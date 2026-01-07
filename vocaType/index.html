@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Polytype Trainer – List</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <header class="app-header">
+      <h1>Polytype Trainer</h1>
+      <p class="subtitle">Lista di parole – pratica con Tab / Invio</p>
+    </header>
+
+    <section class="settings">
+      <div class="field">
+        <label for="language-select">Lingua</label>
+        <select id="language-select">
+          <option value="ko">Coreano</option>
+          <option value="zh">Cinese</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="deck-select">Deck</label>
+        <select id="deck-select">
+          <option value="koBase">Coreano base</option>
+          <option value="hsk1">HSK 1</option>
+        </select>
+      </div>
+
+      <div class="field checkbox-field">
+        <label>
+          <input type="checkbox" id="romaji-toggle" checked>
+          Romaji / Pinyin
+        </label>
+      </div>
+    </section>
+
+    <section class="list-card">
+      <div class="list-header">
+        <span class="col-script">Parola</span>
+        <span class="col-romaji">Romaji / Pinyin</span>
+        <span class="col-meaning">Traduzione</span>
+      </div>
+
+      <div id="rows-container"></div>
+    </section>
+
+    <section class="stats">
+      <span id="progress-text">0 / 0 corrette</span>
+      <span id="score-text">Score: 0%</span>
+    </section>
+  </main>
+
+  <script src="decks/korean.js"></script>
+  <script src="decks/chinese.js"></script>
+  <script src="js/main.js"></script>
+
+</body>
+</html>
