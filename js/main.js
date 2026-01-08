@@ -413,9 +413,26 @@ function centerRowInViewport(row) {
     (rowRect.bottom - containerRect.bottom) +
     offsetFromBottom;
 
-  container.scrollTo({
-    top: targetScrollTop,
-    left: 0,
-    behavior: "smooth"
-  });
+  smoothScrollTo(container, targetScrollTop, 600);
 }
+
+function smoothScrollTo(container, targetTop, duration = 500) {
+  const startTop = container.scrollTop;
+  const distance = targetTop - startTop;
+  const startTime = performance.now();
+
+  function step(now) {
+    const elapsed = now - startTime;
+    const t = Math.min(elapsed / duration, 1); 
+    const eased = 1 - Math.pow(1 - t, 3);
+
+    container.scrollTop = startTop + distance * eased;
+
+    if (elapsed < duration) {
+      requestAnimationFrame(step);
+    }
+  }
+
+  requestAnimationFrame(step);
+}
+
