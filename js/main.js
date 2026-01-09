@@ -1,24 +1,26 @@
 ﻿// ------- Settings & state -------
 
 const settings = {
-  deckName: "topik1",
-  useRomanization: true,
-  infiniteRun: true,
-  maxWords: 20
+    deckName: "topik1",
+    useRomanization: true,
+    useMeaning: true,
+    infiniteRun: true,
+    maxWords: 20
 };
 
 const state = {
-  fullDeck: [],
-  currentDeck: [],
-  currentIndex: 0,
-  totalChecked: 0,
-  totalCorrectFields: 0,
-  wordsUsed: 0
+    fullDeck: [],
+    currentDeck: [],
+    currentIndex: 0,
+    totalChecked: 0,
+    totalCorrectFields: 0,
+    wordsUsed: 0
 };
 
 // DOM references
 let deckSelect;
 let romajiToggle;
+let meaningToggle;
 let rowsContainer;
 let progressText;
 let scoreText;
@@ -30,289 +32,363 @@ const AVAILABLE_DECKS = window.DECK_INDEX || [];
 // ------- Init -------
 
 document.addEventListener("DOMContentLoaded", () => {
-  deckSelect    = document.getElementById("deck-select");
-  romajiToggle  = document.getElementById("romaji-toggle");
-  rowsContainer = document.getElementById("rows-container");
-  progressText  = document.getElementById("progress-text");
-  scoreText     = document.getElementById("score-text");
-  restartBtn    = document.getElementById("restart-btn");
+    deckSelect = document.getElementById("deck-select");
+    romajiToggle = document.getElementById("romaji-toggle");
+    meaningToggle = document.getElementById("meaning-toggle");
+    rowsContainer = document.getElementById("rows-container");
+    progressText = document.getElementById("progress-text");
+    scoreText = document.getElementById("score-text");
+    restartBtn = document.getElementById("restart-btn");
 
-  deckSelect.addEventListener("change", onDeckChange);
-  romajiToggle.addEventListener("change", onRomajiToggle);
-  restartBtn.addEventListener("click", onRestartClick);
+    deckSelect.addEventListener("change", onDeckChange);
+    romajiToggle.addEventListener("change", onRomajiToggle);
+    meaningToggle.addEventListener("change", onMeaningToggle);
+    restartBtn.addEventListener("click", onRestartClick);
 
-  // initial deck from select
-  settings.deckName = deckSelect.value;
+    settings.deckName = deckSelect.value;
 
-  loadDeckFromCsv(settings.deckName).then(() => {
-    prepareCurrentDeck();
-    clearRows();
-    spawnNextRow();
-    spawnNextRow();
+    loadDeckFromCsv(settings.deckName).then(() => {
+        prepareCurrentDeck();
+        clearRows();
+        spawnNextRow();
+        spawnNextRow();
 
-    const rows = Array.from(rowsContainer.querySelectorAll(".row"));
-    rows.forEach(r => r.classList.remove("next-preview"));
-    if (rows[1]) rows[1].classList.add("next-preview");
+        const rows = Array.from(rowsContainer.querySelectorAll(".row"));
+        rows.forEach(r => r.classList.remove("next-preview"));
+        if (rows[1]) rows[1].classList.add("next-preview");
 
-    updateStats();
-  });
+        applyInitialVisibilityClasses();
+        updateColumnLayoutClasses();
+        updateStats();
+    });
 });
 
 // ------- UI handlers -------
 
 function onDeckChange() {
-  settings.deckName = deckSelect.value;
-  resetState();
-  clearRows();
-
-  loadDeckFromCsv(settings.deckName).then(() => {
-    prepareCurrentDeck();
+    settings.deckName = deckSelect.value;
+    resetState();
     clearRows();
-    spawnNextRow();
-    spawnNextRow();
 
-    const rows = Array.from(rowsContainer.querySelectorAll(".row"));
-    rows.forEach(r => r.classList.remove("next-preview"));
-    if (rows[1]) rows[1].classList.add("next-preview");
+    loadDeckFromCsv(settings.deckName).then(() => {
+        prepareCurrentDeck();
+        clearRows();
+        spawnNextRow();
+        spawnNextRow();
 
-    updateStats();
-  });
+        const rows = Array.from(rowsContainer.querySelectorAll(".row"));
+        rows.forEach(r => r.classList.remove("next-preview"));
+        if (rows[1]) rows[1].classList.add("next-preview");
+
+        updateStats();
+    });
+}
+
+function applyInitialVisibilityClasses() {
+    if (settings.useRomanization) {
+        document.body.classList.remove("hide-romaji");
+    } else {
+        document.body.classList.add("hide-romaji");
+    }
+
+    if (settings.useMeaning) {
+        document.body.classList.remove("hide-meaning");
+    } else {
+        document.body.classList.add("hide-meaning");
+    }
+}
+
+function updateColumnLayoutClasses() {
+    const romajiOn = settings.useRomanization;
+    const meaningOn = settings.useMeaning;
+
+    document.body.classList.remove(
+        "one-col",
+        "two-cols",
+        "layout-romaji-only",
+        "layout-meaning-only"
+    );
+
+    const activeCount = (romajiOn ? 1 : 0) + (meaningOn ? 1 : 0);
+
+    if (activeCount === 0) {
+        document.body.classList.add("one-col");
+    } else if (activeCount === 1) {
+        document.body.classList.add("two-cols");
+        if (romajiOn) {
+            document.body.classList.add("layout-romaji-only");
+        } else if (meaningOn) {
+            document.body.classList.add("layout-meaning-only");
+        }
+    }
 }
 
 function onRomajiToggle() {
-  settings.useRomanization = romajiToggle.checked;
-  if (settings.useRomanization) {
-    document.body.classList.remove("hide-romaji");
-  } else {
-    document.body.classList.add("hide-romaji");
-  }
+    const wantRomaji = romajiToggle.checked;
+    const wantMeaning = meaningToggle.checked;
+
+    if (!wantRomaji && !wantMeaning) {
+        settings.useRomanization = false;
+        settings.useMeaning = true;
+
+        romajiToggle.checked = false;
+        meaningToggle.checked = true;
+
+        document.body.classList.add("hide-romaji");
+        document.body.classList.remove("hide-meaning");
+    } else {
+        settings.useRomanization = wantRomaji;
+
+        if (settings.useRomanization) {
+            document.body.classList.remove("hide-romaji");
+        } else {
+            document.body.classList.add("hide-romaji");
+        }
+    }
+
+    updateColumnLayoutClasses();
+}
+
+function onMeaningToggle() {
+    const wantRomaji = romajiToggle.checked;
+    const wantMeaning = meaningToggle.checked;
+
+    if (!wantMeaning && !wantRomaji) {
+        settings.useMeaning = false;
+        settings.useRomanization = true;
+
+        meaningToggle.checked = false;
+        romajiToggle.checked = true;
+
+        document.body.classList.add("hide-meaning");
+        document.body.classList.remove("hide-romaji");
+    } else {
+        settings.useMeaning = wantMeaning;
+
+        if (settings.useMeaning) {
+            document.body.classList.remove("hide-meaning");
+        } else {
+            document.body.classList.add("hide-meaning");
+        }
+    }
+
+    updateColumnLayoutClasses();
 }
 
 function onRestartClick() {
-  resetState();
-  clearRows();
-
-  loadDeckFromCsv(settings.deckName).then(() => {
-    prepareCurrentDeck();
+    resetState();
     clearRows();
-    spawnNextRow();
-    spawnNextRow();
 
-    const rows = Array.from(rowsContainer.querySelectorAll(".row"));
-    rows.forEach(r => r.classList.remove("next-preview"));
-    if (rows[1]) rows[1].classList.add("next-preview");
+    loadDeckFromCsv(settings.deckName).then(() => {
+        prepareCurrentDeck();
+        clearRows();
+        spawnNextRow();
+        spawnNextRow();
 
-    updateStats();
-  });
+        const rows = Array.from(rowsContainer.querySelectorAll(".row"));
+        rows.forEach(r => r.classList.remove("next-preview"));
+        if (rows[1]) rows[1].classList.add("next-preview");
+
+        updateStats();
+    });
 }
 
 // ------- Deck loading -------
 
 async function loadDeckFromCsv(deckId) {
-  const deckMeta = AVAILABLE_DECKS.find(d => d.id === deckId);
-  if (!deckMeta) {
-    console.error("Deck not found:", deckId, AVAILABLE_DECKS);
-    state.fullDeck = [];
-    return;
-  }
+    const deckMeta = AVAILABLE_DECKS.find(d => d.id === deckId);
+    if (!deckMeta || !deckMeta.data) {
+        console.error("Deck not found or has no data:", deckId, AVAILABLE_DECKS);
+        state.fullDeck = [];
+        return;
+    }
 
-  const response = await fetch(deckMeta.file);
-  const text = await response.text();
+    state.fullDeck = deckMeta.data;
+    state.currentDeck = [];
+    state.currentIndex = 0;
+    state.wordsUsed = 0;
 
-  const lines = text.split(/\r?\n/).filter(l => l.trim().length > 0);
-  const dataLines = lines.slice(1); // skip header line
-
-  const deck = dataLines.map(line => {
-    const parts = line.split(",");
-    const script = (parts[0] || "").trim();
-    const romanization = (parts[1] || "").trim();
-    const meaning = parts.slice(2).join(",").trim();
-    return { script, romanization, meaning };
-  });
-
-  state.fullDeck = deck;
-  state.currentDeck = [];
-  state.currentIndex = 0;
-  state.wordsUsed = 0;
-
-  console.log("Loaded deck", deckId, "size:", state.fullDeck.length);
+    console.log("Loaded deck", deckId, "size:", state.fullDeck.length);
 }
 
 function prepareCurrentDeck() {
-  const shuffled = shuffleArray([...state.fullDeck]);
-  state.currentDeck = shuffled;
-  state.currentIndex = 0;
-  state.wordsUsed = 0;
+    const shuffled = shuffleArray([...state.fullDeck]);
+    state.currentDeck = shuffled;
+    state.currentIndex = 0;
+    state.wordsUsed = 0;
 }
 
 function resetState() {
-  state.currentIndex = 0;
-  state.totalChecked = 0;
-  state.totalCorrectFields = 0;
-  state.wordsUsed = 0;
+    state.currentIndex = 0;
+    state.totalChecked = 0;
+    state.totalCorrectFields = 0;
+    state.wordsUsed = 0;
 }
 
 // ------- Rows -------
 
 function clearRows() {
-  rowsContainer.innerHTML = "";
+    rowsContainer.innerHTML = "";
 }
 
 function spawnNextRow() {
-  if (!settings.infiniteRun && state.wordsUsed >= state.currentDeck.length) {
-    return;
-  }
-
-  if (settings.infiniteRun && state.currentIndex >= state.currentDeck.length) {
-    prepareCurrentDeck();
-  }
-
-  const item = state.currentDeck[state.currentIndex];
-  if (!item) return;
-
-  const visualIndex = state.wordsUsed;
-  state.wordsUsed += 1;
-
-  const row = document.createElement("div");
-  row.className = "row";
-  row.dataset.index = String(visualIndex);
-
-  const colScript = document.createElement("div");
-  colScript.className = "script";
-  colScript.textContent = item.script;
-
-  const colRom = document.createElement("div");
-  colRom.className = "rom-col";
-
-  const romInput = document.createElement("input");
-  romInput.type = "text";
-  romInput.className = "rom-input";
-  romInput.autocomplete = "off";
-  romInput.dataset.logicIndex = String(state.currentIndex);
-
-  const romFeedback = document.createElement("div");
-  romFeedback.className = "feedback feedback-rom";
-  romFeedback.id = `feedback-rom-${visualIndex}`;
-
-  if (!settings.useRomanization) {
-    document.body.classList.add("hide-romaji");
-  }
-
-  colRom.appendChild(romInput);
-  colRom.appendChild(romFeedback);
-
-  const colMeaning = document.createElement("div");
-  const meaningInput = document.createElement("input");
-  meaningInput.type = "text";
-  meaningInput.className = "meaning-input";
-  meaningInput.autocomplete = "off";
-  meaningInput.dataset.logicIndex = String(state.currentIndex);
-
-  const meaningFeedback = document.createElement("div");
-  meaningFeedback.className = "feedback";
-  meaningFeedback.id = `feedback-meaning-${visualIndex}`;
-
-  colMeaning.appendChild(meaningInput);
-  colMeaning.appendChild(meaningFeedback);
-
-  row.appendChild(colScript);
-  row.appendChild(colRom);
-  row.appendChild(colMeaning);
-  rowsContainer.appendChild(row);
-
-  const isFirstRow = state.wordsUsed === 1;
-  state.currentIndex += 1;
-
-  romInput.addEventListener("keydown", e =>
-    onKeyDownRom(
-      e,
-      Number(romInput.dataset.logicIndex),
-      romInput,
-      meaningInput
-    )
-  );
-
-  meaningInput.addEventListener("keydown", e =>
-    onKeyDownMeaning(
-      e,
-      Number(meaningInput.dataset.logicIndex),
-      romInput,
-      meaningInput
-    )
-  );
-
-  requestAnimationFrame(() => {
-    row.classList.add("visible");
-    centerRowInViewport(row);
-    if (isFirstRow) {
-      if (settings.useRomanization) romInput.focus();
-      else meaningInput.focus();
+    if (!settings.infiniteRun && state.wordsUsed >= state.currentDeck.length) {
+        return;
     }
-  });
+
+    if (settings.infiniteRun && state.currentIndex >= state.currentDeck.length) {
+        prepareCurrentDeck();
+    }
+
+    const item = state.currentDeck[state.currentIndex];
+    if (!item) return;
+
+    const visualIndex = state.wordsUsed;
+    state.wordsUsed += 1;
+
+    const row = document.createElement("div");
+    row.className = "row";
+    row.dataset.index = String(visualIndex);
+
+    const colScript = document.createElement("div");
+    colScript.className = "script";
+    colScript.textContent = item.script;
+
+    const colRom = document.createElement("div");
+    colRom.className = "rom-col";
+
+    const romInput = document.createElement("input");
+    romInput.type = "text";
+    romInput.className = "rom-input";
+    romInput.autocomplete = "off";
+    romInput.dataset.logicIndex = String(state.currentIndex);
+
+    const romFeedback = document.createElement("div");
+    romFeedback.className = "feedback feedback-rom";
+    romFeedback.id = `feedback-rom-${visualIndex}`;
+
+    colRom.appendChild(romInput);
+    colRom.appendChild(romFeedback);
+
+    const colMeaning = document.createElement("div");
+    colMeaning.className = "meaning-col";
+
+    const meaningInput = document.createElement("input");
+    meaningInput.type = "text";
+    meaningInput.className = "meaning-input";
+    meaningInput.autocomplete = "off";
+    meaningInput.dataset.logicIndex = String(state.currentIndex);
+
+    const meaningFeedback = document.createElement("div");
+    meaningFeedback.className = "feedback feedback-meaning";
+    meaningFeedback.id = `feedback-meaning-${visualIndex}`;
+
+    colMeaning.appendChild(meaningInput);
+    colMeaning.appendChild(meaningFeedback);
+
+    row.appendChild(colScript);
+    row.appendChild(colRom);
+    row.appendChild(colMeaning);
+    rowsContainer.appendChild(row);
+
+    const isFirstRow = state.wordsUsed === 1;
+    state.currentIndex += 1;
+
+    romInput.addEventListener("keydown", e =>
+        onKeyDownRom(
+            e,
+            Number(romInput.dataset.logicIndex),
+            romInput,
+            meaningInput
+        )
+    );
+
+    meaningInput.addEventListener("keydown", e =>
+        onKeyDownMeaning(
+            e,
+            Number(meaningInput.dataset.logicIndex),
+            romInput,
+            meaningInput
+        )
+    );
+
+    requestAnimationFrame(() => {
+        row.classList.add("visible");
+        centerRowInViewport(row);
+        if (isFirstRow) {
+            if (settings.useRomanization) romInput.focus();
+            else meaningInput.focus();
+        }
+    });
 }
 
 // ------- Keyboard handling -------
 
 function onKeyDownRom(event, logicIndex, romInput, meaningInput) {
-  if (event.key === "Enter" || event.key === "Tab") {
-    event.preventDefault();
-    checkRomajiField(logicIndex, romInput);
-    meaningInput.focus();
-  }
+    if (event.key === "Enter" || event.key === "Tab") {
+        event.preventDefault();
+        checkRomajiField(logicIndex, romInput);
+
+        if (settings.useMeaning) {
+            meaningInput.focus();
+        } else {
+            const fakeEvent = { key: "Enter", preventDefault() { } };
+            onKeyDownMeaning(fakeEvent, logicIndex, romInput, meaningInput);
+        }
+    }
 }
 
 function onKeyDownMeaning(event, logicIndex, romInput, meaningInput) {
-  if (event.key === "Enter" || event.key === "Tab") {
-    event.preventDefault();
-    checkMeaningField(logicIndex, meaningInput);
+    if (event.key === "Enter" || event.key === "Tab") {
+        event.preventDefault();
+        if (settings.useMeaning) {
+            checkMeaningField(logicIndex, meaningInput);
+        }
 
-    const currentRow = meaningInput.closest(".row");
-    if (!currentRow) return;
+        const currentRow = meaningInput.closest(".row") || romInput.closest(".row");
+        if (!currentRow) return;
 
-    let rows = Array.from(rowsContainer.querySelectorAll(".row"));
+        let rows = Array.from(rowsContainer.querySelectorAll(".row"));
 
-    // mark all rows up to current as "past"
-    rows.forEach(r => {
-      if (Number(r.dataset.index) <= Number(currentRow.dataset.index)) {
-        r.classList.add("past-row");
-      }
-    });
+        rows.forEach(r => {
+            if (Number(r.dataset.index) <= Number(currentRow.dataset.index)) {
+                r.classList.add("past-row");
+            }
+        });
 
-    const idx = rows.indexOf(currentRow);
+        const idx = rows.indexOf(currentRow);
 
-    // if on last row, create a new one
-    if (idx === rows.length - 1) {
-      spawnNextRow();
-      rows = Array.from(rowsContainer.querySelectorAll(".row"));
+        if (idx === rows.length - 1) {
+            spawnNextRow();
+            rows = Array.from(rowsContainer.querySelectorAll(".row"));
+        }
+
+        const nextRow = rows[idx + 1];
+        if (!nextRow) return;
+
+        if (idx + 2 === rows.length) {
+            spawnNextRow();
+            rows = Array.from(rowsContainer.querySelectorAll(".row"));
+        }
+
+        const previewRow = rows[idx + 2] || null;
+
+        rows.forEach(r => r.classList.remove("next-preview"));
+        if (previewRow) {
+            previewRow.classList.add("next-preview");
+        }
+
+        const nextRom = nextRow.querySelector(".rom-input");
+        const nextMeaning = nextRow.querySelector(".meaning-input");
+
+        if (settings.useRomanization && nextRom) {
+            nextRom.focus();
+        } else if (nextMeaning) {
+            nextMeaning.focus();
+        }
+
+        centerRowInViewport(nextRow);
     }
-
-    const nextRow = rows[idx + 1];
-    if (!nextRow) return;
-
-    // ensure there is always a preview row after nextRow
-    if (idx + 2 === rows.length) {
-      spawnNextRow();
-      rows = Array.from(rowsContainer.querySelectorAll(".row"));
-    }
-
-    const previewRow = rows[idx + 2] || null;
-
-    rows.forEach(r => r.classList.remove("next-preview"));
-    if (previewRow) {
-      previewRow.classList.add("next-preview");
-    }
-
-    const nextRom = nextRow.querySelector(".rom-input");
-    const nextMeaning = nextRow.querySelector(".meaning-input");
-
-    if (settings.useRomanization && nextRom) {
-      nextRom.focus();
-    } else if (nextMeaning) {
-      nextMeaning.focus();
-    }
-
-    centerRowInViewport(nextRow);
-  }
 }
 
 // ------- Checking & stats -------
@@ -320,119 +396,114 @@ function onKeyDownMeaning(event, logicIndex, romInput, meaningInput) {
 const errorColor = "#f87171";
 
 function checkRomajiField(logicIndex, romInput) {
-  if (!settings.useRomanization) return;
+    if (!settings.useRomanization) return;
 
-  const item = state.currentDeck[logicIndex];
-  if (!item) return;
+    const item = state.currentDeck[logicIndex];
+    if (!item) return;
 
-  const userRom = romInput.value.trim();
-  const okRom =
-    normalizeString(userRom) === normalizeString(item.romanization || "");
+    const userRom = romInput.value.trim();
+    const correctRom = item.romanization || "";
 
-  romInput.style.color = okRom ? "inherit" : errorColor;
+    const okRom =
+        normalizeString(userRom) === normalizeString(correctRom);
 
-  const row = romInput.closest(".row");
-  const visualIndex = row ? row.dataset.index : null;
-  if (visualIndex !== null) {
-    const feedback = document.getElementById(`feedback-rom-${visualIndex}`);
-    if (feedback) {
-      feedback.textContent = okRom ? "" : item.romanization;
+    if (okRom) {
+        romInput.style.color = "inherit";
+    } else {
+        romInput.value = correctRom;
+        romInput.style.color = errorColor;
     }
-  }
 
-  state.totalChecked += 1;
-  if (okRom) state.totalCorrectFields += 1;
-  updateStats();
+    state.totalChecked += 1;
+    if (okRom) state.totalCorrectFields += 1;
+    updateStats();
 }
 
 function checkMeaningField(logicIndex, meaningInput) {
-  const item = state.currentDeck[logicIndex];
-  if (!item) return;
+    if (!settings.useMeaning) return;
 
-  const userMeaning = meaningInput.value.trim().toLowerCase();
-  const okMeaning =
-    userMeaning.length > 0 &&
-    normalizeString(userMeaning) === normalizeString(item.meaning);
+    const item = state.currentDeck[logicIndex];
+    if (!item) return;
 
-  meaningInput.style.color = okMeaning ? "inherit" : errorColor;
+    const userMeaning = meaningInput.value.trim();
+    const correctMeaning = item.meaning;
 
-  const row = meaningInput.closest(".row");
-  const visualIndex = row ? row.dataset.index : null;
-  if (visualIndex !== null) {
-    const feedback = document.getElementById(
-      `feedback-meaning-${visualIndex}`
-    );
-    if (feedback) {
-      feedback.textContent = okMeaning ? "" : item.meaning;
+    const okMeaning =
+        userMeaning.length > 0 &&
+        normalizeString(userMeaning) === normalizeString(correctMeaning);
+
+    if (okMeaning) {
+        meaningInput.style.color = "inherit";
+    } else {
+        meaningInput.value = correctMeaning;
+        meaningInput.style.color = errorColor;
     }
-  }
 
-  state.totalChecked += 1;
-  if (okMeaning) state.totalCorrectFields += 1;
-  updateStats();
+    state.totalChecked += 1;
+    if (okMeaning) state.totalCorrectFields += 1;
+    updateStats();
 }
 
 function updateStats() {
-  const perc =
-    state.totalChecked > 0
-      ? Math.round((state.totalCorrectFields / state.totalChecked) * 100)
-      : 0;
+    const perc =
+        state.totalChecked > 0
+            ? Math.round((state.totalCorrectFields / state.totalChecked) * 100)
+            : 0;
 
-  progressText.textContent =
-    `${state.totalCorrectFields} correct / ${state.totalChecked} fields`;
-  scoreText.textContent = `Score: ${perc}% `;
+    progressText.textContent =
+        `${state.totalCorrectFields} correct / ${state.totalChecked} fields`;
+    scoreText.textContent = `Score: ${perc}% `;
 }
 
 // ------- Helpers -------
 
 function normalizeString(str) {
-  return str
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .trim();
+    return str
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim();
 }
 
 function shuffleArray(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
 }
 
 function centerRowInViewport(row) {
-  const container = rowsContainer;
-  const rowRect = row.getBoundingClientRect();
-  const containerRect = container.getBoundingClientRect();
+    const container = rowsContainer;
+    const rowRect = row.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
 
-  const offsetFromBottom = 40;
-  const targetScrollTop =
-    container.scrollTop +
-    (rowRect.bottom - containerRect.bottom) +
-    offsetFromBottom;
+    const offsetFromBottom = 40;
+    const targetScrollTop =
+        container.scrollTop +
+        (rowRect.bottom - containerRect.bottom) +
+        offsetFromBottom;
 
-  smoothScrollTo(container, targetScrollTop, 600);
+    smoothScrollTo(container, targetScrollTop, 600);
 }
 
 function smoothScrollTo(container, targetTop, duration = 500) {
-  const startTop = container.scrollTop;
-  const distance = targetTop - startTop;
-  const startTime = performance.now();
+    const startTop = container.scrollTop;
+    const distance = targetTop - startTop;
+    const startTime = performance.now();
 
-  function step(now) {
-    const elapsed = now - startTime;
-    const t = Math.min(elapsed / duration, 1); 
-    const eased = 1 - Math.pow(1 - t, 3);
+    function step(now) {
+        const elapsed = now - startTime;
+        const t = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - t, 3);
 
-    container.scrollTop = startTop + distance * eased;
+        container.scrollTop = startTop + distance * eased;
 
-    if (elapsed < duration) {
-      requestAnimationFrame(step);
+        if (elapsed < duration) {
+            requestAnimationFrame(step);
+        }
     }
-  }
 
-  requestAnimationFrame(step);
+    requestAnimationFrame(step);
 }
-

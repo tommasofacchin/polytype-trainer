@@ -65,33 +65,42 @@ body {
 }
 
 /* Settings bar */
-
 .settings {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 40px;
+  width: 70%;
+  margin-left: 15%;
   padding: 12px 16px;
-  margin-bottom: 16px;
+  margin-bottom: 30px;
   background: rgba(15, 23, 42, 0.8);
   border-radius: var(--radius);
   border: 1px solid var(--border);
   backdrop-filter: blur(16px);
   overflow: visible;
+  justify-content: center; 
+  align-items: center;    
 }
 
 .field {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 140px;
+  flex-direction: row;   
+  align-items: center;
+  gap: 10px; 
+  min-width: auto;
 }
-
 .field label {
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--muted);
+  white-space: nowrap;   
 }
+
+.field select {
+  max-width: 140px;
+}
+
 
 .checkbox-field {
   justify-content: flex-end;
@@ -129,6 +138,37 @@ input[type="text"]:focus {
 
 .list-header {
   flex: 0 0 auto;
+}
+
+/* 3 colonne fisse: Word / Romaji / Meaning */
+.list-header,
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.5fr) minmax(0, 1.5fr);
+  gap: 0px;
+  align-items: center;
+}
+
+/* fade solo delle colonne extra, senza cambiare larghezze né altezza */
+.col-romaji,
+.rom-col,
+.feedback-rom,
+.col-meaning,
+.meaning-col,
+.feedback-meaning {
+  transition: opacity 0.5s ease;
+}
+
+.hide-romaji .col-romaji,
+.hide-romaji .rom-col,
+.hide-romaji .feedback-rom {
+  opacity: 0;
+}
+
+.hide-meaning .col-meaning,
+.hide-meaning .meaning-col,
+.hide-meaning .feedback-meaning {
+  opacity: 0;
 }
 
 #rows-container {
@@ -190,14 +230,6 @@ input[type="text"]:focus {
 
 /* Columns */
 
-.list-header,
-.row {
-  display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.5fr) minmax(0, 1.5fr);
-  gap: 10px;
-  align-items: center;
-}
-
 .col-script {
   padding-left: 4px;
 }
@@ -221,23 +253,6 @@ input[type="text"]:focus {
   min-height: 1.4em;
   display: block;
   text-align: center;
-}
-
-/* Romaji column visibility animation */
-
-.col-romaji,
-.rom-col,
-.feedback-rom {
-  transition: opacity 0.2s ease, width 0.2s ease, margin 0.2s ease;
-}
-
-.hide-romaji .col-romaji,
-.hide-romaji .rom-col,
-.hide-romaji .feedback-rom {
-  opacity: 0;
-  visibility: hidden;
-  width: auto;
-  margin: 0;
 }
 
 /* Row inputs */
@@ -388,7 +403,6 @@ input.meaning-input {
   }
 
   .row {
-    grid-template-columns: 1fr;
     align-items: flex-start;
   }
 
