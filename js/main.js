@@ -458,11 +458,12 @@ function updateStats() {
 // ------- Helpers -------
 
 function normalizeString(str) {
-    return str
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .trim();
+  return str
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") 
+    .replace(/\s+/g, "")            
+    .trim();
 }
 
 function shuffleArray(arr) {
