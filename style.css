@@ -1,18 +1,19 @@
 :root {
-  --bg: #0f172a;
-  --bg-soft: #111827;
-  --accent: #38bdf8;
-  --accent-soft: rgba(56, 189, 248, 0.15);
-  --text: #e5e7eb;
-  --muted: #9ca3af;
-  --danger-bg: rgba(248, 113, 113, 0.12);
-  --danger-border: #f87171;
-  --success-bg: rgba(74, 222, 128, 0.12);
-  --success-border: #4ade80;
-  --border: #1f2937;
-  --radius: 10px;
-  --shadow: 0 18px 40px rgba(15, 23, 42, 0.8);
+    --bg: #121212; 
+    --bg-soft: #1a1a1a; 
+    --accent: #00c2ff;
+    --accent-soft: rgba(0, 194, 255, 0.15);
+    --text: #f9fafb;
+    --muted: #9ca3af;
+    --danger-bg: rgba(248, 113, 113, 0.12);
+    --danger-border: #f87171;
+    --success-bg: rgba(74, 222, 128, 0.12);
+    --success-border: #4ade80;
+    --border: #2a2a2a;
+    --radius: 10px;
+    --shadow: 0 18px 40px rgba(0, 0, 0, 0.8);
 }
+
 
 /* Global reset */
 
@@ -21,13 +22,12 @@
 }
 
 body {
-  margin: 0;
-  min-height: 100vh;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
-    "Segoe UI", sans-serif;
-  background: radial-gradient(circle at top, #1f2937, #020617);
-  color: var(--text);
-  display: block;
+    margin: 0;
+    min-height: 100vh;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    display: block;
 }
 
 /* Layout */
@@ -66,20 +66,20 @@ body {
 
 /* Settings bar */
 .settings {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 40px;
-  width: 70%;
-  margin-left: 15%;
-  padding: 12px 16px;
-  margin-bottom: 30px;
-  background: rgba(15, 23, 42, 0.8);
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-  backdrop-filter: blur(16px);
-  overflow: visible;
-  justify-content: center; 
-  align-items: center;    
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    width: 70%;
+    margin-left: 15%;
+    padding: 12px 16px;
+    margin-bottom: 30px;
+    background: rgba(26, 26, 26, 0.9); 
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(16px);
+    overflow: visible;
+    justify-content: center;
+    align-items: center;
 }
 
 .field {
@@ -108,13 +108,13 @@ body {
 
 select,
 input[type="text"] {
-  padding: 7px 10px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: #020617;
-  color: var(--text);
-  font-size: 14px;
-  outline: none;
+    padding: 7px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    outline: none;
 }
 
 select:focus,
@@ -280,87 +280,47 @@ input.meaning-input {
 }
 
 /* Custom checkbox */
-
-.checkbox-wrapper-46 input[type="checkbox"] {
-  display: none;
-  visibility: hidden;
+.visually-hidden-checkbox {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    overflow: hidden;
+    white-space: nowrap;
 }
+
 
 .checkbox-wrapper-46 .cbx {
-  margin: auto;
-  -webkit-user-select: none;
-  user-select: none;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
+    margin: auto;
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
 }
 
-.checkbox-wrapper-46 .cbx span {
-  display: inline-block;
-  vertical-align: middle;
-  transform: translate3d(0, 0, 0);
-}
 
-.checkbox-wrapper-46 .cbx span:first-child {
-  position: relative;
-  width: 18px;
-  height: 18px;
-  border-radius: 3px;
-  transform: scale(1);
-  vertical-align: middle;
-  border: 1px solid #9098a9;
-  transition: all 0.2s ease;
-}
+    /* span interno al label: colore base */
+    .checkbox-wrapper-46 .cbx span {
+        display: inline-block;
+        vertical-align: middle;
+        transform: translate3d(0, 0, 0);
+        color: var(--muted);
+        transition: color 0.15s ease;
+    }
 
-.checkbox-wrapper-46 .cbx span:first-child svg {
-  position: absolute;
-  top: 3px;
-  left: 2px;
-  fill: none;
-  stroke: #ffffff;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-dasharray: 16px;
-  stroke-dashoffset: 16px;
-  transition: all 0.3s ease;
-  transition-delay: 0.1s;
-  transform: translate3d(0, 0, 0);
-}
+    /* hover sul label */
+    .checkbox-wrapper-46 .cbx:hover span {
+        color: var(--accent);
+    }
 
-.checkbox-wrapper-46 .cbx span:first-child:before {
-  content: "";
-  width: 100%;
-  height: 100%;
-  background: var(--accent);
-  display: block;
-  transform: scale(0);
-  opacity: 1;
-  border-radius: 50%;
-}
-
-.checkbox-wrapper-46 .cbx span:last-child {
-  padding-left: 8px;
-}
-
-.checkbox-wrapper-46 .cbx:hover span:first-child {
-  border-color: var(--accent);
-}
-
-.checkbox-wrapper-46 .inp-cbx:checked + .cbx span:first-child {
-  background: var(--accent);
-  border-color: var(--accent);
-  animation: wave-46 0.4s ease;
-}
-
-.checkbox-wrapper-46 .inp-cbx:checked + .cbx span:first-child svg {
-  stroke-dashoffset: 0;
-}
-
-.checkbox-wrapper-46 .inp-cbx:checked + .cbx span:first-child:before {
-  transform: scale(3.5);
-  opacity: 0;
-  transition: all 0.6s ease;
+/* STATO SELEZIONATO: input checked → label dopo l’input */
+.checkbox-wrapper-46 .inp-cbx:checked + .cbx span {
+    color: var(--accent);
 }
 
 @keyframes wave-46 {
@@ -372,28 +332,36 @@ input.meaning-input {
 /* Checkbox + restart layout */
 
 .checkbox-wrapper-46 {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text);
 }
+    .checkbox-wrapper-46:hover {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: var(--accent);
+    }
 
 /* Restart button */
 
 .restart-btn {
-  padding: 6px 14px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: #020617;
-  color: var(--text);
-  font-size: 14px;
-  cursor: pointer;
-  transition: background 0.15s ease, border-color 0.15s ease;
+    padding: 6px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
 }
 
-.restart-btn:hover {
-  background: var(--accent-soft);
-  border-color: var(--accent);
-}
+    .restart-btn:hover {
+        background: var(--accent-soft);
+        border-color: var(--accent);
+        color: var(--accent);
+    }
 
 /* Responsive */
 

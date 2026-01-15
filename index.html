@@ -14,43 +14,40 @@
     </header>
 
     <section class="settings">
-      <div class="field">
-        <label for="deck-select">Deck</label>
-        <select id="deck-select">
-          <option value="topik1">TOPIK 1</option>
-          <option value="hsk1">HSK 1</option>
-        </select>
-      </div>
+        <div class="field">
+            <label for="deck-select">Deck</label>
+            <select id="deck-select">
+                <option value="topik1">TOPIK 1</option>
+                <option value="hsk1">HSK 1</option>
+            </select>
+        </div>
 
 
 
-      <div class="field checkbox-field checkbox-wrapper-46">
-        <input class="inp-cbx" id="romaji-toggle" type="checkbox" checked />
-        <label class="cbx" for="romaji-toggle">
-          <span>
-            <svg width="12px" height="10px" viewBox="0 0 12 10">
-              <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
-            </svg>
-          </span>
-          <span>Romaji / Pinyin</span>
-        </label>
-      </div>
+        <div class="field checkbox-field checkbox-wrapper-46">
+            <input class="inp-cbx visually-hidden-checkbox"
+                   id="romaji-toggle"
+                   type="checkbox"
+                   checked />
+            <label class="cbx" for="romaji-toggle">
+                <span>Romaji / Pinyin</span>
+            </label>
+        </div>
 
-      <div class="field checkbox-field checkbox-wrapper-46">
-        <input class="inp-cbx" id="meaning-toggle" type="checkbox" checked />
-        <label class="cbx" for="meaning-toggle">
-          <span>
-            <svg width="12px" height="10px" viewBox="0 0 12 10">
-              <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
-            </svg>
-          </span>
-          <span>Meaning</span>
-        </label>
-      </div>
 
-      <button id="restart-btn" class="restart-btn" type="button">
-        Restart
-      </button>
+        <div class="field checkbox-field checkbox-wrapper-46">
+            <input class="inp-cbx visually-hidden-checkbox"
+                   id="meaning-toggle"
+                   type="checkbox"
+                   checked />
+            <label class="cbx" for="meaning-toggle">
+                <span>Meaning</span>
+            </label>
+        </div>
+
+        <button id="restart-btn" class="restart-btn" type="button">
+            Restart
+        </button>
 
     </section>
 
@@ -72,7 +69,6 @@
     </section>
   </main>
 
-  <script src="decks/hsk1.js"></script>
   <script src="decks/index.js"></script>
   <script src="js/main.js"></script>
 </body>
