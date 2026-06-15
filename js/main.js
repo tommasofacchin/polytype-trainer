@@ -719,7 +719,8 @@ function getDecksForLanguage(language) {
 function getLanguageFlagSrc(language) {
     const flags = {
         chinese: "assets/flags/china.svg",
-        korean: "assets/flags/korea.svg"
+        korean: "assets/flags/korea.svg",
+        norwegian: "assets/flags/norway.svg"
     };
 
     return flags[language] || "assets/flags/china.svg";

@@ -37,5 +37,18 @@ window.DECK_INDEX = [
       romanization: "romaji",
       meaning: "english"
     }
+  },
+  {
+    id: "norwegian-a1",
+    language: "norwegian",
+    languageLabel: "Norwegian",
+    level: "A1",
+    label: "Norwegian A1",
+    path: "decks/norwegian_a1.csv",
+    columns: {
+      script: "norwegian",
+      romanization: "romanization",
+      meaning: "english"
+    }
   }
 ];
