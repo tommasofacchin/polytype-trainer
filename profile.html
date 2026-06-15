@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" class="profile-document">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile - Polytype Trainer</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body class="profile-page-body">
+  <main class="profile-page">
+    <nav class="profile-topbar" aria-label="Profile navigation">
+      <a class="back-link" href="index.html" aria-label="Back to trainer">
+        <span aria-hidden="true">&larr;</span>
+        Trainer
+      </a>
+    </nav>
+
+    <section class="profile-hero" aria-label="Player profile">
+      <div class="profile-avatar profile-avatar-large" aria-hidden="true">T</div>
+      <div class="profile-hero-copy">
+        <span class="profile-kicker">Demo profile</span>
+        <h1 id="profile-page-name">Tommaso</h1>
+        <p id="profile-page-level">Level 1</p>
+      </div>
+    </section>
+
+    <section class="profile-detail-grid" aria-label="Profile details">
+      <article class="profile-detail-card profile-detail-card-wide">
+        <div class="profile-card-head">
+          <div>
+            <span class="profile-card-label">XP progress</span>
+            <strong id="profile-page-xp-title">0 / 200 XP</strong>
+          </div>
+          <span id="profile-page-total-xp" class="profile-stat-pill">0 total XP</span>
+        </div>
+        <div class="xp-bar xp-bar-large" aria-hidden="true">
+          <span id="profile-page-xp-fill"></span>
+        </div>
+        <p id="profile-page-next-level" class="profile-muted">200 XP to Level 2</p>
+      </article>
+
+      <article class="profile-detail-card">
+        <span class="profile-card-label">Day streak</span>
+        <strong id="profile-page-day-streak" class="profile-big-stat">5</strong>
+        <div id="profile-page-fires" class="fire-row fire-row-large" aria-hidden="true"></div>
+      </article>
+
+      <article class="profile-detail-card">
+        <span class="profile-card-label">Current title</span>
+        <strong class="profile-big-stat profile-title-stat">Polytype Rookie</strong>
+        <p class="profile-muted">Learning Chinese and Korean.</p>
+      </article>
+
+      <article class="profile-detail-card profile-detail-card-wide">
+        <div class="profile-card-head">
+          <div>
+            <span class="profile-card-label">Badges</span>
+            <strong>Unlocked achievements</strong>
+          </div>
+          <span id="profile-page-badge-count" class="profile-stat-pill">0 / 4</span>
+        </div>
+        <div id="profile-page-badges" class="profile-badge-grid"></div>
+      </article>
+    </section>
+  </main>
+
+  <script src="js/profile.js"></script>
+</body>
+</html>
