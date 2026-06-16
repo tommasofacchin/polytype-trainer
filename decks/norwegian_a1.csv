@@ -1,21 +1,101 @@
-norwegian,romanization,english
-hei,hei,hello
-takk,takk,thanks
-ja,ja,yes
-nei,nei,no
-vær så snill,vær så snill,please
-unnskyld,unnskyld,sorry
-morgen,morgen,morning
-kveld,kveld,evening
-dag,dag,day
-natt,natt,night
-vann,vann,water
-mat,mat,food
-kaffe,kaffe,coffee
-brød,brød,bread
-hus,hus,house
-bil,bil,car
-bok,bok,book
-venn,venn,friend
-familie,familie,family
-skole,skole,school
+word_id,norwegian,romanization,english,unlock_level
+nor_001,hei,hei,hello,1
+nor_002,takk,takk,thanks,1
+nor_003,ja,ja,yes,1
+nor_004,nei,nei,no,1
+nor_005,vær så snill,vær så snill,please,1
+nor_006,unnskyld,unnskyld,sorry,2
+nor_007,morgen,morgen,morning,2
+nor_008,kveld,kveld,evening,2
+nor_009,dag,dag,day,2
+nor_010,natt,natt,night,2
+nor_011,vann,vann,water,3
+nor_012,mat,mat,food,3
+nor_013,kaffe,kaffe,coffee,3
+nor_014,brød,brød,bread,3
+nor_015,hus,hus,house,3
+nor_016,bil,bil,car,4
+nor_017,bok,bok,book,4
+nor_018,venn,venn,friend,4
+nor_019,familie,familie,family,4
+nor_020,skole,skole,school,4
+nor_021,mann,mann,man,5
+nor_022,kvinne,kvinne,woman,5
+nor_023,barn,barn,child,5
+nor_024,jente,jente,girl,5
+nor_025,gutt,gutt,boy,5
+nor_026,mor,mor,mother,6
+nor_027,far,far,father,6
+nor_028,søster,søster,sister,6
+nor_029,bror,bror,brother,6
+nor_030,bestemor,bestemor,grandmother,6
+nor_031,stor,stor,big,7
+nor_032,liten,liten,small,7
+nor_033,god,god,good,7
+nor_034,dårlig,dårlig,bad,7
+nor_035,ny,ny,new,7
+nor_036,gammel,gammel,old,8
+nor_037,varm,varm,warm,8
+nor_038,kald,kald,cold,8
+nor_039,rask,rask,fast,8
+nor_040,sakte,sakte,slow,8
+nor_041,jeg,jeg,I,9
+nor_042,du,du,you,9
+nor_043,han,han,he,9
+nor_044,hun,hun,she,9
+nor_045,vi,vi,we,9
+nor_046,dere,dere,you plural,10
+nor_047,de,de,they,10
+nor_048,min,min,my,10
+nor_049,din,din,your,10
+nor_050,vår,vår,our,10
+nor_051,å være,å være,to be,11
+nor_052,å ha,å ha,to have,11
+nor_053,å gå,å gå,to go,11
+nor_054,å komme,å komme,to come,11
+nor_055,å gjøre,å gjøre,to do,11
+nor_056,å spise,å spise,to eat,12
+nor_057,å drikke,å drikke,to drink,12
+nor_058,å lese,å lese,to read,12
+nor_059,å skrive,å skrive,to write,12
+nor_060,å snakke,å snakke,to speak,12
+nor_061,en,en,a common,13
+nor_062,ei,ei,a feminine,13
+nor_063,et,et,a neuter,13
+nor_064,den,den,it common,13
+nor_065,det,det,it neuter,13
+nor_066,her,her,here,14
+nor_067,der,der,there,14
+nor_068,nå,nå,now,14
+nor_069,senere,senere,later,14
+nor_070,alltid,alltid,always,14
+nor_071,i dag,i dag,today,15
+nor_072,i morgen,i morgen,tomorrow,15
+nor_073,i går,i går,yesterday,15
+nor_074,uke,uke,week,15
+nor_075,måned,måned,month,15
+nor_076,rød,rød,red,16
+nor_077,blå,blå,blue,16
+nor_078,grønn,grønn,green,16
+nor_079,gul,gul,yellow,16
+nor_080,svart,svart,black,16
+nor_081,hvit,hvit,white,17
+nor_082,brun,brun,brown,17
+nor_083,rosa,rosa,pink,17
+nor_084,oransje,oransje,orange,17
+nor_085,lilla,lilla,purple,17
+nor_086,én,én,one,18
+nor_087,to,to,two,18
+nor_088,tre,tre,three,18
+nor_089,fire,fire,four,18
+nor_090,fem,fem,five,18
+nor_091,seks,seks,six,19
+nor_092,sju,sju,seven,19
+nor_093,åtte,åtte,eight,19
+nor_094,ni,ni,nine,19
+nor_095,ti,ti,ten,19
+nor_096,hvor,hvor,where,20
+nor_097,hva,hva,what,20
+nor_098,hvem,hvem,who,20
+nor_099,når,når,when,20
+nor_100,hvorfor,hvorfor,why,20

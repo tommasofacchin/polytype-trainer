@@ -1,0 +1,11 @@
+{
+  "name": "polytype-trainer",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Static vocabulary trainer with Firebase-backed progression.",
+  "scripts": {
+    "build": "node scripts/write-firebase-config.cjs",
+    "check": "node --check js/firebase-client.js && node --check js/main.js && node --check decks/index.js && node --check functions/index.js"
+  },
+  "devDependencies": {}
+}

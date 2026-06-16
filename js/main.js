@@ -20,15 +20,23 @@ const state = {
     bestStreak: 0,
     score: 0,
     sessionXp: 0,
+    unsavedCorrectFields: 0,
+    unsavedWrongFields: 0,
+    unsavedWordsUsed: 0,
+    unsavedBestStreak: 0,
     remainingSeconds: 0,
     timerId: null,
-    sessionEnded: false
+    sessionEnded: false,
+    progressSaved: false,
+    saveInFlight: false,
+    savePromise: null
 };
 
 const defaultProfile = {
-    name: "Tommaso",
-    xp: 420,
-    dayStreak: 5
+    name: "Polytype Learner",
+    xp: 0,
+    dayStreak: 0,
+    courses: {}
 };
 
 let levelSelect;
@@ -44,6 +52,7 @@ let streakText;
 let sessionResult;
 let resultScore;
 let resultDetail;
+let resultSaveStatus;
 let playAgainBtn;
 let languageMenuToggle;
 let languageMenu;
@@ -72,6 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
     sessionResult = document.getElementById("session-result");
     resultScore = document.getElementById("result-score");
     resultDetail = document.getElementById("result-detail");
+    resultSaveStatus = document.getElementById("result-save-status");
     playAgainBtn = document.getElementById("play-again-btn");
     languageMenuToggle = document.getElementById("language-menu-toggle");
     languageMenu = document.getElementById("language-menu");
@@ -93,6 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     initTheme();
     initProfile();
+    setupFirebaseProfileSync();
     populateLanguageSelect();
     applyInitialVisibilityClasses();
     startSession();
@@ -135,6 +146,42 @@ function initProfile() {
     }
 
     renderProfile();
+}
+
+function setupFirebaseProfileSync() {
+    const firebaseClient = window.PolytypeFirebase;
+    let lastFirebaseUid = null;
+
+    if (!firebaseClient) {
+        document.addEventListener("polytype-profile-updated", event => {
+            profile = { ...defaultProfile, ...profile, ...event.detail };
+            renderProfile();
+            startSession();
+        });
+        return;
+    }
+
+    firebaseClient.onChange(authState => {
+        if (!authState.profile) return;
+
+        const uid = authState.user?.uid || null;
+        const shouldRestart = uid && uid !== lastFirebaseUid;
+        lastFirebaseUid = uid;
+
+        profile = {
+            ...defaultProfile,
+            ...profile,
+            name: authState.profile.displayName || profile.name,
+            xp: authState.profile.totalXp || 0,
+            dayStreak: authState.profile.currentStreak || 0,
+            streakFreezes: authState.profile.streakFreezes || 0,
+            maxStreakFreezes: authState.profile.maxStreakFreezes || 2,
+            courses: authState.profile.courses || profile.courses || {}
+        };
+        saveProfile();
+        renderProfile();
+        if (shouldRestart) startSession();
+    });
 }
 
 function saveProfile() {
@@ -319,6 +366,7 @@ function onRomajiToggle() {
 }
 
 async function startSession() {
+    await saveCurrentSessionProgress();
     stopTimer();
     resetState();
     clearRows();
@@ -360,15 +408,19 @@ function parseDeckCsv(csvText, columns) {
     const headers = rows.shift() || [];
 
     return rows
-        .map(row => {
+        .map((row, index) => {
             const record = Object.fromEntries(
                 headers.map((header, index) => [header.trim(), row[index] || ""])
             );
+            const unlockLevel = Number.parseInt(record[columns.unlockLevel], 10);
+            const script = record[columns.script]?.trim() || "";
 
             return {
-                script: record[columns.script]?.trim() || "",
+                id: record[columns.wordId]?.trim() || `${settings.deckName}-${index + 1}`,
+                script,
                 romanization: record[columns.romanization]?.trim() || "",
-                meaning: record[columns.meaning]?.trim() || ""
+                meaning: record[columns.meaning]?.trim() || "",
+                unlockLevel: Number.isFinite(unlockLevel) && unlockLevel > 0 ? unlockLevel : 1
             };
         })
         .filter(item => item.script && item.meaning);
@@ -409,9 +461,21 @@ function parseCsv(csvText) {
 }
 
 function prepareCurrentDeck() {
-    state.currentDeck = shuffleArray(state.fullDeck);
+    const unlockedLevel = getUnlockedLevel();
+    state.currentDeck = shuffleArray(
+        state.fullDeck.filter(item => item.unlockLevel <= unlockedLevel)
+    );
     state.currentIndex = 0;
     state.wordsUsed = 0;
+}
+
+function getUnlockedLevel() {
+    const courseProgress = profile.courses?.[settings.language] || profile.courses?.[settings.deckName];
+
+    if (courseProgress?.unlockedLevel) return courseProgress.unlockedLevel;
+    if (courseProgress?.level) return courseProgress.level;
+
+    return getLevelInfo(profile.xp).level;
 }
 
 function resetState() {
@@ -425,8 +489,15 @@ function resetState() {
     state.bestStreak = 0;
     state.score = 0;
     state.sessionXp = 0;
+    state.unsavedCorrectFields = 0;
+    state.unsavedWrongFields = 0;
+    state.unsavedWordsUsed = 0;
+    state.unsavedBestStreak = 0;
     state.remainingSeconds = settings.timeLimitSeconds;
     state.sessionEnded = false;
+    state.progressSaved = false;
+    state.saveInFlight = false;
+    state.savePromise = null;
 }
 
 function clearRows() {
@@ -596,13 +667,21 @@ function registerAnswer(isCorrect) {
     state.totalChecked += 1;
     if (isCorrect) {
         state.totalCorrectFields += 1;
+        state.unsavedCorrectFields += 1;
+        state.unsavedWordsUsed += 1;
         state.streak += 1;
         state.bestStreak = Math.max(state.bestStreak, state.streak);
+        state.unsavedBestStreak = Math.max(state.unsavedBestStreak, state.streak);
         awardComboPoints();
     } else {
+        state.unsavedWrongFields += 1;
         state.streak = 0;
     }
     updateStats();
+
+    if (isFirebaseSignedIn() && getUnsavedAnswerCount() >= 5) {
+        saveCurrentSessionProgress();
+    }
 }
 
 function awardComboPoints() {
@@ -611,9 +690,12 @@ function awardComboPoints() {
 
     state.score += points;
     state.sessionXp += points;
-    profile.xp += points;
-    saveProfile();
-    renderProfile();
+
+    if (!isFirebaseSignedIn()) {
+        profile.xp += points;
+        saveProfile();
+        renderProfile();
+    }
 }
 
 function getComboMultiplier(streak) {
@@ -670,7 +752,7 @@ function updateTimerDisplay() {
     timerText.textContent = formatTime(Math.max(0, state.remainingSeconds));
 }
 
-function endSession() {
+async function endSession() {
     stopTimer();
     state.sessionEnded = true;
 
@@ -686,11 +768,96 @@ function endSession() {
     resultScore.textContent = `${state.score} pts`;
     resultDetail.textContent =
         `${state.totalCorrectFields} correct / ${state.totalChecked} fields - ${percentage}% accuracy - Best combo ${state.bestStreak} - +${state.sessionXp} XP`;
+    resultSaveStatus.textContent = "";
     sessionResult.hidden = false;
+
+    await saveCurrentSessionProgress();
 }
 
 function hideSessionResult() {
     sessionResult.hidden = true;
+    if (resultSaveStatus) resultSaveStatus.textContent = "";
+}
+
+async function saveCurrentSessionProgress() {
+    if (state.saveInFlight) return state.savePromise?.catch(() => {});
+    if (state.unsavedCorrectFields <= 0) return;
+
+    const firebaseClient = window.PolytypeFirebase;
+
+    if (!firebaseClient?.isSignedIn?.()) {
+        if (!sessionResult.hidden && resultSaveStatus) {
+            resultSaveStatus.textContent = "Sign in to save XP.";
+        }
+        return;
+    }
+
+    const payload = {
+        courseId: settings.language,
+        correctAnswers: state.unsavedCorrectFields,
+        wrongAnswers: state.unsavedWrongFields,
+        bestCombo: state.unsavedBestStreak,
+        wordsUsed: state.unsavedWordsUsed,
+        sessionSeconds: settings.timeLimitSeconds
+    };
+
+    state.saveInFlight = true;
+    if (!sessionResult.hidden && resultSaveStatus) {
+        resultSaveStatus.textContent = "Saving progress...";
+    }
+
+    state.savePromise = (async () => {
+        const result = await firebaseClient.completePracticeSession(payload);
+        const progress = result.data;
+
+        if (progress) {
+            profile = {
+                ...profile,
+                xp: progress.totalXp || profile.xp,
+                dayStreak: progress.streak?.currentStreak ?? profile.dayStreak,
+                streakFreezes: progress.streak?.streakFreezes ?? profile.streakFreezes,
+                courses: {
+                    ...(profile.courses || {})
+                }
+            };
+
+            if (progress.course?.courseId) {
+                profile.courses[progress.course.courseId] = progress.course;
+            }
+
+            saveProfile();
+            renderProfile();
+        }
+
+        state.unsavedCorrectFields = Math.max(0, state.unsavedCorrectFields - payload.correctAnswers);
+        state.unsavedWrongFields = Math.max(0, state.unsavedWrongFields - payload.wrongAnswers);
+        state.unsavedWordsUsed = Math.max(0, state.unsavedWordsUsed - payload.wordsUsed);
+        state.unsavedBestStreak = getUnsavedAnswerCount() > 0 ? state.streak : 0;
+        state.progressSaved = getUnsavedAnswerCount() === 0;
+        if (!sessionResult.hidden && resultSaveStatus) {
+            resultSaveStatus.textContent = "Progress saved.";
+        }
+    })();
+
+    try {
+        await state.savePromise;
+    } catch (error) {
+        console.error(error);
+        if (!sessionResult.hidden && resultSaveStatus) {
+            resultSaveStatus.textContent = "Progress not saved. Try again.";
+        }
+    } finally {
+        state.saveInFlight = false;
+        state.savePromise = null;
+    }
+}
+
+function isFirebaseSignedIn() {
+    return Boolean(window.PolytypeFirebase?.isSignedIn?.());
+}
+
+function getUnsavedAnswerCount() {
+    return state.unsavedCorrectFields + state.unsavedWrongFields;
 }
 
 function formatTime(totalSeconds) {

@@ -48,7 +48,9 @@ window.DECK_INDEX = [
     columns: {
       script: "norwegian",
       romanization: "romanization",
-      meaning: "english"
+      meaning: "english",
+      wordId: "word_id",
+      unlockLevel: "unlock_level"
     }
   }
 ];
