@@ -1,5 +1,4 @@
 (function () {
-    const REGION = window.POLYTYPE_FIREBASE_FUNCTIONS_REGION || "europe-west1";
     const state = {
         configured: false,
         ready: false,
@@ -10,8 +9,6 @@
     const listeners = new Set();
 
     let auth = null;
-    let functions = null;
-    let ensureUserProfile = null;
 
     window.PolytypeFirebase = {
         state,
@@ -50,13 +47,6 @@
                 : window.firebase.initializeApp(config);
 
             auth = app.auth();
-            functions = app.functions(REGION);
-
-            if (window.POLYTYPE_FIREBASE_USE_EMULATORS) {
-                connectEmulators();
-            }
-
-            ensureUserProfile = functions.httpsCallable("ensureUserProfile");
             state.configured = true;
 
             auth.onAuthStateChanged(handleAuthStateChanged);
@@ -67,18 +57,25 @@
         }
     }
 
-    function connectEmulators() {
-        try {
-            auth.useEmulator("http://127.0.0.1:9099", { disableWarnings: true });
-        } catch {
-            // The SDK throws if the emulator was already connected during reload.
+    async function callApi(endpoint, data) {
+        const token = await auth.currentUser.getIdToken();
+        const response = await fetch(`/api/${endpoint}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+            const err = await response.json().catch(() => ({}));
+            const error = new Error(err.error || "Request failed.");
+            error.code = `api/${response.status}`;
+            throw error;
         }
 
-        try {
-            functions.useEmulator("127.0.0.1", 5001);
-        } catch {
-            // Keep the client usable if this script reloads.
-        }
+        return response.json();
     }
 
     async function handleAuthStateChanged(user) {
@@ -93,7 +90,7 @@
         }
 
         try {
-            const result = await ensureUserProfile({
+            const result = await callApi("ensure-user-profile", {
                 timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
             });
             state.profile = result.data?.user || null;
@@ -128,8 +125,7 @@
         assertConfigured();
         if (!state.user) throw new Error("Sign in before saving progress.");
 
-        const callable = functions.httpsCallable("completePracticeSession");
-        const result = await callable({
+        const result = await callApi("complete-practice-session", {
             ...payload,
             timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
         });
@@ -289,8 +285,8 @@
             "auth/weak-password": "Password must be at least 6 characters.",
             "auth/user-not-found": "Account not found.",
             "auth/wrong-password": "Wrong email or password.",
-            "functions/unavailable": "Functions emulator unavailable.",
-            "functions/unauthenticated": "Sign in required."
+            "api/401": "Sign in required.",
+            "api/503": "Service temporarily unavailable."
         };
 
         return messages[code] || error?.message || "Firebase error.";

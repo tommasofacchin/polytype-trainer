@@ -22,7 +22,8 @@ const COURSE_LEVEL_CAPS = {
 };
 const CALLABLE_OPTIONS = {
   region: REGION,
-  cors: true
+  cors: true,
+  invoker: "public"
 };
 
 exports.ensureUserProfile = onCall(CALLABLE_OPTIONS, async request => {
