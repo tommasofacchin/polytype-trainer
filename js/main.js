@@ -49,6 +49,8 @@ let focusToggle;
 let timerText;
 let hudScoreText;
 let streakText;
+let streakChip;
+let streakHud;
 let sessionResult;
 let resultScore;
 let resultDetail;
@@ -78,6 +80,8 @@ document.addEventListener("DOMContentLoaded", () => {
     timerText = document.getElementById("timer-text");
     hudScoreText = document.getElementById("hud-score-text");
     streakText = document.getElementById("streak-text");
+    streakChip = document.getElementById("streak-chip");
+    streakHud = document.getElementById("streak-hud");
     sessionResult = document.getElementById("session-result");
     resultScore = document.getElementById("result-score");
     resultDetail = document.getElementById("result-detail");
@@ -655,7 +659,7 @@ function checkMeaningField(logicIndex, meaningInput) {
         normalizeString(meaningInput.value) === normalizeString(item.meaning);
 
     markInput(meaningInput, okMeaning, item.meaning);
-    registerAnswer(okMeaning);
+    registerAnswer(okMeaning, meaningInput);
 }
 
 function markInput(input, isCorrect, correctValue) {
@@ -663,7 +667,10 @@ function markInput(input, isCorrect, correctValue) {
     if (!isCorrect) input.value = correctValue;
 }
 
-function registerAnswer(isCorrect) {
+function registerAnswer(isCorrect, meaningInput) {
+    const prevStreak = state.streak;
+    const prevTier = getComboTier(prevStreak);
+
     state.totalChecked += 1;
     if (isCorrect) {
         state.totalCorrectFields += 1;
@@ -678,6 +685,19 @@ function registerAnswer(isCorrect) {
         state.streak = 0;
     }
     updateStats();
+
+    const row = meaningInput?.closest(".row");
+    if (row) flashRow(row, isCorrect);
+
+    if (isCorrect) {
+        const pts = Math.round(10 * getComboMultiplier(state.streak - 1));
+        const tier = getComboTier(state.streak);
+        if (meaningInput) showXpFloat(pts, tier, meaningInput);
+        const tierUp = tier > prevTier;
+        animateStreakPop(tierUp);
+    } else if (prevStreak > 0) {
+        animateStreakBreak();
+    }
 
     if (isFirebaseSignedIn() && getUnsavedAnswerCount() >= 5) {
         saveCurrentSessionProgress();
@@ -710,14 +730,65 @@ function formatMultiplier(multiplier) {
     return Number.isInteger(multiplier) ? String(multiplier) : multiplier.toFixed(1);
 }
 
+function getComboTier(streak) {
+    if (streak >= 20) return 4;
+    if (streak >= 15) return 3;
+    if (streak >= 10) return 2;
+    if (streak >= 5)  return 1;
+    return 0;
+}
+
 function updateStats() {
     const multiplier = getComboMultiplier(state.streak);
+    const tier = getComboTier(state.streak);
 
     hudScoreText.textContent = `${state.score} pts`;
-    streakText.textContent =
-        state.streak > 0
-            ? `${state.streak} x${formatMultiplier(multiplier)}`
-            : "0";
+    streakText.textContent = String(state.streak);
+
+    if (state.streak >= 5) {
+        streakChip.hidden = false;
+        streakChip.textContent = `×${formatMultiplier(multiplier)}`;
+        streakChip.dataset.tier = String(tier);
+    } else {
+        streakChip.hidden = true;
+    }
+
+    streakHud.dataset.comboTier = String(tier);
+}
+
+function animateStreakPop(big) {
+    const cls = big ? "streak-pop-big" : "streak-pop";
+    streakText.classList.remove("streak-pop", "streak-pop-big", "streak-shake");
+    void streakText.offsetWidth;
+    streakText.classList.add(cls);
+    streakText.addEventListener("animationend", () => streakText.classList.remove(cls), { once: true });
+}
+
+function animateStreakBreak() {
+    streakText.classList.remove("streak-pop", "streak-pop-big", "streak-shake");
+    void streakText.offsetWidth;
+    streakText.classList.add("streak-shake");
+    streakText.addEventListener("animationend", () => streakText.classList.remove("streak-shake"), { once: true });
+}
+
+function flashRow(row, isCorrect) {
+    const cls = isCorrect ? "row-flash-correct" : "row-flash-wrong";
+    row.classList.remove("row-flash-correct", "row-flash-wrong");
+    void row.offsetWidth;
+    row.classList.add(cls);
+    row.addEventListener("animationend", () => row.classList.remove(cls), { once: true });
+}
+
+function showXpFloat(pts, tier, inputEl) {
+    const rect = inputEl.getBoundingClientRect();
+    const el = document.createElement("span");
+    el.className = "xp-float";
+    el.textContent = `+${pts}`;
+    if (tier > 1) el.dataset.tier = String(tier);
+    el.style.left = `${rect.left + rect.width / 2 - 18}px`;
+    el.style.top = `${rect.top - 4}px`;
+    document.body.appendChild(el);
+    el.addEventListener("animationend", () => el.remove(), { once: true });
 }
 
 function startTimerIfNeeded() {
