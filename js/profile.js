@@ -254,9 +254,11 @@ function sanitizeCourses(courses) {
 }
 
 function getCourseLabel(courseId) {
-    return courseLabels[courseId] || courseId.charAt(0).toUpperCase() + courseId.slice(1);
+    const safeCourseId = typeof courseId === "string" ? courseId.trim() : "";
+    if (!safeCourseId) return "Course";
+    return courseLabels[safeCourseId] || safeCourseId.charAt(0).toUpperCase() + safeCourseId.slice(1);
 }
 
 function getCourseIcon(courseId) {
-    return getCourseLabel(courseId).charAt(0).toUpperCase();
+    return getCourseLabel(courseId).charAt(0) || "C";
 }
