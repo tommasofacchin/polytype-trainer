@@ -19,11 +19,12 @@
     <section class="profile-hero" aria-label="Player profile">
       <div class="profile-avatar profile-avatar-large" aria-hidden="true">T</div>
       <div class="profile-hero-copy">
-        <span class="profile-kicker">Demo profile</span>
+        <span class="profile-kicker">Player profile</span>
         <h1 id="profile-page-name">Tommaso</h1>
         <p id="profile-page-level">Level 1</p>
       </div>
     </section>
+    <p id="profile-page-sync-status" class="profile-muted">Loading profile...</p>
 
     <section class="profile-detail-grid" aria-label="Profile details">
       <article class="profile-detail-card profile-detail-card-wide">
@@ -62,9 +63,25 @@
         </div>
         <div id="profile-page-badges" class="profile-badge-grid"></div>
       </article>
+
+      <article class="profile-detail-card profile-detail-card-wide">
+        <div class="profile-card-head">
+          <div>
+            <span class="profile-card-label">Course progress</span>
+            <strong>Learning tracks</strong>
+          </div>
+          <span id="profile-page-course-count" class="profile-stat-pill">0 active</span>
+        </div>
+        <div id="profile-page-courses" class="profile-badge-grid"></div>
+      </article>
     </section>
   </main>
 
+  <script src="js/firebase-config.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-functions-compat.js"></script>
+  <script src="js/firebase-client.js"></script>
   <script src="js/profile.js"></script>
 </body>
 </html>
