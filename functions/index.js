@@ -20,8 +20,12 @@ const HANDLE_PATTERN = /^[a-z0-9_]{3,20}$/;
 const COURSE_LEVEL_CAPS = {
   norwegian: 20
 };
+const CALLABLE_OPTIONS = {
+  region: REGION,
+  cors: true
+};
 
-exports.ensureUserProfile = onCall({ region: REGION }, async request => {
+exports.ensureUserProfile = onCall(CALLABLE_OPTIONS, async request => {
   const auth = requireAuth(request);
   const timezone = normalizeTimezone(request.data?.timezone);
   const authProfile = getAuthProfile(auth);
@@ -71,7 +75,7 @@ exports.ensureUserProfile = onCall({ region: REGION }, async request => {
   return result;
 });
 
-exports.setUserHandle = onCall({ region: REGION }, async request => {
+exports.setUserHandle = onCall(CALLABLE_OPTIONS, async request => {
   const auth = requireAuth(request);
   const handle = normalizeHandle(request.data?.handle);
 
@@ -118,7 +122,7 @@ exports.setUserHandle = onCall({ region: REGION }, async request => {
   return result;
 });
 
-exports.completePracticeSession = onCall({ region: REGION }, async request => {
+exports.completePracticeSession = onCall(CALLABLE_OPTIONS, async request => {
   const auth = requireAuth(request);
   const session = normalizeSessionPayload(request.data);
   const xpEarned = calculateSessionXp(session);
@@ -273,7 +277,7 @@ exports.completePracticeSession = onCall({ region: REGION }, async request => {
   return result;
 });
 
-exports.grantStreakFreeze = onCall({ region: REGION }, async request => {
+exports.grantStreakFreeze = onCall(CALLABLE_OPTIONS, async request => {
   const auth = requireAuth(request);
 
   const result = await db.runTransaction(async transaction => {
@@ -300,7 +304,7 @@ exports.grantStreakFreeze = onCall({ region: REGION }, async request => {
   return result;
 });
 
-exports.sendFriendRequest = onCall({ region: REGION }, async request => {
+exports.sendFriendRequest = onCall(CALLABLE_OPTIONS, async request => {
   const auth = requireAuth(request);
   const toUid = normalizeUid(request.data?.toUid);
 
@@ -353,7 +357,7 @@ exports.sendFriendRequest = onCall({ region: REGION }, async request => {
   return result;
 });
 
-exports.respondFriendRequest = onCall({ region: REGION }, async request => {
+exports.respondFriendRequest = onCall(CALLABLE_OPTIONS, async request => {
   const auth = requireAuth(request);
   const requestId = cleanRequiredString(request.data?.requestId, "requestId");
   const accept = Boolean(request.data?.accept);
@@ -426,7 +430,7 @@ exports.respondFriendRequest = onCall({ region: REGION }, async request => {
   return result;
 });
 
-exports.removeFriend = onCall({ region: REGION }, async request => {
+exports.removeFriend = onCall(CALLABLE_OPTIONS, async request => {
   const auth = requireAuth(request);
   const friendUid = normalizeUid(request.data?.friendUid);
 
