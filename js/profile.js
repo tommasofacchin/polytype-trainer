@@ -256,7 +256,10 @@ function sanitizeCourses(courses) {
 function getCourseLabel(courseId) {
     const safeCourseId = typeof courseId === "string" ? courseId.trim() : "";
     if (!safeCourseId) return "Course";
-    return courseLabels[safeCourseId] || safeCourseId.charAt(0).toUpperCase() + safeCourseId.slice(1);
+    if (courseLabels[safeCourseId]) return courseLabels[safeCourseId];
+    const first = safeCourseId[0];
+    if (!first) return "Course";
+    return `${first.toUpperCase()}${safeCourseId.slice(1)}`;
 }
 
 function getCourseIcon(courseId) {
