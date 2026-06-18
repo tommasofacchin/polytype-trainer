@@ -40,6 +40,8 @@ const defaultProfile = {
 };
 
 let levelSelect;
+let levelField;
+let romajiField;
 let romajiToggle;
 let rowsContainer;
 let restartBtn;
@@ -71,6 +73,8 @@ const profileStorageKey = "polytype-profile";
 
 document.addEventListener("DOMContentLoaded", () => {
     levelSelect = document.getElementById("level-select");
+    levelField = document.getElementById("level-field");
+    romajiField = document.getElementById("romaji-field");
     romajiToggle = document.getElementById("romaji-toggle");
     rowsContainer = document.getElementById("rows-container");
     restartBtn = document.getElementById("restart-btn");
@@ -109,6 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initProfile();
     setupFirebaseProfileSync();
     populateLanguageSelect();
+    updateRomajiUI();
     applyInitialVisibilityClasses();
     startSession();
 });
@@ -257,10 +262,9 @@ function populateLanguageSelect() {
 
 function populateLevelSelect() {
     const levels = uniqueBy(
-        getDecksForLanguage(settings.language).map(deck => ({
-            value: deck.level,
-            label: deck.level
-        })),
+        getDecksForLanguage(settings.language)
+            .filter(deck => deck.level !== "A1")
+            .map(deck => ({ value: deck.level, label: deck.level })),
         item => item.value
     );
 
@@ -268,19 +272,35 @@ function populateLevelSelect() {
         ...levels.map(level => option(level.value, level.label))
     );
 
+    levelField.hidden = levels.length <= 1;
     settings.level = levelSelect.value;
     populateDeckSelect();
 }
 
 function populateDeckSelect() {
-    const decks = getDecksForLanguage(settings.language)
-        .filter(deck => deck.level === settings.level);
+    const allDecks = getDecksForLanguage(settings.language);
+    const levelDecks = allDecks.filter(deck => deck.level === settings.level);
+    settings.deckName = (levelDecks[0] ?? allDecks[0])?.id || "";
+}
 
-    settings.deckName = decks[0]?.id || "";
+function updateRomajiUI() {
+    const labels = { chinese: "Pinyin", korean: "Romanization" };
+    const hasHints = settings.language !== "norwegian";
+
+    romajiField.hidden = !hasHints;
+
+    if (!hasHints) {
+        settings.showRomanization = false;
+        document.body.classList.add("hide-romaji");
+    } else {
+        const label = romajiField.querySelector(".cbx span");
+        if (label) label.textContent = labels[settings.language] || "Hints";
+    }
 }
 
 function onLanguageChange() {
     populateLevelSelect();
+    updateRomajiUI();
     startSession();
 }
 
@@ -575,6 +595,19 @@ function spawnNextRow() {
         onKeyDownMeaning(event, Number(meaningInput.dataset.logicIndex), meaningInput)
     );
 
+    meaningInput.addEventListener("input", () => {
+        if (state.sessionEnded || meaningInput.dataset.autoSubmitted) return;
+        if (!settings.useMeaning) return;
+        const logicIndex = Number(meaningInput.dataset.logicIndex);
+        const item = state.currentDeck[logicIndex];
+        if (!item || meaningInput.value.trim().length === 0) return;
+        if (normalizeString(meaningInput.value) === normalizeString(item.meaning)) {
+            meaningInput.dataset.autoSubmitted = "true";
+            checkMeaningField(logicIndex, meaningInput);
+            moveToNextRow(meaningInput);
+        }
+    });
+
     requestAnimationFrame(() => {
         row.classList.add("visible");
         if (isFirstRow) focusFirstEnabledInput(meaningInput);
@@ -593,6 +626,7 @@ function createAnswerInput(className, logicIndex) {
 function onKeyDownMeaning(event, logicIndex, meaningInput) {
     if (!isSubmitKey(event)) return;
     if (state.sessionEnded) return;
+    if (meaningInput.dataset.autoSubmitted) return;
 
     event.preventDefault();
     if (settings.useMeaning) {
@@ -753,7 +787,11 @@ function updateStats() {
         streakChip.hidden = true;
     }
 
-    streakHud.dataset.comboTier = String(tier);
+    if (tier > 0) {
+        streakHud.dataset.comboTier = String(tier);
+    } else {
+        delete streakHud.dataset.comboTier;
+    }
 }
 
 function animateStreakPop(big) {
