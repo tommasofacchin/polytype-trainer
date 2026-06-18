@@ -69,6 +69,7 @@ function prepareDist() {
     "decks",
     "js",
     "index.html",
+    "auth.html",
     "profile.html",
     "style.css",
     "style_to_copy.css"

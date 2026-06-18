@@ -8,8 +8,8 @@
   },
   "scripts": {
     "check": "node --check index.js",
-    "serve": "npx firebase-tools emulators:start --project demo-polytype-trainer-dev --only auth,functions,firestore,hosting",
-    "deploy": "npx firebase-tools deploy --only functions,firestore:rules,firestore:indexes"
+    "serve": "cd .. && npx firebase-tools emulators:start --project demo-polytype-trainer-dev --only auth,functions,firestore,hosting",
+    "deploy": "node ../scripts/deploy-firebase.cjs"
   },
   "dependencies": {
     "firebase-admin": "^13.0.0",

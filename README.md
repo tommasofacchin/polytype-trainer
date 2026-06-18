@@ -80,8 +80,9 @@ After the emulators start, open:
 http://localhost:5000
 ```
 
-Use the `Sign in` menu in the header. Press `Create` for a new local emulator
-account, then use `Sign in` with the same email and password later.
+Open `auth.html` from the header link, then switch between `Sign in` and
+`Register` on the same page. Use `Sign in` with the same email and password
+later to recover the account.
 
 Local emulator users appear only in:
 

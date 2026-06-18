@@ -15,33 +15,17 @@
         <h1>Polytype Trainer</h1>
       </div>
       <div class="header-actions">
-        <div class="auth-menu">
-          <button id="auth-menu-toggle" class="auth-menu-toggle" type="button" aria-haspopup="true" aria-expanded="false">
-            Sign in
-          </button>
-          <div id="auth-menu-panel" class="auth-menu-panel" hidden>
-            <form id="auth-form" class="auth-form">
-              <label>
-                Email
-                <input id="auth-email" type="email" autocomplete="email" required>
-              </label>
-              <label>
-                Password
-                <input id="auth-password" type="password" autocomplete="current-password" required minlength="6">
-              </label>
-              <div class="auth-actions">
-                <button id="auth-signin-btn" class="restart-btn" type="submit">Sign in</button>
-                <button id="auth-register-btn" class="secondary-btn" type="button">Create</button>
-              </div>
-            </form>
-            <div id="auth-user-panel" class="auth-user-panel" hidden>
-              <strong id="auth-user-name">Signed in</strong>
-              <span id="auth-user-email"></span>
-              <button id="auth-signout-btn" class="secondary-btn" type="button">Sign out</button>
-            </div>
-            <p id="auth-status" class="auth-status" aria-live="polite"></p>
-          </div>
-        </div>
+        <button id="my-deck-btn" class="deck-open-btn" type="button" aria-haspopup="dialog">
+          <svg class="deck-open-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3" y="4" width="7" height="7" rx="1.6"></rect>
+            <rect x="14" y="4" width="7" height="7" rx="1.6"></rect>
+            <rect x="3" y="14" width="7" height="7" rx="1.6"></rect>
+            <rect x="14" y="14" width="7" height="7" rx="1.6"></rect>
+          </svg>
+          <span>My Deck</span>
+        </button>
+
+        <a id="auth-link" class="auth-menu-toggle auth-page-link" href="auth.html">Sign in</a>
 
         <div class="language-menu">
           <button id="language-menu-toggle" class="language-menu-toggle" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Choose study language">
@@ -149,6 +133,29 @@
       <button id="play-again-btn" class="restart-btn" type="button">Play again</button>
     </section>
   </main>
+
+  <div id="my-deck-overlay" class="deck-overlay" role="dialog" aria-modal="true" aria-labelledby="deck-overlay-title" hidden>
+    <div class="deck-overlay-backdrop" data-deck-close></div>
+    <div class="deck-modal" role="document">
+      <header class="deck-modal-head">
+        <div class="deck-modal-headings">
+          <span class="deck-modal-kicker">Collection</span>
+          <h2 id="deck-overlay-title">My Deck</h2>
+          <p id="deck-modal-sub" class="deck-modal-sub"></p>
+        </div>
+        <button id="my-deck-close" class="deck-modal-close" type="button" aria-label="Close" data-deck-close>&times;</button>
+      </header>
+
+      <div class="deck-progress">
+        <div class="deck-progress-track">
+          <span id="deck-progress-fill" class="deck-progress-fill"></span>
+        </div>
+        <span id="deck-progress-text" class="deck-progress-text"></span>
+      </div>
+
+      <div id="deck-groups" class="deck-groups"></div>
+    </div>
+  </div>
 
   <script src="js/firebase-config.js"></script>
   <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-app-compat.js"></script>

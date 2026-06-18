@@ -64,7 +64,16 @@ let currentLanguageFlag;
 let miniProfileLevel;
 let miniProfileXp;
 let miniProfileStreak;
+let myDeckBtn;
+let myDeckOverlay;
+let deckGroups;
+let deckModalSub;
+let deckProgressFill;
+let deckProgressText;
 let profile = { ...defaultProfile };
+// Last level reflected in the UI. Used to detect level-ups in renderProfile.
+// null until the first render so we don't celebrate on initial load/hydration.
+let lastShownLevel = null;
 
 const AVAILABLE_DECKS = window.DECK_INDEX || [];
 const errorColor = "var(--danger)";
@@ -97,6 +106,17 @@ document.addEventListener("DOMContentLoaded", () => {
     miniProfileLevel = document.getElementById("mini-profile-level");
     miniProfileXp = document.getElementById("mini-profile-xp");
     miniProfileStreak = document.getElementById("mini-profile-streak");
+    myDeckBtn = document.getElementById("my-deck-btn");
+    myDeckOverlay = document.getElementById("my-deck-overlay");
+    deckGroups = document.getElementById("deck-groups");
+    deckModalSub = document.getElementById("deck-modal-sub");
+    deckProgressFill = document.getElementById("deck-progress-fill");
+    deckProgressText = document.getElementById("deck-progress-text");
+
+    myDeckBtn.addEventListener("click", openMyDeck);
+    myDeckOverlay.addEventListener("click", event => {
+        if (event.target.closest("[data-deck-close]")) closeMyDeck();
+    });
 
     levelSelect.addEventListener("change", onLevelChange);
     romajiToggle.addEventListener("change", onRomajiToggle);
@@ -203,6 +223,16 @@ function renderProfile() {
     miniProfileLevel.textContent = `Level ${levelInfo.level}`;
     miniProfileXp.textContent = `${levelInfo.currentXp} / ${levelInfo.nextXp} XP`;
     miniProfileStreak.textContent = `\u{1F525} ${profile.dayStreak}`;
+
+    maybeCelebrateLevelUp(levelInfo.level);
+}
+
+function maybeCelebrateLevelUp(level) {
+    const isPlaying = !state.sessionEnded && state.currentDeck.length > 0;
+    if (lastShownLevel !== null && level > lastShownLevel && isPlaying) {
+        celebrateLevelUp(level);
+    }
+    lastShownLevel = level;
 }
 
 function getLevelInfo(totalXp) {
@@ -283,9 +313,13 @@ function populateDeckSelect() {
     settings.deckName = (levelDecks[0] ?? allDecks[0])?.id || "";
 }
 
+function languageHasHints() {
+    return settings.language !== "norwegian";
+}
+
 function updateRomajiUI() {
     const labels = { chinese: "Pinyin", korean: "Romanization" };
-    const hasHints = settings.language !== "norwegian";
+    const hasHints = languageHasHints();
 
     romajiField.hidden = !hasHints;
 
@@ -373,6 +407,11 @@ function toggleFocusMode() {
 }
 
 function onGlobalKeyDown(event) {
+    if (event.key === "Escape" && !myDeckOverlay.hidden) {
+        closeMyDeck();
+        return;
+    }
+
     if (event.key === "Escape" && !languageMenu.hidden) {
         closeLanguageMenu();
         languageMenuToggle.focus();
@@ -490,7 +529,10 @@ function prepareCurrentDeck() {
         state.fullDeck.filter(item => item.unlockLevel <= unlockedLevel)
     );
     state.currentIndex = 0;
-    state.wordsUsed = 0;
+    // NB: do not reset state.wordsUsed here. It is the monotonic row counter
+    // used for each row's dataset.index; resetting it mid-session (infinite-run
+    // loop) makes the wrap-around row reuse index 0 and get locked as a
+    // "past-row", which skips a word. resetState() zeroes it at session start.
 }
 
 function getUnlockedLevel() {
@@ -500,6 +542,140 @@ function getUnlockedLevel() {
     if (courseProgress?.level) return courseProgress.level;
 
     return getLevelInfo(profile.xp).level;
+}
+
+const LOCK_SVG =
+    '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+    '<rect x="4.5" y="10.5" width="15" height="10" rx="2.4"></rect>' +
+    '<path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"></path>' +
+    '<circle cx="12" cy="15" r="1.5"></circle>' +
+    '</svg>';
+
+function openMyDeck() {
+    buildMyDeck();
+    myDeckOverlay.hidden = false;
+    document.body.classList.add("deck-overlay-open");
+    requestAnimationFrame(() => myDeckOverlay.classList.add("is-open"));
+}
+
+function closeMyDeck() {
+    myDeckOverlay.classList.remove("is-open");
+    document.body.classList.remove("deck-overlay-open");
+    window.setTimeout(() => { myDeckOverlay.hidden = true; }, 240);
+    myDeckBtn.focus();
+}
+
+function buildMyDeck() {
+    const words = state.fullDeck;
+    deckGroups.replaceChildren();
+
+    if (!words.length) {
+        const empty = document.createElement("p");
+        empty.className = "deck-empty";
+        empty.textContent = "No words loaded yet. Start a session to load this deck.";
+        deckGroups.appendChild(empty);
+        deckModalSub.textContent = "";
+        deckProgressFill.style.width = "0%";
+        deckProgressText.textContent = "";
+        return;
+    }
+
+    const unlockedLevel = getUnlockedLevel();
+    const unlockedCount = words.filter(word => word.unlockLevel <= unlockedLevel).length;
+    const pct = Math.round((unlockedCount / words.length) * 100);
+
+    deckModalSub.textContent =
+        `${getLanguageLabel(settings.language)} · ${words.length} words`;
+    deckProgressFill.style.width = `${pct}%`;
+    deckProgressText.textContent = `${unlockedCount} / ${words.length} unlocked`;
+
+    const byLevel = new Map();
+    words.forEach(word => {
+        if (!byLevel.has(word.unlockLevel)) byLevel.set(word.unlockLevel, []);
+        byLevel.get(word.unlockLevel).push(word);
+    });
+
+    [...byLevel.keys()].sort((a, b) => a - b).forEach(level => {
+        const locked = level > unlockedLevel;
+        deckGroups.appendChild(buildDeckGroup(level, byLevel.get(level), locked));
+    });
+}
+
+function buildDeckGroup(level, words, locked) {
+    const group = document.createElement("section");
+    group.className = "deck-group";
+    if (locked) group.classList.add("is-locked");
+
+    const head = document.createElement("div");
+    head.className = "deck-group-head";
+
+    const badge = document.createElement("span");
+    badge.className = "deck-group-badge";
+    badge.innerHTML = locked ? LOCK_SVG : "&#10003;";
+
+    const title = document.createElement("span");
+    title.className = "deck-group-title";
+    title.textContent = `Level ${level}`;
+
+    const meta = document.createElement("span");
+    meta.className = "deck-group-meta";
+    meta.textContent = locked
+        ? `Unlocks at level ${level}`
+        : `${words.length} word${words.length === 1 ? "" : "s"}`;
+
+    head.append(badge, title, meta);
+
+    const grid = document.createElement("div");
+    grid.className = "deck-grid";
+    words.forEach(word => grid.appendChild(buildDeckCard(word, level, locked)));
+
+    group.append(head, grid);
+    return group;
+}
+
+function buildDeckCard(word, level, locked) {
+    const card = document.createElement("div");
+    card.className = "deck-card";
+
+    if (locked) {
+        card.classList.add("is-locked");
+        card.setAttribute("aria-label", `Locked word, unlocks at level ${level}`);
+
+        const lock = document.createElement("span");
+        lock.className = "deck-card-lock";
+        lock.innerHTML = LOCK_SVG;
+
+        const tag = document.createElement("span");
+        tag.className = "deck-card-locktag";
+        tag.textContent = `Lv ${level}`;
+
+        card.append(lock, tag);
+        return card;
+    }
+
+    const script = document.createElement("span");
+    script.className = "deck-card-script";
+    script.textContent = word.script;
+    card.appendChild(script);
+
+    if (languageHasHints() && word.romanization) {
+        const roman = document.createElement("span");
+        roman.className = "deck-card-roman";
+        roman.textContent = word.romanization;
+        card.appendChild(roman);
+    }
+
+    const meaning = document.createElement("span");
+    meaning.className = "deck-card-meaning";
+    meaning.textContent = word.meaning;
+    card.appendChild(meaning);
+
+    const lvl = document.createElement("span");
+    lvl.className = "deck-card-lv";
+    lvl.textContent = `Lv ${level}`;
+    card.appendChild(lvl);
+
+    return card;
 }
 
 function resetState() {
@@ -571,16 +747,24 @@ function spawnNextRow() {
     scriptText.className = "script-text";
     scriptText.textContent = item.script;
 
-    const romanizationHint = document.createElement("span");
-    romanizationHint.className = "romanization-hint";
-    romanizationHint.textContent = `(${item.romanization})`;
+    colScript.append(scriptText);
 
-    colScript.append(scriptText, romanizationHint);
+    if (languageHasHints() && item.romanization) {
+        const romanizationHint = document.createElement("span");
+        romanizationHint.className = "romanization-hint";
+        romanizationHint.textContent = `(${item.romanization})`;
+        colScript.append(romanizationHint);
+    }
 
     const colMeaning = document.createElement("div");
     colMeaning.className = "meaning-col";
 
-    const meaningInput = createAnswerInput("meaning-input", state.currentIndex);
+    const meaningInput = createAnswerInput("meaning-input");
+    // Bind the actual deck item to the input. state.currentDeck is reshuffled
+    // into a new array when the deck loops (infinite run), which invalidates any
+    // numeric index held by rows already on screen. Checking against this bound
+    // item keeps the displayed word and its correct meaning in sync.
+    meaningInput.deckItem = item;
     const meaningFeedback = document.createElement("div");
     meaningFeedback.className = "feedback feedback-meaning";
 
@@ -592,18 +776,17 @@ function spawnNextRow() {
     state.currentIndex += 1;
 
     meaningInput.addEventListener("keydown", event =>
-        onKeyDownMeaning(event, Number(meaningInput.dataset.logicIndex), meaningInput)
+        onKeyDownMeaning(event, meaningInput)
     );
 
     meaningInput.addEventListener("input", () => {
         if (state.sessionEnded || meaningInput.dataset.autoSubmitted) return;
         if (!settings.useMeaning) return;
-        const logicIndex = Number(meaningInput.dataset.logicIndex);
-        const item = state.currentDeck[logicIndex];
+        const item = meaningInput.deckItem;
         if (!item || meaningInput.value.trim().length === 0) return;
         if (normalizeString(meaningInput.value) === normalizeString(item.meaning)) {
             meaningInput.dataset.autoSubmitted = "true";
-            checkMeaningField(logicIndex, meaningInput);
+            checkMeaningField(meaningInput);
             moveToNextRow(meaningInput);
         }
     });
@@ -614,23 +797,22 @@ function spawnNextRow() {
     });
 }
 
-function createAnswerInput(className, logicIndex) {
+function createAnswerInput(className) {
     const input = document.createElement("input");
     input.type = "text";
     input.className = className;
     input.autocomplete = "off";
-    input.dataset.logicIndex = String(logicIndex);
     return input;
 }
 
-function onKeyDownMeaning(event, logicIndex, meaningInput) {
+function onKeyDownMeaning(event, meaningInput) {
     if (!isSubmitKey(event)) return;
     if (state.sessionEnded) return;
     if (meaningInput.dataset.autoSubmitted) return;
 
     event.preventDefault();
     if (settings.useMeaning) {
-        checkMeaningField(logicIndex, meaningInput);
+        checkMeaningField(meaningInput);
     }
 
     moveToNextRow(meaningInput);
@@ -682,10 +864,10 @@ function lockPastRow(row) {
     });
 }
 
-function checkMeaningField(logicIndex, meaningInput) {
+function checkMeaningField(meaningInput) {
     if (!settings.useMeaning) return;
 
-    const item = state.currentDeck[logicIndex];
+    const item = meaningInput.deckItem;
     if (!item) return;
 
     const okMeaning =
@@ -827,6 +1009,68 @@ function showXpFloat(pts, tier, inputEl) {
     el.style.top = `${rect.top - 4}px`;
     document.body.appendChild(el);
     el.addEventListener("animationend", () => el.remove(), { once: true });
+}
+
+function celebrateLevelUp(level) {
+    document.querySelector(".levelup-overlay")?.remove();
+
+    const overlay = document.createElement("div");
+    overlay.className = "levelup-overlay";
+
+    const card = document.createElement("div");
+    card.className = "levelup-card";
+
+    const rays = document.createElement("div");
+    rays.className = "levelup-rays";
+
+    const badge = document.createElement("div");
+    badge.className = "levelup-badge";
+    const badgeStar = document.createElement("span");
+    badgeStar.className = "levelup-badge-star";
+    badgeStar.textContent = "★";
+    const badgeLevel = document.createElement("span");
+    badgeLevel.className = "levelup-badge-level";
+    badgeLevel.textContent = String(level);
+    badge.append(badgeStar, badgeLevel);
+
+    const title = document.createElement("div");
+    title.className = "levelup-title";
+    title.textContent = "LEVEL UP";
+
+    const sub = document.createElement("div");
+    sub.className = "levelup-sub";
+    sub.textContent = `Level ${level} reached`;
+
+    card.append(rays, badge, title, sub);
+
+    const confetti = document.createElement("div");
+    confetti.className = "levelup-confetti";
+    const colors = [
+        getComboColor(1), getComboColor(2), getComboColor(3), getComboColor(4),
+        "var(--accent)", "var(--success)"
+    ];
+    for (let i = 0; i < 22; i += 1) {
+        const piece = document.createElement("span");
+        piece.className = "levelup-confetti-piece";
+        piece.style.setProperty("--x", `${(Math.random() * 2 - 1) * 42}vw`);
+        piece.style.setProperty("--r", `${Math.random() * 720 - 360}deg`);
+        piece.style.setProperty("--delay", `${Math.random() * 0.25}s`);
+        piece.style.setProperty("--dur", `${1.1 + Math.random() * 0.9}s`);
+        piece.style.left = `${48 + Math.random() * 4}%`;
+        piece.style.background = colors[i % colors.length];
+        confetti.appendChild(piece);
+    }
+
+    overlay.append(confetti, card);
+    document.body.appendChild(overlay);
+
+    window.setTimeout(() => overlay.classList.add("is-leaving"), 2000);
+    window.setTimeout(() => overlay.remove(), 2480);
+}
+
+function getComboColor(tier) {
+    return getComputedStyle(document.documentElement)
+        .getPropertyValue(`--combo-${tier}`).trim() || "var(--accent)";
 }
 
 function startTimerIfNeeded() {

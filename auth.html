@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" class="auth-document">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign in - Polytype Trainer</title>
+    <link rel="icon" type="image/svg+xml" href="assets/flags/china.svg">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body class="auth-page-body">
+  <main class="auth-page">
+    <section id="auth-page" class="auth-panel" data-mode="signin" aria-label="Authentication form">
+      <div class="auth-panel-head">
+        <div>
+          <h2 id="auth-panel-title">Sign in</h2>
+          <p id="auth-panel-copy">Access your saved progress and streaks.</p>
+        </div>
+      </div>
+
+      <form id="auth-form" class="auth-form auth-page-form">
+        <label>
+          <span>Email</span>
+          <input id="auth-email" type="email" autocomplete="email" autocapitalize="none" spellcheck="false" required>
+        </label>
+        <label>
+          <span>Password</span>
+          <input id="auth-password" type="password" autocomplete="current-password" minlength="6" required>
+        </label>
+        <label id="auth-confirm-label" hidden>
+          <span>Confirm password</span>
+          <input id="auth-confirm-password" type="password" autocomplete="new-password" minlength="6">
+        </label>
+
+        <button id="auth-submit-btn" class="restart-btn auth-submit" type="submit">Sign in</button>
+        <p id="auth-status" class="auth-status" aria-live="polite"></p>
+
+        <p class="auth-switch">
+          <span id="auth-switch-text">Don't have an account?</span>
+          <button id="auth-switch-btn" class="auth-switch-btn" type="button">Register</button>
+        </p>
+      </form>
+
+      <div id="auth-signed-in-panel" class="auth-signed-in-panel" hidden>
+        <div>
+          <span class="auth-panel-kicker">Signed in</span>
+          <strong id="auth-user-name">Account ready</strong>
+          <p id="auth-user-email">Your session is linked to this account.</p>
+        </div>
+
+        <div class="auth-secondary-actions">
+          <a class="secondary-btn auth-secondary-link" href="index.html">Continue training</a>
+          <a class="secondary-btn auth-secondary-link" href="profile.html">Open profile</a>
+          <button id="auth-signout-btn" class="secondary-btn" type="button">Sign out</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/firebase-config.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-auth-compat.js"></script>
+  <script src="js/firebase-client.js"></script>
+</body>
+</html>

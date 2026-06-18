@@ -141,69 +141,144 @@
     }
 
     function initAuthUi() {
-        const toggle = document.getElementById("auth-menu-toggle");
-        const panel = document.getElementById("auth-menu-panel");
+        initHeaderAuthLink();
+        initAuthPageUi();
+    }
+
+    function initHeaderAuthLink() {
+        const authLink = document.getElementById("auth-link");
+        if (!authLink) return;
+
+        window.PolytypeFirebase.onChange(nextState => {
+            const user = nextState.user;
+            const label = user
+                ? getShortAuthLabel(nextState.profile?.displayName || user.email)
+                : "Sign in";
+
+            authLink.textContent = label;
+            authLink.setAttribute(
+                "aria-label",
+                user ? "Open account page" : "Open sign in page"
+            );
+            authLink.classList.toggle("is-signed-in", Boolean(user));
+        });
+    }
+
+    function initAuthPageUi() {
+        const page = document.getElementById("auth-page");
+        if (!page) return;
+
         const form = document.getElementById("auth-form");
         const email = document.getElementById("auth-email");
         const password = document.getElementById("auth-password");
-        const registerBtn = document.getElementById("auth-register-btn");
-        const userPanel = document.getElementById("auth-user-panel");
+        const confirmLabel = document.getElementById("auth-confirm-label");
+        const confirmPassword = document.getElementById("auth-confirm-password");
+        const switchBtn = document.getElementById("auth-switch-btn");
+        const switchText = document.getElementById("auth-switch-text");
+        const submitBtn = document.getElementById("auth-submit-btn");
+        const panelTitle = document.getElementById("auth-panel-title");
+        const panelCopy = document.getElementById("auth-panel-copy");
+        const signedInPanel = document.getElementById("auth-signed-in-panel");
         const userName = document.getElementById("auth-user-name");
         const userEmail = document.getElementById("auth-user-email");
         const signOutBtn = document.getElementById("auth-signout-btn");
         const status = document.getElementById("auth-status");
 
-        if (!toggle || !panel || !form) return;
+        if (
+            !form ||
+            !email ||
+            !password ||
+            !confirmLabel ||
+            !confirmPassword ||
+            !switchBtn ||
+            !switchText ||
+            !submitBtn ||
+            !panelTitle ||
+            !panelCopy ||
+            !signedInPanel ||
+            !userName ||
+            !userEmail ||
+            !signOutBtn ||
+            !status
+        ) {
+            return;
+        }
 
-        toggle.addEventListener("click", () => {
-            const willOpen = panel.hidden;
-            panel.hidden = !willOpen;
-            toggle.setAttribute("aria-expanded", String(willOpen));
-        });
+        let mode = "signin";
 
-        document.addEventListener("click", event => {
-            if (panel.hidden || panel.contains(event.target) || toggle.contains(event.target)) {
-                return;
+        function setMode(nextMode) {
+            mode = nextMode;
+            page.dataset.mode = mode;
+            submitBtn.textContent = mode === "signin" ? "Sign in" : "Create account";
+            panelTitle.textContent = mode === "signin" ? "Sign in" : "Register";
+            panelCopy.textContent = mode === "signin"
+                ? "Access your saved progress and streaks."
+                : "Create a new account and start syncing from the first session.";
+            switchText.textContent = mode === "signin"
+                ? "Don't have an account?"
+                : "Already have an account?";
+            switchBtn.textContent = mode === "signin" ? "Register" : "Sign in";
+            password.autocomplete = mode === "signin" ? "current-password" : "new-password";
+            confirmLabel.hidden = mode !== "register";
+            confirmPassword.required = mode === "register";
+            if (mode !== "register") confirmPassword.value = "";
+            status.textContent = "";
+        }
+
+        function syncSignedInState(nextState) {
+            const user = nextState.user;
+            const profile = nextState.profile;
+
+            form.hidden = Boolean(user);
+            signedInPanel.hidden = !user;
+
+            if (user) {
+                userName.textContent = profile?.displayName || "Signed in";
+                userEmail.textContent = user.email || "";
             }
+        }
 
-            panel.hidden = true;
-            toggle.setAttribute("aria-expanded", "false");
+        switchBtn.addEventListener("click", () => {
+            setMode(mode === "signin" ? "register" : "signin");
         });
 
         form.addEventListener("submit", async event => {
             event.preventDefault();
-            await runAuthAction(status, () => signIn(email.value, password.value), "Signed in.");
-        });
 
-        registerBtn.addEventListener("click", async () => {
-            await runAuthAction(status, () => register(email.value, password.value), "Account created.");
+            if (mode === "register" && password.value !== confirmPassword.value) {
+                status.textContent = "Passwords do not match.";
+                confirmPassword.focus();
+                return;
+            }
+
+            const action = mode === "signin"
+                ? () => signIn(email.value, password.value)
+                : () => register(email.value, password.value);
+            const successMessage = mode === "signin" ? "Signed in." : "Account created.";
+            const didSucceed = await runAuthAction(status, action, successMessage);
+
+            if (mode === "register" && didSucceed) {
+                setMode("signin");
+                email.focus();
+                email.select();
+            }
         });
 
         signOutBtn.addEventListener("click", async () => {
             await runAuthAction(status, signOut, "Signed out.");
         });
 
+        setMode("signin");
+
         window.PolytypeFirebase.onChange(nextState => {
-            const user = nextState.user;
-            const profile = nextState.profile;
-
-            form.hidden = Boolean(user);
-            userPanel.hidden = !user;
-            toggle.textContent = user
-                ? getShortAuthLabel(profile?.displayName || user.email)
-                : "Sign in";
-
-            if (user) {
-                userName.textContent = profile?.displayName || "Signed in";
-                userEmail.textContent = user.email || "";
-            }
+            syncSignedInState(nextState);
 
             if (!nextState.configured) {
                 status.textContent = "Firebase config missing or emulator not running.";
             } else if (nextState.error) {
                 status.textContent = nextState.error;
-            } else if (!status.textContent) {
-                status.textContent = user ? "Profile synced." : "";
+            } else if (nextState.user && !status.textContent) {
+                status.textContent = "Profile synced.";
             }
         });
     }
@@ -214,8 +289,10 @@
         try {
             await action();
             status.textContent = successMessage;
+            return true;
         } catch (error) {
             status.textContent = getAuthErrorMessage(error);
+            return false;
         }
     }
 
