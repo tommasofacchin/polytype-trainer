@@ -147,10 +147,41 @@
 
     function initHeaderAuthLink() {
         const authLink = document.getElementById("auth-link");
+        const authDropdown = document.getElementById("auth-dropdown");
+        const signOutBtn = document.getElementById("auth-signout-btn");
         if (!authLink) return;
+
+        let isSignedIn = false;
+
+        function closeDropdown() {
+            if (authDropdown) authDropdown.hidden = true;
+        }
+
+        authLink.addEventListener("click", event => {
+            if (!isSignedIn || !authDropdown) return;
+            event.preventDefault();
+            authDropdown.hidden = !authDropdown.hidden;
+        });
+
+        if (signOutBtn) {
+            signOutBtn.addEventListener("click", async () => {
+                closeDropdown();
+                await signOut();
+                window.location.href = "auth.html";
+            });
+        }
+
+        document.addEventListener("click", event => {
+            if (authDropdown && !authDropdown.hidden &&
+                !authLink.contains(event.target) &&
+                !authDropdown.contains(event.target)) {
+                closeDropdown();
+            }
+        });
 
         window.PolytypeFirebase.onChange(nextState => {
             const user = nextState.user;
+            isSignedIn = Boolean(user);
             const label = user
                 ? getShortAuthLabel(nextState.profile?.displayName || user.email)
                 : "Sign in";
@@ -158,9 +189,10 @@
             authLink.textContent = label;
             authLink.setAttribute(
                 "aria-label",
-                user ? "Open account page" : "Open sign in page"
+                user ? "Open account options" : "Open sign in page"
             );
-            authLink.classList.toggle("is-signed-in", Boolean(user));
+            authLink.classList.toggle("is-signed-in", isSignedIn);
+            if (!isSignedIn) closeDropdown();
         });
     }
 
@@ -178,10 +210,6 @@
         const submitBtn = document.getElementById("auth-submit-btn");
         const panelTitle = document.getElementById("auth-panel-title");
         const panelCopy = document.getElementById("auth-panel-copy");
-        const signedInPanel = document.getElementById("auth-signed-in-panel");
-        const userName = document.getElementById("auth-user-name");
-        const userEmail = document.getElementById("auth-user-email");
-        const signOutBtn = document.getElementById("auth-signout-btn");
         const status = document.getElementById("auth-status");
 
         if (
@@ -195,10 +223,6 @@
             !submitBtn ||
             !panelTitle ||
             !panelCopy ||
-            !signedInPanel ||
-            !userName ||
-            !userEmail ||
-            !signOutBtn ||
             !status
         ) {
             return;
@@ -225,19 +249,6 @@
             status.textContent = "";
         }
 
-        function syncSignedInState(nextState) {
-            const user = nextState.user;
-            const profile = nextState.profile;
-
-            form.hidden = Boolean(user);
-            signedInPanel.hidden = !user;
-
-            if (user) {
-                userName.textContent = profile?.displayName || "Signed in";
-                userEmail.textContent = user.email || "";
-            }
-        }
-
         switchBtn.addEventListener("click", () => {
             setMode(mode === "signin" ? "register" : "signin");
         });
@@ -262,21 +273,18 @@
             }
         });
 
-        signOutBtn.addEventListener("click", async () => {
-            await runAuthAction(status, signOut, "Signed out.");
-        });
-
         setMode("signin");
 
         window.PolytypeFirebase.onChange(nextState => {
-            syncSignedInState(nextState);
+            if (nextState.ready && nextState.user) {
+                window.location.href = "index.html";
+                return;
+            }
 
             if (!nextState.configured) {
                 status.textContent = "Firebase config missing or emulator not running.";
             } else if (nextState.error) {
                 status.textContent = nextState.error;
-            } else if (nextState.user && !status.textContent) {
-                status.textContent = "Profile synced.";
             }
         });
     }

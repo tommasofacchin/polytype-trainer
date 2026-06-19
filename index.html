@@ -25,7 +25,12 @@
           <span>My Deck</span>
         </button>
 
-        <a id="auth-link" class="auth-menu-toggle auth-page-link" href="auth.html">Sign in</a>
+        <div class="auth-menu-wrap">
+          <a id="auth-link" class="auth-menu-toggle auth-page-link" href="auth.html">Sign in</a>
+          <div id="auth-dropdown" class="auth-dropdown" hidden>
+            <button id="auth-signout-btn" class="auth-dropdown-item" type="button">Sign out</button>
+          </div>
+        </div>
 
         <div class="language-menu">
           <button id="language-menu-toggle" class="language-menu-toggle" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Choose study language">
