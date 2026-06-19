@@ -126,6 +126,26 @@
       </div>
 
       <div id="rows-container"></div>
+
+      <div id="timer-start-modal" class="timer-modal" role="dialog" aria-modal="true" hidden>
+        <div class="timer-modal-backdrop"></div>
+        <div class="timer-modal-card">
+          <span class="timer-modal-kicker">Ready to start?</span>
+          <strong id="timer-start-label" class="timer-modal-duration">Free run</strong>
+          <button id="timer-go-btn" class="restart-btn" type="button">Go!</button>
+        </div>
+      </div>
+
+      <div id="timer-result-modal" class="timer-modal" role="dialog" aria-modal="true" hidden>
+        <div class="timer-modal-backdrop"></div>
+        <div class="timer-modal-card">
+          <span class="result-label">Time up</span>
+          <strong id="timed-result-score" class="result-score-text">0 pts</strong>
+          <span id="timed-result-detail" class="result-detail-text">0 correct / 0 fields</span>
+          <span id="timed-result-save-status" class="result-save-status"></span>
+          <button id="timed-play-again-btn" class="restart-btn" type="button">Play again</button>
+        </div>
+      </div>
     </section>
 
     <section id="session-result" class="session-result" aria-live="polite" hidden>
@@ -159,28 +179,6 @@
       </div>
 
       <div id="deck-groups" class="deck-groups"></div>
-    </div>
-  </div>
-
-  <!-- Timed test: start popup -->
-  <div id="timer-start-modal" class="timer-modal" role="dialog" aria-modal="true" hidden>
-    <div class="timer-modal-backdrop"></div>
-    <div class="timer-modal-card">
-      <span class="timer-modal-kicker">Ready to start?</span>
-      <strong id="timer-start-label" class="timer-modal-duration">1:00</strong>
-      <button id="timer-go-btn" class="restart-btn" type="button">Go!</button>
-    </div>
-  </div>
-
-  <!-- Timed test: result popup -->
-  <div id="timer-result-modal" class="timer-modal" role="dialog" aria-modal="true" hidden>
-    <div class="timer-modal-backdrop"></div>
-    <div class="timer-modal-card">
-      <span class="result-label">Time up</span>
-      <strong id="timed-result-score" class="result-score-text">0 pts</strong>
-      <span id="timed-result-detail" class="result-detail-text">0 correct / 0 fields</span>
-      <span id="timed-result-save-status" class="result-save-status"></span>
-      <button id="timed-play-again-btn" class="restart-btn" type="button">Play again</button>
     </div>
   </div>
 

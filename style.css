@@ -1254,6 +1254,7 @@ input[type="password"]:focus {
 .list-card {
     grid-column: 2;
     grid-row: 3;
+    position: relative;
     min-height: 0;
     padding: clamp(16px, 2vw, 24px);
     background: color-mix(in srgb, var(--surface) 88%, var(--bg));
@@ -1328,6 +1329,10 @@ input[type="password"]:focus {
 .row.next-preview,
 .row.past-row {
     opacity: 0.22;
+}
+
+.row.inactive-row:not(.past-row) .meaning-input {
+    pointer-events: none;
 }
 
 .row.past-row {
@@ -2000,9 +2005,11 @@ input[type="password"]:focus {
 /* ---- Timer start / result modal ----------------------------------------- */
 
 .timer-modal {
-    position: fixed;
+    position: absolute;
     inset: 0;
-    z-index: 300;
+    z-index: 20;
+    overflow: hidden;
+    border-radius: inherit;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2016,7 +2023,8 @@ input[type="password"]:focus {
 .timer-modal-backdrop {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.45);
+    border-radius: inherit;
+    background: color-mix(in srgb, var(--surface) 96%, var(--bg));
     -webkit-backdrop-filter: blur(2px);
     backdrop-filter: blur(2px);
 }
@@ -2024,10 +2032,11 @@ input[type="password"]:focus {
 .timer-modal-card {
     position: relative;
     z-index: 1;
+    width: min(100% - 48px, 360px);
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: var(--radius-xl);
-    padding: clamp(24px, 4vw, 40px) clamp(36px, 6vw, 60px);
+    border-radius: var(--radius-lg);
+    padding: clamp(22px, 4vw, 34px);
     text-align: center;
     display: grid;
     gap: var(--space-4);
@@ -2044,7 +2053,7 @@ input[type="password"]:focus {
 }
 
 .timer-modal-duration {
-    font-size: 52px;
+    font-size: 42px;
     font-weight: 800;
     letter-spacing: -0.04em;
     color: var(--accent);

@@ -26,6 +26,9 @@ const state = {
     unsavedBestStreak: 0,
     remainingSeconds: 0,
     timerId: null,
+    answerTimeoutId: null,
+    sessionStarted: false,
+    lastAnswerAutoTimedOut: false,
     sessionEnded: false,
     progressSaved: false,
     saveInFlight: false,
@@ -90,7 +93,18 @@ const profileStorageKey = "polytype-profile";
 const audioBaseUrl = stripTrailingSlash(window.POLYTYPE_AUDIO_BASE_URL || "");
 const audioPrefix = stripSlashes(window.POLYTYPE_AUDIO_PREFIX || "audio/v1");
 const audioPreloadConcurrency = 4;
+const answerTimeoutMs = 10000;
+const timedAnswerTimeoutMs = 5000;
 const audioPreloadCache = new Map();
+const correctSfxUrl = "assets/sfx/correct3.mp3";
+const correctSfxVolume = 0.28;
+const errorSfxUrl = "assets/sfx/error1.mp3";
+const errorSfxVolume = 0.22;
+const levelUpSfxUrl = "assets/sfx/levelup2.mp3";
+const levelUpSfxVolume = 0.38;
+let correctSfxAudio = null;
+let errorSfxAudio = null;
+let levelUpSfxAudio = null;
 let activeWordAudio = null;
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -155,12 +169,14 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("keydown", unlockAudioPlayback, true);
 
     document.querySelector(".list-card").addEventListener("click", event => {
+        if (event.target.closest(".timer-modal")) return;
         if (!event.target.closest("input")) focusActiveRow();
     });
 
     initTheme();
     initProfile();
     setupFirebaseProfileSync();
+    preloadSfx();
     populateLanguageSelect();
     updateRomajiUI();
     applyInitialVisibilityClasses();
@@ -475,7 +491,7 @@ async function startSession() {
     prepareCurrentDeck();
     preloadCurrentDeckAudio();
     spawnInitialRows();
-    startTimerIfNeeded();
+    showSessionStartPrompt();
 }
 
 async function loadDeck(deckId) {
@@ -737,6 +753,9 @@ function resetState() {
     state.unsavedWordsUsed = 0;
     state.unsavedBestStreak = 0;
     state.remainingSeconds = settings.timeLimitSeconds;
+    clearAnswerTimeout();
+    state.sessionStarted = false;
+    state.lastAnswerAutoTimedOut = false;
     state.sessionEnded = false;
     state.progressSaved = false;
     state.saveInFlight = false;
@@ -758,7 +777,8 @@ function spawnInitialRows() {
     spawnNextRow();
     spawnNextRow();
     updatePreviewRow();
-    playActiveRowAudio();
+    syncRowInteractivity();
+    startActiveAnswerTimeout();
 }
 
 function showEmptyState(message) {
@@ -888,9 +908,59 @@ function moveToNextRow(meaningInput) {
     if (!nextRow) return;
 
     updatePreviewRow();
+    syncRowInteractivity();
     focusFirstEnabledInput(nextRow.querySelector(".meaning-input"));
     playWordAudio(nextRow.querySelector(".meaning-input")?.deckItem);
+    startActiveAnswerTimeout();
     centerRowInViewport(nextRow);
+}
+
+function startActiveAnswerTimeout() {
+    clearAnswerTimeout();
+    if (state.sessionEnded || !state.sessionStarted) return;
+    if (isTimedSession() && !state.timerId) return;
+    if (!isTimedSession() && state.wordsUsed <= 2) return;
+    if (!isTimedSession() && state.lastAnswerAutoTimedOut) return;
+
+    const activeRow = rowsContainer.querySelector(".row:not(.past-row)");
+    const activeInput = activeRow?.querySelector(".meaning-input");
+    if (!activeRow || !activeInput || activeInput.disabled || activeInput.readOnly) return;
+
+    const activeIndex = activeRow.dataset.index;
+    state.answerTimeoutId = window.setTimeout(() => {
+        const currentRow = rowsContainer.querySelector(".row:not(.past-row)");
+        const currentInput = currentRow?.querySelector(".meaning-input");
+        if (
+            state.sessionEnded ||
+            !currentRow ||
+            !currentInput ||
+            currentRow.dataset.index !== activeIndex ||
+            currentInput.dataset.autoSubmitted ||
+            currentInput.disabled ||
+            currentInput.readOnly
+        ) {
+            return;
+        }
+
+        currentInput.dataset.autoSubmitted = "true";
+        checkMeaningField(currentInput, { autoTimedOut: true });
+        moveToNextRow(currentInput);
+    }, getActiveAnswerTimeoutMs());
+}
+
+function getActiveAnswerTimeoutMs() {
+    return isTimedSession() ? timedAnswerTimeoutMs : answerTimeoutMs;
+}
+
+function isTimedSession() {
+    return settings.timeLimitSeconds > 0;
+}
+
+function clearAnswerTimeout() {
+    if (!state.answerTimeoutId) return;
+
+    window.clearTimeout(state.answerTimeoutId);
+    state.answerTimeoutId = null;
 }
 
 function playActiveRowAudio() {
@@ -901,6 +971,7 @@ function playActiveRowAudio() {
 function unlockAudioPlayback() {
     document.removeEventListener("pointerdown", unlockAudioPlayback, true);
     document.removeEventListener("keydown", unlockAudioPlayback, true);
+    if (!state.sessionStarted) return;
     playActiveRowAudio();
 }
 
@@ -1000,6 +1071,22 @@ function updatePreviewRow() {
     if (previewRow) previewRow.classList.add("next-preview");
 }
 
+function syncRowInteractivity() {
+    const rows = Array.from(rowsContainer.querySelectorAll(".row"));
+    const activeRow = rows.find(row => !row.classList.contains("past-row"));
+
+    rows.forEach(row => {
+        const isActive = row === activeRow;
+        row.classList.toggle("inactive-row", !isActive);
+        row.querySelectorAll("input").forEach(input => {
+            if (row.classList.contains("past-row")) return;
+            input.readOnly = !isActive;
+            input.tabIndex = isActive ? 0 : -1;
+            input.setAttribute("aria-hidden", String(!isActive));
+        });
+    });
+}
+
 function lockPastRow(row) {
     row.querySelectorAll("input").forEach(input => {
         input.readOnly = true;
@@ -1007,7 +1094,7 @@ function lockPastRow(row) {
     });
 }
 
-function checkMeaningField(meaningInput) {
+function checkMeaningField(meaningInput, options = {}) {
     if (!settings.useMeaning) return;
 
     const item = meaningInput.deckItem;
@@ -1018,7 +1105,7 @@ function checkMeaningField(meaningInput) {
         normalizeString(meaningInput.value) === normalizeString(item.meaning);
 
     markInput(meaningInput, okMeaning, item.meaning);
-    registerAnswer(okMeaning, meaningInput);
+    registerAnswer(okMeaning, meaningInput, options);
 }
 
 function markInput(input, isCorrect, correctValue) {
@@ -1026,12 +1113,16 @@ function markInput(input, isCorrect, correctValue) {
     if (!isCorrect) input.value = correctValue;
 }
 
-function registerAnswer(isCorrect, meaningInput) {
+function registerAnswer(isCorrect, meaningInput, options = {}) {
+    clearAnswerTimeout();
+    state.lastAnswerAutoTimedOut = Boolean(options.autoTimedOut);
+
     const prevStreak = state.streak;
     const prevTier = getComboTier(prevStreak);
 
     state.totalChecked += 1;
     if (isCorrect) {
+        playCorrectSfx();
         state.totalCorrectFields += 1;
         state.unsavedCorrectFields += 1;
         state.unsavedWordsUsed += 1;
@@ -1040,6 +1131,7 @@ function registerAnswer(isCorrect, meaningInput) {
         state.unsavedBestStreak = Math.max(state.unsavedBestStreak, state.streak);
         awardComboPoints();
     } else {
+        playErrorSfx();
         state.unsavedWrongFields += 1;
         state.streak = 0;
     }
@@ -1060,6 +1152,47 @@ function registerAnswer(isCorrect, meaningInput) {
 
     if (isFirebaseSignedIn() && getUnsavedAnswerCount() >= 5) {
         saveCurrentSessionProgress();
+    }
+}
+
+function preloadSfx() {
+    correctSfxAudio = new Audio(correctSfxUrl);
+    correctSfxAudio.preload = "auto";
+    correctSfxAudio.volume = correctSfxVolume;
+    correctSfxAudio.load();
+
+    errorSfxAudio = new Audio(errorSfxUrl);
+    errorSfxAudio.preload = "auto";
+    errorSfxAudio.volume = errorSfxVolume;
+    errorSfxAudio.load();
+
+    levelUpSfxAudio = new Audio(levelUpSfxUrl);
+    levelUpSfxAudio.preload = "auto";
+    levelUpSfxAudio.volume = levelUpSfxVolume;
+    levelUpSfxAudio.load();
+}
+
+function playCorrectSfx() {
+    playSfx(correctSfxAudio, correctSfxVolume);
+}
+
+function playErrorSfx() {
+    playSfx(errorSfxAudio, errorSfxVolume);
+}
+
+function playLevelUpSfx() {
+    playSfx(levelUpSfxAudio, levelUpSfxVolume);
+}
+
+function playSfx(sourceAudio, volume) {
+    if (!sourceAudio) return;
+
+    try {
+        const audio = sourceAudio.cloneNode();
+        audio.volume = volume;
+        audio.play().catch(() => {});
+    } catch {
+        // Browsers may block audio until the first user gesture.
     }
 }
 
@@ -1156,6 +1289,7 @@ function showXpFloat(pts, tier, inputEl) {
 
 function celebrateLevelUp(level) {
     document.querySelector(".levelup-overlay")?.remove();
+    playLevelUpSfx();
 
     const overlay = document.createElement("div");
     overlay.className = "levelup-overlay";
@@ -1246,22 +1380,34 @@ function getComboColor(tier) {
         .getPropertyValue(`--combo-${tier}`).trim() || "var(--accent)";
 }
 
-function startTimerIfNeeded() {
-    if (!settings.timeLimitSeconds || !state.currentDeck.length) return;
+function showSessionStartPrompt() {
+    if (!state.currentDeck.length) return;
     state.remainingSeconds = settings.timeLimitSeconds;
     updateTimerDisplay();
-    timerStartLabel.textContent = formatTime(settings.timeLimitSeconds);
+    timerStartLabel.textContent = isTimedSession()
+        ? formatTime(settings.timeLimitSeconds)
+        : "Free run";
     timerStartModal.hidden = false;
     requestAnimationFrame(() => timerGoBtn.focus());
 }
 
 function onTimerGoClick() {
+    if (state.sessionStarted) return;
+
     timerStartModal.hidden = true;
-    state.timerId = window.setInterval(() => {
-        state.remainingSeconds -= 1;
-        updateTimerDisplay();
-        if (state.remainingSeconds <= 0) endSession();
-    }, 1000);
+    state.sessionStarted = true;
+
+    if (isTimedSession()) {
+        state.timerId = window.setInterval(() => {
+            state.remainingSeconds -= 1;
+            updateTimerDisplay();
+            if (state.remainingSeconds <= 0) endSession();
+        }, 1000);
+    }
+
+    focusActiveRow();
+    playActiveRowAudio();
+    startActiveAnswerTimeout();
 }
 
 function stopTimer() {
@@ -1282,6 +1428,8 @@ function updateTimerDisplay() {
 
 async function endSession() {
     stopTimer();
+    clearAnswerTimeout();
+    state.sessionStarted = false;
     state.sessionEnded = true;
 
     rowsContainer.querySelectorAll("input").forEach(input => {
