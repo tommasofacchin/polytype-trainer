@@ -70,6 +70,14 @@ let deckGroups;
 let deckModalSub;
 let deckProgressFill;
 let deckProgressText;
+let timerStartModal;
+let timerStartLabel;
+let timerGoBtn;
+let timerResultModal;
+let timedResultScore;
+let timedResultDetail;
+let timedResultSaveStatus;
+let timedPlayAgainBtn;
 let profile = { ...defaultProfile };
 // Last level reflected in the UI. Used to detect level-ups in renderProfile.
 // null until the first render so we don't celebrate on initial load/hydration.
@@ -112,6 +120,14 @@ document.addEventListener("DOMContentLoaded", () => {
     deckModalSub = document.getElementById("deck-modal-sub");
     deckProgressFill = document.getElementById("deck-progress-fill");
     deckProgressText = document.getElementById("deck-progress-text");
+    timerStartModal = document.getElementById("timer-start-modal");
+    timerStartLabel = document.getElementById("timer-start-label");
+    timerGoBtn = document.getElementById("timer-go-btn");
+    timerResultModal = document.getElementById("timer-result-modal");
+    timedResultScore = document.getElementById("timed-result-score");
+    timedResultDetail = document.getElementById("timed-result-detail");
+    timedResultSaveStatus = document.getElementById("timed-result-save-status");
+    timedPlayAgainBtn = document.getElementById("timed-play-again-btn");
 
     myDeckBtn.addEventListener("click", openMyDeck);
     myDeckOverlay.addEventListener("click", event => {
@@ -125,9 +141,15 @@ document.addEventListener("DOMContentLoaded", () => {
     timeSelect.addEventListener("change", onTimeChange);
     focusToggle.addEventListener("click", toggleFocusMode);
     playAgainBtn.addEventListener("click", startSession);
+    timerGoBtn.addEventListener("click", onTimerGoClick);
+    timedPlayAgainBtn.addEventListener("click", startSession);
     languageMenuToggle.addEventListener("click", toggleLanguageMenu);
     document.addEventListener("keydown", onGlobalKeyDown);
     document.addEventListener("click", onDocumentClick);
+
+    document.querySelector(".list-card").addEventListener("click", event => {
+        if (!event.target.closest("input")) focusActiveRow();
+    });
 
     initTheme();
     initProfile();
@@ -255,7 +277,7 @@ function getLevelInfo(totalXp) {
 }
 
 function getXpForLevel(level) {
-    return 200 + (level - 1) * 120;
+    return 250 + (level - 1) * 150;
 }
 
 function populateLanguageSelect() {
@@ -285,7 +307,8 @@ function populateLanguageSelect() {
         })
     );
 
-    settings.language = languages[0]?.value || "";
+    const savedLanguage = localStorage.getItem("polytype-language");
+    settings.language = languages.find(l => l.value === savedLanguage) ? savedLanguage : (languages[0]?.value || "");
     syncLanguageMenu();
     populateLevelSelect();
 }
@@ -345,6 +368,7 @@ function selectLanguage(language) {
     }
 
     settings.language = language;
+    localStorage.setItem("polytype-language", language);
     syncLanguageMenu();
     onLanguageChange();
     closeLanguageMenu();
@@ -1043,6 +1067,39 @@ function celebrateLevelUp(level) {
 
     card.append(rays, badge, title, sub);
 
+    const newWords = state.fullDeck.filter(w => w.unlockLevel === level);
+    if (newWords.length > 0) {
+        const unlockSection = document.createElement("div");
+        unlockSection.className = "levelup-unlocks";
+
+        const unlockTitle = document.createElement("p");
+        unlockTitle.className = "levelup-unlocks-title";
+        unlockTitle.textContent = `${newWords.length} new word${newWords.length === 1 ? "" : "s"} unlocked`;
+
+        const unlockGrid = document.createElement("div");
+        unlockGrid.className = "levelup-unlocks-grid";
+        newWords.forEach(word => {
+            const chip = document.createElement("span");
+            chip.className = "levelup-unlock-chip";
+            chip.textContent = word.script;
+            if (word.meaning) chip.title = word.meaning;
+            unlockGrid.appendChild(chip);
+        });
+
+        unlockSection.append(unlockTitle, unlockGrid);
+        card.appendChild(unlockSection);
+    }
+
+    const confirmBtn = document.createElement("button");
+    confirmBtn.type = "button";
+    confirmBtn.className = "levelup-confirm-btn";
+    confirmBtn.textContent = "Got it!";
+    confirmBtn.addEventListener("click", () => {
+        overlay.classList.add("is-leaving");
+        window.setTimeout(() => overlay.remove(), 480);
+    });
+    card.appendChild(confirmBtn);
+
     const confetti = document.createElement("div");
     confetti.className = "levelup-confetti";
     const colors = [
@@ -1063,9 +1120,6 @@ function celebrateLevelUp(level) {
 
     overlay.append(confetti, card);
     document.body.appendChild(overlay);
-
-    window.setTimeout(() => overlay.classList.add("is-leaving"), 2000);
-    window.setTimeout(() => overlay.remove(), 2480);
 }
 
 function getComboColor(tier) {
@@ -1075,17 +1129,19 @@ function getComboColor(tier) {
 
 function startTimerIfNeeded() {
     if (!settings.timeLimitSeconds || !state.currentDeck.length) return;
-
     state.remainingSeconds = settings.timeLimitSeconds;
     updateTimerDisplay();
+    timerStartLabel.textContent = formatTime(settings.timeLimitSeconds);
+    timerStartModal.hidden = false;
+    requestAnimationFrame(() => timerGoBtn.focus());
+}
 
+function onTimerGoClick() {
+    timerStartModal.hidden = true;
     state.timerId = window.setInterval(() => {
         state.remainingSeconds -= 1;
         updateTimerDisplay();
-
-        if (state.remainingSeconds <= 0) {
-            endSession();
-        }
+        if (state.remainingSeconds <= 0) endSession();
     }, 1000);
 }
 
@@ -1117,12 +1173,21 @@ async function endSession() {
         state.totalChecked > 0
             ? Math.round((state.totalCorrectFields / state.totalChecked) * 100)
             : 0;
-
-    resultScore.textContent = `${state.score} pts`;
-    resultDetail.textContent =
+    const scoreText = `${state.score} pts`;
+    const detailText =
         `${state.totalCorrectFields} correct / ${state.totalChecked} fields - ${percentage}% accuracy - Best combo ${state.bestStreak} - +${state.sessionXp} XP`;
-    resultSaveStatus.textContent = "";
-    sessionResult.hidden = false;
+
+    if (settings.timeLimitSeconds && timerResultModal) {
+        timedResultScore.textContent = scoreText;
+        timedResultDetail.textContent = detailText;
+        timedResultSaveStatus.textContent = "";
+        timerResultModal.hidden = false;
+    } else {
+        resultScore.textContent = scoreText;
+        resultDetail.textContent = detailText;
+        resultSaveStatus.textContent = "";
+        sessionResult.hidden = false;
+    }
 
     await saveCurrentSessionProgress();
 }
@@ -1130,6 +1195,21 @@ async function endSession() {
 function hideSessionResult() {
     sessionResult.hidden = true;
     if (resultSaveStatus) resultSaveStatus.textContent = "";
+    if (timerResultModal) timerResultModal.hidden = true;
+    if (timedResultSaveStatus) timedResultSaveStatus.textContent = "";
+    if (timerStartModal) timerStartModal.hidden = true;
+}
+
+function isAnyResultVisible() {
+    return !sessionResult.hidden || (timerResultModal && !timerResultModal.hidden);
+}
+
+function setResultSaveStatus(text) {
+    if (timerResultModal && !timerResultModal.hidden) {
+        if (timedResultSaveStatus) timedResultSaveStatus.textContent = text;
+    } else if (!sessionResult.hidden) {
+        if (resultSaveStatus) resultSaveStatus.textContent = text;
+    }
 }
 
 async function saveCurrentSessionProgress() {
@@ -1139,9 +1219,7 @@ async function saveCurrentSessionProgress() {
     const firebaseClient = window.PolytypeFirebase;
 
     if (!firebaseClient?.isSignedIn?.()) {
-        if (!sessionResult.hidden && resultSaveStatus) {
-            resultSaveStatus.textContent = "Sign in to save XP.";
-        }
+        if (isAnyResultVisible()) setResultSaveStatus("Sign in to save XP.");
         return;
     }
 
@@ -1155,9 +1233,7 @@ async function saveCurrentSessionProgress() {
     };
 
     state.saveInFlight = true;
-    if (!sessionResult.hidden && resultSaveStatus) {
-        resultSaveStatus.textContent = "Saving progress...";
-    }
+    if (isAnyResultVisible()) setResultSaveStatus("Saving progress...");
 
     state.savePromise = (async () => {
         const result = await firebaseClient.completePracticeSession(payload);
@@ -1187,18 +1263,14 @@ async function saveCurrentSessionProgress() {
         state.unsavedWordsUsed = Math.max(0, state.unsavedWordsUsed - payload.wordsUsed);
         state.unsavedBestStreak = getUnsavedAnswerCount() > 0 ? state.streak : 0;
         state.progressSaved = getUnsavedAnswerCount() === 0;
-        if (!sessionResult.hidden && resultSaveStatus) {
-            resultSaveStatus.textContent = "Progress saved.";
-        }
+        if (isAnyResultVisible()) setResultSaveStatus("Progress saved.");
     })();
 
     try {
         await state.savePromise;
     } catch (error) {
         console.error(error);
-        if (!sessionResult.hidden && resultSaveStatus) {
-            resultSaveStatus.textContent = "Progress not saved. Try again.";
-        }
+        if (isAnyResultVisible()) setResultSaveStatus("Progress not saved. Try again.");
     } finally {
         state.saveInFlight = false;
         state.savePromise = null;
