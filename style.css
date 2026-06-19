@@ -1714,7 +1714,6 @@ input[type="password"]:focus {
     z-index: 300;
     display: grid;
     place-items: center;
-    pointer-events: none;
     background: radial-gradient(circle at center, rgba(9, 23, 23, 0.42), rgba(9, 23, 23, 0.16) 60%, transparent);
     -webkit-backdrop-filter: blur(2px);
     backdrop-filter: blur(2px);

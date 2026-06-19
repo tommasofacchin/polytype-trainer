@@ -257,15 +257,8 @@
             const successMessage = mode === "signin" ? "Signed in." : "Account created.";
             const didSucceed = await runAuthAction(status, action, successMessage);
 
-            if (mode === "signin" && didSucceed) {
+            if (didSucceed) {
                 window.location.href = "index.html";
-                return;
-            }
-
-            if (mode === "register" && didSucceed) {
-                setMode("signin");
-                email.focus();
-                email.select();
             }
         });
 
