@@ -99,3 +99,203 @@ nor_097,hva,hva,what,20
 nor_098,hvem,hvem,who,20
 nor_099,når,når,when,20
 nor_100,hvorfor,hvorfor,why,20
+nor_101,hvordan,hvordan,how,21
+nor_102,hvilken,hvilken,which,21
+nor_103,hvor mye,hvor mye,how much,21
+nor_104,fordi,fordi,because,21
+nor_105,men,men,but,21
+nor_106,og,og,and,22
+nor_107,eller,eller,or,22
+nor_108,med,med,with,22
+nor_109,uten,uten,without,22
+nor_110,fra,fra,from,22
+nor_111,til,til,to,23
+nor_112,i,i,in,23
+nor_113,på,på,on,23
+nor_114,under,under,under,23
+nor_115,over,over,above,23
+nor_116,by,by,city,24
+nor_117,gate,gate,street,24
+nor_118,butikk,butikk,shop,24
+nor_119,marked,marked,market,24
+nor_120,park,park,park,24
+nor_121,rom,rom,room,25
+nor_122,kjøkken,kjøkken,kitchen,25
+nor_123,bad,bad,bathroom,25
+nor_124,soverom,soverom,bedroom,25
+nor_125,stue,stue,living room,25
+nor_126,ost,ost,cheese,26
+nor_127,egg,egg,egg,26
+nor_128,fisk,fisk,fish,26
+nor_129,kjøtt,kjøtt,meat,26
+nor_130,suppe,suppe,soup,26
+nor_131,eple,eple,apple,27
+nor_132,banan,banan,banana,27
+nor_133,appelsin,appelsin,orange fruit,27
+nor_134,potet,potet,potato,27
+nor_135,gulrot,gulrot,carrot,27
+nor_136,te,te,tea,28
+nor_137,melk,melk,milk,28
+nor_138,juice,juice,juice,28
+nor_139,frokost,frokost,breakfast,28
+nor_140,lunsj,lunsj,lunch,28
+nor_141,middag,middag,dinner,29
+nor_142,salt,salt,salt,29
+nor_143,sukker,sukker,sugar,29
+nor_144,tallerken,tallerken,plate,29
+nor_145,glass,glass,glass,29
+nor_146,hode,hode,head,30
+nor_147,hånd,hånd,hand,30
+nor_148,fot,fot,foot,30
+nor_149,øye,øye,eye,30
+nor_150,øre,øre,ear,30
+nor_151,nese,nese,nose,31
+nor_152,munn,munn,mouth,31
+nor_153,hår,hår,hair,31
+nor_154,jakke,jakke,jacket,31
+nor_155,sko,sko,shoes,31
+nor_156,bukse,bukse,pants,32
+nor_157,skjorte,skjorte,shirt,32
+nor_158,kjole,kjole,dress,32
+nor_159,lue,lue,hat,32
+nor_160,genser,genser,sweater,32
+nor_161,sekund,sekund,second,33
+nor_162,time,time,hour,33
+nor_163,minutt,minutt,minute,33
+nor_164,år,år,year,33
+nor_165,helg,helg,weekend,33
+nor_166,mandag,mandag,Monday,34
+nor_167,tirsdag,tirsdag,Tuesday,34
+nor_168,onsdag,onsdag,Wednesday,34
+nor_169,torsdag,torsdag,Thursday,34
+nor_170,fredag,fredag,Friday,34
+nor_171,lørdag,lørdag,Saturday,35
+nor_172,søndag,søndag,Sunday,35
+nor_173,våren,våren,spring,35
+nor_174,sommer,sommer,summer,35
+nor_175,høst,høst,autumn,35
+nor_176,vinter,vinter,winter,36
+nor_177,sol,sol,sun,36
+nor_178,regn,regn,rain,36
+nor_179,snø,snø,snow,36
+nor_180,vind,vind,wind,36
+nor_181,fint,fint,nice,37
+nor_182,overskyet,overskyet,cloudy,37
+nor_183,klart,klart,clear,37
+nor_184,tørt,tørt,dry,37
+nor_185,vått,vått,wet,37
+nor_186,tog,tog,train,38
+nor_187,buss,buss,bus,38
+nor_188,fly,fly,plane,38
+nor_189,sykkel,sykkel,bicycle,38
+nor_190,båt,båt,boat,38
+nor_191,stasjon,stasjon,station,39
+nor_192,flyplass,flyplass,airport,39
+nor_193,billett,billett,ticket,39
+nor_194,kart,kart,map,39
+nor_195,hotell,hotell,hotel,39
+nor_196,venstre,venstre,left,40
+nor_197,høyre,høyre,right,40
+nor_198,rett fram,rett fram,straight ahead,40
+nor_199,nær,nær,near,40
+nor_200,langt,langt,far,40
+nor_201,elleve,elleve,eleven,41
+nor_202,tolv,tolv,twelve,41
+nor_203,tretten,tretten,thirteen,41
+nor_204,fjorten,fjorten,fourteen,41
+nor_205,femten,femten,fifteen,41
+nor_206,seksten,seksten,sixteen,42
+nor_207,sytten,sytten,seventeen,42
+nor_208,atten,atten,eighteen,42
+nor_209,nitten,nitten,nineteen,42
+nor_210,tjue,tjue,twenty,42
+nor_211,bestefar,bestefar,grandfather,43
+nor_212,foreldre,foreldre,parents,43
+nor_213,sønn,sønn,son,43
+nor_214,datter,datter,daughter,43
+nor_215,ektemann,ektemann,husband,43
+nor_216,lærer,lærer,teacher,44
+nor_217,student,student,student,44
+nor_218,lege,lege,doctor,44
+nor_219,sykepleier,sykepleier,nurse,44
+nor_220,politi,politi,police,44
+nor_221,jobb,jobb,job,45
+nor_222,kontor,kontor,office,45
+nor_223,klasse,klasse,class,45
+nor_224,lekse,lekse,homework,45
+nor_225,prøve,prøve,test,45
+nor_226,å sove,å sove,to sleep,46
+nor_227,å våkne,å våkne,to wake up,46
+nor_228,å jobbe,å jobbe,to work,46
+nor_229,å studere,å studere,to study,46
+nor_230,å lære,å lære,to learn,46
+nor_231,å kjøre,å kjøre,to drive,47
+nor_232,å reise,å reise,to travel,47
+nor_233,å vente,å vente,to wait,47
+nor_234,å finne,å finne,to find,47
+nor_235,å møte,å møte,to meet,47
+nor_236,å like,å like,to like,48
+nor_237,å elske,å elske,to love,48
+nor_238,å ville,å ville,to want,48
+nor_239,å trenge,å trenge,to need,48
+nor_240,å kjøpe,å kjøpe,to buy,48
+nor_241,å selge,å selge,to sell,49
+nor_242,å betale,å betale,to pay,49
+nor_243,å åpne,å åpne,to open,49
+nor_244,å lukke,å lukke,to close,49
+nor_245,å vaske,å vaske,to wash,49
+nor_246,å se,å se,to see,50
+nor_247,å høre,å høre,to hear,50
+nor_248,å si,å si,to say,50
+nor_249,å spørre,å spørre,to ask,50
+nor_250,å svare,å svare,to answer,50
+nor_251,glad,glad,happy,51
+nor_252,trist,trist,sad,51
+nor_253,sint,sint,angry,51
+nor_254,trøtt,trøtt,tired,51
+nor_255,syk,syk,sick,51
+nor_256,lett,lett,easy,52
+nor_257,vanskelig,vanskelig,difficult,52
+nor_258,dyr,dyr,expensive,52
+nor_259,billig,billig,cheap,52
+nor_260,gratis,gratis,free,52
+nor_261,mange,mange,many,53
+nor_262,få,få,few,53
+nor_263,mer,mer,more,53
+nor_264,mindre,mindre,less,53
+nor_265,nok,nok,enough,53
+nor_266,ofte,ofte,often,54
+nor_267,aldri,aldri,never,54
+nor_268,noen ganger,noen ganger,sometimes,54
+nor_269,tidlig,tidlig,early,54
+nor_270,sent,sent,late,54
+nor_271,denne,denne,this common,55
+nor_272,dette,dette,this neuter,55
+nor_273,disse,disse,these,55
+nor_274,samme,samme,same,55
+nor_275,annen,annen,other,55
+nor_276,ha det,ha det,bye,56
+nor_277,god morgen,god morgen,good morning,56
+nor_278,god kveld,god kveld,good evening,56
+nor_279,god natt,god natt,good night,56
+nor_280,velkommen,velkommen,welcome,56
+nor_281,vær så god,vær så god,here you are,57
+nor_282,tusen takk,tusen takk,many thanks,57
+nor_283,det går bra,det går bra,it is fine,57
+nor_284,ikke sant,ikke sant,right,57
+nor_285,selvfølgelig,selvfølgelig,of course,57
+nor_286,apotek,apotek,pharmacy,58
+nor_287,sykehus,sykehus,hospital,58
+nor_288,tannlege,tannlege,dentist,58
+nor_289,hjelp,hjelp,help,58
+nor_290,problem,problem,problem,58
+nor_291,pris,pris,price,59
+nor_292,penger,penger,money,59
+nor_293,kvittering,kvittering,receipt,59
+nor_294,pose,pose,bag,59
+nor_295,størrelse,størrelse,size,59
+nor_296,telefon,telefon,phone,60
+nor_297,datamaskin,datamaskin,computer,60
+nor_298,nøkkel,nøkkel,key,60
+nor_299,klokke,klokke,clock,60
+nor_300,veske,veske,bag,60

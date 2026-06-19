@@ -87,6 +87,11 @@ const AVAILABLE_DECKS = window.DECK_INDEX || [];
 const errorColor = "var(--danger)";
 const themeStorageKey = "polytype-theme";
 const profileStorageKey = "polytype-profile";
+const audioBaseUrl = stripTrailingSlash(window.POLYTYPE_AUDIO_BASE_URL || "");
+const audioPrefix = stripSlashes(window.POLYTYPE_AUDIO_PREFIX || "audio/v1");
+const audioPreloadConcurrency = 4;
+const audioPreloadCache = new Map();
+let activeWordAudio = null;
 
 document.addEventListener("DOMContentLoaded", () => {
     levelSelect = document.getElementById("level-select");
@@ -146,6 +151,8 @@ document.addEventListener("DOMContentLoaded", () => {
     languageMenuToggle.addEventListener("click", toggleLanguageMenu);
     document.addEventListener("keydown", onGlobalKeyDown);
     document.addEventListener("click", onDocumentClick);
+    document.addEventListener("pointerdown", unlockAudioPlayback, true);
+    document.addEventListener("keydown", unlockAudioPlayback, true);
 
     document.querySelector(".list-card").addEventListener("click", event => {
         if (!event.target.closest("input")) focusActiveRow();
@@ -252,6 +259,9 @@ function renderProfile() {
 function maybeCelebrateLevelUp(level) {
     const isPlaying = !state.sessionEnded && state.currentDeck.length > 0;
     if (lastShownLevel !== null && level > lastShownLevel && isPlaying) {
+        for (let nextLevel = lastShownLevel + 1; nextLevel <= level; nextLevel += 1) {
+            preloadAudioForLevel(nextLevel);
+        }
         celebrateLevelUp(level);
     }
     lastShownLevel = level;
@@ -463,6 +473,7 @@ async function startSession() {
 
     await loadDeck(settings.deckName);
     prepareCurrentDeck();
+    preloadCurrentDeckAudio();
     spawnInitialRows();
     startTimerIfNeeded();
 }
@@ -557,6 +568,14 @@ function prepareCurrentDeck() {
     // used for each row's dataset.index; resetting it mid-session (infinite-run
     // loop) makes the wrap-around row reuse index 0 and get locked as a
     // "past-row", which skips a word. resetState() zeroes it at session start.
+}
+
+function preloadCurrentDeckAudio() {
+    scheduleAudioPreload(state.currentDeck);
+}
+
+function preloadAudioForLevel(level) {
+    scheduleAudioPreload(state.fullDeck.filter(item => item.unlockLevel === level));
 }
 
 function getUnlockedLevel() {
@@ -739,6 +758,7 @@ function spawnInitialRows() {
     spawnNextRow();
     spawnNextRow();
     updatePreviewRow();
+    playActiveRowAudio();
 }
 
 function showEmptyState(message) {
@@ -869,7 +889,106 @@ function moveToNextRow(meaningInput) {
 
     updatePreviewRow();
     focusFirstEnabledInput(nextRow.querySelector(".meaning-input"));
+    playWordAudio(nextRow.querySelector(".meaning-input")?.deckItem);
     centerRowInViewport(nextRow);
+}
+
+function playActiveRowAudio() {
+    const activeInput = rowsContainer.querySelector(".row:not(.past-row) .meaning-input");
+    playWordAudio(activeInput?.deckItem);
+}
+
+function unlockAudioPlayback() {
+    document.removeEventListener("pointerdown", unlockAudioPlayback, true);
+    document.removeEventListener("keydown", unlockAudioPlayback, true);
+    playActiveRowAudio();
+}
+
+function playWordAudio(item) {
+    if (!item?.id || !audioBaseUrl) return;
+
+    const audioUrl = getWordAudioUrl(item);
+    preloadAudioUrl(audioUrl);
+
+    try {
+        if (activeWordAudio) {
+            activeWordAudio.pause();
+            activeWordAudio.currentTime = 0;
+        }
+
+        activeWordAudio = new Audio(audioUrl);
+        activeWordAudio.play().catch(() => {});
+    } catch {
+        // Browsers may block autoplay until the first user gesture.
+    }
+}
+
+function scheduleAudioPreload(items) {
+    if (!audioBaseUrl || !items.length) return;
+
+    const urls = uniqueBy(
+        items
+            .map(getWordAudioUrl)
+            .filter(url => url && !audioPreloadCache.has(url)),
+        url => url
+    );
+    if (!urls.length) return;
+
+    window.setTimeout(() => preloadAudioQueue(urls), 0);
+}
+
+async function preloadAudioQueue(urls) {
+    let nextIndex = 0;
+    const workerCount = Math.min(audioPreloadConcurrency, urls.length);
+    const workers = Array.from({ length: workerCount }, async () => {
+        while (nextIndex < urls.length) {
+            const url = urls[nextIndex];
+            nextIndex += 1;
+            await preloadAudioUrl(url);
+        }
+    });
+
+    await Promise.all(workers);
+}
+
+function preloadAudioUrl(url) {
+    if (!url) return Promise.resolve();
+    const cached = audioPreloadCache.get(url);
+    if (cached) return cached.promise;
+
+    const audio = new Audio();
+    audio.preload = "auto";
+    audio.src = url;
+
+    const promise = new Promise(resolve => {
+        let done = false;
+
+        const finish = () => {
+            if (done) return;
+            done = true;
+            audio.removeEventListener("canplaythrough", finish);
+            audio.removeEventListener("canplay", finish);
+            audio.removeEventListener("error", finish);
+            resolve();
+        };
+
+        audio.addEventListener("canplaythrough", finish);
+        audio.addEventListener("canplay", finish);
+        audio.addEventListener("error", finish);
+        audio.load();
+    });
+
+    audioPreloadCache.set(url, { audio, promise });
+    return promise;
+}
+
+function getWordAudioUrl(item) {
+    return [
+        audioBaseUrl,
+        audioPrefix,
+        encodeURIComponent(settings.deckName),
+        `${encodeURIComponent(item.id)}.mp3`
+    ].filter(Boolean).join("/");
 }
 
 function updatePreviewRow() {
@@ -1355,6 +1474,14 @@ function normalizeString(str) {
         .replace(/[\u0300-\u036f]/g, "")
         .replace(/\s+/g, "")
         .trim();
+}
+
+function stripSlashes(value) {
+    return String(value || "").replace(/^\/+|\/+$/g, "");
+}
+
+function stripTrailingSlash(value) {
+    return String(value || "").replace(/\/+$/g, "");
 }
 
 function shuffleArray(arr) {

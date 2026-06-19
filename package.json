@@ -5,7 +5,8 @@
   "description": "Static vocabulary trainer with Firebase-backed progression.",
   "scripts": {
     "build": "node scripts/write-firebase-config.cjs",
-    "check": "node --check js/firebase-client.js && node --check js/main.js && node --check decks/index.js && node --check functions/index.js"
+    "check": "node --check js/firebase-client.js && node --check js/main.js && node --check decks/index.js && node --check functions/index.js && node --check scripts/generate-audio.cjs && node --check scripts/deploy-firebase.cjs && node --check scripts/write-firebase-config.cjs",
+    "generate:audio": "node scripts/generate-audio.cjs"
   },
   "dependencies": {
     "firebase-admin": "^13.0.0"

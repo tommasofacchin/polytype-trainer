@@ -11,7 +11,7 @@ backend for progression, streaks, streak freezes, and social features.
 - Current languages:
   - Chinese
   - Korean
-  - Norwegian, 20 unlock levels with 5 words per level
+  - Norwegian, 60 unlock levels with 5 words per level
 
 ## Run the static frontend
 
@@ -99,6 +99,50 @@ cd functions
 npm run deploy
 ```
 
+## Generate word audio
+
+One-off audio generation reads a deck CSV, creates speech with ElevenLabs, and
+uploads MP3 files to Storj using its S3-compatible API. Put secrets in
+`.env.local`:
+
+```txt
+ELEVENLABS_API_KEY=your-elevenlabs-api-key
+ELEVENLABS_VOICE_NAME=Mia Starset- Clear and Friendly
+ELEVENLABS_LANGUAGE_CODE=no
+STORJ_ENDPOINT=https://gateway.storjshare.io
+STORJ_REGION=us-east-1
+STORJ_ACCESS_KEY_ID=your-storj-access-key
+STORJ_SECRET_ACCESS_KEY=your-storj-secret-key
+STORJ_BUCKET=your-storj-bucket
+AUDIO_BASE_URL=https://your-public-audio-base-url
+AUDIO_PREFIX=audio/v1
+```
+
+Preview without generating audio:
+
+```bash
+npm run generate:audio -- --deck=norwegian-a1 --dry-run --limit=5
+```
+
+Generate and upload missing audio:
+
+```bash
+npm run generate:audio -- --deck=norwegian-a1
+```
+
+Files are saved as:
+
+```txt
+{STORJ_BUCKET}/audio/v1/norwegian-a1/nor_001.mp3
+```
+
+`AUDIO_BASE_URL` must be a public URL that maps to the bucket root, without a
+trailing slash. The trainer builds audio URLs like:
+
+```txt
+{AUDIO_BASE_URL}/audio/v1/norwegian-a1/nor_001.mp3
+```
+
 ## Vercel production
 
 Vercel hosts only the static frontend. Firebase Auth, Firestore, and Cloud
@@ -116,14 +160,17 @@ FIREBASE_AUTH_DOMAIN
 FIREBASE_PROJECT_ID
 FIREBASE_APP_ID
 FIREBASE_MESSAGING_SENDER_ID
-FIREBASE_STORAGE_BUCKET
 FIREBASE_MEASUREMENT_ID
 FIREBASE_FUNCTIONS_REGION=europe-west1
 FIREBASE_USE_EMULATORS=false
+AUDIO_BASE_URL=https://your-public-audio-base-url
+AUDIO_PREFIX=audio/v1
 ```
 
-Only the first four are required by the build script. You can find these values
-in Firebase Console > Project settings > General > Your apps > Web app config.
+Only the first four Firebase keys are required by the build script. `AUDIO_BASE_URL`
+is required only if you want production flashcards to play hosted audio. You can
+find the Firebase values in Firebase Console > Project settings > General > Your
+apps > Web app config.
 
 Also enable Firebase Console > Authentication > Sign-in method > Email/Password,
 and add your Vercel domain in Authentication > Settings > Authorized domains.
@@ -196,8 +243,8 @@ The backend currently computes `wordsUnlocked` as `courseLevel * 5`. The
 frontend reads `unlock_level` when present and filters the practice deck against
 the current profile/course level.
 
-Norwegian currently has 100 rows:
+Norwegian currently has 300 rows:
 
 ```txt
-20 levels x 5 words = 100 unlockable words
+60 levels x 5 words = 300 unlockable words
 ```

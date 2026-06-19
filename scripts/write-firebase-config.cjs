@@ -47,12 +47,16 @@ const useEmulatorsExpression =
     ? "(window.location.hostname === \"localhost\" || window.location.hostname === \"127.0.0.1\")"
     : JSON.stringify(explicitUseEmulators);
 const functionsRegion = process.env.FIREBASE_FUNCTIONS_REGION || "europe-west1";
+const audioBaseUrl = process.env.AUDIO_BASE_URL || "";
+const audioPrefix = process.env.AUDIO_PREFIX || "audio/v1";
 
 prepareDist();
 
 const file = `window.POLYTYPE_FIREBASE_CONFIG = ${JSON.stringify(config, null, 4)};\n\n` +
   `window.POLYTYPE_FIREBASE_FUNCTIONS_REGION = ${JSON.stringify(functionsRegion)};\n\n` +
-  `window.POLYTYPE_FIREBASE_USE_EMULATORS = ${useEmulatorsExpression};\n`;
+  `window.POLYTYPE_FIREBASE_USE_EMULATORS = ${useEmulatorsExpression};\n\n` +
+  `window.POLYTYPE_AUDIO_BASE_URL = ${JSON.stringify(audioBaseUrl)};\n\n` +
+  `window.POLYTYPE_AUDIO_PREFIX = ${JSON.stringify(audioPrefix)};\n`;
 
 fs.writeFileSync(outputPath, file);
 

@@ -10,3 +10,4 @@ ui-debug.log
 functions/lib/
 functions/node_modules/
 .firebase/
+tools/uplink/
