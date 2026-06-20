@@ -22,17 +22,19 @@
     <style>
         html.memory-document,
         html.memory-document body {
-            height: auto;
-            overflow: auto;
+            height: 100%;
+            overflow: hidden;
         }
 
         .memory-page {
             width: min(100% - 28px, 880px);
+            height: 100dvh;
             margin-inline: auto;
-            padding-block: 14px 40px;
+            padding-block: 14px;
             display: flex;
             flex-direction: column;
             gap: var(--space-4);
+            overflow: hidden;
         }
 
         .memory-topbar {
@@ -89,21 +91,35 @@
         }
 
         /* ── Board ───────────────────────────────────────────── */
+        /* The board takes the leftover height and is a size container, so the
+           grid can size square cards that always fit -> no page scroll. */
         .memory-board {
+            flex: 1;
+            min-height: 0;
+            container-type: size;
             display: grid;
-            gap: var(--space-3);
+            place-items: center;
         }
 
-        /* Desktop layouts: 5 pairs -> 5 cols (2 rows), 10 -> 5 cols (4 rows),
-           15 -> 6 cols (5 rows). */
-        .memory-board[data-pairs="5"],
-        .memory-board[data-pairs="10"] {
-            grid-template-columns: repeat(5, 1fr);
+        .memory-grid {
+            --gap: 10px;
+            display: grid;
+            gap: var(--gap);
+            justify-content: center;
+            align-content: center;
+            /* Largest square card that fits both the width and the height. */
+            --card: min(
+                (100cqw - (var(--cols) - 1) * var(--gap)) / var(--cols),
+                (100cqh - (var(--rows) - 1) * var(--gap)) / var(--rows)
+            );
+            grid-template-columns: repeat(var(--cols), var(--card));
+            grid-template-rows: repeat(var(--rows), var(--card));
         }
 
-        .memory-board[data-pairs="15"] {
-            grid-template-columns: repeat(6, 1fr);
-        }
+        /* Desktop card grids: Easy 5x2, Medium 5x4, Hard 6x5. */
+        .memory-grid[data-pairs="5"]  { --cols: 5; --rows: 2; }
+        .memory-grid[data-pairs="10"] { --cols: 5; --rows: 4; }
+        .memory-grid[data-pairs="15"] { --cols: 6; --rows: 5; }
 
         .memory-empty {
             grid-column: 1 / -1;
@@ -127,7 +143,8 @@
             border: 0;
             padding: 0;
             background: transparent;
-            aspect-ratio: 3 / 4;
+            min-width: 0;
+            min-height: 0;
             cursor: pointer;
             perspective: 900px;
         }
@@ -360,23 +377,18 @@
                 gap: var(--space-3);
             }
 
-            .memory-board {
-                gap: var(--space-2);
+            .memory-grid {
+                --gap: 8px;
             }
 
-            /* Phone layouts: rows and columns swapped vs desktop.
-               5 pairs -> 2 cols (5 rows), 10 -> 4 cols (5 rows),
-               15 -> 5 cols (6 rows). */
-            .memory-board[data-pairs="5"] {
-                grid-template-columns: repeat(2, 1fr);
-            }
+            /* Phone card grids: Easy 3x4 (last card centered), Medium 4x5,
+               Hard 5x6. */
+            .memory-grid[data-pairs="5"]  { --cols: 3; --rows: 4; }
+            .memory-grid[data-pairs="10"] { --cols: 4; --rows: 5; }
+            .memory-grid[data-pairs="15"] { --cols: 5; --rows: 6; }
 
-            .memory-board[data-pairs="10"] {
-                grid-template-columns: repeat(4, 1fr);
-            }
-
-            .memory-board[data-pairs="15"] {
-                grid-template-columns: repeat(5, 1fr);
+            .memory-grid[data-pairs="5"] .mem-card:last-child {
+                grid-column: 2;
             }
 
             .mem-hud-item {
@@ -452,7 +464,9 @@
             </div>
         </section>
 
-        <div id="memory-board" class="memory-board" aria-label="Memory board"></div>
+        <div id="memory-board" class="memory-board" aria-label="Memory board">
+            <div id="memory-grid" class="memory-grid"></div>
+        </div>
     </main>
 
     <div id="difficulty-modal" class="mem-overlay" role="dialog" aria-modal="true" aria-labelledby="difficulty-title" hidden>

@@ -39,6 +39,7 @@
 
     function init() {
         el.board = document.getElementById("memory-board");
+        el.grid = document.getElementById("memory-grid");
         el.hud = document.getElementById("memory-hud");
         el.hudTime = document.getElementById("hud-time");
         el.hudMoves = document.getElementById("hud-moves");
@@ -109,7 +110,7 @@
         } catch (error) {
             console.error(error);
             el.difficultyModal.hidden = true;
-            el.board.innerHTML =
+            el.grid.innerHTML =
                 '<p class="memory-empty">Could not load the vocabulary. Start a local server ' +
                 "(e.g. <code>python -m http.server</code>) and reopen this page.</p>";
         }
@@ -215,7 +216,7 @@
         stopTimer();
         el.resultModal.hidden = true;
         el.hud.hidden = true;
-        el.board.innerHTML = "";
+        el.grid.innerHTML = "";
         el.difficultyModal.hidden = false;
     }
 
@@ -252,8 +253,8 @@
     }
 
     function renderBoard() {
-        // Drives the fixed column counts in CSS (5 / 10 / 15 pairs).
-        el.board.dataset.pairs = String(state.pairCount);
+        // Drives the per-difficulty grid (columns/rows) in CSS.
+        el.grid.dataset.pairs = String(state.pairCount);
 
         const fragment = document.createDocumentFragment();
 
@@ -281,8 +282,8 @@
             fragment.appendChild(button);
         });
 
-        el.board.innerHTML = "";
-        el.board.appendChild(fragment);
+        el.grid.innerHTML = "";
+        el.grid.appendChild(fragment);
     }
 
     function onCardClick(button, card) {
