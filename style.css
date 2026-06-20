@@ -867,6 +867,20 @@ input[type="password"]:focus {
     color: var(--text);
 }
 
+.memory-link {
+    gap: 8px;
+    text-decoration: none;
+}
+
+.memory-link-icon {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linejoin: round;
+}
+
 .profile-pill {
     display: flex;
     align-items: center;
@@ -1690,6 +1704,7 @@ input[type="password"]:focus {
         margin-top: 0;
     }
     #focus-toggle { order: 5; }
+    #memory-link  { order: 6; grid-column: 1 / -1; }
 
     /* HUD numbers fit three across on a narrow screen */
     .hud-item {
