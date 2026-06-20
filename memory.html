@@ -305,6 +305,7 @@
         }
 
         .mem-diff-btn {
+            position: relative;
             appearance: none;
             display: grid;
             gap: 4px;
@@ -318,14 +319,35 @@
             transition: border-color var(--transition), background var(--transition), transform var(--transition);
         }
 
-        .mem-diff-btn:hover,
-        .mem-diff-btn:focus-visible {
+        .mem-diff-btn:not(.is-locked):hover,
+        .mem-diff-btn:not(.is-locked):focus-visible {
             border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
             background: var(--surface);
             outline: 0;
         }
 
-        .mem-diff-btn:active { transform: translateY(1px); }
+        .mem-diff-btn:not(.is-locked):active { transform: translateY(1px); }
+
+        .mem-diff-btn.is-locked {
+            cursor: not-allowed;
+            opacity: 0.55;
+        }
+
+        .mem-diff-lock {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 18px;
+            height: 18px;
+            fill: none;
+            stroke: var(--text-faint);
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            display: none;
+        }
+
+        .mem-diff-btn.is-locked .mem-diff-lock { display: block; }
 
         .mem-diff-name {
             font-size: var(--text-md);
@@ -368,6 +390,10 @@
             gap: var(--space-2);
             margin-top: var(--space-5);
         }
+
+        #play-again-btn { grid-column: 1 / -1; }
+
+        #home-btn { text-decoration: none; }
 
         /* ── Mobile ──────────────────────────────────────────── */
         @media (max-width: 600px) {
@@ -485,11 +511,19 @@
                     <span class="mem-diff-name">Medium</span>
                     <span class="mem-diff-meta">10 pairs</span>
                     <span class="mem-diff-dots" aria-hidden="true">&#9679;&#9679;&#9675;</span>
+                    <svg class="mem-diff-lock" viewBox="0 0 24 24" aria-hidden="true">
+                        <rect x="5" y="11" width="14" height="9" rx="2"></rect>
+                        <path d="M8 11V8a4 4 0 0 1 8 0v3"></path>
+                    </svg>
                 </button>
                 <button class="mem-diff-btn" type="button" data-difficulty="hard">
                     <span class="mem-diff-name">Hard</span>
                     <span class="mem-diff-meta">15 pairs</span>
                     <span class="mem-diff-dots" aria-hidden="true">&#9679;&#9679;&#9679;</span>
+                    <svg class="mem-diff-lock" viewBox="0 0 24 24" aria-hidden="true">
+                        <rect x="5" y="11" width="14" height="9" rx="2"></rect>
+                        <path d="M8 11V8a4 4 0 0 1 8 0v3"></path>
+                    </svg>
                 </button>
             </div>
         </div>
@@ -504,7 +538,8 @@
             <span id="result-detail" class="mem-result-detail">&mdash;</span>
             <div class="mem-result-actions">
                 <button id="play-again-btn" class="restart-btn" type="button">Play again</button>
-                <button id="change-difficulty-btn" class="theme-toggle" type="button">Difficulty</button>
+                <button id="change-difficulty-btn" class="theme-toggle" type="button">Change difficulty</button>
+                <a id="home-btn" class="theme-toggle" href="index.html">Home</a>
             </div>
         </div>
     </div>

@@ -11,9 +11,9 @@
     // Higher difficulty = more pairs and a bigger score multiplier, so a
     // cleared Hard board always beats Medium, and Medium always beats Easy.
     const DIFFICULTIES = {
-        easy:   { id: "easy",   label: "Easy",   pairs: 5,  multiplier: 1 },
-        medium: { id: "medium", label: "Medium", pairs: 10, multiplier: 1.5 },
-        hard:   { id: "hard",   label: "Hard",   pairs: 15, multiplier: 2 }
+        easy:   { id: "easy",   label: "Easy",   pairs: 5,  multiplier: 1,   unlock: 1 },
+        medium: { id: "medium", label: "Medium", pairs: 10, multiplier: 1.5, unlock: 3 },
+        hard:   { id: "hard",   label: "Hard",   pairs: 15, multiplier: 2,   unlock: 10 }
     };
 
     const FLIP_BACK_DELAY = 850;
@@ -21,6 +21,7 @@
     const state = {
         vocab: [],          // every parsed word
         unlocked: [],       // words unlocked at the player's level
+        unlockedLevel: 1,   // player's current course level
         cfg: null,
         pairCount: 0,       // pairs actually in play (capped to unlocked pool)
         deck: [],
@@ -102,10 +103,11 @@
 
             // Only words unlocked at the player's current level are playable,
             // matching the trainer's level gating.
-            const unlockedLevel = getUnlockedLevel(deckMeta && deckMeta.id);
-            state.unlocked = state.vocab.filter(item => item.unlockLevel <= unlockedLevel);
+            state.unlockedLevel = getUnlockedLevel(deckMeta && deckMeta.id);
+            state.unlocked = state.vocab.filter(item => item.unlockLevel <= state.unlockedLevel);
 
-            updateDifficultyHint(unlockedLevel);
+            applyDifficultyLocks();
+            updateDifficultyHint(state.unlockedLevel);
             openDifficulty();
         } catch (error) {
             console.error(error);
@@ -114,6 +116,23 @@
                 '<p class="memory-empty">Could not load the vocabulary. Start a local server ' +
                 "(e.g. <code>python -m http.server</code>) and reopen this page.</p>";
         }
+    }
+
+    // Lock Medium (level 3) and Hard (level 10) until the player reaches them.
+    function applyDifficultyLocks() {
+        el.difficultyModal.querySelectorAll("[data-difficulty]").forEach(btn => {
+            const cfg = DIFFICULTIES[btn.dataset.difficulty];
+            if (!cfg) return;
+            const locked = state.unlockedLevel < cfg.unlock;
+            btn.classList.toggle("is-locked", locked);
+            btn.disabled = locked;
+            const meta = btn.querySelector(".mem-diff-meta");
+            if (meta) {
+                meta.textContent = locked
+                    ? "Unlocks at level " + cfg.unlock
+                    : cfg.pairs + " pairs";
+            }
+        });
     }
 
     function updateDifficultyHint(unlockedLevel) {
@@ -222,6 +241,7 @@
 
     function startGame(difficultyId) {
         const cfg = DIFFICULTIES[difficultyId] || DIFFICULTIES.easy;
+        if (state.unlockedLevel < cfg.unlock) return; // locked at this level
         state.cfg = cfg;
 
         el.difficultyModal.hidden = true;
