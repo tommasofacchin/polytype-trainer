@@ -75,6 +75,7 @@ function prepareDist() {
     "index.html",
     "auth.html",
     "profile.html",
+    "memory.html",
     "style.css",
     "style_to_copy.css"
   ]) {
