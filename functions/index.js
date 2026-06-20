@@ -677,7 +677,7 @@ function getCourseLevel(courseId, totalXp) {
 }
 
 function getXpForLevel(level) {
-  return 200 + (level - 1) * 120;
+  return 400 + (level - 1) * 250;
 }
 
 function normalizeCourseId(value) {

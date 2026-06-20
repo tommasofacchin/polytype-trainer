@@ -93,6 +93,7 @@ const profileStorageKey = "polytype-profile";
 const audioBaseUrl = stripTrailingSlash(window.POLYTYPE_AUDIO_BASE_URL || "");
 const audioPrefix = stripSlashes(window.POLYTYPE_AUDIO_PREFIX || "audio/v1");
 const audioPreloadConcurrency = 4;
+const higherUnlockedLevelDrawBoost = 1;
 const answerTimeoutMs = 10000;
 const timedAnswerTimeoutMs = 5000;
 const audioPreloadCache = new Map();
@@ -303,7 +304,7 @@ function getLevelInfo(totalXp) {
 }
 
 function getXpForLevel(level) {
-    return 250 + (level - 1) * 150;
+    return 400 + (level - 1) * 250;
 }
 
 function populateLanguageSelect() {
@@ -576,9 +577,8 @@ function parseCsv(csvText) {
 
 function prepareCurrentDeck() {
     const unlockedLevel = getUnlockedLevel();
-    state.currentDeck = shuffleArray(
-        state.fullDeck.filter(item => item.unlockLevel <= unlockedLevel)
-    );
+    const unlockedWords = state.fullDeck.filter(item => item.unlockLevel <= unlockedLevel);
+    state.currentDeck = shuffleDeckByUnlockLevel(unlockedWords);
     state.currentIndex = 0;
     // NB: do not reset state.wordsUsed here. It is the monotonic row counter
     // used for each row's dataset.index; resetting it mid-session (infinite-run
@@ -711,6 +711,16 @@ function buildDeckCard(word, level, locked) {
         card.append(lock, tag);
         return card;
     }
+
+    card.setAttribute("role", "button");
+    card.tabIndex = 0;
+    card.setAttribute("aria-label", `Play audio for ${word.script || word.meaning}`);
+    card.addEventListener("click", () => playWordAudio(word));
+    card.addEventListener("keydown", event => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        playWordAudio(word);
+    });
 
     const script = document.createElement("span");
     script.className = "deck-card-script";
@@ -1612,7 +1622,9 @@ function isSubmitKey(event) {
 }
 
 function focusFirstEnabledInput(meaningInput) {
-    if (meaningInput) meaningInput.focus();
+    // preventScroll stops the mobile browser from instantly jumping to the
+    // focused input; centerRowInViewport then drives the scroll smoothly.
+    if (meaningInput) meaningInput.focus({ preventScroll: true });
 }
 
 function normalizeString(str) {
@@ -1630,6 +1642,58 @@ function stripSlashes(value) {
 
 function stripTrailingSlash(value) {
     return String(value || "").replace(/\/+$/g, "");
+}
+
+function shuffleDeckByUnlockLevel(words) {
+    if (words.length <= 1) return [...words];
+
+    const levels = words.map(word => word.unlockLevel || 1);
+    const minLevel = Math.min(...levels);
+    const maxLevel = Math.max(...levels);
+
+    if (minLevel === maxLevel) return shuffleArray(words);
+
+    return weightedShuffleArray(words, word =>
+        getUnlockLevelDrawWeight(word.unlockLevel || 1, minLevel, maxLevel)
+    );
+}
+
+function getUnlockLevelDrawWeight(level, minLevel, maxLevel) {
+    const clampedLevel = Math.min(Math.max(level, minLevel), maxLevel);
+    const levelRank = (clampedLevel - minLevel) / (maxLevel - minLevel);
+    return 1 + levelRank * higherUnlockedLevelDrawBoost;
+}
+
+function weightedShuffleArray(arr, getWeight) {
+    const remaining = arr.map(item => ({
+        item,
+        weight: Math.max(0, getWeight(item) || 0)
+    }));
+    const shuffled = [];
+
+    while (remaining.length) {
+        const totalWeight = remaining.reduce((sum, entry) => sum + entry.weight, 0);
+
+        if (totalWeight <= 0) {
+            shuffled.push(...shuffleArray(remaining.map(entry => entry.item)));
+            break;
+        }
+
+        let roll = Math.random() * totalWeight;
+        let pickedIndex = remaining.length - 1;
+
+        for (let i = 0; i < remaining.length; i += 1) {
+            roll -= remaining[i].weight;
+            if (roll < 0) {
+                pickedIndex = i;
+                break;
+            }
+        }
+
+        shuffled.push(remaining.splice(pickedIndex, 1)[0].item);
+    }
+
+    return shuffled;
 }
 
 function shuffleArray(arr) {
@@ -1652,9 +1716,21 @@ function centerRowInViewport(row) {
     smoothScrollTo(rowsContainer, targetScrollTop, 450);
 }
 
+let activeScrollFrame = null;
+
 function smoothScrollTo(container, targetTop, duration = 450) {
+    // Cancel any in-flight scroll so overlapping animations don't fight each
+    // other (the main cause of jitter when advancing rows quickly on mobile).
+    if (activeScrollFrame !== null) {
+        cancelAnimationFrame(activeScrollFrame);
+        activeScrollFrame = null;
+    }
+
     const startTop = container.scrollTop;
     const distance = targetTop - startTop;
+
+    if (Math.abs(distance) < 1) return;
+
     const startTime = performance.now();
 
     function step(now) {
@@ -1665,9 +1741,11 @@ function smoothScrollTo(container, targetTop, duration = 450) {
         container.scrollTop = startTop + distance * eased;
 
         if (elapsed < duration) {
-            requestAnimationFrame(step);
+            activeScrollFrame = requestAnimationFrame(step);
+        } else {
+            activeScrollFrame = null;
         }
     }
 
-    requestAnimationFrame(step);
+    activeScrollFrame = requestAnimationFrame(step);
 }
