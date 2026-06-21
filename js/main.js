@@ -347,7 +347,8 @@ function getLevelInfo(totalXp) {
 }
 
 function getXpForLevel(level) {
-    return 400 + (level - 1) * 250;
+    // Level 1→2 stays at 400 XP. Each higher level grows faster via a mild quadratic term.
+    return Math.round(400 + (level - 1) * 250 + (level - 1) * (level - 1) * 15);
 }
 
 function getCurrentCourseKey() {
@@ -1029,7 +1030,6 @@ function startActiveAnswerTimeout() {
     if (state.sessionEnded || !state.sessionStarted) return;
     if (isTimedSession() && !state.timerId) return;
     if (!isTimedSession() && state.wordsUsed <= 2) return;
-    if (!isTimedSession() && state.lastAnswerAutoTimedOut) return;
 
     const activeRow = rowsContainer.querySelector(".row:not(.past-row)");
     const activeInput = activeRow?.querySelector(".meaning-input");
@@ -1052,13 +1052,34 @@ function startActiveAnswerTimeout() {
         }
 
         currentInput.dataset.autoSubmitted = "true";
-        checkMeaningField(currentInput, { autoTimedOut: true });
+        onAnswerTimeout(currentInput);
         moveToNextRow(currentInput);
     }, getActiveAnswerTimeoutMs());
 }
 
 function getActiveAnswerTimeoutMs() {
-    return isTimedSession() ? timedAnswerTimeoutMs : answerTimeoutMs;
+    if (isTimedSession()) return timedAnswerTimeoutMs;
+    const reductionSteps = Math.floor(state.streak / 10);
+    const multiplier = Math.max(0.5, 1 - reductionSteps * 0.05);
+    return Math.round(answerTimeoutMs * multiplier);
+}
+
+function onAnswerTimeout(meaningInput) {
+    clearAnswerTimeout();
+    const prevStreak = state.streak;
+    state.streak = 0;
+    updateStats();
+
+    if (prevStreak > 0) animateStreakBreak();
+
+    const item = meaningInput.deckItem;
+    if (item) {
+        meaningInput.style.color = "var(--text-faint)";
+        meaningInput.value = item.meaning;
+    }
+
+    const row = meaningInput?.closest(".row");
+    if (row) flashRowTimeout(row);
 }
 
 function isTimedSession() {
@@ -1403,6 +1424,13 @@ function flashRow(row, isCorrect) {
     void row.offsetWidth;
     row.classList.add(cls);
     row.addEventListener("animationend", () => row.classList.remove(cls), { once: true });
+}
+
+function flashRowTimeout(row) {
+    row.classList.remove("row-flash-timeout");
+    void row.offsetWidth;
+    row.classList.add("row-flash-timeout");
+    row.addEventListener("animationend", () => row.classList.remove("row-flash-timeout"), { once: true });
 }
 
 function showXpFloat(pts, tier, inputEl) {
