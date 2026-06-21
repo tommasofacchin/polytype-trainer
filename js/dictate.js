@@ -17,8 +17,7 @@
 
     const audioBaseUrl  = stripTrailingSlash(window.POLYTYPE_AUDIO_BASE_URL  || "");
     const audioPrefix   = stripSlashes(window.POLYTYPE_AUDIO_PREFIX || "audio/v1");
-    const errorColor    = "var(--danger)";
-    const successColor  = "var(--success)";
+    const PROFILE_KEY   = "polytype-profile";
 
     const state = {
         vocab:       [],
@@ -265,8 +264,38 @@
 
     // ── Session ───────────────────────────────────────────────────────────────
 
+    function getUnlockedLevel() {
+        try {
+            const profile = JSON.parse(localStorage.getItem(PROFILE_KEY) || "{}");
+            const courses = profile.courses || {};
+            const progress = courses[activeLanguage] || courses[activeDeckMeta?.id] || null;
+            if (!progress) return 1;
+            if (progress.unlockedLevel) return progress.unlockedLevel;
+            if (progress.level) return progress.level;
+            if (progress.xp) return getLevelFromXp(Number(progress.xp));
+        } catch {}
+        return 1;
+    }
+
+    function getLevelFromXp(totalXp) {
+        let level = 1, remaining = totalXp;
+        while (true) {
+            const needed = Math.round(400 + (level - 1) * 250 + (level - 1) * (level - 1) * 15);
+            if (remaining < needed) break;
+            remaining -= needed;
+            level++;
+        }
+        return level;
+    }
+
+    function getUnlockedDeck() {
+        const level = getUnlockedLevel();
+        const unlocked = state.vocab.filter(item => item.unlockLevel <= level);
+        return unlocked.length > 0 ? unlocked : state.vocab;
+    }
+
     function resetState() {
-        state.deck = shuffleArray([...state.vocab]);
+        state.deck = shuffleArray(getUnlockedDeck());
         state.currentIndex = 0;
         state.wordsUsed = 0;
         state.score = 0;
@@ -314,7 +343,7 @@
         if (!state.vocab.length) { showEmpty("No words loaded. Start a local server to load decks."); return; }
 
         if (state.currentIndex >= state.deck.length) {
-            state.deck = shuffleArray([...state.vocab]);
+            state.deck = shuffleArray(getUnlockedDeck());
             state.currentIndex = 0;
         }
 
@@ -329,11 +358,6 @@
         row.className = "dictate-row";
         row.dataset.index = String(visualIndex);
 
-        const hint = document.createElement("span");
-        hint.className = "dictate-hint";
-        hint.textContent = item.meaning;
-
-        const hasRoman = languageHasRomanization(activeLanguage);
         const input = document.createElement("input");
         input.type = "text";
         input.className = "dictate-input";
@@ -341,15 +365,12 @@
         input.spellcheck = false;
         input.setAttribute("autocorrect", "off");
         input.setAttribute("autocapitalize", "off");
-        input.placeholder = hasRoman
-            ? `Type the word or ${getRomanizationLabel(activeLanguage)}…`
-            : "Type the word…";
         input.deckItem = item;
 
         const feedback = document.createElement("div");
         feedback.className = "dictate-feedback";
 
-        row.append(hint, input, feedback);
+        row.append(input, feedback);
         el.rows.appendChild(row);
 
         requestAnimationFrame(() => row.classList.add("visible"));

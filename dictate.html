@@ -167,20 +167,7 @@
             50%       { box-shadow: 0 6px 28px color-mix(in srgb, var(--accent) 70%, transparent); }
         }
 
-        .replay-hint {
-            position: absolute;
-            bottom: -22px;
-            left: 50%;
-            transform: translateX(-50%);
-            white-space: nowrap;
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--text-faint);
-            letter-spacing: 0.04em;
-            pointer-events: none;
-        }
-
-        /* ── HUD ─────────────────────────────────────────────────── */
+/* ── HUD ─────────────────────────────────────────────────── */
         .dictate-hud {
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -229,7 +216,10 @@
             overflow-y: auto;
             padding: var(--space-3) 0;
             scroll-behavior: auto;
+            scrollbar-width: none;
         }
+
+        #dictate-rows::-webkit-scrollbar { display: none; }
 
         /* ── Each row ────────────────────────────────────────────── */
         .dictate-row {
@@ -250,40 +240,27 @@
             transform: none;
         }
 
-        .dictate-hint {
-            font-size: var(--text-xs);
-            font-weight: 600;
-            color: var(--text-faint);
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            line-height: 1;
-            transition: color 0.16s;
-        }
-
-        .dictate-input {
+.dictate-input {
             width: 100%;
-            padding: 9px 13px;
+            padding: 6px 0;
             font-size: var(--text-lg);
             font-family: inherit;
             font-weight: 500;
-            border: 2px solid var(--border);
-            border-radius: var(--radius-md);
-            background: var(--bg-soft);
+            border: none;
+            border-bottom: 2px solid var(--border);
+            border-radius: 0;
+            background: transparent;
             color: var(--text);
             outline: none;
-            transition: border-color 0.14s, background 0.14s, box-shadow 0.14s;
+            transition: border-color 0.14s;
         }
 
         .dictate-input:focus {
-            border-color: var(--accent);
-            background: var(--surface);
-            box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 16%, transparent);
+            border-bottom-color: var(--accent);
         }
 
         .dictate-input[readonly] {
-            background: transparent;
-            border-color: transparent;
-            padding-left: 0;
+            border-bottom-color: transparent;
             cursor: default;
         }
 
@@ -314,11 +291,6 @@
         /* Past rows */
         .dictate-row.past-row {
             padding-block: 8px;
-        }
-
-        .dictate-row.past-row .dictate-hint {
-            color: var(--text-faint);
-            font-size: 10px;
         }
 
         /* Next preview (dim) */
@@ -497,7 +469,6 @@
                     <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
                     <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
                 </svg>
-                <span class="replay-hint">R</span>
             </button>
         </div>
     </div>
