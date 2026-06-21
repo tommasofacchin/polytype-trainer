@@ -3,9 +3,17 @@
 (function () {
     const THEME_KEY = "polytype-theme";
     const PROFILE_KEY = "polytype-profile";
-    const LANGUAGE = "norwegian";
-
-    const SCRIPT_FLAG = "assets/flags/norway.svg";
+    const LANGUAGE_KEY = "polytype-language";
+    const FALLBACK_LANGUAGE = "norwegian";
+    const LANGUAGE_FLAGS = {
+        chinese: "assets/flags/china.svg",
+        german: "assets/flags/germany.svg",
+        italian: "assets/flags/italy.svg",
+        japanese: "assets/flags/japan.svg",
+        norwegian: "assets/flags/norway.svg",
+        spanish: "assets/flags/spain.svg",
+        swedish: "assets/flags/sweden.svg"
+    };
     // Higher difficulty = more pairs and a bigger score multiplier, so a
     // cleared Hard board always beats Medium, and Medium always beats Easy.
     const DIFFICULTIES = {
@@ -33,6 +41,9 @@
     };
 
     const el = {};
+    let activeDeckMeta = null;
+    let activeLanguage = FALLBACK_LANGUAGE;
+    let scriptFlag = LANGUAGE_FLAGS[FALLBACK_LANGUAGE];
 
     document.addEventListener("DOMContentLoaded", init);
 
@@ -50,9 +61,64 @@
             : "assets/flags/english.svg";
     }
 
+    function getActiveDeckMeta() {
+        const decks = window.DECK_INDEX || [];
+        const requestedLanguage = getRequestedLanguage(decks);
+        const deck =
+            decks.find(item => item.language === requestedLanguage) ||
+            decks.find(item => item.language === FALLBACK_LANGUAGE) ||
+            decks[0] ||
+            null;
+
+        if (deck?.language) {
+            try {
+                localStorage.setItem(LANGUAGE_KEY, deck.language);
+            } catch (e) {}
+        }
+
+        return deck;
+    }
+
+    function getRequestedLanguage(decks) {
+        const supported = new Set(decks.map(deck => deck.language));
+        const params = new URLSearchParams(window.location.search);
+        const urlLanguage = params.get("language");
+        const storedLanguage = localStorage.getItem(LANGUAGE_KEY);
+
+        if (supported.has(urlLanguage)) return urlLanguage;
+        if (supported.has(storedLanguage)) return storedLanguage;
+        if (supported.has(FALLBACK_LANGUAGE)) return FALLBACK_LANGUAGE;
+        return decks[0]?.language || FALLBACK_LANGUAGE;
+    }
+
+    function syncLanguageUi() {
+        const label = getLanguageLabel(activeLanguage);
+
+        if (el.heading) el.heading.textContent = tr("memory.headingForLanguage", { language: label });
+        if (el.subtitle) el.subtitle.textContent = tr("memory.subtitleForLanguage", { language: label });
+        document.title = tr("memory.titleForLanguage", { language: label });
+
+        const icon = document.querySelector('link[rel="icon"]');
+        if (icon) icon.href = scriptFlag;
+    }
+
+    function getLanguageFlagSrc(language) {
+        return LANGUAGE_FLAGS[language] || LANGUAGE_FLAGS[FALLBACK_LANGUAGE];
+    }
+
+    function getLanguageLabel(language) {
+        return window.PolytypeI18n?.languageLabel?.(language) || language || tr("language.fallback");
+    }
+
     function init() {
+        activeDeckMeta = getActiveDeckMeta();
+        activeLanguage = activeDeckMeta?.language || FALLBACK_LANGUAGE;
+        scriptFlag = getLanguageFlagSrc(activeLanguage);
+
         el.board = document.getElementById("memory-board");
         el.grid = document.getElementById("memory-grid");
+        el.heading = document.getElementById("memory-heading");
+        el.subtitle = document.getElementById("memory-subtitle");
         el.hud = document.getElementById("memory-hud");
         el.hudTime = document.getElementById("hud-time");
         el.hudMoves = document.getElementById("hud-moves");
@@ -67,6 +133,7 @@
         el.difficultySub = document.getElementById("difficulty-sub");
 
         initTheme();
+        syncLanguageUi();
 
         el.difficultyModal.querySelectorAll("[data-difficulty]").forEach(btn => {
             btn.addEventListener("click", () => startGame(btn.dataset.difficulty));
@@ -101,11 +168,14 @@
 
     // ── Vocabulary loading ──────────────────────────────────
     async function loadVocab() {
-        const deckMeta = (window.DECK_INDEX || []).find(d => d.language === LANGUAGE);
-        const path = deckMeta ? deckMeta.path : "decks/norwegian_a1.csv";
-        const cols = deckMeta
-            ? deckMeta.columns
-            : { script: "norwegian", meaning: "english", unlockLevel: "unlock_level" };
+        if (!activeDeckMeta) {
+            el.difficultyModal.hidden = true;
+            el.grid.innerHTML = `<p class="memory-empty">${tr("memory.loadError")}</p>`;
+            return;
+        }
+
+        const path = activeDeckMeta.path;
+        const cols = activeDeckMeta.columns;
 
         try {
             const response = await fetch(path);
@@ -115,7 +185,7 @@
 
             // Only words unlocked at the player's current level are playable,
             // matching the trainer's level gating.
-            state.unlockedLevel = getUnlockedLevel(deckMeta && deckMeta.id);
+            state.unlockedLevel = getUnlockedLevel(activeDeckMeta.id);
             state.unlocked = state.vocab.filter(item => item.unlockLevel <= state.unlockedLevel);
 
             applyDifficultyLocks();
@@ -189,7 +259,7 @@
         const profile = getStoredProfile();
         const courses = profile.courses || {};
         // The trainer may key course progress by language or by deck id.
-        const course = courses[LANGUAGE] || (deckId && courses[deckId]);
+        const course = courses[activeLanguage] || (deckId && courses[deckId]);
         if (course && course.unlockedLevel) return course.unlockedLevel;
         if (course && course.level) return course.level;
         if (course && course.xp) return getLevelInfo(course.xp).level;
@@ -310,7 +380,7 @@
             button.dataset.pair = String(card.pairId);
             button.dataset.type = card.type;
             button.setAttribute("aria-label", tr("memory.hiddenCard"));
-            const flag = card.type === "script" ? SCRIPT_FLAG : getMeaningFlag();
+            const flag = card.type === "script" ? scriptFlag : getMeaningFlag();
             const fontCqw = wordFontCqw(card.text);
             button.innerHTML =
                 '<span class="mem-card-inner">' +
