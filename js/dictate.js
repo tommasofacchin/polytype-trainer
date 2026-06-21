@@ -1,8 +1,9 @@
 "use strict";
 
 (function () {
-    const THEME_KEY = "polytype-theme";
+    const THEME_KEY   = "polytype-theme";
     const LANGUAGE_KEY = "polytype-language";
+    const PROFILE_KEY  = "polytype-profile";
     const FALLBACK_LANGUAGE = "norwegian";
 
     const LANGUAGE_FLAGS = {
@@ -15,21 +16,22 @@
         swedish:   "assets/flags/sweden.svg"
     };
 
-    const audioBaseUrl  = stripTrailingSlash(window.POLYTYPE_AUDIO_BASE_URL  || "");
-    const audioPrefix   = stripSlashes(window.POLYTYPE_AUDIO_PREFIX || "audio/v1");
-    const PROFILE_KEY   = "polytype-profile";
+    const audioBaseUrl = stripTrailingSlash(window.POLYTYPE_AUDIO_BASE_URL || "");
+    const audioPrefix  = stripSlashes(window.POLYTYPE_AUDIO_PREFIX || "audio/v1");
 
     const state = {
-        vocab:       [],
-        deck:        [],
+        vocab:        [],
+        deck:         [],
         currentIndex: 0,
-        wordsUsed:   0,
-        score:       0,
-        streak:      0,
-        bestStreak:  0,
-        correct:     0,
-        total:       0,
-        started:     false
+        wordsUsed:    0,
+        currentTyped: "",
+        submitted:    false,
+        score:        0,
+        streak:       0,
+        bestStreak:   0,
+        correct:      0,
+        total:        0,
+        started:      false
     };
 
     let activeLanguage  = FALLBACK_LANGUAGE;
@@ -43,18 +45,18 @@
     document.addEventListener("DOMContentLoaded", init);
 
     function init() {
-        el.rows        = document.getElementById("dictate-rows");
-        el.audioViz    = document.getElementById("audio-viz");
-        el.replayBtn   = document.getElementById("replay-btn");
-        el.scoreText   = document.getElementById("dictate-score");
-        el.streakText  = document.getElementById("dictate-streak");
-        el.accuracyText= document.getElementById("dictate-accuracy");
-        el.themeToggle = document.getElementById("theme-toggle");
-        el.flagImg     = document.getElementById("current-language-flag");
-        el.startModal  = document.getElementById("dictate-start-modal");
-        el.startBtn    = document.getElementById("dictate-start-btn");
-        el.langMenu    = document.getElementById("dictate-lang-menu");
-        el.langToggle  = document.getElementById("dictate-lang-toggle");
+        el.rows         = document.getElementById("dictate-rows");
+        el.audioViz     = document.getElementById("audio-viz");
+        el.replayBtn    = document.getElementById("replay-btn");
+        el.scoreText    = document.getElementById("dictate-score");
+        el.streakText   = document.getElementById("dictate-streak");
+        el.accuracyText = document.getElementById("dictate-accuracy");
+        el.themeToggle  = document.getElementById("theme-toggle");
+        el.flagImg      = document.getElementById("current-language-flag");
+        el.startModal   = document.getElementById("dictate-start-modal");
+        el.startBtn     = document.getElementById("dictate-start-btn");
+        el.langMenu     = document.getElementById("dictate-lang-menu");
+        el.langToggle   = document.getElementById("dictate-lang-toggle");
 
         el.themeToggle.addEventListener("click", toggleTheme);
         el.replayBtn.addEventListener("click", replayAudio);
@@ -69,7 +71,7 @@
         loadAndStart();
     }
 
-    // ── Theme ────────────────────────────────────────────────────────────────
+    // ── Theme ─────────────────────────────────────────────────────────────────
 
     function initTheme() {
         const stored = localStorage.getItem(THEME_KEY);
@@ -88,7 +90,7 @@
         el.themeToggle.setAttribute("aria-label", theme === "dark" ? "Switch to light mode" : "Switch to dark mode");
     }
 
-    // ── Language ─────────────────────────────────────────────────────────────
+    // ── Language ──────────────────────────────────────────────────────────────
 
     function getLanguageFlagSrc(language) {
         return LANGUAGE_FLAGS[language] || "assets/flags/norway.svg";
@@ -98,22 +100,13 @@
         return language === "chinese" || language === "japanese";
     }
 
-    function getRomanizationLabel(language) {
-        return language === "chinese" ? "pinyin" : "romaji";
-    }
-
     function getDeckMeta() {
         const decks = window.DECK_INDEX || [];
-        const params = new URLSearchParams(window.location.search);
-        const urlLang = params.get("language");
         const storedLang = localStorage.getItem(LANGUAGE_KEY);
         const supported = new Set(decks.map(d => d.language));
-
-        const lang = supported.has(urlLang) ? urlLang
-            : supported.has(storedLang) ? storedLang
+        const lang = supported.has(storedLang) ? storedLang
             : supported.has(FALLBACK_LANGUAGE) ? FALLBACK_LANGUAGE
             : decks[0]?.language || FALLBACK_LANGUAGE;
-
         return decks.find(d => d.language === lang) || decks[0] || null;
     }
 
@@ -175,11 +168,77 @@
         closeLangMenu();
     }
 
+    // ── Global keyboard capture (no input element needed) ─────────────────────
+
     function onGlobalKeyDown(event) {
-        if (event.key === "Escape") { closeLangMenu(); }
+        if (event.key === "Escape") { closeLangMenu(); return; }
+
+        // Don't capture when menu is open or session not started
+        if (!state.started || state.submitted) return;
+        if (!el.langMenu.hidden) return;
+
+        if (event.key === "Backspace") {
+            event.preventDefault();
+            state.currentTyped = state.currentTyped.slice(0, -1);
+            updateActiveDisplay();
+            return;
+        }
+
+        if (event.key === "Enter" || event.key === "Tab") {
+            event.preventDefault();
+            submitActive();
+            return;
+        }
+
+        // Regular printable character
+        if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
+            state.currentTyped += event.key;
+            updateActiveDisplay();
+            autoCheckActive();
+        }
     }
 
-    // ── Data loading ─────────────────────────────────────────────────────────
+    function getActiveRow() {
+        return el.rows?.querySelector(".dictate-row:not(.past-row)") || null;
+    }
+
+    function getActiveTyped() {
+        return getActiveRow()?.querySelector(".dictate-typed") || null;
+    }
+
+    function updateActiveDisplay() {
+        const typed = getActiveTyped();
+        if (typed) typed.textContent = state.currentTyped;
+    }
+
+    function autoCheckActive() {
+        const typed = getActiveTyped();
+        if (!typed?.deckItem) return;
+        const norm = normalizeString(state.currentTyped);
+        if (!norm) return;
+        // Auto-advance on exact OR same-length fuzzy match (guards against premature acceptance of partial words)
+        const targets = getAnswerTargets(typed.deckItem);
+        const isCorrect = targets.some(t =>
+            norm === t || (t.length >= 3 && norm.length >= t.length && levenshtein(norm, t) <= 1)
+        );
+        if (isCorrect) {
+            state.submitted = true;
+            submitAnswer(typed, true);
+            advanceRow(getActiveRow());
+        }
+    }
+
+    function submitActive() {
+        const row = getActiveRow();
+        const typed = row?.querySelector(".dictate-typed");
+        if (!typed?.deckItem) return;
+        const isCorrect = isCorrectAnswer(state.currentTyped, typed.deckItem);
+        state.submitted = true;
+        submitAnswer(typed, isCorrect);
+        advanceRow(row);
+    }
+
+    // ── Data loading ──────────────────────────────────────────────────────────
 
     async function loadAndStart() {
         activeDeckMeta = getDeckMeta();
@@ -201,7 +260,6 @@
         updateHud();
         showStartModal();
     }
-
 
     function parseDeckCsv(csv, columns) {
         const rows = parseCsv(csv.trim());
@@ -281,6 +339,8 @@
         state.deck = shuffleArray(getUnlockedDeck());
         state.currentIndex = 0;
         state.wordsUsed = 0;
+        state.currentTyped = "";
+        state.submitted = false;
         state.score = 0;
         state.streak = 0;
         state.bestStreak = 0;
@@ -301,10 +361,6 @@
         state.started = true;
         clearRows();
         spawnRow();
-        spawnRow();
-        updatePreview();
-        syncRowInteractivity();
-        focusActiveInput();
         playCurrentAudio();
     }
 
@@ -341,61 +397,24 @@
         row.className = "dictate-row";
         row.dataset.index = String(visualIndex);
 
-        const input = document.createElement("input");
-        input.type = "text";
-        input.className = "dictate-input";
-        input.autocomplete = "off";
-        input.spellcheck = false;
-        input.setAttribute("autocorrect", "off");
-        input.setAttribute("autocapitalize", "off");
-        input.deckItem = item;
+        // Display div — no <input>, no focus
+        const typed = document.createElement("div");
+        typed.className = "dictate-typed";
+        typed.deckItem = item;
 
         const feedback = document.createElement("div");
         feedback.className = "dictate-feedback";
 
-        row.append(input, feedback);
+        row.append(typed, feedback);
         el.rows.appendChild(row);
 
         requestAnimationFrame(() => row.classList.add("visible"));
-
-        input.addEventListener("keydown", event => onInputKeyDown(event, input));
-        input.addEventListener("input", () => onInputChange(input));
     }
 
-    function onInputChange(input) {
-        if (!state.started || input.dataset.submitted) return;
-        const item = input.deckItem;
-        if (!item || !input.value.trim()) return;
-        if (isCorrectAnswer(input.value, item)) {
-            input.dataset.submitted = "true";
-            submitAnswer(input, true);
-            advanceRow(input);
-        }
-    }
-
-    function onInputKeyDown(event, input) {
-        if (event.key !== "Enter" && event.key !== "Tab") return;
-        if (!state.started || input.dataset.submitted) return;
-        event.preventDefault();
-        const isCorrect = isCorrectAnswer(input.value, input.deckItem);
-        input.dataset.submitted = "true";
-        submitAnswer(input, isCorrect);
-        advanceRow(input);
-    }
-
-    function isCorrectAnswer(value, item) {
-        const norm = normalizeString(value);
-        if (!norm) return false;
-        if (norm === normalizeString(item.script)) return true;
-        if (languageHasRomanization(activeLanguage) && item.romanization) {
-            if (norm === normalizeString(item.romanization)) return true;
-        }
-        return false;
-    }
-
-    function submitAnswer(input, isCorrect) {
-        const item = input.deckItem;
-        const feedback = input.closest(".dictate-row")?.querySelector(".dictate-feedback");
+    function submitAnswer(typedDiv, isCorrect) {
+        const item = typedDiv.deckItem;
+        const row = typedDiv.closest(".dictate-row");
+        const feedback = row?.querySelector(".dictate-feedback");
 
         state.total++;
 
@@ -404,91 +423,54 @@
             state.streak++;
             state.bestStreak = Math.max(state.bestStreak, state.streak);
             state.score += Math.round(10 * getComboMultiplier(state.streak));
-            input.classList.add("is-correct");
-            const typed = input.value.trim();
-            const showScript = normalizeString(typed) !== normalizeString(item.script);
-            if (feedback) {
+            typedDiv.classList.add("is-correct");
+            // If user typed romanization, show the script below
+            const showScript = normalizeString(state.currentTyped) !== normalizeString(item.script);
+            if (feedback && showScript) {
                 feedback.className = "dictate-feedback is-correct";
-                feedback.textContent = showScript ? item.script : "";
-                if (languageHasRomanization(activeLanguage) && item.romanization && showScript) {
+                feedback.textContent = item.script;
+                if (languageHasRomanization(activeLanguage) && item.romanization) {
                     feedback.textContent += `  ${item.romanization}`;
                 }
             }
         } else {
             state.streak = 0;
-            input.classList.add("is-wrong");
-            if (feedback) {
+            // Replace typed text with correct word in red
+            typedDiv.textContent = item.script;
+            typedDiv.classList.add("is-wrong");
+            if (feedback && languageHasRomanization(activeLanguage) && item.romanization) {
                 feedback.className = "dictate-feedback is-wrong";
-                feedback.textContent = `${item.script}`;
-                if (languageHasRomanization(activeLanguage) && item.romanization) {
-                    feedback.textContent += `  (${item.romanization})`;
-                }
-            }
-            if (!input.value.trim()) {
-                input.value = item.script;
+                feedback.textContent = item.romanization;
             }
         }
 
         updateHud();
-        flashRow(input.closest(".dictate-row"), isCorrect);
+        if (row) flashRow(row, isCorrect);
     }
 
-    function advanceRow(input) {
-        const currentRow = input.closest(".dictate-row");
-        if (!currentRow) return;
+    function advanceRow(row) {
+        if (!row) return;
 
-        let rows = Array.from(el.rows.querySelectorAll(".dictate-row"));
-        rows.forEach(row => {
-            if (Number(row.dataset.index) <= Number(currentRow.dataset.index)) {
-                row.classList.add("past-row");
-                const inp = row.querySelector("input");
-                if (inp) { inp.readOnly = true; inp.tabIndex = -1; }
+        // Mark current row as past
+        const rows = Array.from(el.rows.querySelectorAll(".dictate-row"));
+        rows.forEach(r => {
+            if (Number(r.dataset.index) <= Number(row.dataset.index)) {
+                r.classList.add("past-row");
             }
         });
 
-        const currentIdx = rows.indexOf(currentRow);
-        if (currentIdx >= rows.length - 2) spawnRow();
+        // Reset typed state for next word
+        state.currentTyped = "";
+        state.submitted = false;
 
-        rows = Array.from(el.rows.querySelectorAll(".dictate-row"));
-        const nextRow = rows[currentIdx + 1];
+        // Spawn and scroll to next row
+        spawnRow();
+
+        const nextRow = el.rows.querySelector(".dictate-row:not(.past-row)");
         if (!nextRow) return;
 
-        updatePreview();
-        syncRowInteractivity();
-        focusFirstInput(nextRow);
-        playWordAudio(nextRow.querySelector("input")?.deckItem);
+        playWordAudio(nextRow.querySelector(".dictate-typed")?.deckItem);
         centerRow(nextRow);
-    }
-
-    function updatePreview() {
-        const rows = Array.from(el.rows.querySelectorAll(".dictate-row"));
-        rows.forEach(r => r.classList.remove("next-preview"));
-        const activeIdx = rows.findIndex(r => !r.classList.contains("past-row"));
-        if (activeIdx >= 0 && rows[activeIdx + 1]) rows[activeIdx + 1].classList.add("next-preview");
-    }
-
-    function syncRowInteractivity() {
-        const rows = Array.from(el.rows.querySelectorAll(".dictate-row"));
-        const activeRow = rows.find(r => !r.classList.contains("past-row"));
-        rows.forEach(row => {
-            const isActive = row === activeRow;
-            row.classList.toggle("inactive-row", !isActive);
-            const inp = row.querySelector("input");
-            if (inp && !row.classList.contains("past-row")) {
-                inp.readOnly = !isActive;
-                inp.tabIndex = isActive ? 0 : -1;
-                inp.setAttribute("aria-hidden", String(!isActive));
-            }
-        });
-    }
-
-    function focusActiveInput() {
-        const inp = el.rows?.querySelector(".dictate-row:not(.past-row) input");
-        if (inp) inp.focus({ preventScroll: true });
-    }
-
-    function focusFirstInput(row) {
-        row?.querySelector("input")?.focus({ preventScroll: true });
     }
 
     function flashRow(row, isCorrect) {
@@ -508,8 +490,8 @@
     }
 
     function playCurrentAudio() {
-        const inp = el.rows?.querySelector(".dictate-row:not(.past-row) input");
-        if (inp?.deckItem) playWordAudio(inp.deckItem);
+        const typed = el.rows?.querySelector(".dictate-row:not(.past-row) .dictate-typed");
+        if (typed?.deckItem) playWordAudio(typed.deckItem);
     }
 
     function replayAudio() {
@@ -531,7 +513,6 @@
                 activeWordAudio.pause();
                 activeWordAudio.currentTime = 0;
             }
-
             activeWordAudio = new Audio(url);
             activeWordAudio.addEventListener("play",  () => setAudioPlaying(true));
             activeWordAudio.addEventListener("ended", () => setAudioPlaying(false));
@@ -548,7 +529,6 @@
         if (playing) {
             el.audioViz?.classList.add("is-playing");
         } else {
-            // Keep the animation for a moment so the last ring completes
             playingTimeout = setTimeout(() => {
                 el.audioViz?.classList.remove("is-playing");
                 playingTimeout = null;
@@ -559,8 +539,8 @@
     // ── HUD ───────────────────────────────────────────────────────────────────
 
     function updateHud() {
-        if (el.scoreText)    el.scoreText.textContent    = `${state.score} pts`;
-        if (el.streakText)   el.streakText.textContent   = String(state.streak);
+        if (el.scoreText)    el.scoreText.textContent  = `${state.score} pts`;
+        if (el.streakText)   el.streakText.textContent = String(state.streak);
         if (el.accuracyText) {
             const pct = state.total > 0 ? Math.round((state.correct / state.total) * 100) : 100;
             el.accuracyText.textContent = `${pct}%`;
@@ -586,6 +566,40 @@
             .trim();
     }
 
+    function getAnswerTargets(item) {
+        const targets = [normalizeString(item.script)];
+        if (languageHasRomanization(activeLanguage) && item.romanization) {
+            targets.push(normalizeString(item.romanization));
+        }
+        return targets;
+    }
+
+    function isCorrectAnswer(typed, item) {
+        const norm = normalizeString(typed);
+        if (!norm) return false;
+        return getAnswerTargets(item).some(t =>
+            norm === t || (t.length >= 3 && levenshtein(norm, t) <= 1)
+        );
+    }
+
+    function levenshtein(a, b) {
+        if (a === b) return 0;
+        const m = a.length, n = b.length;
+        if (m === 0) return n;
+        if (n === 0) return m;
+        const dp = Array.from({ length: m + 1 }, (_, i) => i);
+        for (let j = 1; j <= n; j++) {
+            let prev = dp[0];
+            dp[0] = j;
+            for (let i = 1; i <= m; i++) {
+                const temp = dp[i];
+                dp[i] = a[i - 1] === b[j - 1] ? prev : 1 + Math.min(prev, dp[i], dp[i - 1]);
+                prev = temp;
+            }
+        }
+        return dp[m];
+    }
+
     function shuffleArray(arr) {
         const a = [...arr];
         for (let i = a.length - 1; i > 0; i--) {
@@ -595,8 +609,8 @@
         return a;
     }
 
-    function stripSlashes(v)        { return String(v || "").replace(/^\/+|\/+$/g, ""); }
-    function stripTrailingSlash(v)  { return String(v || "").replace(/\/+$/, ""); }
+    function stripSlashes(v)       { return String(v || "").replace(/^\/+|\/+$/g, ""); }
+    function stripTrailingSlash(v) { return String(v || "").replace(/\/+$/, ""); }
 
     function centerRow(row) {
         if (!el.rows || !row) return;

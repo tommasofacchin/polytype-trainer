@@ -24,6 +24,9 @@
 
     const FLIP_BACK_DELAY = 850;
 
+    const audioBaseUrl = (window.POLYTYPE_AUDIO_BASE_URL || "").replace(/\/+$/, "");
+    const audioPrefix  = (window.POLYTYPE_AUDIO_PREFIX || "audio/v1").replace(/^\/+|\/+$/g, "");
+
     const state = {
         vocab: [],          // every parsed word
         unlocked: [],       // words unlocked at the player's level
@@ -44,6 +47,7 @@
     let activeDeckMeta = null;
     let activeLanguage = FALLBACK_LANGUAGE;
     let scriptFlag = LANGUAGE_FLAGS[FALLBACK_LANGUAGE];
+    let activeAudio = null;
 
     document.addEventListener("DOMContentLoaded", init);
 
@@ -228,11 +232,12 @@
         const headers = (rows.shift() || []).map(h => h.trim());
 
         return rows
-            .map(row => {
+            .map((row, i) => {
                 const record = {};
-                headers.forEach((header, i) => { record[header] = (row[i] || "").trim(); });
+                headers.forEach((header, j) => { record[header] = (row[j] || "").trim(); });
                 const unlockLevel = Number.parseInt(record[columns.unlockLevel], 10);
                 return {
+                    id: record[columns.wordId]?.trim() || `w-${i}`,
                     script: record[columns.script] || "",
                     meaning: getRecordMeaning(record, columns),
                     unlockLevel: Number.isFinite(unlockLevel) && unlockLevel > 0 ? unlockLevel : 1
@@ -349,7 +354,7 @@
 
         const cards = [];
         picked.forEach((vocab, index) => {
-            cards.push({ pairId: index, type: "script", text: vocab.script });
+            cards.push({ pairId: index, type: "script", text: vocab.script, wordId: vocab.id });
             cards.push({ pairId: index, type: "meaning", text: vocab.meaning });
         });
         state.deck = shuffle(cards);
@@ -411,6 +416,7 @@
         }
 
         flip(button, true);
+        if (card.type === "script" && card.wordId) playCardAudio(card.wordId);
 
         if (!state.first) {
             state.first = { button, card };
@@ -451,6 +457,17 @@
     function markMatched(button) {
         button.classList.add("is-matched");
         button.disabled = true;
+    }
+
+    // ── Audio ───────────────────────────────────────────────
+    function playCardAudio(wordId) {
+        if (!audioBaseUrl || !activeDeckMeta) return;
+        const url = [audioBaseUrl, audioPrefix, encodeURIComponent(activeDeckMeta.id), encodeURIComponent(wordId) + ".mp3"].join("/");
+        try {
+            if (activeAudio) { activeAudio.pause(); activeAudio = null; }
+            activeAudio = new Audio(url);
+            activeAudio.play().catch(() => {});
+        } catch {}
     }
 
     // ── Timer ───────────────────────────────────────────────

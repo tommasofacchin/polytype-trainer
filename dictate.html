@@ -222,29 +222,42 @@
             transform: none;
         }
 
-        .dictate-input {
+        .dictate-typed {
             width: 100%;
             padding: 6px 0;
+            min-height: 2em;
             font-size: var(--text-lg);
             font-family: inherit;
             font-weight: 500;
-            border: none;
-            background: transparent;
             color: var(--text);
-            outline: none;
             text-align: center;
+            line-height: 1.4;
+            letter-spacing: 0.01em;
+            user-select: none;
         }
 
-        .dictate-input[readonly] {
-            cursor: default;
+        .dictate-typed:empty::before {
+            content: "|";
+            color: var(--accent);
+            animation: caret-blink 1.1s step-end infinite;
         }
 
-        .dictate-input.is-correct[readonly] {
+        @keyframes caret-blink {
+            0%, 100% { opacity: 1; }
+            50%       { opacity: 0; }
+        }
+
+        .dictate-typed.is-correct {
             color: var(--success);
             font-weight: 600;
         }
 
-        .dictate-input.is-wrong[readonly] {
+        .dictate-typed.is-correct:empty::before,
+        .dictate-typed.is-wrong:empty::before {
+            display: none;
+        }
+
+        .dictate-typed.is-wrong {
             color: var(--danger);
         }
 
@@ -383,7 +396,7 @@
             .dictate-hud-item strong { font-size: var(--text-lg); }
 
             .dictate-row { padding: 8px var(--space-4); }
-            .dictate-input { font-size: var(--text-md); }
+            .dictate-typed { font-size: var(--text-md); }
         }
 
         @media (prefers-reduced-motion: reduce) {
