@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Polytype Trainer</title>
+    <title data-i18n="app.name">Polytype Trainer</title>
   <link rel="icon" type="image/svg+xml" href="assets/flags/china.svg">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
     <link rel="stylesheet" href="style.css">
@@ -22,18 +22,18 @@
             <rect x="3" y="14" width="7" height="7" rx="1.6"></rect>
             <rect x="14" y="14" width="7" height="7" rx="1.6"></rect>
           </svg>
-          <span>My Deck</span>
+          <span data-i18n="trainer.myDeck">My Deck</span>
         </button>
 
         <div class="auth-menu-wrap">
-          <a id="auth-link" class="auth-menu-toggle auth-page-link" href="auth.html">Sign in</a>
+          <a id="auth-link" class="auth-menu-toggle auth-page-link" href="auth.html" data-i18n="trainer.signIn">Sign in</a>
           <div id="auth-dropdown" class="auth-dropdown" hidden>
-            <button id="auth-signout-btn" class="auth-dropdown-item" type="button">Sign out</button>
+            <button id="auth-signout-btn" class="auth-dropdown-item" type="button" data-i18n="trainer.signOut">Sign out</button>
           </div>
         </div>
 
         <div class="language-menu">
-          <button id="language-menu-toggle" class="language-menu-toggle" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Choose study language">
+          <button id="language-menu-toggle" class="language-menu-toggle" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Choose study language" data-i18n-aria-label="trainer.chooseStudyLanguage">
             <img id="current-language-flag" class="flag-mark" src="assets/flags/china.svg" alt="">
           </button>
           <div id="language-menu" class="language-menu-panel" role="menu" hidden></div>
@@ -58,9 +58,9 @@
       </div>
     </header>
 
-    <section class="settings" aria-label="Practice settings">
-        <a class="profile-pill" href="profile.html" aria-label="Open profile">
-            <span class="profile-pill-avatar" aria-hidden="true">T</span>
+    <section class="settings" aria-label="Practice settings" data-i18n-aria-label="trainer.practiceSettings">
+        <a class="profile-pill" href="profile.html" aria-label="Open profile" data-i18n-aria-label="trainer.openProfile">
+            <span id="mini-profile-avatar" class="profile-pill-avatar" aria-hidden="true">T</span>
             <span class="profile-pill-main">
                 <strong id="mini-profile-level">Level 1</strong>
                 <span id="mini-profile-xp">0 / 200 XP</span>
@@ -69,7 +69,7 @@
         </a>
 
         <div id="level-field" class="field">
-            <select id="level-select" aria-label="Level"></select>
+            <select id="level-select" aria-label="Level" data-i18n-aria-label="common.level"></select>
         </div>
 
         <div id="romaji-field" class="field checkbox-field checkbox-wrapper-46">
@@ -83,9 +83,9 @@
         </div>
 
         <div class="field">
-            <label for="time-select">Time</label>
+            <label for="time-select" data-i18n="trainer.time">Time</label>
             <select id="time-select">
-                <option value="0">Free</option>
+                <option value="0" data-i18n="trainer.free">Free</option>
                 <option value="30">30 sec</option>
                 <option value="60">1 min</option>
                 <option value="180">3 min</option>
@@ -93,11 +93,11 @@
         </div>
 
         <button id="restart-btn" class="restart-btn" type="button">
-            Start
+            <span data-i18n="trainer.start">Start</span>
         </button>
 
         <button id="focus-toggle" class="theme-toggle" type="button" aria-pressed="false">
-            Focus
+            <span data-i18n="trainer.focus">Focus</span>
         </button>
 
         <a id="memory-link" class="theme-toggle memory-link" href="memory.html">
@@ -105,21 +105,21 @@
                 <rect x="3" y="4" width="8" height="16" rx="1.6"></rect>
                 <rect x="13" y="4" width="8" height="16" rx="1.6"></rect>
             </svg>
-            <span>Memory</span>
+            <span data-i18n="trainer.memory">Memory</span>
         </a>
     </section>
 
-    <section class="game-hud" aria-label="Session score">
+    <section class="game-hud" aria-label="Session score" data-i18n-aria-label="trainer.sessionScore">
       <div class="hud-item">
-        <span class="hud-label">Time</span>
+        <span class="hud-label" data-i18n="trainer.time">Time</span>
         <strong id="timer-text">Free</strong>
       </div>
       <div class="hud-item">
-        <span class="hud-label">Score</span>
+        <span class="hud-label" data-i18n="trainer.score">Score</span>
         <strong id="hud-score-text">0 pts</strong>
       </div>
       <div class="hud-item" id="streak-hud">
-        <span class="hud-label">Combo</span>
+        <span class="hud-label" data-i18n="trainer.combo">Combo</span>
         <div class="streak-display">
           <strong id="streak-text">0</strong>
           <span id="streak-chip" class="streak-chip" hidden></span>
@@ -127,10 +127,10 @@
       </div>
     </section>
 
-    <section class="list-card" aria-label="Vocabulary drill">
+    <section class="list-card" aria-label="Vocabulary drill" data-i18n-aria-label="trainer.vocabularyDrill">
       <div class="list-header">
-        <span class="col-script">Word</span>
-        <span class="col-meaning">Meaning</span>
+        <span class="col-script" data-i18n="trainer.word">Word</span>
+        <span class="col-meaning" data-i18n="trainer.meaning">Meaning</span>
       </div>
 
       <div id="rows-container"></div>
@@ -138,32 +138,32 @@
       <div id="timer-start-modal" class="timer-modal" role="dialog" aria-modal="true" hidden>
         <div class="timer-modal-backdrop"></div>
         <div class="timer-modal-card">
-          <span class="timer-modal-kicker">Ready to start?</span>
+          <span class="timer-modal-kicker" data-i18n="trainer.ready">Ready to start?</span>
           <strong id="timer-start-label" class="timer-modal-duration">Free run</strong>
-          <button id="timer-go-btn" class="restart-btn" type="button">Go!</button>
+          <button id="timer-go-btn" class="restart-btn" type="button" data-i18n="trainer.go">Go!</button>
         </div>
       </div>
 
       <div id="timer-result-modal" class="timer-modal" role="dialog" aria-modal="true" hidden>
         <div class="timer-modal-backdrop"></div>
         <div class="timer-modal-card">
-          <span class="result-label">Time up</span>
+          <span class="result-label" data-i18n="trainer.timeUp">Time up</span>
           <strong id="timed-result-score" class="result-score-text">0 pts</strong>
           <span id="timed-result-detail" class="result-detail-text">0 correct / 0 fields</span>
           <span id="timed-result-save-status" class="result-save-status"></span>
-          <button id="timed-play-again-btn" class="restart-btn" type="button">Play again</button>
+          <button id="timed-play-again-btn" class="restart-btn" type="button" data-i18n="trainer.playAgain">Play again</button>
         </div>
       </div>
     </section>
 
     <section id="session-result" class="session-result" aria-live="polite" hidden>
       <div>
-        <span class="result-label">Time up</span>
+        <span class="result-label" data-i18n="trainer.timeUp">Time up</span>
         <strong id="result-score">0 pts</strong>
         <span id="result-detail">0 correct / 0 fields</span>
         <span id="result-save-status" class="result-save-status"></span>
       </div>
-      <button id="play-again-btn" class="restart-btn" type="button">Play again</button>
+      <button id="play-again-btn" class="restart-btn" type="button" data-i18n="trainer.playAgain">Play again</button>
     </section>
   </main>
 
@@ -172,11 +172,11 @@
     <div class="deck-modal" role="document">
       <header class="deck-modal-head">
         <div class="deck-modal-headings">
-          <span class="deck-modal-kicker">Collection</span>
-          <h2 id="deck-overlay-title">My Deck</h2>
+          <span class="deck-modal-kicker" data-i18n="trainer.collection">Collection</span>
+          <h2 id="deck-overlay-title" data-i18n="trainer.myDeck">My Deck</h2>
           <p id="deck-modal-sub" class="deck-modal-sub"></p>
         </div>
-        <button id="my-deck-close" class="deck-modal-close" type="button" aria-label="Close" data-deck-close>&times;</button>
+        <button id="my-deck-close" class="deck-modal-close" type="button" aria-label="Close" data-i18n-aria-label="common.close" data-deck-close>&times;</button>
       </header>
 
       <div class="deck-progress">
@@ -193,6 +193,7 @@
   <script src="js/firebase-config.js"></script>
   <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-auth-compat.js"></script>
+  <script src="js/i18n.js"></script>
   <script src="js/firebase-client.js"></script>
   <script src="decks/index.js"></script>
   <script src="js/main.js"></script>

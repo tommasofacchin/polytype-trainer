@@ -1,0 +1,301 @@
+word_id,japanese,romaji,english,italian,unlock_level
+ja_001,こんにちは,konnichiwa,hello,ciao,1
+ja_002,ありがとう,arigatou,thanks,grazie,1
+ja_003,はい,hai,yes,sì,1
+ja_004,いいえ,iie,no,no,1
+ja_005,お願いします,onegaishimasu,please,per favore,1
+ja_006,ごめんなさい,gomen nasai,sorry,scusa,2
+ja_007,朝,asa,morning,mattina,2
+ja_008,夕方,yuugata,evening,sera,2
+ja_009,日,hi,day,giorno,2
+ja_010,夜,yoru,night,notte,2
+ja_011,水,mizu,water,acqua,3
+ja_012,食べ物,tabemono,food,cibo,3
+ja_013,コーヒー,koohii,coffee,caffè,3
+ja_014,パン,pan,bread,pane,3
+ja_015,家,ie,house,casa,3
+ja_016,車,kuruma,car,macchina,4
+ja_017,本,hon,book,libro,4
+ja_018,友達,tomodachi,friend,amico,4
+ja_019,家族,kazoku,family,famiglia,4
+ja_020,学校,gakkou,school,scuola,4
+ja_021,男の人,otoko no hito,man,uomo,5
+ja_022,女の人,onna no hito,woman,donna,5
+ja_023,子供,kodomo,child,bambino,5
+ja_024,女の子,onna no ko,girl,bambina,5
+ja_025,男の子,otoko no ko,boy,ragazzo,5
+ja_026,母,haha,mother,madre,6
+ja_027,父,chichi,father,padre,6
+ja_028,姉,ane,sister,sorella,6
+ja_029,兄,ani,brother,fratello,6
+ja_030,祖母,sobo,grandmother,nonna,6
+ja_031,大きい,ookii,big,grande,7
+ja_032,小さい,chiisai,small,piccolo,7
+ja_033,良い,yoi,good,buono,7
+ja_034,悪い,warui,bad,cattivo,7
+ja_035,新しい,atarashii,new,nuovo,7
+ja_036,古い,furui,old,vecchio,8
+ja_037,暖かい,atatakai,warm,caldo,8
+ja_038,寒い,samui,cold,freddo,8
+ja_039,速い,hayai,fast,veloce,8
+ja_040,遅い,osoi,slow,lento,8
+ja_041,私,watashi,I,io,9
+ja_042,あなた,anata,you,tu,9
+ja_043,彼,kare,he,lui,9
+ja_044,彼女,kanojo,she,lei,9
+ja_045,私たち,watashitachi,we,noi,9
+ja_046,あなたたち,anatatachi,you plural,voi,10
+ja_047,彼ら,karera,they,loro,10
+ja_048,私の,watashi no,my,mio,10
+ja_049,あなたの,anata no,your,tuo,10
+ja_050,私たちの,watashitachi no,our,nostro,10
+ja_051,です,desu,to be,essere,11
+ja_052,持つ,motsu,to have,avere,11
+ja_053,行く,iku,to go,andare,11
+ja_054,来る,kuru,to come,venire,11
+ja_055,する,suru,to do,fare,11
+ja_056,食べる,taberu,to eat,mangiare,12
+ja_057,飲む,nomu,to drink,bere,12
+ja_058,読む,yomu,to read,leggere,12
+ja_059,書く,kaku,to write,scrivere,12
+ja_060,話す,hanasu,to speak,parlare,12
+ja_061,一つ,hitotsu,a common,un,13
+ja_062,一つ,hitotsu,a feminine,una,13
+ja_063,一つ,hitotsu,a neuter,un,13
+ja_064,それ,sore,it common,esso,13
+ja_065,それ,sore,it neuter,esso,13
+ja_066,ここ,koko,here,qui,14
+ja_067,そこ,soko,there,lì,14
+ja_068,今,ima,now,ora,14
+ja_069,後で,ato de,later,più tardi,14
+ja_070,いつも,itsumo,always,sempre,14
+ja_071,今日,kyou,today,oggi,15
+ja_072,明日,ashita,tomorrow,domani,15
+ja_073,昨日,kinou,yesterday,ieri,15
+ja_074,週,shuu,week,settimana,15
+ja_075,月,tsuki,month,mese,15
+ja_076,赤,aka,red,rosso,16
+ja_077,青,ao,blue,blu,16
+ja_078,緑,midori,green,verde,16
+ja_079,黄色,kiiro,yellow,giallo,16
+ja_080,黒,kuro,black,nero,16
+ja_081,白,shiro,white,bianco,17
+ja_082,茶色,chairo,brown,marrone,17
+ja_083,ピンク,pinku,pink,rosa,17
+ja_084,オレンジ,orenji,orange,arancione,17
+ja_085,紫,murasaki,purple,viola,17
+ja_086,一,ichi,one,uno,18
+ja_087,二,ni,two,due,18
+ja_088,三,san,three,tre,18
+ja_089,四,yon,four,quattro,18
+ja_090,五,go,five,cinque,18
+ja_091,六,roku,six,sei,19
+ja_092,七,nana,seven,sette,19
+ja_093,八,hachi,eight,otto,19
+ja_094,九,kyuu,nine,nove,19
+ja_095,十,juu,ten,dieci,19
+ja_096,どこ,doko,where,dove,20
+ja_097,何,nani,what,cosa,20
+ja_098,誰,dare,who,chi,20
+ja_099,いつ,itsu,when,quando,20
+ja_100,なぜ,naze,why,perché,20
+ja_101,どう,dou,how,come,21
+ja_102,どれ,dore,which,quale,21
+ja_103,いくら,ikura,how much,quanto,21
+ja_104,なぜなら,nazenara,because,perché,21
+ja_105,でも,demo,but,ma,21
+ja_106,と,to,and,e,22
+ja_107,または,mata wa,or,o,22
+ja_108,一緒に,issho ni,with,con,22
+ja_109,なしで,nashi de,without,senza,22
+ja_110,から,kara,from,da,22
+ja_111,へ,e,to,a,23
+ja_112,中に,naka ni,in,in,23
+ja_113,上に,ue ni,on,su,23
+ja_114,下に,shita ni,under,sotto,23
+ja_115,上,ue,above,sopra,23
+ja_116,町,machi,city,città,24
+ja_117,通り,toori,street,strada,24
+ja_118,店,mise,shop,negozio,24
+ja_119,市場,ichiba,market,mercato,24
+ja_120,公園,kouen,park,parco,24
+ja_121,部屋,heya,room,stanza,25
+ja_122,台所,daidokoro,kitchen,cucina,25
+ja_123,浴室,yokushitsu,bathroom,bagno,25
+ja_124,寝室,shinshitsu,bedroom,camera,25
+ja_125,居間,ima,living room,soggiorno,25
+ja_126,チーズ,chiizu,cheese,formaggio,26
+ja_127,卵,tamago,egg,uovo,26
+ja_128,魚,sakana,fish,pesce,26
+ja_129,肉,niku,meat,carne,26
+ja_130,スープ,suupu,soup,zuppa,26
+ja_131,りんご,ringo,apple,mela,27
+ja_132,バナナ,banana,banana,banana,27
+ja_133,オレンジ,orenji,orange fruit,arancia,27
+ja_134,じゃがいも,jagaimo,potato,patata,27
+ja_135,にんじん,ninjin,carrot,carota,27
+ja_136,お茶,ocha,tea,tè,28
+ja_137,牛乳,gyuunyuu,milk,latte,28
+ja_138,ジュース,juusu,juice,succo,28
+ja_139,朝食,choushoku,breakfast,colazione,28
+ja_140,昼食,chuushoku,lunch,pranzo,28
+ja_141,夕食,yuushoku,dinner,cena,29
+ja_142,塩,shio,salt,sale,29
+ja_143,砂糖,satou,sugar,zucchero,29
+ja_144,皿,sara,plate,piatto,29
+ja_145,グラス,gurasu,glass,bicchiere,29
+ja_146,頭,atama,head,testa,30
+ja_147,手,te,hand,mano,30
+ja_148,足,ashi,foot,piede,30
+ja_149,目,me,eye,occhio,30
+ja_150,耳,mimi,ear,orecchio,30
+ja_151,鼻,hana,nose,naso,31
+ja_152,口,kuchi,mouth,bocca,31
+ja_153,髪,kami,hair,capelli,31
+ja_154,ジャケット,jaketto,jacket,giacca,31
+ja_155,靴,kutsu,shoes,scarpe,31
+ja_156,ズボン,zubon,pants,pantaloni,32
+ja_157,シャツ,shatsu,shirt,camicia,32
+ja_158,ドレス,doresu,dress,vestito,32
+ja_159,帽子,boushi,hat,cappello,32
+ja_160,セーター,seetaa,sweater,maglione,32
+ja_161,秒,byou,second,secondo,33
+ja_162,時間,jikan,hour,ora,33
+ja_163,分,fun,minute,minuto,33
+ja_164,年,toshi,year,anno,33
+ja_165,週末,shuumatsu,weekend,fine settimana,33
+ja_166,月曜日,getsuyoubi,Monday,lunedì,34
+ja_167,火曜日,kayoubi,Tuesday,martedì,34
+ja_168,水曜日,suiyoubi,Wednesday,mercoledì,34
+ja_169,木曜日,mokuyoubi,Thursday,giovedì,34
+ja_170,金曜日,kinyoubi,Friday,venerdì,34
+ja_171,土曜日,doyoubi,Saturday,sabato,35
+ja_172,日曜日,nichiyoubi,Sunday,domenica,35
+ja_173,春,haru,spring,primavera,35
+ja_174,夏,natsu,summer,estate,35
+ja_175,秋,aki,autumn,autunno,35
+ja_176,冬,fuyu,winter,inverno,36
+ja_177,太陽,taiyou,sun,sole,36
+ja_178,雨,ame,rain,pioggia,36
+ja_179,雪,yuki,snow,neve,36
+ja_180,風,kaze,wind,vento,36
+ja_181,素敵,suteki,nice,bello,37
+ja_182,曇り,kumori,cloudy,nuvoloso,37
+ja_183,晴れ,hare,clear,sereno,37
+ja_184,乾いた,kawaita,dry,secco,37
+ja_185,濡れた,nureta,wet,bagnato,37
+ja_186,電車,densha,train,treno,38
+ja_187,バス,basu,bus,autobus,38
+ja_188,飛行機,hikouki,plane,aereo,38
+ja_189,自転車,jitensha,bicycle,bicicletta,38
+ja_190,船,fune,boat,barca,38
+ja_191,駅,eki,station,stazione,39
+ja_192,空港,kuukou,airport,aeroporto,39
+ja_193,切符,kippu,ticket,biglietto,39
+ja_194,地図,chizu,map,mappa,39
+ja_195,ホテル,hoteru,hotel,hotel,39
+ja_196,左,hidari,left,sinistra,40
+ja_197,右,migi,right,vero,40
+ja_198,まっすぐ,massugu,straight ahead,dritto,40
+ja_199,近い,chikai,near,vicino,40
+ja_200,遠い,tooi,far,lontano,40
+ja_201,十一,juuichi,eleven,undici,41
+ja_202,十二,juuni,twelve,dodici,41
+ja_203,十三,juusan,thirteen,tredici,41
+ja_204,十四,juuyon,fourteen,quattordici,41
+ja_205,十五,juugo,fifteen,quindici,41
+ja_206,十六,juuroku,sixteen,sedici,42
+ja_207,十七,juunana,seventeen,diciassette,42
+ja_208,十八,juuhachi,eighteen,diciotto,42
+ja_209,十九,juukyuu,nineteen,diciannove,42
+ja_210,二十,nijuu,twenty,venti,42
+ja_211,祖父,sofu,grandfather,nonno,43
+ja_212,両親,ryoushin,parents,genitori,43
+ja_213,息子,musuko,son,figlio,43
+ja_214,娘,musume,daughter,figlia,43
+ja_215,夫,otto,husband,marito,43
+ja_216,先生,sensei,teacher,insegnante,44
+ja_217,学生,gakusei,student,studente,44
+ja_218,医者,isha,doctor,medico,44
+ja_219,看護師,kangoshi,nurse,infermiera,44
+ja_220,警察,keisatsu,police,polizia,44
+ja_221,仕事,shigoto,job,lavoro,45
+ja_222,事務所,jimusho,office,ufficio,45
+ja_223,クラス,kurasu,class,classe,45
+ja_224,宿題,shukudai,homework,compito,45
+ja_225,試験,shiken,test,test,45
+ja_226,寝る,neru,to sleep,dormire,46
+ja_227,起きる,okiru,to wake up,svegliarsi,46
+ja_228,働く,hataraku,to work,lavorare,46
+ja_229,勉強する,benkyou suru,to study,studiare,46
+ja_230,学ぶ,manabu,to learn,imparare,46
+ja_231,運転する,unten suru,to drive,guidare,47
+ja_232,旅行する,ryokou suru,to travel,viaggiare,47
+ja_233,待つ,matsu,to wait,aspettare,47
+ja_234,見つける,mitsukeru,to find,trovare,47
+ja_235,会う,au,to meet,incontrare,47
+ja_236,好き,suki,to like,piacere,48
+ja_237,愛する,ai suru,to love,amare,48
+ja_238,欲しい,hoshii,to want,volere,48
+ja_239,必要,hitsuyou,to need,avere bisogno,48
+ja_240,買う,kau,to buy,comprare,48
+ja_241,売る,uru,to sell,vendere,49
+ja_242,払う,harau,to pay,pagare,49
+ja_243,開ける,akeru,to open,aprire,49
+ja_244,閉める,shimeru,to close,chiudere,49
+ja_245,洗う,arau,to wash,lavare,49
+ja_246,見る,miru,to see,vedere,50
+ja_247,聞く,kiku,to hear,sentire,50
+ja_248,言う,iu,to say,dire,50
+ja_249,尋ねる,tazuneru,to ask,chiedere,50
+ja_250,答える,kotaeru,to answer,rispondere,50
+ja_251,嬉しい,ureshii,happy,felice,51
+ja_252,悲しい,kanashii,sad,triste,51
+ja_253,怒った,okotta,angry,arrabbiato,51
+ja_254,疲れた,tsukareta,tired,stanco,51
+ja_255,病気,byouki,sick,malato,51
+ja_256,簡単,kantan,easy,facile,52
+ja_257,難しい,muzukashii,difficult,difficile,52
+ja_258,高い,takai,expensive,costoso,52
+ja_259,安い,yasui,cheap,economico,52
+ja_260,無料,muryou,free,gratis,52
+ja_261,多い,ooi,many,molti,53
+ja_262,少ない,sukunai,few,pochi,53
+ja_263,もっと,motto,more,più,53
+ja_264,少なく,sukunaku,less,meno,53
+ja_265,十分,juubun,enough,abbastanza,53
+ja_266,よく,yoku,often,spesso,54
+ja_267,決して,kesshite,never,mai,54
+ja_268,時々,tokidoki,sometimes,a volte,54
+ja_269,早い,hayai,early,presto,54
+ja_270,遅い,osoi,late,tardi,54
+ja_271,この,kono,this common,questo,55
+ja_272,これ,kore,this neuter,questo,55
+ja_273,これら,korera,these,questi,55
+ja_274,同じ,onaji,same,stesso,55
+ja_275,他の,hoka no,other,altro,55
+ja_276,さようなら,sayounara,bye,arrivederci,56
+ja_277,おはよう,ohayou,good morning,buongiorno,56
+ja_278,こんばんは,konbanwa,good evening,buonasera,56
+ja_279,おやすみ,oyasumi,good night,buonanotte,56
+ja_280,ようこそ,youkoso,welcome,benvenuto,56
+ja_281,どうぞ,douzo,here you are,ecco a te,57
+ja_282,本当にありがとう,hontou ni arigatou,many thanks,mille grazie,57
+ja_283,大丈夫,daijoubu,it is fine,va bene,57
+ja_284,そうですね,sou desu ne,right,vero,57
+ja_285,もちろん,mochiron,of course,certo,57
+ja_286,薬局,yakkyoku,pharmacy,farmacia,58
+ja_287,病院,byouin,hospital,ospedale,58
+ja_288,歯医者,haisha,dentist,dentista,58
+ja_289,助け,tasuke,help,aiuto,58
+ja_290,問題,mondai,problem,problema,58
+ja_291,値段,nedan,price,prezzo,59
+ja_292,お金,okane,money,soldi,59
+ja_293,レシート,reshiito,receipt,ricevuta,59
+ja_294,袋,fukuro,bag,borsa,59
+ja_295,サイズ,saizu,size,taglia,59
+ja_296,電話,denwa,phone,telefono,60
+ja_297,コンピューター,konpyuutaa,computer,computer,60
+ja_298,鍵,kagi,key,chiave,60
+ja_299,時計,tokei,clock,orologio,60
+ja_300,かばん,kaban,bag,borsa,60

@@ -8,10 +8,15 @@ backend for progression, streaks, streak freezes, and social features.
 - Frontend: plain HTML, CSS, and JavaScript.
 - Decks: CSV files loaded by the browser.
 - Backend: Firebase Auth, Firestore, and Cloud Functions.
+- App language: English or Italian, selected from the profile page.
 - Current languages:
-  - Chinese
-  - Korean
+  - Chinese, 60 unlock levels with 5 words per level
+  - German, 60 unlock levels with 5 words per level
+  - Italian, 60 unlock levels with 5 words per level
+  - Japanese, 60 unlock levels with 5 words per level
   - Norwegian, 60 unlock levels with 5 words per level
+  - Spanish, 60 unlock levels with 5 words per level
+  - Swedish, 60 unlock levels with 5 words per level
 
 ## Run the static frontend
 
@@ -48,7 +53,8 @@ Firestore rules.
 
 XP and course level are server-owned. The frontend auto-saves signed-in
 practice progress every 5 answered words and again when a timed session ends or
-the player restarts. Norwegian unlocks 5 new words for each course level.
+the player restarts. Each active course unlocks 5 new words for each course
+level.
 
 Available callable functions:
 
@@ -108,7 +114,7 @@ uploads MP3 files to Storj using its S3-compatible API. Put secrets in
 ```txt
 ELEVENLABS_API_KEY=your-elevenlabs-api-key
 ELEVENLABS_VOICE_NAME=Mia Starset- Clear and Friendly
-ELEVENLABS_LANGUAGE_CODE=no
+ELEVENLABS_LANGUAGE_CODE=
 STORJ_ENDPOINT=https://gateway.storjshare.io
 STORJ_REGION=us-east-1
 STORJ_ACCESS_KEY_ID=your-storj-access-key
@@ -116,32 +122,78 @@ STORJ_SECRET_ACCESS_KEY=your-storj-secret-key
 STORJ_BUCKET=your-storj-bucket
 AUDIO_BASE_URL=https://your-public-audio-base-url
 AUDIO_PREFIX=audio/v1
+PROFILE_IMAGE_BASE_URL=https://your-public-profile-image-base-url
+PROFILE_IMAGE_PREFIX=profiles/v1
 ```
 
 Preview without generating audio:
 
 ```bash
+npm run generate:audio:norwegian -- --dry-run --limit=5
+npm run generate:audio:swedish -- --dry-run --limit=5
 npm run generate:audio -- --deck=norwegian-a1 --dry-run --limit=5
+npm run generate:audio -- --deck=chinese-a1 --dry-run --limit=5
+npm run generate:audio -- --deck=german-a1 --dry-run --limit=5
+npm run generate:audio -- --deck=italian-a1 --dry-run --limit=5
+npm run generate:audio -- --deck=japanese-a1 --dry-run --limit=5
+npm run generate:audio -- --deck=spanish-a1 --dry-run --limit=5
+npm run generate:audio -- --deck=swedish-a1 --dry-run --limit=5
 ```
 
 Generate and upload missing audio:
 
 ```bash
+npm run generate:audio:norwegian
+npm run generate:audio:swedish
 npm run generate:audio -- --deck=norwegian-a1
+npm run generate:audio -- --deck=chinese-a1
+npm run generate:audio -- --deck=german-a1
+npm run generate:audio -- --deck=italian-a1
+npm run generate:audio -- --deck=japanese-a1
+npm run generate:audio -- --deck=spanish-a1
+npm run generate:audio -- --deck=swedish-a1
 ```
 
 Files are saved as:
 
 ```txt
 {STORJ_BUCKET}/audio/v1/norwegian-a1/nor_001.mp3
+{STORJ_BUCKET}/audio/v1/chinese-a1/zh_001.mp3
+{STORJ_BUCKET}/audio/v1/german-a1/de_001.mp3
+{STORJ_BUCKET}/audio/v1/italian-a1/it_001.mp3
+{STORJ_BUCKET}/audio/v1/japanese-a1/ja_001.mp3
+{STORJ_BUCKET}/audio/v1/spanish-a1/es_001.mp3
+{STORJ_BUCKET}/audio/v1/swedish-a1/sv_001.mp3
 ```
 
 `AUDIO_BASE_URL` must be a public URL that maps to the bucket root, without a
 trailing slash. The trainer builds audio URLs like:
 
 ```txt
-{AUDIO_BASE_URL}/audio/v1/norwegian-a1/nor_001.mp3
+{AUDIO_BASE_URL}/audio/v1/<deck-id>/<word_id>.mp3
 ```
+
+The audio generator uses deck defaults for language codes where available
+(`zh` for Chinese, `de` for German, `it` for Italian, `ja` for Japanese, `es`
+for Spanish, `sv` for Swedish). Use `--language-code=...` only when you want to
+override that behavior.
+
+## Profile photos
+
+Signed-in users can set a username and upload a profile photo from
+`profile.html`. Photos are uploaded by the server API to Storj using the same
+S3-compatible credentials as audio, then the public URL is saved on
+`users/{uid}` and `publicProfiles/{uid}`.
+
+Files are saved as:
+
+```txt
+{STORJ_BUCKET}/profiles/v1/<uid>/avatar-<timestamp>.jpg
+```
+
+Set `PROFILE_IMAGE_BASE_URL` to the public bucket root for profile images. If it
+is empty, the API falls back to `AUDIO_BASE_URL`. Keep `PROFILE_IMAGE_PREFIX`
+separate from `AUDIO_PREFIX` so generated word audio and user uploads do not mix.
 
 ## Vercel production
 
@@ -165,12 +217,24 @@ FIREBASE_FUNCTIONS_REGION=europe-west1
 FIREBASE_USE_EMULATORS=false
 AUDIO_BASE_URL=https://your-public-audio-base-url
 AUDIO_PREFIX=audio/v1
+PROFILE_IMAGE_BASE_URL=https://your-public-profile-image-base-url
+PROFILE_IMAGE_PREFIX=profiles/v1
 ```
 
 Only the first four Firebase keys are required by the build script. `AUDIO_BASE_URL`
 is required only if you want production flashcards to play hosted audio. You can
 find the Firebase values in Firebase Console > Project settings > General > Your
 apps > Web app config.
+
+Profile photo uploads also need the server-side Storj variables in Vercel:
+
+```txt
+STORJ_ENDPOINT
+STORJ_REGION
+STORJ_ACCESS_KEY_ID
+STORJ_SECRET_ACCESS_KEY
+STORJ_BUCKET
+```
 
 Also enable Firebase Console > Authentication > Sign-in method > Email/Password,
 and add your Vercel domain in Authentication > Settings > Authorized domains.
@@ -204,6 +268,8 @@ maps them to the app fields:
 - `script`: the word shown to the user
 - `romanization`: pinyin, romaja, romaji, or another pronunciation field
 - `meaning`: the answer translation
+- `italianMeaning` optional: Italian answer translation used when the app
+  language is Italian
 - `wordId` optional: stable word identifier
 - `unlockLevel` optional: profile/course level required to unlock the word
 
@@ -211,26 +277,29 @@ Example registry entry:
 
 ```js
 {
-  id: "topik1",
-  language: "korean",
-  languageLabel: "Korean",
-  level: "TOPIK 1",
-  label: "TOPIK 1",
-  path: "decks/topik1.csv",
+  id: "chinese-a1",
+  language: "chinese",
+  languageLabel: "Chinese",
+  level: "A1",
+  label: "Chinese A1",
+  path: "decks/chinese_a1.csv",
   columns: {
-    script: "korean",
-    romanization: "romaji",
-    meaning: "english"
+    script: "chinese",
+    romanization: "pinyin",
+    meaning: "english",
+    italianMeaning: "italian",
+    wordId: "word_id",
+    unlockLevel: "unlock_level"
   }
 }
 ```
 
-Norwegian already uses unlock levels:
+Active A1 decks use unlock levels:
 
 ```csv
-word_id,norwegian,romanization,english,unlock_level
-nor_001,hei,hei,hello,1
-nor_006,unnskyld,unnskyld,sorry,2
+word_id,chinese,pinyin,english,italian,unlock_level
+zh_001,你好,nǐ hǎo,hello,ciao,1
+zh_006,对不起,duì bu qǐ,sorry,scusa,2
 ```
 
 To add a new deck:
@@ -243,7 +312,7 @@ The backend currently computes `wordsUnlocked` as `courseLevel * 5`. The
 frontend reads `unlock_level` when present and filters the practice deck against
 the current profile/course level.
 
-Norwegian currently has 300 rows:
+Each active A1 deck currently has 300 rows:
 
 ```txt
 60 levels x 5 words = 300 unlockable words

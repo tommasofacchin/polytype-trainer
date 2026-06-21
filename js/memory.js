@@ -6,8 +6,6 @@
     const LANGUAGE = "norwegian";
 
     const SCRIPT_FLAG = "assets/flags/norway.svg";
-    const MEANING_FLAG = "assets/flags/english.svg";
-
     // Higher difficulty = more pairs and a bigger score multiplier, so a
     // cleared Hard board always beats Medium, and Medium always beats Easy.
     const DIFFICULTIES = {
@@ -37,6 +35,20 @@
     const el = {};
 
     document.addEventListener("DOMContentLoaded", init);
+
+    function tr(key, params = {}) {
+        return window.PolytypeI18n?.t?.(key, params) || key;
+    }
+
+    function getAppLanguage() {
+        return window.PolytypeI18n?.getLanguage?.() || "en";
+    }
+
+    function getMeaningFlag() {
+        return getAppLanguage() === "it"
+            ? "assets/flags/italy.svg"
+            : "assets/flags/english.svg";
+    }
 
     function init() {
         el.board = document.getElementById("memory-board");
@@ -84,7 +96,7 @@
         } catch (e) {}
         const isDark = theme === "dark";
         el.themeToggle.setAttribute("aria-pressed", String(isDark));
-        el.themeToggle.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
+        el.themeToggle.setAttribute("aria-label", isDark ? tr("common.switchLight") : tr("common.switchDark"));
     }
 
     // ── Vocabulary loading ──────────────────────────────────
@@ -112,9 +124,7 @@
         } catch (error) {
             console.error(error);
             el.difficultyModal.hidden = true;
-            el.grid.innerHTML =
-                '<p class="memory-empty">Could not load the vocabulary. Start a local server ' +
-                "(e.g. <code>python -m http.server</code>) and reopen this page.</p>";
+            el.grid.innerHTML = `<p class="memory-empty">${tr("memory.loadError")}</p>`;
         }
     }
 
@@ -129,17 +139,18 @@
             const meta = btn.querySelector(".mem-diff-meta");
             if (meta) {
                 meta.textContent = locked
-                    ? "Unlocks at level " + cfg.unlock
-                    : cfg.pairs + " pairs";
+                    ? tr("trainer.unlocksAtLevel", { level: cfg.unlock })
+                    : tr("memory.pairCount", { count: cfg.pairs });
             }
         });
     }
 
     function updateDifficultyHint(unlockedLevel) {
         if (!el.difficultySub) return;
-        el.difficultySub.textContent =
-            state.unlocked.length + " words unlocked (level " + unlockedLevel +
-            "). Harder = more cards and more points.";
+        el.difficultySub.textContent = tr("memory.unlockedHint", {
+            count: state.unlocked.length,
+            level: unlockedLevel
+        });
     }
 
     function parseDeckCsv(csvText, columns) {
@@ -153,11 +164,24 @@
                 const unlockLevel = Number.parseInt(record[columns.unlockLevel], 10);
                 return {
                     script: record[columns.script] || "",
-                    meaning: record[columns.meaning] || "",
+                    meaning: getRecordMeaning(record, columns),
                     unlockLevel: Number.isFinite(unlockLevel) && unlockLevel > 0 ? unlockLevel : 1
                 };
             })
             .filter(item => item.script && item.meaning);
+    }
+
+    function getRecordMeaning(record, columns) {
+        const meaningColumn = getAppLanguage() === "it"
+            ? columns.italianMeaning
+            : columns.meaning;
+
+        return (
+            record[meaningColumn] ||
+            record[columns.meaning] ||
+            record[columns.italianMeaning] ||
+            ""
+        );
     }
 
     // ── Level gating (mirrors the trainer's profile + XP math) ──
@@ -284,8 +308,8 @@
             button.className = "mem-card";
             button.dataset.pair = String(card.pairId);
             button.dataset.type = card.type;
-            button.setAttribute("aria-label", "Hidden card");
-            const flag = card.type === "script" ? SCRIPT_FLAG : MEANING_FLAG;
+            button.setAttribute("aria-label", tr("memory.hiddenCard"));
+            const flag = card.type === "script" ? SCRIPT_FLAG : getMeaningFlag();
             const fontCqw = wordFontCqw(card.text);
             button.innerHTML =
                 '<span class="mem-card-inner">' +
@@ -350,7 +374,7 @@
     function flip(button, faceUp) {
         button.classList.toggle("is-flipped", faceUp);
         const text = button.querySelector(".mem-card-back").textContent;
-        button.setAttribute("aria-label", faceUp ? text : "Hidden card");
+        button.setAttribute("aria-label", faceUp ? text : tr("memory.hiddenCard"));
     }
 
     function markMatched(button) {
@@ -387,9 +411,12 @@
         const ms = elapsedMs();
         const score = computeScore(ms, state.cfg, state.pairCount);
 
-        el.resultScore.textContent = score + " pts";
-        el.resultDetail.textContent =
-            state.cfg.label + " · " + formatTime(ms) + " · " + state.moves + " moves";
+        el.resultScore.textContent = score + " " + tr("common.points");
+        el.resultDetail.textContent = tr("memory.resultDetail", {
+            difficulty: tr(`memory.${state.cfg.id}`),
+            time: formatTime(ms),
+            moves: state.moves
+        });
         el.resultModal.hidden = false;
     }
 

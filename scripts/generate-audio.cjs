@@ -41,7 +41,8 @@ async function main() {
   assertEnv();
 
   const deck = loadDeckMeta(deckId);
-  const languageCode = options.languageCode || process.env.ELEVENLABS_LANGUAGE_CODE || getDefaultLanguageCode(deck.language);
+  const defaultLanguageCode = getDefaultLanguageCode(deck.language);
+  const languageCode = options.languageCode || defaultLanguageCode || process.env.ELEVENLABS_LANGUAGE_CODE || "";
   const records = loadDeckRecords(deck);
   const targets = limit ? records.slice(0, limit) : records;
 
@@ -422,8 +423,12 @@ function parsePositiveInt(value) {
 function getDefaultLanguageCode(language) {
   const codes = {
     chinese: "zh",
-    korean: "ko",
-    norwegian: ""
+    german: "de",
+    italian: "it",
+    japanese: "ja",
+    norwegian: "",
+    spanish: "es",
+    swedish: "sv"
   };
 
   return codes[language] || "";

@@ -3,7 +3,15 @@ const MAX_STREAK_FREEZES = 2;
 const WORDS_PER_LEVEL = 5;
 const MAX_SESSION_XP = 500;
 const HANDLE_PATTERN = /^[a-z0-9_]{3,20}$/;
-const COURSE_LEVEL_CAPS = { norwegian: 20 };
+const COURSE_LEVEL_CAPS = {
+  chinese: 60,
+  german: 60,
+  italian: 60,
+  japanese: 60,
+  norwegian: 60,
+  spanish: 60,
+  swedish: 60
+};
 
 class ApiError extends Error {
   constructor(status, message) {
@@ -31,8 +39,9 @@ function withAuth(handler) {
       const result = await handler(req.body || {}, decodedToken);
       return res.json({ data: result });
     } catch (err) {
-      if (err instanceof ApiError) {
-        return res.status(err.status).json({ error: err.message });
+      const status = Number(err?.status);
+      if (err instanceof ApiError || (Number.isInteger(status) && status >= 400 && status < 600)) {
+        return res.status(status).json({ error: err.message });
       }
       console.error(err);
       return res.status(500).json({ error: "Internal error." });

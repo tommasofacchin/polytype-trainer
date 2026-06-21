@@ -1,41 +1,66 @@
 window.DECK_INDEX = [
   {
-    id: "hsk1",
+    id: "chinese-a1",
     language: "chinese",
     languageLabel: "Chinese",
-    level: "HSK 1",
-    label: "HSK 1 Core",
-    path: "decks/hsk1.csv",
-    columns: {
-      script: "korean",
-      romanization: "romaji",
-      meaning: "english"
-    }
-  },
-  {
-    id: "hsk-duolingo",
-    language: "chinese",
-    languageLabel: "Chinese",
-    level: "Starter",
-    label: "Duolingo Chinese",
-    path: "decks/hsk_duolingo.csv",
+    level: "A1",
+    label: "Chinese A1",
+    path: "decks/chinese_a1.csv",
     columns: {
       script: "chinese",
       romanization: "pinyin",
-      meaning: "english"
+      meaning: "english",
+      italianMeaning: "italian",
+      wordId: "word_id",
+      unlockLevel: "unlock_level"
     }
   },
   {
-    id: "topik1",
-    language: "korean",
-    languageLabel: "Korean",
-    level: "TOPIK 1",
-    label: "TOPIK 1",
-    path: "decks/topik1.csv",
+    id: "german-a1",
+    language: "german",
+    languageLabel: "German",
+    level: "A1",
+    label: "German A1",
+    path: "decks/german_a1.csv",
     columns: {
-      script: "korean",
+      script: "german",
+      romanization: "romanization",
+      meaning: "english",
+      italianMeaning: "italian",
+      wordId: "word_id",
+      unlockLevel: "unlock_level"
+    }
+  },
+  {
+    id: "italian-a1",
+    language: "italian",
+    languageLabel: "Italian",
+    level: "A1",
+    label: "Italian A1",
+    path: "decks/italian_a1.csv",
+    columns: {
+      script: "italian",
+      romanization: "romanization",
+      meaning: "english",
+      italianMeaning: "italian",
+      wordId: "word_id",
+      unlockLevel: "unlock_level"
+    }
+  },
+  {
+    id: "japanese-a1",
+    language: "japanese",
+    languageLabel: "Japanese",
+    level: "A1",
+    label: "Japanese A1",
+    path: "decks/japanese_a1.csv",
+    columns: {
+      script: "japanese",
       romanization: "romaji",
-      meaning: "english"
+      meaning: "english",
+      italianMeaning: "italian",
+      wordId: "word_id",
+      unlockLevel: "unlock_level"
     }
   },
   {
@@ -49,6 +74,39 @@ window.DECK_INDEX = [
       script: "norwegian",
       romanization: "romanization",
       meaning: "english",
+      italianMeaning: "italian",
+      wordId: "word_id",
+      unlockLevel: "unlock_level"
+    }
+  },
+  {
+    id: "spanish-a1",
+    language: "spanish",
+    languageLabel: "Spanish",
+    level: "A1",
+    label: "Spanish A1",
+    path: "decks/spanish_a1.csv",
+    columns: {
+      script: "spanish",
+      romanization: "romanization",
+      meaning: "english",
+      italianMeaning: "italian",
+      wordId: "word_id",
+      unlockLevel: "unlock_level"
+    }
+  },
+  {
+    id: "swedish-a1",
+    language: "swedish",
+    languageLabel: "Swedish",
+    level: "A1",
+    label: "Swedish A1",
+    path: "decks/swedish_a1.csv",
+    columns: {
+      script: "swedish",
+      romanization: "romanization",
+      meaning: "english",
+      italianMeaning: "italian",
       wordId: "word_id",
       unlockLevel: "unlock_level"
     }

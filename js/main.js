@@ -37,6 +37,8 @@ const state = {
 
 const defaultProfile = {
     name: "Polytype Learner",
+    handle: null,
+    avatarUrl: null,
     xp: 0,
     dayStreak: 0,
     courses: {}
@@ -64,6 +66,7 @@ let playAgainBtn;
 let languageMenuToggle;
 let languageMenu;
 let currentLanguageFlag;
+let miniProfileAvatar;
 let miniProfileLevel;
 let miniProfileXp;
 let miniProfileStreak;
@@ -108,6 +111,14 @@ let errorSfxAudio = null;
 let levelUpSfxAudio = null;
 let activeWordAudio = null;
 
+function tr(key, params = {}) {
+    return window.PolytypeI18n?.t?.(key, params) || key;
+}
+
+function getAppLanguage() {
+    return window.PolytypeI18n?.getLanguage?.() || "en";
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     levelSelect = document.getElementById("level-select");
     levelField = document.getElementById("level-field");
@@ -131,6 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
     languageMenuToggle = document.getElementById("language-menu-toggle");
     languageMenu = document.getElementById("language-menu");
     currentLanguageFlag = document.getElementById("current-language-flag");
+    miniProfileAvatar = document.getElementById("mini-profile-avatar");
     miniProfileLevel = document.getElementById("mini-profile-level");
     miniProfileXp = document.getElementById("mini-profile-xp");
     miniProfileStreak = document.getElementById("mini-profile-streak");
@@ -165,6 +177,7 @@ document.addEventListener("DOMContentLoaded", () => {
     timedPlayAgainBtn.addEventListener("click", startSession);
     languageMenuToggle.addEventListener("click", toggleLanguageMenu);
     document.addEventListener("keydown", onGlobalKeyDown);
+    document.addEventListener("polytype-app-language-changed", onAppLanguageChange);
     document.addEventListener("click", onDocumentClick);
     document.addEventListener("pointerdown", unlockAudioPlayback, true);
     document.addEventListener("keydown", unlockAudioPlayback, true);
@@ -205,7 +218,7 @@ function applyTheme(theme) {
     themeToggle.setAttribute("aria-pressed", String(isDark));
     themeToggle.setAttribute(
         "aria-label",
-        isDark ? "Switch to light mode" : "Switch to dark mode"
+        isDark ? tr("common.switchLight") : tr("common.switchDark")
     );
 }
 
@@ -247,6 +260,8 @@ function setupFirebaseProfileSync() {
             ...defaultProfile,
             ...profile,
             name: authState.profile.displayName || profile.name,
+            handle: authState.profile.handle || null,
+            avatarUrl: authState.profile.avatarUrl || null,
             xp: authState.profile.totalXp || 0,
             dayStreak: authState.profile.currentStreak || 0,
             streakFreezes: authState.profile.streakFreezes || 0,
@@ -266,11 +281,29 @@ function saveProfile() {
 function renderProfile() {
     const levelInfo = getLevelInfo(profile.xp);
 
-    miniProfileLevel.textContent = `Level ${levelInfo.level}`;
+    miniProfileLevel.textContent = tr("common.levelNumber", { level: levelInfo.level });
     miniProfileXp.textContent = `${levelInfo.currentXp} / ${levelInfo.nextXp} XP`;
     miniProfileStreak.textContent = `\u{1F525} ${profile.dayStreak}`;
+    renderProfileAvatar(miniProfileAvatar, profile);
 
     maybeCelebrateLevelUp(levelInfo.level);
+}
+
+function renderProfileAvatar(element, profileData) {
+    if (!element) return;
+
+    if (profileData.avatarUrl) {
+        const image = document.createElement("img");
+        image.src = profileData.avatarUrl;
+        image.alt = "";
+        element.classList.add("has-image");
+        element.replaceChildren(image);
+        return;
+    }
+
+    element.classList.remove("has-image");
+    const source = profileData.handle || profileData.name || "P";
+    element.textContent = source.trim().charAt(0).toUpperCase() || "P";
 }
 
 function maybeCelebrateLevelUp(level) {
@@ -311,7 +344,7 @@ function populateLanguageSelect() {
     const languages = uniqueBy(
         AVAILABLE_DECKS.map(deck => ({
             value: deck.language,
-            label: deck.languageLabel || deck.language,
+            label: getLanguageLabel(deck.language),
             flagSrc: getLanguageFlagSrc(deck.language)
         })),
         item => item.value
@@ -364,11 +397,11 @@ function populateDeckSelect() {
 }
 
 function languageHasHints() {
-    return settings.language !== "norwegian";
+    return settings.language === "chinese" || settings.language === "japanese";
 }
 
 function updateRomajiUI() {
-    const labels = { chinese: "Pinyin", korean: "Romanization" };
+    const labels = { chinese: "Pinyin", japanese: "Romaji" };
     const hasHints = languageHasHints();
 
     romajiField.hidden = !hasHints;
@@ -405,7 +438,7 @@ function syncLanguageMenu() {
     currentLanguageFlag.src = getLanguageFlagSrc(settings.language);
     languageMenuToggle.setAttribute(
         "aria-label",
-        `Study language: ${getLanguageLabel(settings.language)}`
+        tr("trainer.studyLanguage", { language: getLanguageLabel(settings.language) })
     );
 
     languageMenu.querySelectorAll(".language-menu-item").forEach(item => {
@@ -452,9 +485,18 @@ function onTimeChange() {
 function toggleFocusMode() {
     settings.focusMode = !settings.focusMode;
     document.body.classList.toggle("focus-mode", settings.focusMode);
-    focusToggle.textContent = settings.focusMode ? "Exit focus" : "Focus";
+    focusToggle.textContent = settings.focusMode ? tr("trainer.exitFocus") : tr("trainer.focus");
     focusToggle.setAttribute("aria-pressed", String(settings.focusMode));
     focusActiveRow();
+}
+
+function onAppLanguageChange() {
+    window.PolytypeI18n?.applyStaticTranslations?.();
+    applyTheme(document.documentElement.dataset.theme === "dark" ? "dark" : "light");
+    populateLanguageSelect();
+    updateRomajiUI();
+    renderProfile();
+    startSession();
 }
 
 function onGlobalKeyDown(event) {
@@ -499,7 +541,7 @@ async function loadDeck(deckId) {
     const deckMeta = AVAILABLE_DECKS.find(deck => deck.id === deckId);
 
     if (!deckMeta) {
-        showEmptyState("No deck found.");
+        showEmptyState(tr("trainer.noDeck"));
         return;
     }
 
@@ -514,7 +556,7 @@ async function loadDeck(deckId) {
     } catch (error) {
         console.error(error);
         state.fullDeck = [];
-        showEmptyState("Start a local server to load CSV decks.");
+        showEmptyState(tr("trainer.localServer"));
     }
 }
 
@@ -534,11 +576,24 @@ function parseDeckCsv(csvText, columns) {
                 id: record[columns.wordId]?.trim() || `${settings.deckName}-${index + 1}`,
                 script,
                 romanization: record[columns.romanization]?.trim() || "",
-                meaning: record[columns.meaning]?.trim() || "",
+                meaning: getRecordMeaning(record, columns),
                 unlockLevel: Number.isFinite(unlockLevel) && unlockLevel > 0 ? unlockLevel : 1
             };
         })
         .filter(item => item.script && item.meaning);
+}
+
+function getRecordMeaning(record, columns) {
+    const meaningColumn = getAppLanguage() === "it"
+        ? columns.italianMeaning
+        : columns.meaning;
+
+    return (
+        record[meaningColumn]?.trim() ||
+        record[columns.meaning]?.trim() ||
+        record[columns.italianMeaning]?.trim() ||
+        ""
+    );
 }
 
 function parseCsv(csvText) {
@@ -631,7 +686,7 @@ function buildMyDeck() {
     if (!words.length) {
         const empty = document.createElement("p");
         empty.className = "deck-empty";
-        empty.textContent = "No words loaded yet. Start a session to load this deck.";
+        empty.textContent = tr("trainer.noWordsLoaded");
         deckGroups.appendChild(empty);
         deckModalSub.textContent = "";
         deckProgressFill.style.width = "0%";
@@ -643,10 +698,15 @@ function buildMyDeck() {
     const unlockedCount = words.filter(word => word.unlockLevel <= unlockedLevel).length;
     const pct = Math.round((unlockedCount / words.length) * 100);
 
-    deckModalSub.textContent =
-        `${getLanguageLabel(settings.language)} · ${words.length} words`;
+    deckModalSub.textContent = tr("trainer.deckSummary", {
+        language: getLanguageLabel(settings.language),
+        count: words.length
+    });
     deckProgressFill.style.width = `${pct}%`;
-    deckProgressText.textContent = `${unlockedCount} / ${words.length} unlocked`;
+    deckProgressText.textContent = tr("trainer.deckProgress", {
+        unlocked: unlockedCount,
+        total: words.length
+    });
 
     const byLevel = new Map();
     words.forEach(word => {
@@ -674,13 +734,16 @@ function buildDeckGroup(level, words, locked) {
 
     const title = document.createElement("span");
     title.className = "deck-group-title";
-    title.textContent = `Level ${level}`;
+    title.textContent = tr("common.levelNumber", { level });
 
     const meta = document.createElement("span");
     meta.className = "deck-group-meta";
     meta.textContent = locked
-        ? `Unlocks at level ${level}`
-        : `${words.length} word${words.length === 1 ? "" : "s"}`;
+        ? tr("trainer.unlocksAtLevel", { level })
+        : tr("trainer.wordCount", {
+            count: words.length,
+            word: words.length === 1 ? tr("common.word") : tr("common.words")
+        });
 
     head.append(badge, title, meta);
 
@@ -698,7 +761,7 @@ function buildDeckCard(word, level, locked) {
 
     if (locked) {
         card.classList.add("is-locked");
-        card.setAttribute("aria-label", `Locked word, unlocks at level ${level}`);
+        card.setAttribute("aria-label", tr("trainer.lockedWord", { level }));
 
         const lock = document.createElement("span");
         lock.className = "deck-card-lock";
@@ -714,7 +777,7 @@ function buildDeckCard(word, level, locked) {
 
     card.setAttribute("role", "button");
     card.tabIndex = 0;
-    card.setAttribute("aria-label", `Play audio for ${word.script || word.meaning}`);
+    card.setAttribute("aria-label", tr("trainer.playAudioFor", { word: word.script || word.meaning }));
     card.addEventListener("click", () => playWordAudio(word));
     card.addEventListener("keydown", event => {
         if (event.key !== "Enter" && event.key !== " ") return;
@@ -780,7 +843,7 @@ function spawnInitialRows() {
     clearRows();
 
     if (!state.currentDeck.length) {
-        showEmptyState("No words available in this deck.");
+        showEmptyState(tr("trainer.noWords"));
         return;
     }
 
@@ -1244,7 +1307,7 @@ function updateStats() {
     const multiplier = getComboMultiplier(state.streak);
     const tier = getComboTier(state.streak);
 
-    hudScoreText.textContent = `${state.score} pts`;
+    hudScoreText.textContent = `${state.score} ${tr("common.points")}`;
     streakText.textContent = String(state.streak);
 
     if (state.streak >= 5) {
@@ -1322,11 +1385,11 @@ function celebrateLevelUp(level) {
 
     const title = document.createElement("div");
     title.className = "levelup-title";
-    title.textContent = "LEVEL UP";
+    title.textContent = tr("trainer.levelUp");
 
     const sub = document.createElement("div");
     sub.className = "levelup-sub";
-    sub.textContent = `Level ${level} reached`;
+    sub.textContent = tr("trainer.levelReached", { level });
 
     card.append(rays, badge, title, sub);
 
@@ -1337,7 +1400,10 @@ function celebrateLevelUp(level) {
 
         const unlockTitle = document.createElement("p");
         unlockTitle.className = "levelup-unlocks-title";
-        unlockTitle.textContent = `${newWords.length} new word${newWords.length === 1 ? "" : "s"} unlocked`;
+        unlockTitle.textContent = tr("trainer.newWordsUnlocked", {
+            count: newWords.length,
+            word: newWords.length === 1 ? tr("common.word") : tr("common.words")
+        });
 
         const unlockGrid = document.createElement("div");
         unlockGrid.className = "levelup-unlocks-grid";
@@ -1356,7 +1422,7 @@ function celebrateLevelUp(level) {
     const confirmBtn = document.createElement("button");
     confirmBtn.type = "button";
     confirmBtn.className = "levelup-confirm-btn";
-    confirmBtn.textContent = "Got it!";
+    confirmBtn.textContent = tr("trainer.gotIt");
     confirmBtn.addEventListener("click", () => {
         overlay.classList.add("is-leaving");
         window.setTimeout(() => overlay.remove(), 480);
@@ -1396,7 +1462,7 @@ function showSessionStartPrompt() {
     updateTimerDisplay();
     timerStartLabel.textContent = isTimedSession()
         ? formatTime(settings.timeLimitSeconds)
-        : "Free run";
+        : tr("trainer.freeRun");
     timerStartModal.hidden = false;
     requestAnimationFrame(() => timerGoBtn.focus());
 }
@@ -1429,7 +1495,7 @@ function stopTimer() {
 
 function updateTimerDisplay() {
     if (!settings.timeLimitSeconds) {
-        timerText.textContent = "Free";
+        timerText.textContent = tr("trainer.free");
         return;
     }
 
@@ -1450,9 +1516,14 @@ async function endSession() {
         state.totalChecked > 0
             ? Math.round((state.totalCorrectFields / state.totalChecked) * 100)
             : 0;
-    const scoreText = `${state.score} pts`;
-    const detailText =
-        `${state.totalCorrectFields} correct / ${state.totalChecked} fields - ${percentage}% accuracy - Best combo ${state.bestStreak} - +${state.sessionXp} XP`;
+    const scoreText = `${state.score} ${tr("common.points")}`;
+    const detailText = tr("trainer.resultDetail", {
+        correct: state.totalCorrectFields,
+        total: state.totalChecked,
+        accuracy: percentage,
+        combo: state.bestStreak,
+        xp: state.sessionXp
+    });
 
     if (settings.timeLimitSeconds && timerResultModal) {
         timedResultScore.textContent = scoreText;
@@ -1496,7 +1567,7 @@ async function saveCurrentSessionProgress() {
     const firebaseClient = window.PolytypeFirebase;
 
     if (!firebaseClient?.isSignedIn?.()) {
-        if (isAnyResultVisible()) setResultSaveStatus("Sign in to save XP.");
+        if (isAnyResultVisible()) setResultSaveStatus(tr("trainer.signInSave"));
         return;
     }
 
@@ -1510,7 +1581,7 @@ async function saveCurrentSessionProgress() {
     };
 
     state.saveInFlight = true;
-    if (isAnyResultVisible()) setResultSaveStatus("Saving progress...");
+    if (isAnyResultVisible()) setResultSaveStatus(tr("trainer.savingProgress"));
 
     state.savePromise = (async () => {
         const result = await firebaseClient.completePracticeSession(payload);
@@ -1540,14 +1611,14 @@ async function saveCurrentSessionProgress() {
         state.unsavedWordsUsed = Math.max(0, state.unsavedWordsUsed - payload.wordsUsed);
         state.unsavedBestStreak = getUnsavedAnswerCount() > 0 ? state.streak : 0;
         state.progressSaved = getUnsavedAnswerCount() === 0;
-        if (isAnyResultVisible()) setResultSaveStatus("Progress saved.");
+        if (isAnyResultVisible()) setResultSaveStatus(tr("trainer.progressSaved"));
     })();
 
     try {
         await state.savePromise;
     } catch (error) {
         console.error(error);
-        if (isAnyResultVisible()) setResultSaveStatus("Progress not saved. Try again.");
+        if (isAnyResultVisible()) setResultSaveStatus(tr("trainer.progressNotSaved"));
     } finally {
         state.saveInFlight = false;
         state.savePromise = null;
@@ -1588,16 +1659,19 @@ function getDecksForLanguage(language) {
 function getLanguageFlagSrc(language) {
     const flags = {
         chinese: "assets/flags/china.svg",
-        korean: "assets/flags/korea.svg",
-        norwegian: "assets/flags/norway.svg"
+        german: "assets/flags/germany.svg",
+        italian: "assets/flags/italy.svg",
+        japanese: "assets/flags/japan.svg",
+        norwegian: "assets/flags/norway.svg",
+        spanish: "assets/flags/spain.svg",
+        swedish: "assets/flags/sweden.svg"
     };
 
     return flags[language] || "assets/flags/china.svg";
 }
 
 function getLanguageLabel(language) {
-    const deck = AVAILABLE_DECKS.find(item => item.language === language);
-    return deck?.languageLabel || language || "Language";
+    return window.PolytypeI18n?.languageLabel?.(language) || language || tr("language.fallback");
 }
 
 function uniqueBy(items, getKey) {

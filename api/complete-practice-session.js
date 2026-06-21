@@ -45,8 +45,9 @@ module.exports = withAuth(async (data, token) => {
     const userData = {
       ...buildDefaultUserProfile(token.uid, authProfile, timezone),
       ...existingUser,
-      displayName: authProfile.displayName,
-      avatarUrl: authProfile.avatarUrl,
+      displayName: existingUser?.displayName || authProfile.displayName,
+      avatarUrl: existingUser?.avatarUrl || authProfile.avatarUrl,
+      email: existingUser?.email || authProfile.email,
       timezone,
       totalXp,
       globalLevel,
