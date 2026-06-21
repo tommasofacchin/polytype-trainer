@@ -467,14 +467,8 @@ function syncLanguageMenu() {
         "aria-label",
         tr("trainer.studyLanguage", { language: getLanguageLabel(settings.language) })
     );
-    document.getElementById("memory-link")?.setAttribute(
-        "href",
-        `memory.html?language=${encodeURIComponent(settings.language)}`
-    );
-    document.getElementById("dictate-link")?.setAttribute(
-        "href",
-        `dictate.html?language=${encodeURIComponent(settings.language)}`
-    );
+    document.getElementById("memory-link")?.setAttribute("href", "memory.html");
+    document.getElementById("dictate-link")?.setAttribute("href", "dictate.html");
 
     languageMenu.querySelectorAll(".language-menu-item").forEach(item => {
         const isSelected = item.dataset.language === settings.language;
