@@ -49,24 +49,6 @@
             gap: var(--space-2);
         }
 
-        /* ── Header ──────────────────────────────────────────────── */
-        .dictate-head {
-            flex-shrink: 0;
-        }
-
-        .dictate-head h1 {
-            margin: 0;
-            font-size: clamp(24px, 5vw, 32px);
-            font-weight: 700;
-            letter-spacing: -0.02em;
-        }
-
-        .dictate-head p {
-            margin: 4px 0 0;
-            color: var(--text-soft);
-            font-size: var(--text-sm);
-        }
-
         /* ── Audio visualization ─────────────────────────────────── */
         .dictate-viz-wrap {
             flex-shrink: 0;
@@ -240,27 +222,20 @@
             transform: none;
         }
 
-.dictate-input {
+        .dictate-input {
             width: 100%;
             padding: 6px 0;
             font-size: var(--text-lg);
             font-family: inherit;
             font-weight: 500;
             border: none;
-            border-bottom: 2px solid var(--border);
-            border-radius: 0;
             background: transparent;
             color: var(--text);
             outline: none;
-            transition: border-color 0.14s;
-        }
-
-        .dictate-input:focus {
-            border-bottom-color: var(--accent);
+            text-align: center;
         }
 
         .dictate-input[readonly] {
-            border-bottom-color: transparent;
             cursor: default;
         }
 
@@ -278,6 +253,7 @@
             font-weight: 500;
             min-height: 18px;
             line-height: 1.3;
+            text-align: center;
         }
 
         .dictate-feedback.is-correct {
@@ -407,7 +383,7 @@
             .dictate-hud-item strong { font-size: var(--text-lg); }
 
             .dictate-row { padding: 8px var(--space-4); }
-            .dictate-input { font-size: var(--text-md); padding: 8px 11px; }
+            .dictate-input { font-size: var(--text-md); }
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -449,11 +425,6 @@
             </button>
         </div>
     </nav>
-
-    <header class="dictate-head">
-        <h1 id="dictate-heading">Dictate</h1>
-        <p id="dictate-subtitle">Listen and type what you hear.</p>
-    </header>
 
     <!-- Radial audio visualization -->
     <div class="dictate-viz-wrap">

@@ -43,8 +43,6 @@
     document.addEventListener("DOMContentLoaded", init);
 
     function init() {
-        el.heading     = document.getElementById("dictate-heading");
-        el.subtitle    = document.getElementById("dictate-subtitle");
         el.rows        = document.getElementById("dictate-rows");
         el.audioViz    = document.getElementById("audio-viz");
         el.replayBtn   = document.getElementById("replay-btn");
@@ -178,11 +176,7 @@
     }
 
     function onGlobalKeyDown(event) {
-        if (event.key === "Escape") { closeLangMenu(); return; }
-        // R / Space = replay audio when not typing
-        if ((event.key === "r" || event.key === "R") && document.activeElement?.tagName !== "INPUT") {
-            replayAudio();
-        }
+        if (event.key === "Escape") { closeLangMenu(); }
     }
 
     // ── Data loading ─────────────────────────────────────────────────────────
@@ -193,7 +187,6 @@
 
         activeLanguage = activeDeckMeta.language;
         syncLangMenu();
-        updateHeading();
 
         try {
             const response = await fetch(activeDeckMeta.path);
@@ -209,16 +202,6 @@
         showStartModal();
     }
 
-    function updateHeading() {
-        const label = activeDeckMeta?.languageLabel || activeLanguage;
-        if (el.heading) el.heading.textContent = `Dictate · ${label}`;
-        if (el.subtitle) {
-            const hasRoman = languageHasRomanization(activeLanguage);
-            el.subtitle.textContent = hasRoman
-                ? `Listen and type the word — ${getRomanizationLabel(activeLanguage)} accepted.`
-                : `Listen and type what you hear.`;
-        }
-    }
 
     function parseDeckCsv(csv, columns) {
         const rows = parseCsv(csv.trim());
@@ -426,7 +409,7 @@
             const showScript = normalizeString(typed) !== normalizeString(item.script);
             if (feedback) {
                 feedback.className = "dictate-feedback is-correct";
-                feedback.textContent = showScript ? `✓ ${item.script}` : `✓`;
+                feedback.textContent = showScript ? item.script : "";
                 if (languageHasRomanization(activeLanguage) && item.romanization && showScript) {
                     feedback.textContent += `  ${item.romanization}`;
                 }
