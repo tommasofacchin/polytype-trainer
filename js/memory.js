@@ -192,7 +192,8 @@
         const course = courses[LANGUAGE] || (deckId && courses[deckId]);
         if (course && course.unlockedLevel) return course.unlockedLevel;
         if (course && course.level) return course.level;
-        return getLevelInfo(profile.xp || 0).level;
+        if (course && course.xp) return getLevelInfo(course.xp).level;
+        return 1;
     }
 
     function getStoredProfile() {

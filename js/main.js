@@ -24,6 +24,7 @@ const state = {
     unsavedWrongFields: 0,
     unsavedWordsUsed: 0,
     unsavedBestStreak: 0,
+    unsavedCourseId: null,
     remainingSeconds: 0,
     timerId: null,
     answerTimeoutId: null,
@@ -88,6 +89,7 @@ let profile = { ...defaultProfile };
 // Last level reflected in the UI. Used to detect level-ups in renderProfile.
 // null until the first render so we don't celebrate on initial load/hydration.
 let lastShownLevel = null;
+let lastShownCourseKey = null;
 
 const AVAILABLE_DECKS = window.DECK_INDEX || [];
 const errorColor = "var(--danger)";
@@ -96,6 +98,7 @@ const profileStorageKey = "polytype-profile";
 const audioBaseUrl = stripTrailingSlash(window.POLYTYPE_AUDIO_BASE_URL || "");
 const audioPrefix = stripSlashes(window.POLYTYPE_AUDIO_PREFIX || "audio/v1");
 const audioPreloadConcurrency = 4;
+const wordsPerLevel = 5;
 const higherUnlockedLevelDrawBoost = 1;
 const answerTimeoutMs = 10000;
 const timedAnswerTimeoutMs = 5000;
@@ -193,6 +196,7 @@ document.addEventListener("DOMContentLoaded", () => {
     preloadSfx();
     populateLanguageSelect();
     updateRomajiUI();
+    renderProfile();
     applyInitialVisibilityClasses();
     startSession();
 });
@@ -279,7 +283,7 @@ function saveProfile() {
 }
 
 function renderProfile() {
-    const levelInfo = getLevelInfo(profile.xp);
+    const levelInfo = getCurrentCourseLevelInfo();
 
     miniProfileLevel.textContent = tr("common.levelNumber", { level: levelInfo.level });
     miniProfileXp.textContent = `${levelInfo.currentXp} / ${levelInfo.nextXp} XP`;
@@ -307,6 +311,12 @@ function renderProfileAvatar(element, profileData) {
 }
 
 function maybeCelebrateLevelUp(level) {
+    const courseKey = getCurrentCourseKey();
+    if (courseKey !== lastShownCourseKey) {
+        lastShownCourseKey = courseKey;
+        lastShownLevel = null;
+    }
+
     const isPlaying = !state.sessionEnded && state.currentDeck.length > 0;
     if (lastShownLevel !== null && level > lastShownLevel && isPlaying) {
         for (let nextLevel = lastShownLevel + 1; nextLevel <= level; nextLevel += 1) {
@@ -338,6 +348,20 @@ function getLevelInfo(totalXp) {
 
 function getXpForLevel(level) {
     return 400 + (level - 1) * 250;
+}
+
+function getCurrentCourseKey() {
+    return settings.language || settings.deckName || "course";
+}
+
+function getCurrentCourseProgress() {
+    const courses = profile.courses || {};
+    return courses[settings.language] || courses[settings.deckName] || null;
+}
+
+function getCurrentCourseLevelInfo() {
+    const courseProgress = getCurrentCourseProgress();
+    return getLevelInfo(Math.max(0, Number(courseProgress?.xp) || 0));
 }
 
 function populateLanguageSelect() {
@@ -418,15 +442,17 @@ function updateRomajiUI() {
 function onLanguageChange() {
     populateLevelSelect();
     updateRomajiUI();
+    renderProfile();
     startSession();
 }
 
-function selectLanguage(language) {
+async function selectLanguage(language) {
     if (settings.language === language) {
         closeLanguageMenu();
         return;
     }
 
+    await saveCurrentSessionProgress();
     settings.language = language;
     localStorage.setItem("polytype-language", language);
     syncLanguageMenu();
@@ -650,12 +676,13 @@ function preloadAudioForLevel(level) {
 }
 
 function getUnlockedLevel() {
-    const courseProgress = profile.courses?.[settings.language] || profile.courses?.[settings.deckName];
+    const courseProgress = getCurrentCourseProgress();
 
     if (courseProgress?.unlockedLevel) return courseProgress.unlockedLevel;
     if (courseProgress?.level) return courseProgress.level;
+    if (courseProgress?.xp) return getLevelInfo(courseProgress.xp).level;
 
-    return getLevelInfo(profile.xp).level;
+    return 1;
 }
 
 const LOCK_SVG =
@@ -825,6 +852,7 @@ function resetState() {
     state.unsavedWrongFields = 0;
     state.unsavedWordsUsed = 0;
     state.unsavedBestStreak = 0;
+    state.unsavedCourseId = null;
     state.remainingSeconds = settings.timeLimitSeconds;
     clearAnswerTimeout();
     state.sessionStarted = false;
@@ -1193,6 +1221,7 @@ function registerAnswer(isCorrect, meaningInput, options = {}) {
     const prevStreak = state.streak;
     const prevTier = getComboTier(prevStreak);
 
+    state.unsavedCourseId = state.unsavedCourseId || getCurrentCourseKey();
     state.totalChecked += 1;
     if (isCorrect) {
         playCorrectSfx();
@@ -1277,10 +1306,30 @@ function awardComboPoints() {
     state.sessionXp += points;
 
     if (!isFirebaseSignedIn()) {
-        profile.xp += points;
+        addLocalCourseXp(points);
         saveProfile();
         renderProfile();
     }
+}
+
+function addLocalCourseXp(points) {
+    const courseId = getCurrentCourseKey();
+    const currentCourse = getCurrentCourseProgress() || {};
+    const xp = Math.max(0, Number(currentCourse.xp) || 0) + points;
+    const levelInfo = getLevelInfo(xp);
+
+    profile.xp = Math.max(0, Number(profile.xp) || 0) + points;
+    profile.courses = {
+        ...(profile.courses || {}),
+        [courseId]: {
+            ...currentCourse,
+            courseId,
+            xp,
+            level: levelInfo.level,
+            unlockedLevel: levelInfo.level,
+            wordsUnlocked: levelInfo.level * wordsPerLevel
+        }
+    };
 }
 
 function getComboMultiplier(streak) {
@@ -1572,7 +1621,7 @@ async function saveCurrentSessionProgress() {
     }
 
     const payload = {
-        courseId: settings.language,
+        courseId: state.unsavedCourseId || getCurrentCourseKey(),
         correctAnswers: state.unsavedCorrectFields,
         wrongAnswers: state.unsavedWrongFields,
         bestCombo: state.unsavedBestStreak,
@@ -1611,6 +1660,7 @@ async function saveCurrentSessionProgress() {
         state.unsavedWordsUsed = Math.max(0, state.unsavedWordsUsed - payload.wordsUsed);
         state.unsavedBestStreak = getUnsavedAnswerCount() > 0 ? state.streak : 0;
         state.progressSaved = getUnsavedAnswerCount() === 0;
+        if (state.progressSaved) state.unsavedCourseId = null;
         if (isAnyResultVisible()) setResultSaveStatus(tr("trainer.progressSaved"));
     })();
 

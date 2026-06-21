@@ -53,8 +53,9 @@ Firestore rules.
 
 XP and course level are server-owned. The frontend auto-saves signed-in
 practice progress every 5 answered words and again when a timed session ends or
-the player restarts. Each active course unlocks 5 new words for each course
-level.
+the player restarts. Course XP and unlock level are tracked per language: level
+5 in Norwegian does not unlock words or XP in Chinese, German, or any other
+course. Each active course unlocks 5 new words for each course level.
 
 Available callable functions:
 
@@ -115,6 +116,12 @@ uploads MP3 files to Storj using its S3-compatible API. Put secrets in
 ELEVENLABS_API_KEY=your-elevenlabs-api-key
 ELEVENLABS_VOICE_NAME=Mia Starset- Clear and Friendly
 ELEVENLABS_LANGUAGE_CODE=
+ELEVENLABS_CHINESE_VOICE_ID=bhJUNIXWQQ94l8eI2VUf
+ELEVENLABS_GERMAN_VOICE_ID=qAVuy3NdMTW0CZ8uA7M9
+ELEVENLABS_ITALIAN_VOICE_ID=BZc8d1MPTdZkyGbE9Sin
+ELEVENLABS_JAPANESE_VOICE_ID=WQz3clzUdMqvBf0jswZQ
+ELEVENLABS_SPANISH_VOICE_ID=ajOR9IDAaubDK5qtLUqQ
+ELEVENLABS_SWEDISH_VOICE_ID=1Iztu4UHnTb9SUjJcpS1
 STORJ_ENDPOINT=https://gateway.storjshare.io
 STORJ_REGION=us-east-1
 STORJ_ACCESS_KEY_ID=your-storj-access-key
@@ -129,30 +136,32 @@ PROFILE_IMAGE_PREFIX=profiles/v1
 Preview without generating audio:
 
 ```bash
+npm run generate:audio:all -- --dry-run --limit=5
+npm run generate:audio:chinese -- --dry-run --limit=5
+npm run generate:audio:german -- --dry-run --limit=5
+npm run generate:audio:italian -- --dry-run --limit=5
+npm run generate:audio:japanese -- --dry-run --limit=5
 npm run generate:audio:norwegian -- --dry-run --limit=5
+npm run generate:audio:spanish -- --dry-run --limit=5
 npm run generate:audio:swedish -- --dry-run --limit=5
-npm run generate:audio -- --deck=norwegian-a1 --dry-run --limit=5
-npm run generate:audio -- --deck=chinese-a1 --dry-run --limit=5
-npm run generate:audio -- --deck=german-a1 --dry-run --limit=5
-npm run generate:audio -- --deck=italian-a1 --dry-run --limit=5
-npm run generate:audio -- --deck=japanese-a1 --dry-run --limit=5
-npm run generate:audio -- --deck=spanish-a1 --dry-run --limit=5
-npm run generate:audio -- --deck=swedish-a1 --dry-run --limit=5
 ```
 
 Generate and upload missing audio:
 
 ```bash
+npm run generate:audio:all
+npm run generate:audio:chinese
+npm run generate:audio:german
+npm run generate:audio:italian
+npm run generate:audio:japanese
 npm run generate:audio:norwegian
+npm run generate:audio:spanish
 npm run generate:audio:swedish
-npm run generate:audio -- --deck=norwegian-a1
-npm run generate:audio -- --deck=chinese-a1
-npm run generate:audio -- --deck=german-a1
-npm run generate:audio -- --deck=italian-a1
-npm run generate:audio -- --deck=japanese-a1
-npm run generate:audio -- --deck=spanish-a1
-npm run generate:audio -- --deck=swedish-a1
 ```
+
+`generate:audio:all` runs every active deck from `decks/index.js` in sequence
+and forwards extra options such as `--dry-run`, `--limit=5`, `--force`, or
+`--continue-on-error`.
 
 Files are saved as:
 
@@ -177,6 +186,10 @@ The audio generator uses deck defaults for language codes where available
 (`zh` for Chinese, `de` for German, `it` for Italian, `ja` for Japanese, `es`
 for Spanish, `sv` for Swedish). Use `--language-code=...` only when you want to
 override that behavior.
+
+Each language can use a dedicated `ELEVENLABS_<LANGUAGE>_VOICE_ID`; when one is
+not set, the script falls back to the built-in language default, then
+`ELEVENLABS_VOICE_ID`, then `ELEVENLABS_VOICE_NAME`.
 
 ## Profile photos
 
