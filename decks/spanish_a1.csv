@@ -1,0 +1,301 @@
+word_id,spanish,romanization,english,italian,unlock_level
+es_001,hola,,hello,ciao,1
+es_002,gracias,,thanks,grazie,1
+es_003,sí,,yes,sì,1
+es_004,no,,no,no,1
+es_005,por favor,,please,per favore,1
+es_006,lo siento,,sorry,scusa,2
+es_007,mañana,,morning,mattina,2
+es_008,tarde,,evening,sera,2
+es_009,día,,day,giorno,2
+es_010,noche,,night,notte,2
+es_011,agua,,water,acqua,3
+es_012,comida,,food,cibo,3
+es_013,café,,coffee,caffè,3
+es_014,pan,,bread,pane,3
+es_015,casa,,house,casa,3
+es_016,coche,,car,macchina,4
+es_017,libro,,book,libro,4
+es_018,amigo,,friend,amico,4
+es_019,familia,,family,famiglia,4
+es_020,escuela,,school,scuola,4
+es_021,hombre,,man,uomo,5
+es_022,mujer,,woman,donna,5
+es_023,niño,,child,bambino,5
+es_024,niña,,girl,bambina,5
+es_025,chico,,boy,ragazzo,5
+es_026,madre,,mother,madre,6
+es_027,padre,,father,padre,6
+es_028,hermana,,sister,sorella,6
+es_029,hermano,,brother,fratello,6
+es_030,abuela,,grandmother,nonna,6
+es_031,grande,,big,grande,7
+es_032,pequeño,,small,piccolo,7
+es_033,bueno,,good,buono,7
+es_034,malo,,bad,cattivo,7
+es_035,nuevo,,new,nuovo,7
+es_036,viejo,,old,vecchio,8
+es_037,cálido,,warm,caldo,8
+es_038,frío,,cold,freddo,8
+es_039,rápido,,fast,veloce,8
+es_040,lento,,slow,lento,8
+es_041,yo,,I,io,9
+es_042,tú,,you,tu,9
+es_043,él,,he,lui,9
+es_044,ella,,she,lei,9
+es_045,nosotros,,we,noi,9
+es_046,vosotros,,you plural,voi,10
+es_047,ellos,,they,loro,10
+es_048,mi,,my,mio,10
+es_049,tu,,your,tuo,10
+es_050,nuestro,,our,nostro,10
+es_051,ser,,to be,essere,11
+es_052,tener,,to have,avere,11
+es_053,ir,,to go,andare,11
+es_054,venir,,to come,venire,11
+es_055,hacer,,to do,fare,11
+es_056,comer,,to eat,mangiare,12
+es_057,beber,,to drink,bere,12
+es_058,leer,,to read,leggere,12
+es_059,escribir,,to write,scrivere,12
+es_060,hablar,,to speak,parlare,12
+es_061,un,,a common,un,13
+es_062,una,,a feminine,una,13
+es_063,un,,a neuter,un,13
+es_064,eso,,it common,esso,13
+es_065,eso,,it neuter,esso,13
+es_066,aquí,,here,qui,14
+es_067,allí,,there,lì,14
+es_068,ahora,,now,ora,14
+es_069,más tarde,,later,più tardi,14
+es_070,siempre,,always,sempre,14
+es_071,hoy,,today,oggi,15
+es_072,mañana,,tomorrow,domani,15
+es_073,ayer,,yesterday,ieri,15
+es_074,semana,,week,settimana,15
+es_075,mes,,month,mese,15
+es_076,rojo,,red,rosso,16
+es_077,azul,,blue,blu,16
+es_078,verde,,green,verde,16
+es_079,amarillo,,yellow,giallo,16
+es_080,negro,,black,nero,16
+es_081,blanco,,white,bianco,17
+es_082,marrón,,brown,marrone,17
+es_083,rosa,,pink,rosa,17
+es_084,naranja,,orange,arancione,17
+es_085,morado,,purple,viola,17
+es_086,uno,,one,uno,18
+es_087,dos,,two,due,18
+es_088,tres,,three,tre,18
+es_089,cuatro,,four,quattro,18
+es_090,cinco,,five,cinque,18
+es_091,seis,,six,sei,19
+es_092,siete,,seven,sette,19
+es_093,ocho,,eight,otto,19
+es_094,nueve,,nine,nove,19
+es_095,diez,,ten,dieci,19
+es_096,dónde,,where,dove,20
+es_097,qué,,what,cosa,20
+es_098,quién,,who,chi,20
+es_099,cuándo,,when,quando,20
+es_100,por qué,,why,perché,20
+es_101,cómo,,how,come,21
+es_102,cuál,,which,quale,21
+es_103,cuánto,,how much,quanto,21
+es_104,porque,,because,perché,21
+es_105,pero,,but,ma,21
+es_106,y,,and,e,22
+es_107,o,,or,o,22
+es_108,con,,with,con,22
+es_109,sin,,without,senza,22
+es_110,de,,from,da,22
+es_111,a,,to,a,23
+es_112,en,,in,in,23
+es_113,sobre,,on,su,23
+es_114,debajo,,under,sotto,23
+es_115,encima,,above,sopra,23
+es_116,ciudad,,city,città,24
+es_117,calle,,street,strada,24
+es_118,tienda,,shop,negozio,24
+es_119,mercado,,market,mercato,24
+es_120,parque,,park,parco,24
+es_121,habitación,,room,stanza,25
+es_122,cocina,,kitchen,cucina,25
+es_123,baño,,bathroom,bagno,25
+es_124,dormitorio,,bedroom,camera,25
+es_125,sala,,living room,soggiorno,25
+es_126,queso,,cheese,formaggio,26
+es_127,huevo,,egg,uovo,26
+es_128,pescado,,fish,pesce,26
+es_129,carne,,meat,carne,26
+es_130,sopa,,soup,zuppa,26
+es_131,manzana,,apple,mela,27
+es_132,plátano,,banana,banana,27
+es_133,naranja,,orange fruit,arancia,27
+es_134,patata,,potato,patata,27
+es_135,zanahoria,,carrot,carota,27
+es_136,té,,tea,tè,28
+es_137,leche,,milk,latte,28
+es_138,zumo,,juice,succo,28
+es_139,desayuno,,breakfast,colazione,28
+es_140,almuerzo,,lunch,pranzo,28
+es_141,cena,,dinner,cena,29
+es_142,sal,,salt,sale,29
+es_143,azúcar,,sugar,zucchero,29
+es_144,plato,,plate,piatto,29
+es_145,vaso,,glass,bicchiere,29
+es_146,cabeza,,head,testa,30
+es_147,mano,,hand,mano,30
+es_148,pie,,foot,piede,30
+es_149,ojo,,eye,occhio,30
+es_150,oreja,,ear,orecchio,30
+es_151,nariz,,nose,naso,31
+es_152,boca,,mouth,bocca,31
+es_153,pelo,,hair,capelli,31
+es_154,chaqueta,,jacket,giacca,31
+es_155,zapatos,,shoes,scarpe,31
+es_156,pantalón,,pants,pantaloni,32
+es_157,camisa,,shirt,camicia,32
+es_158,vestido,,dress,vestito,32
+es_159,sombrero,,hat,cappello,32
+es_160,suéter,,sweater,maglione,32
+es_161,segundo,,second,secondo,33
+es_162,hora,,hour,ora,33
+es_163,minuto,,minute,minuto,33
+es_164,año,,year,anno,33
+es_165,fin de semana,,weekend,fine settimana,33
+es_166,lunes,,Monday,lunedì,34
+es_167,martes,,Tuesday,martedì,34
+es_168,miércoles,,Wednesday,mercoledì,34
+es_169,jueves,,Thursday,giovedì,34
+es_170,viernes,,Friday,venerdì,34
+es_171,sábado,,Saturday,sabato,35
+es_172,domingo,,Sunday,domenica,35
+es_173,primavera,,spring,primavera,35
+es_174,verano,,summer,estate,35
+es_175,otoño,,autumn,autunno,35
+es_176,invierno,,winter,inverno,36
+es_177,sol,,sun,sole,36
+es_178,lluvia,,rain,pioggia,36
+es_179,nieve,,snow,neve,36
+es_180,viento,,wind,vento,36
+es_181,bonito,,nice,bello,37
+es_182,nublado,,cloudy,nuvoloso,37
+es_183,claro,,clear,sereno,37
+es_184,seco,,dry,secco,37
+es_185,mojado,,wet,bagnato,37
+es_186,tren,,train,treno,38
+es_187,autobús,,bus,autobus,38
+es_188,avión,,plane,aereo,38
+es_189,bicicleta,,bicycle,bicicletta,38
+es_190,barco,,boat,barca,38
+es_191,estación,,station,stazione,39
+es_192,aeropuerto,,airport,aeroporto,39
+es_193,billete,,ticket,biglietto,39
+es_194,mapa,,map,mappa,39
+es_195,hotel,,hotel,hotel,39
+es_196,izquierda,,left,sinistra,40
+es_197,derecha,,right,vero,40
+es_198,todo recto,,straight ahead,dritto,40
+es_199,cerca,,near,vicino,40
+es_200,lejos,,far,lontano,40
+es_201,once,,eleven,undici,41
+es_202,doce,,twelve,dodici,41
+es_203,trece,,thirteen,tredici,41
+es_204,catorce,,fourteen,quattordici,41
+es_205,quince,,fifteen,quindici,41
+es_206,dieciséis,,sixteen,sedici,42
+es_207,diecisiete,,seventeen,diciassette,42
+es_208,dieciocho,,eighteen,diciotto,42
+es_209,diecinueve,,nineteen,diciannove,42
+es_210,veinte,,twenty,venti,42
+es_211,abuelo,,grandfather,nonno,43
+es_212,padres,,parents,genitori,43
+es_213,hijo,,son,figlio,43
+es_214,hija,,daughter,figlia,43
+es_215,marido,,husband,marito,43
+es_216,profesor,,teacher,insegnante,44
+es_217,estudiante,,student,studente,44
+es_218,médico,,doctor,medico,44
+es_219,enfermera,,nurse,infermiera,44
+es_220,policía,,police,polizia,44
+es_221,trabajo,,job,lavoro,45
+es_222,oficina,,office,ufficio,45
+es_223,clase,,class,classe,45
+es_224,deberes,,homework,compito,45
+es_225,examen,,test,test,45
+es_226,dormir,,to sleep,dormire,46
+es_227,despertarse,,to wake up,svegliarsi,46
+es_228,trabajar,,to work,lavorare,46
+es_229,estudiar,,to study,studiare,46
+es_230,aprender,,to learn,imparare,46
+es_231,conducir,,to drive,guidare,47
+es_232,viajar,,to travel,viaggiare,47
+es_233,esperar,,to wait,aspettare,47
+es_234,encontrar,,to find,trovare,47
+es_235,encontrarse,,to meet,incontrare,47
+es_236,gustar,,to like,piacere,48
+es_237,amar,,to love,amare,48
+es_238,querer,,to want,volere,48
+es_239,necesitar,,to need,avere bisogno,48
+es_240,comprar,,to buy,comprare,48
+es_241,vender,,to sell,vendere,49
+es_242,pagar,,to pay,pagare,49
+es_243,abrir,,to open,aprire,49
+es_244,cerrar,,to close,chiudere,49
+es_245,lavar,,to wash,lavare,49
+es_246,ver,,to see,vedere,50
+es_247,oír,,to hear,sentire,50
+es_248,decir,,to say,dire,50
+es_249,preguntar,,to ask,chiedere,50
+es_250,responder,,to answer,rispondere,50
+es_251,feliz,,happy,felice,51
+es_252,triste,,sad,triste,51
+es_253,enfadado,,angry,arrabbiato,51
+es_254,cansado,,tired,stanco,51
+es_255,enfermo,,sick,malato,51
+es_256,fácil,,easy,facile,52
+es_257,difícil,,difficult,difficile,52
+es_258,caro,,expensive,costoso,52
+es_259,barato,,cheap,economico,52
+es_260,gratis,,free,gratis,52
+es_261,muchos,,many,molti,53
+es_262,pocos,,few,pochi,53
+es_263,más,,more,più,53
+es_264,menos,,less,meno,53
+es_265,suficiente,,enough,abbastanza,53
+es_266,a menudo,,often,spesso,54
+es_267,nunca,,never,mai,54
+es_268,a veces,,sometimes,a volte,54
+es_269,temprano,,early,presto,54
+es_270,tarde,,late,tardi,54
+es_271,este,,this common,questo,55
+es_272,esto,,this neuter,questo,55
+es_273,estos,,these,questi,55
+es_274,mismo,,same,stesso,55
+es_275,otro,,other,altro,55
+es_276,adiós,,bye,arrivederci,56
+es_277,buenos días,,good morning,buongiorno,56
+es_278,buenas tardes,,good evening,buonasera,56
+es_279,buenas noches,,good night,buonanotte,56
+es_280,bienvenido,,welcome,benvenuto,56
+es_281,aquí tienes,,here you are,ecco a te,57
+es_282,muchas gracias,,many thanks,mille grazie,57
+es_283,está bien,,it is fine,va bene,57
+es_284,verdad,,right,vero,57
+es_285,por supuesto,,of course,certo,57
+es_286,farmacia,,pharmacy,farmacia,58
+es_287,hospital,,hospital,ospedale,58
+es_288,dentista,,dentist,dentista,58
+es_289,ayuda,,help,aiuto,58
+es_290,problema,,problem,problema,58
+es_291,precio,,price,prezzo,59
+es_292,dinero,,money,soldi,59
+es_293,recibo,,receipt,ricevuta,59
+es_294,bolsa,,bag,borsa,59
+es_295,talla,,size,taglia,59
+es_296,teléfono,,phone,telefono,60
+es_297,ordenador,,computer,computer,60
+es_298,llave,,key,chiave,60
+es_299,reloj,,clock,orologio,60
+es_300,bolso,,bag,borsa,60

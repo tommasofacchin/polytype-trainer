@@ -15,21 +15,25 @@ module.exports = withAuth(async (data, token) => {
     const baseProfile = buildDefaultUserProfile(token.uid, authProfile, timezone);
     const now = FieldValue.serverTimestamp();
 
+    const userProfile = userSnap.exists
+      ? { ...baseProfile, ...userSnap.data(), email: userSnap.data().email || authProfile.email, timezone }
+      : baseProfile;
+
     if (!userSnap.exists) {
-      transaction.set(userRef, { ...baseProfile, createdAt: now, updatedAt: now, lastActiveAt: now });
+      transaction.set(userRef, { ...userProfile, createdAt: now, updatedAt: now, lastActiveAt: now });
     } else {
-      transaction.set(userRef, { displayName: authProfile.displayName, avatarUrl: authProfile.avatarUrl, timezone, updatedAt: now, lastActiveAt: now }, { merge: true });
+      transaction.set(userRef, { email: userProfile.email, timezone, updatedAt: now, lastActiveAt: now }, { merge: true });
     }
 
     const publicProfile = buildPublicProfile(
       token.uid,
-      userSnap.exists ? { ...baseProfile, ...userSnap.data() } : baseProfile,
+      userProfile,
       authProfile
     );
     transaction.set(publicRef, { ...publicProfile, updatedAt: now }, { merge: true });
 
     return {
-      user: sanitizeUserProfile(userSnap.exists ? { ...baseProfile, ...userSnap.data(), ...authProfile, timezone } : baseProfile),
+      user: sanitizeUserProfile(userProfile),
       publicProfile
     };
   });

@@ -1,0 +1,301 @@
+word_id,swedish,romanization,english,italian,unlock_level
+sv_001,hej,,hello,ciao,1
+sv_002,tack,,thanks,grazie,1
+sv_003,ja,,yes,sì,1
+sv_004,nej,,no,no,1
+sv_005,snälla,,please,per favore,1
+sv_006,förlåt,,sorry,scusa,2
+sv_007,morgon,,morning,mattina,2
+sv_008,kväll,,evening,sera,2
+sv_009,dag,,day,giorno,2
+sv_010,natt,,night,notte,2
+sv_011,vatten,,water,acqua,3
+sv_012,mat,,food,cibo,3
+sv_013,kaffe,,coffee,caffè,3
+sv_014,bröd,,bread,pane,3
+sv_015,hus,,house,casa,3
+sv_016,bil,,car,macchina,4
+sv_017,bok,,book,libro,4
+sv_018,vän,,friend,amico,4
+sv_019,familj,,family,famiglia,4
+sv_020,skola,,school,scuola,4
+sv_021,man,,man,uomo,5
+sv_022,kvinna,,woman,donna,5
+sv_023,barn,,child,bambino,5
+sv_024,flicka,,girl,bambina,5
+sv_025,pojke,,boy,ragazzo,5
+sv_026,mamma,,mother,madre,6
+sv_027,pappa,,father,padre,6
+sv_028,syster,,sister,sorella,6
+sv_029,bror,,brother,fratello,6
+sv_030,mormor,,grandmother,nonna,6
+sv_031,stor,,big,grande,7
+sv_032,liten,,small,piccolo,7
+sv_033,bra,,good,buono,7
+sv_034,dålig,,bad,cattivo,7
+sv_035,ny,,new,nuovo,7
+sv_036,gammal,,old,vecchio,8
+sv_037,varm,,warm,caldo,8
+sv_038,kall,,cold,freddo,8
+sv_039,snabb,,fast,veloce,8
+sv_040,långsam,,slow,lento,8
+sv_041,jag,,I,io,9
+sv_042,du,,you,tu,9
+sv_043,han,,he,lui,9
+sv_044,hon,,she,lei,9
+sv_045,vi,,we,noi,9
+sv_046,ni,,you plural,voi,10
+sv_047,de,,they,loro,10
+sv_048,min,,my,mio,10
+sv_049,din,,your,tuo,10
+sv_050,vår,,our,nostro,10
+sv_051,att vara,,to be,essere,11
+sv_052,att ha,,to have,avere,11
+sv_053,att gå,,to go,andare,11
+sv_054,att komma,,to come,venire,11
+sv_055,att göra,,to do,fare,11
+sv_056,att äta,,to eat,mangiare,12
+sv_057,att dricka,,to drink,bere,12
+sv_058,att läsa,,to read,leggere,12
+sv_059,att skriva,,to write,scrivere,12
+sv_060,att prata,,to speak,parlare,12
+sv_061,en,,a common,un,13
+sv_062,en,,a feminine,una,13
+sv_063,ett,,a neuter,un,13
+sv_064,den,,it common,esso,13
+sv_065,det,,it neuter,esso,13
+sv_066,här,,here,qui,14
+sv_067,där,,there,lì,14
+sv_068,nu,,now,ora,14
+sv_069,senare,,later,più tardi,14
+sv_070,alltid,,always,sempre,14
+sv_071,idag,,today,oggi,15
+sv_072,imorgon,,tomorrow,domani,15
+sv_073,igår,,yesterday,ieri,15
+sv_074,vecka,,week,settimana,15
+sv_075,månad,,month,mese,15
+sv_076,röd,,red,rosso,16
+sv_077,blå,,blue,blu,16
+sv_078,grön,,green,verde,16
+sv_079,gul,,yellow,giallo,16
+sv_080,svart,,black,nero,16
+sv_081,vit,,white,bianco,17
+sv_082,brun,,brown,marrone,17
+sv_083,rosa,,pink,rosa,17
+sv_084,orange,,orange,arancione,17
+sv_085,lila,,purple,viola,17
+sv_086,ett,,one,uno,18
+sv_087,två,,two,due,18
+sv_088,tre,,three,tre,18
+sv_089,fyra,,four,quattro,18
+sv_090,fem,,five,cinque,18
+sv_091,sex,,six,sei,19
+sv_092,sju,,seven,sette,19
+sv_093,åtta,,eight,otto,19
+sv_094,nio,,nine,nove,19
+sv_095,tio,,ten,dieci,19
+sv_096,var,,where,dove,20
+sv_097,vad,,what,cosa,20
+sv_098,vem,,who,chi,20
+sv_099,när,,when,quando,20
+sv_100,varför,,why,perché,20
+sv_101,hur,,how,come,21
+sv_102,vilken,,which,quale,21
+sv_103,hur mycket,,how much,quanto,21
+sv_104,för att,,because,perché,21
+sv_105,men,,but,ma,21
+sv_106,och,,and,e,22
+sv_107,eller,,or,o,22
+sv_108,med,,with,con,22
+sv_109,utan,,without,senza,22
+sv_110,från,,from,da,22
+sv_111,till,,to,a,23
+sv_112,i,,in,in,23
+sv_113,på,,on,su,23
+sv_114,under,,under,sotto,23
+sv_115,över,,above,sopra,23
+sv_116,stad,,city,città,24
+sv_117,gata,,street,strada,24
+sv_118,affär,,shop,negozio,24
+sv_119,marknad,,market,mercato,24
+sv_120,park,,park,parco,24
+sv_121,rum,,room,stanza,25
+sv_122,kök,,kitchen,cucina,25
+sv_123,badrum,,bathroom,bagno,25
+sv_124,sovrum,,bedroom,camera,25
+sv_125,vardagsrum,,living room,soggiorno,25
+sv_126,ost,,cheese,formaggio,26
+sv_127,ägg,,egg,uovo,26
+sv_128,fisk,,fish,pesce,26
+sv_129,kött,,meat,carne,26
+sv_130,soppa,,soup,zuppa,26
+sv_131,äpple,,apple,mela,27
+sv_132,banan,,banana,banana,27
+sv_133,apelsin,,orange fruit,arancia,27
+sv_134,potatis,,potato,patata,27
+sv_135,morot,,carrot,carota,27
+sv_136,te,,tea,tè,28
+sv_137,mjölk,,milk,latte,28
+sv_138,juice,,juice,succo,28
+sv_139,frukost,,breakfast,colazione,28
+sv_140,lunch,,lunch,pranzo,28
+sv_141,middag,,dinner,cena,29
+sv_142,salt,,salt,sale,29
+sv_143,socker,,sugar,zucchero,29
+sv_144,tallrik,,plate,piatto,29
+sv_145,glas,,glass,bicchiere,29
+sv_146,huvud,,head,testa,30
+sv_147,hand,,hand,mano,30
+sv_148,fot,,foot,piede,30
+sv_149,öga,,eye,occhio,30
+sv_150,öra,,ear,orecchio,30
+sv_151,näsa,,nose,naso,31
+sv_152,mun,,mouth,bocca,31
+sv_153,hår,,hair,capelli,31
+sv_154,jacka,,jacket,giacca,31
+sv_155,skor,,shoes,scarpe,31
+sv_156,byxor,,pants,pantaloni,32
+sv_157,skjorta,,shirt,camicia,32
+sv_158,klänning,,dress,vestito,32
+sv_159,mössa,,hat,cappello,32
+sv_160,tröja,,sweater,maglione,32
+sv_161,sekund,,second,secondo,33
+sv_162,timme,,hour,ora,33
+sv_163,minut,,minute,minuto,33
+sv_164,år,,year,anno,33
+sv_165,helg,,weekend,fine settimana,33
+sv_166,måndag,,Monday,lunedì,34
+sv_167,tisdag,,Tuesday,martedì,34
+sv_168,onsdag,,Wednesday,mercoledì,34
+sv_169,torsdag,,Thursday,giovedì,34
+sv_170,fredag,,Friday,venerdì,34
+sv_171,lördag,,Saturday,sabato,35
+sv_172,söndag,,Sunday,domenica,35
+sv_173,vår,,spring,primavera,35
+sv_174,sommar,,summer,estate,35
+sv_175,höst,,autumn,autunno,35
+sv_176,vinter,,winter,inverno,36
+sv_177,sol,,sun,sole,36
+sv_178,regn,,rain,pioggia,36
+sv_179,snö,,snow,neve,36
+sv_180,vind,,wind,vento,36
+sv_181,fin,,nice,bello,37
+sv_182,molnig,,cloudy,nuvoloso,37
+sv_183,klar,,clear,sereno,37
+sv_184,torr,,dry,secco,37
+sv_185,våt,,wet,bagnato,37
+sv_186,tåg,,train,treno,38
+sv_187,buss,,bus,autobus,38
+sv_188,flygplan,,plane,aereo,38
+sv_189,cykel,,bicycle,bicicletta,38
+sv_190,båt,,boat,barca,38
+sv_191,station,,station,stazione,39
+sv_192,flygplats,,airport,aeroporto,39
+sv_193,biljett,,ticket,biglietto,39
+sv_194,karta,,map,mappa,39
+sv_195,hotell,,hotel,hotel,39
+sv_196,vänster,,left,sinistra,40
+sv_197,höger,,right,vero,40
+sv_198,rakt fram,,straight ahead,dritto,40
+sv_199,nära,,near,vicino,40
+sv_200,långt,,far,lontano,40
+sv_201,elva,,eleven,undici,41
+sv_202,tolv,,twelve,dodici,41
+sv_203,tretton,,thirteen,tredici,41
+sv_204,fjorton,,fourteen,quattordici,41
+sv_205,femton,,fifteen,quindici,41
+sv_206,sexton,,sixteen,sedici,42
+sv_207,sjutton,,seventeen,diciassette,42
+sv_208,arton,,eighteen,diciotto,42
+sv_209,nitton,,nineteen,diciannove,42
+sv_210,tjugo,,twenty,venti,42
+sv_211,morfar,,grandfather,nonno,43
+sv_212,föräldrar,,parents,genitori,43
+sv_213,son,,son,figlio,43
+sv_214,dotter,,daughter,figlia,43
+sv_215,make,,husband,marito,43
+sv_216,lärare,,teacher,insegnante,44
+sv_217,student,,student,studente,44
+sv_218,läkare,,doctor,medico,44
+sv_219,sjuksköterska,,nurse,infermiera,44
+sv_220,polis,,police,polizia,44
+sv_221,jobb,,job,lavoro,45
+sv_222,kontor,,office,ufficio,45
+sv_223,klass,,class,classe,45
+sv_224,läxa,,homework,compito,45
+sv_225,prov,,test,test,45
+sv_226,att sova,,to sleep,dormire,46
+sv_227,att vakna,,to wake up,svegliarsi,46
+sv_228,att jobba,,to work,lavorare,46
+sv_229,att studera,,to study,studiare,46
+sv_230,att lära,,to learn,imparare,46
+sv_231,att köra,,to drive,guidare,47
+sv_232,att resa,,to travel,viaggiare,47
+sv_233,att vänta,,to wait,aspettare,47
+sv_234,att hitta,,to find,trovare,47
+sv_235,att träffa,,to meet,incontrare,47
+sv_236,att gilla,,to like,piacere,48
+sv_237,att älska,,to love,amare,48
+sv_238,att vilja,,to want,volere,48
+sv_239,att behöva,,to need,avere bisogno,48
+sv_240,att köpa,,to buy,comprare,48
+sv_241,att sälja,,to sell,vendere,49
+sv_242,att betala,,to pay,pagare,49
+sv_243,att öppna,,to open,aprire,49
+sv_244,att stänga,,to close,chiudere,49
+sv_245,att tvätta,,to wash,lavare,49
+sv_246,att se,,to see,vedere,50
+sv_247,att höra,,to hear,sentire,50
+sv_248,att säga,,to say,dire,50
+sv_249,att fråga,,to ask,chiedere,50
+sv_250,att svara,,to answer,rispondere,50
+sv_251,glad,,happy,felice,51
+sv_252,ledsen,,sad,triste,51
+sv_253,arg,,angry,arrabbiato,51
+sv_254,trött,,tired,stanco,51
+sv_255,sjuk,,sick,malato,51
+sv_256,lätt,,easy,facile,52
+sv_257,svår,,difficult,difficile,52
+sv_258,dyr,,expensive,costoso,52
+sv_259,billig,,cheap,economico,52
+sv_260,gratis,,free,gratis,52
+sv_261,många,,many,molti,53
+sv_262,få,,few,pochi,53
+sv_263,mer,,more,più,53
+sv_264,mindre,,less,meno,53
+sv_265,nog,,enough,abbastanza,53
+sv_266,ofta,,often,spesso,54
+sv_267,aldrig,,never,mai,54
+sv_268,ibland,,sometimes,a volte,54
+sv_269,tidig,,early,presto,54
+sv_270,sen,,late,tardi,54
+sv_271,den här,,this common,questo,55
+sv_272,det här,,this neuter,questo,55
+sv_273,dessa,,these,questi,55
+sv_274,samma,,same,stesso,55
+sv_275,annan,,other,altro,55
+sv_276,hej då,,bye,arrivederci,56
+sv_277,god morgon,,good morning,buongiorno,56
+sv_278,god kväll,,good evening,buonasera,56
+sv_279,god natt,,good night,buonanotte,56
+sv_280,välkommen,,welcome,benvenuto,56
+sv_281,varsågod,,here you are,ecco a te,57
+sv_282,tusen tack,,many thanks,mille grazie,57
+sv_283,det är bra,,it is fine,va bene,57
+sv_284,eller hur,,right,vero,57
+sv_285,självklart,,of course,certo,57
+sv_286,apotek,,pharmacy,farmacia,58
+sv_287,sjukhus,,hospital,ospedale,58
+sv_288,tandläkare,,dentist,dentista,58
+sv_289,hjälp,,help,aiuto,58
+sv_290,problem,,problem,problema,58
+sv_291,pris,,price,prezzo,59
+sv_292,pengar,,money,soldi,59
+sv_293,kvitto,,receipt,ricevuta,59
+sv_294,påse,,bag,borsa,59
+sv_295,storlek,,size,taglia,59
+sv_296,telefon,,phone,telefono,60
+sv_297,dator,,computer,computer,60
+sv_298,nyckel,,key,chiave,60
+sv_299,klocka,,clock,orologio,60
+sv_300,väska,,bag,borsa,60

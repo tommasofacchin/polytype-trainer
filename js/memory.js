@@ -3,11 +3,17 @@
 (function () {
     const THEME_KEY = "polytype-theme";
     const PROFILE_KEY = "polytype-profile";
-    const LANGUAGE = "norwegian";
-
-    const SCRIPT_FLAG = "assets/flags/norway.svg";
-    const MEANING_FLAG = "assets/flags/english.svg";
-
+    const LANGUAGE_KEY = "polytype-language";
+    const FALLBACK_LANGUAGE = "norwegian";
+    const LANGUAGE_FLAGS = {
+        chinese: "assets/flags/china.svg",
+        german: "assets/flags/germany.svg",
+        italian: "assets/flags/italy.svg",
+        japanese: "assets/flags/japan.svg",
+        norwegian: "assets/flags/norway.svg",
+        spanish: "assets/flags/spain.svg",
+        swedish: "assets/flags/sweden.svg"
+    };
     // Higher difficulty = more pairs and a bigger score multiplier, so a
     // cleared Hard board always beats Medium, and Medium always beats Easy.
     const DIFFICULTIES = {
@@ -17,6 +23,9 @@
     };
 
     const FLIP_BACK_DELAY = 850;
+
+    const audioBaseUrl = (window.POLYTYPE_AUDIO_BASE_URL || "").replace(/\/+$/, "");
+    const audioPrefix  = (window.POLYTYPE_AUDIO_PREFIX || "audio/v1").replace(/^\/+|\/+$/g, "");
 
     const state = {
         vocab: [],          // every parsed word
@@ -35,12 +44,85 @@
     };
 
     const el = {};
+    let activeDeckMeta = null;
+    let activeLanguage = FALLBACK_LANGUAGE;
+    let scriptFlag = LANGUAGE_FLAGS[FALLBACK_LANGUAGE];
+    let activeAudio = null;
 
     document.addEventListener("DOMContentLoaded", init);
 
+    function tr(key, params = {}) {
+        return window.PolytypeI18n?.t?.(key, params) || key;
+    }
+
+    function getAppLanguage() {
+        return window.PolytypeI18n?.getLanguage?.() || "en";
+    }
+
+    function getMeaningFlag() {
+        return getAppLanguage() === "it"
+            ? "assets/flags/italy.svg"
+            : "assets/flags/english.svg";
+    }
+
+    function getActiveDeckMeta() {
+        const decks = window.DECK_INDEX || [];
+        const requestedLanguage = getRequestedLanguage(decks);
+        const deck =
+            decks.find(item => item.language === requestedLanguage) ||
+            decks.find(item => item.language === FALLBACK_LANGUAGE) ||
+            decks[0] ||
+            null;
+
+        if (deck?.language) {
+            try {
+                localStorage.setItem(LANGUAGE_KEY, deck.language);
+            } catch (e) {}
+        }
+
+        return deck;
+    }
+
+    function getRequestedLanguage(decks) {
+        const supported = new Set(decks.map(deck => deck.language));
+        const params = new URLSearchParams(window.location.search);
+        const urlLanguage = params.get("language");
+        const storedLanguage = localStorage.getItem(LANGUAGE_KEY);
+
+        if (supported.has(urlLanguage)) return urlLanguage;
+        if (supported.has(storedLanguage)) return storedLanguage;
+        if (supported.has(FALLBACK_LANGUAGE)) return FALLBACK_LANGUAGE;
+        return decks[0]?.language || FALLBACK_LANGUAGE;
+    }
+
+    function syncLanguageUi() {
+        const label = getLanguageLabel(activeLanguage);
+
+        if (el.heading) el.heading.textContent = tr("memory.headingForLanguage", { language: label });
+        if (el.subtitle) el.subtitle.textContent = tr("memory.subtitleForLanguage", { language: label });
+        document.title = tr("memory.titleForLanguage", { language: label });
+
+        const icon = document.querySelector('link[rel="icon"]');
+        if (icon) icon.href = scriptFlag;
+    }
+
+    function getLanguageFlagSrc(language) {
+        return LANGUAGE_FLAGS[language] || LANGUAGE_FLAGS[FALLBACK_LANGUAGE];
+    }
+
+    function getLanguageLabel(language) {
+        return window.PolytypeI18n?.languageLabel?.(language) || language || tr("language.fallback");
+    }
+
     function init() {
+        activeDeckMeta = getActiveDeckMeta();
+        activeLanguage = activeDeckMeta?.language || FALLBACK_LANGUAGE;
+        scriptFlag = getLanguageFlagSrc(activeLanguage);
+
         el.board = document.getElementById("memory-board");
         el.grid = document.getElementById("memory-grid");
+        el.heading = document.getElementById("memory-heading");
+        el.subtitle = document.getElementById("memory-subtitle");
         el.hud = document.getElementById("memory-hud");
         el.hudTime = document.getElementById("hud-time");
         el.hudMoves = document.getElementById("hud-moves");
@@ -55,6 +137,7 @@
         el.difficultySub = document.getElementById("difficulty-sub");
 
         initTheme();
+        syncLanguageUi();
 
         el.difficultyModal.querySelectorAll("[data-difficulty]").forEach(btn => {
             btn.addEventListener("click", () => startGame(btn.dataset.difficulty));
@@ -84,16 +167,19 @@
         } catch (e) {}
         const isDark = theme === "dark";
         el.themeToggle.setAttribute("aria-pressed", String(isDark));
-        el.themeToggle.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
+        el.themeToggle.setAttribute("aria-label", isDark ? tr("common.switchLight") : tr("common.switchDark"));
     }
 
     // ── Vocabulary loading ──────────────────────────────────
     async function loadVocab() {
-        const deckMeta = (window.DECK_INDEX || []).find(d => d.language === LANGUAGE);
-        const path = deckMeta ? deckMeta.path : "decks/norwegian_a1.csv";
-        const cols = deckMeta
-            ? deckMeta.columns
-            : { script: "norwegian", meaning: "english", unlockLevel: "unlock_level" };
+        if (!activeDeckMeta) {
+            el.difficultyModal.hidden = true;
+            el.grid.innerHTML = `<p class="memory-empty">${tr("memory.loadError")}</p>`;
+            return;
+        }
+
+        const path = activeDeckMeta.path;
+        const cols = activeDeckMeta.columns;
 
         try {
             const response = await fetch(path);
@@ -103,7 +189,7 @@
 
             // Only words unlocked at the player's current level are playable,
             // matching the trainer's level gating.
-            state.unlockedLevel = getUnlockedLevel(deckMeta && deckMeta.id);
+            state.unlockedLevel = getUnlockedLevel(activeDeckMeta.id);
             state.unlocked = state.vocab.filter(item => item.unlockLevel <= state.unlockedLevel);
 
             applyDifficultyLocks();
@@ -112,9 +198,7 @@
         } catch (error) {
             console.error(error);
             el.difficultyModal.hidden = true;
-            el.grid.innerHTML =
-                '<p class="memory-empty">Could not load the vocabulary. Start a local server ' +
-                "(e.g. <code>python -m http.server</code>) and reopen this page.</p>";
+            el.grid.innerHTML = `<p class="memory-empty">${tr("memory.loadError")}</p>`;
         }
     }
 
@@ -129,15 +213,22 @@
             const meta = btn.querySelector(".mem-diff-meta");
             if (meta) {
                 meta.textContent = locked
-                    ? "Unlocks at level " + cfg.unlock
-                    : cfg.pairs + " pairs";
+                    ? tr("trainer.unlocksAtLevel", { level: cfg.unlock })
+                    : tr("memory.pairCount", { count: cfg.pairs });
             }
         });
     }
 
     function updateDifficultyHint() {
         if (!el.difficultySub) return;
+<<<<<<< HEAD
         el.difficultySub.textContent = "Harder difficulty gives more XP.";
+=======
+        el.difficultySub.textContent = tr("memory.unlockedHint", {
+            count: state.unlocked.length,
+            level: unlockedLevel
+        });
+>>>>>>> bf5611e5f7bc9ca2054106a9aafe47efd5e250bd
     }
 
     function parseDeckCsv(csvText, columns) {
@@ -145,17 +236,31 @@
         const headers = (rows.shift() || []).map(h => h.trim());
 
         return rows
-            .map(row => {
+            .map((row, i) => {
                 const record = {};
-                headers.forEach((header, i) => { record[header] = (row[i] || "").trim(); });
+                headers.forEach((header, j) => { record[header] = (row[j] || "").trim(); });
                 const unlockLevel = Number.parseInt(record[columns.unlockLevel], 10);
                 return {
+                    id: record[columns.wordId]?.trim() || `w-${i}`,
                     script: record[columns.script] || "",
-                    meaning: record[columns.meaning] || "",
+                    meaning: getRecordMeaning(record, columns),
                     unlockLevel: Number.isFinite(unlockLevel) && unlockLevel > 0 ? unlockLevel : 1
                 };
             })
             .filter(item => item.script && item.meaning);
+    }
+
+    function getRecordMeaning(record, columns) {
+        const meaningColumn = getAppLanguage() === "it"
+            ? columns.italianMeaning
+            : columns.meaning;
+
+        return (
+            record[meaningColumn] ||
+            record[columns.meaning] ||
+            record[columns.italianMeaning] ||
+            ""
+        );
     }
 
     // ── Level gating (mirrors the trainer's profile + XP math) ──
@@ -163,10 +268,11 @@
         const profile = getStoredProfile();
         const courses = profile.courses || {};
         // The trainer may key course progress by language or by deck id.
-        const course = courses[LANGUAGE] || (deckId && courses[deckId]);
+        const course = courses[activeLanguage] || (deckId && courses[deckId]);
         if (course && course.unlockedLevel) return course.unlockedLevel;
         if (course && course.level) return course.level;
-        return getLevelInfo(profile.xp || 0).level;
+        if (course && course.xp) return getLevelInfo(course.xp).level;
+        return 1;
     }
 
     function getStoredProfile() {
@@ -252,7 +358,7 @@
 
         const cards = [];
         picked.forEach((vocab, index) => {
-            cards.push({ pairId: index, type: "script", text: vocab.script });
+            cards.push({ pairId: index, type: "script", text: vocab.script, wordId: vocab.id });
             cards.push({ pairId: index, type: "meaning", text: vocab.meaning });
         });
         state.deck = shuffle(cards);
@@ -282,8 +388,8 @@
             button.className = "mem-card";
             button.dataset.pair = String(card.pairId);
             button.dataset.type = card.type;
-            button.setAttribute("aria-label", "Hidden card");
-            const flag = card.type === "script" ? SCRIPT_FLAG : MEANING_FLAG;
+            button.setAttribute("aria-label", tr("memory.hiddenCard"));
+            const flag = card.type === "script" ? scriptFlag : getMeaningFlag();
             const fontCqw = wordFontCqw(card.text);
             button.innerHTML =
                 '<span class="mem-card-inner">' +
@@ -314,6 +420,7 @@
         }
 
         flip(button, true);
+        if (card.type === "script" && card.wordId) playCardAudio(card.wordId);
 
         if (!state.first) {
             state.first = { button, card };
@@ -348,12 +455,23 @@
     function flip(button, faceUp) {
         button.classList.toggle("is-flipped", faceUp);
         const text = button.querySelector(".mem-card-back").textContent;
-        button.setAttribute("aria-label", faceUp ? text : "Hidden card");
+        button.setAttribute("aria-label", faceUp ? text : tr("memory.hiddenCard"));
     }
 
     function markMatched(button) {
         button.classList.add("is-matched");
         button.disabled = true;
+    }
+
+    // ── Audio ───────────────────────────────────────────────
+    function playCardAudio(wordId) {
+        if (!audioBaseUrl || !activeDeckMeta) return;
+        const url = [audioBaseUrl, audioPrefix, encodeURIComponent(activeDeckMeta.id), encodeURIComponent(wordId) + ".mp3"].join("/");
+        try {
+            if (activeAudio) { activeAudio.pause(); activeAudio = null; }
+            activeAudio = new Audio(url);
+            activeAudio.play().catch(() => {});
+        } catch {}
     }
 
     // ── Timer ───────────────────────────────────────────────
@@ -385,9 +503,12 @@
         const ms = elapsedMs();
         const score = computeScore(ms, state.cfg, state.pairCount);
 
-        el.resultScore.textContent = score + " pts";
-        el.resultDetail.textContent =
-            state.cfg.label + " · " + formatTime(ms) + " · " + state.moves + " moves";
+        el.resultScore.textContent = score + " " + tr("common.points");
+        el.resultDetail.textContent = tr("memory.resultDetail", {
+            difficulty: tr(`memory.${state.cfg.id}`),
+            time: formatTime(ms),
+            moves: state.moves
+        });
         el.resultModal.hidden = false;
     }
 

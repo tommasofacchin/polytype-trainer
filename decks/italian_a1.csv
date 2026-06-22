@@ -1,0 +1,301 @@
+word_id,italian,romanization,english,unlock_level
+it_001,ciao,,hello,1
+it_002,grazie,,thanks,1
+it_003,sì,,yes,1
+it_004,no,,no,1
+it_005,per favore,,please,1
+it_006,scusa,,sorry,2
+it_007,mattina,,morning,2
+it_008,sera,,evening,2
+it_009,giorno,,day,2
+it_010,notte,,night,2
+it_011,acqua,,water,3
+it_012,cibo,,food,3
+it_013,caffè,,coffee,3
+it_014,pane,,bread,3
+it_015,casa,,house,3
+it_016,macchina,,car,4
+it_017,libro,,book,4
+it_018,amico,,friend,4
+it_019,famiglia,,family,4
+it_020,scuola,,school,4
+it_021,uomo,,man,5
+it_022,donna,,woman,5
+it_023,bambino,,child,5
+it_024,bambina,,girl,5
+it_025,ragazzo,,boy,5
+it_026,madre,,mother,6
+it_027,padre,,father,6
+it_028,sorella,,sister,6
+it_029,fratello,,brother,6
+it_030,nonna,,grandmother,6
+it_031,grande,,big,7
+it_032,piccolo,,small,7
+it_033,buono,,good,7
+it_034,cattivo,,bad,7
+it_035,nuovo,,new,7
+it_036,vecchio,,old,8
+it_037,caldo,,warm,8
+it_038,freddo,,cold,8
+it_039,veloce,,fast,8
+it_040,lento,,slow,8
+it_041,io,,I,9
+it_042,tu,,you,9
+it_043,lui,,he,9
+it_044,lei,,she,9
+it_045,noi,,we,9
+it_046,voi,,you plural,10
+it_047,loro,,they,10
+it_048,mio,,my,10
+it_049,tuo,,your,10
+it_050,nostro,,our,10
+it_051,essere,,to be,11
+it_052,avere,,to have,11
+it_053,andare,,to go,11
+it_054,venire,,to come,11
+it_055,fare,,to do,11
+it_056,mangiare,,to eat,12
+it_057,bere,,to drink,12
+it_058,leggere,,to read,12
+it_059,scrivere,,to write,12
+it_060,parlare,,to speak,12
+it_061,un,,a common,13
+it_062,una,,a feminine,13
+it_063,un,,a neuter,13
+it_064,esso,,it common,13
+it_065,esso,,it neuter,13
+it_066,qui,,here,14
+it_067,lì,,there,14
+it_068,ora,,now,14
+it_069,più tardi,,later,14
+it_070,sempre,,always,14
+it_071,oggi,,today,15
+it_072,domani,,tomorrow,15
+it_073,ieri,,yesterday,15
+it_074,settimana,,week,15
+it_075,mese,,month,15
+it_076,rosso,,red,16
+it_077,blu,,blue,16
+it_078,verde,,green,16
+it_079,giallo,,yellow,16
+it_080,nero,,black,16
+it_081,bianco,,white,17
+it_082,marrone,,brown,17
+it_083,rosa,,pink,17
+it_084,arancione,,orange,17
+it_085,viola,,purple,17
+it_086,uno,,one,18
+it_087,due,,two,18
+it_088,tre,,three,18
+it_089,quattro,,four,18
+it_090,cinque,,five,18
+it_091,sei,,six,19
+it_092,sette,,seven,19
+it_093,otto,,eight,19
+it_094,nove,,nine,19
+it_095,dieci,,ten,19
+it_096,dove,,where,20
+it_097,cosa,,what,20
+it_098,chi,,who,20
+it_099,quando,,when,20
+it_100,perché,,why,20
+it_101,come,,how,21
+it_102,quale,,which,21
+it_103,quanto,,how much,21
+it_104,perché,,because,21
+it_105,ma,,but,21
+it_106,e,,and,22
+it_107,o,,or,22
+it_108,con,,with,22
+it_109,senza,,without,22
+it_110,da,,from,22
+it_111,a,,to,23
+it_112,in,,in,23
+it_113,su,,on,23
+it_114,sotto,,under,23
+it_115,sopra,,above,23
+it_116,città,,city,24
+it_117,strada,,street,24
+it_118,negozio,,shop,24
+it_119,mercato,,market,24
+it_120,parco,,park,24
+it_121,stanza,,room,25
+it_122,cucina,,kitchen,25
+it_123,bagno,,bathroom,25
+it_124,camera,,bedroom,25
+it_125,soggiorno,,living room,25
+it_126,formaggio,,cheese,26
+it_127,uovo,,egg,26
+it_128,pesce,,fish,26
+it_129,carne,,meat,26
+it_130,zuppa,,soup,26
+it_131,mela,,apple,27
+it_132,banana,,banana,27
+it_133,arancia,,orange fruit,27
+it_134,patata,,potato,27
+it_135,carota,,carrot,27
+it_136,tè,,tea,28
+it_137,latte,,milk,28
+it_138,succo,,juice,28
+it_139,colazione,,breakfast,28
+it_140,pranzo,,lunch,28
+it_141,cena,,dinner,29
+it_142,sale,,salt,29
+it_143,zucchero,,sugar,29
+it_144,piatto,,plate,29
+it_145,bicchiere,,glass,29
+it_146,testa,,head,30
+it_147,mano,,hand,30
+it_148,piede,,foot,30
+it_149,occhio,,eye,30
+it_150,orecchio,,ear,30
+it_151,naso,,nose,31
+it_152,bocca,,mouth,31
+it_153,capelli,,hair,31
+it_154,giacca,,jacket,31
+it_155,scarpe,,shoes,31
+it_156,pantaloni,,pants,32
+it_157,camicia,,shirt,32
+it_158,vestito,,dress,32
+it_159,cappello,,hat,32
+it_160,maglione,,sweater,32
+it_161,secondo,,second,33
+it_162,ora,,hour,33
+it_163,minuto,,minute,33
+it_164,anno,,year,33
+it_165,fine settimana,,weekend,33
+it_166,lunedì,,Monday,34
+it_167,martedì,,Tuesday,34
+it_168,mercoledì,,Wednesday,34
+it_169,giovedì,,Thursday,34
+it_170,venerdì,,Friday,34
+it_171,sabato,,Saturday,35
+it_172,domenica,,Sunday,35
+it_173,primavera,,spring,35
+it_174,estate,,summer,35
+it_175,autunno,,autumn,35
+it_176,inverno,,winter,36
+it_177,sole,,sun,36
+it_178,pioggia,,rain,36
+it_179,neve,,snow,36
+it_180,vento,,wind,36
+it_181,bello,,nice,37
+it_182,nuvoloso,,cloudy,37
+it_183,sereno,,clear,37
+it_184,secco,,dry,37
+it_185,bagnato,,wet,37
+it_186,treno,,train,38
+it_187,autobus,,bus,38
+it_188,aereo,,plane,38
+it_189,bicicletta,,bicycle,38
+it_190,barca,,boat,38
+it_191,stazione,,station,39
+it_192,aeroporto,,airport,39
+it_193,biglietto,,ticket,39
+it_194,mappa,,map,39
+it_195,hotel,,hotel,39
+it_196,sinistra,,left,40
+it_197,destra,,right,40
+it_198,dritto,,straight ahead,40
+it_199,vicino,,near,40
+it_200,lontano,,far,40
+it_201,undici,,eleven,41
+it_202,dodici,,twelve,41
+it_203,tredici,,thirteen,41
+it_204,quattordici,,fourteen,41
+it_205,quindici,,fifteen,41
+it_206,sedici,,sixteen,42
+it_207,diciassette,,seventeen,42
+it_208,diciotto,,eighteen,42
+it_209,diciannove,,nineteen,42
+it_210,venti,,twenty,42
+it_211,nonno,,grandfather,43
+it_212,genitori,,parents,43
+it_213,figlio,,son,43
+it_214,figlia,,daughter,43
+it_215,marito,,husband,43
+it_216,insegnante,,teacher,44
+it_217,studente,,student,44
+it_218,medico,,doctor,44
+it_219,infermiera,,nurse,44
+it_220,polizia,,police,44
+it_221,lavoro,,job,45
+it_222,ufficio,,office,45
+it_223,classe,,class,45
+it_224,compito,,homework,45
+it_225,test,,test,45
+it_226,dormire,,to sleep,46
+it_227,svegliarsi,,to wake up,46
+it_228,lavorare,,to work,46
+it_229,studiare,,to study,46
+it_230,imparare,,to learn,46
+it_231,guidare,,to drive,47
+it_232,viaggiare,,to travel,47
+it_233,aspettare,,to wait,47
+it_234,trovare,,to find,47
+it_235,incontrare,,to meet,47
+it_236,piacere,,to like,48
+it_237,amare,,to love,48
+it_238,volere,,to want,48
+it_239,avere bisogno,,to need,48
+it_240,comprare,,to buy,48
+it_241,vendere,,to sell,49
+it_242,pagare,,to pay,49
+it_243,aprire,,to open,49
+it_244,chiudere,,to close,49
+it_245,lavare,,to wash,49
+it_246,vedere,,to see,50
+it_247,sentire,,to hear,50
+it_248,dire,,to say,50
+it_249,chiedere,,to ask,50
+it_250,rispondere,,to answer,50
+it_251,felice,,happy,51
+it_252,triste,,sad,51
+it_253,arrabbiato,,angry,51
+it_254,stanco,,tired,51
+it_255,malato,,sick,51
+it_256,facile,,easy,52
+it_257,difficile,,difficult,52
+it_258,costoso,,expensive,52
+it_259,economico,,cheap,52
+it_260,gratis,,free,52
+it_261,molti,,many,53
+it_262,pochi,,few,53
+it_263,più,,more,53
+it_264,meno,,less,53
+it_265,abbastanza,,enough,53
+it_266,spesso,,often,54
+it_267,mai,,never,54
+it_268,a volte,,sometimes,54
+it_269,presto,,early,54
+it_270,tardi,,late,54
+it_271,questo,,this common,55
+it_272,questo,,this neuter,55
+it_273,questi,,these,55
+it_274,stesso,,same,55
+it_275,altro,,other,55
+it_276,arrivederci,,bye,56
+it_277,buongiorno,,good morning,56
+it_278,buonasera,,good evening,56
+it_279,buonanotte,,good night,56
+it_280,benvenuto,,welcome,56
+it_281,ecco a te,,here you are,57
+it_282,mille grazie,,many thanks,57
+it_283,va bene,,it is fine,57
+it_284,vero,,right,57
+it_285,certo,,of course,57
+it_286,farmacia,,pharmacy,58
+it_287,ospedale,,hospital,58
+it_288,dentista,,dentist,58
+it_289,aiuto,,help,58
+it_290,problema,,problem,58
+it_291,prezzo,,price,59
+it_292,soldi,,money,59
+it_293,ricevuta,,receipt,59
+it_294,borsa,,bag,59
+it_295,taglia,,size,59
+it_296,telefono,,phone,60
+it_297,computer,,computer,60
+it_298,chiave,,key,60
+it_299,orologio,,clock,60
+it_300,borsa,,bag,60

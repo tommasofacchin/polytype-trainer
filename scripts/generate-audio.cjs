@@ -21,7 +21,7 @@ const elevenLabsVoiceName =
   options.voiceName ||
   process.env.ELEVENLABS_VOICE_NAME ||
   "Mia Starset- Clear and Friendly";
-let elevenLabsVoiceId = options.voiceId || process.env.ELEVENLABS_VOICE_ID;
+let elevenLabsVoiceId = options.voiceId || "";
 
 const storjConfig = {
   endpoint: stripTrailingSlash(options.storjEndpoint || process.env.STORJ_ENDPOINT || "https://gateway.storjshare.io"),
@@ -41,7 +41,9 @@ async function main() {
   assertEnv();
 
   const deck = loadDeckMeta(deckId);
-  const languageCode = options.languageCode || process.env.ELEVENLABS_LANGUAGE_CODE || getDefaultLanguageCode(deck.language);
+  const defaultLanguageCode = getDefaultLanguageCode(deck.language);
+  const languageCode = options.languageCode || defaultLanguageCode || process.env.ELEVENLABS_LANGUAGE_CODE || "";
+  elevenLabsVoiceId = elevenLabsVoiceId || getVoiceIdForLanguage(deck.language);
   const records = loadDeckRecords(deck);
   const targets = limit ? records.slice(0, limit) : records;
 
@@ -422,11 +424,29 @@ function parsePositiveInt(value) {
 function getDefaultLanguageCode(language) {
   const codes = {
     chinese: "zh",
-    korean: "ko",
-    norwegian: ""
+    german: "de",
+    italian: "it",
+    japanese: "ja",
+    norwegian: "",
+    spanish: "es",
+    swedish: "sv"
   };
 
   return codes[language] || "";
+}
+
+function getVoiceIdForLanguage(language) {
+  const defaults = {
+    chinese: "bhJUNIXWQQ94l8eI2VUf",
+    german: "qAVuy3NdMTW0CZ8uA7M9",
+    italian: "BZc8d1MPTdZkyGbE9Sin",
+    japanese: "WQz3clzUdMqvBf0jswZQ",
+    spanish: "ajOR9IDAaubDK5qtLUqQ",
+    swedish: "1Iztu4UHnTb9SUjJcpS1"
+  };
+  const envKey = `ELEVENLABS_${String(language || "").toUpperCase()}_VOICE_ID`;
+
+  return process.env[envKey] || defaults[language] || process.env.ELEVENLABS_VOICE_ID || "";
 }
 
 function normalizeName(value) {

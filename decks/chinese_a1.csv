@@ -1,0 +1,301 @@
+word_id,chinese,pinyin,english,italian,unlock_level
+zh_001,你好,nǐ hǎo,hello,ciao,1
+zh_002,谢谢,xiè xie,thanks,grazie,1
+zh_003,是,shì,yes,sì,1
+zh_004,不,bù,no,no,1
+zh_005,请,qǐng,please,per favore,1
+zh_006,对不起,duì bu qǐ,sorry,scusa,2
+zh_007,早上,zǎo shang,morning,mattina,2
+zh_008,晚上,wǎn shang,evening,sera,2
+zh_009,天,tiān,day,giorno,2
+zh_010,夜晚,yè wǎn,night,notte,2
+zh_011,水,shuǐ,water,acqua,3
+zh_012,食物,shí wù,food,cibo,3
+zh_013,咖啡,kā fēi,coffee,caffè,3
+zh_014,面包,miàn bāo,bread,pane,3
+zh_015,房子,fáng zi,house,casa,3
+zh_016,汽车,qì chē,car,macchina,4
+zh_017,书,shū,book,libro,4
+zh_018,朋友,péng you,friend,amico,4
+zh_019,家庭,jiā tíng,family,famiglia,4
+zh_020,学校,xué xiào,school,scuola,4
+zh_021,男人,nán rén,man,uomo,5
+zh_022,女人,nǚ rén,woman,donna,5
+zh_023,孩子,hái zi,child,bambino,5
+zh_024,女孩,nǚ hái,girl,bambina,5
+zh_025,男孩,nán hái,boy,ragazzo,5
+zh_026,母亲,mǔ qīn,mother,madre,6
+zh_027,父亲,fù qīn,father,padre,6
+zh_028,姐妹,jiě mèi,sister,sorella,6
+zh_029,兄弟,xiōng dì,brother,fratello,6
+zh_030,奶奶,nǎi nai,grandmother,nonna,6
+zh_031,大,dà,big,grande,7
+zh_032,小,xiǎo,small,piccolo,7
+zh_033,好,hǎo,good,buono,7
+zh_034,坏,huài,bad,cattivo,7
+zh_035,新,xīn,new,nuovo,7
+zh_036,旧,jiù,old,vecchio,8
+zh_037,暖和,nuǎn huo,warm,caldo,8
+zh_038,冷,lěng,cold,freddo,8
+zh_039,快,kuài,fast,veloce,8
+zh_040,慢,màn,slow,lento,8
+zh_041,我,wǒ,I,io,9
+zh_042,你,nǐ,you,tu,9
+zh_043,他,tā,he,lui,9
+zh_044,她,tā,she,lei,9
+zh_045,我们,wǒ men,we,noi,9
+zh_046,你们,nǐ men,you plural,voi,10
+zh_047,他们,tā men,they,loro,10
+zh_048,我的,wǒ de,my,mio,10
+zh_049,你的,nǐ de,your,tuo,10
+zh_050,我们的,wǒ men de,our,nostro,10
+zh_051,是,shì,to be,essere,11
+zh_052,有,yǒu,to have,avere,11
+zh_053,去,qù,to go,andare,11
+zh_054,来,lái,to come,venire,11
+zh_055,做,zuò,to do,fare,11
+zh_056,吃,chī,to eat,mangiare,12
+zh_057,喝,hē,to drink,bere,12
+zh_058,读,dú,to read,leggere,12
+zh_059,写,xiě,to write,scrivere,12
+zh_060,说,shuō,to speak,parlare,12
+zh_061,一个,yí gè,a common,un,13
+zh_062,一个,yí gè,a feminine,una,13
+zh_063,一个,yí gè,a neuter,un,13
+zh_064,它,tā,it common,esso,13
+zh_065,它,tā,it neuter,esso,13
+zh_066,这里,zhè lǐ,here,qui,14
+zh_067,那里,nà lǐ,there,lì,14
+zh_068,现在,xiàn zài,now,ora,14
+zh_069,以后,yǐ hòu,later,più tardi,14
+zh_070,总是,zǒng shì,always,sempre,14
+zh_071,今天,jīn tiān,today,oggi,15
+zh_072,明天,míng tiān,tomorrow,domani,15
+zh_073,昨天,zuó tiān,yesterday,ieri,15
+zh_074,星期,xīng qī,week,settimana,15
+zh_075,月,yuè,month,mese,15
+zh_076,红色,hóng sè,red,rosso,16
+zh_077,蓝色,lán sè,blue,blu,16
+zh_078,绿色,lǜ sè,green,verde,16
+zh_079,黄色,huáng sè,yellow,giallo,16
+zh_080,黑色,hēi sè,black,nero,16
+zh_081,白色,bái sè,white,bianco,17
+zh_082,棕色,zōng sè,brown,marrone,17
+zh_083,粉色,fěn sè,pink,rosa,17
+zh_084,橙色,chéng sè,orange,arancione,17
+zh_085,紫色,zǐ sè,purple,viola,17
+zh_086,一,yī,one,uno,18
+zh_087,二,èr,two,due,18
+zh_088,三,sān,three,tre,18
+zh_089,四,sì,four,quattro,18
+zh_090,五,wǔ,five,cinque,18
+zh_091,六,liù,six,sei,19
+zh_092,七,qī,seven,sette,19
+zh_093,八,bā,eight,otto,19
+zh_094,九,jiǔ,nine,nove,19
+zh_095,十,shí,ten,dieci,19
+zh_096,哪里,nǎ lǐ,where,dove,20
+zh_097,什么,shén me,what,cosa,20
+zh_098,谁,shéi,who,chi,20
+zh_099,什么时候,shén me shí hou,when,quando,20
+zh_100,为什么,wèi shén me,why,perché,20
+zh_101,怎么,zěn me,how,come,21
+zh_102,哪个,nǎ ge,which,quale,21
+zh_103,多少,duō shao,how much,quanto,21
+zh_104,因为,yīn wèi,because,perché,21
+zh_105,但是,dàn shì,but,ma,21
+zh_106,和,hé,and,e,22
+zh_107,或者,huò zhě,or,o,22
+zh_108,跟,gēn,with,con,22
+zh_109,没有,méi yǒu,without,senza,22
+zh_110,从,cóng,from,da,22
+zh_111,到,dào,to,a,23
+zh_112,在,zài,in,in,23
+zh_113,在上面,zài shàng miàn,on,su,23
+zh_114,在下面,zài xià miàn,under,sotto,23
+zh_115,上方,shàng fāng,above,sopra,23
+zh_116,城市,chéng shì,city,città,24
+zh_117,街道,jiē dào,street,strada,24
+zh_118,商店,shāng diàn,shop,negozio,24
+zh_119,市场,shì chǎng,market,mercato,24
+zh_120,公园,gōng yuán,park,parco,24
+zh_121,房间,fáng jiān,room,stanza,25
+zh_122,厨房,chú fáng,kitchen,cucina,25
+zh_123,浴室,yù shì,bathroom,bagno,25
+zh_124,卧室,wò shì,bedroom,camera,25
+zh_125,客厅,kè tīng,living room,soggiorno,25
+zh_126,奶酪,nǎi lào,cheese,formaggio,26
+zh_127,鸡蛋,jī dàn,egg,uovo,26
+zh_128,鱼,yú,fish,pesce,26
+zh_129,肉,ròu,meat,carne,26
+zh_130,汤,tāng,soup,zuppa,26
+zh_131,苹果,píng guǒ,apple,mela,27
+zh_132,香蕉,xiāng jiāo,banana,banana,27
+zh_133,橙子,chéng zi,orange fruit,arancia,27
+zh_134,土豆,tǔ dòu,potato,patata,27
+zh_135,胡萝卜,hú luó bo,carrot,carota,27
+zh_136,茶,chá,tea,tè,28
+zh_137,牛奶,niú nǎi,milk,latte,28
+zh_138,果汁,guǒ zhī,juice,succo,28
+zh_139,早餐,zǎo cān,breakfast,colazione,28
+zh_140,午餐,wǔ cān,lunch,pranzo,28
+zh_141,晚餐,wǎn cān,dinner,cena,29
+zh_142,盐,yán,salt,sale,29
+zh_143,糖,táng,sugar,zucchero,29
+zh_144,盘子,pán zi,plate,piatto,29
+zh_145,玻璃杯,bō li bēi,glass,bicchiere,29
+zh_146,头,tóu,head,testa,30
+zh_147,手,shǒu,hand,mano,30
+zh_148,脚,jiǎo,foot,piede,30
+zh_149,眼睛,yǎn jing,eye,occhio,30
+zh_150,耳朵,ěr duo,ear,orecchio,30
+zh_151,鼻子,bí zi,nose,naso,31
+zh_152,嘴,zuǐ,mouth,bocca,31
+zh_153,头发,tóu fa,hair,capelli,31
+zh_154,夹克,jiā kè,jacket,giacca,31
+zh_155,鞋子,xié zi,shoes,scarpe,31
+zh_156,裤子,kù zi,pants,pantaloni,32
+zh_157,衬衫,chèn shān,shirt,camicia,32
+zh_158,连衣裙,lián yī qún,dress,vestito,32
+zh_159,帽子,mào zi,hat,cappello,32
+zh_160,毛衣,máo yī,sweater,maglione,32
+zh_161,秒,miǎo,second,secondo,33
+zh_162,小时,xiǎo shí,hour,ora,33
+zh_163,分钟,fēn zhōng,minute,minuto,33
+zh_164,年,nián,year,anno,33
+zh_165,周末,zhōu mò,weekend,fine settimana,33
+zh_166,星期一,xīng qī yī,Monday,lunedì,34
+zh_167,星期二,xīng qī èr,Tuesday,martedì,34
+zh_168,星期三,xīng qī sān,Wednesday,mercoledì,34
+zh_169,星期四,xīng qī sì,Thursday,giovedì,34
+zh_170,星期五,xīng qī wǔ,Friday,venerdì,34
+zh_171,星期六,xīng qī liù,Saturday,sabato,35
+zh_172,星期日,xīng qī rì,Sunday,domenica,35
+zh_173,春天,chūn tiān,spring,primavera,35
+zh_174,夏天,xià tiān,summer,estate,35
+zh_175,秋天,qiū tiān,autumn,autunno,35
+zh_176,冬天,dōng tiān,winter,inverno,36
+zh_177,太阳,tài yáng,sun,sole,36
+zh_178,雨,yǔ,rain,pioggia,36
+zh_179,雪,xuě,snow,neve,36
+zh_180,风,fēng,wind,vento,36
+zh_181,不错,bù cuò,nice,bello,37
+zh_182,多云,duō yún,cloudy,nuvoloso,37
+zh_183,晴朗,qíng lǎng,clear,sereno,37
+zh_184,干,gān,dry,secco,37
+zh_185,湿,shī,wet,bagnato,37
+zh_186,火车,huǒ chē,train,treno,38
+zh_187,公交车,gōng jiāo chē,bus,autobus,38
+zh_188,飞机,fēi jī,plane,aereo,38
+zh_189,自行车,zì xíng chē,bicycle,bicicletta,38
+zh_190,船,chuán,boat,barca,38
+zh_191,车站,chē zhàn,station,stazione,39
+zh_192,机场,jī chǎng,airport,aeroporto,39
+zh_193,票,piào,ticket,biglietto,39
+zh_194,地图,dì tú,map,mappa,39
+zh_195,酒店,jiǔ diàn,hotel,hotel,39
+zh_196,左,zuǒ,left,sinistra,40
+zh_197,右,yòu,right,vero,40
+zh_198,一直走,yì zhí zǒu,straight ahead,dritto,40
+zh_199,近,jìn,near,vicino,40
+zh_200,远,yuǎn,far,lontano,40
+zh_201,十一,shí yī,eleven,undici,41
+zh_202,十二,shí èr,twelve,dodici,41
+zh_203,十三,shí sān,thirteen,tredici,41
+zh_204,十四,shí sì,fourteen,quattordici,41
+zh_205,十五,shí wǔ,fifteen,quindici,41
+zh_206,十六,shí liù,sixteen,sedici,42
+zh_207,十七,shí qī,seventeen,diciassette,42
+zh_208,十八,shí bā,eighteen,diciotto,42
+zh_209,十九,shí jiǔ,nineteen,diciannove,42
+zh_210,二十,èr shí,twenty,venti,42
+zh_211,爷爷,yé ye,grandfather,nonno,43
+zh_212,父母,fù mǔ,parents,genitori,43
+zh_213,儿子,ér zi,son,figlio,43
+zh_214,女儿,nǚ ér,daughter,figlia,43
+zh_215,丈夫,zhàng fu,husband,marito,43
+zh_216,老师,lǎo shī,teacher,insegnante,44
+zh_217,学生,xué sheng,student,studente,44
+zh_218,医生,yī shēng,doctor,medico,44
+zh_219,护士,hù shi,nurse,infermiera,44
+zh_220,警察,jǐng chá,police,polizia,44
+zh_221,工作,gōng zuò,job,lavoro,45
+zh_222,办公室,bàn gōng shì,office,ufficio,45
+zh_223,班级,bān jí,class,classe,45
+zh_224,作业,zuò yè,homework,compito,45
+zh_225,考试,kǎo shì,test,test,45
+zh_226,睡觉,shuì jiào,to sleep,dormire,46
+zh_227,醒来,xǐng lái,to wake up,svegliarsi,46
+zh_228,工作,gōng zuò,to work,lavorare,46
+zh_229,学习,xué xí,to study,studiare,46
+zh_230,学会,xué huì,to learn,imparare,46
+zh_231,开车,kāi chē,to drive,guidare,47
+zh_232,旅行,lǚ xíng,to travel,viaggiare,47
+zh_233,等,děng,to wait,aspettare,47
+zh_234,找到,zhǎo dào,to find,trovare,47
+zh_235,见面,jiàn miàn,to meet,incontrare,47
+zh_236,喜欢,xǐ huan,to like,piacere,48
+zh_237,爱,ài,to love,amare,48
+zh_238,想要,xiǎng yào,to want,volere,48
+zh_239,需要,xū yào,to need,avere bisogno,48
+zh_240,买,mǎi,to buy,comprare,48
+zh_241,卖,mài,to sell,vendere,49
+zh_242,付钱,fù qián,to pay,pagare,49
+zh_243,打开,dǎ kāi,to open,aprire,49
+zh_244,关上,guān shàng,to close,chiudere,49
+zh_245,洗,xǐ,to wash,lavare,49
+zh_246,看见,kàn jiàn,to see,vedere,50
+zh_247,听见,tīng jiàn,to hear,sentire,50
+zh_248,说,shuō,to say,dire,50
+zh_249,问,wèn,to ask,chiedere,50
+zh_250,回答,huí dá,to answer,rispondere,50
+zh_251,高兴,gāo xìng,happy,felice,51
+zh_252,难过,nán guò,sad,triste,51
+zh_253,生气,shēng qì,angry,arrabbiato,51
+zh_254,累,lèi,tired,stanco,51
+zh_255,生病,shēng bìng,sick,malato,51
+zh_256,容易,róng yì,easy,facile,52
+zh_257,难,nán,difficult,difficile,52
+zh_258,贵,guì,expensive,costoso,52
+zh_259,便宜,pián yi,cheap,economico,52
+zh_260,免费,miǎn fèi,free,gratis,52
+zh_261,很多,hěn duō,many,molti,53
+zh_262,少,shǎo,few,pochi,53
+zh_263,更多,gèng duō,more,più,53
+zh_264,更少,gèng shǎo,less,meno,53
+zh_265,足够,zú gòu,enough,abbastanza,53
+zh_266,经常,jīng cháng,often,spesso,54
+zh_267,从不,cóng bù,never,mai,54
+zh_268,有时候,yǒu shí hou,sometimes,a volte,54
+zh_269,早,zǎo,early,presto,54
+zh_270,晚,wǎn,late,tardi,54
+zh_271,这个,zhè ge,this common,questo,55
+zh_272,这个,zhè ge,this neuter,questo,55
+zh_273,这些,zhè xiē,these,questi,55
+zh_274,相同,xiāng tóng,same,stesso,55
+zh_275,其他,qí tā,other,altro,55
+zh_276,再见,zài jiàn,bye,arrivederci,56
+zh_277,早上好,zǎo shang hǎo,good morning,buongiorno,56
+zh_278,晚上好,wǎn shang hǎo,good evening,buonasera,56
+zh_279,晚安,wǎn ān,good night,buonanotte,56
+zh_280,欢迎,huān yíng,welcome,benvenuto,56
+zh_281,给你,gěi nǐ,here you are,ecco a te,57
+zh_282,非常感谢,fēi cháng gǎn xiè,many thanks,mille grazie,57
+zh_283,没关系,méi guān xi,it is fine,va bene,57
+zh_284,对吧,duì ba,right,vero,57
+zh_285,当然,dāng rán,of course,certo,57
+zh_286,药店,yào diàn,pharmacy,farmacia,58
+zh_287,医院,yī yuàn,hospital,ospedale,58
+zh_288,牙医,yá yī,dentist,dentista,58
+zh_289,帮助,bāng zhù,help,aiuto,58
+zh_290,问题,wèn tí,problem,problema,58
+zh_291,价格,jià gé,price,prezzo,59
+zh_292,钱,qián,money,soldi,59
+zh_293,收据,shōu jù,receipt,ricevuta,59
+zh_294,袋子,dài zi,bag,borsa,59
+zh_295,尺码,chǐ mǎ,size,taglia,59
+zh_296,电话,diàn huà,phone,telefono,60
+zh_297,电脑,diàn nǎo,computer,computer,60
+zh_298,钥匙,yào shi,key,chiave,60
+zh_299,钟,zhōng,clock,orologio,60
+zh_300,包,bāo,bag,borsa,60

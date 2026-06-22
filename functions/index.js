@@ -18,7 +18,13 @@ const WORDS_PER_LEVEL = 5;
 const MAX_SESSION_XP = 500;
 const HANDLE_PATTERN = /^[a-z0-9_]{3,20}$/;
 const COURSE_LEVEL_CAPS = {
-  norwegian: 20
+  chinese: 60,
+  german: 60,
+  italian: 60,
+  japanese: 60,
+  norwegian: 60,
+  spanish: 60,
+  swedish: 60
 };
 const CALLABLE_OPTIONS = {
   region: REGION,
@@ -39,17 +45,20 @@ exports.ensureUserProfile = onCall(CALLABLE_OPTIONS, async request => {
     const baseProfile = buildDefaultUserProfile(auth.uid, authProfile, timezone);
     const now = FieldValue.serverTimestamp();
 
+    const userProfile = userSnap.exists
+      ? { ...baseProfile, ...userSnap.data(), email: userSnap.data().email || authProfile.email, timezone }
+      : baseProfile;
+
     if (!userSnap.exists) {
       transaction.set(userRef, {
-        ...baseProfile,
+        ...userProfile,
         createdAt: now,
         updatedAt: now,
         lastActiveAt: now
       });
     } else {
       transaction.set(userRef, {
-        displayName: authProfile.displayName,
-        avatarUrl: authProfile.avatarUrl,
+        email: userProfile.email,
         timezone,
         updatedAt: now,
         lastActiveAt: now
@@ -58,7 +67,7 @@ exports.ensureUserProfile = onCall(CALLABLE_OPTIONS, async request => {
 
     const publicProfile = buildPublicProfile(
       auth.uid,
-      userSnap.exists ? { ...baseProfile, ...userSnap.data() } : baseProfile,
+      userProfile,
       authProfile
     );
 
@@ -68,7 +77,7 @@ exports.ensureUserProfile = onCall(CALLABLE_OPTIONS, async request => {
     }, { merge: true });
 
     return {
-      user: sanitizeUserProfile(userSnap.exists ? { ...baseProfile, ...userSnap.data(), ...authProfile, timezone } : baseProfile),
+      user: sanitizeUserProfile(userProfile),
       publicProfile
     };
   });
@@ -148,7 +157,10 @@ exports.completePracticeSession = onCall(CALLABLE_OPTIONS, async request => {
     const timezone = normalizeTimezone(session.timezone || existingUser?.timezone);
     const todayKey = getDateKeyForTimezone(new Date(), timezone);
     const previousTotalXp = existingUser?.totalXp || 0;
-    const previousCourseXp = courseSnap.exists ? courseSnap.data().xp || 0 : 0;
+    const existingCourse = existingUser?.courses?.[session.courseId] || null;
+    const previousCourseXp = courseSnap.exists
+      ? courseSnap.data().xp || 0
+      : existingCourse?.xp || 0;
 
     const totalXp = previousTotalXp + xpEarned;
     const courseXp = previousCourseXp + xpEarned;
@@ -166,8 +178,9 @@ exports.completePracticeSession = onCall(CALLABLE_OPTIONS, async request => {
     const userData = {
       ...buildDefaultUserProfile(auth.uid, authProfile, timezone),
       ...existingUser,
-      displayName: authProfile.displayName,
-      avatarUrl: authProfile.avatarUrl,
+      displayName: existingUser?.displayName || authProfile.displayName,
+      avatarUrl: existingUser?.avatarUrl || authProfile.avatarUrl,
+      email: existingUser?.email || authProfile.email,
       timezone,
       totalXp,
       globalLevel,
@@ -180,7 +193,9 @@ exports.completePracticeSession = onCall(CALLABLE_OPTIONS, async request => {
       lastActiveAt: now
     };
 
-    const previousCourseLevel = courseSnap.exists ? courseSnap.data().level || 1 : 1;
+    const previousCourseLevel = courseSnap.exists
+      ? courseSnap.data().level || 1
+      : existingCourse?.level || 1;
     const courseData = {
       courseId: session.courseId,
       xp: courseXp,

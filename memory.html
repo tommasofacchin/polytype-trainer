@@ -2,7 +2,7 @@
 <html lang="en" class="memory-document">
 <head>
     <meta charset="UTF-8">
-    <title>Memory - Polytype Trainer</title>
+    <title data-i18n="memory.title">Memory - Polytype Trainer</title>
     <link rel="icon" type="image/svg+xml" href="assets/flags/norway.svg">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
     <link rel="stylesheet" href="style.css">
@@ -458,10 +458,10 @@
 </head>
 <body class="profile-page-body">
     <main class="memory-page">
-        <nav class="memory-topbar" aria-label="Memory navigation">
-            <a class="back-link" href="index.html" aria-label="Back to trainer">
+        <nav class="memory-topbar" aria-label="Memory navigation" data-i18n-aria-label="memory.navigation">
+            <a class="back-link" href="index.html" aria-label="Back to trainer" data-i18n-aria-label="profile.back">
                 <span aria-hidden="true">&larr;</span>
-                Trainer
+                <span data-i18n="common.trainer">Trainer</span>
             </a>
             <button id="theme-toggle" class="theme-icon-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false">
                 <svg class="theme-icon sun-icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -478,26 +478,26 @@
         </nav>
 
         <header class="memory-head">
-            <h1>Memory &middot; Norsk</h1>
-            <p id="memory-subtitle">Match each Norwegian word with its translation.</p>
+            <h1 id="memory-heading">Memory</h1>
+            <p id="memory-subtitle">Match each word with its translation.</p>
         </header>
 
-        <section id="memory-hud" class="memory-hud" aria-label="Game status" hidden>
+        <section id="memory-hud" class="memory-hud" aria-label="Game status" data-i18n-aria-label="memory.status" hidden>
             <div class="mem-hud-item">
-                <span class="mem-hud-label">Time</span>
+                <span class="mem-hud-label" data-i18n="trainer.time">Time</span>
                 <strong id="hud-time">0:00</strong>
             </div>
             <div class="mem-hud-item">
-                <span class="mem-hud-label">Moves</span>
+                <span class="mem-hud-label" data-i18n="memory.moves">Moves</span>
                 <strong id="hud-moves">0</strong>
             </div>
             <div class="mem-hud-item">
-                <span class="mem-hud-label">Pairs</span>
+                <span class="mem-hud-label" data-i18n="memory.pairs">Pairs</span>
                 <strong id="hud-pairs">0 / 0</strong>
             </div>
         </section>
 
-        <div id="memory-board" class="memory-board" aria-label="Memory board">
+        <div id="memory-board" class="memory-board" aria-label="Memory board" data-i18n-aria-label="memory.board">
             <div id="memory-grid" class="memory-grid"></div>
         </div>
     </main>
@@ -505,17 +505,23 @@
     <div id="difficulty-modal" class="mem-overlay" role="dialog" aria-modal="true" aria-labelledby="difficulty-title" hidden>
         <div class="mem-overlay-backdrop"></div>
         <div class="mem-overlay-card">
+<<<<<<< HEAD
             <span class="mem-overlay-kicker">Memory</span>
             <h2 id="difficulty-title">Choose a difficulty</h2>
             <p id="difficulty-sub" class="mem-overlay-sub">Harder difficulty gives more XP.</p>
+=======
+            <span class="mem-overlay-kicker" data-i18n="trainer.memory">Memory</span>
+            <h2 id="difficulty-title" data-i18n="memory.chooseDifficulty">Choose a difficulty</h2>
+            <p id="difficulty-sub" class="mem-overlay-sub" data-i18n="memory.difficultySub">Higher difficulty = more cards and more points.</p>
+>>>>>>> bf5611e5f7bc9ca2054106a9aafe47efd5e250bd
             <div class="mem-difficulty-grid">
                 <button class="mem-diff-btn" type="button" data-difficulty="easy">
-                    <span class="mem-diff-name">Easy</span>
+                    <span class="mem-diff-name" data-i18n="memory.easy">Easy</span>
                     <span class="mem-diff-meta">5 pairs</span>
                     <span class="mem-diff-dots" aria-hidden="true">&#9679;&#9675;&#9675;</span>
                 </button>
                 <button class="mem-diff-btn" type="button" data-difficulty="medium">
-                    <span class="mem-diff-name">Medium</span>
+                    <span class="mem-diff-name" data-i18n="memory.medium">Medium</span>
                     <span class="mem-diff-meta">10 pairs</span>
                     <span class="mem-diff-dots" aria-hidden="true">&#9679;&#9679;&#9675;</span>
                     <svg class="mem-diff-lock" viewBox="0 0 24 24" aria-hidden="true">
@@ -524,7 +530,7 @@
                     </svg>
                 </button>
                 <button class="mem-diff-btn" type="button" data-difficulty="hard">
-                    <span class="mem-diff-name">Hard</span>
+                    <span class="mem-diff-name" data-i18n="memory.hard">Hard</span>
                     <span class="mem-diff-meta">15 pairs</span>
                     <span class="mem-diff-dots" aria-hidden="true">&#9679;&#9679;&#9679;</span>
                     <svg class="mem-diff-lock" viewBox="0 0 24 24" aria-hidden="true">
@@ -539,19 +545,20 @@
     <div id="result-modal" class="mem-overlay" role="dialog" aria-modal="true" aria-labelledby="result-title" hidden>
         <div class="mem-overlay-backdrop"></div>
         <div class="mem-overlay-card">
-            <span class="mem-overlay-kicker">Cleared!</span>
-            <h2 id="result-title">Well done</h2>
+            <span class="mem-overlay-kicker" data-i18n="memory.cleared">Cleared!</span>
+            <h2 id="result-title" data-i18n="memory.wellDone">Well done</h2>
             <strong id="result-score" class="mem-result-score">0 pts</strong>
             <span id="result-detail" class="mem-result-detail">&mdash;</span>
             <div class="mem-result-actions">
-                <button id="play-again-btn" class="restart-btn" type="button">Play again</button>
-                <button id="change-difficulty-btn" class="theme-toggle" type="button">Change difficulty</button>
-                <a id="home-btn" class="theme-toggle" href="index.html">Home</a>
+                <button id="play-again-btn" class="restart-btn" type="button" data-i18n="trainer.playAgain">Play again</button>
+                <button id="change-difficulty-btn" class="theme-toggle" type="button" data-i18n="memory.changeDifficulty">Change difficulty</button>
+                <a id="home-btn" class="theme-toggle" href="index.html" data-i18n="common.home">Home</a>
             </div>
         </div>
     </div>
 
     <script src="decks/index.js"></script>
+    <script src="js/i18n.js"></script>
     <script src="js/memory.js"></script>
 </body>
 </html>

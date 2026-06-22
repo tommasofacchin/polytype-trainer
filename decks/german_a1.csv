@@ -1,0 +1,301 @@
+word_id,german,romanization,english,italian,unlock_level
+de_001,hallo,,hello,ciao,1
+de_002,danke,,thanks,grazie,1
+de_003,ja,,yes,sì,1
+de_004,nein,,no,no,1
+de_005,bitte,,please,per favore,1
+de_006,Entschuldigung,,sorry,scusa,2
+de_007,Morgen,,morning,mattina,2
+de_008,Abend,,evening,sera,2
+de_009,Tag,,day,giorno,2
+de_010,Nacht,,night,notte,2
+de_011,Wasser,,water,acqua,3
+de_012,Essen,,food,cibo,3
+de_013,Kaffee,,coffee,caffè,3
+de_014,Brot,,bread,pane,3
+de_015,Haus,,house,casa,3
+de_016,Auto,,car,macchina,4
+de_017,Buch,,book,libro,4
+de_018,Freund,,friend,amico,4
+de_019,Familie,,family,famiglia,4
+de_020,Schule,,school,scuola,4
+de_021,Mann,,man,uomo,5
+de_022,Frau,,woman,donna,5
+de_023,Kind,,child,bambino,5
+de_024,Mädchen,,girl,bambina,5
+de_025,Junge,,boy,ragazzo,5
+de_026,Mutter,,mother,madre,6
+de_027,Vater,,father,padre,6
+de_028,Schwester,,sister,sorella,6
+de_029,Bruder,,brother,fratello,6
+de_030,Großmutter,,grandmother,nonna,6
+de_031,groß,,big,grande,7
+de_032,klein,,small,piccolo,7
+de_033,gut,,good,buono,7
+de_034,schlecht,,bad,cattivo,7
+de_035,neu,,new,nuovo,7
+de_036,alt,,old,vecchio,8
+de_037,warm,,warm,caldo,8
+de_038,kalt,,cold,freddo,8
+de_039,schnell,,fast,veloce,8
+de_040,langsam,,slow,lento,8
+de_041,ich,,I,io,9
+de_042,du,,you,tu,9
+de_043,er,,he,lui,9
+de_044,sie,,she,lei,9
+de_045,wir,,we,noi,9
+de_046,ihr,,you plural,voi,10
+de_047,sie,,they,loro,10
+de_048,mein,,my,mio,10
+de_049,dein,,your,tuo,10
+de_050,unser,,our,nostro,10
+de_051,sein,,to be,essere,11
+de_052,haben,,to have,avere,11
+de_053,gehen,,to go,andare,11
+de_054,kommen,,to come,venire,11
+de_055,machen,,to do,fare,11
+de_056,essen,,to eat,mangiare,12
+de_057,trinken,,to drink,bere,12
+de_058,lesen,,to read,leggere,12
+de_059,schreiben,,to write,scrivere,12
+de_060,sprechen,,to speak,parlare,12
+de_061,ein,,a common,un,13
+de_062,eine,,a feminine,una,13
+de_063,ein,,a neuter,un,13
+de_064,er/sie,,it common,esso,13
+de_065,es,,it neuter,esso,13
+de_066,hier,,here,qui,14
+de_067,dort,,there,lì,14
+de_068,jetzt,,now,ora,14
+de_069,später,,later,più tardi,14
+de_070,immer,,always,sempre,14
+de_071,heute,,today,oggi,15
+de_072,morgen,,tomorrow,domani,15
+de_073,gestern,,yesterday,ieri,15
+de_074,Woche,,week,settimana,15
+de_075,Monat,,month,mese,15
+de_076,rot,,red,rosso,16
+de_077,blau,,blue,blu,16
+de_078,grün,,green,verde,16
+de_079,gelb,,yellow,giallo,16
+de_080,schwarz,,black,nero,16
+de_081,weiß,,white,bianco,17
+de_082,braun,,brown,marrone,17
+de_083,rosa,,pink,rosa,17
+de_084,orange,,orange,arancione,17
+de_085,lila,,purple,viola,17
+de_086,eins,,one,uno,18
+de_087,zwei,,two,due,18
+de_088,drei,,three,tre,18
+de_089,vier,,four,quattro,18
+de_090,fünf,,five,cinque,18
+de_091,sechs,,six,sei,19
+de_092,sieben,,seven,sette,19
+de_093,acht,,eight,otto,19
+de_094,neun,,nine,nove,19
+de_095,zehn,,ten,dieci,19
+de_096,wo,,where,dove,20
+de_097,was,,what,cosa,20
+de_098,wer,,who,chi,20
+de_099,wann,,when,quando,20
+de_100,warum,,why,perché,20
+de_101,wie,,how,come,21
+de_102,welcher,,which,quale,21
+de_103,wie viel,,how much,quanto,21
+de_104,weil,,because,perché,21
+de_105,aber,,but,ma,21
+de_106,und,,and,e,22
+de_107,oder,,or,o,22
+de_108,mit,,with,con,22
+de_109,ohne,,without,senza,22
+de_110,von,,from,da,22
+de_111,zu,,to,a,23
+de_112,in,,in,in,23
+de_113,auf,,on,su,23
+de_114,unter,,under,sotto,23
+de_115,über,,above,sopra,23
+de_116,Stadt,,city,città,24
+de_117,Straße,,street,strada,24
+de_118,Laden,,shop,negozio,24
+de_119,Markt,,market,mercato,24
+de_120,Park,,park,parco,24
+de_121,Zimmer,,room,stanza,25
+de_122,Küche,,kitchen,cucina,25
+de_123,Badezimmer,,bathroom,bagno,25
+de_124,Schlafzimmer,,bedroom,camera,25
+de_125,Wohnzimmer,,living room,soggiorno,25
+de_126,Käse,,cheese,formaggio,26
+de_127,Ei,,egg,uovo,26
+de_128,Fisch,,fish,pesce,26
+de_129,Fleisch,,meat,carne,26
+de_130,Suppe,,soup,zuppa,26
+de_131,Apfel,,apple,mela,27
+de_132,Banane,,banana,banana,27
+de_133,Orange,,orange fruit,arancia,27
+de_134,Kartoffel,,potato,patata,27
+de_135,Karotte,,carrot,carota,27
+de_136,Tee,,tea,tè,28
+de_137,Milch,,milk,latte,28
+de_138,Saft,,juice,succo,28
+de_139,Frühstück,,breakfast,colazione,28
+de_140,Mittagessen,,lunch,pranzo,28
+de_141,Abendessen,,dinner,cena,29
+de_142,Salz,,salt,sale,29
+de_143,Zucker,,sugar,zucchero,29
+de_144,Teller,,plate,piatto,29
+de_145,Glas,,glass,bicchiere,29
+de_146,Kopf,,head,testa,30
+de_147,Hand,,hand,mano,30
+de_148,Fuß,,foot,piede,30
+de_149,Auge,,eye,occhio,30
+de_150,Ohr,,ear,orecchio,30
+de_151,Nase,,nose,naso,31
+de_152,Mund,,mouth,bocca,31
+de_153,Haar,,hair,capelli,31
+de_154,Jacke,,jacket,giacca,31
+de_155,Schuhe,,shoes,scarpe,31
+de_156,Hose,,pants,pantaloni,32
+de_157,Hemd,,shirt,camicia,32
+de_158,Kleid,,dress,vestito,32
+de_159,Hut,,hat,cappello,32
+de_160,Pullover,,sweater,maglione,32
+de_161,Sekunde,,second,secondo,33
+de_162,Stunde,,hour,ora,33
+de_163,Minute,,minute,minuto,33
+de_164,Jahr,,year,anno,33
+de_165,Wochenende,,weekend,fine settimana,33
+de_166,Montag,,Monday,lunedì,34
+de_167,Dienstag,,Tuesday,martedì,34
+de_168,Mittwoch,,Wednesday,mercoledì,34
+de_169,Donnerstag,,Thursday,giovedì,34
+de_170,Freitag,,Friday,venerdì,34
+de_171,Samstag,,Saturday,sabato,35
+de_172,Sonntag,,Sunday,domenica,35
+de_173,Frühling,,spring,primavera,35
+de_174,Sommer,,summer,estate,35
+de_175,Herbst,,autumn,autunno,35
+de_176,Winter,,winter,inverno,36
+de_177,Sonne,,sun,sole,36
+de_178,Regen,,rain,pioggia,36
+de_179,Schnee,,snow,neve,36
+de_180,Wind,,wind,vento,36
+de_181,schön,,nice,bello,37
+de_182,bewölkt,,cloudy,nuvoloso,37
+de_183,klar,,clear,sereno,37
+de_184,trocken,,dry,secco,37
+de_185,nass,,wet,bagnato,37
+de_186,Zug,,train,treno,38
+de_187,Bus,,bus,autobus,38
+de_188,Flugzeug,,plane,aereo,38
+de_189,Fahrrad,,bicycle,bicicletta,38
+de_190,Boot,,boat,barca,38
+de_191,Bahnhof,,station,stazione,39
+de_192,Flughafen,,airport,aeroporto,39
+de_193,Fahrkarte,,ticket,biglietto,39
+de_194,Karte,,map,mappa,39
+de_195,Hotel,,hotel,hotel,39
+de_196,links,,left,sinistra,40
+de_197,rechts,,right,vero,40
+de_198,geradeaus,,straight ahead,dritto,40
+de_199,nah,,near,vicino,40
+de_200,weit,,far,lontano,40
+de_201,elf,,eleven,undici,41
+de_202,zwölf,,twelve,dodici,41
+de_203,dreizehn,,thirteen,tredici,41
+de_204,vierzehn,,fourteen,quattordici,41
+de_205,fünfzehn,,fifteen,quindici,41
+de_206,sechzehn,,sixteen,sedici,42
+de_207,siebzehn,,seventeen,diciassette,42
+de_208,achtzehn,,eighteen,diciotto,42
+de_209,neunzehn,,nineteen,diciannove,42
+de_210,zwanzig,,twenty,venti,42
+de_211,Großvater,,grandfather,nonno,43
+de_212,Eltern,,parents,genitori,43
+de_213,Sohn,,son,figlio,43
+de_214,Tochter,,daughter,figlia,43
+de_215,Ehemann,,husband,marito,43
+de_216,Lehrer,,teacher,insegnante,44
+de_217,Student,,student,studente,44
+de_218,Arzt,,doctor,medico,44
+de_219,Pflegekraft,,nurse,infermiera,44
+de_220,Polizei,,police,polizia,44
+de_221,Job,,job,lavoro,45
+de_222,Büro,,office,ufficio,45
+de_223,Klasse,,class,classe,45
+de_224,Hausaufgabe,,homework,compito,45
+de_225,Prüfung,,test,test,45
+de_226,schlafen,,to sleep,dormire,46
+de_227,aufwachen,,to wake up,svegliarsi,46
+de_228,arbeiten,,to work,lavorare,46
+de_229,studieren,,to study,studiare,46
+de_230,lernen,,to learn,imparare,46
+de_231,fahren,,to drive,guidare,47
+de_232,reisen,,to travel,viaggiare,47
+de_233,warten,,to wait,aspettare,47
+de_234,finden,,to find,trovare,47
+de_235,treffen,,to meet,incontrare,47
+de_236,mögen,,to like,piacere,48
+de_237,lieben,,to love,amare,48
+de_238,wollen,,to want,volere,48
+de_239,brauchen,,to need,avere bisogno,48
+de_240,kaufen,,to buy,comprare,48
+de_241,verkaufen,,to sell,vendere,49
+de_242,bezahlen,,to pay,pagare,49
+de_243,öffnen,,to open,aprire,49
+de_244,schließen,,to close,chiudere,49
+de_245,waschen,,to wash,lavare,49
+de_246,sehen,,to see,vedere,50
+de_247,hören,,to hear,sentire,50
+de_248,sagen,,to say,dire,50
+de_249,fragen,,to ask,chiedere,50
+de_250,antworten,,to answer,rispondere,50
+de_251,glücklich,,happy,felice,51
+de_252,traurig,,sad,triste,51
+de_253,wütend,,angry,arrabbiato,51
+de_254,müde,,tired,stanco,51
+de_255,krank,,sick,malato,51
+de_256,einfach,,easy,facile,52
+de_257,schwierig,,difficult,difficile,52
+de_258,teuer,,expensive,costoso,52
+de_259,billig,,cheap,economico,52
+de_260,kostenlos,,free,gratis,52
+de_261,viele,,many,molti,53
+de_262,wenige,,few,pochi,53
+de_263,mehr,,more,più,53
+de_264,weniger,,less,meno,53
+de_265,genug,,enough,abbastanza,53
+de_266,oft,,often,spesso,54
+de_267,nie,,never,mai,54
+de_268,manchmal,,sometimes,a volte,54
+de_269,früh,,early,presto,54
+de_270,spät,,late,tardi,54
+de_271,dieser,,this common,questo,55
+de_272,dieses,,this neuter,questo,55
+de_273,diese,,these,questi,55
+de_274,gleich,,same,stesso,55
+de_275,anderer,,other,altro,55
+de_276,tschüss,,bye,arrivederci,56
+de_277,guten Morgen,,good morning,buongiorno,56
+de_278,guten Abend,,good evening,buonasera,56
+de_279,gute Nacht,,good night,buonanotte,56
+de_280,willkommen,,welcome,benvenuto,56
+de_281,bitte sehr,,here you are,ecco a te,57
+de_282,vielen Dank,,many thanks,mille grazie,57
+de_283,es ist in Ordnung,,it is fine,va bene,57
+de_284,stimmt,,right,vero,57
+de_285,natürlich,,of course,certo,57
+de_286,Apotheke,,pharmacy,farmacia,58
+de_287,Krankenhaus,,hospital,ospedale,58
+de_288,Zahnarzt,,dentist,dentista,58
+de_289,Hilfe,,help,aiuto,58
+de_290,Problem,,problem,problema,58
+de_291,Preis,,price,prezzo,59
+de_292,Geld,,money,soldi,59
+de_293,Quittung,,receipt,ricevuta,59
+de_294,Tüte,,bag,borsa,59
+de_295,Größe,,size,taglia,59
+de_296,Telefon,,phone,telefono,60
+de_297,Computer,,computer,computer,60
+de_298,Schlüssel,,key,chiave,60
+de_299,Uhr,,clock,orologio,60
+de_300,Tasche,,bag,borsa,60

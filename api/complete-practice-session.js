@@ -27,7 +27,10 @@ module.exports = withAuth(async (data, token) => {
     const timezone = normalizeTimezone(session.timezone || existingUser?.timezone);
     const todayKey = getDateKeyForTimezone(new Date(), timezone);
     const previousTotalXp = existingUser?.totalXp || 0;
-    const previousCourseXp = courseSnap.exists ? courseSnap.data().xp || 0 : 0;
+    const existingCourse = existingUser?.courses?.[session.courseId] || null;
+    const previousCourseXp = courseSnap.exists
+      ? courseSnap.data().xp || 0
+      : existingCourse?.xp || 0;
 
     const totalXp = previousTotalXp + xpEarned;
     const courseXp = previousCourseXp + xpEarned;
@@ -45,8 +48,9 @@ module.exports = withAuth(async (data, token) => {
     const userData = {
       ...buildDefaultUserProfile(token.uid, authProfile, timezone),
       ...existingUser,
-      displayName: authProfile.displayName,
-      avatarUrl: authProfile.avatarUrl,
+      displayName: existingUser?.displayName || authProfile.displayName,
+      avatarUrl: existingUser?.avatarUrl || authProfile.avatarUrl,
+      email: existingUser?.email || authProfile.email,
       timezone,
       totalXp,
       globalLevel,
@@ -59,7 +63,9 @@ module.exports = withAuth(async (data, token) => {
       lastActiveAt: now
     };
 
-    const previousCourseLevel = courseSnap.exists ? courseSnap.data().level || 1 : 1;
+    const previousCourseLevel = courseSnap.exists
+      ? courseSnap.data().level || 1
+      : existingCourse?.level || 1;
     const courseData = {
       courseId: session.courseId,
       xp: courseXp,

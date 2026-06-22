@@ -10,6 +10,10 @@
 
     let auth = null;
 
+    function tr(key, params = {}) {
+        return window.PolytypeI18n?.t?.(key, params) || key;
+    }
+
     window.PolytypeFirebase = {
         state,
         onChange(listener) {
@@ -21,7 +25,9 @@
         register,
         signOut,
         isSignedIn,
-        completePracticeSession
+        completePracticeSession,
+        setUserHandle,
+        uploadProfileAvatar
     };
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -36,7 +42,7 @@
 
         if (!hasFirebaseSdk || !hasConfig) {
             state.ready = true;
-            state.error = "Firebase config missing.";
+            state.error = tr("auth.firebaseMissing");
             notify();
             return;
         }
@@ -70,7 +76,7 @@
 
         if (!response.ok) {
             const err = await response.json().catch(() => ({}));
-            const error = new Error(err.error || "Request failed.");
+            const error = new Error(err.error || tr("auth.requestFailed"));
             error.code = `api/${response.status}`;
             throw error;
         }
@@ -123,7 +129,7 @@
 
     async function completePracticeSession(payload) {
         assertConfigured();
-        if (!state.user) throw new Error("Sign in before saving progress.");
+        if (!state.user) throw new Error(tr("auth.signInBeforeSaving"));
 
         const result = await callApi("complete-practice-session", {
             ...payload,
@@ -133,6 +139,49 @@
 
         if (progress) {
             state.profile = applyProgressToProfile(state.profile, progress);
+            syncProfileToLocalStorage(state.profile);
+            notify();
+        }
+
+        return result;
+    }
+
+    async function setUserHandle(handle) {
+        assertConfigured();
+        if (!state.user) throw new Error(tr("auth.signInRequired"));
+
+        const result = await callApi("set-user-handle", { handle });
+        const savedHandle = result.data?.handle || null;
+
+        if (savedHandle) {
+            state.profile = {
+                ...(state.profile || {}),
+                handle: savedHandle
+            };
+            syncProfileToLocalStorage(state.profile);
+            notify();
+        }
+
+        return result;
+    }
+
+    async function uploadProfileAvatar(imageDataUrl) {
+        assertConfigured();
+        if (!state.user) throw new Error(tr("auth.signInRequired"));
+
+        const result = await callApi("upload-profile-avatar", {
+            imageDataUrl,
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+        });
+        const user = result.data?.user;
+        const avatarUrl = result.data?.avatarUrl || user?.avatarUrl || null;
+
+        if (avatarUrl || user) {
+            state.profile = {
+                ...(state.profile || {}),
+                ...(user || {}),
+                avatarUrl
+            };
             syncProfileToLocalStorage(state.profile);
             notify();
         }
@@ -183,13 +232,13 @@
             const user = nextState.user;
             isSignedIn = Boolean(user);
             const label = user
-                ? getShortAuthLabel(nextState.profile?.displayName || user.email)
-                : "Sign in";
+                ? getShortAuthLabel(nextState.profile?.handle ? `@${nextState.profile.handle}` : nextState.profile?.displayName || user.email)
+                : tr("auth.signIn");
 
             authLink.textContent = label;
             authLink.setAttribute(
                 "aria-label",
-                user ? "Open account options" : "Open sign in page"
+                user ? tr("auth.openAccount") : tr("auth.openSignin")
             );
             authLink.classList.toggle("is-signed-in", isSignedIn);
             if (!isSignedIn) closeDropdown();
@@ -233,15 +282,15 @@
         function setMode(nextMode) {
             mode = nextMode;
             page.dataset.mode = mode;
-            submitBtn.textContent = mode === "signin" ? "Sign in" : "Create account";
-            panelTitle.textContent = mode === "signin" ? "Sign in" : "Register";
+            submitBtn.textContent = mode === "signin" ? tr("auth.signIn") : tr("auth.createAccount");
+            panelTitle.textContent = mode === "signin" ? tr("auth.signIn") : tr("auth.register");
             panelCopy.textContent = mode === "signin"
-                ? "Access your saved progress and streaks."
-                : "Create a new account and start syncing from the first session.";
+                ? tr("auth.signInCopy")
+                : tr("auth.registerCopy");
             switchText.textContent = mode === "signin"
-                ? "Don't have an account?"
-                : "Already have an account?";
-            switchBtn.textContent = mode === "signin" ? "Register" : "Sign in";
+                ? tr("auth.noAccount")
+                : tr("auth.hasAccount");
+            switchBtn.textContent = mode === "signin" ? tr("auth.register") : tr("auth.signIn");
             password.autocomplete = mode === "signin" ? "current-password" : "new-password";
             confirmLabel.hidden = mode !== "register";
             confirmPassword.required = mode === "register";
@@ -257,7 +306,7 @@
             event.preventDefault();
 
             if (mode === "register" && password.value !== confirmPassword.value) {
-                status.textContent = "Passwords do not match.";
+                status.textContent = tr("auth.passwordMismatch");
                 confirmPassword.focus();
                 return;
             }
@@ -265,7 +314,7 @@
             const action = mode === "signin"
                 ? () => signIn(email.value, password.value)
                 : () => register(email.value, password.value);
-            const successMessage = mode === "signin" ? "Signed in." : "Account created.";
+            const successMessage = mode === "signin" ? tr("auth.signedIn") : tr("auth.accountCreated");
             const didSucceed = await runAuthAction(status, action, successMessage);
 
             if (didSucceed) {
@@ -282,7 +331,7 @@
             }
 
             if (!nextState.configured) {
-                status.textContent = "Firebase config missing or emulator not running.";
+                status.textContent = tr("auth.configMissing");
             } else if (nextState.error) {
                 status.textContent = nextState.error;
             }
@@ -307,6 +356,8 @@
 
         const localProfile = {
             name: remoteProfile.displayName || "Polytype Learner",
+            handle: remoteProfile.handle || null,
+            avatarUrl: remoteProfile.avatarUrl || null,
             xp: remoteProfile.totalXp || 0,
             dayStreak: remoteProfile.currentStreak || 0,
             streakFreezes: remoteProfile.streakFreezes || 0,
@@ -347,12 +398,12 @@
 
     function assertConfigured() {
         if (!state.configured || !auth) {
-            throw new Error("Firebase is not configured.");
+            throw new Error(tr("auth.firebaseNotConfigured"));
         }
     }
 
     function getShortAuthLabel(label) {
-        if (!label) return "Account";
+        if (!label) return tr("auth.account");
         if (label.includes("@")) return label.split("@")[0];
         return label.length > 14 ? `${label.slice(0, 13)}...` : label;
     }
@@ -361,17 +412,17 @@
         const code = error?.code || "";
 
         const messages = {
-            "auth/email-already-in-use": "Email already registered.",
-            "auth/invalid-email": "Invalid email.",
-            "auth/invalid-login-credentials": "Wrong email or password.",
-            "auth/missing-password": "Password required.",
-            "auth/weak-password": "Password must be at least 6 characters.",
-            "auth/user-not-found": "Account not found.",
-            "auth/wrong-password": "Wrong email or password.",
-            "api/401": "Sign in required.",
-            "api/503": "Service temporarily unavailable."
+            "auth/email-already-in-use": tr("auth.emailUsed"),
+            "auth/invalid-email": tr("auth.invalidEmail"),
+            "auth/invalid-login-credentials": tr("auth.wrongLogin"),
+            "auth/missing-password": tr("auth.passwordRequired"),
+            "auth/weak-password": tr("auth.weakPassword"),
+            "auth/user-not-found": tr("auth.accountNotFound"),
+            "auth/wrong-password": tr("auth.wrongLogin"),
+            "api/401": tr("auth.signInRequired"),
+            "api/503": tr("auth.serviceUnavailable")
         };
 
-        return messages[code] || error?.message || "Firebase error.";
+        return messages[code] || error?.message || tr("auth.firebaseError");
     }
 })();

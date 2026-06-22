@@ -24,6 +24,7 @@ const state = {
     unsavedWrongFields: 0,
     unsavedWordsUsed: 0,
     unsavedBestStreak: 0,
+    unsavedCourseId: null,
     remainingSeconds: 0,
     timerId: null,
     answerTimeoutId: null,
@@ -37,6 +38,8 @@ const state = {
 
 const defaultProfile = {
     name: "Polytype Learner",
+    handle: null,
+    avatarUrl: null,
     xp: 0,
     dayStreak: 0,
     courses: {}
@@ -64,6 +67,7 @@ let playAgainBtn;
 let languageMenuToggle;
 let languageMenu;
 let currentLanguageFlag;
+let miniProfileAvatar;
 let miniProfileLevel;
 let miniProfileXp;
 let miniProfileStreak;
@@ -85,6 +89,7 @@ let profile = { ...defaultProfile };
 // Last level reflected in the UI. Used to detect level-ups in renderProfile.
 // null until the first render so we don't celebrate on initial load/hydration.
 let lastShownLevel = null;
+let lastShownCourseKey = null;
 
 const AVAILABLE_DECKS = window.DECK_INDEX || [];
 const errorColor = "var(--danger)";
@@ -93,6 +98,7 @@ const profileStorageKey = "polytype-profile";
 const audioBaseUrl = stripTrailingSlash(window.POLYTYPE_AUDIO_BASE_URL || "");
 const audioPrefix = stripSlashes(window.POLYTYPE_AUDIO_PREFIX || "audio/v1");
 const audioPreloadConcurrency = 4;
+const wordsPerLevel = 5;
 const higherUnlockedLevelDrawBoost = 1;
 const answerTimeoutMs = 10000;
 const timedAnswerTimeoutMs = 5000;
@@ -107,6 +113,14 @@ let correctSfxAudio = null;
 let errorSfxAudio = null;
 let levelUpSfxAudio = null;
 let activeWordAudio = null;
+
+function tr(key, params = {}) {
+    return window.PolytypeI18n?.t?.(key, params) || key;
+}
+
+function getAppLanguage() {
+    return window.PolytypeI18n?.getLanguage?.() || "en";
+}
 
 document.addEventListener("DOMContentLoaded", () => {
     levelSelect = document.getElementById("level-select");
@@ -131,6 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
     languageMenuToggle = document.getElementById("language-menu-toggle");
     languageMenu = document.getElementById("language-menu");
     currentLanguageFlag = document.getElementById("current-language-flag");
+    miniProfileAvatar = document.getElementById("mini-profile-avatar");
     miniProfileLevel = document.getElementById("mini-profile-level");
     miniProfileXp = document.getElementById("mini-profile-xp");
     miniProfileStreak = document.getElementById("mini-profile-streak");
@@ -165,6 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
     timedPlayAgainBtn.addEventListener("click", startSession);
     languageMenuToggle.addEventListener("click", toggleLanguageMenu);
     document.addEventListener("keydown", onGlobalKeyDown);
+    document.addEventListener("polytype-app-language-changed", onAppLanguageChange);
     document.addEventListener("click", onDocumentClick);
     document.addEventListener("pointerdown", unlockAudioPlayback, true);
     document.addEventListener("keydown", unlockAudioPlayback, true);
@@ -180,6 +196,7 @@ document.addEventListener("DOMContentLoaded", () => {
     preloadSfx();
     populateLanguageSelect();
     updateRomajiUI();
+    renderProfile();
     applyInitialVisibilityClasses();
     startSession();
 });
@@ -205,7 +222,7 @@ function applyTheme(theme) {
     themeToggle.setAttribute("aria-pressed", String(isDark));
     themeToggle.setAttribute(
         "aria-label",
-        isDark ? "Switch to light mode" : "Switch to dark mode"
+        isDark ? tr("common.switchLight") : tr("common.switchDark")
     );
 }
 
@@ -248,6 +265,8 @@ function setupFirebaseProfileSync() {
             ...defaultProfile,
             ...profile,
             name: authState.profile.displayName || profile.name,
+            handle: authState.profile.handle || null,
+            avatarUrl: authState.profile.avatarUrl || null,
             xp: authState.profile.totalXp || 0,
             dayStreak: authState.profile.currentStreak || 0,
             streakFreezes: authState.profile.streakFreezes || 0,
@@ -275,16 +294,40 @@ function saveProfile() {
 }
 
 function renderProfile() {
-    const levelInfo = getLevelInfo(profile.xp);
+    const levelInfo = getCurrentCourseLevelInfo();
 
-    miniProfileLevel.textContent = `Level ${levelInfo.level}`;
+    miniProfileLevel.textContent = tr("common.levelNumber", { level: levelInfo.level });
     miniProfileXp.textContent = `${levelInfo.currentXp} / ${levelInfo.nextXp} XP`;
     miniProfileStreak.textContent = `\u{1F525} ${profile.dayStreak}`;
+    renderProfileAvatar(miniProfileAvatar, profile);
 
     maybeCelebrateLevelUp(levelInfo.level);
 }
 
+function renderProfileAvatar(element, profileData) {
+    if (!element) return;
+
+    if (profileData.avatarUrl) {
+        const image = document.createElement("img");
+        image.src = profileData.avatarUrl;
+        image.alt = "";
+        element.classList.add("has-image");
+        element.replaceChildren(image);
+        return;
+    }
+
+    element.classList.remove("has-image");
+    const source = profileData.handle || profileData.name || "P";
+    element.textContent = source.trim().charAt(0).toUpperCase() || "P";
+}
+
 function maybeCelebrateLevelUp(level) {
+    const courseKey = getCurrentCourseKey();
+    if (courseKey !== lastShownCourseKey) {
+        lastShownCourseKey = courseKey;
+        lastShownLevel = null;
+    }
+
     const isPlaying = !state.sessionEnded && state.currentDeck.length > 0;
     if (lastShownLevel !== null && level > lastShownLevel && isPlaying) {
         for (let nextLevel = lastShownLevel + 1; nextLevel <= level; nextLevel += 1) {
@@ -315,14 +358,29 @@ function getLevelInfo(totalXp) {
 }
 
 function getXpForLevel(level) {
-    return 400 + (level - 1) * 250;
+    // Level 1→2 stays at 400 XP. Each higher level grows faster via a mild quadratic term.
+    return Math.round(400 + (level - 1) * 250 + (level - 1) * (level - 1) * 15);
+}
+
+function getCurrentCourseKey() {
+    return settings.language || settings.deckName || "course";
+}
+
+function getCurrentCourseProgress() {
+    const courses = profile.courses || {};
+    return courses[settings.language] || courses[settings.deckName] || null;
+}
+
+function getCurrentCourseLevelInfo() {
+    const courseProgress = getCurrentCourseProgress();
+    return getLevelInfo(Math.max(0, Number(courseProgress?.xp) || 0));
 }
 
 function populateLanguageSelect() {
     const languages = uniqueBy(
         AVAILABLE_DECKS.map(deck => ({
             value: deck.language,
-            label: deck.languageLabel || deck.language,
+            label: getLanguageLabel(deck.language),
             flagSrc: getLanguageFlagSrc(deck.language)
         })),
         item => item.value
@@ -375,11 +433,11 @@ function populateDeckSelect() {
 }
 
 function languageHasHints() {
-    return settings.language !== "norwegian";
+    return settings.language === "chinese" || settings.language === "japanese";
 }
 
 function updateRomajiUI() {
-    const labels = { chinese: "Pinyin", korean: "Romanization" };
+    const labels = { chinese: "Pinyin", japanese: "Romaji" };
     const hasHints = languageHasHints();
 
     romajiField.hidden = !hasHints;
@@ -396,9 +454,11 @@ function updateRomajiUI() {
 function onLanguageChange() {
     populateLevelSelect();
     updateRomajiUI();
+    renderProfile();
     startSession();
 }
 
+<<<<<<< HEAD
 // On login, adopt the study language from the account's courses (the one with
 // the most XP) when the user hasn't picked one on this device. An explicit
 // local choice always wins, so manual switches are never overridden.
@@ -427,11 +487,15 @@ function applyAccountLanguage() {
 }
 
 function selectLanguage(language) {
+=======
+async function selectLanguage(language) {
+>>>>>>> bf5611e5f7bc9ca2054106a9aafe47efd5e250bd
     if (settings.language === language) {
         closeLanguageMenu();
         return;
     }
 
+    await saveCurrentSessionProgress();
     settings.language = language;
     localStorage.setItem("polytype-language", language);
     syncLanguageMenu();
@@ -443,8 +507,10 @@ function syncLanguageMenu() {
     currentLanguageFlag.src = getLanguageFlagSrc(settings.language);
     languageMenuToggle.setAttribute(
         "aria-label",
-        `Study language: ${getLanguageLabel(settings.language)}`
+        tr("trainer.studyLanguage", { language: getLanguageLabel(settings.language) })
     );
+    document.getElementById("memory-link")?.setAttribute("href", "memory.html");
+    document.getElementById("dictate-link")?.setAttribute("href", "dictate.html");
 
     languageMenu.querySelectorAll(".language-menu-item").forEach(item => {
         const isSelected = item.dataset.language === settings.language;
@@ -490,9 +556,18 @@ function onTimeChange() {
 function toggleFocusMode() {
     settings.focusMode = !settings.focusMode;
     document.body.classList.toggle("focus-mode", settings.focusMode);
-    focusToggle.textContent = settings.focusMode ? "Exit focus" : "Focus";
+    focusToggle.textContent = settings.focusMode ? tr("trainer.exitFocus") : tr("trainer.focus");
     focusToggle.setAttribute("aria-pressed", String(settings.focusMode));
     focusActiveRow();
+}
+
+function onAppLanguageChange() {
+    window.PolytypeI18n?.applyStaticTranslations?.();
+    applyTheme(document.documentElement.dataset.theme === "dark" ? "dark" : "light");
+    populateLanguageSelect();
+    updateRomajiUI();
+    renderProfile();
+    startSession();
 }
 
 function onGlobalKeyDown(event) {
@@ -537,7 +612,7 @@ async function loadDeck(deckId) {
     const deckMeta = AVAILABLE_DECKS.find(deck => deck.id === deckId);
 
     if (!deckMeta) {
-        showEmptyState("No deck found.");
+        showEmptyState(tr("trainer.noDeck"));
         return;
     }
 
@@ -552,7 +627,7 @@ async function loadDeck(deckId) {
     } catch (error) {
         console.error(error);
         state.fullDeck = [];
-        showEmptyState("Start a local server to load CSV decks.");
+        showEmptyState(tr("trainer.localServer"));
     }
 }
 
@@ -572,11 +647,24 @@ function parseDeckCsv(csvText, columns) {
                 id: record[columns.wordId]?.trim() || `${settings.deckName}-${index + 1}`,
                 script,
                 romanization: record[columns.romanization]?.trim() || "",
-                meaning: record[columns.meaning]?.trim() || "",
+                meaning: getRecordMeaning(record, columns),
                 unlockLevel: Number.isFinite(unlockLevel) && unlockLevel > 0 ? unlockLevel : 1
             };
         })
         .filter(item => item.script && item.meaning);
+}
+
+function getRecordMeaning(record, columns) {
+    const meaningColumn = getAppLanguage() === "it"
+        ? columns.italianMeaning
+        : columns.meaning;
+
+    return (
+        record[meaningColumn]?.trim() ||
+        record[columns.meaning]?.trim() ||
+        record[columns.italianMeaning]?.trim() ||
+        ""
+    );
 }
 
 function parseCsv(csvText) {
@@ -633,12 +721,13 @@ function preloadAudioForLevel(level) {
 }
 
 function getUnlockedLevel() {
-    const courseProgress = profile.courses?.[settings.language] || profile.courses?.[settings.deckName];
+    const courseProgress = getCurrentCourseProgress();
 
     if (courseProgress?.unlockedLevel) return courseProgress.unlockedLevel;
     if (courseProgress?.level) return courseProgress.level;
+    if (courseProgress?.xp) return getLevelInfo(courseProgress.xp).level;
 
-    return getLevelInfo(profile.xp).level;
+    return 1;
 }
 
 const LOCK_SVG =
@@ -669,7 +758,7 @@ function buildMyDeck() {
     if (!words.length) {
         const empty = document.createElement("p");
         empty.className = "deck-empty";
-        empty.textContent = "No words loaded yet. Start a session to load this deck.";
+        empty.textContent = tr("trainer.noWordsLoaded");
         deckGroups.appendChild(empty);
         deckModalSub.textContent = "";
         deckProgressFill.style.width = "0%";
@@ -681,10 +770,15 @@ function buildMyDeck() {
     const unlockedCount = words.filter(word => word.unlockLevel <= unlockedLevel).length;
     const pct = Math.round((unlockedCount / words.length) * 100);
 
-    deckModalSub.textContent =
-        `${getLanguageLabel(settings.language)} · ${words.length} words`;
+    deckModalSub.textContent = tr("trainer.deckSummary", {
+        language: getLanguageLabel(settings.language),
+        count: words.length
+    });
     deckProgressFill.style.width = `${pct}%`;
-    deckProgressText.textContent = `${unlockedCount} / ${words.length} unlocked`;
+    deckProgressText.textContent = tr("trainer.deckProgress", {
+        unlocked: unlockedCount,
+        total: words.length
+    });
 
     const byLevel = new Map();
     words.forEach(word => {
@@ -712,13 +806,16 @@ function buildDeckGroup(level, words, locked) {
 
     const title = document.createElement("span");
     title.className = "deck-group-title";
-    title.textContent = `Level ${level}`;
+    title.textContent = tr("common.levelNumber", { level });
 
     const meta = document.createElement("span");
     meta.className = "deck-group-meta";
     meta.textContent = locked
-        ? `Unlocks at level ${level}`
-        : `${words.length} word${words.length === 1 ? "" : "s"}`;
+        ? tr("trainer.unlocksAtLevel", { level })
+        : tr("trainer.wordCount", {
+            count: words.length,
+            word: words.length === 1 ? tr("common.word") : tr("common.words")
+        });
 
     head.append(badge, title, meta);
 
@@ -736,7 +833,7 @@ function buildDeckCard(word, level, locked) {
 
     if (locked) {
         card.classList.add("is-locked");
-        card.setAttribute("aria-label", `Locked word, unlocks at level ${level}`);
+        card.setAttribute("aria-label", tr("trainer.lockedWord", { level }));
 
         const lock = document.createElement("span");
         lock.className = "deck-card-lock";
@@ -752,7 +849,7 @@ function buildDeckCard(word, level, locked) {
 
     card.setAttribute("role", "button");
     card.tabIndex = 0;
-    card.setAttribute("aria-label", `Play audio for ${word.script || word.meaning}`);
+    card.setAttribute("aria-label", tr("trainer.playAudioFor", { word: word.script || word.meaning }));
     card.addEventListener("click", () => playWordAudio(word));
     card.addEventListener("keydown", event => {
         if (event.key !== "Enter" && event.key !== " ") return;
@@ -800,6 +897,7 @@ function resetState() {
     state.unsavedWrongFields = 0;
     state.unsavedWordsUsed = 0;
     state.unsavedBestStreak = 0;
+    state.unsavedCourseId = null;
     state.remainingSeconds = settings.timeLimitSeconds;
     clearAnswerTimeout();
     state.sessionStarted = false;
@@ -818,7 +916,7 @@ function spawnInitialRows() {
     clearRows();
 
     if (!state.currentDeck.length) {
-        showEmptyState("No words available in this deck.");
+        showEmptyState(tr("trainer.noWords"));
         return;
     }
 
@@ -968,7 +1066,6 @@ function startActiveAnswerTimeout() {
     if (state.sessionEnded || !state.sessionStarted) return;
     if (isTimedSession() && !state.timerId) return;
     if (!isTimedSession() && state.wordsUsed <= 2) return;
-    if (!isTimedSession() && state.lastAnswerAutoTimedOut) return;
 
     const activeRow = rowsContainer.querySelector(".row:not(.past-row)");
     const activeInput = activeRow?.querySelector(".meaning-input");
@@ -991,13 +1088,34 @@ function startActiveAnswerTimeout() {
         }
 
         currentInput.dataset.autoSubmitted = "true";
-        checkMeaningField(currentInput, { autoTimedOut: true });
+        onAnswerTimeout(currentInput);
         moveToNextRow(currentInput);
     }, getActiveAnswerTimeoutMs());
 }
 
 function getActiveAnswerTimeoutMs() {
-    return isTimedSession() ? timedAnswerTimeoutMs : answerTimeoutMs;
+    if (isTimedSession()) return timedAnswerTimeoutMs;
+    const reductionSteps = Math.floor(state.streak / 10);
+    const multiplier = Math.max(0.5, 1 - reductionSteps * 0.05);
+    return Math.round(answerTimeoutMs * multiplier);
+}
+
+function onAnswerTimeout(meaningInput) {
+    clearAnswerTimeout();
+    const prevStreak = state.streak;
+    state.streak = 0;
+    updateStats();
+
+    if (prevStreak > 0) animateStreakBreak();
+
+    const item = meaningInput.deckItem;
+    if (item) {
+        meaningInput.style.color = "var(--text-faint)";
+        meaningInput.value = item.meaning;
+    }
+
+    const row = meaningInput?.closest(".row");
+    if (row) flashRowTimeout(row);
 }
 
 function isTimedSession() {
@@ -1168,6 +1286,7 @@ function registerAnswer(isCorrect, meaningInput, options = {}) {
     const prevStreak = state.streak;
     const prevTier = getComboTier(prevStreak);
 
+    state.unsavedCourseId = state.unsavedCourseId || getCurrentCourseKey();
     state.totalChecked += 1;
     if (isCorrect) {
         playCorrectSfx();
@@ -1252,10 +1371,30 @@ function awardComboPoints() {
     state.sessionXp += points;
 
     if (!isFirebaseSignedIn()) {
-        profile.xp += points;
+        addLocalCourseXp(points);
         saveProfile();
         renderProfile();
     }
+}
+
+function addLocalCourseXp(points) {
+    const courseId = getCurrentCourseKey();
+    const currentCourse = getCurrentCourseProgress() || {};
+    const xp = Math.max(0, Number(currentCourse.xp) || 0) + points;
+    const levelInfo = getLevelInfo(xp);
+
+    profile.xp = Math.max(0, Number(profile.xp) || 0) + points;
+    profile.courses = {
+        ...(profile.courses || {}),
+        [courseId]: {
+            ...currentCourse,
+            courseId,
+            xp,
+            level: levelInfo.level,
+            unlockedLevel: levelInfo.level,
+            wordsUnlocked: levelInfo.level * wordsPerLevel
+        }
+    };
 }
 
 function getComboMultiplier(streak) {
@@ -1282,7 +1421,7 @@ function updateStats() {
     const multiplier = getComboMultiplier(state.streak);
     const tier = getComboTier(state.streak);
 
-    hudScoreText.textContent = `${state.score} pts`;
+    hudScoreText.textContent = `${state.score} ${tr("common.points")}`;
     streakText.textContent = String(state.streak);
 
     if (state.streak >= 5) {
@@ -1323,6 +1462,13 @@ function flashRow(row, isCorrect) {
     row.addEventListener("animationend", () => row.classList.remove(cls), { once: true });
 }
 
+function flashRowTimeout(row) {
+    row.classList.remove("row-flash-timeout");
+    void row.offsetWidth;
+    row.classList.add("row-flash-timeout");
+    row.addEventListener("animationend", () => row.classList.remove("row-flash-timeout"), { once: true });
+}
+
 function showXpFloat(pts, tier, inputEl) {
     const rect = inputEl.getBoundingClientRect();
     const el = document.createElement("span");
@@ -1360,11 +1506,11 @@ function celebrateLevelUp(level) {
 
     const title = document.createElement("div");
     title.className = "levelup-title";
-    title.textContent = "LEVEL UP";
+    title.textContent = tr("trainer.levelUp");
 
     const sub = document.createElement("div");
     sub.className = "levelup-sub";
-    sub.textContent = `Level ${level} reached`;
+    sub.textContent = tr("trainer.levelReached", { level });
 
     card.append(rays, badge, title, sub);
 
@@ -1375,7 +1521,10 @@ function celebrateLevelUp(level) {
 
         const unlockTitle = document.createElement("p");
         unlockTitle.className = "levelup-unlocks-title";
-        unlockTitle.textContent = `${newWords.length} new word${newWords.length === 1 ? "" : "s"} unlocked`;
+        unlockTitle.textContent = tr("trainer.newWordsUnlocked", {
+            count: newWords.length,
+            word: newWords.length === 1 ? tr("common.word") : tr("common.words")
+        });
 
         const unlockGrid = document.createElement("div");
         unlockGrid.className = "levelup-unlocks-grid";
@@ -1394,7 +1543,7 @@ function celebrateLevelUp(level) {
     const confirmBtn = document.createElement("button");
     confirmBtn.type = "button";
     confirmBtn.className = "levelup-confirm-btn";
-    confirmBtn.textContent = "Got it!";
+    confirmBtn.textContent = tr("trainer.gotIt");
     confirmBtn.addEventListener("click", () => {
         overlay.classList.add("is-leaving");
         window.setTimeout(() => overlay.remove(), 480);
@@ -1434,7 +1583,7 @@ function showSessionStartPrompt() {
     updateTimerDisplay();
     timerStartLabel.textContent = isTimedSession()
         ? formatTime(settings.timeLimitSeconds)
-        : "Free run";
+        : tr("trainer.freeRun");
     timerStartModal.hidden = false;
     requestAnimationFrame(() => timerGoBtn.focus());
 }
@@ -1467,7 +1616,7 @@ function stopTimer() {
 
 function updateTimerDisplay() {
     if (!settings.timeLimitSeconds) {
-        timerText.textContent = "Free";
+        timerText.textContent = tr("trainer.free");
         return;
     }
 
@@ -1488,9 +1637,14 @@ async function endSession() {
         state.totalChecked > 0
             ? Math.round((state.totalCorrectFields / state.totalChecked) * 100)
             : 0;
-    const scoreText = `${state.score} pts`;
-    const detailText =
-        `${state.totalCorrectFields} correct / ${state.totalChecked} fields - ${percentage}% accuracy - Best combo ${state.bestStreak} - +${state.sessionXp} XP`;
+    const scoreText = `${state.score} ${tr("common.points")}`;
+    const detailText = tr("trainer.resultDetail", {
+        correct: state.totalCorrectFields,
+        total: state.totalChecked,
+        accuracy: percentage,
+        combo: state.bestStreak,
+        xp: state.sessionXp
+    });
 
     if (settings.timeLimitSeconds && timerResultModal) {
         timedResultScore.textContent = scoreText;
@@ -1534,12 +1688,12 @@ async function saveCurrentSessionProgress() {
     const firebaseClient = window.PolytypeFirebase;
 
     if (!firebaseClient?.isSignedIn?.()) {
-        if (isAnyResultVisible()) setResultSaveStatus("Sign in to save XP.");
+        if (isAnyResultVisible()) setResultSaveStatus(tr("trainer.signInSave"));
         return;
     }
 
     const payload = {
-        courseId: settings.language,
+        courseId: state.unsavedCourseId || getCurrentCourseKey(),
         correctAnswers: state.unsavedCorrectFields,
         wrongAnswers: state.unsavedWrongFields,
         bestCombo: state.unsavedBestStreak,
@@ -1548,7 +1702,7 @@ async function saveCurrentSessionProgress() {
     };
 
     state.saveInFlight = true;
-    if (isAnyResultVisible()) setResultSaveStatus("Saving progress...");
+    if (isAnyResultVisible()) setResultSaveStatus(tr("trainer.savingProgress"));
 
     state.savePromise = (async () => {
         const result = await firebaseClient.completePracticeSession(payload);
@@ -1578,14 +1732,15 @@ async function saveCurrentSessionProgress() {
         state.unsavedWordsUsed = Math.max(0, state.unsavedWordsUsed - payload.wordsUsed);
         state.unsavedBestStreak = getUnsavedAnswerCount() > 0 ? state.streak : 0;
         state.progressSaved = getUnsavedAnswerCount() === 0;
-        if (isAnyResultVisible()) setResultSaveStatus("Progress saved.");
+        if (state.progressSaved) state.unsavedCourseId = null;
+        if (isAnyResultVisible()) setResultSaveStatus(tr("trainer.progressSaved"));
     })();
 
     try {
         await state.savePromise;
     } catch (error) {
         console.error(error);
-        if (isAnyResultVisible()) setResultSaveStatus("Progress not saved. Try again.");
+        if (isAnyResultVisible()) setResultSaveStatus(tr("trainer.progressNotSaved"));
     } finally {
         state.saveInFlight = false;
         state.savePromise = null;
@@ -1626,16 +1781,19 @@ function getDecksForLanguage(language) {
 function getLanguageFlagSrc(language) {
     const flags = {
         chinese: "assets/flags/china.svg",
-        korean: "assets/flags/korea.svg",
-        norwegian: "assets/flags/norway.svg"
+        german: "assets/flags/germany.svg",
+        italian: "assets/flags/italy.svg",
+        japanese: "assets/flags/japan.svg",
+        norwegian: "assets/flags/norway.svg",
+        spanish: "assets/flags/spain.svg",
+        swedish: "assets/flags/sweden.svg"
     };
 
     return flags[language] || "assets/flags/china.svg";
 }
 
 function getLanguageLabel(language) {
-    const deck = AVAILABLE_DECKS.find(item => item.language === language);
-    return deck?.languageLabel || language || "Language";
+    return window.PolytypeI18n?.languageLabel?.(language) || language || tr("language.fallback");
 }
 
 function uniqueBy(items, getKey) {

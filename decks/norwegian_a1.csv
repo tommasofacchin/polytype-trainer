@@ -1,301 +1,301 @@
-word_id,norwegian,romanization,english,unlock_level
-nor_001,hei,hei,hello,1
-nor_002,takk,takk,thanks,1
-nor_003,ja,ja,yes,1
-nor_004,nei,nei,no,1
-nor_005,vær så snill,vær så snill,please,1
-nor_006,unnskyld,unnskyld,sorry,2
-nor_007,morgen,morgen,morning,2
-nor_008,kveld,kveld,evening,2
-nor_009,dag,dag,day,2
-nor_010,natt,natt,night,2
-nor_011,vann,vann,water,3
-nor_012,mat,mat,food,3
-nor_013,kaffe,kaffe,coffee,3
-nor_014,brød,brød,bread,3
-nor_015,hus,hus,house,3
-nor_016,bil,bil,car,4
-nor_017,bok,bok,book,4
-nor_018,venn,venn,friend,4
-nor_019,familie,familie,family,4
-nor_020,skole,skole,school,4
-nor_021,mann,mann,man,5
-nor_022,kvinne,kvinne,woman,5
-nor_023,barn,barn,child,5
-nor_024,jente,jente,girl,5
-nor_025,gutt,gutt,boy,5
-nor_026,mor,mor,mother,6
-nor_027,far,far,father,6
-nor_028,søster,søster,sister,6
-nor_029,bror,bror,brother,6
-nor_030,bestemor,bestemor,grandmother,6
-nor_031,stor,stor,big,7
-nor_032,liten,liten,small,7
-nor_033,god,god,good,7
-nor_034,dårlig,dårlig,bad,7
-nor_035,ny,ny,new,7
-nor_036,gammel,gammel,old,8
-nor_037,varm,varm,warm,8
-nor_038,kald,kald,cold,8
-nor_039,rask,rask,fast,8
-nor_040,sakte,sakte,slow,8
-nor_041,jeg,jeg,I,9
-nor_042,du,du,you,9
-nor_043,han,han,he,9
-nor_044,hun,hun,she,9
-nor_045,vi,vi,we,9
-nor_046,dere,dere,you plural,10
-nor_047,de,de,they,10
-nor_048,min,min,my,10
-nor_049,din,din,your,10
-nor_050,vår,vår,our,10
-nor_051,å være,å være,to be,11
-nor_052,å ha,å ha,to have,11
-nor_053,å gå,å gå,to go,11
-nor_054,å komme,å komme,to come,11
-nor_055,å gjøre,å gjøre,to do,11
-nor_056,å spise,å spise,to eat,12
-nor_057,å drikke,å drikke,to drink,12
-nor_058,å lese,å lese,to read,12
-nor_059,å skrive,å skrive,to write,12
-nor_060,å snakke,å snakke,to speak,12
-nor_061,en,en,a common,13
-nor_062,ei,ei,a feminine,13
-nor_063,et,et,a neuter,13
-nor_064,den,den,it common,13
-nor_065,det,det,it neuter,13
-nor_066,her,her,here,14
-nor_067,der,der,there,14
-nor_068,nå,nå,now,14
-nor_069,senere,senere,later,14
-nor_070,alltid,alltid,always,14
-nor_071,i dag,i dag,today,15
-nor_072,i morgen,i morgen,tomorrow,15
-nor_073,i går,i går,yesterday,15
-nor_074,uke,uke,week,15
-nor_075,måned,måned,month,15
-nor_076,rød,rød,red,16
-nor_077,blå,blå,blue,16
-nor_078,grønn,grønn,green,16
-nor_079,gul,gul,yellow,16
-nor_080,svart,svart,black,16
-nor_081,hvit,hvit,white,17
-nor_082,brun,brun,brown,17
-nor_083,rosa,rosa,pink,17
-nor_084,oransje,oransje,orange,17
-nor_085,lilla,lilla,purple,17
-nor_086,én,én,one,18
-nor_087,to,to,two,18
-nor_088,tre,tre,three,18
-nor_089,fire,fire,four,18
-nor_090,fem,fem,five,18
-nor_091,seks,seks,six,19
-nor_092,sju,sju,seven,19
-nor_093,åtte,åtte,eight,19
-nor_094,ni,ni,nine,19
-nor_095,ti,ti,ten,19
-nor_096,hvor,hvor,where,20
-nor_097,hva,hva,what,20
-nor_098,hvem,hvem,who,20
-nor_099,når,når,when,20
-nor_100,hvorfor,hvorfor,why,20
-nor_101,hvordan,hvordan,how,21
-nor_102,hvilken,hvilken,which,21
-nor_103,hvor mye,hvor mye,how much,21
-nor_104,fordi,fordi,because,21
-nor_105,men,men,but,21
-nor_106,og,og,and,22
-nor_107,eller,eller,or,22
-nor_108,med,med,with,22
-nor_109,uten,uten,without,22
-nor_110,fra,fra,from,22
-nor_111,til,til,to,23
-nor_112,i,i,in,23
-nor_113,på,på,on,23
-nor_114,under,under,under,23
-nor_115,over,over,above,23
-nor_116,by,by,city,24
-nor_117,gate,gate,street,24
-nor_118,butikk,butikk,shop,24
-nor_119,marked,marked,market,24
-nor_120,park,park,park,24
-nor_121,rom,rom,room,25
-nor_122,kjøkken,kjøkken,kitchen,25
-nor_123,bad,bad,bathroom,25
-nor_124,soverom,soverom,bedroom,25
-nor_125,stue,stue,living room,25
-nor_126,ost,ost,cheese,26
-nor_127,egg,egg,egg,26
-nor_128,fisk,fisk,fish,26
-nor_129,kjøtt,kjøtt,meat,26
-nor_130,suppe,suppe,soup,26
-nor_131,eple,eple,apple,27
-nor_132,banan,banan,banana,27
-nor_133,appelsin,appelsin,orange fruit,27
-nor_134,potet,potet,potato,27
-nor_135,gulrot,gulrot,carrot,27
-nor_136,te,te,tea,28
-nor_137,melk,melk,milk,28
-nor_138,juice,juice,juice,28
-nor_139,frokost,frokost,breakfast,28
-nor_140,lunsj,lunsj,lunch,28
-nor_141,middag,middag,dinner,29
-nor_142,salt,salt,salt,29
-nor_143,sukker,sukker,sugar,29
-nor_144,tallerken,tallerken,plate,29
-nor_145,glass,glass,glass,29
-nor_146,hode,hode,head,30
-nor_147,hånd,hånd,hand,30
-nor_148,fot,fot,foot,30
-nor_149,øye,øye,eye,30
-nor_150,øre,øre,ear,30
-nor_151,nese,nese,nose,31
-nor_152,munn,munn,mouth,31
-nor_153,hår,hår,hair,31
-nor_154,jakke,jakke,jacket,31
-nor_155,sko,sko,shoes,31
-nor_156,bukse,bukse,pants,32
-nor_157,skjorte,skjorte,shirt,32
-nor_158,kjole,kjole,dress,32
-nor_159,lue,lue,hat,32
-nor_160,genser,genser,sweater,32
-nor_161,sekund,sekund,second,33
-nor_162,time,time,hour,33
-nor_163,minutt,minutt,minute,33
-nor_164,år,år,year,33
-nor_165,helg,helg,weekend,33
-nor_166,mandag,mandag,Monday,34
-nor_167,tirsdag,tirsdag,Tuesday,34
-nor_168,onsdag,onsdag,Wednesday,34
-nor_169,torsdag,torsdag,Thursday,34
-nor_170,fredag,fredag,Friday,34
-nor_171,lørdag,lørdag,Saturday,35
-nor_172,søndag,søndag,Sunday,35
-nor_173,våren,våren,spring,35
-nor_174,sommer,sommer,summer,35
-nor_175,høst,høst,autumn,35
-nor_176,vinter,vinter,winter,36
-nor_177,sol,sol,sun,36
-nor_178,regn,regn,rain,36
-nor_179,snø,snø,snow,36
-nor_180,vind,vind,wind,36
-nor_181,fint,fint,nice,37
-nor_182,overskyet,overskyet,cloudy,37
-nor_183,klart,klart,clear,37
-nor_184,tørt,tørt,dry,37
-nor_185,vått,vått,wet,37
-nor_186,tog,tog,train,38
-nor_187,buss,buss,bus,38
-nor_188,fly,fly,plane,38
-nor_189,sykkel,sykkel,bicycle,38
-nor_190,båt,båt,boat,38
-nor_191,stasjon,stasjon,station,39
-nor_192,flyplass,flyplass,airport,39
-nor_193,billett,billett,ticket,39
-nor_194,kart,kart,map,39
-nor_195,hotell,hotell,hotel,39
-nor_196,venstre,venstre,left,40
-nor_197,høyre,høyre,right,40
-nor_198,rett fram,rett fram,straight ahead,40
-nor_199,nær,nær,near,40
-nor_200,langt,langt,far,40
-nor_201,elleve,elleve,eleven,41
-nor_202,tolv,tolv,twelve,41
-nor_203,tretten,tretten,thirteen,41
-nor_204,fjorten,fjorten,fourteen,41
-nor_205,femten,femten,fifteen,41
-nor_206,seksten,seksten,sixteen,42
-nor_207,sytten,sytten,seventeen,42
-nor_208,atten,atten,eighteen,42
-nor_209,nitten,nitten,nineteen,42
-nor_210,tjue,tjue,twenty,42
-nor_211,bestefar,bestefar,grandfather,43
-nor_212,foreldre,foreldre,parents,43
-nor_213,sønn,sønn,son,43
-nor_214,datter,datter,daughter,43
-nor_215,ektemann,ektemann,husband,43
-nor_216,lærer,lærer,teacher,44
-nor_217,student,student,student,44
-nor_218,lege,lege,doctor,44
-nor_219,sykepleier,sykepleier,nurse,44
-nor_220,politi,politi,police,44
-nor_221,jobb,jobb,job,45
-nor_222,kontor,kontor,office,45
-nor_223,klasse,klasse,class,45
-nor_224,lekse,lekse,homework,45
-nor_225,prøve,prøve,test,45
-nor_226,å sove,å sove,to sleep,46
-nor_227,å våkne,å våkne,to wake up,46
-nor_228,å jobbe,å jobbe,to work,46
-nor_229,å studere,å studere,to study,46
-nor_230,å lære,å lære,to learn,46
-nor_231,å kjøre,å kjøre,to drive,47
-nor_232,å reise,å reise,to travel,47
-nor_233,å vente,å vente,to wait,47
-nor_234,å finne,å finne,to find,47
-nor_235,å møte,å møte,to meet,47
-nor_236,å like,å like,to like,48
-nor_237,å elske,å elske,to love,48
-nor_238,å ville,å ville,to want,48
-nor_239,å trenge,å trenge,to need,48
-nor_240,å kjøpe,å kjøpe,to buy,48
-nor_241,å selge,å selge,to sell,49
-nor_242,å betale,å betale,to pay,49
-nor_243,å åpne,å åpne,to open,49
-nor_244,å lukke,å lukke,to close,49
-nor_245,å vaske,å vaske,to wash,49
-nor_246,å se,å se,to see,50
-nor_247,å høre,å høre,to hear,50
-nor_248,å si,å si,to say,50
-nor_249,å spørre,å spørre,to ask,50
-nor_250,å svare,å svare,to answer,50
-nor_251,glad,glad,happy,51
-nor_252,trist,trist,sad,51
-nor_253,sint,sint,angry,51
-nor_254,trøtt,trøtt,tired,51
-nor_255,syk,syk,sick,51
-nor_256,lett,lett,easy,52
-nor_257,vanskelig,vanskelig,difficult,52
-nor_258,dyr,dyr,expensive,52
-nor_259,billig,billig,cheap,52
-nor_260,gratis,gratis,free,52
-nor_261,mange,mange,many,53
-nor_262,få,få,few,53
-nor_263,mer,mer,more,53
-nor_264,mindre,mindre,less,53
-nor_265,nok,nok,enough,53
-nor_266,ofte,ofte,often,54
-nor_267,aldri,aldri,never,54
-nor_268,noen ganger,noen ganger,sometimes,54
-nor_269,tidlig,tidlig,early,54
-nor_270,sent,sent,late,54
-nor_271,denne,denne,this common,55
-nor_272,dette,dette,this neuter,55
-nor_273,disse,disse,these,55
-nor_274,samme,samme,same,55
-nor_275,annen,annen,other,55
-nor_276,ha det,ha det,bye,56
-nor_277,god morgen,god morgen,good morning,56
-nor_278,god kveld,god kveld,good evening,56
-nor_279,god natt,god natt,good night,56
-nor_280,velkommen,velkommen,welcome,56
-nor_281,vær så god,vær så god,here you are,57
-nor_282,tusen takk,tusen takk,many thanks,57
-nor_283,det går bra,det går bra,it is fine,57
-nor_284,ikke sant,ikke sant,right,57
-nor_285,selvfølgelig,selvfølgelig,of course,57
-nor_286,apotek,apotek,pharmacy,58
-nor_287,sykehus,sykehus,hospital,58
-nor_288,tannlege,tannlege,dentist,58
-nor_289,hjelp,hjelp,help,58
-nor_290,problem,problem,problem,58
-nor_291,pris,pris,price,59
-nor_292,penger,penger,money,59
-nor_293,kvittering,kvittering,receipt,59
-nor_294,pose,pose,bag,59
-nor_295,størrelse,størrelse,size,59
-nor_296,telefon,telefon,phone,60
-nor_297,datamaskin,datamaskin,computer,60
-nor_298,nøkkel,nøkkel,key,60
-nor_299,klokke,klokke,clock,60
-nor_300,veske,veske,bag,60
+word_id,norwegian,romanization,english,italian,unlock_level
+nor_001,hei,hei,hello,ciao,1
+nor_002,takk,takk,thanks,grazie,1
+nor_003,ja,ja,yes,sì,1
+nor_004,nei,nei,no,no,1
+nor_005,vær så snill,vær så snill,please,per favore,1
+nor_006,unnskyld,unnskyld,sorry,scusa,2
+nor_007,morgen,morgen,morning,mattina,2
+nor_008,kveld,kveld,evening,sera,2
+nor_009,dag,dag,day,giorno,2
+nor_010,natt,natt,night,notte,2
+nor_011,vann,vann,water,acqua,3
+nor_012,mat,mat,food,cibo,3
+nor_013,kaffe,kaffe,coffee,caffè,3
+nor_014,brød,brød,bread,pane,3
+nor_015,hus,hus,house,casa,3
+nor_016,bil,bil,car,macchina,4
+nor_017,bok,bok,book,libro,4
+nor_018,venn,venn,friend,amico,4
+nor_019,familie,familie,family,famiglia,4
+nor_020,skole,skole,school,scuola,4
+nor_021,mann,mann,man,uomo,5
+nor_022,kvinne,kvinne,woman,donna,5
+nor_023,barn,barn,child,bambino,5
+nor_024,jente,jente,girl,bambina,5
+nor_025,gutt,gutt,boy,ragazzo,5
+nor_026,mor,mor,mother,madre,6
+nor_027,far,far,father,padre,6
+nor_028,søster,søster,sister,sorella,6
+nor_029,bror,bror,brother,fratello,6
+nor_030,bestemor,bestemor,grandmother,nonna,6
+nor_031,stor,stor,big,grande,7
+nor_032,liten,liten,small,piccolo,7
+nor_033,god,god,good,buono,7
+nor_034,dårlig,dårlig,bad,cattivo,7
+nor_035,ny,ny,new,nuovo,7
+nor_036,gammel,gammel,old,vecchio,8
+nor_037,varm,varm,warm,caldo,8
+nor_038,kald,kald,cold,freddo,8
+nor_039,rask,rask,fast,veloce,8
+nor_040,sakte,sakte,slow,lento,8
+nor_041,jeg,jeg,I,io,9
+nor_042,du,du,you,tu,9
+nor_043,han,han,he,lui,9
+nor_044,hun,hun,she,lei,9
+nor_045,vi,vi,we,noi,9
+nor_046,dere,dere,you plural,voi,10
+nor_047,de,de,they,loro,10
+nor_048,min,min,my,mio,10
+nor_049,din,din,your,tuo,10
+nor_050,vår,vår,our,nostro,10
+nor_051,å være,å være,to be,essere,11
+nor_052,å ha,å ha,to have,avere,11
+nor_053,å gå,å gå,to go,andare,11
+nor_054,å komme,å komme,to come,venire,11
+nor_055,å gjøre,å gjøre,to do,fare,11
+nor_056,å spise,å spise,to eat,mangiare,12
+nor_057,å drikke,å drikke,to drink,bere,12
+nor_058,å lese,å lese,to read,leggere,12
+nor_059,å skrive,å skrive,to write,scrivere,12
+nor_060,å snakke,å snakke,to speak,parlare,12
+nor_061,en,en,a common,un,13
+nor_062,ei,ei,a feminine,una,13
+nor_063,et,et,a neuter,un,13
+nor_064,den,den,it common,esso,13
+nor_065,det,det,it neuter,esso,13
+nor_066,her,her,here,qui,14
+nor_067,der,der,there,lì,14
+nor_068,nå,nå,now,ora,14
+nor_069,senere,senere,later,più tardi,14
+nor_070,alltid,alltid,always,sempre,14
+nor_071,i dag,i dag,today,oggi,15
+nor_072,i morgen,i morgen,tomorrow,domani,15
+nor_073,i går,i går,yesterday,ieri,15
+nor_074,uke,uke,week,settimana,15
+nor_075,måned,måned,month,mese,15
+nor_076,rød,rød,red,rosso,16
+nor_077,blå,blå,blue,blu,16
+nor_078,grønn,grønn,green,verde,16
+nor_079,gul,gul,yellow,giallo,16
+nor_080,svart,svart,black,nero,16
+nor_081,hvit,hvit,white,bianco,17
+nor_082,brun,brun,brown,marrone,17
+nor_083,rosa,rosa,pink,rosa,17
+nor_084,oransje,oransje,orange,arancione,17
+nor_085,lilla,lilla,purple,viola,17
+nor_086,én,én,one,uno,18
+nor_087,to,to,two,due,18
+nor_088,tre,tre,three,tre,18
+nor_089,fire,fire,four,quattro,18
+nor_090,fem,fem,five,cinque,18
+nor_091,seks,seks,six,sei,19
+nor_092,sju,sju,seven,sette,19
+nor_093,åtte,åtte,eight,otto,19
+nor_094,ni,ni,nine,nove,19
+nor_095,ti,ti,ten,dieci,19
+nor_096,hvor,hvor,where,dove,20
+nor_097,hva,hva,what,cosa,20
+nor_098,hvem,hvem,who,chi,20
+nor_099,når,når,when,quando,20
+nor_100,hvorfor,hvorfor,why,perché,20
+nor_101,hvordan,hvordan,how,come,21
+nor_102,hvilken,hvilken,which,quale,21
+nor_103,hvor mye,hvor mye,how much,quanto,21
+nor_104,fordi,fordi,because,perché,21
+nor_105,men,men,but,ma,21
+nor_106,og,og,and,e,22
+nor_107,eller,eller,or,o,22
+nor_108,med,med,with,con,22
+nor_109,uten,uten,without,senza,22
+nor_110,fra,fra,from,da,22
+nor_111,til,til,to,a,23
+nor_112,i,i,in,in,23
+nor_113,på,på,on,su,23
+nor_114,under,under,under,sotto,23
+nor_115,over,over,above,sopra,23
+nor_116,by,by,city,città,24
+nor_117,gate,gate,street,strada,24
+nor_118,butikk,butikk,shop,negozio,24
+nor_119,marked,marked,market,mercato,24
+nor_120,park,park,park,parco,24
+nor_121,rom,rom,room,stanza,25
+nor_122,kjøkken,kjøkken,kitchen,cucina,25
+nor_123,bad,bad,bathroom,bagno,25
+nor_124,soverom,soverom,bedroom,camera,25
+nor_125,stue,stue,living room,soggiorno,25
+nor_126,ost,ost,cheese,formaggio,26
+nor_127,egg,egg,egg,uovo,26
+nor_128,fisk,fisk,fish,pesce,26
+nor_129,kjøtt,kjøtt,meat,carne,26
+nor_130,suppe,suppe,soup,zuppa,26
+nor_131,eple,eple,apple,mela,27
+nor_132,banan,banan,banana,banana,27
+nor_133,appelsin,appelsin,orange fruit,arancia,27
+nor_134,potet,potet,potato,patata,27
+nor_135,gulrot,gulrot,carrot,carota,27
+nor_136,te,te,tea,tè,28
+nor_137,melk,melk,milk,latte,28
+nor_138,juice,juice,juice,succo,28
+nor_139,frokost,frokost,breakfast,colazione,28
+nor_140,lunsj,lunsj,lunch,pranzo,28
+nor_141,middag,middag,dinner,cena,29
+nor_142,salt,salt,salt,sale,29
+nor_143,sukker,sukker,sugar,zucchero,29
+nor_144,tallerken,tallerken,plate,piatto,29
+nor_145,glass,glass,glass,bicchiere,29
+nor_146,hode,hode,head,testa,30
+nor_147,hånd,hånd,hand,mano,30
+nor_148,fot,fot,foot,piede,30
+nor_149,øye,øye,eye,occhio,30
+nor_150,øre,øre,ear,orecchio,30
+nor_151,nese,nese,nose,naso,31
+nor_152,munn,munn,mouth,bocca,31
+nor_153,hår,hår,hair,capelli,31
+nor_154,jakke,jakke,jacket,giacca,31
+nor_155,sko,sko,shoes,scarpe,31
+nor_156,bukse,bukse,pants,pantaloni,32
+nor_157,skjorte,skjorte,shirt,camicia,32
+nor_158,kjole,kjole,dress,vestito,32
+nor_159,lue,lue,hat,cappello,32
+nor_160,genser,genser,sweater,maglione,32
+nor_161,sekund,sekund,second,secondo,33
+nor_162,time,time,hour,ora,33
+nor_163,minutt,minutt,minute,minuto,33
+nor_164,år,år,year,anno,33
+nor_165,helg,helg,weekend,fine settimana,33
+nor_166,mandag,mandag,Monday,lunedì,34
+nor_167,tirsdag,tirsdag,Tuesday,martedì,34
+nor_168,onsdag,onsdag,Wednesday,mercoledì,34
+nor_169,torsdag,torsdag,Thursday,giovedì,34
+nor_170,fredag,fredag,Friday,venerdì,34
+nor_171,lørdag,lørdag,Saturday,sabato,35
+nor_172,søndag,søndag,Sunday,domenica,35
+nor_173,våren,våren,spring,primavera,35
+nor_174,sommer,sommer,summer,estate,35
+nor_175,høst,høst,autumn,autunno,35
+nor_176,vinter,vinter,winter,inverno,36
+nor_177,sol,sol,sun,sole,36
+nor_178,regn,regn,rain,pioggia,36
+nor_179,snø,snø,snow,neve,36
+nor_180,vind,vind,wind,vento,36
+nor_181,fint,fint,nice,bello,37
+nor_182,overskyet,overskyet,cloudy,nuvoloso,37
+nor_183,klart,klart,clear,sereno,37
+nor_184,tørt,tørt,dry,secco,37
+nor_185,vått,vått,wet,bagnato,37
+nor_186,tog,tog,train,treno,38
+nor_187,buss,buss,bus,autobus,38
+nor_188,fly,fly,plane,aereo,38
+nor_189,sykkel,sykkel,bicycle,bicicletta,38
+nor_190,båt,båt,boat,barca,38
+nor_191,stasjon,stasjon,station,stazione,39
+nor_192,flyplass,flyplass,airport,aeroporto,39
+nor_193,billett,billett,ticket,biglietto,39
+nor_194,kart,kart,map,mappa,39
+nor_195,hotell,hotell,hotel,hotel,39
+nor_196,venstre,venstre,left,sinistra,40
+nor_197,høyre,høyre,right,vero,40
+nor_198,rett fram,rett fram,straight ahead,dritto,40
+nor_199,nær,nær,near,vicino,40
+nor_200,langt,langt,far,lontano,40
+nor_201,elleve,elleve,eleven,undici,41
+nor_202,tolv,tolv,twelve,dodici,41
+nor_203,tretten,tretten,thirteen,tredici,41
+nor_204,fjorten,fjorten,fourteen,quattordici,41
+nor_205,femten,femten,fifteen,quindici,41
+nor_206,seksten,seksten,sixteen,sedici,42
+nor_207,sytten,sytten,seventeen,diciassette,42
+nor_208,atten,atten,eighteen,diciotto,42
+nor_209,nitten,nitten,nineteen,diciannove,42
+nor_210,tjue,tjue,twenty,venti,42
+nor_211,bestefar,bestefar,grandfather,nonno,43
+nor_212,foreldre,foreldre,parents,genitori,43
+nor_213,sønn,sønn,son,figlio,43
+nor_214,datter,datter,daughter,figlia,43
+nor_215,ektemann,ektemann,husband,marito,43
+nor_216,lærer,lærer,teacher,insegnante,44
+nor_217,student,student,student,studente,44
+nor_218,lege,lege,doctor,medico,44
+nor_219,sykepleier,sykepleier,nurse,infermiera,44
+nor_220,politi,politi,police,polizia,44
+nor_221,jobb,jobb,job,lavoro,45
+nor_222,kontor,kontor,office,ufficio,45
+nor_223,klasse,klasse,class,classe,45
+nor_224,lekse,lekse,homework,compito,45
+nor_225,prøve,prøve,test,test,45
+nor_226,å sove,å sove,to sleep,dormire,46
+nor_227,å våkne,å våkne,to wake up,svegliarsi,46
+nor_228,å jobbe,å jobbe,to work,lavorare,46
+nor_229,å studere,å studere,to study,studiare,46
+nor_230,å lære,å lære,to learn,imparare,46
+nor_231,å kjøre,å kjøre,to drive,guidare,47
+nor_232,å reise,å reise,to travel,viaggiare,47
+nor_233,å vente,å vente,to wait,aspettare,47
+nor_234,å finne,å finne,to find,trovare,47
+nor_235,å møte,å møte,to meet,incontrare,47
+nor_236,å like,å like,to like,piacere,48
+nor_237,å elske,å elske,to love,amare,48
+nor_238,å ville,å ville,to want,volere,48
+nor_239,å trenge,å trenge,to need,avere bisogno,48
+nor_240,å kjøpe,å kjøpe,to buy,comprare,48
+nor_241,å selge,å selge,to sell,vendere,49
+nor_242,å betale,å betale,to pay,pagare,49
+nor_243,å åpne,å åpne,to open,aprire,49
+nor_244,å lukke,å lukke,to close,chiudere,49
+nor_245,å vaske,å vaske,to wash,lavare,49
+nor_246,å se,å se,to see,vedere,50
+nor_247,å høre,å høre,to hear,sentire,50
+nor_248,å si,å si,to say,dire,50
+nor_249,å spørre,å spørre,to ask,chiedere,50
+nor_250,å svare,å svare,to answer,rispondere,50
+nor_251,glad,glad,happy,felice,51
+nor_252,trist,trist,sad,triste,51
+nor_253,sint,sint,angry,arrabbiato,51
+nor_254,trøtt,trøtt,tired,stanco,51
+nor_255,syk,syk,sick,malato,51
+nor_256,lett,lett,easy,facile,52
+nor_257,vanskelig,vanskelig,difficult,difficile,52
+nor_258,dyr,dyr,expensive,costoso,52
+nor_259,billig,billig,cheap,economico,52
+nor_260,gratis,gratis,free,gratis,52
+nor_261,mange,mange,many,molti,53
+nor_262,få,få,few,pochi,53
+nor_263,mer,mer,more,più,53
+nor_264,mindre,mindre,less,meno,53
+nor_265,nok,nok,enough,abbastanza,53
+nor_266,ofte,ofte,often,spesso,54
+nor_267,aldri,aldri,never,mai,54
+nor_268,noen ganger,noen ganger,sometimes,a volte,54
+nor_269,tidlig,tidlig,early,presto,54
+nor_270,sent,sent,late,tardi,54
+nor_271,denne,denne,this common,questo,55
+nor_272,dette,dette,this neuter,questo,55
+nor_273,disse,disse,these,questi,55
+nor_274,samme,samme,same,stesso,55
+nor_275,annen,annen,other,altro,55
+nor_276,ha det,ha det,bye,arrivederci,56
+nor_277,god morgen,god morgen,good morning,buongiorno,56
+nor_278,god kveld,god kveld,good evening,buonasera,56
+nor_279,god natt,god natt,good night,buonanotte,56
+nor_280,velkommen,velkommen,welcome,benvenuto,56
+nor_281,vær så god,vær så god,here you are,ecco a te,57
+nor_282,tusen takk,tusen takk,many thanks,mille grazie,57
+nor_283,det går bra,det går bra,it is fine,va bene,57
+nor_284,ikke sant,ikke sant,right,vero,57
+nor_285,selvfølgelig,selvfølgelig,of course,certo,57
+nor_286,apotek,apotek,pharmacy,farmacia,58
+nor_287,sykehus,sykehus,hospital,ospedale,58
+nor_288,tannlege,tannlege,dentist,dentista,58
+nor_289,hjelp,hjelp,help,aiuto,58
+nor_290,problem,problem,problem,problema,58
+nor_291,pris,pris,price,prezzo,59
+nor_292,penger,penger,money,soldi,59
+nor_293,kvittering,kvittering,receipt,ricevuta,59
+nor_294,pose,pose,bag,borsa,59
+nor_295,størrelse,størrelse,size,taglia,59
+nor_296,telefon,telefon,phone,telefono,60
+nor_297,datamaskin,datamaskin,computer,computer,60
+nor_298,nøkkel,nøkkel,key,chiave,60
+nor_299,klokke,klokke,clock,orologio,60
+nor_300,veske,veske,bag,borsa,60
