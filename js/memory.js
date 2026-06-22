@@ -221,14 +221,10 @@
 
     function updateDifficultyHint() {
         if (!el.difficultySub) return;
-<<<<<<< HEAD
-        el.difficultySub.textContent = "Harder difficulty gives more XP.";
-=======
         el.difficultySub.textContent = tr("memory.unlockedHint", {
             count: state.unlocked.length,
-            level: unlockedLevel
+            level: state.unlockedLevel
         });
->>>>>>> bf5611e5f7bc9ca2054106a9aafe47efd5e250bd
     }
 
     function parseDeckCsv(csvText, columns) {

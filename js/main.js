@@ -458,7 +458,6 @@ function onLanguageChange() {
     startSession();
 }
 
-<<<<<<< HEAD
 // On login, adopt the study language from the account's courses (the one with
 // the most XP) when the user hasn't picked one on this device. An explicit
 // local choice always wins, so manual switches are never overridden.
@@ -486,10 +485,7 @@ function applyAccountLanguage() {
     updateRomajiUI();
 }
 
-function selectLanguage(language) {
-=======
 async function selectLanguage(language) {
->>>>>>> bf5611e5f7bc9ca2054106a9aafe47efd5e250bd
     if (settings.language === language) {
         closeLanguageMenu();
         return;
