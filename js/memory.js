@@ -107,7 +107,7 @@
             state.unlocked = state.vocab.filter(item => item.unlockLevel <= state.unlockedLevel);
 
             applyDifficultyLocks();
-            updateDifficultyHint(state.unlockedLevel);
+            updateDifficultyHint();
             openDifficulty();
         } catch (error) {
             console.error(error);
@@ -135,11 +135,9 @@
         });
     }
 
-    function updateDifficultyHint(unlockedLevel) {
+    function updateDifficultyHint() {
         if (!el.difficultySub) return;
-        el.difficultySub.textContent =
-            state.unlocked.length + " words unlocked (level " + unlockedLevel +
-            "). Harder = more cards and more points.";
+        el.difficultySub.textContent = "Harder difficulty gives more XP.";
     }
 
     function parseDeckCsv(csvText, columns) {

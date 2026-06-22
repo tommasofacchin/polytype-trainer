@@ -231,6 +231,7 @@ function setupFirebaseProfileSync() {
         document.addEventListener("polytype-profile-updated", event => {
             profile = { ...defaultProfile, ...profile, ...event.detail };
             renderProfile();
+            applyAccountLanguage();
             startSession();
         });
         return;
@@ -253,9 +254,19 @@ function setupFirebaseProfileSync() {
             maxStreakFreezes: authState.profile.maxStreakFreezes || 2,
             courses: authState.profile.courses || profile.courses || {}
         };
+        // On login / user change the profile is hydrated to its saved XP, which
+        // is not a real level-up: adopt the level silently so renderProfile does
+        // not fire the celebration. In-session XP gains (same user) still do.
+        if (shouldRestart) {
+            lastShownLevel = getLevelInfo(profile.xp).level;
+        }
+
         saveProfile();
         renderProfile();
-        if (shouldRestart) startSession();
+        if (shouldRestart) {
+            applyAccountLanguage();
+            startSession();
+        }
     });
 }
 
@@ -386,6 +397,33 @@ function onLanguageChange() {
     populateLevelSelect();
     updateRomajiUI();
     startSession();
+}
+
+// On login, adopt the study language from the account's courses (the one with
+// the most XP) when the user hasn't picked one on this device. An explicit
+// local choice always wins, so manual switches are never overridden.
+function applyAccountLanguage() {
+    if (localStorage.getItem("polytype-language")) return;
+
+    const availableLanguages = new Set(AVAILABLE_DECKS.map(deck => deck.language));
+    let best = null;
+
+    for (const [courseId, course] of Object.entries(profile.courses || {})) {
+        if (!availableLanguages.has(courseId)) continue;
+        const xp = Number(course?.xp) || 0;
+        const level = Number(course?.level) || 0;
+        if (!best || xp > best.xp || (xp === best.xp && level > best.level)) {
+            best = { language: courseId, xp, level };
+        }
+    }
+
+    if (!best || best.language === settings.language) return;
+
+    settings.language = best.language;
+    localStorage.setItem("polytype-language", best.language);
+    syncLanguageMenu();
+    populateLevelSelect();
+    updateRomajiUI();
 }
 
 function selectLanguage(language) {

@@ -103,17 +103,20 @@
 
         .memory-grid {
             --gap: 10px;
+            /* Cards are portrait, like a normal playing card (height ≈ 1.4 × width). */
+            --ratio: 1.4;
             display: grid;
             gap: var(--gap);
             justify-content: center;
             align-content: center;
-            /* Largest square card that fits both the width and the height. */
-            --card: min(
+            /* Largest portrait card (at --ratio) that fits both width and height. */
+            --card-w: min(
                 (100cqw - (var(--cols) - 1) * var(--gap)) / var(--cols),
-                (100cqh - (var(--rows) - 1) * var(--gap)) / var(--rows)
+                ((100cqh - (var(--rows) - 1) * var(--gap)) / var(--rows)) / var(--ratio)
             );
-            grid-template-columns: repeat(var(--cols), var(--card));
-            grid-template-rows: repeat(var(--rows), var(--card));
+            --card-h: calc(var(--card-w) * var(--ratio));
+            grid-template-columns: repeat(var(--cols), var(--card-w));
+            grid-template-rows: repeat(var(--rows), var(--card-h));
         }
 
         /* Desktop card grids: Easy 5x2, Medium 5x4, Hard 6x5. */
@@ -405,6 +408,8 @@
 
             .memory-grid {
                 --gap: 8px;
+                /* Keep phone cards square so more fit per row. */
+                --ratio: 1;
             }
 
             /* Phone card grids: Easy 3x4 (last card centered), Medium 4x5,
@@ -444,7 +449,9 @@
         }
 
         @media (prefers-reduced-motion: reduce) {
-            .mem-card-inner { transition: none; }
+            /* The flip is essential game feedback, so keep a short version even
+               with reduced motion; only the decorative match "pop" is dropped. */
+            .mem-card-inner { transition: transform 0.2s ease; }
             .mem-card.is-matched .mem-card-back { animation: none; }
         }
     </style>
@@ -500,7 +507,7 @@
         <div class="mem-overlay-card">
             <span class="mem-overlay-kicker">Memory</span>
             <h2 id="difficulty-title">Choose a difficulty</h2>
-            <p id="difficulty-sub" class="mem-overlay-sub">Higher difficulty = more cards and more points.</p>
+            <p id="difficulty-sub" class="mem-overlay-sub">Harder difficulty gives more XP.</p>
             <div class="mem-difficulty-grid">
                 <button class="mem-diff-btn" type="button" data-difficulty="easy">
                     <span class="mem-diff-name">Easy</span>
