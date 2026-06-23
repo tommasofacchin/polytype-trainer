@@ -1436,6 +1436,13 @@ input[type="password"]:focus {
 .row.past-row {
     pointer-events: none;
     user-select: none;
+    /* Past rows pile up for the whole session and are never removed. Let the
+       browser skip layout/paint for the ones scrolled off-screen so a long
+       session's scroll + row animations stay smooth. contain-intrinsic-size
+       keeps the scrollbar/height stable (auto reuses each row's real measured
+       height once rendered; 62px matches .row min-height). */
+    content-visibility: auto;
+    contain-intrinsic-size: auto 62px;
 }
 
 .script {
@@ -1958,9 +1965,7 @@ input[type="password"]:focus {
     z-index: 300;
     display: grid;
     place-items: center;
-    background: radial-gradient(circle at center, rgba(9, 23, 23, 0.42), rgba(9, 23, 23, 0.16) 60%, transparent);
-    -webkit-backdrop-filter: blur(2px);
-    backdrop-filter: blur(2px);
+    background: radial-gradient(circle at center, rgba(9, 23, 23, 0.52), rgba(9, 23, 23, 0.24) 60%, transparent);
     animation: levelup-backdrop-in 240ms ease forwards;
 }
 
@@ -2221,9 +2226,7 @@ input[type="password"]:focus {
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: color-mix(in srgb, var(--surface) 96%, var(--bg));
-    -webkit-backdrop-filter: blur(2px);
-    backdrop-filter: blur(2px);
+    background: color-mix(in srgb, var(--surface) 98%, var(--bg));
 }
 
 .timer-modal-card {
@@ -2322,9 +2325,7 @@ body.deck-overlay-open {
 .deck-overlay-backdrop {
     position: absolute;
     inset: 0;
-    background: rgba(9, 23, 23, 0.5);
-    -webkit-backdrop-filter: blur(4px);
-    backdrop-filter: blur(4px);
+    background: rgba(9, 23, 23, 0.66);
     opacity: 0;
     transition: opacity 220ms ease;
 }

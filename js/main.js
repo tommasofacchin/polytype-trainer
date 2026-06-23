@@ -1030,10 +1030,19 @@ function moveToNextRow(meaningInput) {
     const currentRow = meaningInput.closest(".row");
     if (!currentRow) return;
 
+    // Drop the oldest off-screen rows before reading indices below, so the
+    // removal never shifts the indices spawnNextRow's re-capture relies on.
+    pruneOldRows();
+
     let rows = Array.from(rowsContainer.querySelectorAll(".row"));
 
+    const currentRowDatasetIndex = Number(currentRow.dataset.index);
     rows.forEach(row => {
-        if (Number(row.dataset.index) <= Number(currentRow.dataset.index)) {
+        // Rows already settled into the past keep their state; re-marking and
+        // re-locking their inputs on every advance was O(n) busywork that grew
+        // with the session length.
+        if (row.classList.contains("past-row")) return;
+        if (Number(row.dataset.index) <= currentRowDatasetIndex) {
             row.classList.add("past-row");
             lockPastRow(row);
         }
@@ -1254,6 +1263,32 @@ function lockPastRow(row) {
         input.readOnly = true;
         input.tabIndex = -1;
     });
+}
+
+// Past rows pile up for the whole session and are never otherwise removed.
+// Keep a generous scroll-back buffer but drop the oldest rows from the DOM so
+// memory use and the per-advance row scans stay bounded in long sessions.
+// Removing rows above the viewport would shift everything up, so compensate
+// scrollTop by the height we removed to keep the visible position stable.
+function pruneOldRows() {
+    const MAX_RETAINED_ROWS = 60;
+    let excess = rowsContainer.childElementCount - MAX_RETAINED_ROWS;
+    if (excess <= 0) return;
+
+    let removedHeight = 0;
+    while (excess > 0) {
+        const oldest = rowsContainer.firstElementChild;
+        // Only ever drop rows that have already settled into the past; never
+        // the active row or upcoming ones.
+        if (!oldest || !oldest.classList.contains("past-row")) break;
+        removedHeight += oldest.offsetHeight;
+        oldest.remove();
+        excess -= 1;
+    }
+
+    if (removedHeight > 0) {
+        rowsContainer.scrollTop = Math.max(0, rowsContainer.scrollTop - removedHeight);
+    }
 }
 
 function checkMeaningField(meaningInput, options = {}) {
