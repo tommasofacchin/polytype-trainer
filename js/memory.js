@@ -4,6 +4,7 @@
     const THEME_KEY = "polytype-theme";
     const PROFILE_KEY = "polytype-profile";
     const LANGUAGE_KEY = "polytype-language";
+    const SFX_MUTED_KEY = "polytype-sfx-muted";
     const FALLBACK_LANGUAGE = "norwegian";
     const LANGUAGE_FLAGS = {
         chinese: "assets/flags/china.svg",
@@ -24,6 +25,26 @@
 
     const FLIP_BACK_DELAY = 850;
 
+    // Combo tiers scaled down from the main trainer's 5/10/15/20 thresholds
+    // (js/main.js) since a memory board tops out at 15 pairs on Hard.
+    const COMBO_THRESHOLDS = [3, 6, 9, 12];
+    const COMBO_MULTIPLIERS = [1, 1.5, 2, 2.5, 3];
+    const COMBO_BASE_POINTS = 4;
+
+    const matchSfxUrl = "assets/sfx/correct3.mp3";
+    const matchSfxVolume = 0.28;
+    const mismatchSfxUrls = ["assets/sfx/error1.mp3", "assets/sfx/error2.mp3", "assets/sfx/error3.mp3"];
+    const mismatchSfxVolume = 0.22;
+    const comboSfxUrl = "assets/sfx/levelup3.mp3";
+    const comboSfxVolume = 0.3;
+    const victorySfxUrl = "assets/sfx/levelup1.mp3";
+    const victorySfxVolume = 0.4;
+    let matchSfxAudio = null;
+    let mismatchSfxAudios = [];
+    let comboSfxAudio = null;
+    let victorySfxAudio = null;
+    let sfxMuted = false;
+
     const audioBaseUrl = (window.POLYTYPE_AUDIO_BASE_URL || "").replace(/\/+$/, "");
     const audioPrefix  = (window.POLYTYPE_AUDIO_PREFIX || "audio/v1").replace(/^\/+|\/+$/g, "");
 
@@ -38,6 +59,9 @@
         lock: false,
         matched: 0,
         moves: 0,
+        streak: 0,          // consecutive matches without a miss
+        maxStreak: 0,
+        comboPoints: 0,
         startTime: 0,
         timerId: null,
         started: false
@@ -135,8 +159,15 @@
         el.changeDiffBtn = document.getElementById("change-difficulty-btn");
         el.themeToggle = document.getElementById("theme-toggle");
         el.difficultySub = document.getElementById("difficulty-sub");
+        el.comboPill = document.getElementById("combo-pill");
+        el.comboPillValue = document.getElementById("combo-pill-value");
+        el.sfxToggle = document.getElementById("sfx-toggle");
+        el.resultCombo = document.getElementById("result-combo");
+        el.resultPerfect = document.getElementById("result-perfect");
 
         initTheme();
+        initSfxToggle();
+        preloadSfx();
         syncLanguageUi();
 
         el.difficultyModal.querySelectorAll("[data-difficulty]").forEach(btn => {
@@ -168,6 +199,208 @@
         const isDark = theme === "dark";
         el.themeToggle.setAttribute("aria-pressed", String(isDark));
         el.themeToggle.setAttribute("aria-label", isDark ? tr("common.switchLight") : tr("common.switchDark"));
+    }
+
+    // ── Sound effects ───────────────────────────────────────
+    function preloadSfx() {
+        matchSfxAudio = new Audio(matchSfxUrl);
+        matchSfxAudio.preload = "auto";
+        matchSfxAudio.volume = matchSfxVolume;
+        matchSfxAudio.load();
+
+        mismatchSfxAudios = mismatchSfxUrls.map(url => {
+            const audio = new Audio(url);
+            audio.preload = "auto";
+            audio.volume = mismatchSfxVolume;
+            audio.load();
+            return audio;
+        });
+
+        comboSfxAudio = new Audio(comboSfxUrl);
+        comboSfxAudio.preload = "auto";
+        comboSfxAudio.volume = comboSfxVolume;
+        comboSfxAudio.load();
+
+        victorySfxAudio = new Audio(victorySfxUrl);
+        victorySfxAudio.preload = "auto";
+        victorySfxAudio.volume = victorySfxVolume;
+        victorySfxAudio.load();
+    }
+
+    function playMatchSfx() {
+        playSfx(matchSfxAudio, matchSfxVolume);
+    }
+
+    function playMismatchSfx() {
+        const audio = mismatchSfxAudios[Math.floor(Math.random() * mismatchSfxAudios.length)];
+        playSfx(audio, mismatchSfxVolume);
+    }
+
+    function playComboSfx() {
+        playSfx(comboSfxAudio, comboSfxVolume);
+    }
+
+    function playVictorySfx() {
+        playSfx(victorySfxAudio, victorySfxVolume);
+    }
+
+    function playSfx(sourceAudio, volume) {
+        if (sfxMuted || !sourceAudio) return;
+        try {
+            const audio = sourceAudio.cloneNode();
+            audio.volume = volume;
+            audio.play().catch(() => {});
+        } catch (e) {
+            // Browsers may block audio until the first user gesture.
+        }
+    }
+
+    function initSfxToggle() {
+        let stored = false;
+        try {
+            stored = localStorage.getItem(SFX_MUTED_KEY) === "true";
+        } catch (e) {}
+        applySfxMuted(stored);
+
+        el.sfxToggle.addEventListener("click", () => applySfxMuted(!sfxMuted));
+    }
+
+    function applySfxMuted(muted) {
+        sfxMuted = muted;
+        try {
+            localStorage.setItem(SFX_MUTED_KEY, String(muted));
+        } catch (e) {}
+        el.sfxToggle.setAttribute("aria-pressed", String(muted));
+        el.sfxToggle.setAttribute("aria-label", muted ? tr("memory.unmuteSound") : tr("memory.muteSound"));
+    }
+
+    // ── Combo / streak ──────────────────────────────────────
+    function getComboMultiplier(streak) {
+        for (let i = COMBO_THRESHOLDS.length - 1; i >= 0; i -= 1) {
+            if (streak >= COMBO_THRESHOLDS[i]) return COMBO_MULTIPLIERS[i + 1];
+        }
+        return COMBO_MULTIPLIERS[0];
+    }
+
+    function getComboTier(streak) {
+        for (let i = COMBO_THRESHOLDS.length - 1; i >= 0; i -= 1) {
+            if (streak >= COMBO_THRESHOLDS[i]) return i + 1;
+        }
+        return 0;
+    }
+
+    function formatMultiplier(multiplier) {
+        return Number.isInteger(multiplier) ? String(multiplier) : multiplier.toFixed(1);
+    }
+
+    function updateComboHud() {
+        const tier = getComboTier(state.streak);
+        if (tier > 0) {
+            el.comboPill.hidden = false;
+            el.comboPill.dataset.tier = String(tier);
+            el.comboPillValue.textContent = `×${formatMultiplier(getComboMultiplier(state.streak))}`;
+        } else {
+            el.comboPill.hidden = true;
+            delete el.comboPill.dataset.tier;
+        }
+    }
+
+    function animateComboPop(big) {
+        const cls = big ? "mem-combo-pop-big" : "mem-combo-pop";
+        el.comboPill.classList.remove("mem-combo-pop", "mem-combo-pop-big", "mem-combo-shake");
+        void el.comboPill.offsetWidth;
+        el.comboPill.classList.add(cls);
+        el.comboPill.addEventListener("animationend", () => el.comboPill.classList.remove(cls), { once: true });
+    }
+
+    function animateComboBreak() {
+        el.comboPill.classList.remove("mem-combo-pop", "mem-combo-pop-big", "mem-combo-shake");
+        void el.comboPill.offsetWidth;
+        el.comboPill.classList.add("mem-combo-shake");
+        el.comboPill.addEventListener("animationend", () => el.comboPill.classList.remove("mem-combo-shake"), { once: true });
+    }
+
+    // ── Particles / floating popups ─────────────────────────
+    function spawnMatchConfetti(cardA, cardB) {
+        const rectA = cardA.getBoundingClientRect();
+        const rectB = cardB.getBoundingClientRect();
+        const x = (rectA.left + rectA.width / 2 + rectB.left + rectB.width / 2) / 2;
+        const y = (rectA.top + rectA.height / 2 + rectB.top + rectB.height / 2) / 2;
+
+        const colors = [
+            "var(--mem-confetti-1)", "var(--mem-confetti-2)", "var(--mem-confetti-3)",
+            "var(--mem-confetti-4)", "var(--mem-confetti-5)", "var(--mem-confetti-6)"
+        ];
+
+        const burst = document.createElement("div");
+        burst.className = "mem-confetti-burst";
+        let maxDur = 0;
+
+        for (let i = 0; i < 9; i += 1) {
+            const piece = document.createElement("span");
+            piece.className = "mem-confetti-piece";
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 34 + Math.random() * 34;
+            const dur = 0.5 + Math.random() * 0.3;
+            piece.style.left = `${x}px`;
+            piece.style.top = `${y}px`;
+            piece.style.setProperty("--x", `${Math.cos(angle) * distance}px`);
+            piece.style.setProperty("--y", `${Math.sin(angle) * distance + 30}px`);
+            piece.style.setProperty("--r", `${Math.random() * 480 - 240}deg`);
+            piece.style.setProperty("--delay", `${Math.random() * 0.08}s`);
+            piece.style.setProperty("--dur", `${dur}s`);
+            piece.style.background = colors[i % colors.length];
+            burst.appendChild(piece);
+            maxDur = Math.max(maxDur, dur * 1000);
+        }
+
+        document.body.appendChild(burst);
+        window.setTimeout(() => burst.remove(), maxDur + 150);
+    }
+
+    function showComboFloat(pts, tier, anchorEl) {
+        const rect = anchorEl.getBoundingClientRect();
+        const floatEl = document.createElement("span");
+        floatEl.className = "mem-xp-float";
+        floatEl.textContent = `+${pts}`;
+        if (tier > 0) floatEl.dataset.tier = String(tier);
+        floatEl.style.left = `${rect.left + rect.width / 2 - 14}px`;
+        floatEl.style.top = `${rect.top - 4}px`;
+        document.body.appendChild(floatEl);
+        floatEl.addEventListener("animationend", () => floatEl.remove(), { once: true });
+    }
+
+    function celebrateBoardCleared() {
+        playVictorySfx();
+        const card = el.resultModal.querySelector(".mem-overlay-card");
+        card.classList.add("is-victory");
+
+        const colors = [
+            "var(--mem-confetti-1)", "var(--mem-confetti-2)", "var(--mem-confetti-3)",
+            "var(--mem-confetti-4)", "var(--mem-confetti-5)", "var(--mem-confetti-6)"
+        ];
+
+        const confetti = document.createElement("div");
+        confetti.className = "mem-victory-confetti";
+        for (let i = 0; i < 18; i += 1) {
+            const piece = document.createElement("span");
+            piece.className = "mem-confetti-piece";
+            piece.style.left = `${10 + Math.random() * 80}%`;
+            piece.style.setProperty("--x", `${(Math.random() * 2 - 1) * 60}px`);
+            piece.style.setProperty("--fall", `${140 + Math.random() * 80}px`);
+            piece.style.setProperty("--r", `${Math.random() * 720 - 360}deg`);
+            piece.style.setProperty("--delay", `${Math.random() * 0.25}s`);
+            piece.style.setProperty("--dur", `${1 + Math.random() * 0.6}s`);
+            piece.style.background = colors[i % colors.length];
+            confetti.appendChild(piece);
+        }
+        card.prepend(confetti);
+    }
+
+    function clearVictoryDecorations() {
+        const card = el.resultModal.querySelector(".mem-overlay-card");
+        card.classList.remove("is-victory");
+        card.querySelector(".mem-victory-confetti")?.remove();
     }
 
     // ── Vocabulary loading ──────────────────────────────────
@@ -337,6 +570,7 @@
         el.hud.hidden = true;
         el.grid.innerHTML = "";
         el.difficultyModal.hidden = false;
+        clearVictoryDecorations();
     }
 
     function startGame(difficultyId) {
@@ -346,6 +580,7 @@
 
         el.difficultyModal.hidden = true;
         el.resultModal.hidden = true;
+        clearVictoryDecorations();
 
         // Draw only from unlocked words; cap pairs to what is available.
         const pairCount = Math.min(cfg.pairs, state.unlocked.length);
@@ -363,9 +598,15 @@
         state.lock = false;
         state.matched = 0;
         state.moves = 0;
+        state.streak = 0;
+        state.maxStreak = 0;
+        state.comboPoints = 0;
         state.started = false;
         state.startTime = 0;
         stopTimer();
+
+        el.comboPill.hidden = true;
+        delete el.comboPill.dataset.tier;
 
         renderBoard();
         updateHud();
@@ -385,6 +626,9 @@
             button.dataset.pair = String(card.pairId);
             button.dataset.type = card.type;
             button.setAttribute("aria-label", tr("memory.hiddenCard"));
+            // Random idle-float delay, purely cosmetic and never derived from
+            // pairId, so it never leaks which cards match.
+            button.style.setProperty("--idle-delay", `${(Math.random() * 2.4).toFixed(2)}s`);
             const flag = card.type === "script" ? scriptFlag : getMeaningFlag();
             const fontCqw = wordFontCqw(card.text);
             button.innerHTML =
@@ -430,18 +674,44 @@
         const isMatch = state.first.card.pairId === card.pairId;
 
         if (isMatch) {
+            const prevTier = getComboTier(state.streak);
+            state.streak += 1;
+            state.maxStreak = Math.max(state.maxStreak, state.streak);
+            const tier = getComboTier(state.streak);
+            const points = Math.round(COMBO_BASE_POINTS * getComboMultiplier(state.streak));
+            state.comboPoints += points;
+
             markMatched(firstButton);
             markMatched(button);
             state.first = null;
             state.matched += 1;
             updateHud();
+            updateComboHud();
+
+            playMatchSfx();
+            spawnMatchConfetti(firstButton, button);
+            showComboFloat(points, tier, button);
+            if (tier > 0) {
+                animateComboPop(tier > prevTier);
+                if (tier > prevTier) playComboSfx();
+            }
+
             if (state.matched === state.pairCount) finish();
         } else {
+            if (state.streak > 0) animateComboBreak();
+            state.streak = 0;
+            updateComboHud();
+            playMismatchSfx();
+
             state.lock = true;
             const secondButton = button;
+            firstButton.classList.add("is-mismatch");
+            secondButton.classList.add("is-mismatch");
             setTimeout(() => {
                 flip(firstButton, false);
                 flip(secondButton, false);
+                firstButton.classList.remove("is-mismatch");
+                secondButton.classList.remove("is-mismatch");
                 state.first = null;
                 state.lock = false;
             }, FLIP_BACK_DELAY);
@@ -497,7 +767,7 @@
     function finish() {
         stopTimer();
         const ms = elapsedMs();
-        const score = computeScore(ms, state.cfg, state.pairCount);
+        const score = computeScore(ms, state.cfg, state.pairCount, state.comboPoints);
 
         el.resultScore.textContent = score + " " + tr("common.points");
         el.resultDetail.textContent = tr("memory.resultDetail", {
@@ -505,6 +775,20 @@
             time: formatTime(ms),
             moves: state.moves
         });
+
+        if (state.maxStreak >= COMBO_THRESHOLDS[0]) {
+            el.resultCombo.hidden = false;
+            el.resultCombo.textContent = tr("memory.resultCombo", {
+                multiplier: formatMultiplier(getComboMultiplier(state.maxStreak)),
+                streak: state.maxStreak
+            });
+        } else {
+            el.resultCombo.hidden = true;
+        }
+
+        el.resultPerfect.hidden = state.maxStreak !== state.pairCount;
+
+        celebrateBoardCleared();
         el.resultModal.hidden = false;
     }
 
@@ -512,12 +796,14 @@
     // Every second costs points (more on bigger boards), with a 20% floor so
     // finishing always rewards something. The difficulty multiplier keeps the
     // ordering (Hard > Medium > Easy) even when a board is capped by unlocks.
-    function computeScore(ms, cfg, pairs) {
+    // Combo bonus is folded in before the multiplier so it scales identically
+    // to the base score and can't invert the difficulty ordering.
+    function computeScore(ms, cfg, pairs, comboPoints = 0) {
         const seconds = ms / 1000;
         const maxScore = pairs * 100;
         const penalty = seconds * pairs * 1.4;
-        const raw = Math.max(maxScore * 0.2, maxScore - penalty);
-        return Math.round(raw * cfg.multiplier);
+        const rawBase = Math.max(maxScore * 0.2, maxScore - penalty);
+        return Math.round((rawBase + comboPoints) * cfg.multiplier);
     }
 
     // ── Utils ───────────────────────────────────────────────

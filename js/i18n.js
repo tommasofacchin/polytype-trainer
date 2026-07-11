@@ -189,7 +189,12 @@
             "memory.cleared": "Cleared!",
             "memory.wellDone": "Well done",
             "memory.resultDetail": "{difficulty} · {time} · {moves} moves",
-            "memory.changeDifficulty": "Change difficulty"
+            "memory.changeDifficulty": "Change difficulty",
+            "memory.combo": "Combo",
+            "memory.muteSound": "Mute sound effects",
+            "memory.unmuteSound": "Unmute sound effects",
+            "memory.resultCombo": "Best combo ×{multiplier} ({streak} in a row)",
+            "memory.perfectClear": "Perfect clear — no misses!"
         },
         it: {
             "app.name": "Polytype Trainer",
@@ -377,7 +382,12 @@
             "memory.cleared": "Completato!",
             "memory.wellDone": "Ben fatto",
             "memory.resultDetail": "{difficulty} · {time} · {moves} mosse",
-            "memory.changeDifficulty": "Cambia difficoltà"
+            "memory.changeDifficulty": "Cambia difficoltà",
+            "memory.combo": "Combo",
+            "memory.muteSound": "Disattiva audio",
+            "memory.unmuteSound": "Attiva audio",
+            "memory.resultCombo": "Combo massimo ×{multiplier} ({streak} di fila)",
+            "memory.perfectClear": "Turno perfetto, nessun errore!"
         }
     };
 

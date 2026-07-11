@@ -35,6 +35,23 @@
             flex-direction: column;
             gap: var(--space-4);
             overflow: hidden;
+            --mem-front-a: #17c3d1;
+            --mem-front-b: #6d28d9;
+            --mem-confetti-1: var(--mem-front-a);
+            --mem-confetti-2: var(--mem-front-b);
+            --mem-confetti-3: #f472b6;
+            --mem-confetti-4: #fbbf24;
+            --mem-confetti-5: #34d399;
+            --mem-confetti-6: #fb7185;
+            --mem-mismatch-tint: color-mix(in srgb, var(--danger) 16%, var(--surface));
+        }
+
+        [data-theme="dark"] .memory-page {
+            --mem-front-a: #22d3ee;
+            --mem-front-b: #a78bfa;
+            --mem-confetti-3: #f9a8d4;
+            --mem-confetti-4: #fcd34d;
+            --mem-confetti-6: #fca5a5;
         }
 
         .memory-topbar {
@@ -42,6 +59,32 @@
             align-items: center;
             justify-content: space-between;
             gap: var(--space-3);
+        }
+
+        .memory-topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .sound-on-icon {
+            opacity: 1;
+            transform: rotate(0deg) scale(1);
+        }
+
+        .sound-off-icon {
+            opacity: 0;
+            transform: rotate(-18deg) scale(0.72);
+        }
+
+        #sfx-toggle[aria-pressed="true"] .sound-on-icon {
+            opacity: 0;
+            transform: rotate(18deg) scale(0.72);
+        }
+
+        #sfx-toggle[aria-pressed="true"] .sound-off-icon {
+            opacity: 1;
+            transform: rotate(0deg) scale(1);
         }
 
         .memory-head h1 {
@@ -94,11 +137,115 @@
         /* The board takes the leftover height and is a size container, so the
            grid can size square cards that always fit -> no page scroll. */
         .memory-board {
+            position: relative;
             flex: 1;
             min-height: 0;
             container-type: size;
             display: grid;
             place-items: center;
+        }
+
+        /* ── Combo pill (floating, doesn't perturb the board's container-query sizing) ── */
+        .mem-combo-pill {
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%) translateY(0) scale(1);
+            z-index: 5;
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: var(--radius-pill);
+            background: var(--accent-soft);
+            color: var(--accent);
+            font-weight: 700;
+            font-size: var(--text-sm);
+            box-shadow: var(--shadow-sm);
+            transition: background var(--transition), color var(--transition);
+        }
+
+        .mem-combo-pill[hidden] { display: none; }
+
+        .mem-combo-pill-label {
+            font-size: var(--text-xs);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            opacity: 0.85;
+        }
+
+        .mem-combo-pill[data-tier="2"] { background: var(--combo-2-soft); color: var(--combo-2); }
+        .mem-combo-pill[data-tier="3"] { background: var(--combo-3-soft); color: var(--combo-3); }
+        .mem-combo-pill[data-tier="4"] { background: var(--combo-4-soft); color: var(--combo-4); }
+
+        @keyframes mem-combo-pulse {
+            0%   { transform: translateX(-50%) scale(1); }
+            35%  { transform: translateX(-50%) scale(1.16); }
+            100% { transform: translateX(-50%) scale(1); }
+        }
+
+        @keyframes mem-combo-pulse-big {
+            0%   { transform: translateX(-50%) scale(1); }
+            30%  { transform: translateX(-50%) scale(1.32); }
+            55%  { transform: translateX(-50%) scale(0.94); }
+            100% { transform: translateX(-50%) scale(1); }
+        }
+
+        @keyframes mem-combo-break {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            20%       { transform: translateX(-50%) translateY(-2px) rotate(-3deg); }
+            45%       { transform: translateX(-50%) translateY(1px) rotate(3deg); }
+            65%       { transform: translateX(-50%) translateY(-1px) rotate(-2deg); }
+            85%       { transform: translateX(-50%) translateY(1px) rotate(2deg); }
+        }
+
+        .mem-combo-pill.mem-combo-pop     { animation: mem-combo-pulse     240ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .mem-combo-pill.mem-combo-pop-big { animation: mem-combo-pulse-big 320ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .mem-combo-pill.mem-combo-shake   { animation: mem-combo-break     300ms ease-out; }
+
+        /* ── Match / victory confetti ───────────────────────────── */
+        .mem-confetti-burst {
+            position: fixed;
+            inset: 0;
+            z-index: 260;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .mem-confetti-piece {
+            position: absolute;
+            width: 7px;
+            height: 11px;
+            border-radius: 2px;
+            opacity: 0;
+            animation: mem-confetti-pop var(--dur, 0.6s) cubic-bezier(0.2, 0.7, 0.3, 1) var(--delay, 0s) forwards;
+        }
+
+        @keyframes mem-confetti-pop {
+            0%   { opacity: 0; transform: translate(0, 0) rotate(0); }
+            10%  { opacity: 1; }
+            100% { opacity: 0; transform: translate(var(--x, 0), var(--y, 60px)) rotate(var(--r, 260deg)); }
+        }
+
+        .mem-xp-float {
+            position: fixed;
+            pointer-events: none;
+            z-index: 260;
+            font-size: var(--text-sm);
+            font-weight: 700;
+            color: var(--accent);
+            animation: mem-xp-float 700ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        .mem-xp-float[data-tier="2"] { color: var(--combo-2); }
+        .mem-xp-float[data-tier="3"] { color: var(--combo-3); }
+        .mem-xp-float[data-tier="4"] { color: var(--combo-4); }
+
+        @keyframes mem-xp-float {
+            0%   { opacity: 1; transform: translateY(0) scale(1); }
+            18%  { opacity: 1; transform: translateY(-10px) scale(1.1); }
+            100% { opacity: 0; transform: translateY(-46px) scale(0.88); }
         }
 
         .memory-grid {
@@ -150,9 +297,34 @@
             min-height: 0;
             cursor: pointer;
             perspective: 900px;
+            animation: mem-card-idle 3.6s ease-in-out infinite;
+            animation-delay: var(--idle-delay, 0s);
         }
 
         .mem-card:disabled { cursor: default; }
+
+        .mem-card.is-flipped,
+        .mem-card.is-matched,
+        .mem-card:disabled {
+            animation: none;
+        }
+
+        .mem-card.is-mismatch {
+            animation: mem-mismatch-shake 320ms ease-out;
+        }
+
+        @keyframes mem-card-idle {
+            0%, 100% { transform: translateY(0); }
+            50%      { transform: translateY(-3px); }
+        }
+
+        @keyframes mem-mismatch-shake {
+            0%, 100% { transform: translateX(0); }
+            20%       { transform: translateX(-6px); }
+            45%       { transform: translateX(6px); }
+            65%       { transform: translateX(-3px); }
+            85%       { transform: translateX(3px); }
+        }
 
         .mem-card-inner {
             display: block;
@@ -184,11 +356,39 @@
         }
 
         .mem-card-front {
-            background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 60%, #ffffff));
+            overflow: hidden;
+            background:
+                radial-gradient(circle at 30% 22%, rgba(255, 255, 255, 0.4), transparent 46%),
+                linear-gradient(155deg, var(--mem-front-a), var(--mem-front-b));
             color: var(--text-inverse);
             font-size: 26px;
-            font-weight: 700;
-            box-shadow: var(--shadow-sm);
+            font-weight: 800;
+            box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+        }
+
+        .mem-card-front::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 46%;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.14);
+            border: 1px solid rgba(255, 255, 255, 0.32);
+            box-shadow:
+                inset 0 2px 5px rgba(255, 255, 255, 0.3),
+                inset 0 -4px 8px rgba(0, 0, 0, 0.14);
+        }
+
+        .mem-card-front::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            box-shadow: inset 0 -14px 22px rgba(0, 0, 0, 0.1);
+            pointer-events: none;
         }
 
         .mem-card-back {
@@ -196,6 +396,13 @@
             background: var(--surface);
             border: 1px solid var(--border);
             color: var(--text);
+            transition: background var(--transition), border-color var(--transition), color var(--transition);
+        }
+
+        .mem-card.is-mismatch .mem-card-back {
+            background: var(--mem-mismatch-tint);
+            border-color: color-mix(in srgb, var(--danger) 55%, var(--border));
+            color: var(--danger);
         }
 
         /* Plain wrapper (not part of the 3D flip) used as the size container
@@ -267,6 +474,7 @@
 
         .mem-overlay-card {
             position: relative;
+            overflow: hidden;
             width: min(100%, 560px);
             padding: clamp(20px, 4vw, 30px);
             border: 1px solid var(--border);
@@ -274,6 +482,35 @@
             background: var(--surface);
             box-shadow: var(--shadow-lg);
             text-align: center;
+        }
+
+        .mem-overlay-card.is-victory {
+            animation: mem-victory-pop 520ms cubic-bezier(0.18, 1.2, 0.32, 1) both;
+        }
+
+        @keyframes mem-victory-pop {
+            0%   { opacity: 0; transform: scale(0.7) translateY(10px); }
+            60%  { opacity: 1; }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .mem-victory-confetti {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            border-radius: inherit;
+            pointer-events: none;
+        }
+
+        .mem-victory-confetti .mem-confetti-piece {
+            top: 6%;
+            animation-name: mem-victory-confetti-fall;
+        }
+
+        @keyframes mem-victory-confetti-fall {
+            0%   { opacity: 0; transform: translate(0, 0) rotate(0); }
+            10%  { opacity: 1; }
+            100% { opacity: 0; transform: translate(var(--x, 0), var(--fall, 180px)) rotate(var(--r, 360deg)); }
         }
 
         .mem-overlay-kicker {
@@ -448,9 +685,21 @@
 
         @media (prefers-reduced-motion: reduce) {
             /* The flip is essential game feedback, so keep a short version even
-               with reduced motion; only the decorative match "pop" is dropped. */
+               with reduced motion; only decorative motion is dropped. Color-state
+               feedback (mismatch red / matched green) stays since it's instant,
+               not motion. */
             .mem-card-inner { transition: transform 0.2s ease; }
             .mem-card.is-matched .mem-card-back { animation: none; }
+            .mem-card { animation: none !important; }
+            .mem-combo-pill { animation: none !important; }
+            .mem-confetti-piece,
+            .mem-victory-confetti { display: none; }
+            .mem-overlay-card.is-victory { animation: mem-victory-fade 200ms ease both; }
+        }
+
+        @keyframes mem-victory-fade {
+            from { opacity: 0; }
+            to   { opacity: 1; }
         }
     </style>
 </head>
@@ -461,18 +710,32 @@
                 <span aria-hidden="true">&larr;</span>
                 <span data-i18n="common.trainer">Trainer</span>
             </a>
-            <button id="theme-toggle" class="theme-icon-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false">
-                <svg class="theme-icon sun-icon" viewBox="0 0 24 24" aria-hidden="true">
-                    <circle cx="12" cy="12" r="4"></circle>
-                    <path d="M12 2v2"></path><path d="M12 20v2"></path>
-                    <path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path>
-                    <path d="M2 12h2"></path><path d="M20 12h2"></path>
-                    <path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path>
-                </svg>
-                <svg class="theme-icon moon-icon" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M20 14.4A7.8 7.8 0 0 1 9.6 4 8 8 0 1 0 20 14.4Z"></path>
-                </svg>
-            </button>
+            <div class="memory-topbar-actions">
+                <button id="sfx-toggle" class="theme-icon-toggle" type="button" aria-label="Mute sound effects" data-i18n-aria-label="memory.muteSound" aria-pressed="false">
+                    <svg class="theme-icon mem-sfx-icon sound-on-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M4 9v6h4l5 5V4L8 9H4Z"></path>
+                        <path d="M17 8a5 5 0 0 1 0 8"></path>
+                        <path d="M19.5 5.5a9 9 0 0 1 0 13"></path>
+                    </svg>
+                    <svg class="theme-icon mem-sfx-icon sound-off-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M4 9v6h4l5 5V4L8 9H4Z"></path>
+                        <path d="m17 9 5 6"></path>
+                        <path d="m22 9-5 6"></path>
+                    </svg>
+                </button>
+                <button id="theme-toggle" class="theme-icon-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false">
+                    <svg class="theme-icon sun-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <circle cx="12" cy="12" r="4"></circle>
+                        <path d="M12 2v2"></path><path d="M12 20v2"></path>
+                        <path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path>
+                        <path d="M2 12h2"></path><path d="M20 12h2"></path>
+                        <path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path>
+                    </svg>
+                    <svg class="theme-icon moon-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M20 14.4A7.8 7.8 0 0 1 9.6 4 8 8 0 1 0 20 14.4Z"></path>
+                    </svg>
+                </button>
+            </div>
         </nav>
 
         <header class="memory-head">
@@ -496,6 +759,10 @@
         </section>
 
         <div id="memory-board" class="memory-board" aria-label="Memory board" data-i18n-aria-label="memory.board">
+            <div id="combo-pill" class="mem-combo-pill" role="status" hidden>
+                <span class="mem-combo-pill-label" data-i18n="memory.combo">Combo</span>
+                <span id="combo-pill-value">&times;1</span>
+            </div>
             <div id="memory-grid" class="memory-grid"></div>
         </div>
     </main>
@@ -541,6 +808,8 @@
             <h2 id="result-title" data-i18n="memory.wellDone">Well done</h2>
             <strong id="result-score" class="mem-result-score">0 pts</strong>
             <span id="result-detail" class="mem-result-detail">&mdash;</span>
+            <span id="result-combo" class="mem-result-detail" hidden>&mdash;</span>
+            <span id="result-perfect" class="mem-result-detail" hidden data-i18n="memory.perfectClear">Perfect clear &mdash; no misses!</span>
             <div class="mem-result-actions">
                 <button id="play-again-btn" class="restart-btn" type="button" data-i18n="trainer.playAgain">Play again</button>
                 <button id="change-difficulty-btn" class="theme-toggle" type="button" data-i18n="memory.changeDifficulty">Change difficulty</button>
