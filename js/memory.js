@@ -33,14 +33,11 @@
 
     const matchSfxUrl = "assets/sfx/correct3.mp3";
     const matchSfxVolume = 0.28;
-    const mismatchSfxUrls = ["assets/sfx/error1.mp3", "assets/sfx/error2.mp3", "assets/sfx/error3.mp3"];
-    const mismatchSfxVolume = 0.22;
     const comboSfxUrl = "assets/sfx/levelup3.mp3";
     const comboSfxVolume = 0.3;
     const victorySfxUrl = "assets/sfx/levelup1.mp3";
     const victorySfxVolume = 0.4;
     let matchSfxAudio = null;
-    let mismatchSfxAudios = [];
     let comboSfxAudio = null;
     let victorySfxAudio = null;
     let sfxMuted = false;
@@ -208,14 +205,6 @@
         matchSfxAudio.volume = matchSfxVolume;
         matchSfxAudio.load();
 
-        mismatchSfxAudios = mismatchSfxUrls.map(url => {
-            const audio = new Audio(url);
-            audio.preload = "auto";
-            audio.volume = mismatchSfxVolume;
-            audio.load();
-            return audio;
-        });
-
         comboSfxAudio = new Audio(comboSfxUrl);
         comboSfxAudio.preload = "auto";
         comboSfxAudio.volume = comboSfxVolume;
@@ -229,11 +218,6 @@
 
     function playMatchSfx() {
         playSfx(matchSfxAudio, matchSfxVolume);
-    }
-
-    function playMismatchSfx() {
-        const audio = mismatchSfxAudios[Math.floor(Math.random() * mismatchSfxAudios.length)];
-        playSfx(audio, mismatchSfxVolume);
     }
 
     function playComboSfx() {
@@ -701,7 +685,6 @@
             if (state.streak > 0) animateComboBreak();
             state.streak = 0;
             updateComboHud();
-            playMismatchSfx();
 
             state.lock = true;
             const secondButton = button;
