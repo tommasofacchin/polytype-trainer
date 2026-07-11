@@ -161,10 +161,6 @@
             display: grid;
             gap: 2px;
             padding: 10px 14px;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            background: color-mix(in srgb, var(--surface) 86%, var(--bg-soft));
-            box-shadow: var(--shadow-sm);
         }
 
         .dictate-hud-label {
@@ -186,9 +182,7 @@
             flex: 1;
             min-height: 0;
             position: relative;
-            border: 1px solid var(--border);
             border-radius: var(--radius-xl);
-            background: var(--surface);
             box-shadow: var(--shadow-md);
             overflow: hidden;
         }
@@ -290,20 +284,6 @@
         .dictate-row.next-preview {
             opacity: 0.65;
         }
-
-        /* Row flash animations */
-        @keyframes flash-correct {
-            0%   { background: color-mix(in srgb, var(--success) 14%, var(--surface)); }
-            100% { background: var(--surface); }
-        }
-
-        @keyframes flash-wrong {
-            0%   { background: color-mix(in srgb, var(--danger) 12%, var(--surface)); }
-            100% { background: var(--surface); }
-        }
-
-        .row-flash-correct { animation: flash-correct 0.5s ease forwards; }
-        .row-flash-wrong   { animation: flash-wrong   0.5s ease forwards; }
 
         /* Empty state */
         .dictate-empty {
