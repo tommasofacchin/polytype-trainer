@@ -267,15 +267,9 @@
         }
 
         /* Desktop card grids: Easy 4x3, Medium 5x4, Hard 6x5 (inverse of mobile). */
-        .memory-grid[data-pairs="5"]  { --cols: 4; --rows: 3; }
+        .memory-grid[data-pairs="6"]  { --cols: 4; --rows: 3; }
         .memory-grid[data-pairs="10"] { --cols: 5; --rows: 4; }
         .memory-grid[data-pairs="15"] { --cols: 6; --rows: 5; }
-
-        /* Easy has 10 cards in a 4-col grid: center the 2 leftover cards on row 3. */
-        @media (min-width: 601px) {
-            .memory-grid[data-pairs="5"] .mem-card:nth-last-child(2) { grid-column: 2; }
-            .memory-grid[data-pairs="5"] .mem-card:nth-last-child(1) { grid-column: 3; }
-        }
 
         .memory-empty {
             grid-column: 1 / -1;
@@ -653,15 +647,10 @@
                 --ratio: 1;
             }
 
-            /* Phone card grids: Easy 3x4 (last card centered), Medium 4x5,
-               Hard 5x6. */
-            .memory-grid[data-pairs="5"]  { --cols: 3; --rows: 4; }
+            /* Phone card grids: Easy 3x4, Medium 4x5, Hard 5x6. */
+            .memory-grid[data-pairs="6"]  { --cols: 3; --rows: 4; }
             .memory-grid[data-pairs="10"] { --cols: 4; --rows: 5; }
             .memory-grid[data-pairs="15"] { --cols: 5; --rows: 6; }
-
-            .memory-grid[data-pairs="5"] .mem-card:last-child {
-                grid-column: 2;
-            }
 
             .mem-hud-item {
                 padding: 8px 10px;

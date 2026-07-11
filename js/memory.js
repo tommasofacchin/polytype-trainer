@@ -18,7 +18,7 @@
     // Higher difficulty = more pairs and a bigger score multiplier, so a
     // cleared Hard board always beats Medium, and Medium always beats Easy.
     const DIFFICULTIES = {
-        easy:   { id: "easy",   label: "Easy",   pairs: 5,  multiplier: 1,   unlock: 1 },
+        easy:   { id: "easy",   label: "Easy",   pairs: 6,  multiplier: 1,   unlock: 3 },
         medium: { id: "medium", label: "Medium", pairs: 10, multiplier: 1.5, unlock: 3 },
         hard:   { id: "hard",   label: "Hard",   pairs: 15, multiplier: 2,   unlock: 10 }
     };
@@ -419,7 +419,7 @@
         }
     }
 
-    // Lock Medium (level 3) and Hard (level 10) until the player reaches them.
+    // Lock Easy/Medium (level 3) and Hard (level 10) until the player reaches them.
     function applyDifficultyLocks() {
         el.difficultyModal.querySelectorAll("[data-difficulty]").forEach(btn => {
             const cfg = DIFFICULTIES[btn.dataset.difficulty];
