@@ -16,6 +16,8 @@ const DEFAULT_TIMEZONE = "UTC";
 const MAX_STREAK_FREEZES = 2;
 const WORDS_PER_LEVEL = 5;
 const MAX_SESSION_XP = 500;
+const SEARCH_RESULTS_LIMIT = 10;
+const MIN_SEARCH_LENGTH = 2;
 const HANDLE_PATTERN = /^[a-z0-9_]{3,20}$/;
 const COURSE_LEVEL_CAPS = {
   chinese: 60,
@@ -483,6 +485,122 @@ exports.removeFriend = onCall(CALLABLE_OPTIONS, async request => {
     removed: true
   };
 });
+
+exports.searchUsers = onCall(CALLABLE_OPTIONS, async request => {
+  const auth = requireAuth(request);
+  const query = normalizeSearchQuery(request.data?.query);
+
+  if (query.length < MIN_SEARCH_LENGTH) {
+    return { results: [] };
+  }
+
+  const usernameSnap = await db.collection("usernames")
+    .orderBy("handle")
+    .startAt(query)
+    .endAt(`${query}`)
+    .limit(SEARCH_RESULTS_LIMIT)
+    .get();
+
+  const candidateUids = usernameSnap.docs
+    .map(doc => doc.data().uid)
+    .filter(uid => uid && uid !== auth.uid);
+
+  if (!candidateUids.length) {
+    return { results: [] };
+  }
+
+  const results = await Promise.all(
+    candidateUids.map(uid => buildSearchResult(auth.uid, uid))
+  );
+
+  return { results: results.filter(Boolean) };
+});
+
+exports.getSocialOverview = onCall(CALLABLE_OPTIONS, async request => {
+  const auth = requireAuth(request);
+
+  const [selfSnap, friendsSnap, incomingSnap, outgoingSnap] = await Promise.all([
+    db.doc(`publicProfiles/${auth.uid}`).get(),
+    db.collection(`users/${auth.uid}/friends`).get(),
+    db.collection("friendRequests").where("toUid", "==", auth.uid).get(),
+    db.collection("friendRequests").where("fromUid", "==", auth.uid).get()
+  ]);
+
+  const friendUids = friendsSnap.docs.map(doc => doc.id);
+  const friendProfileSnaps = friendUids.length
+    ? await db.getAll(...friendUids.map(uid => db.doc(`publicProfiles/${uid}`)))
+    : [];
+
+  const leaderboardEntries = [];
+
+  if (selfSnap.exists) {
+    leaderboardEntries.push({ ...pickFriendProfile(selfSnap.data()), isSelf: true });
+  }
+
+  friendProfileSnaps.forEach(snap => {
+    if (snap.exists) {
+      leaderboardEntries.push({ ...pickFriendProfile(snap.data()), isSelf: false });
+    }
+  });
+
+  leaderboardEntries.sort((a, b) => (b.totalXp || 0) - (a.totalXp || 0));
+  const leaderboard = leaderboardEntries.map((entry, index) => ({ ...entry, rank: index + 1 }));
+
+  const incomingRequests = incomingSnap.docs
+    .filter(doc => doc.data().status === "pending")
+    .map(doc => ({
+      requestId: doc.id,
+      fromUid: doc.data().fromUid,
+      profile: doc.data().fromProfile || null,
+      createdAt: toMillis(doc.data().createdAt)
+    }));
+
+  const outgoingRequests = outgoingSnap.docs
+    .filter(doc => doc.data().status === "pending")
+    .map(doc => ({
+      requestId: doc.id,
+      toUid: doc.data().toUid,
+      profile: doc.data().toProfile || null,
+      createdAt: toMillis(doc.data().createdAt)
+    }));
+
+  return {
+    leaderboard,
+    incomingRequests,
+    outgoingRequests,
+    friendCount: friendUids.length
+  };
+});
+
+async function buildSearchResult(myUid, uid) {
+  const [publicSnap, friendSnap, requestSnap] = await Promise.all([
+    db.doc(`publicProfiles/${uid}`).get(),
+    db.doc(`users/${myUid}/friends/${uid}`).get(),
+    db.doc(`friendRequests/${getFriendPairId(myUid, uid)}`).get()
+  ]);
+
+  if (!publicSnap.exists) return null;
+
+  let relationship = "none";
+  let requestId = null;
+
+  if (friendSnap.exists) {
+    relationship = "friends";
+  } else if (requestSnap.exists && requestSnap.data().status === "pending") {
+    requestId = requestSnap.id;
+    relationship = requestSnap.data().fromUid === myUid ? "pending_outgoing" : "pending_incoming";
+  }
+
+  return { ...pickFriendProfile(publicSnap.data()), relationship, requestId };
+}
+
+function toMillis(timestamp) {
+  return timestamp && typeof timestamp.toMillis === "function" ? timestamp.toMillis() : null;
+}
+
+function normalizeSearchQuery(value) {
+  return cleanOptionalString(value).toLowerCase().replace(/^@+/, "").slice(0, 20);
+}
 
 function requireAuth(request) {
   if (!request.auth?.uid) {

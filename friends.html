@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" class="profile-document">
+<head>
+    <meta charset="UTF-8">
+    <title data-i18n="friends.title">Friends - Polytype Trainer</title>
+  <link rel="icon" type="image/svg+xml" href="assets/flags/china.svg">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap">
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body class="profile-page-body">
+  <main class="profile-page friends-page">
+    <nav class="profile-topbar" aria-label="Friends navigation" data-i18n-aria-label="friends.navigation">
+      <a class="back-link" href="index.html" aria-label="Back home" data-i18n-aria-label="friends.back">
+        <span aria-hidden="true">&larr;</span>
+        <span data-i18n="common.home">Home</span>
+      </a>
+    </nav>
+
+    <section class="profile-hero friends-hero" aria-label="Friends">
+      <div class="profile-hero-copy">
+        <span class="profile-kicker" data-i18n="friends.heading">Friends</span>
+        <h1 data-i18n="friends.heading">Friends</h1>
+        <p class="profile-muted" data-i18n="friends.subtitle">Find friends and see who's leading the pack.</p>
+      </div>
+    </section>
+
+    <p id="friends-signin-notice" class="profile-muted" data-i18n="friends.signInToConnect" hidden>Sign in to search for friends and see the leaderboard.</p>
+    <p id="friends-page-status" class="profile-muted friends-page-status" aria-live="polite"></p>
+
+    <section id="friends-search-card" class="friends-card friends-search-card" hidden>
+      <label for="friends-search-input">
+        <span class="profile-card-label" data-i18n="friends.searchLabel">Search by username</span>
+      </label>
+      <input id="friends-search-input" class="friends-search-input" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" data-i18n-placeholder="friends.searchPlaceholder" placeholder="@username">
+      <p id="friends-search-status" class="profile-muted friends-search-status" data-i18n="friends.searchHint">Type at least 2 characters.</p>
+      <div id="friends-search-results" class="friends-result-list"></div>
+    </section>
+
+    <section id="friends-incoming-card" class="friends-card" hidden>
+      <div class="profile-card-head">
+        <span class="profile-card-label" data-i18n="friends.incomingRequests">Friend requests</span>
+      </div>
+      <div id="friends-incoming-list" class="friends-result-list"></div>
+    </section>
+
+    <section id="friends-outgoing-card" class="friends-card" hidden>
+      <div class="profile-card-head">
+        <span class="profile-card-label" data-i18n="friends.outgoingRequests">Sent requests</span>
+      </div>
+      <div id="friends-outgoing-list" class="friends-chip-list"></div>
+    </section>
+
+    <section class="friends-card">
+      <div class="profile-card-head">
+        <span class="profile-card-label" data-i18n="friends.leaderboard">Leaderboard</span>
+      </div>
+      <div id="friends-leaderboard-list" class="friends-leaderboard-list"></div>
+    </section>
+  </main>
+
+  <script src="js/firebase-config.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-auth-compat.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/firebase-client.js"></script>
+  <script src="js/friends.js"></script>
+</body>
+</html>

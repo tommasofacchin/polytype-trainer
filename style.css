@@ -278,7 +278,10 @@ body {
 .profile-hero,
 .list-card,
 .profile-detail-card,
-.language-menu-panel {
+.language-menu-panel,
+.dashboard-tile,
+.dashboard-social-card,
+.friends-card {
     --card-tint: 100%;
     background: color-mix(in srgb, var(--surface) var(--card-tint), var(--bg-soft));
     border: 1px solid var(--border);
@@ -289,7 +292,7 @@ body {
 .settings { --card-tint: 84%; }
 .hud-item, .dictate-hud-item, .mem-hud-item { --card-tint: 86%; }
 .profile-hero, .list-card { --card-tint: 88%; }
-.profile-detail-card { --card-tint: 90%; }
+.profile-detail-card, .dashboard-tile, .dashboard-social-card, .friends-card { --card-tint: 90%; }
 .language-menu-panel { --card-tint: 94%; }
 
 /* ---- Header: auth dropdown widget -------------------------------------------- */
@@ -1044,6 +1047,7 @@ input[type="password"]:focus {
     width: fit-content;
     min-width: 150px;
     margin: 0;
+    text-decoration: none;
 }
 
 .profile-edit-status[data-tone="success"] {
@@ -2448,4 +2452,367 @@ body.deck-overlay-open {
     .deck-open-btn {
         padding: 0 12px;
     }
+}
+
+/* ---- Dashboard: page shell, game tiles, social card ---------------------------- */
+
+.dashboard-document {
+    height: auto;
+    min-height: 100%;
+    overflow: auto;
+}
+
+.dashboard-page-body {
+    min-height: 100vh;
+    height: auto;
+    overflow: auto;
+}
+
+.dashboard-page {
+    width: min(100% - 32px, 980px);
+    min-height: 100vh;
+    margin-inline: auto;
+    padding: clamp(18px, 4vw, 44px) 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+}
+
+.dashboard-header {
+    margin-bottom: 0;
+}
+
+.dashboard-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.dashboard-welcome {
+    margin: calc(-1 * var(--space-4)) 0 0;
+    color: var(--text-faint);
+    font-size: var(--text-sm);
+    font-weight: 600;
+}
+
+.dashboard-profile-pill {
+    width: fit-content;
+    min-width: 240px;
+}
+
+.dashboard-section {
+    display: grid;
+    gap: var(--space-3);
+}
+
+.dashboard-section-title {
+    margin: 0;
+    color: var(--text);
+    font-size: var(--text-lg);
+    font-weight: 700;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: var(--space-4);
+}
+
+.dashboard-tile,
+.dashboard-social-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: clamp(16px, 3vw, 20px);
+    color: var(--text);
+    text-decoration: none;
+    transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+}
+
+.dashboard-tile:hover,
+.dashboard-tile:focus-visible,
+.dashboard-social-card:hover,
+.dashboard-social-card:focus-visible {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+    box-shadow: var(--shadow-md);
+    outline: 0;
+}
+
+.dashboard-tile-disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.dashboard-tile-disabled:hover,
+.dashboard-tile-disabled:focus-visible {
+    transform: none;
+    border-color: var(--border);
+    box-shadow: var(--shadow-sm);
+}
+
+.dashboard-tile-icon {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    flex: 0 0 auto;
+    border-radius: var(--radius-pill);
+    background: var(--accent-soft);
+    color: var(--accent);
+}
+
+.dashboard-tile-icon svg {
+    width: 22px;
+    height: 22px;
+}
+
+.dashboard-tile-copy {
+    display: grid;
+    gap: 2px;
+    min-width: 0;
+}
+
+.dashboard-tile-copy strong {
+    color: var(--text);
+    font-size: var(--text-md);
+    font-weight: 700;
+}
+
+.dashboard-tile-copy small {
+    color: var(--text-faint);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    line-height: 1.35;
+}
+
+.dashboard-tile-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 2px 8px;
+    border-radius: var(--radius-pill);
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+    color: var(--text-faint);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.dashboard-social-card {
+    justify-content: flex-start;
+}
+
+.dashboard-pending-badge {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 24px;
+    padding: 0 8px;
+    border-radius: var(--radius-pill);
+    background: var(--accent);
+    color: var(--text-inverse);
+    font-size: var(--text-xs);
+    font-weight: 700;
+}
+
+@media (max-width: 560px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-profile-pill {
+        width: 100%;
+    }
+}
+
+/* ---- Friends: search, requests, leaderboard ------------------------------------- */
+
+.friends-card {
+    display: grid;
+    gap: var(--space-3);
+    padding: clamp(16px, 3vw, 22px);
+}
+
+.friends-search-input {
+    width: 100%;
+    padding: 0 14px;
+}
+
+.friends-page-status:empty,
+.friends-search-status:empty {
+    display: none;
+}
+
+.friends-page-status {
+    color: var(--danger);
+    font-size: var(--text-sm);
+    font-weight: 600;
+}
+
+.friends-result-list,
+.friends-chip-list,
+.friends-leaderboard-list {
+    display: grid;
+    gap: var(--space-2);
+}
+
+.friends-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+}
+
+.friends-row-avatar {
+    width: 36px;
+    height: 36px;
+    flex: 0 0 auto;
+}
+
+.friends-row-copy {
+    display: grid;
+    gap: 1px;
+    min-width: 0;
+    margin-right: auto;
+}
+
+.friends-row-copy strong {
+    display: block;
+    color: var(--text);
+    font-size: var(--text-sm);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.friends-row-copy small {
+    color: var(--text-faint);
+    font-size: var(--text-xs);
+    font-weight: 600;
+}
+
+.friends-row-actions {
+    display: flex;
+    gap: var(--space-2);
+    flex: 0 0 auto;
+}
+
+.friends-row-actions .btn,
+.friends-row-actions .btn-solid {
+    min-height: 34px;
+    padding: 0 14px;
+}
+
+.friends-status-badge {
+    flex: 0 0 auto;
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+    background: var(--surface-soft);
+    color: var(--text-faint);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.friends-chip {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    padding: 6px 12px;
+    border-radius: var(--radius-pill);
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+    color: var(--text-faint);
+    font-size: var(--text-xs);
+    font-weight: 600;
+}
+
+.friends-leaderboard-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+}
+
+.friends-leaderboard-row.is-self {
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+    background: var(--accent-soft);
+}
+
+.friends-rank {
+    flex: 0 0 auto;
+    width: 28px;
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    text-align: center;
+}
+
+.friends-row-streak {
+    flex: 0 0 auto;
+    color: var(--accent);
+    font-size: var(--text-sm);
+    font-weight: 700;
+}
+
+.friends-remove-btn {
+    appearance: none;
+    flex: 0 0 auto;
+    padding: 4px;
+    border: 0;
+    background: none;
+    color: var(--text-faint);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.friends-remove-btn:hover,
+.friends-remove-btn:focus-visible {
+    color: var(--danger);
+    outline: 0;
+}
+
+@media (max-width: 560px) {
+    .friends-row,
+    .friends-leaderboard-row {
+        flex-wrap: wrap;
+    }
+
+    .friends-row-actions {
+        margin-left: auto;
+    }
+}
+
+/* ---- Profile: visual polish -------------------------------------------------- */
+
+.profile-hero {
+    position: relative;
+    overflow: hidden;
+    background-image: radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 55%);
+}
+
+.profile-avatar-large {
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 28%, transparent);
+}
+
+.profile-detail-card {
+    transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.profile-detail-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
 }

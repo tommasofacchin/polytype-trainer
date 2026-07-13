@@ -4,6 +4,7 @@ const defaultProfile = {
     avatarUrl: null,
     xp: 0,
     dayStreak: 0,
+    friendCount: 0,
     courses: {}
 };
 
@@ -154,6 +155,7 @@ function setupFirebaseSync() {
             avatarUrl: authState.profile.avatarUrl,
             xp: authState.profile.totalXp,
             dayStreak: authState.profile.currentStreak,
+            friendCount: authState.profile.friendCount,
             courses: authState.profile.courses
         });
         localStorage.setItem(profileStorageKey, JSON.stringify(currentProfile));
@@ -333,6 +335,7 @@ function renderProfilePage(profile) {
         level: levelInfo.level + 1
     }));
     setText("profile-page-day-streak", String(safeProfile.dayStreak));
+    setText("profile-page-friend-count", String(safeProfile.friendCount));
     setText("profile-page-badge-count", `${demoBadges.length} / ${demoBadges.length}`);
 
     const xpFill = document.getElementById("profile-page-xp-fill");
@@ -535,6 +538,7 @@ function sanitizeProfile(value = {}) {
         avatarUrl,
         xp: Math.max(0, Number(value.xp ?? value.totalXp) || 0),
         dayStreak: Math.max(0, Math.trunc(Number(value.dayStreak ?? value.currentStreak) || 0)),
+        friendCount: Math.max(0, Math.trunc(Number(value.friendCount) || 0)),
         courses: sanitizeCourses(value.courses)
     };
 }

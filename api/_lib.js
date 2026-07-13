@@ -2,6 +2,8 @@ const DEFAULT_TIMEZONE = "UTC";
 const MAX_STREAK_FREEZES = 2;
 const WORDS_PER_LEVEL = 5;
 const MAX_SESSION_XP = 500;
+const SEARCH_RESULTS_LIMIT = 10;
+const MIN_SEARCH_LENGTH = 2;
 const HANDLE_PATTERN = /^[a-z0-9_]{3,20}$/;
 const COURSE_LEVEL_CAPS = {
   chinese: 60,
@@ -218,6 +220,10 @@ function normalizeHandle(value) {
   return handle;
 }
 
+function normalizeSearchQuery(value) {
+  return cleanOptionalString(value).toLowerCase().replace(/^@+/, "").slice(0, 20);
+}
+
 function normalizeTimezone(value) {
   const timezone = cleanOptionalString(value) || DEFAULT_TIMEZONE;
   try {
@@ -300,6 +306,7 @@ module.exports = {
   normalizeUid,
   normalizeHandle,
   normalizeTimezone,
+  normalizeSearchQuery,
   cleanRequiredString,
   cleanOptionalString,
   clampInteger,
@@ -307,5 +314,7 @@ module.exports = {
   getFriendPairId,
   pickFriendProfile,
   MAX_STREAK_FREEZES,
-  WORDS_PER_LEVEL
+  WORDS_PER_LEVEL,
+  SEARCH_RESULTS_LIMIT,
+  MIN_SEARCH_LENGTH
 };

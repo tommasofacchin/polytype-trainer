@@ -27,7 +27,12 @@
         isSignedIn,
         completePracticeSession,
         setUserHandle,
-        uploadProfileAvatar
+        uploadProfileAvatar,
+        searchUsers,
+        sendFriendRequest,
+        respondFriendRequest,
+        removeFriend,
+        getSocialOverview
     };
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -187,6 +192,41 @@
         }
 
         return result;
+    }
+
+    async function searchUsers(query) {
+        assertConfigured();
+        if (!state.user) throw new Error(tr("auth.signInRequired"));
+
+        return callApi("search-users", { query });
+    }
+
+    async function sendFriendRequest(toUid) {
+        assertConfigured();
+        if (!state.user) throw new Error(tr("auth.signInRequired"));
+
+        return callApi("send-friend-request", { toUid });
+    }
+
+    async function respondFriendRequest(requestId, accept) {
+        assertConfigured();
+        if (!state.user) throw new Error(tr("auth.signInRequired"));
+
+        return callApi("respond-friend-request", { requestId, accept });
+    }
+
+    async function removeFriend(friendUid) {
+        assertConfigured();
+        if (!state.user) throw new Error(tr("auth.signInRequired"));
+
+        return callApi("remove-friend", { friendUid });
+    }
+
+    async function getSocialOverview() {
+        assertConfigured();
+        if (!state.user) throw new Error(tr("auth.signInRequired"));
+
+        return callApi("get-social-overview", {});
     }
 
     function initAuthUi() {
