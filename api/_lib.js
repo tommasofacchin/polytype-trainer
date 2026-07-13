@@ -5,6 +5,14 @@ const MAX_SESSION_XP = 500;
 const SEARCH_RESULTS_LIMIT = 10;
 const MIN_SEARCH_LENGTH = 2;
 const HANDLE_PATTERN = /^[a-z0-9_]{3,20}$/;
+// Keep in sync with decks/categories.js (see scripts/generate-categories.cjs) -
+// these are just the `size` of each generated category, in order.
+const CATEGORY_SIZES = [20, 15, 20, 35, 25, 30, 25, 20, 25, 15, 10, 15, 10, 25, 10];
+const TOTAL_CATEGORY_WORDS = CATEGORY_SIZES.reduce((sum, size) => sum + size, 0);
+const XP_PER_DROP = 50;
+// A brand-new course needs a handful of words unlocked before any XP exists,
+// otherwise there is nothing to practice to earn that first XP at all.
+const STARTER_WORDS = 5;
 const COURSE_LEVEL_CAPS = {
   chinese: 60,
   german: 60,
@@ -198,6 +206,56 @@ function getCourseLevel(courseId, totalXp) {
   return cap ? Math.min(level, cap) : level;
 }
 
+function getUnlockedWordCount(categoryIndex, categoryUnlocked) {
+  let total = 0;
+  for (let i = 0; i < categoryIndex && i < CATEGORY_SIZES.length; i += 1) {
+    total += CATEGORY_SIZES[i];
+  }
+  return total + Math.max(0, categoryUnlocked);
+}
+
+// Walks a course's category/drop progress forward to match the XP it has
+// earned so far. Categories unlock in sequence: a category only starts
+// dropping words once every earlier category is fully unlocked. `isNewCourse`
+// grants the starter baseline as the walk's starting point (only for a
+// course's very first save) so a fresh course isn't stuck with zero words.
+function advanceCategoryProgress(categoryIndex, categoryUnlocked, courseXp, isNewCourse) {
+  const initialUnlocked = isNewCourse
+    ? Math.min(STARTER_WORDS, CATEGORY_SIZES[0] || 0)
+    : categoryUnlocked;
+  const previousTotal = getUnlockedWordCount(categoryIndex, initialUnlocked);
+  const targetTotal = Math.min(TOTAL_CATEGORY_WORDS, Math.floor(courseXp / XP_PER_DROP));
+  const newlyUnlocked = Math.max(0, targetTotal - previousTotal);
+
+  let index = Math.min(categoryIndex, CATEGORY_SIZES.length - 1);
+  let unlocked = initialUnlocked;
+  let remaining = newlyUnlocked;
+
+  while (remaining > 0 && index < CATEGORY_SIZES.length) {
+    const capacity = CATEGORY_SIZES[index] - unlocked;
+    if (remaining < capacity) {
+      unlocked += remaining;
+      remaining = 0;
+    } else {
+      remaining -= capacity;
+      index += 1;
+      unlocked = 0;
+    }
+  }
+
+  if (index >= CATEGORY_SIZES.length) {
+    index = CATEGORY_SIZES.length - 1;
+    unlocked = CATEGORY_SIZES[index];
+  }
+
+  return {
+    categoryIndex: index,
+    categoryUnlocked: unlocked,
+    totalWordsUnlocked: getUnlockedWordCount(index, unlocked),
+    newlyUnlocked
+  };
+}
+
 function getXpForLevel(level) {
   return 400 + (level - 1) * 250;
 }
@@ -302,6 +360,8 @@ module.exports = {
   calculateStreakUpdate,
   getLevelInfo,
   getCourseLevel,
+  getUnlockedWordCount,
+  advanceCategoryProgress,
   normalizeCourseId,
   normalizeUid,
   normalizeHandle,
@@ -316,5 +376,9 @@ module.exports = {
   MAX_STREAK_FREEZES,
   WORDS_PER_LEVEL,
   SEARCH_RESULTS_LIMIT,
-  MIN_SEARCH_LENGTH
+  MIN_SEARCH_LENGTH,
+  CATEGORY_SIZES,
+  TOTAL_CATEGORY_WORDS,
+  XP_PER_DROP,
+  STARTER_WORDS
 };

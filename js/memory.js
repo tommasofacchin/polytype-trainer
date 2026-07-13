@@ -18,9 +18,9 @@
     // Higher difficulty = more pairs and a bigger score multiplier, so a
     // cleared Hard board always beats Medium, and Medium always beats Easy.
     const DIFFICULTIES = {
-        easy:   { id: "easy",   label: "Easy",   pairs: 6,  multiplier: 1,   unlock: 3 },
-        medium: { id: "medium", label: "Medium", pairs: 10, multiplier: 1.5, unlock: 3 },
-        hard:   { id: "hard",   label: "Hard",   pairs: 15, multiplier: 2,   unlock: 10 }
+        easy:   { id: "easy",   label: "Easy",   pairs: 6,  multiplier: 1,   minWords: 6 },
+        medium: { id: "medium", label: "Medium", pairs: 10, multiplier: 1.5, minWords: 12 },
+        hard:   { id: "hard",   label: "Hard",   pairs: 15, multiplier: 2,   minWords: 20 }
     };
 
     const FLIP_BACK_DELAY = 850;
@@ -47,8 +47,7 @@
 
     const state = {
         vocab: [],          // every parsed word
-        unlocked: [],       // words unlocked at the player's level
-        unlockedLevel: 1,   // player's current course level
+        unlocked: [],       // words unlocked so far via category drops
         cfg: null,
         pairCount: 0,       // pairs actually in play (capped to unlocked pool)
         deck: [],
@@ -404,10 +403,11 @@
             state.vocab = parseDeckCsv(await response.text(), cols);
             if (!state.vocab.length) throw new Error("Empty deck");
 
-            // Only words unlocked at the player's current level are playable,
-            // matching the trainer's level gating.
-            state.unlockedLevel = getUnlockedLevel(activeDeckMeta.id);
-            state.unlocked = state.vocab.filter(item => item.unlockLevel <= state.unlockedLevel);
+            // Only words unlocked so far (category drops) are playable,
+            // matching the trainer's unlock gating.
+            const categoryProgress = getCategoryProgress(activeDeckMeta.id);
+            const unlockedSuffixes = getUnlockedWordSuffixes(categoryProgress.categoryIndex, categoryProgress.categoryUnlocked);
+            state.unlocked = state.vocab.filter(item => unlockedSuffixes.has(getWordSuffix(item.id)));
 
             applyDifficultyLocks();
             updateDifficultyHint();
@@ -419,18 +419,18 @@
         }
     }
 
-    // Lock Easy/Medium (level 3) and Hard (level 10) until the player reaches them.
+    // Lock Medium/Hard until enough words are unlocked to fill their board.
     function applyDifficultyLocks() {
         el.difficultyModal.querySelectorAll("[data-difficulty]").forEach(btn => {
             const cfg = DIFFICULTIES[btn.dataset.difficulty];
             if (!cfg) return;
-            const locked = state.unlockedLevel < cfg.unlock;
+            const locked = state.unlocked.length < cfg.minWords;
             btn.classList.toggle("is-locked", locked);
             btn.disabled = locked;
             const meta = btn.querySelector(".mem-diff-meta");
             if (meta) {
                 meta.textContent = locked
-                    ? tr("trainer.unlocksAtLevel", { level: cfg.unlock })
+                    ? tr("memory.unlocksAtWordCount", { count: cfg.minWords })
                     : tr("memory.pairCount", { count: cfg.pairs });
             }
         });
@@ -439,8 +439,7 @@
     function updateDifficultyHint() {
         if (!el.difficultySub) return;
         el.difficultySub.textContent = tr("memory.unlockedHint", {
-            count: state.unlocked.length,
-            level: state.unlockedLevel
+            count: state.unlocked.length
         });
     }
 
@@ -476,16 +475,49 @@
         );
     }
 
-    // ── Level gating (mirrors the trainer's profile + XP math) ──
-    function getUnlockedLevel(deckId) {
+    // ── Category/drop gating (mirrors the trainer's profile + XP math) ──
+    function getCategoryProgress(deckId) {
         const profile = getStoredProfile();
         const courses = profile.courses || {};
         // The trainer may key course progress by language or by deck id.
         const course = courses[activeLanguage] || (deckId && courses[deckId]);
-        if (course && course.unlockedLevel) return course.unlockedLevel;
-        if (course && course.level) return course.level;
-        if (course && course.xp) return getLevelInfo(course.xp).level;
-        return 1;
+
+        // No progress saved for this course yet: fall back to the starter
+        // baseline rather than zero (mirrors main.js) so a course the player
+        // has never opened in the Trainer still has something to play here.
+        if (!course) {
+            return { categoryIndex: 0, categoryUnlocked: getStarterWordCount() };
+        }
+
+        return {
+            categoryIndex: Math.max(0, Math.trunc(Number(course.categoryIndex) || 0)),
+            categoryUnlocked: Math.max(0, Math.trunc(Number(course.categoryUnlocked) || 0))
+        };
+    }
+
+    function getStarterWordCount() {
+        const sorted = [...(window.POLYTYPE_CATEGORIES || [])].sort((a, b) => a.order - b.order);
+        return Math.min(5, sorted[0]?.size || 0);
+    }
+
+    function getWordSuffix(wordId) {
+        const match = /(\d+)$/.exec(wordId || "");
+        return match ? Number.parseInt(match[0], 10) : 0;
+    }
+
+    function getUnlockedWordSuffixes(categoryIndex, categoryUnlocked) {
+        const categories = [...(window.POLYTYPE_CATEGORIES || [])].sort((a, b) => a.order - b.order);
+        const unlocked = new Set();
+
+        categories.forEach(category => {
+            if (category.order < categoryIndex) {
+                category.wordSuffixes.forEach(suffix => unlocked.add(suffix));
+            } else if (category.order === categoryIndex) {
+                category.wordSuffixes.slice(0, categoryUnlocked).forEach(suffix => unlocked.add(suffix));
+            }
+        });
+
+        return unlocked;
     }
 
     function getStoredProfile() {
@@ -494,22 +526,6 @@
         } catch (e) {
             return {};
         }
-    }
-
-    function getXpForLevel(level) {
-        return 400 + (level - 1) * 250;
-    }
-
-    function getLevelInfo(totalXp) {
-        let level = 1;
-        let currentXp = totalXp;
-        let nextXp = getXpForLevel(level);
-        while (currentXp >= nextXp) {
-            currentXp -= nextXp;
-            level += 1;
-            nextXp = getXpForLevel(level);
-        }
-        return { level };
     }
 
     // Minimal CSV parser (mirrors the trainer's, handles quoted fields).
@@ -559,7 +575,7 @@
 
     function startGame(difficultyId) {
         const cfg = DIFFICULTIES[difficultyId] || DIFFICULTIES.easy;
-        if (state.unlockedLevel < cfg.unlock) return; // locked at this level
+        if (state.unlocked.length < cfg.minWords) return; // not enough words unlocked yet
         state.cfg = cfg;
 
         el.difficultyModal.hidden = true;

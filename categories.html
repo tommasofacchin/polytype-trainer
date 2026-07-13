@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" class="profile-document">
+<head>
+    <meta charset="UTF-8">
+    <title data-i18n="categories.title">Categories - Polytype Trainer</title>
+  <link rel="icon" type="image/svg+xml" href="assets/flags/china.svg">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap">
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body class="profile-page-body">
+  <main class="profile-page categories-page">
+    <nav class="profile-topbar" aria-label="Categories navigation" data-i18n-aria-label="categories.navigation">
+      <a class="back-link" href="index.html" aria-label="Back home" data-i18n-aria-label="categories.back">
+        <span aria-hidden="true">&larr;</span>
+        <span data-i18n="common.home">Home</span>
+      </a>
+
+      <div class="language-menu">
+        <button id="language-menu-toggle" class="language-menu-toggle" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Choose study language" data-i18n-aria-label="trainer.chooseStudyLanguage">
+          <img id="current-language-flag" class="flag-mark" src="assets/flags/china.svg" alt="">
+        </button>
+        <div id="language-menu" class="language-menu-panel" role="menu" hidden></div>
+      </div>
+    </nav>
+
+    <section class="profile-hero categories-hero" aria-label="Categories">
+      <div class="profile-hero-copy">
+        <span class="profile-kicker" data-i18n="categories.heading">Categories</span>
+        <h1 data-i18n="categories.heading">Categories</h1>
+        <p class="profile-muted" data-i18n="categories.subtitle">Unlock new vocabulary category by category as you earn XP.</p>
+      </div>
+    </section>
+
+    <p id="categories-progress-summary" class="profile-muted categories-progress-summary"></p>
+
+    <div id="categories-list" class="categories-list"></div>
+  </main>
+
+  <script src="js/i18n.js"></script>
+  <script src="decks/index.js"></script>
+  <script src="decks/categories.js"></script>
+  <script src="js/categories.js"></script>
+</body>
+</html>

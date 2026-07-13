@@ -98,7 +98,7 @@ const profileStorageKey = "polytype-profile";
 const audioBaseUrl = stripTrailingSlash(window.POLYTYPE_AUDIO_BASE_URL || "");
 const audioPrefix = stripSlashes(window.POLYTYPE_AUDIO_PREFIX || "audio/v1");
 const audioPreloadConcurrency = 4;
-const wordsPerLevel = 5;
+const xpPerDrop = 50; // keep in sync with XP_PER_DROP in api/_lib.js / functions/index.js
 const higherUnlockedLevelDrawBoost = 1;
 const answerTimeoutMs = 10000;
 const timedAnswerTimeoutMs = 5000;
@@ -330,9 +330,6 @@ function maybeCelebrateLevelUp(level) {
 
     const isPlaying = !state.sessionEnded && state.currentDeck.length > 0;
     if (lastShownLevel !== null && level > lastShownLevel && isPlaying) {
-        for (let nextLevel = lastShownLevel + 1; nextLevel <= level; nextLevel += 1) {
-            preloadAudioForLevel(nextLevel);
-        }
         celebrateLevelUp(level);
     }
     lastShownLevel = level;
@@ -374,6 +371,67 @@ function getCurrentCourseProgress() {
 function getCurrentCourseLevelInfo() {
     const courseProgress = getCurrentCourseProgress();
     return getLevelInfo(Math.max(0, Number(courseProgress?.xp) || 0));
+}
+
+function getCurrentCategoryProgress() {
+    const courseProgress = getCurrentCourseProgress();
+
+    // No progress saved for this course yet: fall back to the starter
+    // baseline rather than zero, otherwise a brand-new course would have no
+    // words to practice with and could never earn the XP to unlock more.
+    if (!courseProgress) {
+        return { categoryIndex: 0, categoryUnlocked: getStarterWordCount() };
+    }
+
+    return {
+        categoryIndex: Math.max(0, Math.trunc(Number(courseProgress.categoryIndex) || 0)),
+        categoryUnlocked: Math.max(0, Math.trunc(Number(courseProgress.categoryUnlocked) || 0))
+    };
+}
+
+function getStarterWordCount() {
+    return Math.min(5, getSortedCategories()[0]?.size || 0);
+}
+
+function getWordSuffix(wordId) {
+    const match = /(\d+)$/.exec(wordId || "");
+    return match ? Number.parseInt(match[0], 10) : 0;
+}
+
+function getSortedCategories() {
+    return [...(window.POLYTYPE_CATEGORIES || [])].sort((a, b) => a.order - b.order);
+}
+
+function getUnlockedWordSuffixes(categoryIndex, categoryUnlocked) {
+    const unlocked = new Set();
+
+    getSortedCategories().forEach(category => {
+        if (category.order < categoryIndex) {
+            category.wordSuffixes.forEach(suffix => unlocked.add(suffix));
+        } else if (category.order === categoryIndex) {
+            category.wordSuffixes.slice(0, categoryUnlocked).forEach(suffix => unlocked.add(suffix));
+        }
+    });
+
+    return unlocked;
+}
+
+function getCategoryForSuffix(suffix) {
+    return getSortedCategories().find(category => category.wordSuffixes.includes(suffix));
+}
+
+function getWordDropRanks() {
+    const ranks = new Map();
+    let rank = 0;
+
+    getSortedCategories().forEach(category => {
+        category.wordSuffixes.forEach(suffix => {
+            ranks.set(suffix, rank);
+            rank += 1;
+        });
+    });
+
+    return ranks;
 }
 
 function populateLanguageSelect() {
@@ -698,8 +756,9 @@ function parseCsv(csvText) {
 }
 
 function prepareCurrentDeck() {
-    const unlockedLevel = getUnlockedLevel();
-    const unlockedWords = state.fullDeck.filter(item => item.unlockLevel <= unlockedLevel);
+    const { categoryIndex, categoryUnlocked } = getCurrentCategoryProgress();
+    const unlockedSuffixes = getUnlockedWordSuffixes(categoryIndex, categoryUnlocked);
+    const unlockedWords = state.fullDeck.filter(item => unlockedSuffixes.has(getWordSuffix(item.id)));
     state.currentDeck = shuffleDeckByUnlockLevel(unlockedWords);
     state.currentIndex = 0;
     // NB: do not reset state.wordsUsed here. It is the monotonic row counter
@@ -710,20 +769,6 @@ function prepareCurrentDeck() {
 
 function preloadCurrentDeckAudio() {
     scheduleAudioPreload(state.currentDeck);
-}
-
-function preloadAudioForLevel(level) {
-    scheduleAudioPreload(state.fullDeck.filter(item => item.unlockLevel === level));
-}
-
-function getUnlockedLevel() {
-    const courseProgress = getCurrentCourseProgress();
-
-    if (courseProgress?.unlockedLevel) return courseProgress.unlockedLevel;
-    if (courseProgress?.level) return courseProgress.level;
-    if (courseProgress?.xp) return getLevelInfo(courseProgress.xp).level;
-
-    return 1;
 }
 
 const LOCK_SVG =
@@ -762,8 +807,9 @@ function buildMyDeck() {
         return;
     }
 
-    const unlockedLevel = getUnlockedLevel();
-    const unlockedCount = words.filter(word => word.unlockLevel <= unlockedLevel).length;
+    const { categoryIndex, categoryUnlocked } = getCurrentCategoryProgress();
+    const unlockedSuffixes = getUnlockedWordSuffixes(categoryIndex, categoryUnlocked);
+    const unlockedCount = words.filter(word => unlockedSuffixes.has(getWordSuffix(word.id))).length;
     const pct = Math.round((unlockedCount / words.length) * 100);
 
     deckModalSub.textContent = tr("trainer.deckSummary", {
@@ -776,70 +822,73 @@ function buildMyDeck() {
         total: words.length
     });
 
-    const byLevel = new Map();
+    const byCategory = new Map();
     words.forEach(word => {
-        if (!byLevel.has(word.unlockLevel)) byLevel.set(word.unlockLevel, []);
-        byLevel.get(word.unlockLevel).push(word);
+        const category = getCategoryForSuffix(getWordSuffix(word.id));
+        if (!category) return;
+        if (!byCategory.has(category.id)) byCategory.set(category.id, []);
+        byCategory.get(category.id).push(word);
     });
 
-    [...byLevel.keys()].sort((a, b) => a - b).forEach(level => {
-        const locked = level > unlockedLevel;
-        deckGroups.appendChild(buildDeckGroup(level, byLevel.get(level), locked));
+    getSortedCategories().forEach(category => {
+        const categoryWords = byCategory.get(category.id);
+        if (!categoryWords || !categoryWords.length) return;
+        deckGroups.appendChild(buildDeckGroup(category, categoryWords, categoryIndex, unlockedSuffixes));
     });
 }
 
-function buildDeckGroup(level, words, locked) {
+function buildDeckGroup(category, words, courseCategoryIndex, unlockedSuffixes) {
+    const total = words.length;
+    const unlockedInCategory = words.filter(word => unlockedSuffixes.has(getWordSuffix(word.id))).length;
+    const isComplete = courseCategoryIndex > category.order;
+
     const group = document.createElement("section");
     group.className = "deck-group";
-    if (locked) group.classList.add("is-locked");
+    if (!isComplete) group.classList.add("is-locked");
 
     const head = document.createElement("div");
     head.className = "deck-group-head";
 
     const badge = document.createElement("span");
     badge.className = "deck-group-badge";
-    badge.innerHTML = locked ? LOCK_SVG : "&#10003;";
+    badge.innerHTML = isComplete ? "&#10003;" : LOCK_SVG;
 
     const title = document.createElement("span");
     title.className = "deck-group-title";
-    title.textContent = tr("common.levelNumber", { level });
+    title.textContent = tr(category.labelKey);
 
     const meta = document.createElement("span");
     meta.className = "deck-group-meta";
-    meta.textContent = locked
-        ? tr("trainer.unlocksAtLevel", { level })
-        : tr("trainer.wordCount", {
-            count: words.length,
-            word: words.length === 1 ? tr("common.word") : tr("common.words")
-        });
+    meta.textContent = isComplete
+        ? tr("trainer.wordCount", {
+            count: total,
+            word: total === 1 ? tr("common.word") : tr("common.words")
+        })
+        : tr("trainer.categoryProgress", { unlocked: unlockedInCategory, total });
 
     head.append(badge, title, meta);
 
     const grid = document.createElement("div");
     grid.className = "deck-grid";
-    words.forEach(word => grid.appendChild(buildDeckCard(word, level, locked)));
+    words.forEach(word => grid.appendChild(buildDeckCard(word, !unlockedSuffixes.has(getWordSuffix(word.id)))));
 
     group.append(head, grid);
     return group;
 }
 
-function buildDeckCard(word, level, locked) {
+function buildDeckCard(word, locked) {
     const card = document.createElement("div");
     card.className = "deck-card";
 
     if (locked) {
         card.classList.add("is-locked");
-        card.setAttribute("aria-label", tr("trainer.lockedWord", { level }));
+        card.setAttribute("aria-label", tr("trainer.lockedWord"));
 
         const lock = document.createElement("span");
         lock.className = "deck-card-lock";
         lock.innerHTML = LOCK_SVG;
 
-        const tag = document.createElement("span");
-        tag.className = "deck-card-locktag";
-        tag.textContent = `Lv ${level}`;
-
-        card.append(lock, tag);
+        card.append(lock);
         return card;
     }
 
@@ -869,11 +918,6 @@ function buildDeckCard(word, level, locked) {
     meaning.className = "deck-card-meaning";
     meaning.textContent = word.meaning;
     card.appendChild(meaning);
-
-    const lvl = document.createElement("span");
-    lvl.className = "deck-card-lv";
-    lvl.textContent = `Lv ${level}`;
-    card.appendChild(lvl);
 
     return card;
 }
@@ -1410,22 +1454,79 @@ function awardComboPoints() {
 
 function addLocalCourseXp(points) {
     const courseId = getCurrentCourseKey();
-    const currentCourse = getCurrentCourseProgress() || {};
-    const xp = Math.max(0, Number(currentCourse.xp) || 0) + points;
+    const currentCourse = getCurrentCourseProgress();
+    const isNewCourse = !currentCourse;
+    const xp = Math.max(0, Number(currentCourse?.xp) || 0) + points;
     const levelInfo = getLevelInfo(xp);
+    const previousCategoryIndex = Math.max(0, Math.trunc(Number(currentCourse?.categoryIndex) || 0));
+    const previousCategoryUnlocked = Math.max(0, Math.trunc(Number(currentCourse?.categoryUnlocked) || 0));
+    const categoryProgress = advanceLocalCategoryProgress(
+        previousCategoryIndex,
+        previousCategoryUnlocked,
+        xp,
+        isNewCourse
+    );
 
     profile.xp = Math.max(0, Number(profile.xp) || 0) + points;
     profile.courses = {
         ...(profile.courses || {}),
         [courseId]: {
-            ...currentCourse,
+            ...(currentCourse || {}),
             courseId,
             xp,
             level: levelInfo.level,
             unlockedLevel: levelInfo.level,
-            wordsUnlocked: levelInfo.level * wordsPerLevel
+            categoryIndex: categoryProgress.categoryIndex,
+            categoryUnlocked: categoryProgress.categoryUnlocked,
+            wordsUnlocked: categoryProgress.totalWordsUnlocked
         }
     };
+}
+
+// Mirrors advanceCategoryProgress() in api/_lib.js / functions/index.js for the
+// signed-out/local-only progress path (no server round trip available there).
+function advanceLocalCategoryProgress(categoryIndex, categoryUnlocked, courseXp, isNewCourse) {
+    const categories = getSortedCategories();
+    const totalWords = categories.reduce((sum, category) => sum + category.size, 0);
+    const initialUnlocked = isNewCourse ? getStarterWordCount() : categoryUnlocked;
+    const previousTotal = getUnlockedWordCountForCategoryState(categoryIndex, initialUnlocked);
+    const targetTotal = Math.min(totalWords, Math.floor(courseXp / xpPerDrop));
+
+    let index = Math.min(categoryIndex, categories.length - 1);
+    let unlocked = initialUnlocked;
+    let remaining = Math.max(0, targetTotal - previousTotal);
+
+    while (remaining > 0 && index < categories.length) {
+        const capacity = categories[index].size - unlocked;
+        if (remaining < capacity) {
+            unlocked += remaining;
+            remaining = 0;
+        } else {
+            remaining -= capacity;
+            index += 1;
+            unlocked = 0;
+        }
+    }
+
+    if (index >= categories.length) {
+        index = categories.length - 1;
+        unlocked = categories[index].size;
+    }
+
+    return {
+        categoryIndex: index,
+        categoryUnlocked: unlocked,
+        totalWordsUnlocked: getUnlockedWordCountForCategoryState(index, unlocked)
+    };
+}
+
+function getUnlockedWordCountForCategoryState(categoryIndex, categoryUnlocked) {
+    const categories = getSortedCategories();
+    let total = 0;
+    for (let i = 0; i < categoryIndex && i < categories.length; i += 1) {
+        total += categories[i].size;
+    }
+    return total + Math.max(0, categoryUnlocked);
 }
 
 function getComboMultiplier(streak) {
@@ -1545,32 +1646,6 @@ function celebrateLevelUp(level) {
 
     card.append(rays, badge, title, sub);
 
-    const newWords = state.fullDeck.filter(w => w.unlockLevel === level);
-    if (newWords.length > 0) {
-        const unlockSection = document.createElement("div");
-        unlockSection.className = "levelup-unlocks";
-
-        const unlockTitle = document.createElement("p");
-        unlockTitle.className = "levelup-unlocks-title";
-        unlockTitle.textContent = tr("trainer.newWordsUnlocked", {
-            count: newWords.length,
-            word: newWords.length === 1 ? tr("common.word") : tr("common.words")
-        });
-
-        const unlockGrid = document.createElement("div");
-        unlockGrid.className = "levelup-unlocks-grid";
-        newWords.forEach(word => {
-            const chip = document.createElement("span");
-            chip.className = "levelup-unlock-chip";
-            chip.textContent = word.script;
-            if (word.meaning) chip.title = word.meaning;
-            unlockGrid.appendChild(chip);
-        });
-
-        unlockSection.append(unlockTitle, unlockGrid);
-        card.appendChild(unlockSection);
-    }
-
     const confirmBtn = document.createElement("button");
     confirmBtn.type = "button";
     confirmBtn.className = "levelup-confirm-btn";
@@ -1601,6 +1676,55 @@ function celebrateLevelUp(level) {
 
     overlay.append(confetti, card);
     document.body.appendChild(overlay);
+}
+
+function celebrateWordDrop(newWords, category) {
+    if (!newWords.length) return;
+
+    document.querySelector(".drop-toast")?.remove();
+
+    const toast = document.createElement("div");
+    toast.className = "drop-toast";
+
+    const header = document.createElement("div");
+    header.className = "drop-toast-head";
+
+    const icon = document.createElement("span");
+    icon.className = "drop-toast-icon";
+    icon.textContent = "\u{1F381}";
+
+    const heading = document.createElement("div");
+    heading.className = "drop-toast-heading";
+
+    const title = document.createElement("strong");
+    title.textContent = tr("trainer.newWordsUnlocked", {
+        count: newWords.length,
+        word: newWords.length === 1 ? tr("common.word") : tr("common.words")
+    });
+
+    const subtitle = document.createElement("span");
+    subtitle.textContent = category ? tr(category.labelKey) : "";
+
+    heading.append(title, subtitle);
+    header.append(icon, heading);
+
+    const grid = document.createElement("div");
+    grid.className = "levelup-unlocks-grid drop-toast-grid";
+    newWords.forEach(word => {
+        const chip = document.createElement("span");
+        chip.className = "levelup-unlock-chip";
+        chip.textContent = word.script;
+        if (word.meaning) chip.title = word.meaning;
+        grid.appendChild(chip);
+    });
+
+    toast.append(header, grid);
+    document.body.appendChild(toast);
+
+    window.setTimeout(() => {
+        toast.classList.add("is-leaving");
+        toast.addEventListener("animationend", () => toast.remove(), { once: true });
+    }, 4200);
 }
 
 function getComboColor(tier) {
@@ -1735,6 +1859,12 @@ async function saveCurrentSessionProgress() {
     state.saveInFlight = true;
     if (isAnyResultVisible()) setResultSaveStatus(tr("trainer.savingProgress"));
 
+    const previousCategoryProgress = getCurrentCategoryProgress();
+    const previousUnlockedSuffixes = getUnlockedWordSuffixes(
+        previousCategoryProgress.categoryIndex,
+        previousCategoryProgress.categoryUnlocked
+    );
+
     state.savePromise = (async () => {
         const result = await firebaseClient.completePracticeSession(payload);
         const progress = result.data;
@@ -1756,6 +1886,22 @@ async function saveCurrentSessionProgress() {
 
             saveProfile();
             renderProfile();
+
+            if (progress.newlyUnlockedWords > 0 && progress.course?.courseId === getCurrentCourseKey()) {
+                const newUnlockedSuffixes = getUnlockedWordSuffixes(
+                    progress.course.categoryIndex,
+                    progress.course.categoryUnlocked
+                );
+                const newWords = state.fullDeck.filter(word => {
+                    const suffix = getWordSuffix(word.id);
+                    return newUnlockedSuffixes.has(suffix) && !previousUnlockedSuffixes.has(suffix);
+                });
+
+                if (newWords.length) {
+                    scheduleAudioPreload(newWords);
+                    celebrateWordDrop(newWords, getSortedCategories()[progress.course.categoryIndex] || null);
+                }
+            }
         }
 
         state.unsavedCorrectFields = Math.max(0, state.unsavedCorrectFields - payload.correctAnswers);
@@ -1874,14 +2020,15 @@ function stripTrailingSlash(value) {
 function shuffleDeckByUnlockLevel(words) {
     if (words.length <= 1) return [...words];
 
-    const levels = words.map(word => word.unlockLevel || 1);
-    const minLevel = Math.min(...levels);
-    const maxLevel = Math.max(...levels);
+    const dropRanks = getWordDropRanks();
+    const ranks = words.map(word => dropRanks.get(getWordSuffix(word.id)) ?? 0);
+    const minLevel = Math.min(...ranks);
+    const maxLevel = Math.max(...ranks);
 
     if (minLevel === maxLevel) return shuffleArray(words);
 
     return weightedShuffleArray(words, word =>
-        getUnlockLevelDrawWeight(word.unlockLevel || 1, minLevel, maxLevel)
+        getUnlockLevelDrawWeight(dropRanks.get(getWordSuffix(word.id)) ?? 0, minLevel, maxLevel)
     );
 }
 

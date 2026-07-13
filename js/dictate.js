@@ -305,33 +305,58 @@
 
     // ── Session ───────────────────────────────────────────────────────────────
 
-    function getUnlockedLevel() {
+    // ── Category/drop gating (mirrors the trainer's profile + XP math) ──
+    function getCategoryProgress() {
         try {
             const profile = JSON.parse(localStorage.getItem(PROFILE_KEY) || "{}");
             const courses = profile.courses || {};
-            const progress = courses[activeLanguage] || courses[activeDeckMeta?.id] || null;
-            if (!progress) return 1;
-            if (progress.unlockedLevel) return progress.unlockedLevel;
-            if (progress.level) return progress.level;
-            if (progress.xp) return getLevelFromXp(Number(progress.xp));
-        } catch {}
-        return 1;
+            const course = courses[activeLanguage] || (activeDeckMeta?.id && courses[activeDeckMeta.id]) || null;
+
+            // No progress saved for this course yet: fall back to the starter
+            // baseline rather than zero (mirrors main.js) so a course the
+            // player has never opened in the Trainer still has words to play.
+            if (!course) {
+                return { categoryIndex: 0, categoryUnlocked: getStarterWordCount() };
+            }
+
+            return {
+                categoryIndex: Math.max(0, Math.trunc(Number(course.categoryIndex) || 0)),
+                categoryUnlocked: Math.max(0, Math.trunc(Number(course.categoryUnlocked) || 0))
+            };
+        } catch {
+            return { categoryIndex: 0, categoryUnlocked: getStarterWordCount() };
+        }
     }
 
-    function getLevelFromXp(totalXp) {
-        let level = 1, remaining = totalXp;
-        while (true) {
-            const needed = Math.round(400 + (level - 1) * 250 + (level - 1) * (level - 1) * 15);
-            if (remaining < needed) break;
-            remaining -= needed;
-            level++;
-        }
-        return level;
+    function getStarterWordCount() {
+        const sorted = [...(window.POLYTYPE_CATEGORIES || [])].sort((a, b) => a.order - b.order);
+        return Math.min(5, sorted[0]?.size || 0);
+    }
+
+    function getWordSuffix(wordId) {
+        const match = /(\d+)$/.exec(wordId || "");
+        return match ? Number.parseInt(match[0], 10) : 0;
+    }
+
+    function getUnlockedWordSuffixes(categoryIndex, categoryUnlocked) {
+        const categories = [...(window.POLYTYPE_CATEGORIES || [])].sort((a, b) => a.order - b.order);
+        const unlocked = new Set();
+
+        categories.forEach(category => {
+            if (category.order < categoryIndex) {
+                category.wordSuffixes.forEach(suffix => unlocked.add(suffix));
+            } else if (category.order === categoryIndex) {
+                category.wordSuffixes.slice(0, categoryUnlocked).forEach(suffix => unlocked.add(suffix));
+            }
+        });
+
+        return unlocked;
     }
 
     function getUnlockedDeck() {
-        const level = getUnlockedLevel();
-        const unlocked = state.vocab.filter(item => item.unlockLevel <= level);
+        const progress = getCategoryProgress();
+        const unlockedSuffixes = getUnlockedWordSuffixes(progress.categoryIndex, progress.categoryUnlocked);
+        const unlocked = state.vocab.filter(item => unlockedSuffixes.has(getWordSuffix(item.id)));
         return unlocked.length > 0 ? unlocked : state.vocab;
     }
 

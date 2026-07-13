@@ -2,8 +2,8 @@ const { db, FieldValue, Timestamp } = require("./_firebase");
 const {
   withAuth, getAuthProfile, buildDefaultUserProfile, buildPublicProfile,
   normalizeSessionPayload, calculateSessionXp, calculateStreakUpdate,
-  getLevelInfo, getCourseLevel, getDateKeyForTimezone, normalizeTimezone,
-  ApiError, WORDS_PER_LEVEL
+  getLevelInfo, getCourseLevel, advanceCategoryProgress, getDateKeyForTimezone, normalizeTimezone,
+  ApiError
 } = require("./_lib");
 
 module.exports = withAuth(async (data, token) => {
@@ -36,6 +36,19 @@ module.exports = withAuth(async (data, token) => {
     const courseXp = previousCourseXp + xpEarned;
     const globalLevel = getLevelInfo(totalXp).level;
     const courseLevel = getCourseLevel(session.courseId, courseXp);
+    const hasExistingCourse = courseSnap.exists || Boolean(existingCourse);
+    const previousCategoryIndex = courseSnap.exists
+      ? courseSnap.data().categoryIndex || 0
+      : existingCourse?.categoryIndex || 0;
+    const previousCategoryUnlocked = courseSnap.exists
+      ? courseSnap.data().categoryUnlocked || 0
+      : existingCourse?.categoryUnlocked || 0;
+    const categoryProgress = advanceCategoryProgress(
+      previousCategoryIndex,
+      previousCategoryUnlocked,
+      courseXp,
+      !hasExistingCourse
+    );
     const streak = calculateStreakUpdate({
       currentStreak: existingUser?.currentStreak || 0,
       longestStreak: existingUser?.longestStreak || 0,
@@ -71,7 +84,9 @@ module.exports = withAuth(async (data, token) => {
       xp: courseXp,
       level: courseLevel,
       unlockedLevel: courseLevel,
-      wordsUnlocked: courseLevel * WORDS_PER_LEVEL,
+      categoryIndex: categoryProgress.categoryIndex,
+      categoryUnlocked: categoryProgress.categoryUnlocked,
+      wordsUnlocked: categoryProgress.totalWordsUnlocked,
       wordsMastered: courseSnap.exists ? courseSnap.data().wordsMastered || 0 : 0,
       lastPlayedAt: now,
       updatedAt: now
@@ -81,6 +96,8 @@ module.exports = withAuth(async (data, token) => {
       xp: courseXp,
       level: courseLevel,
       unlockedLevel: courseLevel,
+      categoryIndex: categoryProgress.categoryIndex,
+      categoryUnlocked: categoryProgress.categoryUnlocked,
       wordsUnlocked: courseData.wordsUnlocked,
       wordsMastered: courseData.wordsMastered
     };
@@ -128,6 +145,14 @@ module.exports = withAuth(async (data, token) => {
       });
     }
 
-    return { xpEarned, totalXp, globalLevel, course: courseResponse, streak, unlockedWords: courseData.wordsUnlocked };
+    return {
+      xpEarned,
+      totalXp,
+      globalLevel,
+      course: courseResponse,
+      streak,
+      unlockedWords: courseData.wordsUnlocked,
+      newlyUnlockedWords: categoryProgress.newlyUnlocked
+    };
   });
 });
