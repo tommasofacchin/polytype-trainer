@@ -286,6 +286,14 @@
             "nav.deck": "Deck",
             "nav.friends": "Friends",
             "nav.profile": "Profile",
+            "nav.newLanguage": "New language",
+
+            "languages.pageTitle": "Choose a language - Polytype Trainer",
+            "languages.title": "Choose a language",
+            "languages.subtitle": "Pick a language to switch to it, or start a brand-new one.",
+            "languages.inProgress": "In progress",
+            "languages.notStarted": "Not started",
+            "languages.current": "Current",
 
             "deck.pageTitle": "Deck - Polytype Trainer",
             "deck.title": "Deck",
@@ -632,6 +640,14 @@
             "nav.deck": "Mazzo",
             "nav.friends": "Amici",
             "nav.profile": "Profilo",
+            "nav.newLanguage": "Nuova lingua",
+
+            "languages.pageTitle": "Scegli una lingua - Polytype Trainer",
+            "languages.title": "Scegli una lingua",
+            "languages.subtitle": "Scegli una lingua per passare a quella, o iniziane una nuova.",
+            "languages.inProgress": "In corso",
+            "languages.notStarted": "Non iniziata",
+            "languages.current": "Attuale",
 
             "deck.pageTitle": "Mazzo - Polytype Trainer",
             "deck.title": "Mazzo",

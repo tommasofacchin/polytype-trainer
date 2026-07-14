@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title data-i18n="languages.pageTitle">Choose a language - Polytype Trainer</title>
+    <link rel="icon" type="image/svg+xml" href="assets/flags/china.svg">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap">
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body class="has-app-shell is-scroll-page">
+    <div id="app-header"></div>
+
+    <main class="page-content">
+        <a class="back-link-mini" href="index.html">&lsaquo; <span data-i18n="nav.home">Home</span></a>
+        <h1 class="page-title" data-i18n="languages.title">Choose a language</h1>
+        <p class="page-subtitle" data-i18n="languages.subtitle">Pick a language to switch to it, or start a brand-new one.</p>
+
+        <div id="languages-list" class="game-hub-grid" style="grid-template-columns:1fr"></div>
+    </main>
+    <div id="app-bottom-nav"></div>
+
+    <script src="js/firebase-config.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-auth-compat.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/firebase-client.js"></script>
+    <script src="js/gamestate.js"></script>
+    <script src="js/app-shell.js"></script>
+    <script src="decks/index.js"></script>
+    <script src="js/languages.js"></script>
+</body>
+</html>

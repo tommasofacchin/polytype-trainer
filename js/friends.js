@@ -1,4 +1,5 @@
 const themeStorageKey = "polytype-theme";
+const CACHE_KEY = "polytype-friends-cache";
 
 function tr(key, params = {}) {
     return window.PolytypeI18n?.t?.(key, params) || key;
@@ -6,6 +7,7 @@ function tr(key, params = {}) {
 
 document.addEventListener("DOMContentLoaded", () => {
     applyStoredTheme();
+    renderFromCache();
     setupAuthGate();
 
     document.addEventListener("polytype-app-language-changed", () => {
@@ -19,23 +21,53 @@ function applyStoredTheme() {
     document.documentElement.dataset.theme = storedTheme || (prefersDark ? "dark" : "light");
 }
 
+// Render whatever we already have cached (from this page's last visit, or a
+// background prefetch from app-shell.js on another page) immediately, before
+// any network round trip - the fresh fetch below then quietly reconciles it.
+function renderFromCache() {
+    const cached = readCache();
+    if (!cached) return;
+    renderIncoming(cached.incomingRequests || []);
+    renderOutgoing(cached.outgoingRequests || []);
+    renderLeaderboard(cached.leaderboard || []);
+}
+
+function readCache() {
+    try {
+        const raw = localStorage.getItem(CACHE_KEY);
+        const entry = raw ? JSON.parse(raw) : null;
+        return entry?.data || null;
+    } catch {
+        return null;
+    }
+}
+
+function writeCache(data) {
+    try {
+        localStorage.setItem(CACHE_KEY, JSON.stringify({ savedAt: Date.now(), data }));
+    } catch {}
+}
+
 let hasLoadedOverview = false;
 
 function setupAuthGate() {
     const firebaseClient = window.PolytypeFirebase;
     const notice = document.getElementById("friends-signin-notice");
-    const findBtn = document.getElementById("find-friends-btn");
 
     if (!firebaseClient) {
         if (notice) notice.hidden = false;
-        if (findBtn) findBtn.hidden = true;
         return;
     }
 
     firebaseClient.onChange(authState => {
         const signedIn = Boolean(authState.user);
         if (notice) notice.hidden = signedIn;
-        if (findBtn) findBtn.hidden = !signedIn;
+
+        // onChange fires synchronously with the *unresolved* state before
+        // Firebase has even checked whether there's a session - don't treat
+        // that as "signed out" and wipe out what renderFromCache() just
+        // painted. Only clear once we've definitively confirmed no session.
+        if (!authState.ready) return;
 
         if (!signedIn) {
             hasLoadedOverview = false;
@@ -45,11 +77,11 @@ function setupAuthGate() {
             return;
         }
 
-        // Wait for the full profile (not just the auth user) before the first
-        // fetch: publicProfiles/{uid} is only guaranteed to exist once
-        // ensure-user-profile has completed, otherwise the leaderboard can
-        // come back incomplete and then "pop in" again once it catches up.
-        if (authState.profile && !hasLoadedOverview) {
+        // Fire as soon as we know we're signed in - don't wait for the full
+        // profile round trip too, that just adds a second sequential fetch
+        // on top of an already-slow cold start. The cache render above
+        // already covers the "looks instant" case for repeat visits.
+        if (!hasLoadedOverview) {
             hasLoadedOverview = true;
             loadOverview();
         }
@@ -66,6 +98,7 @@ async function loadOverview() {
         renderIncoming(data.incomingRequests || []);
         renderOutgoing(data.outgoingRequests || []);
         renderLeaderboard(data.leaderboard || []);
+        writeCache(data);
     } catch (error) {
         setPageStatus(getFriendsErrorMessage(error));
     }

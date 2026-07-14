@@ -161,7 +161,18 @@ function sanitizeCoursesSummary(courses) {
         xp: course.xp || 0,
         level: course.level || 1,
         unlockedLevel: course.unlockedLevel || course.level || 1,
-        wordsUnlocked: course.wordsUnlocked || WORDS_PER_LEVEL
+        // Must round-trip categoryIndex/categoryUnlocked (not just
+        // wordsUnlocked) - the trainer/memory/dictate/deck pages all derive
+        // their actual playable word list from these two fields via
+        // getUnlockedWordSuffixes(). Dropping them here made every page
+        // reload silently reset a real course back to 0 unlocked words,
+        // since the client's own "no course yet" starter-word fallback only
+        // triggers when the course object is entirely missing, not when
+        // it's present but missing these fields.
+        categoryIndex: Math.max(0, Math.trunc(Number(course.categoryIndex) || 0)),
+        categoryUnlocked: Math.max(0, Math.trunc(Number(course.categoryUnlocked) || 0)),
+        wordsUnlocked: course.wordsUnlocked || WORDS_PER_LEVEL,
+        wordsMastered: course.wordsMastered || 0
       }
     ])
   );

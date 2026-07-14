@@ -40,6 +40,7 @@
         renderBottomNav();
 
         window.PolytypeFirebase?.onChange?.(renderHeaderAuth);
+        window.PolytypeFirebase?.onChange?.(prefetchFriendsOverview);
         window.PolytypeGameState?.onChange?.(renderHeaderStats);
         document.addEventListener("polytype-app-language-changed", () => {
             renderHeader();
@@ -47,53 +48,195 @@
         });
     });
 
+    // Keeps the friends.html cache warm from every other page, so opening
+    // the Friends tab renders instantly instead of waiting on a cold fetch.
+    const FRIENDS_CACHE_KEY = "polytype-friends-cache";
+    const FRIENDS_CACHE_STALE_MS = 20000;
+    let friendsPrefetchInFlight = false;
+
+    function prefetchFriendsOverview(authState) {
+        if (!authState.user || friendsPrefetchInFlight) return;
+
+        try {
+            const raw = localStorage.getItem(FRIENDS_CACHE_KEY);
+            const entry = raw ? JSON.parse(raw) : null;
+            if (entry?.savedAt && Date.now() - entry.savedAt < FRIENDS_CACHE_STALE_MS) return;
+        } catch {}
+
+        friendsPrefetchInFlight = true;
+        window.PolytypeFirebase.getSocialOverview()
+            .then(result => {
+                if (!result?.data) return;
+                try {
+                    localStorage.setItem(FRIENDS_CACHE_KEY, JSON.stringify({ savedAt: Date.now(), data: result.data }));
+                } catch {}
+            })
+            .catch(() => {})
+            .finally(() => { friendsPrefetchInFlight = false; });
+    }
+
+    // Last-known values from firebase-client.js's own localStorage mirror
+    // (kept up to date after every session/chest/claim). Painting from this
+    // synchronously means the header never has to show 0 while the real
+    // auth + network round trip catches up on the next page.
+    function readCachedProfile() {
+        try {
+            return JSON.parse(localStorage.getItem("polytype-profile")) || {};
+        } catch {
+            return {};
+        }
+    }
+
     function renderHeader() {
         const mount = document.getElementById("app-header");
         if (!mount) return;
 
         const language = localStorage.getItem("polytype-language") || "chinese";
         const flagSrc = LANGUAGE_FLAGS[language] || LANGUAGE_FLAGS.chinese;
+        const cached = readCachedProfile();
+        const avatarInner = cached.avatarUrl ? `<img src="${cached.avatarUrl}" alt="">` : ICONS.person;
 
         mount.innerHTML = `
             <div class="app-shell-header">
                 <div class="app-shell-stats">
-                    <span class="app-shell-stat app-shell-stat-streak" id="app-shell-streak">${ICONS.streak}0</span>
-                    <span class="app-shell-stat app-shell-stat-coin" id="app-shell-coins">${ICONS.coin}0</span>
-                    <span class="app-shell-stat app-shell-stat-rupee" id="app-shell-rupees">${ICONS.rupee}0</span>
+                    <span class="app-shell-stat app-shell-stat-streak" id="app-shell-streak">${ICONS.streak}${cached.dayStreak || 0}</span>
+                    <span class="app-shell-stat app-shell-stat-coin" id="app-shell-coins">${ICONS.coin}${cached.coins || 0}</span>
+                    <span class="app-shell-stat app-shell-stat-rupee" id="app-shell-rupees">${ICONS.rupee}${cached.rupees || 0}</span>
                 </div>
                 <div class="app-shell-identity">
-                    <span class="app-shell-flag"><img src="${flagSrc}" alt=""></span>
-                    <a id="app-shell-avatar" class="app-shell-avatar" href="profile.html" aria-label="${tr("trainer.openProfile")}">${ICONS.person}</a>
+                    <div class="language-menu app-shell-lang-menu">
+                        <span class="app-shell-flag" id="app-shell-flag-toggle" tabindex="0" role="button" aria-haspopup="true" aria-expanded="false"><img src="${flagSrc}" alt=""></span>
+                        <div id="app-shell-language-menu" class="language-menu-panel" role="menu" hidden></div>
+                    </div>
+                    <a id="app-shell-avatar" class="app-shell-avatar${cached.avatarUrl ? " has-image" : ""}" href="profile.html" aria-label="${tr("trainer.openProfile")}">${avatarInner}</a>
                 </div>
             </div>
         `;
 
         renderHeaderAuth(window.PolytypeFirebase?.state || {});
         renderHeaderStats(window.PolytypeGameState?.state || {});
+        setupFlagMenu();
+    }
+
+    function getLanguageLabel(language) {
+        return window.PolytypeI18n?.languageLabel?.(language) || language;
+    }
+
+    function renderFlagMenuContent() {
+        const panel = document.getElementById("app-shell-language-menu");
+        if (!panel) return;
+
+        const activeLanguage = localStorage.getItem("polytype-language") || "chinese";
+        const cached = readCachedProfile();
+        const studying = Object.keys(cached.courses || {}).filter(lang => LANGUAGE_FLAGS[lang]);
+        if (!studying.includes(activeLanguage)) studying.unshift(activeLanguage);
+
+        panel.innerHTML = `
+            ${studying.map(lang => `
+                <button type="button" class="language-menu-item${lang === activeLanguage ? " is-active" : ""}" data-language="${lang}" role="menuitemradio" aria-checked="${lang === activeLanguage}">
+                    <img class="flag-mark" src="${LANGUAGE_FLAGS[lang] || ""}" alt="">
+                    <span>${getLanguageLabel(lang)}</span>
+                </button>
+            `).join("")}
+            <div class="language-menu-divider"></div>
+            <a class="language-menu-item" href="languages.html">
+                <span class="language-menu-plus" aria-hidden="true">+</span>
+                <span>${tr("nav.newLanguage")}</span>
+            </a>
+        `;
+
+        panel.querySelectorAll("[data-language]").forEach(btn => {
+            btn.addEventListener("click", () => {
+                localStorage.setItem("polytype-language", btn.dataset.language);
+                closeFlagMenu();
+                renderHeader();
+            });
+        });
+    }
+
+    let flagMenuCloseTimer = null;
+
+    function openFlagMenu() {
+        clearTimeout(flagMenuCloseTimer);
+        const panel = document.getElementById("app-shell-language-menu");
+        const toggle = document.getElementById("app-shell-flag-toggle");
+        if (!panel || !toggle) return;
+        renderFlagMenuContent();
+        panel.hidden = false;
+        toggle.setAttribute("aria-expanded", "true");
+    }
+
+    function closeFlagMenu() {
+        const panel = document.getElementById("app-shell-language-menu");
+        const toggle = document.getElementById("app-shell-flag-toggle");
+        if (panel) panel.hidden = true;
+        if (toggle) toggle.setAttribute("aria-expanded", "false");
+    }
+
+    function setupFlagMenu() {
+        const wrap = document.querySelector(".app-shell-lang-menu");
+        const toggle = document.getElementById("app-shell-flag-toggle");
+        const panel = document.getElementById("app-shell-language-menu");
+        if (!wrap || !toggle || !panel) return;
+
+        wrap.addEventListener("mouseenter", openFlagMenu);
+        wrap.addEventListener("mouseleave", () => {
+            flagMenuCloseTimer = setTimeout(closeFlagMenu, 150);
+        });
+
+        toggle.addEventListener("click", () => {
+            if (panel.hidden) openFlagMenu(); else closeFlagMenu();
+        });
+        toggle.addEventListener("keydown", event => {
+            if (event.key !== "Enter" && event.key !== " ") return;
+            event.preventDefault();
+            if (panel.hidden) openFlagMenu(); else closeFlagMenu();
+        });
+
+        document.addEventListener("click", event => {
+            if (panel.hidden) return;
+            if (wrap.contains(event.target)) return;
+            closeFlagMenu();
+        });
     }
 
     function renderHeaderAuth(authState) {
         const avatar = document.getElementById("app-shell-avatar");
         if (!avatar) return;
 
-        const profile = authState.profile;
         avatar.href = authState.user ? "profile.html" : "auth.html";
 
-        if (profile?.avatarUrl) {
-            avatar.classList.add("has-image");
-            avatar.innerHTML = `<img src="${profile.avatarUrl}" alt="">`;
-        } else {
-            avatar.classList.remove("has-image");
-            avatar.innerHTML = ICONS.person;
+        // Same "don't stomp the cache with a false default" problem as
+        // renderHeaderStats: onChange fires synchronously before Firebase has
+        // resolved anything, with profile still null. Only repaint once we
+        // have a real profile, or have definitively confirmed signed-out.
+        const definitivelySignedOut = authState.ready && !authState.user;
+        const hasFreshProfile = Boolean(authState.profile);
+
+        if (hasFreshProfile || definitivelySignedOut) {
+            const avatarUrl = authState.profile?.avatarUrl;
+            if (avatarUrl) {
+                avatar.classList.add("has-image");
+                avatar.innerHTML = `<img src="${avatarUrl}" alt="">`;
+            } else {
+                avatar.classList.remove("has-image");
+                avatar.innerHTML = ICONS.person;
+            }
         }
 
         const streakEl = document.getElementById("app-shell-streak");
-        if (streakEl && typeof profile?.currentStreak === "number") {
-            streakEl.innerHTML = `${ICONS.streak}${profile.currentStreak}`;
+        if (streakEl && typeof authState.profile?.currentStreak === "number") {
+            streakEl.innerHTML = `${ICONS.streak}${authState.profile.currentStreak}`;
         }
     }
 
     function renderHeaderStats(gameState) {
+        // gamestate.js's own state defaults coins/rupees to 0 before its first
+        // real fetch resolves - only trust it once `loaded` confirms that
+        // happened, otherwise this would stomp the cached value renderHeader()
+        // just painted with a false zero.
+        if (!gameState.loaded) return;
+
         const coinsEl = document.getElementById("app-shell-coins");
         const rupeesEl = document.getElementById("app-shell-rupees");
         if (coinsEl && typeof gameState.coins === "number") coinsEl.innerHTML = `${ICONS.coin}${gameState.coins}`;
