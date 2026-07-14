@@ -1,12 +1,8 @@
 const { db, FieldValue } = require("./_firebase");
 const {
-  withAuth,
-  getAuthProfile,
-  buildDefaultUserProfile,
-  buildPublicProfile,
-  sanitizeUserProfile,
-  normalizeTimezone,
-  ApiError
+  withAuth, normalizeHandle, normalizeDisplayName, getAuthProfile,
+  buildDefaultUserProfile, buildPublicProfile, sanitizeUserProfile,
+  normalizeTimezone, ApiError
 } = require("./_lib");
 const { getStorjConfig, putStorjObject, getPublicObjectUrl } = require("./_storj");
 
@@ -17,7 +13,64 @@ const IMAGE_TYPES = new Map([
   ["image/webp", "webp"]
 ]);
 
+// Consolidated so this counts as a single Vercel serverless function
+// (Hobby plan caps a deployment at 12) - dispatches on data.action instead
+// of one file per profile-editing operation.
 module.exports = withAuth(async (data, token) => {
+  switch (data.action) {
+    case "handle": return setHandle(data, token);
+    case "name": return setDisplayName(data, token);
+    case "avatar": return uploadAvatar(data, token);
+    default: throw new ApiError(400, "Unknown profile action.");
+  }
+});
+
+async function setHandle(data, token) {
+  const handle = normalizeHandle(data.handle);
+
+  return db.runTransaction(async transaction => {
+    const userRef = db.doc(`users/${token.uid}`);
+    const publicRef = db.doc(`publicProfiles/${token.uid}`);
+    const usernameRef = db.doc(`usernames/${handle}`);
+    const userSnap = await transaction.get(userRef);
+    const usernameSnap = await transaction.get(usernameRef);
+
+    if (usernameSnap.exists && usernameSnap.data().uid !== token.uid) {
+      throw new ApiError(409, "This handle is already taken.");
+    }
+
+    const previousHandle = userSnap.exists ? userSnap.data().handle : null;
+    const previousHandleRef = previousHandle && previousHandle !== handle
+      ? db.doc(`usernames/${previousHandle}`)
+      : null;
+
+    if (previousHandleRef) transaction.delete(previousHandleRef);
+
+    const now = FieldValue.serverTimestamp();
+    transaction.set(usernameRef, { uid: token.uid, handle, updatedAt: now });
+    transaction.set(userRef, { handle, updatedAt: now }, { merge: true });
+    transaction.set(publicRef, { handle, updatedAt: now }, { merge: true });
+
+    return { handle };
+  });
+}
+
+async function setDisplayName(data, token) {
+  const displayName = normalizeDisplayName(data.name);
+  const now = FieldValue.serverTimestamp();
+
+  const userRef = db.doc(`users/${token.uid}`);
+  const publicRef = db.doc(`publicProfiles/${token.uid}`);
+
+  await Promise.all([
+    userRef.set({ displayName, updatedAt: now }, { merge: true }),
+    publicRef.set({ displayName, updatedAt: now }, { merge: true })
+  ]);
+
+  return { displayName };
+}
+
+async function uploadAvatar(data, token) {
   const image = parseImageDataUrl(data.imageDataUrl);
   const authProfile = getAuthProfile(token);
   const config = getStorjConfig();
@@ -64,7 +117,7 @@ module.exports = withAuth(async (data, token) => {
       user: sanitizeUserProfile(userProfile)
     };
   });
-});
+}
 
 function parseImageDataUrl(value) {
   if (typeof value !== "string") {

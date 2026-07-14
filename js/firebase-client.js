@@ -165,7 +165,7 @@
         assertConfigured();
         if (!state.user) throw new Error(tr("auth.signInRequired"));
 
-        const result = await callApi("set-user-handle", { handle });
+        const result = await callApi("update-profile", { action: "handle", handle });
         const savedHandle = result.data?.handle || null;
 
         if (savedHandle) {
@@ -184,7 +184,7 @@
         assertConfigured();
         if (!state.user) throw new Error(tr("auth.signInRequired"));
 
-        const result = await callApi("set-display-name", { name });
+        const result = await callApi("update-profile", { action: "name", name });
         const savedName = result.data?.displayName || null;
 
         if (savedName) {
@@ -203,7 +203,8 @@
         assertConfigured();
         if (!state.user) throw new Error(tr("auth.signInRequired"));
 
-        const result = await callApi("upload-profile-avatar", {
+        const result = await callApi("update-profile", {
+            action: "avatar",
             imageDataUrl,
             timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
         });
@@ -227,35 +228,35 @@
         assertConfigured();
         if (!state.user) throw new Error(tr("auth.signInRequired"));
 
-        return callApi("search-users", { query });
+        return callApi("friends", { action: "search", query });
     }
 
     async function sendFriendRequest(toUid) {
         assertConfigured();
         if (!state.user) throw new Error(tr("auth.signInRequired"));
 
-        return callApi("send-friend-request", { toUid });
+        return callApi("friends", { action: "send", toUid });
     }
 
     async function respondFriendRequest(requestId, accept) {
         assertConfigured();
         if (!state.user) throw new Error(tr("auth.signInRequired"));
 
-        return callApi("respond-friend-request", { requestId, accept });
+        return callApi("friends", { action: "respond", requestId, accept });
     }
 
     async function removeFriend(friendUid) {
         assertConfigured();
         if (!state.user) throw new Error(tr("auth.signInRequired"));
 
-        return callApi("remove-friend", { friendUid });
+        return callApi("friends", { action: "remove", friendUid });
     }
 
     async function getSocialOverview() {
         assertConfigured();
         if (!state.user) throw new Error(tr("auth.signInRequired"));
 
-        return callApi("get-social-overview", {});
+        return callApi("friends", { action: "overview" });
     }
 
     async function getHomeOverview() {
