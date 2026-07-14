@@ -5,8 +5,7 @@ const settings = {
     showRomanization: true,
     useMeaning: true,
     infiniteRun: true,
-    timeLimitSeconds: 0,
-    focusMode: false
+    timeLimitSeconds: 0
 };
 
 const state = {
@@ -33,7 +32,10 @@ const state = {
     sessionEnded: false,
     progressSaved: false,
     saveInFlight: false,
-    savePromise: null
+    savePromise: null,
+    pendingUnlockedWords: [],
+    pendingUnlockedCategory: null,
+    pendingCompletedMissions: []
 };
 
 const defaultProfile = {
@@ -50,10 +52,8 @@ let levelField;
 let romajiField;
 let romajiToggle;
 let rowsContainer;
-let restartBtn;
 let themeToggle;
-let timeSelect;
-let focusToggle;
+let durationButtons;
 let timerText;
 let hudScoreText;
 let streakText;
@@ -77,9 +77,6 @@ let deckGroups;
 let deckModalSub;
 let deckProgressFill;
 let deckProgressText;
-let timerStartModal;
-let timerStartLabel;
-let timerGoBtn;
 let timerResultModal;
 let timedResultScore;
 let timedResultDetail;
@@ -128,10 +125,8 @@ document.addEventListener("DOMContentLoaded", () => {
     romajiField = document.getElementById("romaji-field");
     romajiToggle = document.getElementById("romaji-toggle");
     rowsContainer = document.getElementById("rows-container");
-    restartBtn = document.getElementById("restart-btn");
     themeToggle = document.getElementById("theme-toggle");
-    timeSelect = document.getElementById("time-select");
-    focusToggle = document.getElementById("focus-toggle");
+    durationButtons = Array.from(document.querySelectorAll(".trainer-duration-btn"));
     timerText = document.getElementById("timer-text");
     hudScoreText = document.getElementById("hud-score-text");
     streakText = document.getElementById("streak-text");
@@ -155,9 +150,6 @@ document.addEventListener("DOMContentLoaded", () => {
     deckModalSub = document.getElementById("deck-modal-sub");
     deckProgressFill = document.getElementById("deck-progress-fill");
     deckProgressText = document.getElementById("deck-progress-text");
-    timerStartModal = document.getElementById("timer-start-modal");
-    timerStartLabel = document.getElementById("timer-start-label");
-    timerGoBtn = document.getElementById("timer-go-btn");
     timerResultModal = document.getElementById("timer-result-modal");
     timedResultScore = document.getElementById("timed-result-score");
     timedResultDetail = document.getElementById("timed-result-detail");
@@ -171,12 +163,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     levelSelect.addEventListener("change", onLevelChange);
     romajiToggle.addEventListener("change", onRomajiToggle);
-    restartBtn.addEventListener("click", startSession);
-    timeSelect.addEventListener("change", onTimeChange);
-    focusToggle.addEventListener("click", toggleFocusMode);
-    playAgainBtn.addEventListener("click", startSession);
-    timerGoBtn.addEventListener("click", onTimerGoClick);
-    timedPlayAgainBtn.addEventListener("click", startSession);
+    durationButtons.forEach(btn => {
+        btn.addEventListener("click", () => startSession(Number(btn.dataset.seconds)));
+    });
+    playAgainBtn.addEventListener("click", () => startSession());
+    timedPlayAgainBtn.addEventListener("click", () => startSession());
     languageMenuToggle.addEventListener("click", toggleLanguageMenu);
     document.addEventListener("keydown", onGlobalKeyDown);
     document.addEventListener("polytype-app-language-changed", onAppLanguageChange);
@@ -266,7 +257,16 @@ function saveProfile() {
     localStorage.setItem(profileStorageKey, JSON.stringify(profile));
 }
 
+function isActivelyPlayingSession() {
+    return state.sessionStarted && !state.sessionEnded;
+}
+
+// Rewards (XP/level/streak/coins) are revealed on the end-of-session result
+// screen, not ticking live while a round is in progress - skip the pill
+// repaint (and any level-up celebration) entirely until the session ends.
 function renderProfile() {
+    if (isActivelyPlayingSession()) return;
+
     const levelInfo = getCurrentCourseLevelInfo();
 
     miniProfileLevel.textContent = tr("common.levelNumber", { level: levelInfo.level });
@@ -301,8 +301,10 @@ function maybeCelebrateLevelUp(level) {
         lastShownLevel = null;
     }
 
-    const isPlaying = !state.sessionEnded && state.currentDeck.length > 0;
-    if (lastShownLevel !== null && level > lastShownLevel && isPlaying) {
+    // renderProfile() already only calls this once a session isn't actively
+    // in progress, so any level gained during play surfaces here right after
+    // the result screen appears, not mid-game.
+    if (lastShownLevel !== null && level > lastShownLevel && state.currentDeck.length > 0) {
         celebrateLevelUp(level);
     }
     lastShownLevel = level;
@@ -575,19 +577,6 @@ function onLevelChange() {
     startSession();
 }
 
-function onTimeChange() {
-    settings.timeLimitSeconds = Number(timeSelect.value);
-    startSession();
-}
-
-function toggleFocusMode() {
-    settings.focusMode = !settings.focusMode;
-    document.body.classList.toggle("focus-mode", settings.focusMode);
-    focusToggle.textContent = settings.focusMode ? tr("trainer.exitFocus") : tr("trainer.focus");
-    focusToggle.setAttribute("aria-pressed", String(settings.focusMode));
-    focusActiveRow();
-}
-
 function onAppLanguageChange() {
     window.PolytypeI18n?.applyStaticTranslations?.();
     applyTheme(document.documentElement.dataset.theme === "dark" ? "dark" : "light");
@@ -606,11 +595,6 @@ function onGlobalKeyDown(event) {
     if (event.key === "Escape" && !languageMenu.hidden) {
         closeLanguageMenu();
         languageMenuToggle.focus();
-        return;
-    }
-
-    if (event.key === "Escape" && settings.focusMode) {
-        toggleFocusMode();
     }
 }
 
@@ -619,7 +603,10 @@ function onRomajiToggle() {
     applyInitialVisibilityClasses();
 }
 
-async function startSession() {
+async function startSession(seconds) {
+    if (typeof seconds === "number") settings.timeLimitSeconds = seconds;
+    syncDurationButtons();
+
     await saveCurrentSessionProgress();
     stopTimer();
     resetState();
@@ -632,7 +619,13 @@ async function startSession() {
     prepareCurrentDeck();
     preloadCurrentDeckAudio();
     spawnInitialRows();
-    showSessionStartPrompt();
+    beginActivePlay();
+}
+
+function syncDurationButtons() {
+    durationButtons.forEach(btn => {
+        btn.classList.toggle("is-active", Number(btn.dataset.seconds) === settings.timeLimitSeconds);
+    });
 }
 
 async function loadDeck(deckId) {
@@ -919,6 +912,9 @@ function resetState() {
     state.progressSaved = false;
     state.saveInFlight = false;
     state.savePromise = null;
+    state.pendingUnlockedWords = [];
+    state.pendingUnlockedCategory = null;
+    state.pendingCompletedMissions = [];
 }
 
 function clearRows() {
@@ -1651,6 +1647,20 @@ function celebrateLevelUp(level) {
     document.body.appendChild(overlay);
 }
 
+function flushPendingWordDrop() {
+    if (!state.pendingUnlockedWords.length) return;
+    celebrateWordDrop(state.pendingUnlockedWords, state.pendingUnlockedCategory);
+    state.pendingUnlockedWords = [];
+    state.pendingUnlockedCategory = null;
+}
+
+function flushPendingMissionCelebration() {
+    if (!state.pendingCompletedMissions.length) return Promise.resolve();
+    const missions = state.pendingCompletedMissions;
+    state.pendingCompletedMissions = [];
+    return window.PolytypeMissionCelebrate?.show?.(missions) || Promise.resolve();
+}
+
 function celebrateWordDrop(newWords, category) {
     if (!newWords.length) return;
 
@@ -1705,21 +1715,13 @@ function getComboColor(tier) {
         .getPropertyValue(`--combo-${tier}`).trim() || "var(--accent)";
 }
 
-function showSessionStartPrompt() {
-    if (!state.currentDeck.length) return;
+// Selecting a duration IS starting the session now - no separate "Ready to
+// start? Go!" confirmation step.
+function beginActivePlay() {
+    if (!state.currentDeck.length || state.sessionStarted) return;
+
     state.remainingSeconds = settings.timeLimitSeconds;
     updateTimerDisplay();
-    timerStartLabel.textContent = isTimedSession()
-        ? formatTime(settings.timeLimitSeconds)
-        : tr("trainer.freeRun");
-    timerStartModal.hidden = false;
-    requestAnimationFrame(() => timerGoBtn.focus());
-}
-
-function onTimerGoClick() {
-    if (state.sessionStarted) return;
-
-    timerStartModal.hidden = true;
     state.sessionStarted = true;
 
     if (isTimedSession()) {
@@ -1787,6 +1789,16 @@ async function endSession() {
     }
 
     await saveCurrentSessionProgress();
+
+    // saveCurrentSessionProgress() only reveals these when it actually has
+    // something fresh to send - if everything was already flushed by an
+    // earlier mid-session autosave, force the reveal here so the pill,
+    // header coins, and any queued word-unlock toast always show up once the
+    // session truly ends.
+    renderProfile();
+    window.PolytypeGameState?.refresh?.();
+    await flushPendingMissionCelebration();
+    flushPendingWordDrop();
 }
 
 function hideSessionResult() {
@@ -1794,7 +1806,6 @@ function hideSessionResult() {
     if (resultSaveStatus) resultSaveStatus.textContent = "";
     if (timerResultModal) timerResultModal.hidden = true;
     if (timedResultSaveStatus) timedResultSaveStatus.textContent = "";
-    if (timerStartModal) timerStartModal.hidden = true;
 }
 
 function isAnyResultVisible() {
@@ -1860,7 +1871,9 @@ async function saveCurrentSessionProgress() {
 
             saveProfile();
             renderProfile();
-            window.PolytypeGameState?.refresh?.();
+            // Same "not during the match" rule as the pill: the header's
+            // coin/rupee counters only refresh once play has actually paused.
+            if (!isActivelyPlayingSession()) window.PolytypeGameState?.refresh?.();
 
             if (progress.newlyUnlockedWords > 0 && progress.course?.courseId === getCurrentCourseKey()) {
                 const newUnlockedSuffixes = getUnlockedWordSuffixes(
@@ -1874,8 +1887,20 @@ async function saveCurrentSessionProgress() {
 
                 if (newWords.length) {
                     scheduleAudioPreload(newWords);
-                    celebrateWordDrop(newWords, getSortedCategories()[progress.course.categoryIndex] || null);
+                    // Accumulate rather than celebrate immediately - a session
+                    // can flush progress multiple times mid-play, and the
+                    // reveal only happens once, at the end (see endSession).
+                    state.pendingUnlockedWords.push(...newWords);
+                    state.pendingUnlockedCategory = getSortedCategories()[progress.course.categoryIndex] || state.pendingUnlockedCategory;
+                    if (!isActivelyPlayingSession()) flushPendingWordDrop();
                 }
+            }
+
+            if (progress.completedMissions?.length) {
+                // Same accumulate-then-flush rule: shown once, when the
+                // session actually ends (see endSession).
+                state.pendingCompletedMissions.push(...progress.completedMissions);
+                if (!isActivelyPlayingSession()) flushPendingMissionCelebration();
             }
         }
 

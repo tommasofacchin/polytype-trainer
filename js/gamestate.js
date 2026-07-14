@@ -78,9 +78,12 @@
     async function claimDailyChest() {
         const result = await window.PolytypeFirebase.claimDailyChest();
         state.coins = result.data?.coins ?? state.coins;
-        state.chestReady = false;
         saveToCache();
         notify();
+        // Re-fetch chestReady from the server rather than assuming false -
+        // in the DEBUG_ALWAYS_CLAIM_CHEST test mode it stays claimable so
+        // the reward animation can be replayed on demand.
+        refresh();
         return result.data;
     }
 

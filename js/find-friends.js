@@ -86,7 +86,10 @@ function renderResults(results) {
 
 function renderResultRow(result) {
     const row = document.createElement("div");
-    row.className = "friends-row";
+    row.className = "friends-row is-clickable";
+    row.addEventListener("click", () => {
+        window.location.href = `visit-profile.html?uid=${encodeURIComponent(result.uid)}`;
+    });
     row.append(
         buildAvatar(result),
         buildNameCopy(result, `${tr("common.levelNumber", { level: result.globalLevel || 1 })} · ${result.totalXp || 0} XP`),
@@ -164,7 +167,10 @@ function buildActionButton(label, className, onClick) {
     button.type = "button";
     button.className = className;
     button.textContent = label;
-    button.addEventListener("click", onClick);
+    button.addEventListener("click", event => {
+        event.stopPropagation();
+        onClick(event);
+    });
     return button;
 }
 

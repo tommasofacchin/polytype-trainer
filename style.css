@@ -664,6 +664,38 @@ body.auth-page-body {
     display: none;
 }
 
+.trainer-duration-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2);
+}
+
+.trainer-duration-btn {
+    appearance: none;
+    border: 1px solid var(--border);
+    outline: 0;
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    color: var(--text-soft);
+    font: inherit;
+    font-size: var(--text-sm);
+    font-weight: 700;
+    padding: 10px 8px;
+    cursor: pointer;
+    transition: background var(--transition), border-color var(--transition), color var(--transition);
+}
+
+.trainer-duration-btn:hover, .trainer-duration-btn:focus-visible {
+    border-color: var(--border-strong);
+    color: var(--text);
+}
+
+.trainer-duration-btn.is-active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-on, var(--text-inverse));
+}
+
 .field label {
     color: var(--text-faint);
     font-size: var(--text-xs);
@@ -740,6 +772,15 @@ input[type="password"]:focus {
 .settings .restart-btn {
     width: 100%;
     margin-top: auto;
+}
+
+/* The Settings page's name/username rows pair a flex-1 input with a compact
+   save button - override the mobile "buttons go full width" rule below so
+   the button doesn't swallow the input's space. */
+#profile-name-form .restart-btn,
+#profile-handle-form .restart-btn {
+    width: auto;
+    flex: 0 0 auto;
 }
 
 .restart-btn:disabled {
@@ -900,7 +941,6 @@ input[type="password"]:focus {
 
 .profile-page {
     width: min(100% - 32px, 980px);
-    min-height: 100vh;
     margin-inline: auto;
     padding: clamp(18px, 4vw, 44px) 0;
 }
@@ -2737,6 +2777,16 @@ body.deck-overlay-open {
     background: var(--accent-soft);
 }
 
+.friends-row.is-clickable,
+.friends-leaderboard-row.is-clickable {
+    cursor: pointer;
+}
+
+.friends-row.is-clickable:hover,
+.friends-leaderboard-row.is-clickable:hover {
+    background: var(--surface-soft);
+}
+
 .friends-rank {
     flex: 0 0 auto;
     width: 28px;
@@ -2949,7 +2999,7 @@ body.deck-overlay-open {
 .drop-toast {
     position: fixed;
     right: 20px;
-    bottom: 20px;
+    bottom: calc(84px + env(safe-area-inset-bottom, 0px));
     z-index: 250;
     display: grid;
     gap: var(--space-2);
@@ -3050,7 +3100,7 @@ body {
    Chrome whenever its collapsing address bar is showing. Content that sits
    above the nav gets bottom padding (below) so nothing is hidden behind it. */
 .has-app-shell:has(#app-bottom-nav) {
-    padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px));
 }
 
 #app-header {
@@ -3281,6 +3331,10 @@ body {
 
     .app-shell-nav-label {
         font-size: 14px;
+    }
+
+    .drop-toast {
+        bottom: 20px;
     }
 }
 
@@ -3530,6 +3584,124 @@ body {
     100% { transform: translateY(0) scale(1); opacity: 1; }
 }
 
+.mission-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    background: var(--scrim);
+    padding: 24px;
+    animation: chest-fadein 0.25s ease;
+}
+
+.mission-overlay-art {
+    position: relative;
+    width: 190px;
+    height: 170px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mission-overlay-rays {
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    background: repeating-conic-gradient(from 0deg, rgba(47, 230, 164, 0.2) 0 9deg, transparent 9deg 18deg);
+    border-radius: 50%;
+    animation: chest-rayspin 16s linear infinite;
+}
+
+.mission-overlay-flash {
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.95), transparent 62%);
+    animation: chest-flashburst 1.4s ease-out forwards;
+}
+
+.mission-overlay-icon {
+    position: relative;
+    animation: chest-shakepop 1.1s ease-out forwards;
+    filter: drop-shadow(0 12px 22px rgba(47, 230, 164, 0.5));
+}
+
+.mission-overlay-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 24px;
+    color: #fff;
+    text-align: center;
+    animation: chest-rewardpop 1.3s ease-out forwards;
+}
+
+.mission-overlay-subtitle {
+    margin-top: -10px;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--text-soft);
+    text-align: center;
+    animation: chest-rewardpop 1.3s ease-out forwards;
+}
+
+.mission-rewards-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    max-width: 320px;
+}
+
+.mission-reward-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 11px 14px;
+    opacity: 0;
+    animation: chest-rewardpop 0.6s ease-out forwards;
+    animation-delay: var(--delay, 0s);
+}
+
+.mission-reward-row strong {
+    flex: 1;
+    min-width: 0;
+    font-weight: 800;
+    font-size: 13px;
+    color: var(--text);
+}
+
+.mission-reward-row span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 900;
+    font-size: 13px;
+    color: var(--color-gold-text);
+    flex: 0 0 auto;
+}
+
+.mission-collect-btn {
+    margin-top: 6px;
+    background: var(--accent);
+    color: var(--accent-on);
+    border: 0;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 16px;
+    padding: 13px 44px;
+    border-radius: 16px;
+    cursor: pointer;
+    animation: chest-rewardpop 1.7s ease-out forwards;
+}
+
 /* ---- Daily missions ----------------------------------------------------------- */
 
 .mission-row {
@@ -3600,6 +3772,14 @@ body {
 .leaderboard-row.is-self {
     background: var(--accent-soft);
     box-shadow: inset 0 0 0 1px rgba(47, 230, 164, 0.28);
+}
+
+.leaderboard-row.is-clickable {
+    cursor: pointer;
+}
+
+.leaderboard-row.is-clickable:hover {
+    background: var(--surface-soft);
 }
 
 .leaderboard-rank {

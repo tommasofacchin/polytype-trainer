@@ -12,6 +12,7 @@ module.exports = withAuth(async (data, token) => {
   switch (data.action) {
     case "overview": return getOverview(token);
     case "search": return searchUsers(data, token);
+    case "profile": return getPublicProfile(data, token);
     case "send": return sendFriendRequest(data, token);
     case "respond": return respondFriendRequest(data, token);
     case "remove": return removeFriend(data, token);
@@ -79,23 +80,37 @@ async function searchUsers(data, token) {
     return { results: [] };
   }
 
-  const usernameSnap = await db.collection("usernames")
+  // Firestore has no native LIKE/contains, so we combine an indexed prefix
+  // range (cheap, catches "starts with") with a bounded in-memory substring
+  // scan (catches matches anywhere in the handle) and merge the two.
+  const prefixSnap = await db.collection("usernames")
     .orderBy("handle")
     .startAt(query)
-    .endAt(query + "")
+    .endAt(query + "")
     .limit(SEARCH_RESULTS_LIMIT)
     .get();
 
-  const candidateUids = usernameSnap.docs
-    .map(doc => doc.data().uid)
-    .filter(uid => uid && uid !== token.uid);
+  const candidateUids = new Set(
+    prefixSnap.docs.map(doc => doc.data().uid).filter(uid => uid && uid !== token.uid)
+  );
 
-  if (!candidateUids.length) {
+  if (candidateUids.size < SEARCH_RESULTS_LIMIT) {
+    const scanSnap = await db.collection("usernames").limit(500).get();
+    scanSnap.docs.forEach(doc => {
+      const entry = doc.data();
+      if (entry.uid && entry.uid !== token.uid && entry.handle?.includes(query)) {
+        candidateUids.add(entry.uid);
+      }
+    });
+  }
+
+  const uids = Array.from(candidateUids).slice(0, SEARCH_RESULTS_LIMIT);
+  if (!uids.length) {
     return { results: [] };
   }
 
   const results = await Promise.all(
-    candidateUids.map(uid => buildSearchResult(token.uid, uid))
+    uids.map(uid => buildSearchResult(token.uid, uid))
   );
 
   return { results: results.filter(Boolean) };
@@ -121,6 +136,21 @@ async function buildSearchResult(myUid, uid) {
   }
 
   return { ...pickFriendProfile(publicSnap.data()), relationship, requestId };
+}
+
+async function getPublicProfile(data, token) {
+  const uid = normalizeUid(data.uid);
+  if (!uid) throw new ApiError(400, "uid is required.");
+  if (uid === token.uid) throw new ApiError(400, "Use your own profile page instead.");
+
+  const [result, badgesSnap] = await Promise.all([
+    buildSearchResult(token.uid, uid),
+    db.collection(`users/${uid}/badges`).get()
+  ]);
+
+  if (!result) throw new ApiError(404, "User not found.");
+
+  return { ...result, badges: badgesSnap.docs.map(doc => doc.id) };
 }
 
 async function sendFriendRequest(data, token) {

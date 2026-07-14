@@ -12,6 +12,7 @@ function tr(key, params = {}) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    renderFromCache();
     setupProfileControls();
     setupFirebaseSync();
 
@@ -20,6 +21,30 @@ document.addEventListener("DOMContentLoaded", () => {
         window.location.href = "auth.html";
     });
 });
+
+function readCachedProfile() {
+    try {
+        return JSON.parse(localStorage.getItem("polytype-profile")) || null;
+    } catch (error) {
+        return null;
+    }
+}
+
+function renderFromCache() {
+    const cached = readCachedProfile();
+    if (!cached) return;
+
+    const emailEl = document.getElementById("settings-account-email");
+    if (emailEl && cached.email) emailEl.textContent = cached.email;
+
+    const nameInput = document.getElementById("profile-name-input");
+    if (nameInput && cached.name) nameInput.value = cached.name;
+
+    const handleInput = document.getElementById("profile-handle-input");
+    if (handleInput && cached.handle) handleInput.value = cached.handle;
+
+    renderAvatar(document.getElementById("profile-page-avatar"), cached);
+}
 
 function setupProfileControls() {
     const nameForm = document.getElementById("profile-name-form");
@@ -57,6 +82,14 @@ function setupFirebaseSync() {
 
     firebaseClient.onChange(authState => {
         updateEditControls();
+
+        // onChange fires synchronously with the *unresolved* state before
+        // Firebase has even checked for a session - don't let that blank
+        // tick stomp the cache-painted fields from renderFromCache(). Only
+        // repaint once we've definitively resolved signed-in (profile
+        // loaded) or signed-out (ready, no user).
+        const resolved = Boolean(authState.profile) || (authState.ready && !authState.user);
+        if (!resolved) return;
 
         const emailEl = document.getElementById("settings-account-email");
         if (emailEl) emailEl.textContent = authState.profile?.email || authState.user?.email || "-";

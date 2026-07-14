@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" class="profile-document">
+<head>
+    <meta charset="UTF-8">
+    <title data-i18n="profile.title">Profile - Polytype Trainer</title>
+  <link rel="icon" type="image/svg+xml" href="assets/flags/china.svg">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap">
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body class="has-app-shell is-scroll-page" data-tab="friends">
+  <div id="app-header"></div>
+  <main class="profile-page">
+    <a class="back-link-mini" href="friends.html">&lsaquo; <span data-i18n="nav.friends">Friends</span></a>
+
+    <section class="profile-hero" aria-label="Player profile" data-i18n-aria-label="profile.player" style="flex-direction:column;text-align:center">
+      <div style="position:relative;margin-bottom:4px">
+        <div id="visit-profile-avatar" class="profile-avatar profile-avatar-large" aria-hidden="true">P</div>
+      </div>
+      <div class="profile-hero-copy" style="text-align:center">
+        <h1 id="visit-profile-name">-</h1>
+        <p id="visit-profile-handle" class="profile-handle"></p>
+        <p id="visit-profile-level" class="profile-kicker" style="display:inline-flex;align-items:center;gap:6px;background:var(--accent-soft);color:var(--accent);font-weight:800;padding:6px 14px;border-radius:999px;margin-top:6px">Level 1</p>
+      </div>
+      <div id="visit-profile-action" style="margin-top:10px"></div>
+    </section>
+    <p id="visit-profile-status" class="profile-muted" data-i18n="common.loadingProfile">Loading profile...</p>
+
+    <section class="profile-detail-grid" aria-label="Profile details" data-i18n-aria-label="profile.details">
+      <div class="stat-tile-row profile-detail-card-wide" style="margin:0">
+        <div class="stat-tile">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="#ff7a2d" style="margin-bottom:2px"><path d="M12 2c3 4 5 6 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 1 2 2 2 3 2 0-3-1-5 0-8z"/></svg>
+          <div id="visit-profile-day-streak" class="stat-tile-value">0</div>
+          <div class="stat-tile-label" data-i18n="profile.dayStreak">day streak</div>
+        </div>
+        <div class="stat-tile">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="#2fe6a4" style="margin-bottom:2px"><path d="M12 2l2.9 6.2 6.6.7-4.9 4.5 1.3 6.6L12 17.8 6.1 20.6l1.3-6.6L2.5 8.9l6.6-.7z"/></svg>
+          <div id="visit-profile-total-xp" class="stat-tile-value">0</div>
+          <div class="stat-tile-label" data-i18n="profile.totalXpLabel">total XP</div>
+        </div>
+      </div>
+
+      <article class="profile-detail-card profile-detail-card-wide">
+        <div class="profile-card-head">
+          <div>
+            <span class="profile-card-label" data-i18n="profile.badges">Badges</span>
+            <strong data-i18n="profile.achievements">Unlocked achievements</strong>
+          </div>
+          <span id="visit-profile-badge-count" class="profile-stat-pill">0 / 6</span>
+        </div>
+        <div id="visit-profile-badges" class="badge-grid"></div>
+      </article>
+    </section>
+  </main>
+  <div id="app-bottom-nav"></div>
+
+  <script src="js/firebase-config.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-auth-compat.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/firebase-client.js"></script>
+  <script src="js/gamestate.js"></script>
+  <script src="js/app-shell.js"></script>
+  <script src="js/visit-profile.js"></script>
+</body>
+</html>

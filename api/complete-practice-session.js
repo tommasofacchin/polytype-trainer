@@ -211,7 +211,7 @@ module.exports = withAuth(async (data, token) => {
       rupees,
       coinsEarned,
       rupeesEarned,
-      completedMissions: completedMissions.map(mission => ({ id: mission.id, coinReward: mission.coinReward })),
+      completedMissions: completedMissions.map(mission => ({ id: mission.id, coinReward: mission.coinReward, labelKey: mission.labelKey })),
       newBadges: newBadges.map(badge => ({ id: badge.id }))
     };
   });

@@ -139,6 +139,7 @@ function renderIncoming(list) {
     container.replaceChildren(...list.map(item => {
         const row = document.createElement("div");
         row.className = "friends-row";
+        makeRowVisitable(row, item.profile?.uid);
 
         const actions = document.createElement("span");
         actions.className = "friends-row-actions";
@@ -186,6 +187,7 @@ function renderLeaderboard(list) {
     container.replaceChildren(...list.map(entry => {
         const row = document.createElement("div");
         row.className = entry.isSelf ? "friends-leaderboard-row is-self" : "friends-leaderboard-row";
+        if (!entry.isSelf) makeRowVisitable(row, entry.uid);
 
         const rank = document.createElement("span");
         rank.className = "friends-rank";
@@ -250,8 +252,19 @@ function buildActionButton(label, className, onClick) {
     button.type = "button";
     button.className = className;
     button.textContent = label;
-    button.addEventListener("click", onClick);
+    button.addEventListener("click", event => {
+        event.stopPropagation();
+        onClick(event);
+    });
     return button;
+}
+
+function makeRowVisitable(row, uid) {
+    if (!uid) return;
+    row.classList.add("is-clickable");
+    row.addEventListener("click", () => {
+        window.location.href = `visit-profile.html?uid=${encodeURIComponent(uid)}`;
+    });
 }
 
 function displayName(profileData) {

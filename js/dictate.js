@@ -329,11 +329,14 @@
         return match ? Number.parseInt(match[0], 10) : 0;
     }
 
+    function getSortedCategories() {
+        return [...(window.POLYTYPE_CATEGORIES || [])].sort((a, b) => a.order - b.order);
+    }
+
     function getUnlockedWordSuffixes(categoryIndex, categoryUnlocked) {
-        const categories = [...(window.POLYTYPE_CATEGORIES || [])].sort((a, b) => a.order - b.order);
         const unlocked = new Set();
 
-        categories.forEach(category => {
+        getSortedCategories().forEach(category => {
             if (category.order < categoryIndex) {
                 category.wordSuffixes.forEach(suffix => unlocked.add(suffix));
             } else if (category.order === categoryIndex) {
@@ -498,6 +501,9 @@
             sessionSeconds: Math.round((Date.now() - state.batchStartTime) / 1000)
         };
 
+        const { categoryIndex: prevCategoryIndex, categoryUnlocked: prevCategoryUnlocked } = getCategoryProgress();
+        const previousUnlockedSuffixes = getUnlockedWordSuffixes(prevCategoryIndex, prevCategoryUnlocked);
+
         state.saveInFlight = true;
         if (el.saveStatus) el.saveStatus.textContent = tr("trainer.savingProgress");
 
@@ -511,11 +517,23 @@
         state.batchStartTime = Date.now();
 
         try {
-            const save = window.PolytypeGameState?.completePracticeSession
-                ? window.PolytypeGameState.completePracticeSession(payload)
-                : firebaseClient.completePracticeSession(payload);
-            await save;
+            const progress = window.PolytypeGameState?.completePracticeSession
+                ? await window.PolytypeGameState.completePracticeSession(payload)
+                : (await firebaseClient.completePracticeSession(payload))?.data;
             if (el.saveStatus) el.saveStatus.textContent = tr("trainer.progressSaved");
+
+            if (progress?.newlyUnlockedWords > 0 && progress.course) {
+                const newUnlockedSuffixes = getUnlockedWordSuffixes(progress.course.categoryIndex, progress.course.categoryUnlocked);
+                const newWords = state.vocab.filter(word => {
+                    const suffix = getWordSuffix(word.id);
+                    return newUnlockedSuffixes.has(suffix) && !previousUnlockedSuffixes.has(suffix);
+                });
+                if (newWords.length) celebrateWordDrop(newWords, getSortedCategories()[progress.course.categoryIndex] || null);
+            }
+
+            if (progress?.completedMissions?.length) {
+                await window.PolytypeMissionCelebrate?.show?.(progress.completedMissions);
+            }
         } catch (error) {
             // Put the unsaved counts back so the next batch retries them.
             state.unsavedCorrect += savedCorrect;
@@ -525,6 +543,43 @@
         } finally {
             state.saveInFlight = false;
         }
+    }
+
+    function celebrateWordDrop(newWords, category) {
+        document.querySelector(".drop-toast")?.remove();
+
+        const toast = document.createElement("div");
+        toast.className = "drop-toast";
+        toast.innerHTML = `
+            <div class="drop-toast-head">
+                <span class="drop-toast-icon">\u{1F381}</span>
+                <div class="drop-toast-heading">
+                    <strong></strong>
+                    <span></span>
+                </div>
+            </div>
+            <div class="levelup-unlocks-grid drop-toast-grid"></div>
+        `;
+        toast.querySelector("strong").textContent = tr("trainer.newWordsUnlocked", {
+            count: newWords.length,
+            word: newWords.length === 1 ? tr("common.word") : tr("common.words")
+        });
+        toast.querySelector(".drop-toast-heading span").textContent = category ? tr(category.labelKey) : "";
+
+        const grid = toast.querySelector(".drop-toast-grid");
+        newWords.forEach(word => {
+            const chip = document.createElement("span");
+            chip.className = "levelup-unlock-chip";
+            chip.textContent = word.script;
+            if (word.meaning) chip.title = word.meaning;
+            grid.appendChild(chip);
+        });
+
+        document.body.appendChild(toast);
+        window.setTimeout(() => {
+            toast.classList.add("is-leaving");
+            toast.addEventListener("animationend", () => toast.remove(), { once: true });
+        }, 4200);
     }
 
     function advanceRow(row) {

@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body class="has-app-shell is-scroll-page">
+<body class="has-app-shell is-scroll-page" data-tab="settings">
+    <div id="app-header"></div>
     <main class="page-content" style="max-width:520px">
         <a class="back-link-mini" href="profile.html">&lsaquo; <span data-i18n="nav.profile">Profile</span></a>
         <h1 class="page-title" data-i18n="settings.title">Settings</h1>
@@ -43,12 +44,15 @@
             <span data-i18n="trainer.signOut">Log out</span>
         </button>
     </main>
+    <div id="app-bottom-nav"></div>
 
     <script src="js/firebase-config.js"></script>
     <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-auth-compat.js"></script>
     <script src="js/i18n.js"></script>
     <script src="js/firebase-client.js"></script>
+    <script src="js/gamestate.js"></script>
+    <script src="js/app-shell.js"></script>
     <script src="js/settings.js"></script>
 </body>
 </html>

@@ -171,7 +171,7 @@ function renderFriendsPreview(state) {
     list.replaceChildren(
         ...entries.map(entry => {
             const row = document.createElement("div");
-            row.className = `leaderboard-row${entry.isSelf ? " is-self" : ""}`;
+            row.className = `leaderboard-row${entry.isSelf ? " is-self" : " is-clickable"}`;
             const initial = (entry.handle || entry.displayName || "?").trim().charAt(0).toUpperCase();
             row.innerHTML = `
                 <span class="leaderboard-rank is-plain">${entry.rank}</span>
@@ -179,6 +179,11 @@ function renderFriendsPreview(state) {
                 <span class="leaderboard-name">${entry.isSelf ? tr("common.you") : (entry.displayName || entry.handle || "")}</span>
                 <span class="leaderboard-xp"><svg width="14" height="14" viewBox="0 0 24 24" fill="#2fe6a4"><path d="M12 2l2.9 6.2 6.6.7-4.9 4.5 1.3 6.6L12 17.8 6.1 20.6l1.3-6.6L2.5 8.9l6.6-.7z"/></svg>${(entry.totalXp || 0).toLocaleString()}</span>
             `;
+            if (!entry.isSelf && entry.uid) {
+                row.addEventListener("click", () => {
+                    window.location.href = `visit-profile.html?uid=${encodeURIComponent(entry.uid)}`;
+                });
+            }
             return row;
         })
     );

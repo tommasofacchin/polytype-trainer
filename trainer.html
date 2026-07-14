@@ -54,39 +54,15 @@
             </label>
         </div>
 
-        <div class="field">
-            <label for="time-select" data-i18n="trainer.time">Time</label>
-            <select id="time-select">
-                <option value="0" data-i18n="trainer.free">Free</option>
-                <option value="30">30 sec</option>
-                <option value="60">1 min</option>
-                <option value="180">3 min</option>
-            </select>
+        <div class="field trainer-duration-field">
+            <span class="profile-card-label" data-i18n="trainer.time">Time</span>
+            <div class="trainer-duration-grid">
+                <button type="button" class="trainer-duration-btn" data-seconds="30" data-i18n="trainer.duration30s">30 sec</button>
+                <button type="button" class="trainer-duration-btn" data-seconds="120" data-i18n="trainer.duration2m">2 min</button>
+                <button type="button" class="trainer-duration-btn" data-seconds="300" data-i18n="trainer.duration5m">5 min</button>
+                <button type="button" class="trainer-duration-btn is-active" data-seconds="0" data-i18n="trainer.durationNoLimit">No limit</button>
+            </div>
         </div>
-
-        <button id="restart-btn" class="restart-btn" type="button">
-            <span data-i18n="trainer.start">Start</span>
-        </button>
-
-        <button id="focus-toggle" class="theme-toggle" type="button" aria-pressed="false">
-            <span data-i18n="trainer.focus">Focus</span>
-        </button>
-
-        <a id="memory-link" class="theme-toggle memory-link" href="memory.html">
-            <svg class="memory-link-icon" viewBox="0 0 24 24" aria-hidden="true">
-                <rect x="3" y="4" width="8" height="16" rx="1.6"></rect>
-                <rect x="13" y="4" width="8" height="16" rx="1.6"></rect>
-            </svg>
-            <span data-i18n="trainer.memory">Memory</span>
-        </a>
-
-        <a id="dictate-link" class="theme-toggle memory-link" href="dictate.html">
-            <svg class="memory-link-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M11 5 6 9H2v6h4l5 4V5Z"></path>
-                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-            </svg>
-            <span>Dictate</span>
-        </a>
     </section>
 
     <section class="game-hud" aria-label="Session score" data-i18n-aria-label="trainer.sessionScore">
@@ -114,15 +90,6 @@
       </div>
 
       <div id="rows-container"></div>
-
-      <div id="timer-start-modal" class="timer-modal" role="dialog" aria-modal="true" hidden>
-        <div class="timer-modal-backdrop"></div>
-        <div class="timer-modal-card">
-          <span class="timer-modal-kicker" data-i18n="trainer.ready">Ready to start?</span>
-          <strong id="timer-start-label" class="timer-modal-duration">Free run</strong>
-          <button id="timer-go-btn" class="restart-btn" type="button" data-i18n="trainer.go">Go!</button>
-        </div>
-      </div>
 
       <div id="timer-result-modal" class="timer-modal" role="dialog" aria-modal="true" hidden>
         <div class="timer-modal-backdrop"></div>
@@ -178,6 +145,7 @@
   <script src="js/firebase-client.js"></script>
   <script src="js/gamestate.js"></script>
   <script src="js/app-shell.js"></script>
+  <script src="js/mission-celebrate.js"></script>
   <script src="decks/index.js"></script>
   <script src="decks/categories.js"></script>
   <script src="js/main.js"></script>

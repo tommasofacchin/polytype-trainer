@@ -35,6 +35,7 @@
         respondFriendRequest,
         removeFriend,
         getSocialOverview,
+        getFriendProfile,
         getHomeOverview,
         claimDailyChest
     };
@@ -259,6 +260,13 @@
         return callApi("friends", { action: "overview" });
     }
 
+    async function getFriendProfile(uid) {
+        assertConfigured();
+        if (!state.user) throw new Error(tr("auth.signInRequired"));
+
+        return callApi("friends", { action: "profile", uid });
+    }
+
     async function getHomeOverview() {
         assertConfigured();
         if (!state.user) throw new Error(tr("auth.signInRequired"));
@@ -466,6 +474,7 @@
         const localProfile = {
             name: remoteProfile.displayName || "Player",
             handle: remoteProfile.handle || null,
+            email: remoteProfile.email || null,
             avatarUrl: remoteProfile.avatarUrl || null,
             xp: remoteProfile.totalXp || 0,
             dayStreak: remoteProfile.currentStreak || 0,

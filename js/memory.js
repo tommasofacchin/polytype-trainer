@@ -782,6 +782,9 @@
 
         el.resultSaveStatus.textContent = tr("trainer.savingProgress");
 
+        const { categoryIndex: prevCategoryIndex, categoryUnlocked: prevCategoryUnlocked } = getCategoryProgress();
+        const previousUnlockedSuffixes = getUnlockedWordSuffixes(prevCategoryIndex, prevCategoryUnlocked);
+
         const payload = {
             courseId: activeLanguage,
             gameType: "memory",
@@ -793,14 +796,63 @@
         };
 
         try {
-            const save = window.PolytypeGameState?.completePracticeSession
-                ? window.PolytypeGameState.completePracticeSession(payload)
-                : firebaseClient.completePracticeSession(payload);
-            await save;
+            const progress = window.PolytypeGameState?.completePracticeSession
+                ? await window.PolytypeGameState.completePracticeSession(payload)
+                : (await firebaseClient.completePracticeSession(payload))?.data;
             el.resultSaveStatus.textContent = tr("trainer.progressSaved");
+
+            if (progress?.newlyUnlockedWords > 0 && progress.course) {
+                const newUnlockedSuffixes = getUnlockedWordSuffixes(progress.course.categoryIndex, progress.course.categoryUnlocked);
+                const newWords = state.vocab.filter(word => {
+                    const suffix = getWordSuffix(word.id);
+                    return newUnlockedSuffixes.has(suffix) && !previousUnlockedSuffixes.has(suffix);
+                });
+                if (newWords.length) celebrateWordDrop(newWords, getSortedCategories()[progress.course.categoryIndex] || null);
+            }
+
+            if (progress?.completedMissions?.length) {
+                await window.PolytypeMissionCelebrate?.show?.(progress.completedMissions);
+            }
         } catch (error) {
             el.resultSaveStatus.textContent = error?.message || tr("trainer.progressSaved");
         }
+    }
+
+    function celebrateWordDrop(newWords, category) {
+        document.querySelector(".drop-toast")?.remove();
+
+        const toast = document.createElement("div");
+        toast.className = "drop-toast";
+        toast.innerHTML = `
+            <div class="drop-toast-head">
+                <span class="drop-toast-icon">\u{1F381}</span>
+                <div class="drop-toast-heading">
+                    <strong></strong>
+                    <span></span>
+                </div>
+            </div>
+            <div class="levelup-unlocks-grid drop-toast-grid"></div>
+        `;
+        toast.querySelector("strong").textContent = tr("trainer.newWordsUnlocked", {
+            count: newWords.length,
+            word: newWords.length === 1 ? tr("common.word") : tr("common.words")
+        });
+        toast.querySelector(".drop-toast-heading span").textContent = category ? tr(category.labelKey) : "";
+
+        const grid = toast.querySelector(".drop-toast-grid");
+        newWords.forEach(word => {
+            const chip = document.createElement("span");
+            chip.className = "levelup-unlock-chip";
+            chip.textContent = word.script;
+            if (word.meaning) chip.title = word.meaning;
+            grid.appendChild(chip);
+        });
+
+        document.body.appendChild(toast);
+        window.setTimeout(() => {
+            toast.classList.add("is-leaving");
+            toast.addEventListener("animationend", () => toast.remove(), { once: true });
+        }, 4200);
     }
 
     // Perfect (instant) play scores pairs * 100, scaled by difficulty.
