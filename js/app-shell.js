@@ -147,9 +147,15 @@
 
         panel.querySelectorAll("[data-language]").forEach(btn => {
             btn.addEventListener("click", () => {
+                if (btn.dataset.language === (localStorage.getItem("polytype-language") || "chinese")) {
+                    closeFlagMenu();
+                    return;
+                }
                 localStorage.setItem("polytype-language", btn.dataset.language);
-                closeFlagMenu();
-                renderHeader();
+                // Full reload, not just a header repaint: whatever page we're
+                // on (Trainer, Memory, Deck, Categories...) needs to reload
+                // its own deck/progress for the newly selected language too.
+                window.location.reload();
             });
         });
     }

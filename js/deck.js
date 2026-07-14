@@ -284,17 +284,19 @@ function renderDeck() {
     }
     if (el.emptyHint) el.emptyHint.hidden = unlockedCount > 0;
 
-    const byCategory = new Map();
-    vocab.forEach(word => {
-        const category = getCategoryForSuffix(getWordSuffix(word.id));
-        if (!category) return;
-        if (!byCategory.has(category.id)) byCategory.set(category.id, []);
-        byCategory.get(category.id).push(word);
-    });
+    // Order each category's words by their actual unlock sequence
+    // (category.wordSuffixes), not by CSV row order - the drop order is a
+    // fixed shuffle (see scripts/generate-categories.cjs), so listing by
+    // suffix number would show unlocked words scattered through the grid
+    // instead of as a clean, in-order block at the top.
+    const wordBySuffix = new Map();
+    vocab.forEach(word => wordBySuffix.set(getWordSuffix(word.id), word));
 
     getSortedCategories().forEach(category => {
-        const categoryWords = byCategory.get(category.id);
-        if (!categoryWords || !categoryWords.length) return;
+        const categoryWords = category.wordSuffixes
+            .map(suffix => wordBySuffix.get(suffix))
+            .filter(Boolean);
+        if (!categoryWords.length) return;
         el.groups.appendChild(buildDeckGroup(category, categoryWords, categoryIndex, unlockedSuffixes));
     });
 }

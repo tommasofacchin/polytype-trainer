@@ -1,4 +1,6 @@
 (function () {
+    const CACHE_KEY = "polytype-gamestate-cache";
+
     const state = {
         loaded: false,
         coins: 0,
@@ -8,6 +10,13 @@
         friendsPreview: []
     };
     const listeners = new Set();
+
+    // Seed synchronously from the last successful fetch (if any) so every
+    // page that reads gamestate - Home's chest/missions/friends preview, the
+    // header's coin/rupee counters - paints real numbers on the very first
+    // frame instead of the 0/empty defaults while the network round trip
+    // catches up.
+    restoreFromCache();
 
     window.PolytypeGameState = {
         state,
@@ -28,6 +37,28 @@
         });
     });
 
+    function restoreFromCache() {
+        try {
+            const raw = localStorage.getItem(CACHE_KEY);
+            const cached = raw ? JSON.parse(raw) : null;
+            if (!cached) return;
+            Object.assign(state, cached);
+            state.loaded = true;
+        } catch {}
+    }
+
+    function saveToCache() {
+        try {
+            localStorage.setItem(CACHE_KEY, JSON.stringify({
+                coins: state.coins,
+                rupees: state.rupees,
+                chestReady: state.chestReady,
+                missions: state.missions,
+                friendsPreview: state.friendsPreview
+            }));
+        } catch {}
+    }
+
     async function refresh() {
         const firebaseClient = window.PolytypeFirebase;
         if (!firebaseClient?.isSignedIn?.()) return null;
@@ -36,6 +67,7 @@
             const result = await firebaseClient.getHomeOverview();
             Object.assign(state, result.data || {});
             state.loaded = true;
+            saveToCache();
             notify();
             return result.data;
         } catch {
@@ -47,6 +79,7 @@
         const result = await window.PolytypeFirebase.claimDailyChest();
         state.coins = result.data?.coins ?? state.coins;
         state.chestReady = false;
+        saveToCache();
         notify();
         return result.data;
     }
@@ -58,6 +91,7 @@
         if (progress) {
             state.coins = progress.coins ?? state.coins;
             state.rupees = progress.rupees ?? state.rupees;
+            saveToCache();
             notify();
         }
 
@@ -72,6 +106,7 @@
         state.chestReady = false;
         state.missions = [];
         state.friendsPreview = [];
+        try { localStorage.removeItem(CACHE_KEY); } catch {}
         notify();
     }
 

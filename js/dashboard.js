@@ -42,6 +42,12 @@ function setupProfileSync() {
         profile = { ...defaultProfile, ...profile, ...event.detail };
     });
 
+    // Optimistic initial paint: a cached profile means we were signed in
+    // last time this browser loaded the app, so assume that's still true and
+    // show the full Home layout right away instead of the guest/empty state
+    // while Firebase spends a moment confirming the session.
+    renderGreeting(Boolean(localStorage.getItem(profileStorageKey)));
+
     const firebaseClient = window.PolytypeFirebase;
     if (!firebaseClient) {
         renderGreeting(false);
@@ -49,6 +55,10 @@ function setupProfileSync() {
     }
 
     firebaseClient.onChange(authState => {
+        // Ignore the synchronous "not resolved yet" tick - only repaint once
+        // Firebase has actually confirmed signed-in vs signed-out, otherwise
+        // this immediately flips the optimistic render above back to guest.
+        if (!authState.ready) return;
         renderGreeting(Boolean(authState.user));
     });
 }
