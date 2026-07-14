@@ -319,6 +319,14 @@ function normalizeHandle(value) {
   return handle;
 }
 
+function normalizeDisplayName(value) {
+  const name = cleanRequiredString(value, "name").replace(/\s+/g, " ").trim();
+  if (name.length < 1 || name.length > 40) {
+    throw new ApiError(400, "Name must be 1-40 characters.");
+  }
+  return name;
+}
+
 function normalizeSearchQuery(value) {
   return cleanOptionalString(value).toLowerCase().replace(/^@+/, "").slice(0, 20);
 }
@@ -471,6 +479,7 @@ module.exports = {
   normalizeCourseId,
   normalizeUid,
   normalizeHandle,
+  normalizeDisplayName,
   normalizeTimezone,
   normalizeSearchQuery,
   cleanRequiredString,

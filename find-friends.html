@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title data-i18n="findFriends.pageTitle">Find friends - Polytype Trainer</title>
+    <link rel="icon" type="image/svg+xml" href="assets/flags/china.svg">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap">
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body class="has-app-shell is-scroll-page" data-tab="friends">
+    <div id="app-header"></div>
+
+    <main class="page-content">
+        <a class="back-link-mini" href="friends.html">&lsaquo; <span data-i18n="friends.heading">Friends</span></a>
+        <h1 class="page-title" data-i18n="findFriends.title">Find friends</h1>
+        <p class="page-subtitle" data-i18n="findFriends.subtitle">Search by username and send a request.</p>
+
+        <form id="find-friends-form" style="display:flex;gap:8px;margin-bottom:16px">
+            <input id="find-friends-input" class="friends-search-input" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" data-i18n-placeholder="friends.searchPlaceholder" placeholder="@username" style="flex:1;min-width:0;box-sizing:border-box;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);color:var(--text);font-family:var(--font-sans);font-weight:700;font-size:14px">
+            <button id="find-friends-submit" class="btn-solid" type="submit" style="padding:0 20px" data-i18n="findFriends.find">Find</button>
+        </form>
+
+        <p id="find-friends-status" class="profile-muted" aria-live="polite" data-i18n="findFriends.hint">Type a username and press Find.</p>
+        <div id="find-friends-results" class="friends-result-list"></div>
+    </main>
+    <div id="app-bottom-nav"></div>
+
+    <script src="js/firebase-config.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-auth-compat.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/firebase-client.js"></script>
+    <script src="js/gamestate.js"></script>
+    <script src="js/app-shell.js"></script>
+    <script src="js/find-friends.js"></script>
+</body>
+</html>

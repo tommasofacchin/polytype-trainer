@@ -19,6 +19,12 @@
             <input id="profile-avatar-input" class="visually-hidden" type="file" accept="image/jpeg,image/png,image/webp">
         </div>
 
+        <div style="font-size:10px;font-weight:800;color:var(--text-faint);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em" data-i18n="profile.fullName">Full name</div>
+        <form id="profile-name-form" style="display:flex;gap:8px;margin-bottom:16px">
+            <input id="profile-name-input" type="text" autocomplete="name" maxlength="40" placeholder="Tommaso" data-i18n-placeholder="profile.fullNamePlaceholder" style="flex:1;min-width:0;box-sizing:border-box;background:var(--bg);border:1px solid var(--border-strong);border-radius:12px;padding:12px 14px;color:var(--text);font-family:var(--font-sans);font-weight:700;font-size:14px">
+            <button id="profile-name-save-btn" class="restart-btn" type="submit" style="padding:0 18px" data-i18n="profile.saveName">Edit</button>
+        </form>
+
         <div style="font-size:10px;font-weight:800;color:var(--text-faint);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em" data-i18n="profile.username">Username</div>
         <form id="profile-handle-form" style="display:flex;gap:8px;margin-bottom:16px">
             <input id="profile-handle-input" type="text" autocomplete="username" maxlength="20" inputmode="latin" pattern="[a-z0-9_]{3,20}" placeholder="@tommaso" data-i18n-placeholder="profile.usernamePlaceholder" style="flex:1;min-width:0;box-sizing:border-box;background:var(--bg);border:1px solid var(--border-strong);border-radius:12px;padding:12px 14px;color:var(--text);font-family:var(--font-sans);font-weight:700;font-size:14px">

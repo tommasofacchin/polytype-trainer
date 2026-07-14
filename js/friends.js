@@ -1,9 +1,4 @@
 const themeStorageKey = "polytype-theme";
-const searchDebounceMs = 300;
-const minSearchLength = 2;
-
-let searchInput;
-let searchToken = 0;
 
 function tr(key, params = {}) {
     return window.PolytypeI18n?.t?.(key, params) || key;
@@ -11,8 +6,6 @@ function tr(key, params = {}) {
 
 document.addEventListener("DOMContentLoaded", () => {
     applyStoredTheme();
-    searchInput = document.getElementById("friends-search-input");
-    setupSearch();
     setupAuthGate();
 
     document.addEventListener("polytype-app-language-changed", () => {
@@ -26,69 +19,41 @@ function applyStoredTheme() {
     document.documentElement.dataset.theme = storedTheme || (prefersDark ? "dark" : "light");
 }
 
-function setupSearch() {
-    if (!searchInput) return;
-
-    let debounceId = null;
-    searchInput.addEventListener("input", () => {
-        clearTimeout(debounceId);
-        const value = searchInput.value;
-        debounceId = setTimeout(() => runSearch(value), searchDebounceMs);
-    });
-}
+let hasLoadedOverview = false;
 
 function setupAuthGate() {
     const firebaseClient = window.PolytypeFirebase;
     const notice = document.getElementById("friends-signin-notice");
-    const searchCard = document.getElementById("friends-search-card");
+    const findBtn = document.getElementById("find-friends-btn");
 
     if (!firebaseClient) {
         if (notice) notice.hidden = false;
-        if (searchCard) searchCard.hidden = true;
+        if (findBtn) findBtn.hidden = true;
         return;
     }
 
     firebaseClient.onChange(authState => {
         const signedIn = Boolean(authState.user);
         if (notice) notice.hidden = signedIn;
-        if (searchCard) searchCard.hidden = !signedIn;
+        if (findBtn) findBtn.hidden = !signedIn;
 
-        if (signedIn) {
-            loadOverview();
-        } else {
+        if (!signedIn) {
+            hasLoadedOverview = false;
             renderIncoming([]);
             renderOutgoing([]);
             renderLeaderboard([]);
+            return;
+        }
+
+        // Wait for the full profile (not just the auth user) before the first
+        // fetch: publicProfiles/{uid} is only guaranteed to exist once
+        // ensure-user-profile has completed, otherwise the leaderboard can
+        // come back incomplete and then "pop in" again once it catches up.
+        if (authState.profile && !hasLoadedOverview) {
+            hasLoadedOverview = true;
+            loadOverview();
         }
     });
-}
-
-async function runSearch(value) {
-    const query = value.trim();
-    searchToken += 1;
-    const requestToken = searchToken;
-
-    if (query.length < minSearchLength) {
-        setSearchStatus(tr("friends.searchHint"));
-        renderSearchResults([]);
-        return;
-    }
-
-    if (!window.PolytypeFirebase?.isSignedIn?.()) return;
-
-    setSearchStatus(tr("friends.searching"));
-
-    try {
-        const result = await window.PolytypeFirebase.searchUsers(query);
-        if (requestToken !== searchToken) return;
-
-        const results = result.data?.results || [];
-        renderSearchResults(results);
-        setSearchStatus(results.length ? "" : tr("friends.searchEmpty"));
-    } catch (error) {
-        if (requestToken !== searchToken) return;
-        setSearchStatus(getFriendsErrorMessage(error));
-    }
 }
 
 async function loadOverview() {
@@ -106,22 +71,10 @@ async function loadOverview() {
     }
 }
 
-async function handleAdd(uid, button) {
-    if (button) button.disabled = true;
-
-    try {
-        await window.PolytypeFirebase.sendFriendRequest(uid);
-        await Promise.all([refreshVisibleSearch(), loadOverview()]);
-    } catch (error) {
-        setPageStatus(getFriendsErrorMessage(error));
-        if (button) button.disabled = false;
-    }
-}
-
 async function handleRespond(requestId, accept) {
     try {
         await window.PolytypeFirebase.respondFriendRequest(requestId, accept);
-        await Promise.all([refreshVisibleSearch(), loadOverview()]);
+        await loadOverview();
     } catch (error) {
         setPageStatus(getFriendsErrorMessage(error));
     }
@@ -137,54 +90,6 @@ async function handleRemove(uid, name) {
     } catch (error) {
         setPageStatus(getFriendsErrorMessage(error));
     }
-}
-
-function refreshVisibleSearch() {
-    if (searchInput && searchInput.value.trim().length >= minSearchLength) {
-        return runSearch(searchInput.value);
-    }
-    return Promise.resolve();
-}
-
-function renderSearchResults(results) {
-    const container = document.getElementById("friends-search-results");
-    if (!container) return;
-
-    container.replaceChildren(...results.map(renderResultRow));
-}
-
-function renderResultRow(result) {
-    const row = document.createElement("div");
-    row.className = "friends-row";
-    row.append(
-        buildAvatar(result),
-        buildNameCopy(result, `${tr("common.levelNumber", { level: result.globalLevel || 1 })} · ${result.totalXp || 0} XP`),
-        buildRelationshipAction(result)
-    );
-    return row;
-}
-
-function buildRelationshipAction(result) {
-    if (result.relationship === "friends") {
-        return buildStatusBadge(tr("friends.alreadyFriends"));
-    }
-
-    if (result.relationship === "pending_outgoing") {
-        return buildStatusBadge(tr("friends.pendingSent"));
-    }
-
-    if (result.relationship === "pending_incoming") {
-        const wrap = document.createElement("span");
-        wrap.className = "friends-row-actions";
-        wrap.append(
-            buildActionButton(tr("friends.accept"), "btn-solid", () => handleRespond(result.requestId, true)),
-            buildActionButton(tr("friends.decline"), "btn", () => handleRespond(result.requestId, false))
-        );
-        return wrap;
-    }
-
-    const button = buildActionButton(tr("friends.add"), "btn-solid", event => handleAdd(result.uid, event.currentTarget));
-    return button;
 }
 
 function renderIncoming(list) {
@@ -307,13 +212,6 @@ function buildNameCopy(profileData, metaText, isSelf) {
     return copy;
 }
 
-function buildStatusBadge(label) {
-    const badge = document.createElement("span");
-    badge.className = "friends-status-badge";
-    badge.textContent = label;
-    return badge;
-}
-
 function buildActionButton(label, className, onClick) {
     const button = document.createElement("button");
     button.type = "button";
@@ -330,11 +228,6 @@ function displayName(profileData) {
 function getInitial(profileData) {
     const source = profileData.handle || profileData.displayName || "P";
     return source.trim().charAt(0).toUpperCase() || "P";
-}
-
-function setSearchStatus(value) {
-    const el = document.getElementById("friends-search-status");
-    if (el) el.textContent = value;
 }
 
 function setPageStatus(value) {

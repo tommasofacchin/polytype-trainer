@@ -28,6 +28,7 @@
         isSignedIn,
         completePracticeSession,
         setUserHandle,
+        setDisplayName,
         uploadProfileAvatar,
         searchUsers,
         sendFriendRequest,
@@ -171,6 +172,25 @@
             state.profile = {
                 ...(state.profile || {}),
                 handle: savedHandle
+            };
+            syncProfileToLocalStorage(state.profile);
+            notify();
+        }
+
+        return result;
+    }
+
+    async function setDisplayName(name) {
+        assertConfigured();
+        if (!state.user) throw new Error(tr("auth.signInRequired"));
+
+        const result = await callApi("set-display-name", { name });
+        const savedName = result.data?.displayName || null;
+
+        if (savedName) {
+            state.profile = {
+                ...(state.profile || {}),
+                displayName: savedName
             };
             syncProfileToLocalStorage(state.profile);
             notify();

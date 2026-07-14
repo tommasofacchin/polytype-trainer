@@ -4,6 +4,7 @@ const maxSourceAvatarBytes = 10 * 1024 * 1024;
 const maxUploadAvatarBytes = 2 * 1024 * 1024;
 const avatarCanvasSize = 512;
 let isSavingHandle = false;
+let isSavingName = false;
 let isUploadingAvatar = false;
 
 function tr(key, params = {}) {
@@ -21,9 +22,17 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function setupProfileControls() {
+    const nameForm = document.getElementById("profile-name-form");
     const handleForm = document.getElementById("profile-handle-form");
     const avatarInput = document.getElementById("profile-avatar-input");
     const avatarButton = document.getElementById("profile-avatar-upload-btn");
+
+    if (nameForm) {
+        nameForm.addEventListener("submit", async event => {
+            event.preventDefault();
+            await saveName();
+        });
+    }
 
     if (handleForm) {
         handleForm.addEventListener("submit", async event => {
@@ -52,6 +61,11 @@ function setupFirebaseSync() {
         const emailEl = document.getElementById("settings-account-email");
         if (emailEl) emailEl.textContent = authState.profile?.email || authState.user?.email || "-";
 
+        const nameInput = document.getElementById("profile-name-input");
+        if (nameInput && document.activeElement !== nameInput) {
+            nameInput.value = authState.profile?.displayName || "";
+        }
+
         const handleInput = document.getElementById("profile-handle-input");
         if (handleInput && document.activeElement !== handleInput) {
             handleInput.value = authState.profile?.handle || "";
@@ -65,6 +79,38 @@ function setupFirebaseSync() {
             setEditStatus(tr("profile.profileReady"), "success");
         }
     });
+}
+
+async function saveName() {
+    const firebaseClient = window.PolytypeFirebase;
+    const input = document.getElementById("profile-name-input");
+    if (!input) return;
+
+    if (!firebaseClient?.isSignedIn?.()) {
+        setEditStatus(tr("profile.signInToEdit"), "error");
+        return;
+    }
+
+    const name = input.value.replace(/\s+/g, " ").trim();
+    if (!name) {
+        setEditStatus(tr("profile.nameInvalid"), "error");
+        input.focus();
+        return;
+    }
+
+    isSavingName = true;
+    updateEditControls();
+    setEditStatus(tr("profile.savingName"));
+
+    try {
+        await firebaseClient.setDisplayName(name);
+        setEditStatus(tr("profile.nameSaved"), "success");
+    } catch (error) {
+        setEditStatus(getProfileErrorMessage(error, "name"), "error");
+    } finally {
+        isSavingName = false;
+        updateEditControls();
+    }
 }
 
 async function saveHandle() {
@@ -217,14 +263,18 @@ function renderAvatar(element, profile) {
 
 function updateEditControls() {
     const signedIn = Boolean(window.PolytypeFirebase?.isSignedIn?.());
-    const busy = isSavingHandle || isUploadingAvatar;
+    const busy = isSavingHandle || isSavingName || isUploadingAvatar;
+    const nameInput = document.getElementById("profile-name-input");
+    const nameButton = document.getElementById("profile-name-save-btn");
     const handleInput = document.getElementById("profile-handle-input");
     const handleButton = document.getElementById("profile-handle-save-btn");
     const avatarButton = document.getElementById("profile-avatar-upload-btn");
 
+    if (nameInput) nameInput.disabled = !signedIn || busy;
+    if (nameButton) nameButton.disabled = !signedIn || busy;
     if (handleInput) handleInput.disabled = !signedIn || busy;
-    if (handleButton) handleButton.disabled = !signedIn || busy || isUploadingAvatar;
-    if (avatarButton) avatarButton.disabled = !signedIn || busy || isSavingHandle;
+    if (handleButton) handleButton.disabled = !signedIn || busy;
+    if (avatarButton) avatarButton.disabled = !signedIn || busy;
 }
 
 function setEditStatus(value, tone = "") {
@@ -235,10 +285,10 @@ function setEditStatus(value, tone = "") {
     element.dataset.tone = tone;
 }
 
-function getProfileErrorMessage(error) {
+function getProfileErrorMessage(error, context = "handle") {
     const code = error?.code || "";
     const messages = {
-        "api/400": tr("profile.handleInvalid"),
+        "api/400": context === "name" ? tr("profile.nameInvalid") : tr("profile.handleInvalid"),
         "api/409": tr("profile.handleTaken"),
         "api/413": tr("profile.photoTooLarge"),
         "api/503": tr("profile.storageUnavailable"),

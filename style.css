@@ -106,6 +106,19 @@ html {
     overflow: hidden;
 }
 
+/* Scrolling stays fully functional everywhere - this only hides the
+   browser's scrollbar track/thumb chrome for an app-like feel. */
+* {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+*::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+}
+
 body {
     margin: 0;
     height: 100%;
@@ -2602,6 +2615,22 @@ body.deck-overlay-open {
     padding: 0 14px;
 }
 
+.friends-find-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 13px;
+    text-decoration: none;
+    margin-bottom: var(--space-4);
+}
+
+.friends-find-btn[hidden] {
+    display: none;
+}
+
 .friends-page-status:empty,
 .friends-search-status:empty {
     display: none;
@@ -2991,13 +3020,14 @@ body {
     flex-direction: column;
 }
 
-/* Scrolling pages (Home/Games/Categories/Friends/Profile): shell + content
-   scroll together as one normal document. */
+/* Scrolling pages (Home/Games/Categories/Friends/Profile): the shell is
+   pinned to exactly one viewport (html above has overflow:hidden, so a
+   taller `height:auto` box here would just get clipped instead of
+   scrolling) and scrolls its own overflowing content internally. */
 .has-app-shell.is-scroll-page {
-    min-height: 100vh;
-    min-height: 100dvh;
-    height: auto;
-    overflow: auto;
+    height: 100vh;
+    height: 100dvh;
+    overflow-y: auto;
 }
 
 /* Fixed-viewport game pages (Trainer/Memory/Dictate) keep their own internal
@@ -3190,11 +3220,18 @@ body {
     }
 
     .app-shell-nav-item {
+        flex: 0 0 auto;
         flex-direction: row;
         justify-content: flex-start;
         gap: 12px;
         padding: 11px 14px;
         border-radius: var(--radius-md);
+        transition: background var(--transition);
+    }
+
+    .app-shell-nav-item:hover, .app-shell-nav-item:focus-visible {
+        background: var(--surface-soft);
+        outline: 0;
     }
 
     .app-shell-nav-item.is-active {
@@ -3280,6 +3317,10 @@ body {
     border-radius: 20px;
     padding: 14px 16px;
     margin-bottom: 16px;
+}
+
+.chest-card[hidden] {
+    display: none;
 }
 
 .chest-card.is-ready {

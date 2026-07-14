@@ -36,6 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
     el.currentLanguageFlag = document.getElementById("current-language-flag");
     el.progressFill = document.getElementById("deck-progress-fill");
     el.progressText = document.getElementById("deck-progress-text");
+    el.emptyHint = document.getElementById("deck-empty-hint");
     el.groups = document.getElementById("deck-groups");
 
     setupLanguageMenu();
@@ -281,6 +282,7 @@ function renderDeck() {
             total: vocab.length
         });
     }
+    if (el.emptyHint) el.emptyHint.hidden = unlockedCount > 0;
 
     const byCategory = new Map();
     vocab.forEach(word => {
