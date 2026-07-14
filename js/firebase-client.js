@@ -443,7 +443,7 @@
         if (!remoteProfile) return;
 
         const localProfile = {
-            name: remoteProfile.displayName || "Polytype Learner",
+            name: remoteProfile.displayName || "Player",
             handle: remoteProfile.handle || null,
             avatarUrl: remoteProfile.avatarUrl || null,
             xp: remoteProfile.totalXp || 0,

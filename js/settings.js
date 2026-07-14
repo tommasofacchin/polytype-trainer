@@ -11,7 +11,6 @@ function tr(key, params = {}) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    setupAppLanguageSelect();
     setupProfileControls();
     setupFirebaseSync();
 
@@ -20,16 +19,6 @@ document.addEventListener("DOMContentLoaded", () => {
         window.location.href = "auth.html";
     });
 });
-
-function setupAppLanguageSelect() {
-    const select = document.getElementById("app-language-select");
-    if (!select) return;
-
-    select.value = window.PolytypeI18n?.getLanguage?.() || "en";
-    select.addEventListener("change", () => {
-        window.PolytypeI18n?.setLanguage?.(select.value);
-    });
-}
 
 function setupProfileControls() {
     const handleForm = document.getElementById("profile-handle-form");

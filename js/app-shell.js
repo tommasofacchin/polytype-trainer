@@ -16,15 +16,19 @@
         person: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><circle cx="12" cy="9" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6z"/></svg>',
         home: '<svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>',
         games: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><rect x="3" y="4" width="7" height="7" rx="1.6"/><rect x="14" y="4" width="7" height="7" rx="1.6"/><rect x="3" y="14" width="7" height="7" rx="1.6"/><rect x="14" y="14" width="7" height="7" rx="1.6"/></svg>',
+        deck: '<svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>',
         friends: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M2.6 20c0-3.6 3-5.6 6.4-5.6S15.4 16.4 15.4 20"/><path d="M16.5 5.6a2.8 2.8 0 0 1 0 5.4"/><path d="M17 14.5c2.7.3 4.9 2 4.9 5.2"/></svg>',
-        profile: '<svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>'
+        profile: '<svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>',
+        settings: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>'
     };
 
     const TABS = [
         { id: "home", href: "index.html", label: "nav.home", icon: ICONS.home },
         { id: "games", href: "games.html", label: "nav.games", icon: ICONS.games },
+        { id: "deck", href: "deck.html", label: "nav.deck", icon: ICONS.deck },
         { id: "friends", href: "friends.html", label: "nav.friends", icon: ICONS.friends },
-        { id: "profile", href: "profile.html", label: "nav.profile", icon: ICONS.profile }
+        { id: "profile", href: "profile.html", label: "nav.profile", icon: ICONS.profile },
+        { id: "settings", href: "settings.html", label: "settings.title", icon: ICONS.settings, desktopOnly: true }
     ];
 
     function tr(key, params) {
@@ -105,7 +109,7 @@
         mount.innerHTML = `
             <nav class="app-shell-nav">
                 ${TABS.map(tabItem => `
-                    <a class="app-shell-nav-item${tabItem.id === activeTab ? " is-active" : ""}" href="${tabItem.href}">
+                    <a class="app-shell-nav-item${tabItem.id === activeTab ? " is-active" : ""}${tabItem.desktopOnly ? " app-shell-nav-item-desktop-only" : ""}" href="${tabItem.href}">
                         <span class="app-shell-nav-icon">${tabItem.icon}</span>
                         <span class="app-shell-nav-label">${tr(tabItem.label)}</span>
                     </a>

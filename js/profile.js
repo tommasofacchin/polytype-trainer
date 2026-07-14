@@ -1,5 +1,5 @@
 const defaultProfile = {
-    name: "Polytype Learner",
+    name: "Player",
     handle: null,
     avatarUrl: null,
     xp: 0,
@@ -109,7 +109,6 @@ function renderProfilePage(profile) {
     setText("profile-page-total-xp", safeProfile.xp.toLocaleString());
     setText("profile-page-next-level", tr("profile.xpToLevel", { xp: xpToNextLevel, level: levelInfo.level + 1 }));
     setText("profile-page-day-streak", String(safeProfile.dayStreak));
-    setText("profile-page-coins", safeProfile.coins.toLocaleString());
 
     const xpFill = document.getElementById("profile-page-xp-fill");
     if (xpFill) xpFill.style.width = `${levelInfo.progress}%`;

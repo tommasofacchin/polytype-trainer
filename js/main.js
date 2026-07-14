@@ -37,7 +37,7 @@ const state = {
 };
 
 const defaultProfile = {
-    name: "Polytype Learner",
+    name: "Player",
     handle: null,
     avatarUrl: null,
     xp: 0,

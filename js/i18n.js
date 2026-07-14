@@ -1,6 +1,8 @@
 (function () {
     const storageKey = "polytype-app-language";
-    const supported = new Set(["en", "it"]);
+    // App UI language is locked to English - "it" stays translated below for
+    // future use, but setLanguage()/getLanguage() never resolve to it.
+    const supported = new Set(["en"]);
 
     const dictionaries = {
         en: {
@@ -268,8 +270,13 @@
 
             "nav.home": "Home",
             "nav.games": "Games",
+            "nav.deck": "Deck",
             "nav.friends": "Friends",
             "nav.profile": "Profile",
+
+            "deck.pageTitle": "Deck - Polytype Trainer",
+            "deck.title": "Deck",
+            "deck.subtitle": "Every word you've unlocked so far, grouped by category.",
 
             "games.pageTitle": "Games - Polytype Trainer",
             "games.title": "Games",
@@ -594,8 +601,13 @@
 
             "nav.home": "Home",
             "nav.games": "Giochi",
+            "nav.deck": "Mazzo",
             "nav.friends": "Amici",
             "nav.profile": "Profilo",
+
+            "deck.pageTitle": "Mazzo - Polytype Trainer",
+            "deck.title": "Mazzo",
+            "deck.subtitle": "Tutte le parole sbloccate finora, raggruppate per categoria.",
 
             "games.pageTitle": "Giochi - Polytype Trainer",
             "games.title": "Giochi",

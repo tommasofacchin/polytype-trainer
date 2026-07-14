@@ -1,7 +1,7 @@
 const { db } = require("./_firebase");
 const {
   withAuth, pickFriendProfile, buildLeaderboard, evaluateMissions,
-  getDateKeyForTimezone, normalizeTimezone
+  getDateKeyForTimezone, normalizeTimezone, DEBUG_ALWAYS_CLAIM_CHEST
 } = require("./_lib");
 
 module.exports = withAuth(async (data, token) => {
@@ -20,7 +20,7 @@ module.exports = withAuth(async (data, token) => {
   const dailyStats = dailyStatsSnap.exists ? dailyStatsSnap.data() : {};
 
   const missions = evaluateMissions(token.uid, todayKey, dailyStats);
-  const chestReady = user.lastChestClaimedDate !== todayKey;
+  const chestReady = DEBUG_ALWAYS_CLAIM_CHEST || user.lastChestClaimedDate !== todayKey;
 
   const friendUids = friendsSnap.docs.map(doc => doc.id);
   const friendProfileSnaps = friendUids.length

@@ -1,7 +1,7 @@
 const profileStorageKey = "polytype-profile";
 
 const defaultProfile = {
-    name: "Polytype Learner",
+    name: "Player",
     handle: null,
     avatarUrl: null,
     xp: 0,

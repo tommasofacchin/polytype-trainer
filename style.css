@@ -1103,6 +1103,15 @@ input[type="password"]:focus {
     gap: var(--space-3);
 }
 
+/* Compact square badge tiles (icon over label), always a 4-col grid — unlike
+   .profile-badge-grid's horizontal course/badge cards, this doesn't collapse
+   to 1 column on mobile since the tiles are small enough to stay 4-across. */
+.badge-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+}
+
 .profile-badge-card {
     display: flex;
     align-items: center;
@@ -2097,7 +2106,6 @@ input[type="password"]:focus {
 
 .deck-open-btn:hover,
 .deck-open-btn:focus-visible {
-    transform: translateY(-1px);
     border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
     box-shadow: var(--shadow-md);
     outline: 0;
@@ -2337,7 +2345,6 @@ body.deck-overlay-open {
 
 .deck-card:not(.is-locked):hover,
 .deck-card:not(.is-locked):focus-visible {
-    transform: translateY(-3px);
     border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
     box-shadow: var(--shadow-md);
     outline: none;
@@ -2509,7 +2516,6 @@ body.deck-overlay-open {
 .dashboard-tile:focus-visible,
 .dashboard-social-card:hover,
 .dashboard-social-card:focus-visible {
-    transform: translateY(-2px);
     border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
     box-shadow: var(--shadow-md);
     outline: 0;
@@ -2585,6 +2591,10 @@ body.deck-overlay-open {
     display: grid;
     gap: var(--space-3);
     padding: clamp(16px, 3vw, 22px);
+}
+
+.friends-card[hidden] {
+    display: none;
 }
 
 .friends-search-input {
@@ -2757,12 +2767,44 @@ body.deck-overlay-open {
 }
 
 .profile-detail-card {
-    transition: transform var(--transition), box-shadow var(--transition);
+    transition: box-shadow var(--transition);
 }
 
 .profile-detail-card:hover {
-    transform: translateY(-2px);
     box-shadow: var(--shadow-md);
+}
+
+/* Compact settings entry - a plain row/button, not a tall stat card. Mobile
+   only: on desktop Settings lives in the sidebar nav instead (see the
+   app-shell-nav-item-desktop-only rule further down). */
+.profile-settings-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 0;
+    padding: 13px 16px;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 800;
+    font-size: var(--text-sm);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    transition: border-color var(--transition);
+}
+
+.profile-settings-link:hover, .profile-settings-link:focus-visible {
+    border-color: var(--border-strong);
+}
+
+.profile-settings-link span {
+    flex: 1;
+}
+
+@media (min-width: 860px) {
+    .profile-settings-link {
+        display: none;
+    }
 }
 
 /* ---- Categories page ---------------------------------------------------------- */
@@ -2953,6 +2995,7 @@ body {
    scroll together as one normal document. */
 .has-app-shell.is-scroll-page {
     min-height: 100vh;
+    min-height: 100dvh;
     height: auto;
     overflow: auto;
 }
@@ -2961,6 +3004,7 @@ body {
    scroll region; the shell just bookends it top and bottom. */
 .has-app-shell.is-fixed-page {
     height: 100%;
+    height: 100dvh;
     overflow: hidden;
 }
 
@@ -2968,6 +3012,14 @@ body {
     flex: 1;
     min-height: 0;
     height: 100%;
+}
+
+/* The bottom nav is pinned to the actual visual viewport, not the document —
+   `position: sticky` inside a tall page gets pushed off-screen on mobile
+   Chrome whenever its collapsing address bar is showing. Content that sits
+   above the nav gets bottom padding (below) so nothing is hidden behind it. */
+.has-app-shell:has(#app-bottom-nav) {
+    padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
 }
 
 #app-header {
@@ -3052,10 +3104,11 @@ body {
 }
 
 #app-bottom-nav {
-    position: sticky;
+    position: fixed;
+    left: 0;
+    right: 0;
     bottom: 0;
     z-index: 40;
-    margin-top: auto;
     background: var(--bg-soft);
     box-shadow: 0 -1px 0 var(--border);
 }
@@ -3101,6 +3154,68 @@ body {
     font-weight: 800;
 }
 
+/* Settings only shows in the desktop sidebar; on mobile the bottom bar stays
+   at 5 tabs and Settings is reached from a link on the Profile page instead. */
+.app-shell-nav-item-desktop-only {
+    display: none;
+}
+
+/* ---- Desktop: nav becomes a left sidebar instead of a bottom bar ------------- */
+
+@media (min-width: 860px) {
+    .app-shell-nav-item-desktop-only {
+        display: flex;
+    }
+
+    .has-app-shell:has(#app-bottom-nav) {
+        padding-bottom: 0;
+        padding-left: 220px;
+    }
+
+    #app-bottom-nav {
+        top: 0;
+        left: 0;
+        right: auto;
+        bottom: 0;
+        width: 220px;
+        box-shadow: 1px 0 0 var(--border);
+    }
+
+    .app-shell-nav {
+        flex-direction: column;
+        max-width: none;
+        height: 100%;
+        padding: 20px 12px;
+        gap: 2px;
+    }
+
+    .app-shell-nav-item {
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 12px;
+        padding: 11px 14px;
+        border-radius: var(--radius-md);
+    }
+
+    .app-shell-nav-item.is-active {
+        background: var(--accent-soft);
+    }
+
+    .app-shell-nav-icon {
+        width: auto;
+        height: auto;
+        border-radius: 0;
+    }
+
+    .app-shell-nav-item.is-active .app-shell-nav-icon {
+        background: none;
+    }
+
+    .app-shell-nav-label {
+        font-size: 14px;
+    }
+}
+
 /* ---- Games hub grid ---------------------------------------------------------- */
 
 .game-hub-grid {
@@ -3118,12 +3233,11 @@ body {
     color: var(--text);
     text-decoration: none;
     display: block;
-    transition: transform var(--transition), border-color var(--transition);
+    transition: border-color var(--transition);
 }
 
 .game-hub-card:hover, .game-hub-card:focus-visible {
     border-color: var(--border-strong);
-    transform: translateY(-1px);
 }
 
 .game-hub-card.is-disabled {

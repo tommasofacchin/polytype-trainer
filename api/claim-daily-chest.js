@@ -2,7 +2,7 @@ const { db, FieldValue } = require("./_firebase");
 const {
   withAuth, getAuthProfile, buildDefaultUserProfile, buildPublicProfile,
   getLevelInfo, getDateKeyForTimezone, normalizeTimezone, evaluateNewBadges,
-  CHEST_COIN_REWARD, CHEST_XP_REWARD, ApiError
+  CHEST_COIN_REWARD, CHEST_XP_REWARD, DEBUG_ALWAYS_CLAIM_CHEST, ApiError
 } = require("./_lib");
 
 module.exports = withAuth(async (data, token) => {
@@ -19,7 +19,7 @@ module.exports = withAuth(async (data, token) => {
     const timezone = normalizeTimezone(data.timezone || existingUser?.timezone);
     const todayKey = getDateKeyForTimezone(new Date(), timezone);
 
-    if (existingUser?.lastChestClaimedDate === todayKey) {
+    if (!DEBUG_ALWAYS_CLAIM_CHEST && existingUser?.lastChestClaimedDate === todayKey) {
       throw new ApiError(409, "The daily chest has already been claimed today.");
     }
 

@@ -27,6 +27,10 @@ const GAME_TYPES = ["trainer", "memory", "dictate"];
 const CHEST_COIN_REWARD = 50;
 const CHEST_XP_REWARD = 20;
 const LEVEL_UP_RUPEE_REWARD = 1;
+// Debug-only: set DEBUG_ALWAYS_CLAIM_CHEST=true in the environment to let the
+// daily chest be reopened on every claim instead of once per day. Never set
+// this in production - it lets any signed-in user farm coins/XP at will.
+const DEBUG_ALWAYS_CLAIM_CHEST = process.env.DEBUG_ALWAYS_CLAIM_CHEST === "true";
 
 // Small fixed pool; 3 are picked deterministically per (uid, date) so the set
 // rotates daily without needing a cron job or extra Firestore writes.
@@ -128,7 +132,7 @@ function sanitizeUserProfile(user) {
   return {
     uid: user.uid,
     handle: user.handle || null,
-    displayName: user.displayName || "Polytype Learner",
+    displayName: user.displayName || "Player",
     avatarUrl: user.avatarUrl || null,
     timezone: user.timezone || DEFAULT_TIMEZONE,
     totalXp: user.totalXp || 0,
@@ -165,7 +169,7 @@ function sanitizeCoursesSummary(courses) {
 
 function getAuthProfile(token) {
   return {
-    displayName: cleanOptionalString(token.name) || "Polytype Learner",
+    displayName: cleanOptionalString(token.name) || "Player",
     avatarUrl: cleanOptionalString(token.picture) || null,
     email: cleanOptionalString(token.email) || null
   };
@@ -376,7 +380,7 @@ function pickFriendProfile(profile) {
   return {
     uid: profile.uid,
     handle: profile.handle || null,
-    displayName: profile.displayName || "Polytype Learner",
+    displayName: profile.displayName || "Player",
     avatarUrl: profile.avatarUrl || null,
     totalXp: profile.totalXp || 0,
     globalLevel: profile.globalLevel || 1,
@@ -492,6 +496,7 @@ module.exports = {
   CHEST_COIN_REWARD,
   CHEST_XP_REWARD,
   LEVEL_UP_RUPEE_REWARD,
+  DEBUG_ALWAYS_CLAIM_CHEST,
   MISSION_POOL,
   BADGE_DEFINITIONS
 };
