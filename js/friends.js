@@ -139,7 +139,9 @@ function renderIncoming(list) {
     container.replaceChildren(...list.map(item => {
         const row = document.createElement("div");
         row.className = "friends-row";
-        makeRowVisitable(row, item.profile?.uid);
+        if (item.profile?.uid) {
+            makeRowVisitable(row, { ...item.profile, relationship: "pending_incoming", requestId: item.requestId });
+        }
 
         const actions = document.createElement("span");
         actions.className = "friends-row-actions";
@@ -187,7 +189,7 @@ function renderLeaderboard(list) {
     container.replaceChildren(...list.map(entry => {
         const row = document.createElement("div");
         row.className = entry.isSelf ? "friends-leaderboard-row is-self" : "friends-leaderboard-row";
-        if (!entry.isSelf) makeRowVisitable(row, entry.uid);
+        if (!entry.isSelf) makeRowVisitable(row, { ...entry, relationship: "friends" });
 
         const rank = document.createElement("span");
         rank.className = "friends-rank";
@@ -259,12 +261,27 @@ function buildActionButton(label, className, onClick) {
     return button;
 }
 
-function makeRowVisitable(row, uid) {
+function makeRowVisitable(row, profile) {
+    const uid = profile?.uid;
     if (!uid) return;
     row.classList.add("is-clickable");
     row.addEventListener("click", () => {
+        stashProfilePreview(profile);
         window.location.href = `visit-profile.html?uid=${encodeURIComponent(uid)}`;
     });
+}
+
+// Stash whatever profile fields the row already has (avatar/name/level/xp/
+// streak/relationship) so visit-profile.html can paint instantly instead of
+// waiting on auth + a network round trip for the exact same data.
+function stashProfilePreview(profile) {
+    try {
+        sessionStorage.setItem("polytype-visit-profile-cache", JSON.stringify({
+            uid: profile.uid,
+            savedAt: Date.now(),
+            data: profile
+        }));
+    } catch {}
 }
 
 function displayName(profileData) {

@@ -88,6 +88,7 @@ function renderResultRow(result) {
     const row = document.createElement("div");
     row.className = "friends-row is-clickable";
     row.addEventListener("click", () => {
+        stashProfilePreview(result);
         window.location.href = `visit-profile.html?uid=${encodeURIComponent(result.uid)}`;
     });
     row.append(
@@ -186,6 +187,18 @@ function getInitial(profileData) {
 function setStatus(value) {
     const el = document.getElementById("find-friends-status");
     if (el) el.textContent = value;
+}
+
+// So visit-profile.html can paint instantly from the row the user just
+// tapped instead of waiting on auth + a network round trip.
+function stashProfilePreview(profile) {
+    try {
+        sessionStorage.setItem("polytype-visit-profile-cache", JSON.stringify({
+            uid: profile.uid,
+            savedAt: Date.now(),
+            data: profile
+        }));
+    } catch {}
 }
 
 function getFindFriendsErrorMessage(error) {

@@ -181,6 +181,13 @@ function renderFriendsPreview(state) {
             `;
             if (!entry.isSelf && entry.uid) {
                 row.addEventListener("click", () => {
+                    try {
+                        sessionStorage.setItem("polytype-visit-profile-cache", JSON.stringify({
+                            uid: entry.uid,
+                            savedAt: Date.now(),
+                            data: { ...entry, relationship: "friends" }
+                        }));
+                    } catch {}
                     window.location.href = `visit-profile.html?uid=${encodeURIComponent(entry.uid)}`;
                 });
             }

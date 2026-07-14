@@ -20,11 +20,23 @@ function tr(key, params = {}) {
     return window.PolytypeI18n?.t?.(key, params) || key;
 }
 
+const PREVIEW_CACHE_KEY = "polytype-visit-profile-cache";
+
 document.addEventListener("DOMContentLoaded", () => {
     const uid = new URLSearchParams(window.location.search).get("uid");
     if (!uid) {
         setStatus(tr("friends.userNotFound"));
         return;
+    }
+
+    // The row the user just tapped (leaderboard/search/friends preview)
+    // already carried avatar/name/level/xp/streak - paint that instantly
+    // instead of waiting on auth + a network round trip for anything to
+    // show up.
+    const cached = readPreviewCache(uid);
+    if (cached) {
+        renderProfile(cached);
+        hasCachedPaint = true;
     }
 
     window.PolytypeFirebase?.onChange?.(authState => {
@@ -37,13 +49,23 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+function readPreviewCache(uid) {
+    try {
+        const raw = sessionStorage.getItem(PREVIEW_CACHE_KEY);
+        const cached = raw ? JSON.parse(raw) : null;
+        if (cached && cached.uid === uid && Date.now() - cached.savedAt < 5 * 60 * 1000) return cached.data;
+    } catch {}
+    return null;
+}
+
 let hasLoaded = false;
+let hasCachedPaint = false;
 
 async function loadProfile(uid) {
     if (hasLoaded) return;
     hasLoaded = true;
 
-    setStatus(tr("common.loadingProfile"));
+    if (!hasCachedPaint) setStatus(tr("common.loadingProfile"));
 
     try {
         const result = await window.PolytypeFirebase.getFriendProfile(uid);
