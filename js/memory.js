@@ -153,15 +153,14 @@
         el.resultDetail = document.getElementById("result-detail");
         el.playAgainBtn = document.getElementById("play-again-btn");
         el.changeDiffBtn = document.getElementById("change-difficulty-btn");
-        el.themeToggle = document.getElementById("theme-toggle");
         el.difficultySub = document.getElementById("difficulty-sub");
         el.comboPill = document.getElementById("combo-pill");
         el.comboPillValue = document.getElementById("combo-pill-value");
         el.sfxToggle = document.getElementById("sfx-toggle");
         el.resultCombo = document.getElementById("result-combo");
         el.resultPerfect = document.getElementById("result-perfect");
+        el.resultSaveStatus = document.getElementById("result-save-status");
 
-        initTheme();
         initSfxToggle();
         preloadSfx();
         syncLanguageUi();
@@ -173,28 +172,6 @@
         el.changeDiffBtn.addEventListener("click", openDifficulty);
 
         loadVocab();
-    }
-
-    // ── Theme ───────────────────────────────────────────────
-    function initTheme() {
-        const stored = localStorage.getItem(THEME_KEY);
-        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-        applyTheme(stored || (prefersDark ? "dark" : "light"));
-
-        el.themeToggle.addEventListener("click", () => {
-            const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-            applyTheme(next);
-        });
-    }
-
-    function applyTheme(theme) {
-        document.documentElement.dataset.theme = theme;
-        try {
-            localStorage.setItem(THEME_KEY, theme);
-        } catch (e) {}
-        const isDark = theme === "dark";
-        el.themeToggle.setAttribute("aria-pressed", String(isDark));
-        el.themeToggle.setAttribute("aria-label", isDark ? tr("common.switchLight") : tr("common.switchDark"));
     }
 
     // ── Sound effects ───────────────────────────────────────
@@ -607,6 +584,7 @@
 
         el.comboPill.hidden = true;
         delete el.comboPill.dataset.tier;
+        if (el.resultSaveStatus) el.resultSaveStatus.textContent = "";
 
         renderBoard();
         updateHud();
@@ -789,6 +767,40 @@
 
         celebrateBoardCleared();
         el.resultModal.hidden = false;
+        saveSessionProgress(ms);
+    }
+
+    // ── Progress sync ────────────────────────────────────────
+    async function saveSessionProgress(ms) {
+        if (!el.resultSaveStatus) return;
+
+        const firebaseClient = window.PolytypeFirebase;
+        if (!firebaseClient?.isSignedIn?.()) {
+            el.resultSaveStatus.textContent = tr("trainer.signInSave");
+            return;
+        }
+
+        el.resultSaveStatus.textContent = tr("trainer.savingProgress");
+
+        const payload = {
+            courseId: activeLanguage,
+            gameType: "memory",
+            correctAnswers: state.matched,
+            wrongAnswers: Math.max(0, state.moves - state.matched),
+            bestCombo: state.maxStreak,
+            wordsUsed: state.pairCount,
+            sessionSeconds: Math.round(ms / 1000)
+        };
+
+        try {
+            const save = window.PolytypeGameState?.completePracticeSession
+                ? window.PolytypeGameState.completePracticeSession(payload)
+                : firebaseClient.completePracticeSession(payload);
+            await save;
+            el.resultSaveStatus.textContent = tr("trainer.progressSaved");
+        } catch (error) {
+            el.resultSaveStatus.textContent = error?.message || tr("trainer.progressSaved");
+        }
     }
 
     // Perfect (instant) play scores pairs * 100, scaled by difficulty.

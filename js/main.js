@@ -172,7 +172,6 @@ document.addEventListener("DOMContentLoaded", () => {
     levelSelect.addEventListener("change", onLevelChange);
     romajiToggle.addEventListener("change", onRomajiToggle);
     restartBtn.addEventListener("click", startSession);
-    themeToggle.addEventListener("click", toggleTheme);
     timeSelect.addEventListener("change", onTimeChange);
     focusToggle.addEventListener("click", toggleFocusMode);
     playAgainBtn.addEventListener("click", startSession);
@@ -190,7 +189,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!event.target.closest("input")) focusActiveRow();
     });
 
-    initTheme();
     initProfile();
     setupFirebaseProfileSync();
     preloadSfx();
@@ -200,31 +198,6 @@ document.addEventListener("DOMContentLoaded", () => {
     applyInitialVisibilityClasses();
     startSession();
 });
-
-function initTheme() {
-    const storedTheme = localStorage.getItem(themeStorageKey);
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const theme = storedTheme || (prefersDark ? "dark" : "light");
-
-    applyTheme(theme);
-}
-
-function toggleTheme() {
-    const currentTheme = document.documentElement.dataset.theme === "dark" ? "dark" : "light";
-    applyTheme(currentTheme === "dark" ? "light" : "dark");
-}
-
-function applyTheme(theme) {
-    document.documentElement.dataset.theme = theme;
-    localStorage.setItem(themeStorageKey, theme);
-
-    const isDark = theme === "dark";
-    themeToggle.setAttribute("aria-pressed", String(isDark));
-    themeToggle.setAttribute(
-        "aria-label",
-        isDark ? tr("common.switchLight") : tr("common.switchDark")
-    );
-}
 
 function initProfile() {
     const storedProfile = localStorage.getItem(profileStorageKey);
@@ -1849,6 +1822,7 @@ async function saveCurrentSessionProgress() {
 
     const payload = {
         courseId: state.unsavedCourseId || getCurrentCourseKey(),
+        gameType: "trainer",
         correctAnswers: state.unsavedCorrectFields,
         wrongAnswers: state.unsavedWrongFields,
         bestCombo: state.unsavedBestStreak,
@@ -1886,6 +1860,7 @@ async function saveCurrentSessionProgress() {
 
             saveProfile();
             renderProfile();
+            window.PolytypeGameState?.refresh?.();
 
             if (progress.newlyUnlockedWords > 0 && progress.course?.courseId === getCurrentCourseKey()) {
                 const newUnlockedSuffixes = getUnlockedWordSuffixes(

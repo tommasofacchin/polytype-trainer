@@ -4,62 +4,42 @@ const defaultProfile = {
     avatarUrl: null,
     xp: 0,
     dayStreak: 0,
+    coins: 0,
     friendCount: 0,
+    badges: [],
     courses: {}
 };
 
-const demoBadges = [
-    {
-        icon: "1",
-        labelKey: "profile.badgeFirstRun",
-        descriptionKey: "profile.badgeFirstRunDesc"
-    },
-    {
-        icon: "x",
-        labelKey: "profile.badgeCombo",
-        descriptionKey: "profile.badgeComboDesc"
-    },
-    {
-        icon: "ZH",
-        labelKey: "profile.badgeMandarin",
-        descriptionKey: "profile.badgeMandarinDesc"
-    },
-    {
-        icon: "OK",
-        labelKey: "profile.badgeClean",
-        descriptionKey: "profile.badgeCleanDesc"
-    }
+// Mirrors BADGE_DEFINITIONS in api/_lib.js — icon/labels only, unlock logic is server-side.
+const BADGE_DEFINITIONS = [
+    { id: "first_steps", icon: "star", labelKey: "badge.firstSteps" },
+    { id: "streak_5", icon: "flame", labelKey: "badge.streak5" },
+    { id: "streak_30", icon: "flame", labelKey: "badge.streak30" },
+    { id: "word_master", icon: "book", labelKey: "badge.wordMaster" },
+    { id: "chest_hunter", icon: "chest", labelKey: "badge.chestHunter" },
+    { id: "level_10", icon: "star", labelKey: "badge.level10" }
 ];
 
-const courseLabels = {
-    chinese: "Chinese",
-    german: "German",
-    italian: "Italian",
-    japanese: "Japanese",
-    norwegian: "Norwegian",
-    spanish: "Spanish",
-    swedish: "Swedish"
+const BADGE_ICONS = {
+    star: '<svg width="24" height="24" viewBox="0 0 24 24" fill="#ffc73a"><path d="M12 2l2.9 6.2 6.6.7-4.9 4.5 1.3 6.6L12 17.8 6.1 20.6l1.3-6.6L2.5 8.9l6.6-.7z"/></svg>',
+    flame: '<svg width="24" height="24" viewBox="0 0 24 24" fill="#ff7a2d"><path d="M12 2c3 4 5 6 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 1 2 2 2 3 2 0-3-1-5 0-8z"/></svg>',
+    book: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8b6cff" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
+    chest: '<svg width="22" height="22" viewBox="0 0 48 48"><rect x="6" y="20" width="36" height="20" rx="4" fill="#8b6cff"/><path d="M6 22a18 12 0 0 1 36 0z" fill="#a084ff"/><rect x="6" y="25" width="36" height="4" fill="#6b4dff"/></svg>',
+    locked: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>'
 };
 
-const themeStorageKey = "polytype-theme";
-const profileStorageKey = "polytype-profile";
-const handlePattern = /^[a-z0-9_]{3,20}$/;
-const supportedAvatarTypes = new Set(["image/jpeg", "image/png", "image/webp"]);
-const maxSourceAvatarBytes = 10 * 1024 * 1024;
-const maxUploadAvatarBytes = 2 * 1024 * 1024;
-const avatarCanvasSize = 512;
+const courseLabels = {
+    chinese: "Chinese", german: "German", italian: "Italian", japanese: "Japanese",
+    norwegian: "Norwegian", spanish: "Spanish", swedish: "Swedish"
+};
+
 let currentProfile = { ...defaultProfile };
-let isSavingHandle = false;
-let isUploadingAvatar = false;
 
 function tr(key, params = {}) {
     return window.PolytypeI18n?.t?.(key, params) || key;
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    applyStoredTheme();
-    setupAppLanguageSelect();
-    setupProfileControls();
     currentProfile = loadProfile();
     renderProfilePage(currentProfile);
     setupFirebaseSync();
@@ -67,58 +47,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.addEventListener("polytype-app-language-changed", () => {
         renderProfilePage(currentProfile);
-        updateEditStatusForAuth();
     });
 });
 
-function setupAppLanguageSelect() {
-    const select = document.getElementById("app-language-select");
-    if (!select) return;
-
-    select.value = window.PolytypeI18n?.getLanguage?.() || "en";
-    select.addEventListener("change", () => {
-        window.PolytypeI18n?.setLanguage?.(select.value);
-    });
-}
-
-function setupProfileControls() {
-    const handleForm = document.getElementById("profile-handle-form");
-    const avatarInput = document.getElementById("profile-avatar-input");
-    const avatarButton = document.getElementById("profile-avatar-upload-btn");
-
-    if (handleForm) {
-        handleForm.addEventListener("submit", async event => {
-            event.preventDefault();
-            await saveHandle();
-        });
-    }
-
-    if (avatarButton && avatarInput) {
-        avatarButton.addEventListener("click", () => {
-            avatarInput.click();
-        });
-
-        avatarInput.addEventListener("change", async () => {
-            const file = avatarInput.files?.[0];
-            avatarInput.value = "";
-            if (file) await uploadAvatar(file);
-        });
-    }
-}
-
-function applyStoredTheme() {
-    const storedTheme = localStorage.getItem(themeStorageKey);
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    document.documentElement.dataset.theme = storedTheme || (prefersDark ? "dark" : "light");
-}
-
 function loadProfile() {
-    const storedProfile = localStorage.getItem(profileStorageKey);
-
-    if (!storedProfile) return { ...defaultProfile };
-
+    const stored = localStorage.getItem("polytype-profile");
+    if (!stored) return { ...defaultProfile };
     try {
-        return sanitizeProfile(JSON.parse(storedProfile));
+        return sanitizeProfile(JSON.parse(stored));
     } catch {
         return { ...defaultProfile };
     }
@@ -129,23 +65,12 @@ function setupFirebaseSync() {
     if (!firebaseClient) return;
 
     firebaseClient.onChange(authState => {
-        updateEditControls();
-
-        if (authState.error) {
-            setText("profile-page-sync-status", authState.error);
-            setEditStatus(authState.error, "error");
-            return;
-        }
-
         if (!authState.user) {
             setText("profile-page-sync-status", tr("profile.cloudSignin"));
-            setEditStatus(tr("profile.signInToEdit"));
             return;
         }
-
         if (!authState.profile) {
             setText("profile-page-sync-status", tr("profile.cloudLoading"));
-            setEditStatus(tr("profile.cloudLoading"));
             return;
         }
 
@@ -155,169 +80,21 @@ function setupFirebaseSync() {
             avatarUrl: authState.profile.avatarUrl,
             xp: authState.profile.totalXp,
             dayStreak: authState.profile.currentStreak,
+            coins: authState.profile.coins,
             friendCount: authState.profile.friendCount,
+            badges: authState.profile.badges,
             courses: authState.profile.courses
         });
-        localStorage.setItem(profileStorageKey, JSON.stringify(currentProfile));
         renderProfilePage(currentProfile);
         setText("profile-page-sync-status", tr("profile.cloudSynced"));
-        setEditStatus(tr("profile.profileReady"), "success");
     });
 }
 
 function setupLocalProfileSync() {
     document.addEventListener("polytype-profile-updated", event => {
-        currentProfile = sanitizeProfile({
-            ...currentProfile,
-            ...event.detail
-        });
+        currentProfile = sanitizeProfile({ ...currentProfile, ...event.detail });
         renderProfilePage(currentProfile);
-        setText("profile-page-sync-status", tr("profile.updated"));
     });
-}
-
-async function saveHandle() {
-    const firebaseClient = window.PolytypeFirebase;
-    const input = document.getElementById("profile-handle-input");
-    if (!input) return;
-
-    if (!firebaseClient?.isSignedIn?.()) {
-        setEditStatus(tr("profile.signInToEdit"), "error");
-        return;
-    }
-
-    const handle = normalizeHandleInput(input.value);
-    if (!handlePattern.test(handle)) {
-        setEditStatus(tr("profile.handleInvalid"), "error");
-        input.focus();
-        return;
-    }
-
-    isSavingHandle = true;
-    updateEditControls();
-    setEditStatus(tr("profile.savingUsername"));
-
-    try {
-        const result = await firebaseClient.setUserHandle(handle);
-        currentProfile = sanitizeProfile({
-            ...currentProfile,
-            handle: result.data?.handle || handle
-        });
-        renderProfilePage(currentProfile);
-        setEditStatus(tr("profile.usernameSaved"), "success");
-    } catch (error) {
-        setEditStatus(getProfileErrorMessage(error), "error");
-    } finally {
-        isSavingHandle = false;
-        updateEditControls();
-    }
-}
-
-async function uploadAvatar(file) {
-    const firebaseClient = window.PolytypeFirebase;
-
-    if (!firebaseClient?.isSignedIn?.()) {
-        setEditStatus(tr("profile.signInToEdit"), "error");
-        return;
-    }
-
-    isUploadingAvatar = true;
-    updateEditControls();
-    setEditStatus(tr("profile.preparingPhoto"));
-
-    try {
-        const imageDataUrl = await prepareAvatarDataUrl(file);
-        setEditStatus(tr("profile.uploadingPhoto"));
-
-        const result = await firebaseClient.uploadProfileAvatar(imageDataUrl);
-        const avatarUrl = result.data?.avatarUrl || result.data?.user?.avatarUrl;
-        currentProfile = sanitizeProfile({
-            ...currentProfile,
-            ...(result.data?.user || {}),
-            avatarUrl: avatarUrl || currentProfile.avatarUrl
-        });
-        renderProfilePage(currentProfile);
-        setEditStatus(tr("profile.photoSaved"), "success");
-    } catch (error) {
-        setEditStatus(getProfileErrorMessage(error), "error");
-    } finally {
-        isUploadingAvatar = false;
-        updateEditControls();
-    }
-}
-
-async function prepareAvatarDataUrl(file) {
-    if (!supportedAvatarTypes.has(file.type)) {
-        const error = new Error(tr("profile.photoUnsupported"));
-        error.code = "avatar/unsupported";
-        throw error;
-    }
-
-    if (file.size > maxSourceAvatarBytes) {
-        const error = new Error(tr("profile.photoTooLarge"));
-        error.code = "avatar/source-too-large";
-        throw error;
-    }
-
-    const image = await loadImage(file);
-    const canvas = document.createElement("canvas");
-    const context = canvas.getContext("2d");
-    const sourceWidth = image.naturalWidth || image.width;
-    const sourceHeight = image.naturalHeight || image.height;
-
-    if (!sourceWidth || !sourceHeight) {
-        throw new Error(tr("profile.photoUnreadable"));
-    }
-
-    const cropSize = Math.min(sourceWidth, sourceHeight);
-    const targetSize = Math.min(avatarCanvasSize, cropSize);
-
-    canvas.width = targetSize;
-    canvas.height = targetSize;
-    context.fillStyle = "#ffffff";
-    context.fillRect(0, 0, targetSize, targetSize);
-    context.drawImage(
-        image,
-        Math.max(0, (sourceWidth - cropSize) / 2),
-        Math.max(0, (sourceHeight - cropSize) / 2),
-        cropSize,
-        cropSize,
-        0,
-        0,
-        targetSize,
-        targetSize
-    );
-
-    for (const quality of [0.86, 0.76, 0.66]) {
-        const dataUrl = canvas.toDataURL("image/jpeg", quality);
-        if (estimateDataUrlBytes(dataUrl) <= maxUploadAvatarBytes) return dataUrl;
-    }
-
-    const error = new Error(tr("profile.photoTooLarge"));
-    error.code = "avatar/upload-too-large";
-    throw error;
-}
-
-function loadImage(file) {
-    return new Promise((resolve, reject) => {
-        const image = new Image();
-        const url = URL.createObjectURL(file);
-
-        image.onload = () => {
-            URL.revokeObjectURL(url);
-            resolve(image);
-        };
-        image.onerror = () => {
-            URL.revokeObjectURL(url);
-            reject(new Error(tr("profile.photoUnreadable")));
-        };
-        image.src = url;
-    });
-}
-
-function estimateDataUrlBytes(dataUrl) {
-    const base64 = dataUrl.split(",")[1] || "";
-    return Math.ceil((base64.length * 3) / 4);
 }
 
 function renderProfilePage(profile) {
@@ -329,29 +106,21 @@ function renderProfilePage(profile) {
     setText("profile-page-handle", safeProfile.handle ? `@${safeProfile.handle}` : tr("profile.noUsername"));
     setText("profile-page-level", tr("common.levelNumber", { level: levelInfo.level }));
     setText("profile-page-xp-title", `${levelInfo.currentXp} / ${levelInfo.nextXp} XP`);
-    setText("profile-page-total-xp", tr("profile.totalXp", { xp: safeProfile.xp }));
-    setText("profile-page-next-level", tr("profile.xpToLevel", {
-        xp: xpToNextLevel,
-        level: levelInfo.level + 1
-    }));
+    setText("profile-page-total-xp", safeProfile.xp.toLocaleString());
+    setText("profile-page-next-level", tr("profile.xpToLevel", { xp: xpToNextLevel, level: levelInfo.level + 1 }));
     setText("profile-page-day-streak", String(safeProfile.dayStreak));
-    setText("profile-page-friend-count", String(safeProfile.friendCount));
-    setText("profile-page-badge-count", `${demoBadges.length} / ${demoBadges.length}`);
+    setText("profile-page-coins", safeProfile.coins.toLocaleString());
 
     const xpFill = document.getElementById("profile-page-xp-fill");
     if (xpFill) xpFill.style.width = `${levelInfo.progress}%`;
 
-    renderProfileAvatar(document.getElementById("profile-page-avatar"), safeProfile);
-    updateHandleInput(safeProfile);
-    renderFires(safeProfile.dayStreak);
-    renderBadges();
+    renderAvatar(document.getElementById("profile-page-avatar"), safeProfile);
+    renderBadges(safeProfile.badges);
     renderCourses(safeProfile.courses);
-    updateEditControls();
 }
 
-function renderProfileAvatar(element, profile) {
+function renderAvatar(element, profile) {
     if (!element) return;
-
     if (profile.avatarUrl) {
         const image = document.createElement("img");
         image.src = profile.avatarUrl;
@@ -360,15 +129,32 @@ function renderProfileAvatar(element, profile) {
         element.replaceChildren(image);
         return;
     }
-
     element.classList.remove("has-image");
-    element.textContent = getProfileInitial(profile);
+    const source = profile.handle || profile.name || "P";
+    element.textContent = source.trim().charAt(0).toUpperCase() || "P";
 }
 
-function updateHandleInput(profile) {
-    const input = document.getElementById("profile-handle-input");
-    if (!input || document.activeElement === input) return;
-    input.value = profile.handle || "";
+function renderBadges(earnedIds) {
+    const badgeGrid = document.getElementById("profile-page-badges");
+    if (!badgeGrid) return;
+
+    const earnedSet = new Set(earnedIds || []);
+    setText("profile-page-badge-count", `${earnedSet.size} / ${BADGE_DEFINITIONS.length}`);
+
+    badgeGrid.replaceChildren(
+        ...BADGE_DEFINITIONS.map(badge => {
+            const isEarned = earnedSet.has(badge.id);
+            const wrap = document.createElement("div");
+            wrap.style.textAlign = "center";
+            wrap.innerHTML = `
+                <div style="aspect-ratio:1;border-radius:16px;background:${isEarned ? "rgba(255,255,255,.06)" : "rgba(255,255,255,.04)"};display:flex;align-items:center;justify-content:center;margin-bottom:6px;${isEarned ? "" : "color:var(--text-faintest)"}">
+                    ${isEarned ? BADGE_ICONS[badge.icon] : BADGE_ICONS.locked}
+                </div>
+                <div style="font-size:9px;font-weight:800;color:${isEarned ? "var(--text-soft)" : "var(--text-faintest)"}">${tr(badge.labelKey)}</div>
+            `;
+            return wrap;
+        })
+    );
 }
 
 function renderCourses(courses) {
@@ -392,111 +178,34 @@ function renderCourses(courses) {
     courseGrid.replaceChildren(
         ...entries.map(course => {
             const courseId = course.courseId || "course";
-            const card = document.createElement("article");
-            const icon = document.createElement("span");
-            const copy = document.createElement("span");
-            const title = document.createElement("strong");
-            const stats = document.createElement("small");
-
-            card.className = "profile-badge-card";
-            icon.className = "profile-badge-icon";
-            icon.setAttribute("aria-hidden", "true");
-            icon.textContent = getCourseIcon(courseId);
-            title.textContent = getCourseLabel(courseId);
-            stats.textContent = tr("profile.courseStats", {
-                level: course.level || 1,
-                xp: course.xp || 0,
-                words: course.wordsUnlocked || 0
-            });
-            copy.append(title, stats);
-            card.append(icon, copy);
-            return card;
+            const row = document.createElement("div");
+            row.style.cssText = "display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:12px 14px;grid-column:1/-1";
+            row.innerHTML = `
+                <span style="width:30px;height:20px;border-radius:5px;overflow:hidden;display:flex;box-shadow:0 0 0 1px var(--border-strong)"><img src="${getCourseFlag(courseId)}" alt="" style="width:100%;height:100%;object-fit:cover"></span>
+                <div style="flex:1">
+                    <div style="font-weight:800;font-size:14px;margin-bottom:5px">${getCourseLabel(courseId)} &middot; ${tr("common.levelNumber", { level: course.level || 1 })}</div>
+                    <div style="height:6px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden"><div style="height:100%;width:${Math.min(100, ((course.level || 1) % 10) * 10 || 10)}%;background:var(--accent);border-radius:999px"></div></div>
+                </div>
+            `;
+            return row;
         })
     );
+    courseGrid.style.display = "grid";
+    courseGrid.style.gap = "10px";
 }
 
-function renderFires(dayStreak) {
-    const fireRow = document.getElementById("profile-page-fires");
-    if (!fireRow) return;
-
-    fireRow.replaceChildren(
-        ...Array.from({ length: 7 }, (_, index) => {
-            const fire = document.createElement("span");
-            fire.className = index < dayStreak ? "fire is-lit" : "fire";
-            fire.textContent = "\u{1F525}";
-            return fire;
-        })
-    );
-}
-
-function renderBadges() {
-    const badgeGrid = document.getElementById("profile-page-badges");
-    if (!badgeGrid) return;
-
-    badgeGrid.replaceChildren(
-        ...demoBadges.map(badge => {
-            const badgeElement = document.createElement("article");
-            const icon = document.createElement("span");
-            const copy = document.createElement("span");
-            const title = document.createElement("strong");
-            const description = document.createElement("small");
-
-            badgeElement.className = "profile-badge-card";
-            icon.className = "profile-badge-icon";
-            icon.setAttribute("aria-hidden", "true");
-            icon.textContent = badge.icon;
-            title.textContent = tr(badge.labelKey);
-            description.textContent = tr(badge.descriptionKey);
-            copy.append(title, description);
-            badgeElement.append(icon, copy);
-            return badgeElement;
-        })
-    );
-}
-
-function updateEditControls() {
-    const signedIn = Boolean(window.PolytypeFirebase?.isSignedIn?.());
-    const busy = isSavingHandle || isUploadingAvatar;
-    const handleInput = document.getElementById("profile-handle-input");
-    const handleButton = document.getElementById("profile-handle-save-btn");
-    const avatarButton = document.getElementById("profile-avatar-upload-btn");
-
-    if (handleInput) handleInput.disabled = !signedIn || busy;
-    if (handleButton) handleButton.disabled = !signedIn || busy || isUploadingAvatar;
-    if (avatarButton) avatarButton.disabled = !signedIn || busy || isSavingHandle;
-}
-
-function updateEditStatusForAuth() {
-    const signedIn = Boolean(window.PolytypeFirebase?.isSignedIn?.());
-    if (!signedIn) setEditStatus(tr("profile.signInToEdit"));
-}
-
-function setEditStatus(value, tone = "") {
-    const element = document.getElementById("profile-edit-status");
-    if (!element) return;
-
-    element.textContent = value;
-    element.dataset.tone = tone;
+function getCourseFlag(courseId) {
+    const flags = {
+        chinese: "assets/flags/china.svg", german: "assets/flags/germany.svg", italian: "assets/flags/italy.svg",
+        japanese: "assets/flags/japan.svg", norwegian: "assets/flags/norway.svg", spanish: "assets/flags/spain.svg",
+        swedish: "assets/flags/sweden.svg"
+    };
+    return flags[courseId] || "assets/flags/china.svg";
 }
 
 function setText(id, value) {
     const element = document.getElementById(id);
     if (element) element.textContent = value;
-}
-
-function getProfileErrorMessage(error) {
-    const code = error?.code || "";
-    const messages = {
-        "api/400": tr("profile.handleInvalid"),
-        "api/409": tr("profile.handleTaken"),
-        "api/413": tr("profile.photoTooLarge"),
-        "api/503": tr("profile.storageUnavailable"),
-        "avatar/source-too-large": tr("profile.photoTooLarge"),
-        "avatar/upload-too-large": tr("profile.photoTooLarge"),
-        "avatar/unsupported": tr("profile.photoUnsupported")
-    };
-
-    return messages[code] || error?.message || tr("profile.profileSaveFailed");
 }
 
 function getLevelInfo(totalXp) {
@@ -510,42 +219,35 @@ function getLevelInfo(totalXp) {
         nextXp = getXpForLevel(level);
     }
 
-    return {
-        level,
-        currentXp,
-        nextXp,
-        progress: Math.round((currentXp / nextXp) * 100)
-    };
+    return { level, currentXp, nextXp, progress: Math.round((currentXp / nextXp) * 100) };
 }
 
+// Keep in sync with getXpForLevel in api/_lib.js.
 function getXpForLevel(level) {
-    return 200 + (level - 1) * 120;
+    return 400 + (level - 1) * 250;
 }
 
 function sanitizeProfile(value = {}) {
     const handle = normalizeHandleInput(value.handle);
-    const avatarUrl = typeof value.avatarUrl === "string" && value.avatarUrl.trim()
-        ? value.avatarUrl.trim()
-        : null;
+    const avatarUrl = typeof value.avatarUrl === "string" && value.avatarUrl.trim() ? value.avatarUrl.trim() : null;
 
     return {
         ...defaultProfile,
         ...value,
-        name: typeof value.name === "string" && value.name.trim()
-            ? value.name.trim()
-            : defaultProfile.name,
-        handle: handlePattern.test(handle) ? handle : null,
+        name: typeof value.name === "string" && value.name.trim() ? value.name.trim() : defaultProfile.name,
+        handle: /^[a-z0-9_]{3,20}$/.test(handle) ? handle : null,
         avatarUrl,
         xp: Math.max(0, Number(value.xp ?? value.totalXp) || 0),
         dayStreak: Math.max(0, Math.trunc(Number(value.dayStreak ?? value.currentStreak) || 0)),
+        coins: Math.max(0, Math.trunc(Number(value.coins) || 0)),
         friendCount: Math.max(0, Math.trunc(Number(value.friendCount) || 0)),
+        badges: Array.isArray(value.badges) ? value.badges : [],
         courses: sanitizeCourses(value.courses)
     };
 }
 
 function sanitizeCourses(courses) {
     if (!courses || typeof courses !== "object") return {};
-
     return Object.fromEntries(
         Object.entries(courses)
             .filter(([, course]) => course && typeof course === "object")
@@ -562,14 +264,7 @@ function sanitizeCourses(courses) {
 }
 
 function normalizeHandleInput(value) {
-    return typeof value === "string"
-        ? value.trim().replace(/^@+/, "").toLowerCase()
-        : "";
-}
-
-function getProfileInitial(profile) {
-    const source = profile.handle || profile.name || "P";
-    return source.trim().charAt(0).toUpperCase() || "P";
+    return typeof value === "string" ? value.trim().replace(/^@+/, "").toLowerCase() : "";
 }
 
 function getCourseLabel(courseId) {
@@ -578,11 +273,5 @@ function getCourseLabel(courseId) {
     if (courseLabels[safeCourseId]) {
         return window.PolytypeI18n?.languageLabel?.(safeCourseId) || courseLabels[safeCourseId];
     }
-    const first = safeCourseId[0];
-    if (!first) return tr("profile.courseFallback");
-    return `${first.toUpperCase()}${safeCourseId.slice(1)}`;
-}
-
-function getCourseIcon(courseId) {
-    return getCourseLabel(courseId).charAt(0) || "C";
+    return `${safeCourseId[0].toUpperCase()}${safeCourseId.slice(1)}`;
 }

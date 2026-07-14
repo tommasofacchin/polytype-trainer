@@ -7,6 +7,8 @@ const {
 module.exports = withAuth(async (data, token) => {
   const authProfile = getAuthProfile(token);
   const timezone = normalizeTimezone(data.timezone);
+  const badgesSnap = await db.collection(`users/${token.uid}/badges`).get();
+  const badges = badgesSnap.docs.map(doc => doc.id);
 
   return db.runTransaction(async transaction => {
     const userRef = db.doc(`users/${token.uid}`);
@@ -33,7 +35,7 @@ module.exports = withAuth(async (data, token) => {
     transaction.set(publicRef, { ...publicProfile, updatedAt: now }, { merge: true });
 
     return {
-      user: sanitizeUserProfile(userProfile),
+      user: { ...sanitizeUserProfile(userProfile), badges },
       publicProfile
     };
   });

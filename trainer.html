@@ -4,18 +4,15 @@
     <meta charset="UTF-8">
     <title data-i18n="trainer.pageTitle">Trainer - Polytype Trainer</title>
   <link rel="icon" type="image/svg+xml" href="assets/flags/china.svg">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap">
     <link rel="stylesheet" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body>
+<body class="has-app-shell is-fixed-page" data-tab="games">
+  <div id="app-header"></div>
   <main class="app">
-    <header class="app-header">
-      <div>
-        <h1>Polytype Trainer</h1>
-      </div>
-      <div class="header-actions">
-        <a id="home-link" class="theme-toggle" href="index.html" data-i18n="common.home">Home</a>
+    <section class="settings" aria-label="Practice settings" data-i18n-aria-label="trainer.practiceSettings">
+        <a class="back-link-mini" href="games.html">&lsaquo; <span data-i18n="nav.games">Games</span></a>
 
         <button id="my-deck-btn" class="deck-open-btn" type="button" aria-haspopup="dialog">
           <svg class="deck-open-icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -27,13 +24,6 @@
           <span data-i18n="trainer.myDeck">My Deck</span>
         </button>
 
-        <div class="auth-menu-wrap">
-          <a id="auth-link" class="auth-menu-toggle auth-page-link" href="auth.html" data-i18n="trainer.signIn">Sign in</a>
-          <div id="auth-dropdown" class="auth-dropdown" hidden>
-            <button id="auth-signout-btn" class="auth-dropdown-item" type="button" data-i18n="trainer.signOut">Sign out</button>
-          </div>
-        </div>
-
         <div class="language-menu">
           <button id="language-menu-toggle" class="language-menu-toggle" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Choose study language" data-i18n-aria-label="trainer.chooseStudyLanguage">
             <img id="current-language-flag" class="flag-mark" src="assets/flags/china.svg" alt="">
@@ -41,26 +31,6 @@
           <div id="language-menu" class="language-menu-panel" role="menu" hidden></div>
         </div>
 
-        <button id="theme-toggle" class="theme-icon-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false">
-          <svg class="theme-icon sun-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="12" cy="12" r="4"></circle>
-            <path d="M12 2v2"></path>
-            <path d="M12 20v2"></path>
-            <path d="m4.93 4.93 1.41 1.41"></path>
-            <path d="m17.66 17.66 1.41 1.41"></path>
-            <path d="M2 12h2"></path>
-            <path d="M20 12h2"></path>
-            <path d="m6.34 17.66-1.41 1.41"></path>
-            <path d="m19.07 4.93-1.41 1.41"></path>
-          </svg>
-          <svg class="theme-icon moon-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M20 14.4A7.8 7.8 0 0 1 9.6 4 8 8 0 1 0 20 14.4Z"></path>
-          </svg>
-        </button>
-      </div>
-    </header>
-
-    <section class="settings" aria-label="Practice settings" data-i18n-aria-label="trainer.practiceSettings">
         <a class="profile-pill" href="profile.html" aria-label="Open profile" data-i18n-aria-label="trainer.openProfile">
             <span id="mini-profile-avatar" class="profile-pill-avatar" aria-hidden="true">T</span>
             <span class="profile-pill-main">
@@ -176,6 +146,7 @@
       <button id="play-again-btn" class="restart-btn" type="button" data-i18n="trainer.playAgain">Play again</button>
     </section>
   </main>
+  <div id="app-bottom-nav"></div>
 
   <div id="my-deck-overlay" class="deck-overlay" role="dialog" aria-modal="true" aria-labelledby="deck-overlay-title" hidden>
     <div class="deck-overlay-backdrop" data-deck-close></div>
@@ -205,6 +176,8 @@
   <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-auth-compat.js"></script>
   <script src="js/i18n.js"></script>
   <script src="js/firebase-client.js"></script>
+  <script src="js/gamestate.js"></script>
+  <script src="js/app-shell.js"></script>
   <script src="decks/index.js"></script>
   <script src="decks/categories.js"></script>
   <script src="js/main.js"></script>

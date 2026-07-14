@@ -23,6 +23,34 @@ const COURSE_LEVEL_CAPS = {
   swedish: 60
 };
 
+const GAME_TYPES = ["trainer", "memory", "dictate"];
+const CHEST_COIN_REWARD = 50;
+const CHEST_XP_REWARD = 20;
+const LEVEL_UP_RUPEE_REWARD = 1;
+
+// Small fixed pool; 3 are picked deterministically per (uid, date) so the set
+// rotates daily without needing a cron job or extra Firestore writes.
+const MISSION_POOL = [
+  { id: "earn_30_xp", metric: "xp", target: 30, coinReward: 15, labelKey: "mission.earn30Xp" },
+  { id: "earn_50_xp", metric: "xp", target: 50, coinReward: 20, labelKey: "mission.earn50Xp" },
+  { id: "earn_100_xp", metric: "xp", target: 100, coinReward: 35, labelKey: "mission.earn100Xp" },
+  { id: "play_trainer", metric: "gameSessions.trainer", target: 1, coinReward: 20, labelKey: "mission.playTrainer" },
+  { id: "play_memory", metric: "gameSessions.memory", target: 1, coinReward: 30, labelKey: "mission.playMemory" },
+  { id: "play_dictate", metric: "gameSessions.dictate", target: 1, coinReward: 25, labelKey: "mission.playDictate" },
+  { id: "correct_20", metric: "correctAnswers", target: 20, coinReward: 25, labelKey: "mission.correct20" }
+];
+
+// Evaluated (in order) against the updated user profile after every session;
+// the first time a condition is met the badge is written and stays earned.
+const BADGE_DEFINITIONS = [
+  { id: "first_steps", icon: "star", labelKey: "badge.firstSteps", descriptionKey: "badge.firstStepsDesc", condition: user => (user.totalXp || 0) > 0 },
+  { id: "streak_5", icon: "flame", labelKey: "badge.streak5", descriptionKey: "badge.streak5Desc", condition: user => (user.currentStreak || 0) >= 5 },
+  { id: "streak_30", icon: "flame", labelKey: "badge.streak30", descriptionKey: "badge.streak30Desc", condition: user => (user.currentStreak || 0) >= 30 },
+  { id: "word_master", icon: "book", labelKey: "badge.wordMaster", descriptionKey: "badge.wordMasterDesc", condition: user => Object.values(user.courses || {}).some(course => (course.wordsUnlocked || 0) >= 100) },
+  { id: "chest_hunter", icon: "chest", labelKey: "badge.chestHunter", descriptionKey: "badge.chestHunterDesc", condition: (user, extra) => (extra.chestsClaimed || 0) >= 7 },
+  { id: "level_10", icon: "star", labelKey: "badge.level10", descriptionKey: "badge.level10Desc", condition: user => (user.globalLevel || 1) >= 10 }
+];
+
 class ApiError extends Error {
   constructor(status, message) {
     super(message);
@@ -75,6 +103,10 @@ function buildDefaultUserProfile(uid, authProfile, timezone) {
     streakFreezes: 0,
     maxStreakFreezes: MAX_STREAK_FREEZES,
     friendCount: 0,
+    coins: 0,
+    rupees: 0,
+    lastChestClaimedDate: null,
+    chestsClaimed: 0,
     courses: {}
   };
 }
@@ -107,6 +139,10 @@ function sanitizeUserProfile(user) {
     streakFreezes: user.streakFreezes || 0,
     maxStreakFreezes: user.maxStreakFreezes || MAX_STREAK_FREEZES,
     friendCount: user.friendCount || 0,
+    coins: user.coins || 0,
+    rupees: user.rupees || 0,
+    lastChestClaimedDate: user.lastChestClaimedDate || null,
+    chestsClaimed: user.chestsClaimed || 0,
     courses: sanitizeCoursesSummary(user.courses)
   };
 }
@@ -139,6 +175,7 @@ function normalizeSessionPayload(data = {}) {
   return {
     courseId: normalizeCourseId(data.courseId),
     timezone: cleanOptionalString(data.timezone),
+    gameType: GAME_TYPES.includes(data.gameType) ? data.gameType : "trainer",
     correctAnswers: clampInteger(data.correctAnswers, 0, 1000),
     wrongAnswers: clampInteger(data.wrongAnswers, 0, 1000),
     bestCombo: clampInteger(data.bestCombo, 0, 1000),
@@ -347,6 +384,71 @@ function pickFriendProfile(profile) {
   };
 }
 
+function buildLeaderboard(entries) {
+  const sorted = [...entries].sort((a, b) => (b.totalXp || 0) - (a.totalXp || 0));
+  return sorted.map((entry, index) => ({ ...entry, rank: index + 1 }));
+}
+
+// Deterministic 3-of-N daily pick from (uid, dateKey) so missions rotate
+// without needing a scheduled job or extra writes.
+function pickDailyMissions(uid, dateKey) {
+  const seed = `${uid}:${dateKey}`;
+  let hash = 0;
+  for (let i = 0; i < seed.length; i += 1) {
+    hash = (hash * 31 + seed.charCodeAt(i)) >>> 0;
+  }
+
+  const pool = [...MISSION_POOL];
+  const picked = [];
+  for (let i = 0; i < 3 && pool.length; i += 1) {
+    hash = (hash * 1103515245 + 12345) >>> 0;
+    const index = hash % pool.length;
+    picked.push(pool.splice(index, 1)[0]);
+  }
+  return picked;
+}
+
+function getMetricValue(dailyStats, metric) {
+  return metric.split(".").reduce((value, key) => (value && typeof value === "object" ? value[key] : undefined), dailyStats) || 0;
+}
+
+function evaluateMissions(uid, dateKey, dailyStats) {
+  const missions = pickDailyMissions(uid, dateKey);
+  const completedFlags = (dailyStats && dailyStats.missionsCompleted) || {};
+
+  return missions.map(mission => {
+    const value = getMetricValue(dailyStats || {}, mission.metric);
+    const progress = Math.min(mission.target, value);
+    const completed = Boolean(completedFlags[mission.id]) || progress >= mission.target;
+    return {
+      id: mission.id,
+      labelKey: mission.labelKey,
+      progress,
+      target: mission.target,
+      coinReward: mission.coinReward,
+      completed
+    };
+  });
+}
+
+// Coins are only paid once per mission per day: any mission whose progress
+// newly reaches its target this call (and isn't already flagged) pays out.
+function getNewlyCompletedMissions(uid, dateKey, previousDailyStats, updatedDailyStats) {
+  const missions = pickDailyMissions(uid, dateKey);
+  const previousFlags = (previousDailyStats && previousDailyStats.missionsCompleted) || {};
+
+  return missions.filter(mission => {
+    if (previousFlags[mission.id]) return false;
+    const value = getMetricValue(updatedDailyStats || {}, mission.metric);
+    return value >= mission.target;
+  });
+}
+
+function evaluateNewBadges(userData, extra, alreadyEarnedIds) {
+  const earnedSet = new Set(alreadyEarnedIds);
+  return BADGE_DEFINITIONS.filter(badge => !earnedSet.has(badge.id) && badge.condition(userData, extra));
+}
+
 module.exports = {
   ApiError,
   withAuth,
@@ -373,6 +475,11 @@ module.exports = {
   getDateKeyForTimezone,
   getFriendPairId,
   pickFriendProfile,
+  buildLeaderboard,
+  pickDailyMissions,
+  evaluateMissions,
+  getNewlyCompletedMissions,
+  evaluateNewBadges,
   MAX_STREAK_FREEZES,
   WORDS_PER_LEVEL,
   SEARCH_RESULTS_LIMIT,
@@ -380,5 +487,11 @@ module.exports = {
   CATEGORY_SIZES,
   TOTAL_CATEGORY_WORDS,
   XP_PER_DROP,
-  STARTER_WORDS
+  STARTER_WORDS,
+  GAME_TYPES,
+  CHEST_COIN_REWARD,
+  CHEST_XP_REWARD,
+  LEVEL_UP_RUPEE_REWARD,
+  MISSION_POOL,
+  BADGE_DEFINITIONS
 };

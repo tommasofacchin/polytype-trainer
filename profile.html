@@ -4,99 +4,55 @@
     <meta charset="UTF-8">
     <title data-i18n="profile.title">Profile - Polytype Trainer</title>
   <link rel="icon" type="image/svg+xml" href="assets/flags/china.svg">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap">
     <link rel="stylesheet" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body class="profile-page-body">
+<body class="has-app-shell is-scroll-page" data-tab="profile">
+  <div id="app-header"></div>
   <main class="profile-page">
-    <nav class="profile-topbar" aria-label="Profile navigation" data-i18n-aria-label="profile.navigation">
-      <a class="back-link" href="index.html" aria-label="Back home" data-i18n-aria-label="profile.back">
-        <span aria-hidden="true">&larr;</span>
-        <span data-i18n="common.home">Home</span>
-      </a>
-    </nav>
-
-    <section class="profile-hero" aria-label="Player profile" data-i18n-aria-label="profile.player">
-      <div id="profile-page-avatar" class="profile-avatar profile-avatar-large" aria-hidden="true">T</div>
-      <div class="profile-hero-copy">
-        <span class="profile-kicker" data-i18n="profile.player">Player profile</span>
+    <section class="profile-hero" aria-label="Player profile" data-i18n-aria-label="profile.player" style="flex-direction:column;text-align:center">
+      <div style="position:relative;margin-bottom:4px">
+        <div id="profile-page-avatar" class="profile-avatar profile-avatar-large" aria-hidden="true">T</div>
+      </div>
+      <div class="profile-hero-copy" style="text-align:center">
         <h1 id="profile-page-name">Tommaso</h1>
         <p id="profile-page-handle" class="profile-handle">@tommaso</p>
-        <p id="profile-page-level">Level 1</p>
+        <p id="profile-page-level" class="profile-kicker" style="display:inline-flex;align-items:center;gap:6px;background:var(--accent-soft);color:var(--accent);font-weight:800;padding:6px 14px;border-radius:999px;margin-top:6px">Level 1</p>
       </div>
     </section>
     <p id="profile-page-sync-status" class="profile-muted" data-i18n="common.loadingProfile">Loading profile...</p>
 
     <section class="profile-detail-grid" aria-label="Profile details" data-i18n-aria-label="profile.details">
+      <div class="stat-tile-row profile-detail-card-wide" style="margin:0">
+        <div class="stat-tile">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="#ff7a2d" style="margin-bottom:2px"><path d="M12 2c3 4 5 6 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 1 2 2 2 3 2 0-3-1-5 0-8z"/></svg>
+          <div id="profile-page-day-streak" class="stat-tile-value">0</div>
+          <div class="stat-tile-label" data-i18n="profile.dayStreak">day streak</div>
+        </div>
+        <div class="stat-tile">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="#2fe6a4" style="margin-bottom:2px"><path d="M12 2l2.9 6.2 6.6.7-4.9 4.5 1.3 6.6L12 17.8 6.1 20.6l1.3-6.6L2.5 8.9l6.6-.7z"/></svg>
+          <div id="profile-page-total-xp" class="stat-tile-value">0</div>
+          <div class="stat-tile-label" data-i18n="profile.totalXpLabel">total XP</div>
+        </div>
+        <div class="stat-tile">
+          <svg viewBox="0 0 24 24" width="20" height="20" style="margin-bottom:2px"><circle cx="12" cy="12" r="10" fill="#ffc73a"/><circle cx="12" cy="12" r="6.5" fill="none" stroke="#d99a1c" stroke-width="2"/></svg>
+          <div id="profile-page-coins" class="stat-tile-value">0</div>
+          <div class="stat-tile-label" data-i18n="common.coins">coins</div>
+        </div>
+      </div>
+
       <article class="profile-detail-card profile-detail-card-wide">
         <div class="profile-card-head">
           <div>
             <span class="profile-card-label" data-i18n="profile.xpProgress">XP progress</span>
             <strong id="profile-page-xp-title">0 / 200 XP</strong>
           </div>
-          <span id="profile-page-total-xp" class="profile-stat-pill">0 total XP</span>
         </div>
         <div class="xp-bar xp-bar-large" aria-hidden="true">
           <span id="profile-page-xp-fill"></span>
         </div>
         <p id="profile-page-next-level" class="profile-muted">200 XP to Level 2</p>
-      </article>
-
-      <article class="profile-detail-card">
-        <span class="profile-card-label" data-i18n="profile.dayStreak">Day streak</span>
-        <strong id="profile-page-day-streak" class="profile-big-stat">5</strong>
-        <div id="profile-page-fires" class="fire-row fire-row-large" aria-hidden="true"></div>
-      </article>
-
-      <article class="profile-detail-card profile-friends-card">
-        <span class="profile-card-label" data-i18n="profile.friends">Friends</span>
-        <strong id="profile-page-friend-count" class="profile-big-stat">0</strong>
-        <a class="restart-btn profile-action-btn" href="friends.html" data-i18n="profile.viewFriends">View leaderboard</a>
-      </article>
-
-      <article class="profile-detail-card">
-        <span class="profile-card-label" data-i18n="profile.currentTitle">Current title</span>
-        <strong class="profile-big-stat profile-title-stat" data-i18n="profile.rookie">Polytype Rookie</strong>
-        <p class="profile-muted" data-i18n="profile.learning">Learning Chinese, German, Italian, Japanese, Norwegian, Spanish, and Swedish.</p>
-      </article>
-
-      <article class="profile-detail-card">
-        <label class="profile-language-control" for="app-language-select">
-          <span class="profile-card-label" data-i18n="app.language">App language</span>
-          <select id="app-language-select">
-            <option value="en" data-i18n="common.english">English</option>
-            <option value="it" data-i18n="common.italian">Italiano</option>
-          </select>
-        </label>
-        <p class="profile-muted" data-i18n="app.languageHelp">Choose the interface and answer language.</p>
-      </article>
-
-      <article class="profile-detail-card profile-detail-card-wide profile-edit-card">
-        <div class="profile-card-head">
-          <div>
-            <span class="profile-card-label" data-i18n="profile.account">Account</span>
-            <strong data-i18n="profile.customizeProfile">Profile settings</strong>
-          </div>
-        </div>
-        <div class="profile-edit-grid">
-          <div class="profile-edit-block">
-            <span class="profile-card-label" data-i18n="profile.photo">Profile photo</span>
-            <button id="profile-avatar-upload-btn" class="restart-btn profile-action-btn" type="button" data-i18n="profile.uploadPhoto">Upload photo</button>
-            <input id="profile-avatar-input" class="visually-hidden" type="file" accept="image/jpeg,image/png,image/webp">
-            <p class="profile-muted" data-i18n="profile.photoHelp">JPEG, PNG, or WebP. The app crops it square before upload.</p>
-          </div>
-
-          <form id="profile-handle-form" class="profile-edit-form">
-            <label for="profile-handle-input">
-              <span class="profile-card-label" data-i18n="profile.username">Username</span>
-              <input id="profile-handle-input" type="text" autocomplete="username" maxlength="20" inputmode="latin" pattern="[a-z0-9_]{3,20}" placeholder="@tommaso" data-i18n-placeholder="profile.usernamePlaceholder">
-            </label>
-            <button id="profile-handle-save-btn" class="restart-btn profile-action-btn" type="submit" data-i18n="profile.saveUsername">Save username</button>
-            <p class="profile-muted" data-i18n="profile.usernameHelp">3-20 characters: lowercase letters, numbers, and underscores.</p>
-          </form>
-        </div>
-        <p id="profile-edit-status" class="profile-muted profile-edit-status" aria-live="polite" data-i18n="profile.signInToEdit">Sign in to edit your profile.</p>
       </article>
 
       <article class="profile-detail-card profile-detail-card-wide">
@@ -105,7 +61,7 @@
             <span class="profile-card-label" data-i18n="profile.badges">Badges</span>
             <strong data-i18n="profile.achievements">Unlocked achievements</strong>
           </div>
-          <span id="profile-page-badge-count" class="profile-stat-pill">0 / 4</span>
+          <span id="profile-page-badge-count" class="profile-stat-pill">0 / 6</span>
         </div>
         <div id="profile-page-badges" class="profile-badge-grid"></div>
       </article>
@@ -120,14 +76,23 @@
         </div>
         <div id="profile-page-courses" class="profile-badge-grid"></div>
       </article>
+
+      <a href="settings.html" class="profile-detail-card profile-detail-card-wide" style="display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text-soft)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <strong style="flex:1;font-weight:800" data-i18n="settings.title">Settings</strong>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-faint)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+      </a>
     </section>
   </main>
+  <div id="app-bottom-nav"></div>
 
   <script src="js/firebase-config.js"></script>
   <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-auth-compat.js"></script>
   <script src="js/i18n.js"></script>
   <script src="js/firebase-client.js"></script>
+  <script src="js/gamestate.js"></script>
+  <script src="js/app-shell.js"></script>
   <script src="js/profile.js"></script>
 </body>
 </html>

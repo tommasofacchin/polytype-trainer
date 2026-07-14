@@ -38,6 +38,11 @@ service cloud.firestore {
         allow read: if isSelf(uid);
         allow write: if false;
       }
+
+      match /badges/{badgeId} {
+        allow read: if isSelf(uid);
+        allow write: if false;
+      }
     }
 
     match /publicProfiles/{uid} {

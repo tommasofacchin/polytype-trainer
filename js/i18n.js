@@ -264,7 +264,70 @@
             "categories.travel": "Travel & Directions",
             "categories.workSchool": "Work & School",
             "categories.feelingsQualities": "Feelings & Qualities",
-            "categories.shoppingHealth": "Shopping & Health"
+            "categories.shoppingHealth": "Shopping & Health",
+
+            "nav.home": "Home",
+            "nav.games": "Games",
+            "nav.friends": "Friends",
+            "nav.profile": "Profile",
+
+            "games.pageTitle": "Games - Polytype Trainer",
+            "games.title": "Games",
+            "games.subtitle": "Pick a game to practice",
+            "games.trainerDesc": "Type the meaning",
+            "games.memoryDesc": "Match the pairs",
+            "games.dictateDesc": "Listen & type",
+            "games.categoriesDesc": "Study by topic",
+            "games.spelling": "Spelling",
+            "games.sprint": "Sprint",
+            "games.comingSoon": "Coming soon",
+
+            "home.thisWeek": "This week ›",
+            "dashboard.welcomeBack": "Welcome back,",
+
+            "mission.dailyMissions": "Daily missions",
+            "mission.earn30Xp": "Earn 30 XP",
+            "mission.earn50Xp": "Earn 50 XP",
+            "mission.earn100Xp": "Earn 100 XP",
+            "mission.playTrainer": "Play a Trainer round",
+            "mission.playMemory": "Win 1 Memory round",
+            "mission.playDictate": "Play a Dictate round",
+            "mission.correct20": "Get 20 answers right",
+
+            "chest.title": "Daily chest!",
+            "chest.collect": "Collect",
+            "chest.ready": "Daily chest ready!",
+            "chest.readyDesc": "Tap to reveal your reward",
+            "chest.claimed": "Chest opened",
+            "chest.claimedDesc": "Come back tomorrow for more",
+            "chest.open": "Open",
+
+            "common.coins": "coins",
+            "common.you": "You",
+
+            "badge.firstSteps": "First steps",
+            "badge.firstStepsDesc": "Earn your first XP.",
+            "badge.streak5": "5-day streak",
+            "badge.streak5Desc": "Practice 5 days in a row.",
+            "badge.streak30": "30-day streak",
+            "badge.streak30Desc": "Practice 30 days in a row.",
+            "badge.wordMaster": "Word master",
+            "badge.wordMasterDesc": "Unlock 100 words in a language.",
+            "badge.chestHunter": "Chest hunter",
+            "badge.chestHunterDesc": "Claim 7 daily chests.",
+            "badge.level10": "Rising star",
+            "badge.level10Desc": "Reach level 10.",
+
+            "settings.title": "Settings",
+            "settings.pageTitle": "Settings - Polytype Trainer",
+
+            "auth.or": "OR",
+            "auth.continueWithGoogle": "Continue with Google",
+            "auth.googleNotEnabled": "Google sign-in isn't enabled for this app yet.",
+            "auth.googlePopupClosed": "Google sign-in was cancelled.",
+            "auth.chestAlreadyClaimed": "You've already claimed today's chest.",
+
+            "profile.totalXpLabel": "total XP"
         },
         it: {
             "app.name": "Polytype Trainer",
@@ -527,7 +590,70 @@
             "categories.travel": "Viaggi e indicazioni",
             "categories.workSchool": "Lavoro e scuola",
             "categories.feelingsQualities": "Emozioni e qualità",
-            "categories.shoppingHealth": "Shopping e salute"
+            "categories.shoppingHealth": "Shopping e salute",
+
+            "nav.home": "Home",
+            "nav.games": "Giochi",
+            "nav.friends": "Amici",
+            "nav.profile": "Profilo",
+
+            "games.pageTitle": "Giochi - Polytype Trainer",
+            "games.title": "Giochi",
+            "games.subtitle": "Scegli un gioco per esercitarti",
+            "games.trainerDesc": "Scrivi il significato",
+            "games.memoryDesc": "Abbina le coppie",
+            "games.dictateDesc": "Ascolta e scrivi",
+            "games.categoriesDesc": "Studia per argomento",
+            "games.spelling": "Ortografia",
+            "games.sprint": "Sprint",
+            "games.comingSoon": "In arrivo",
+
+            "home.thisWeek": "Questa settimana ›",
+            "dashboard.welcomeBack": "Bentornato,",
+
+            "mission.dailyMissions": "Missioni giornaliere",
+            "mission.earn30Xp": "Guadagna 30 XP",
+            "mission.earn50Xp": "Guadagna 50 XP",
+            "mission.earn100Xp": "Guadagna 100 XP",
+            "mission.playTrainer": "Gioca un round di Trainer",
+            "mission.playMemory": "Vinci 1 round di Memory",
+            "mission.playDictate": "Gioca un round di Dictate",
+            "mission.correct20": "Rispondi bene 20 volte",
+
+            "chest.title": "Forziere giornaliero!",
+            "chest.collect": "Ritira",
+            "chest.ready": "Forziere pronto!",
+            "chest.readyDesc": "Tocca per scoprire la ricompensa",
+            "chest.claimed": "Forziere aperto",
+            "chest.claimedDesc": "Torna domani per altri premi",
+            "chest.open": "Apri",
+
+            "common.coins": "monete",
+            "common.you": "Tu",
+
+            "badge.firstSteps": "Primi passi",
+            "badge.firstStepsDesc": "Guadagna i tuoi primi XP.",
+            "badge.streak5": "Streak di 5 giorni",
+            "badge.streak5Desc": "Esercitati 5 giorni di fila.",
+            "badge.streak30": "Streak di 30 giorni",
+            "badge.streak30Desc": "Esercitati 30 giorni di fila.",
+            "badge.wordMaster": "Maestro delle parole",
+            "badge.wordMasterDesc": "Sblocca 100 parole in una lingua.",
+            "badge.chestHunter": "Cacciatore di forzieri",
+            "badge.chestHunterDesc": "Ritira 7 forzieri giornalieri.",
+            "badge.level10": "Stella nascente",
+            "badge.level10Desc": "Raggiungi il livello 10.",
+
+            "settings.title": "Impostazioni",
+            "settings.pageTitle": "Impostazioni - Polytype Trainer",
+
+            "auth.or": "OPPURE",
+            "auth.continueWithGoogle": "Continua con Google",
+            "auth.googleNotEnabled": "L'accesso con Google non è ancora abilitato per questa app.",
+            "auth.googlePopupClosed": "Accesso con Google annullato.",
+            "auth.chestAlreadyClaimed": "Hai già ritirato il forziere di oggi.",
+
+            "profile.totalXpLabel": "XP totali"
         }
     };
 

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title data-i18n="games.pageTitle">Games - Polytype Trainer</title>
+    <link rel="icon" type="image/svg+xml" href="assets/flags/china.svg">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap">
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body class="has-app-shell is-scroll-page" data-tab="games">
+    <div id="app-header"></div>
+
+    <main class="page-content games-hub-page">
+        <h1 class="page-title" data-i18n="games.title">Games</h1>
+        <p class="page-subtitle" data-i18n="games.subtitle">Pick a game to practice</p>
+
+        <div class="game-hub-grid">
+            <a class="game-hub-card" href="trainer.html">
+                <span class="game-hub-icon" style="background:rgba(47,230,164,.16)">
+                    <svg viewBox="0 0 24 24" width="21" height="21" fill="#2fe6a4"><rect x="3" y="4" width="7" height="7" rx="1.6"/><rect x="14" y="4" width="7" height="7" rx="1.6"/><rect x="3" y="14" width="7" height="7" rx="1.6"/><rect x="14" y="14" width="7" height="7" rx="1.6"/></svg>
+                </span>
+                <strong data-i18n="common.trainer">Trainer</strong>
+                <small data-i18n="games.trainerDesc">Type the meaning</small>
+            </a>
+
+            <a class="game-hub-card" href="memory.html">
+                <span class="game-hub-icon" style="background:rgba(139,108,255,.16)">
+                    <svg viewBox="0 0 24 24" width="21" height="21" fill="#8b6cff"><rect x="3" y="4" width="8" height="16" rx="1.6"/><rect x="13" y="4" width="8" height="16" rx="1.6"/></svg>
+                </span>
+                <strong data-i18n="trainer.memory">Memory</strong>
+                <small data-i18n="games.memoryDesc">Match the pairs</small>
+            </a>
+
+            <a class="game-hub-card" href="dictate.html">
+                <span class="game-hub-icon" style="background:rgba(255,199,58,.16)">
+                    <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="#ffc73a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5Z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                </span>
+                <strong data-i18n="dashboard.dictate">Dictate</strong>
+                <small data-i18n="games.dictateDesc">Listen &amp; type</small>
+            </a>
+
+            <a class="game-hub-card" href="categories.html">
+                <span class="game-hub-icon" style="background:rgba(255,122,45,.16)">
+                    <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="#ff7a2d" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 11 3.83A2 2 0 0 0 9.59 3.24L4 3a1 1 0 0 0-1 1l.24 5.59a2 2 0 0 0 .59 1.41l9.58 9.59a2 2 0 0 0 2.83 0l4.35-4.35a2 2 0 0 0 0-2.83Z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>
+                </span>
+                <strong data-i18n="dashboard.categories">Categories</strong>
+                <small data-i18n="games.categoriesDesc">Study by topic</small>
+            </a>
+
+            <div class="game-hub-card is-disabled">
+                <span class="game-hub-icon" style="background:rgba(255,255,255,.05);color:var(--text-faintest)">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+                </span>
+                <strong style="color:var(--text-faint)" data-i18n="games.spelling">Spelling</strong>
+                <small data-i18n="games.comingSoon">Coming soon</small>
+            </div>
+
+            <div class="game-hub-card is-disabled">
+                <span class="game-hub-icon" style="background:rgba(255,255,255,.05);color:var(--text-faintest)">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+                </span>
+                <strong style="color:var(--text-faint)" data-i18n="games.sprint">Sprint</strong>
+                <small data-i18n="games.comingSoon">Coming soon</small>
+            </div>
+        </div>
+    </main>
+
+    <div id="app-bottom-nav"></div>
+
+    <script src="js/firebase-config.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-auth-compat.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/firebase-client.js"></script>
+    <script src="js/gamestate.js"></script>
+    <script src="js/app-shell.js"></script>
+</body>
+</html>

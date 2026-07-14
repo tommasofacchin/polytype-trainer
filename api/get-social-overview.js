@@ -1,5 +1,5 @@
 const { db } = require("./_firebase");
-const { withAuth, pickFriendProfile } = require("./_lib");
+const { withAuth, pickFriendProfile, buildLeaderboard } = require("./_lib");
 
 module.exports = withAuth(async (data, token) => {
   const [selfSnap, friendsSnap, incomingSnap, outgoingSnap] = await Promise.all([
@@ -26,8 +26,7 @@ module.exports = withAuth(async (data, token) => {
     }
   });
 
-  leaderboardEntries.sort((a, b) => (b.totalXp || 0) - (a.totalXp || 0));
-  const leaderboard = leaderboardEntries.map((entry, index) => ({ ...entry, rank: index + 1 }));
+  const leaderboard = buildLeaderboard(leaderboardEntries);
 
   const incomingRequests = incomingSnap.docs
     .filter(doc => doc.data().status === "pending")

@@ -4,146 +4,48 @@
     <meta charset="UTF-8">
     <title data-i18n="app.name">Polytype Trainer</title>
     <link rel="icon" type="image/svg+xml" href="assets/flags/china.svg">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap">
     <link rel="stylesheet" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>
-        (function () {
-            try {
-                var t = localStorage.getItem("polytype-theme");
-                if (!t) t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-                document.documentElement.dataset.theme = t;
-            } catch (e) {}
-        })();
-    </script>
 </head>
-<body class="dashboard-page-body">
-  <main class="dashboard-page">
-    <header class="app-header dashboard-header">
-      <div class="dashboard-brand">
-        <span class="brand-mark" aria-hidden="true">P</span>
-        <h1 data-i18n="app.name">Polytype Trainer</h1>
-      </div>
-      <div class="header-actions">
-        <div class="auth-menu-wrap">
-          <a id="auth-link" class="auth-menu-toggle auth-page-link" href="auth.html" data-i18n="trainer.signIn">Sign in</a>
-          <div id="auth-dropdown" class="auth-dropdown" hidden>
-            <button id="auth-signout-btn" class="auth-dropdown-item" type="button" data-i18n="trainer.signOut">Sign out</button>
-          </div>
+<body class="has-app-shell is-scroll-page" data-tab="home">
+    <div id="app-header"></div>
+
+    <main class="page-content">
+        <div style="margin-bottom:16px">
+            <div style="font-size:13px;font-weight:700;color:var(--text-soft)" data-i18n="dashboard.welcomeBack">Welcome back,</div>
+            <div id="home-greeting-name" style="font-family:var(--font-display);font-weight:600;font-size:24px;line-height:1.05;color:#fff">Learner</div>
         </div>
 
-        <button id="theme-toggle" class="theme-icon-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false">
-          <svg class="theme-icon sun-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="12" cy="12" r="4"></circle>
-            <path d="M12 2v2"></path>
-            <path d="M12 20v2"></path>
-            <path d="m4.93 4.93 1.41 1.41"></path>
-            <path d="m17.66 17.66 1.41 1.41"></path>
-            <path d="M2 12h2"></path>
-            <path d="M20 12h2"></path>
-            <path d="m6.34 17.66-1.41 1.41"></path>
-            <path d="m19.07 4.93-1.41 1.41"></path>
-          </svg>
-          <svg class="theme-icon moon-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M20 14.4A7.8 7.8 0 0 1 9.6 4 8 8 0 1 0 20 14.4Z"></path>
-          </svg>
-        </button>
-      </div>
-    </header>
+        <p id="home-signed-out" class="page-subtitle" data-i18n="dashboard.welcomeGuest">Sign in to save your progress, earn coins, and open your daily chest.</p>
 
-    <p id="dashboard-welcome" class="dashboard-welcome" data-i18n="dashboard.welcomeGuest">Welcome! Sign in to save your progress.</p>
+        <div id="home-signed-in" hidden>
+            <div id="home-chest-card" class="chest-card is-claimed"></div>
 
-    <a class="profile-pill dashboard-profile-pill" href="profile.html" aria-label="Open profile" data-i18n-aria-label="trainer.openProfile">
-        <span id="mini-profile-avatar" class="profile-pill-avatar" aria-hidden="true">P</span>
-        <span class="profile-pill-main">
-            <strong id="mini-profile-level">Level 1</strong>
-            <span id="mini-profile-xp">0 / 200 XP</span>
-        </span>
-        <span id="mini-profile-streak" class="profile-pill-streak">&#128293; 0</span>
-    </a>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+                <span style="font-weight:800;font-size:15px" data-i18n="mission.dailyMissions">Daily missions</span>
+                <span id="home-missions-count" style="font-size:11px;font-weight:800;color:var(--text-faint)">0 / 3</span>
+            </div>
+            <div id="home-missions-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px"></div>
 
-    <section class="dashboard-section" aria-label="Games" data-i18n-aria-label="dashboard.games">
-      <h2 class="dashboard-section-title" data-i18n="dashboard.games">Games</h2>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+                <span style="font-weight:800;font-size:15px" data-i18n="dashboard.friendsCard">Friends</span>
+                <a href="friends.html" style="font-size:11px;font-weight:800;color:var(--accent);text-decoration:none" data-i18n="home.thisWeek">This week &rsaquo;</a>
+            </div>
+            <div id="home-friends-preview" class="card" style="background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:6px;display:flex;flex-direction:column;gap:2px"></div>
+        </div>
+    </main>
 
-      <div class="dashboard-grid">
-        <a class="dashboard-tile" href="trainer.html">
-          <span class="dashboard-tile-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" class="deck-open-icon">
-              <rect x="3" y="4" width="7" height="7" rx="1.6"></rect>
-              <rect x="14" y="4" width="7" height="7" rx="1.6"></rect>
-              <rect x="3" y="14" width="7" height="7" rx="1.6"></rect>
-              <rect x="14" y="14" width="7" height="7" rx="1.6"></rect>
-            </svg>
-          </span>
-          <span class="dashboard-tile-copy">
-            <strong data-i18n="common.trainer">Trainer</strong>
-            <small data-i18n="dashboard.trainerDesc">Classic flashcard drill. Type the meaning before time runs out.</small>
-          </span>
-        </a>
+    <div id="app-bottom-nav"></div>
 
-        <a class="dashboard-tile" href="memory.html">
-          <span class="dashboard-tile-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" class="memory-link-icon">
-              <rect x="3" y="4" width="8" height="16" rx="1.6"></rect>
-              <rect x="13" y="4" width="8" height="16" rx="1.6"></rect>
-            </svg>
-          </span>
-          <span class="dashboard-tile-copy">
-            <strong data-i18n="trainer.memory">Memory</strong>
-            <small data-i18n="dashboard.memoryDesc">Flip cards and match every word to its translation.</small>
-          </span>
-        </a>
-
-        <a class="dashboard-tile" href="dictate.html">
-          <span class="dashboard-tile-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M11 5 6 9H2v6h4l5 4V5Z"></path>
-              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-            </svg>
-          </span>
-          <span class="dashboard-tile-copy">
-            <strong data-i18n="dashboard.dictate">Dictate</strong>
-            <small data-i18n="dashboard.dictateDesc">Listen and type what you hear.</small>
-          </span>
-        </a>
-
-        <a class="dashboard-tile" href="categories.html">
-          <span class="dashboard-tile-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20.59 13.41 11 3.83A2 2 0 0 0 9.59 3.24L4 3a1 1 0 0 0-1 1l.24 5.59a2 2 0 0 0 .59 1.41l9.58 9.59a2 2 0 0 0 2.83 0l4.35-4.35a2 2 0 0 0 0-2.83Z"></path>
-              <circle cx="7.5" cy="7.5" r="1.5"></circle>
-            </svg>
-          </span>
-          <span class="dashboard-tile-copy">
-            <strong data-i18n="dashboard.categories">Categories</strong>
-            <small data-i18n="dashboard.categoriesDesc">Study vocabulary grouped by topic.</small>
-          </span>
-        </a>
-      </div>
-    </section>
-
-    <section class="dashboard-section" aria-label="Social">
-      <a id="dashboard-friends-card" class="dashboard-social-card" href="friends.html">
-        <span class="dashboard-tile-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="8" r="6"></circle>
-            <path d="m9 14.5-1.5 6.5 4.5-2.5 4.5 2.5-1.5-6.5"></path>
-          </svg>
-        </span>
-        <span class="dashboard-tile-copy">
-          <strong data-i18n="dashboard.friendsCard">Friends &amp; leaderboard</strong>
-          <small data-i18n="dashboard.friendsCardDesc">Add friends, see requests, and check the leaderboard.</small>
-        </span>
-        <span id="dashboard-pending-badge" class="dashboard-pending-badge" hidden></span>
-      </a>
-    </section>
-  </main>
-
-  <script src="js/firebase-config.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-auth-compat.js"></script>
-  <script src="js/i18n.js"></script>
-  <script src="js/firebase-client.js"></script>
-  <script src="js/dashboard.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-auth-compat.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/firebase-client.js"></script>
+    <script src="js/gamestate.js"></script>
+    <script src="js/chest.js"></script>
+    <script src="js/app-shell.js"></script>
+    <script src="js/dashboard.js"></script>
 </body>
 </html>

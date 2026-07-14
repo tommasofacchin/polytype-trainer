@@ -4,18 +4,9 @@
     <meta charset="UTF-8">
     <title>Dictate - Polytype Trainer</title>
     <link rel="icon" type="image/svg+xml" href="assets/flags/china.svg">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap">
     <link rel="stylesheet" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>
-        (function () {
-            try {
-                var t = localStorage.getItem("polytype-theme");
-                if (!t) t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-                document.documentElement.dataset.theme = t;
-            } catch (e) {}
-        })();
-    </script>
     <style>
         html.dictate-document,
         html.dictate-document body {
@@ -25,7 +16,9 @@
 
         .dictate-page {
             width: min(100% - 28px, 680px);
-            height: 100dvh;
+            height: 100%;
+            flex: 1;
+            min-height: 0;
             margin-inline: auto;
             padding-block: 14px;
             display: flex;
@@ -389,14 +382,12 @@
         }
     </style>
 </head>
-<body>
+<body class="has-app-shell is-fixed-page" data-tab="games">
+<div id="app-header"></div>
 <main class="dictate-page">
 
     <nav class="dictate-topbar" aria-label="Dictate navigation">
-        <a class="back-link" href="index.html" aria-label="Back home">
-            <span aria-hidden="true">&larr;</span>
-            <span>Home</span>
-        </a>
+        <a class="back-link-mini" href="games.html">&lsaquo; <span data-i18n="nav.games">Games</span></a>
         <div class="dictate-topbar-end">
             <div class="language-menu">
                 <button id="dictate-lang-toggle" class="language-menu-toggle" type="button"
@@ -405,20 +396,6 @@
                 </button>
                 <div id="dictate-lang-menu" class="language-menu-panel" role="menu" hidden></div>
             </div>
-
-            <button id="theme-toggle" class="theme-icon-toggle" type="button"
-                    aria-label="Switch to dark mode" aria-pressed="false">
-                <svg class="theme-icon sun-icon" viewBox="0 0 24 24" aria-hidden="true">
-                    <circle cx="12" cy="12" r="4"></circle>
-                    <path d="M12 2v2"></path><path d="M12 20v2"></path>
-                    <path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path>
-                    <path d="M2 12h2"></path><path d="M20 12h2"></path>
-                    <path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path>
-                </svg>
-                <svg class="theme-icon moon-icon" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M20 14.4A7.8 7.8 0 0 1 9.6 4 8 8 0 1 0 20 14.4Z"></path>
-                </svg>
-            </button>
         </div>
     </nav>
 
@@ -455,6 +432,7 @@
             <strong id="dictate-accuracy">100%</strong>
         </div>
     </div>
+    <p id="dictate-save-status" class="dictate-modal-sub" style="text-align:center;margin:0;min-height:16px" aria-live="polite"></p>
 
     <!-- Scrollable rows — one column -->
     <section class="dictate-card" aria-label="Dictation exercise">
@@ -472,9 +450,15 @@
     </section>
 
 </main>
+<div id="app-bottom-nav"></div>
 
 <script src="js/firebase-config.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-auth-compat.js"></script>
 <script src="js/i18n.js"></script>
+<script src="js/firebase-client.js"></script>
+<script src="js/gamestate.js"></script>
+<script src="js/app-shell.js"></script>
 <script src="decks/index.js"></script>
 <script src="decks/categories.js"></script>
 <script src="js/dictate.js"></script>

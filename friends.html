@@ -4,19 +4,13 @@
     <meta charset="UTF-8">
     <title data-i18n="friends.title">Friends - Polytype Trainer</title>
   <link rel="icon" type="image/svg+xml" href="assets/flags/china.svg">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap">
     <link rel="stylesheet" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body class="profile-page-body">
+<body class="has-app-shell is-scroll-page" data-tab="friends">
+  <div id="app-header"></div>
   <main class="profile-page friends-page">
-    <nav class="profile-topbar" aria-label="Friends navigation" data-i18n-aria-label="friends.navigation">
-      <a class="back-link" href="index.html" aria-label="Back home" data-i18n-aria-label="friends.back">
-        <span aria-hidden="true">&larr;</span>
-        <span data-i18n="common.home">Home</span>
-      </a>
-    </nav>
-
     <section class="profile-hero friends-hero" aria-label="Friends">
       <div class="profile-hero-copy">
         <span class="profile-kicker" data-i18n="friends.heading">Friends</span>
@@ -58,12 +52,15 @@
       <div id="friends-leaderboard-list" class="friends-leaderboard-list"></div>
     </section>
   </main>
+  <div id="app-bottom-nav"></div>
 
   <script src="js/firebase-config.js"></script>
   <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-auth-compat.js"></script>
   <script src="js/i18n.js"></script>
   <script src="js/firebase-client.js"></script>
+  <script src="js/gamestate.js"></script>
+  <script src="js/app-shell.js"></script>
   <script src="js/friends.js"></script>
 </body>
 </html>

@@ -31,8 +31,15 @@
         bestStreak:   0,
         correct:      0,
         total:        0,
-        started:      false
+        started:      false,
+        unsavedCorrect:    0,
+        unsavedWrong:      0,
+        unsavedWordsUsed:  0,
+        unsavedBestStreak: 0,
+        saveInFlight:      false,
+        batchStartTime:    0
     };
+    const SAVE_BATCH_SIZE = 5;
 
     let activeLanguage  = FALLBACK_LANGUAGE;
     let activeDeckMeta  = null;
@@ -44,6 +51,10 @@
 
     document.addEventListener("DOMContentLoaded", init);
 
+    function tr(key, params = {}) {
+        return window.PolytypeI18n?.t?.(key, params) || key;
+    }
+
     function init() {
         el.rows         = document.getElementById("dictate-rows");
         el.audioViz     = document.getElementById("audio-viz");
@@ -51,14 +62,13 @@
         el.scoreText    = document.getElementById("dictate-score");
         el.streakText   = document.getElementById("dictate-streak");
         el.accuracyText = document.getElementById("dictate-accuracy");
-        el.themeToggle  = document.getElementById("theme-toggle");
         el.flagImg      = document.getElementById("current-language-flag");
         el.startModal   = document.getElementById("dictate-start-modal");
         el.startBtn     = document.getElementById("dictate-start-btn");
         el.langMenu     = document.getElementById("dictate-lang-menu");
         el.langToggle   = document.getElementById("dictate-lang-toggle");
+        el.saveStatus   = document.getElementById("dictate-save-status");
 
-        el.themeToggle.addEventListener("click", toggleTheme);
         el.replayBtn.addEventListener("click", replayAudio);
         el.langToggle.addEventListener("click", toggleLangMenu);
         el.startBtn.addEventListener("click", startSession);
@@ -66,28 +76,8 @@
         document.addEventListener("keydown", onGlobalKeyDown);
         document.addEventListener("pointerdown", unlockAudio, { once: true });
 
-        initTheme();
         populateLangMenu();
         loadAndStart();
-    }
-
-    // ── Theme ─────────────────────────────────────────────────────────────────
-
-    function initTheme() {
-        const stored = localStorage.getItem(THEME_KEY);
-        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-        applyTheme(stored || (prefersDark ? "dark" : "light"));
-    }
-
-    function toggleTheme() {
-        applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
-    }
-
-    function applyTheme(theme) {
-        document.documentElement.dataset.theme = theme;
-        localStorage.setItem(THEME_KEY, theme);
-        el.themeToggle.setAttribute("aria-pressed", String(theme === "dark"));
-        el.themeToggle.setAttribute("aria-label", theme === "dark" ? "Switch to light mode" : "Switch to dark mode");
     }
 
     // ── Language ──────────────────────────────────────────────────────────────
@@ -155,6 +145,7 @@
     }
 
     async function selectLanguage(language) {
+        await flushSessionProgress();
         activeLanguage = language;
         localStorage.setItem(LANGUAGE_KEY, language);
         closeLangMenu();
@@ -372,6 +363,12 @@
         state.correct = 0;
         state.total = 0;
         state.started = false;
+        state.unsavedCorrect = 0;
+        state.unsavedWrong = 0;
+        state.unsavedWordsUsed = 0;
+        state.unsavedBestStreak = 0;
+        state.batchStartTime = Date.now();
+        if (el.saveStatus) el.saveStatus.textContent = "";
     }
 
     function showStartModal() {
@@ -448,6 +445,9 @@
             state.streak++;
             state.bestStreak = Math.max(state.bestStreak, state.streak);
             state.score += Math.round(10 * getComboMultiplier(state.streak));
+            state.unsavedCorrect++;
+            state.unsavedWordsUsed++;
+            state.unsavedBestStreak = Math.max(state.unsavedBestStreak, state.streak);
             typedDiv.classList.add("is-correct");
             // If user typed romanization, show the script below
             const showScript = normalizeString(state.currentTyped) !== normalizeString(item.script);
@@ -460,6 +460,7 @@
             }
         } else {
             state.streak = 0;
+            state.unsavedWrong++;
             // Replace typed text with correct word in red
             typedDiv.textContent = item.script;
             typedDiv.classList.add("is-wrong");
@@ -471,6 +472,59 @@
 
         updateHud();
         if (row) flashRow(row, isCorrect);
+
+        if ((state.unsavedCorrect + state.unsavedWrong) >= SAVE_BATCH_SIZE) {
+            flushSessionProgress();
+        }
+    }
+
+    // ── Progress sync ────────────────────────────────────────────────────────
+    async function flushSessionProgress() {
+        if (state.saveInFlight || state.unsavedCorrect <= 0) return;
+
+        const firebaseClient = window.PolytypeFirebase;
+        if (!firebaseClient?.isSignedIn?.()) {
+            if (el.saveStatus) el.saveStatus.textContent = tr("trainer.signInSave");
+            return;
+        }
+
+        const payload = {
+            courseId: activeLanguage,
+            gameType: "dictate",
+            correctAnswers: state.unsavedCorrect,
+            wrongAnswers: state.unsavedWrong,
+            bestCombo: state.unsavedBestStreak,
+            wordsUsed: state.unsavedWordsUsed,
+            sessionSeconds: Math.round((Date.now() - state.batchStartTime) / 1000)
+        };
+
+        state.saveInFlight = true;
+        if (el.saveStatus) el.saveStatus.textContent = tr("trainer.savingProgress");
+
+        const savedCorrect = state.unsavedCorrect;
+        const savedWrong = state.unsavedWrong;
+        const savedWordsUsed = state.unsavedWordsUsed;
+        state.unsavedCorrect = 0;
+        state.unsavedWrong = 0;
+        state.unsavedWordsUsed = 0;
+        state.unsavedBestStreak = 0;
+        state.batchStartTime = Date.now();
+
+        try {
+            const save = window.PolytypeGameState?.completePracticeSession
+                ? window.PolytypeGameState.completePracticeSession(payload)
+                : firebaseClient.completePracticeSession(payload);
+            await save;
+            if (el.saveStatus) el.saveStatus.textContent = tr("trainer.progressSaved");
+        } catch (error) {
+            // Put the unsaved counts back so the next batch retries them.
+            state.unsavedCorrect += savedCorrect;
+            state.unsavedWrong += savedWrong;
+            state.unsavedWordsUsed += savedWordsUsed;
+            if (el.saveStatus) el.saveStatus.textContent = error?.message || tr("trainer.signInSave");
+        } finally {
+            state.saveInFlight = false;
+        }
     }
 
     function advanceRow(row) {

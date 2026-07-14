@@ -23,6 +23,7 @@
         },
         signIn,
         register,
+        signInWithGoogle,
         signOut,
         isSignedIn,
         completePracticeSession,
@@ -32,7 +33,9 @@
         sendFriendRequest,
         respondFriendRequest,
         removeFriend,
-        getSocialOverview
+        getSocialOverview,
+        getHomeOverview,
+        claimDailyChest
     };
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -121,6 +124,12 @@
     async function register(email, password) {
         assertConfigured();
         return auth.createUserWithEmailAndPassword(email, password);
+    }
+
+    async function signInWithGoogle() {
+        assertConfigured();
+        const provider = new window.firebase.auth.GoogleAuthProvider();
+        return auth.signInWithPopup(provider);
     }
 
     async function signOut() {
@@ -229,6 +238,37 @@
         return callApi("get-social-overview", {});
     }
 
+    async function getHomeOverview() {
+        assertConfigured();
+        if (!state.user) throw new Error(tr("auth.signInRequired"));
+
+        return callApi("get-home-overview", {
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+        });
+    }
+
+    async function claimDailyChest() {
+        assertConfigured();
+        if (!state.user) throw new Error(tr("auth.signInRequired"));
+
+        const result = await callApi("claim-daily-chest", {
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+        });
+
+        if (result.data) {
+            state.profile = {
+                ...(state.profile || {}),
+                totalXp: result.data.totalXp,
+                globalLevel: result.data.globalLevel,
+                coins: result.data.coins
+            };
+            syncProfileToLocalStorage(state.profile);
+            notify();
+        }
+
+        return result;
+    }
+
     function initAuthUi() {
         initHeaderAuthLink();
         initAuthPageUi();
@@ -300,6 +340,7 @@
         const panelTitle = document.getElementById("auth-panel-title");
         const panelCopy = document.getElementById("auth-panel-copy");
         const status = document.getElementById("auth-status");
+        const googleBtn = document.getElementById("auth-google-btn");
 
         if (
             !form ||
@@ -362,6 +403,13 @@
             }
         });
 
+        if (googleBtn) {
+            googleBtn.addEventListener("click", async () => {
+                const didSucceed = await runAuthAction(status, signInWithGoogle, tr("auth.signedIn"));
+                if (didSucceed) window.location.href = "index.html";
+            });
+        }
+
         setMode("signin");
 
         window.PolytypeFirebase.onChange(nextState => {
@@ -402,6 +450,9 @@
             dayStreak: remoteProfile.currentStreak || 0,
             streakFreezes: remoteProfile.streakFreezes || 0,
             maxStreakFreezes: remoteProfile.maxStreakFreezes || 2,
+            coins: remoteProfile.coins || 0,
+            rupees: remoteProfile.rupees || 0,
+            badges: remoteProfile.badges || [],
             courses: remoteProfile.courses || {}
         };
 
@@ -424,6 +475,8 @@
             currentStreak: progress.streak?.currentStreak ?? currentProfile?.currentStreak ?? 0,
             longestStreak: progress.streak?.longestStreak ?? currentProfile?.longestStreak ?? 0,
             streakFreezes: progress.streak?.streakFreezes ?? currentProfile?.streakFreezes ?? 0,
+            coins: progress.coins ?? currentProfile?.coins ?? 0,
+            rupees: progress.rupees ?? currentProfile?.rupees ?? 0,
             courses: {
                 ...(currentProfile?.courses || {})
             }
@@ -459,7 +512,10 @@
             "auth/weak-password": tr("auth.weakPassword"),
             "auth/user-not-found": tr("auth.accountNotFound"),
             "auth/wrong-password": tr("auth.wrongLogin"),
+            "auth/operation-not-allowed": tr("auth.googleNotEnabled"),
+            "auth/popup-closed-by-user": tr("auth.googlePopupClosed"),
             "api/401": tr("auth.signInRequired"),
+            "api/409": tr("auth.chestAlreadyClaimed"),
             "api/503": tr("auth.serviceUnavailable")
         };
 
