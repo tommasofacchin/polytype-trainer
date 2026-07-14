@@ -68,19 +68,12 @@ function prepareDist() {
   fs.rmSync(distDir, { recursive: true, force: true });
   fs.mkdirSync(distDir, { recursive: true });
 
-  for (const entry of [
-    "assets",
-    "decks",
-    "js",
-    "index.html",
-    "auth.html",
-    "profile.html",
-    "memory.html",
-    "dictate.html",
-    "style.css",
-    "style_to_copy.css"
-  ]) {
+  for (const entry of ["assets", "decks", "js", "style.css", "style_to_copy.css"]) {
     copyEntry(entry);
+  }
+
+  for (const entry of fs.readdirSync(rootDir)) {
+    if (entry.endsWith(".html")) copyEntry(entry);
   }
 }
 
