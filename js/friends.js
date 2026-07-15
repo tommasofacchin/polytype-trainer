@@ -197,7 +197,7 @@ function renderLeaderboard(list) {
         row.append(
             rank,
             buildAvatar(entry),
-            buildNameCopy(entry, `${tr("common.levelNumber", { level: entry.globalLevel || 1 })} · ${entry.totalXp || 0} XP`, entry.isSelf),
+            buildNameCopy(entry, `${tr("common.levelNumber", { level: entry.globalLevel || 1 })} - ${entry.totalXp || 0} XP`, entry.isSelf),
             streak
         );
 

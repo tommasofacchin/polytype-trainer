@@ -1440,6 +1440,52 @@ input[type="password"]:focus {
     justify-content: center;
 }
 
+/* End-of-session points checklist - same row shape as the mission-reward
+   list (style.css .mission-reward-row) for a consistent "here's what you
+   earned" feel, with a checkmark instead of a coin icon. */
+.sprint-result-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.sprint-result-breakdown[hidden] {
+    display: none;
+}
+
+.sprint-result-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 10px 14px;
+    text-align: left;
+}
+
+.sprint-result-row-check {
+    flex: 0 0 auto;
+    display: flex;
+    color: var(--success);
+}
+
+.sprint-result-row-label {
+    flex: 1;
+    min-width: 0;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--text);
+}
+
+.sprint-result-row-value {
+    flex: 0 0 auto;
+    font-weight: 900;
+    font-size: 13px;
+    color: var(--text);
+}
+
 .sprint-load-error {
     margin: auto;
     color: var(--text-faint);

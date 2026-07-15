@@ -93,7 +93,7 @@ function renderResultRow(result) {
     });
     row.append(
         buildAvatar(result),
-        buildNameCopy(result, `${tr("common.levelNumber", { level: result.globalLevel || 1 })} · ${result.totalXp || 0} XP`),
+        buildNameCopy(result, `${tr("common.levelNumber", { level: result.globalLevel || 1 })} - ${result.totalXp || 0} XP`),
         buildRelationshipAction(result)
     );
     return row;

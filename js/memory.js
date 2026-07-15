@@ -815,13 +815,13 @@
             const progress = window.PolytypeGameState?.completePracticeSession
                 ? await window.PolytypeGameState.completePracticeSession(payload)
                 : (await firebaseClient.completePracticeSession(payload))?.data;
-            el.resultSaveStatus.textContent = tr("trainer.progressSaved");
+            el.resultSaveStatus.textContent = "";
 
             if (progress?.completedMissions?.length) {
                 await window.PolytypeMissionCelebrate?.show?.(progress.completedMissions);
             }
         } catch (error) {
-            el.resultSaveStatus.textContent = error?.message || tr("trainer.progressSaved");
+            el.resultSaveStatus.textContent = error?.message || tr("trainer.signInSave");
         }
     }
 

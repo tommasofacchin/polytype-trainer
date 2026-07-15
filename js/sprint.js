@@ -60,6 +60,7 @@
         el.resultModal = document.getElementById("sprint-result-modal");
         el.resultScore = document.getElementById("sprint-result-score");
         el.resultDetail = document.getElementById("sprint-result-detail");
+        el.resultBreakdown = document.getElementById("sprint-result-breakdown");
         el.resultCoins = document.getElementById("sprint-result-coins");
         el.resultSaveStatus = document.getElementById("sprint-result-save-status");
         el.playAgainBtn = document.getElementById("sprint-play-again-btn");
@@ -520,7 +521,8 @@
 
         el.exerciseRoot.innerHTML = "";
         el.resultScore.textContent = `${state.score} ${tr("common.points")}`;
-        el.resultDetail.textContent = tr("sprint.resultDetail", { correct: state.correctAnswers, total }) + ` · ${accuracy}%`;
+        el.resultDetail.textContent = `${tr("sprint.resultDetail", { correct: state.correctAnswers, total })} (${accuracy}%)`;
+        renderResultBreakdown();
         el.resultCoins.textContent = "";
         el.resultSaveStatus.textContent = "";
         el.resultModal.hidden = false;
@@ -550,7 +552,7 @@
                 ? await window.PolytypeGameState.completePracticeSession(payload)
                 : (await firebaseClient.completePracticeSession(payload))?.data;
 
-            el.resultSaveStatus.textContent = tr("trainer.progressSaved");
+            el.resultSaveStatus.textContent = "";
             if (typeof progress?.sessionCoins === "number" && progress.sessionCoins > 0) {
                 el.resultCoins.textContent = tr("trainer.coinsEarned", { count: progress.sessionCoins });
             }
@@ -560,6 +562,51 @@
         } catch (error) {
             el.resultSaveStatus.textContent = error?.message || tr("trainer.signInSave");
         }
+    }
+
+    // Breaks the final score down into what it was actually earned for: a
+    // flat 10 pts per correct answer, plus whatever extra the combo
+    // multiplier added on top. Every correct answer already banks
+    // `10 * getComboMultiplier(streakAtTheTime)` (see recordAnswer), so the
+    // combo's contribution is simply the total score minus the flat base -
+    // no separate running tally needed.
+    function renderResultBreakdown() {
+        if (!el.resultBreakdown) return;
+
+        const basePoints = state.correctAnswers * 10;
+        const comboBonus = Math.max(0, state.score - basePoints);
+        const rows = [];
+
+        if (state.correctAnswers > 0) {
+            rows.push({
+                label: tr("sprint.breakdownCorrect", { count: state.correctAnswers }),
+                value: `${basePoints} ${tr("common.points")}`
+            });
+        }
+        if (comboBonus > 0) {
+            rows.push({
+                label: tr("sprint.breakdownCombo", { streak: state.bestStreak }),
+                value: `+${comboBonus} ${tr("common.points")}`
+            });
+        }
+
+        el.resultBreakdown.hidden = rows.length === 0;
+        el.resultBreakdown.replaceChildren(
+            ...rows.map(row => {
+                const rowEl = document.createElement("div");
+                rowEl.className = "sprint-result-row";
+                rowEl.innerHTML = `
+                    <span class="sprint-result-row-check">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+                    </span>
+                    <span class="sprint-result-row-label"></span>
+                    <span class="sprint-result-row-value"></span>
+                `;
+                rowEl.querySelector(".sprint-result-row-label").textContent = row.label;
+                rowEl.querySelector(".sprint-result-row-value").textContent = row.value;
+                return rowEl;
+            })
+        );
     }
 
     // ── Audio playback (mirrors js/dictate.js's own copy) ──────────────────

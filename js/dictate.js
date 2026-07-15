@@ -532,7 +532,7 @@
             const progress = window.PolytypeGameState?.completePracticeSession
                 ? await window.PolytypeGameState.completePracticeSession(payload)
                 : (await firebaseClient.completePracticeSession(payload))?.data;
-            if (el.saveStatus) el.saveStatus.textContent = tr("trainer.progressSaved");
+            if (el.saveStatus) el.saveStatus.textContent = "";
 
             if (progress?.completedMissions?.length) {
                 await window.PolytypeMissionCelebrate?.show?.(progress.completedMissions);

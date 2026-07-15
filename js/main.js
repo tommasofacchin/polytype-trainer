@@ -1492,7 +1492,7 @@ async function saveCurrentSessionProgress() {
         state.unsavedBestStreak = getUnsavedAnswerCount() > 0 ? state.streak : 0;
         state.progressSaved = getUnsavedAnswerCount() === 0;
         if (state.progressSaved) state.unsavedCourseId = null;
-        if (isAnyResultVisible()) setResultSaveStatus(tr("trainer.progressSaved"));
+        if (isAnyResultVisible()) setResultSaveStatus("");
     })();
 
     try {
