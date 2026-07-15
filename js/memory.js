@@ -6,8 +6,6 @@
     const LANGUAGE_KEY = "polytype-language";
     const SFX_MUTED_KEY = "polytype-sfx-muted";
     const FALLBACK_LANGUAGE = "norwegian";
-    const xpPerDrop = 50; // keep in sync with XP_PER_DROP in api/_lib.js
-    const maxKeys = 5; // keep in sync with MAX_KEYS in api/_lib.js
     const LANGUAGE_FLAGS = {
         chinese: "assets/flags/china.svg",
         german: "assets/flags/germany.svg",
@@ -488,25 +486,6 @@
         };
     }
 
-    // Mirrors getEarnedWordTotal()/getKeysHeld() in api/_lib.js - how many
-    // keys the player holds, earned via XP but not yet spent on the Deck
-    // page (plus any shop-bought keys).
-    function getEarnedWordTotal(courseXp, unlockedCount) {
-        const totalWords = getSortedCategories().reduce((sum, category) => sum + category.size, 0);
-        const xpEarned = Math.min(totalWords, Math.floor(courseXp / xpPerDrop));
-        return Math.max(unlockedCount, xpEarned);
-    }
-
-    function getKeysHeld(courseXp, unlockedCount, purchasedKeys) {
-        const earnedKeys = Math.max(0, getEarnedWordTotal(courseXp, unlockedCount) - unlockedCount);
-        return Math.max(0, Math.min(maxKeys, earnedKeys + (purchasedKeys || 0)));
-    }
-
-    function getCourseKeysHeld(deckId) {
-        const progress = getCourseProgress(deckId);
-        return getKeysHeld(progress.xp, progress.unlockedWords.size, progress.purchasedKeys);
-    }
-
     function getSortedCategories() {
         return [...(window.POLYTYPE_CATEGORIES || [])].sort((a, b) => a.order - b.order);
     }
@@ -822,8 +801,6 @@
 
         el.resultSaveStatus.textContent = tr("trainer.savingProgress");
 
-        const previousKeys = getCourseKeysHeld(activeDeckMeta?.id);
-
         const payload = {
             courseId: activeLanguage,
             gameType: "memory",
@@ -840,51 +817,12 @@
                 : (await firebaseClient.completePracticeSession(payload))?.data;
             el.resultSaveStatus.textContent = tr("trainer.progressSaved");
 
-            if (progress?.course) {
-                const newKeys = typeof progress.keys === "number"
-                    ? progress.keys
-                    : getKeysHeld(
-                        progress.course.xp || 0,
-                        (progress.course.unlockedWords || []).length,
-                        progress.course.purchasedKeys || 0
-                    );
-                const gained = Math.max(0, newKeys - previousKeys);
-                if (gained > 0) notifyNewKeys(gained);
-            }
-
             if (progress?.completedMissions?.length) {
                 await window.PolytypeMissionCelebrate?.show?.(progress.completedMissions);
             }
         } catch (error) {
             el.resultSaveStatus.textContent = error?.message || tr("trainer.progressSaved");
         }
-    }
-
-    function notifyNewKeys(count) {
-        document.querySelector(".drop-toast")?.remove();
-
-        const toast = document.createElement("div");
-        toast.className = "drop-toast drop-toast-notice";
-        toast.innerHTML = `
-            <div class="drop-toast-head">
-                <span class="drop-toast-icon">\u{1F511}</span>
-                <div class="drop-toast-heading">
-                    <strong></strong>
-                    <a href="deck.html"></a>
-                </div>
-            </div>
-        `;
-        toast.querySelector("strong").textContent = tr("trainer.newKeysReady", {
-            count,
-            key: count === 1 ? tr("common.key") : tr("common.keys")
-        });
-        toast.querySelector(".drop-toast-heading a").textContent = `${tr("trainer.goToDeck")} →`;
-
-        document.body.appendChild(toast);
-        window.setTimeout(() => {
-            toast.classList.add("is-leaving");
-            toast.addEventListener("animationend", () => toast.remove(), { once: true });
-        }, 4200);
     }
 
     // Perfect (instant) play scores pairs * 100, scaled by difficulty.

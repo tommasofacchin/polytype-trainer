@@ -35,7 +35,7 @@ module.exports = withAuth(async (data, token) => {
     const courseXp = existingCourse.xp || 0;
     const purchasedKeys = existingCourse.purchasedKeys || 0;
     const unlockedWords = resolveUnlockedWords(existingCourse, false);
-    const keysHeld = getKeysHeld(courseXp, unlockedWords.length, purchasedKeys);
+    const keysHeld = getKeysHeld(purchasedKeys);
 
     if (keysHeld >= MAX_KEYS) {
       throw new ApiError(409, "Keys are already full.");
@@ -69,7 +69,7 @@ module.exports = withAuth(async (data, token) => {
     return {
       coins: nextCoins,
       course: courseResponse,
-      keys: getKeysHeld(courseXp, unlockedWords.length, nextPurchasedKeys)
+      keys: getKeysHeld(nextPurchasedKeys)
     };
   });
 });

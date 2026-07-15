@@ -58,9 +58,8 @@
             <span class="profile-card-label" data-i18n="trainer.time">Time</span>
             <div class="trainer-duration-grid">
                 <button type="button" class="trainer-duration-btn" data-seconds="30" data-i18n="trainer.duration30s">30 sec</button>
-                <button type="button" class="trainer-duration-btn" data-seconds="120" data-i18n="trainer.duration2m">2 min</button>
+                <button type="button" class="trainer-duration-btn is-active" data-seconds="120" data-i18n="trainer.duration2m">2 min</button>
                 <button type="button" class="trainer-duration-btn" data-seconds="300" data-i18n="trainer.duration5m">5 min</button>
-                <button type="button" class="trainer-duration-btn is-active" data-seconds="0" data-i18n="trainer.durationNoLimit">No limit</button>
             </div>
         </div>
     </section>
@@ -97,6 +96,7 @@
           <span class="result-label" data-i18n="trainer.timeUp">Time up</span>
           <strong id="timed-result-score" class="result-score-text">0 pts</strong>
           <span id="timed-result-detail" class="result-detail-text">0 correct / 0 fields</span>
+          <span id="timed-result-coins" class="result-coins-text"></span>
           <span id="timed-result-save-status" class="result-save-status"></span>
           <button id="timed-play-again-btn" class="restart-btn" type="button" data-i18n="trainer.playAgain">Play again</button>
         </div>
@@ -114,6 +114,19 @@
     </section>
   </main>
   <div id="app-bottom-nav"></div>
+
+  <div id="trainer-start-gate" class="confirm-overlay" role="dialog" aria-modal="true" aria-labelledby="trainer-gate-title" hidden>
+    <div class="confirm-overlay-backdrop"></div>
+    <div class="confirm-card" role="document">
+      <h2 id="trainer-gate-title" data-i18n="trainer.chooseTimeTitle">How long do you want to play?</h2>
+      <p class="confirm-card-body" data-i18n="trainer.chooseTimeBody">Pick a session length to start.</p>
+      <div class="trainer-duration-grid">
+        <button type="button" class="trainer-duration-btn" data-gate-seconds="30" data-i18n="trainer.duration30s">30 sec</button>
+        <button type="button" class="trainer-duration-btn" data-gate-seconds="120" data-i18n="trainer.duration2m">2 min</button>
+        <button type="button" class="trainer-duration-btn" data-gate-seconds="300" data-i18n="trainer.duration5m">5 min</button>
+      </div>
+    </div>
+  </div>
 
   <div id="my-deck-overlay" class="deck-overlay" role="dialog" aria-modal="true" aria-labelledby="deck-overlay-title" hidden>
     <div class="deck-overlay-backdrop" data-deck-close></div>

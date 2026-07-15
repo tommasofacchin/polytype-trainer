@@ -45,13 +45,13 @@ const DEBUG_ALWAYS_CLAIM_CHEST = process.env.DEBUG_ALWAYS_CLAIM_CHEST === "true"
 // Small fixed pool; 3 are picked deterministically per (uid, date) so the set
 // rotates daily without needing a cron job or extra Firestore writes.
 const MISSION_POOL = [
-  { id: "earn_30_xp", metric: "xp", target: 30, coinReward: 15, labelKey: "mission.earn30Xp" },
-  { id: "earn_50_xp", metric: "xp", target: 50, coinReward: 20, labelKey: "mission.earn50Xp" },
-  { id: "earn_100_xp", metric: "xp", target: 100, coinReward: 35, labelKey: "mission.earn100Xp" },
-  { id: "play_trainer", metric: "gameSessions.trainer", target: 1, coinReward: 20, labelKey: "mission.playTrainer" },
-  { id: "play_memory", metric: "gameSessions.memory", target: 1, coinReward: 30, labelKey: "mission.playMemory" },
-  { id: "play_dictate", metric: "gameSessions.dictate", target: 1, coinReward: 25, labelKey: "mission.playDictate" },
-  { id: "correct_20", metric: "correctAnswers", target: 20, coinReward: 25, labelKey: "mission.correct20" }
+  { id: "earn_30_xp", metric: "xp", target: 30, coinReward: 30, labelKey: "mission.earn30Xp" },
+  { id: "earn_50_xp", metric: "xp", target: 50, coinReward: 40, labelKey: "mission.earn50Xp" },
+  { id: "earn_100_xp", metric: "xp", target: 100, coinReward: 70, labelKey: "mission.earn100Xp" },
+  { id: "play_trainer", metric: "gameSessions.trainer", target: 1, coinReward: 40, labelKey: "mission.playTrainer" },
+  { id: "play_memory", metric: "gameSessions.memory", target: 1, coinReward: 60, labelKey: "mission.playMemory" },
+  { id: "play_dictate", metric: "gameSessions.dictate", target: 1, coinReward: 50, labelKey: "mission.playDictate" },
+  { id: "correct_20", metric: "correctAnswers", target: 20, coinReward: 50, labelKey: "mission.correct20" }
 ];
 
 // Evaluated (in order) against the updated user profile after every session;
@@ -319,22 +319,11 @@ function resolveUnlockedWords(existingCourse, isNewCourse) {
   return (CATEGORIES.find(category => category.order === 0)?.wordSuffixes || []).slice(0, STARTER_WORDS);
 }
 
-// How many words the course's XP alone would justify unlocking, floored at
-// the count already unlocked (a brand-new course's fixed starter grant can
-// exceed what its XP alone would justify).
-function getEarnedWordTotal(courseXp, unlockedCount) {
-  const xpEarned = Math.min(TOTAL_CATEGORY_WORDS, Math.floor(courseXp / XP_PER_DROP));
-  return Math.max(unlockedCount, xpEarned);
-}
-
-// How many keys the player currently holds: earned via XP (one per word) plus
-// any shop-bought keys (api/buy-key.js), capped at MAX_KEYS - earning more
-// XP or buying more keys beyond that cap doesn't grant more until one is
-// spent (see api/unlock-word.js's spend rule for how purchasedKeys is drawn
-// down without double-counting against the XP-earned pool).
-function getKeysHeld(courseXp, unlockedCount, purchasedKeys) {
-  const earnedKeys = Math.max(0, getEarnedWordTotal(courseXp, unlockedCount) - unlockedCount);
-  return Math.max(0, Math.min(MAX_KEYS, earnedKeys + (purchasedKeys || 0)));
+// How many keys the player currently holds: purchased via the Shop
+// (api/buy-key.js) only, capped at MAX_KEYS - buying more beyond that cap
+// doesn't grant more until one is spent (api/unlock-word.js).
+function getKeysHeld(purchasedKeys) {
+  return Math.max(0, Math.min(MAX_KEYS, Math.trunc(purchasedKeys) || 0));
 }
 
 function getXpForLevel(level) {
@@ -517,7 +506,6 @@ module.exports = {
   getUnlockedWordSuffixesFromPrefix,
   resolveUnlockedWords,
   sanitizeUnlockedWords,
-  getEarnedWordTotal,
   getKeysHeld,
   normalizeCourseId,
   normalizeUid,

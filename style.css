@@ -663,7 +663,7 @@ body.auth-page-body {
 
 .trainer-duration-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: var(--space-2);
 }
 
@@ -2135,6 +2135,16 @@ input[type="password"]:focus {
     font-size: var(--text-sm);
 }
 
+.result-coins-text {
+    color: #d99a1c;
+    font-size: var(--text-sm);
+    font-weight: 700;
+}
+
+.result-coins-text:empty {
+    display: none;
+}
+
 /* ---- My Deck ----------------------------------------------------------- */
 
 .deck-open-btn {
@@ -2347,6 +2357,17 @@ body.deck-overlay-open {
     display: none;
 }
 
+.confirm-card-note {
+    margin: 0;
+    color: var(--text-soft);
+    font-size: var(--text-xs);
+    font-weight: 700;
+}
+
+.confirm-card-note[hidden] {
+    display: none;
+}
+
 .confirm-actions {
     display: flex;
     gap: var(--space-3);
@@ -2355,6 +2376,17 @@ body.deck-overlay-open {
 
 .confirm-actions button {
     flex: 1;
+}
+
+#unlock-go-shop-link {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+    padding: 0 var(--space-4);
+    text-decoration: none;
+    text-align: center;
 }
 
 .btn-ghost {
@@ -3488,11 +3520,46 @@ body {
     display: none;
 }
 
+/* Logo only makes sense above the desktop sidebar - the mobile bottom bar
+   has no room above it. */
+.app-shell-logo {
+    display: none;
+}
+
 /* ---- Desktop: nav becomes a left sidebar instead of a bottom bar ------------- */
 
 @media (min-width: 860px) {
     .app-shell-nav-item-desktop-only {
         display: flex;
+    }
+
+    .app-shell-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 18px 18px 8px;
+        text-decoration: none;
+        color: var(--text);
+    }
+
+    .app-shell-logo-mark {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 9px;
+        background: var(--accent);
+        color: var(--accent-on, var(--text-inverse));
+        font-weight: 800;
+        font-size: 16px;
+    }
+
+    .app-shell-logo-word {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 17px;
+        letter-spacing: -0.02em;
     }
 
     .has-app-shell:has(#app-bottom-nav) {
@@ -3670,6 +3737,104 @@ body {
     border: 0;
     cursor: pointer;
     font-family: var(--font-sans);
+}
+
+/* ---- Home: chest + missions side by side ------------------------------- */
+
+.home-chest-missions-row {
+    display: flex;
+    align-items: stretch;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.home-chest-missions-row > * {
+    min-width: 0;
+}
+
+/* Missions need more room per row (3 stacked rows of text) than the chest
+   card (icon + two short lines + a button), so the split favors missions
+   rather than a plain 50/50. */
+#home-chest-card {
+    flex: 0 0 38%;
+}
+
+.home-missions-col {
+    flex: 1;
+}
+
+/* The chest card is a wide horizontal row everywhere else it's used (e.g.
+   the Deck page's empty-state banner) - stack it vertically here instead so
+   it fits a narrow column next to the missions list. */
+#home-chest-card.chest-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 0;
+}
+
+#home-chest-card .chest-open-btn {
+    width: 100%;
+    text-align: center;
+    margin-top: auto;
+}
+
+.home-missions-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.home-missions-col #home-missions-list {
+    flex: 1;
+}
+
+/* Tighter than the default mission-row sizing (used full-width elsewhere) -
+   this column is narrow, so trim padding/icon size to leave more room for
+   the mission title before it wraps awkwardly. */
+.home-missions-col .mission-row {
+    gap: 8px;
+    padding: 10px;
+}
+
+.home-missions-col .mission-icon {
+    width: 28px;
+    height: 28px;
+}
+
+.home-missions-col .mission-copy strong {
+    font-size: 12px;
+    margin-bottom: 4px;
+}
+
+.home-missions-col .mission-reward {
+    font-size: 12px;
+}
+
+.home-play-again-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 13px;
+    border-radius: 14px;
+    border: 0;
+    background: var(--accent);
+    color: var(--accent-on, var(--text-inverse));
+    font-weight: 800;
+    font-size: 14px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background var(--transition), transform var(--transition);
+}
+
+.home-play-again-btn:hover, .home-play-again-btn:focus-visible {
+    background: var(--accent-hover);
+}
+
+.home-play-again-btn:active {
+    transform: translateY(1px);
 }
 
 .chest-overlay {

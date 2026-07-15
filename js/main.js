@@ -5,7 +5,7 @@ const settings = {
     showRomanization: true,
     useMeaning: true,
     infiniteRun: true,
-    timeLimitSeconds: 0
+    timeLimitSeconds: 120
 };
 
 const state = {
@@ -33,7 +33,7 @@ const state = {
     progressSaved: false,
     saveInFlight: false,
     savePromise: null,
-    pendingNewlyEarnedWords: 0,
+    pendingSessionCoins: 0,
     pendingCompletedMissions: []
 };
 
@@ -79,13 +79,20 @@ let deckProgressText;
 let timerResultModal;
 let timedResultScore;
 let timedResultDetail;
+let timedResultCoins;
 let timedResultSaveStatus;
 let timedPlayAgainBtn;
+let trainerStartGate;
 let profile = { ...defaultProfile };
 // Last level reflected in the UI. Used to detect level-ups in renderProfile.
 // null until the first render so we don't celebrate on initial load/hydration.
 let lastShownLevel = null;
 let lastShownCourseKey = null;
+// Becomes true once the player picks a duration from the mandatory start
+// gate (see showStartGate/hideStartGate) - startSession() no-ops before
+// that, so the gate can't be bypassed by any of the other events that
+// trigger a (re)start (account switch, language change, etc.).
+let gateResolved = false;
 
 const AVAILABLE_DECKS = window.DECK_INDEX || [];
 const errorColor = "var(--danger)";
@@ -94,8 +101,6 @@ const profileStorageKey = "polytype-profile";
 const audioBaseUrl = stripTrailingSlash(window.POLYTYPE_AUDIO_BASE_URL || "");
 const audioPrefix = stripSlashes(window.POLYTYPE_AUDIO_PREFIX || "audio/v1");
 const audioPreloadConcurrency = 4;
-const xpPerDrop = 50; // keep in sync with XP_PER_DROP in api/_lib.js / functions/index.js
-const maxKeys = 5; // keep in sync with MAX_KEYS in api/_lib.js
 const higherUnlockedLevelDrawBoost = 1;
 const answerTimeoutMs = 10000;
 const timedAnswerTimeoutMs = 5000;
@@ -127,7 +132,9 @@ document.addEventListener("DOMContentLoaded", () => {
     romajiToggle = document.getElementById("romaji-toggle");
     rowsContainer = document.getElementById("rows-container");
     themeToggle = document.getElementById("theme-toggle");
-    durationButtons = Array.from(document.querySelectorAll(".trainer-duration-btn"));
+    // [data-seconds] scopes this to the persistent in-toolbar buttons only -
+    // the start gate's buttons share the same class but use [data-gate-seconds].
+    durationButtons = Array.from(document.querySelectorAll(".trainer-duration-btn[data-seconds]"));
     timerText = document.getElementById("timer-text");
     hudScoreText = document.getElementById("hud-score-text");
     streakText = document.getElementById("streak-text");
@@ -154,8 +161,10 @@ document.addEventListener("DOMContentLoaded", () => {
     timerResultModal = document.getElementById("timer-result-modal");
     timedResultScore = document.getElementById("timed-result-score");
     timedResultDetail = document.getElementById("timed-result-detail");
+    timedResultCoins = document.getElementById("timed-result-coins");
     timedResultSaveStatus = document.getElementById("timed-result-save-status");
     timedPlayAgainBtn = document.getElementById("timed-play-again-btn");
+    trainerStartGate = document.getElementById("trainer-start-gate");
 
     myDeckBtn.addEventListener("click", openMyDeck);
     myDeckOverlay.addEventListener("click", event => {
@@ -166,6 +175,13 @@ document.addEventListener("DOMContentLoaded", () => {
     romajiToggle.addEventListener("change", onRomajiToggle);
     durationButtons.forEach(btn => {
         btn.addEventListener("click", () => startSession(Number(btn.dataset.seconds)));
+    });
+    trainerStartGate.querySelectorAll("[data-gate-seconds]").forEach(btn => {
+        btn.addEventListener("click", () => {
+            gateResolved = true;
+            hideStartGate();
+            startSession(Number(btn.dataset.gateSeconds));
+        });
     });
     playAgainBtn.addEventListener("click", () => startSession());
     timedPlayAgainBtn.addEventListener("click", () => startSession());
@@ -188,7 +204,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateRomajiUI();
     renderProfile();
     applyInitialVisibilityClasses();
-    startSession();
+    showStartGate();
 });
 
 function initProfile() {
@@ -615,7 +631,23 @@ function onRomajiToggle() {
     applyInitialVisibilityClasses();
 }
 
+function showStartGate() {
+    if (!trainerStartGate) return;
+    trainerStartGate.hidden = false;
+    requestAnimationFrame(() => trainerStartGate.classList.add("is-open"));
+}
+
+function hideStartGate() {
+    if (!trainerStartGate) return;
+    trainerStartGate.classList.remove("is-open");
+    window.setTimeout(() => { trainerStartGate.hidden = true; }, 240);
+}
+
 async function startSession(seconds) {
+    // Blocks every (re)start trigger - toolbar buttons, play-again,
+    // language/level changes, account switches - until the player has
+    // picked a duration from the mandatory start gate at least once.
+    if (!gateResolved) return;
     if (typeof seconds === "number") settings.timeLimitSeconds = seconds;
     syncDurationButtons();
 
@@ -924,7 +956,7 @@ function resetState() {
     state.progressSaved = false;
     state.saveInFlight = false;
     state.savePromise = null;
-    state.pendingNewlyEarnedWords = 0;
+    state.pendingSessionCoins = 0;
     state.pendingCompletedMissions = [];
 }
 
@@ -1434,12 +1466,9 @@ function awardComboPoints() {
     state.sessionXp += points;
 
     if (!isFirebaseSignedIn()) {
-        const previousKeys = getCourseKeysHeld(getCurrentCourseProgress());
         addLocalCourseXp(points);
         saveProfile();
         renderProfile();
-        const newKeys = getCourseKeysHeld(getCurrentCourseProgress());
-        state.pendingNewlyEarnedWords += Math.max(0, newKeys - previousKeys);
     }
 }
 
@@ -1474,36 +1503,6 @@ function addLocalCourseXp(points) {
             wordsUnlocked: unlockedWords.length
         }
     };
-}
-
-// How many words a course's XP alone would justify unlocking, floored at
-// the count already unlocked (a brand-new course's fixed starter grant can
-// exceed what its XP alone would justify). Mirrors getEarnedWordTotal() in
-// api/_lib.js.
-function getEarnedWordTotal(courseXp, unlockedCount) {
-    const categories = getSortedCategories();
-    const totalWords = categories.reduce((sum, category) => sum + category.size, 0);
-    const xpEarned = Math.min(totalWords, Math.floor(courseXp / xpPerDrop));
-    return Math.max(unlockedCount, xpEarned);
-}
-
-// How many keys the player currently holds (XP-earned plus any shop-bought
-// keys), capped at maxKeys. Mirrors getKeysHeld() in api/_lib.js.
-function getKeysHeld(courseXp, unlockedCount, purchasedKeys) {
-    const earnedKeys = Math.max(0, getEarnedWordTotal(courseXp, unlockedCount) - unlockedCount);
-    return Math.max(0, Math.min(maxKeys, earnedKeys + (purchasedKeys || 0)));
-}
-
-function getCourseKeysHeld(courseProgress) {
-    if (!courseProgress) return 0;
-    const unlockedCount = Array.isArray(courseProgress.unlockedWords)
-        ? courseProgress.unlockedWords.length
-        : getUnlockedWordSuffixesFromPrefix(
-            Math.max(0, Math.trunc(Number(courseProgress.categoryIndex) || 0)),
-            Math.max(0, Math.trunc(Number(courseProgress.categoryUnlocked) || 0))
-        ).size;
-    const purchasedKeys = Math.max(0, Math.trunc(Number(courseProgress.purchasedKeys) || 0));
-    return getKeysHeld(Math.max(0, Number(courseProgress.xp) || 0), unlockedCount, purchasedKeys);
 }
 
 function getComboMultiplier(streak) {
@@ -1655,56 +1654,11 @@ function celebrateLevelUp(level) {
     document.body.appendChild(overlay);
 }
 
-function flushPendingWordNotice() {
-    if (!state.pendingNewlyEarnedWords) return;
-    notifyNewKeys(state.pendingNewlyEarnedWords);
-    state.pendingNewlyEarnedWords = 0;
-}
-
 function flushPendingMissionCelebration() {
     if (!state.pendingCompletedMissions.length) return Promise.resolve();
     const missions = state.pendingCompletedMissions;
     state.pendingCompletedMissions = [];
     return window.PolytypeMissionCelebrate?.show?.(missions) || Promise.resolve();
-}
-
-function notifyNewKeys(count) {
-    if (!count) return;
-
-    document.querySelector(".drop-toast")?.remove();
-
-    const toast = document.createElement("div");
-    toast.className = "drop-toast drop-toast-notice";
-
-    const header = document.createElement("div");
-    header.className = "drop-toast-head";
-
-    const icon = document.createElement("span");
-    icon.className = "drop-toast-icon";
-    icon.textContent = "\u{1F511}";
-
-    const heading = document.createElement("div");
-    heading.className = "drop-toast-heading";
-
-    const title = document.createElement("strong");
-    title.textContent = tr("trainer.newKeysReady", {
-        count,
-        key: count === 1 ? tr("common.key") : tr("common.keys")
-    });
-
-    const subtitle = document.createElement("a");
-    subtitle.href = "deck.html";
-    subtitle.textContent = `${tr("trainer.goToDeck")} →`;
-
-    heading.append(title, subtitle);
-    header.append(icon, heading);
-    toast.append(header);
-    document.body.appendChild(toast);
-
-    window.setTimeout(() => {
-        toast.classList.add("is-leaving");
-        toast.addEventListener("animationend", () => toast.remove(), { once: true });
-    }, 4200);
 }
 
 function getComboColor(tier) {
@@ -1776,6 +1730,7 @@ async function endSession() {
     if (settings.timeLimitSeconds && timerResultModal) {
         timedResultScore.textContent = scoreText;
         timedResultDetail.textContent = detailText;
+        if (timedResultCoins) timedResultCoins.textContent = "";
         timedResultSaveStatus.textContent = "";
         timerResultModal.hidden = false;
     } else {
@@ -1789,13 +1744,15 @@ async function endSession() {
 
     // saveCurrentSessionProgress() only reveals these when it actually has
     // something fresh to send - if everything was already flushed by an
-    // earlier mid-session autosave, force the reveal here so the pill,
-    // header coins, and any queued word-unlock toast always show up once the
-    // session truly ends.
+    // earlier mid-session autosave, force the reveal here so the pill and
+    // header coins always show up once the session truly ends.
     renderProfile();
     window.PolytypeGameState?.refresh?.();
+    if (timedResultCoins && state.pendingSessionCoins > 0) {
+        timedResultCoins.textContent = tr("trainer.coinsEarned", { count: state.pendingSessionCoins });
+    }
+    state.pendingSessionCoins = 0;
     await flushPendingMissionCelebration();
-    flushPendingWordNotice();
 }
 
 function hideSessionResult() {
@@ -1841,8 +1798,6 @@ async function saveCurrentSessionProgress() {
     state.saveInFlight = true;
     if (isAnyResultVisible()) setResultSaveStatus(tr("trainer.savingProgress"));
 
-    const previousKeys = getCourseKeysHeld(getCurrentCourseProgress());
-
     state.savePromise = (async () => {
         const result = await firebaseClient.completePracticeSession(payload);
         const progress = result.data;
@@ -1859,7 +1814,17 @@ async function saveCurrentSessionProgress() {
             };
 
             if (progress.course?.courseId) {
-                profile.courses[progress.course.courseId] = progress.course;
+                const incoming = progress.course;
+                const cached = profile.courses[incoming.courseId];
+                // xp and unlockedWords only ever grow for a course, so a
+                // reply reporting fewer of either than what's already
+                // cached must be an out-of-order response (e.g. a mid-game
+                // autosave that was in flight when a Deck-page unlock
+                // committed) - applying it would revert the newer state.
+                const incomingIsFresh = !cached ||
+                    ((incoming.xp || 0) >= (cached.xp || 0) &&
+                        (incoming.unlockedWords?.length || 0) >= (cached.unlockedWords?.length || 0));
+                if (incomingIsFresh) profile.courses[incoming.courseId] = incoming;
             }
 
             saveProfile();
@@ -1868,19 +1833,10 @@ async function saveCurrentSessionProgress() {
             // coin counter only refreshes once play has actually paused.
             if (!isActivelyPlayingSession()) window.PolytypeGameState?.refresh?.();
 
-            if (progress.course?.courseId === getCurrentCourseKey()) {
-                const newKeys = typeof progress.keys === "number"
-                    ? progress.keys
-                    : getCourseKeysHeld(progress.course);
-                const gained = Math.max(0, newKeys - previousKeys);
-
-                if (gained > 0) {
-                    // Accumulate rather than notify immediately - a session
-                    // can flush progress multiple times mid-play, and the
-                    // reveal only happens once, at the end (see endSession).
-                    state.pendingNewlyEarnedWords += gained;
-                    if (!isActivelyPlayingSession()) flushPendingWordNotice();
-                }
+            if (typeof progress.sessionCoins === "number") {
+                // Same accumulate-then-flush rule as missions below - shown
+                // once, when the session actually ends (see endSession).
+                state.pendingSessionCoins += progress.sessionCoins;
             }
 
             if (progress.completedMissions?.length) {

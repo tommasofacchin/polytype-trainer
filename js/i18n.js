@@ -63,6 +63,9 @@
             "trainer.duration2m": "2 min",
             "trainer.duration5m": "5 min",
             "trainer.durationNoLimit": "No limit",
+            "trainer.chooseTimeTitle": "How long do you want to play?",
+            "trainer.chooseTimeBody": "Pick a session length to start.",
+            "trainer.coinsEarned": "+{count} coins",
             "trainer.start": "Start",
             "trainer.focus": "Focus",
             "trainer.exitFocus": "Exit focus",
@@ -315,6 +318,8 @@
             "deck.confirmUnlockConfirm": "Unlock",
             "deck.confirmUnlockCancel": "Not yet",
             "deck.unlockFailed": "Couldn't unlock that word. Try again.",
+            "deck.noKeysMessage": "You don't have any keys yet. Buy one in the Shop to unlock this word.",
+            "deck.goToShop": "Go to Shop",
 
             "shop.pageTitle": "Shop - Polytype Trainer",
             "shop.title": "Shop",
@@ -343,6 +348,7 @@
             "games.comingSoon": "Coming soon",
 
             "home.thisWeek": "This week ›",
+            "home.playAgain": "Play another round",
             "dashboard.welcomeBack": "Welcome back,",
 
             "mission.dailyMissions": "Daily missions",
@@ -456,6 +462,9 @@
             "trainer.duration2m": "2 min",
             "trainer.duration5m": "5 min",
             "trainer.durationNoLimit": "Senza limite",
+            "trainer.chooseTimeTitle": "Quanto tempo vuoi giocare?",
+            "trainer.chooseTimeBody": "Scegli la durata della sessione per iniziare.",
+            "trainer.coinsEarned": "+{count} monete",
             "trainer.start": "Inizia",
             "trainer.focus": "Focus",
             "trainer.exitFocus": "Esci dal focus",
@@ -708,6 +717,8 @@
             "deck.confirmUnlockConfirm": "Sblocca",
             "deck.confirmUnlockCancel": "Non ora",
             "deck.unlockFailed": "Impossibile sbloccare quella parola. Riprova.",
+            "deck.noKeysMessage": "Non hai ancora nessuna chiave. Comprane una nello Shop per sbloccare questa parola.",
+            "deck.goToShop": "Vai allo Shop",
 
             "shop.pageTitle": "Negozio - Polytype Trainer",
             "shop.title": "Negozio",
@@ -736,6 +747,7 @@
             "games.comingSoon": "In arrivo",
 
             "home.thisWeek": "Questa settimana ›",
+            "home.playAgain": "Gioca un'altra partita",
             "dashboard.welcomeBack": "Bentornato,",
 
             "mission.dailyMissions": "Missioni giornaliere",

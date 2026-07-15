@@ -1,15 +1,15 @@
 const { db, FieldValue, Timestamp } = require("./_firebase");
 const {
   withAuth, normalizeCourseId, resolveUnlockedWords,
-  getEarnedWordTotal, getKeysHeld, VALID_WORD_SUFFIXES,
+  getKeysHeld, VALID_WORD_SUFFIXES,
   ApiError
 } = require("./_lib");
 
-// Spends one key to unlock a single, player-chosen word. Unlike XP (which
-// only grows the pool of keys - see getKeysHeld), unlockedWords only ever
-// changes here (plus the one-time starter grant / legacy migration in
-// resolveUnlockedWords). The player may pick ANY currently-locked word in
-// the course, in any order - there is no per-category gating.
+// Spends one shop-bought key (see api/buy-key.js) to unlock a single,
+// player-chosen word. unlockedWords only ever changes here (plus the
+// one-time starter grant / legacy migration in resolveUnlockedWords). The
+// player may pick ANY currently-locked word in the course, in any order -
+// there is no per-category gating.
 module.exports = withAuth(async (data, token) => {
   const courseId = normalizeCourseId(data.courseId);
   const wordSuffix = normalizeWordSuffix(data.wordSuffix);
@@ -38,20 +38,11 @@ module.exports = withAuth(async (data, token) => {
       throw new ApiError(409, "Word already unlocked.");
     }
 
-    // Earned-via-XP keys aren't a stored number - growing unlockedWords by 1
-    // below automatically reduces getEarnedWordTotal(...)-unlockedCount by 1
-    // on its own. Only draw down the separately-stored purchasedKeys pool
-    // when the earned pool was already at its floor (0) *before* this spend
-    // - otherwise both pools would shrink for the same single spend, or (if
-    // purchasedKeys were folded directly into the earned formula instead of
-    // being spent explicitly) a bought key would regenerate forever once
-    // unlockedCount overtakes the XP-justified total. See getKeysHeld().
-    const earnedKeysBefore = Math.max(0, getEarnedWordTotal(courseXp, unlockedWords.length) - unlockedWords.length);
-    const keysHeld = getKeysHeld(courseXp, unlockedWords.length, purchasedKeys);
+    const keysHeld = getKeysHeld(purchasedKeys);
     if (keysHeld <= 0) {
       throw new ApiError(409, "No keys available.");
     }
-    const nextPurchasedKeys = earnedKeysBefore > 0 ? purchasedKeys : Math.max(0, purchasedKeys - 1);
+    const nextPurchasedKeys = purchasedKeys - 1;
 
     const nextUnlockedWords = [...unlockedWords, wordSuffix];
     const now = FieldValue.serverTimestamp();
@@ -78,7 +69,7 @@ module.exports = withAuth(async (data, token) => {
 
     return {
       course: courseResponse,
-      keys: getKeysHeld(courseXp, nextUnlockedWords.length, nextPurchasedKeys)
+      keys: getKeysHeld(nextPurchasedKeys)
     };
   });
 });

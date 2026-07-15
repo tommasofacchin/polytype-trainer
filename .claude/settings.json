@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(taskkill //F //PID 17992 //T)",
+      "Bash(taskkill //F //PID 20164 //T)",
+      "Bash(node \"C:\\\\Users\\\\wangf\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-wangf-OneDrive----Tommaso-polytype-trainer\\\\2f0defb5-bfbd-414c-917f-f7b854f436a6\\\\scratchpad\\\\verify_home.js\")",
+      "Bash(node -e ' *)",
+      "Bash(node \"C:\\\\Users\\\\wangf\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-wangf-OneDrive----Tommaso-polytype-trainer\\\\2f0defb5-bfbd-414c-917f-f7b854f436a6\\\\scratchpad\\\\shot_home_check.js\")",
+      "Bash(node \"C:\\\\Users\\\\wangf\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-wangf-OneDrive----Tommaso-polytype-trainer\\\\2f0defb5-bfbd-414c-917f-f7b854f436a6\\\\scratchpad\\\\verify_logo.js\")",
+      "Bash(taskkill //F //PID 22008 //T)"
+    ]
+  }
+}

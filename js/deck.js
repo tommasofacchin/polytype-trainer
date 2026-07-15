@@ -62,6 +62,7 @@ let activeAudio = null;
 let isConfirmingUnlock = false;
 let pendingCourseKey = null;
 let pendingUnlockWord = null;
+let pendingKeysHeld = 0;
 
 const el = {};
 
@@ -82,7 +83,9 @@ document.addEventListener("DOMContentLoaded", () => {
     el.unlockOverlay = document.getElementById("unlock-confirm-overlay");
     el.unlockBody = document.getElementById("unlock-confirm-body");
     el.unlockError = document.getElementById("unlock-confirm-error");
+    el.unlockNoKeys = document.getElementById("unlock-confirm-no-keys");
     el.unlockConfirmBtn = document.getElementById("unlock-confirm-btn");
+    el.unlockShopLink = document.getElementById("unlock-go-shop-link");
     if (el.keysIcon) el.keysIcon.innerHTML = KEY_SVG;
 
     setupLanguageMenu();
@@ -316,17 +319,9 @@ function getUnlockedWordSuffixesFromPrefix(categoryIndex, categoryUnlocked) {
     return unlocked;
 }
 
-// Mirrors getEarnedWordTotal()/getKeysHeld() in api/_lib.js for the Deck
-// page's own render pass.
-function getEarnedWordTotal(courseXp, unlockedCount) {
-    const totalWords = getSortedCategories().reduce((sum, category) => sum + category.size, 0);
-    const xpEarned = Math.min(totalWords, Math.floor(courseXp / xpPerDrop));
-    return Math.max(unlockedCount, xpEarned);
-}
-
-function getKeysHeld(courseXp, unlockedCount, purchasedKeys) {
-    const earnedKeys = Math.max(0, getEarnedWordTotal(courseXp, unlockedCount) - unlockedCount);
-    return Math.max(0, Math.min(maxKeys, earnedKeys + (purchasedKeys || 0)));
+// Mirrors getKeysHeld() in api/_lib.js for the Deck page's own render pass.
+function getKeysHeld(purchasedKeys) {
+    return Math.max(0, Math.min(maxKeys, purchasedKeys || 0));
 }
 
 function getWordSuffix(wordId) {
@@ -355,7 +350,7 @@ function renderDeck() {
 
     const courseProgress = getCourseProgress();
     const { unlockedWords } = courseProgress;
-    const keysHeld = getKeysHeld(courseProgress.xp, unlockedWords.size, courseProgress.purchasedKeys);
+    const keysHeld = getKeysHeld(courseProgress.purchasedKeys);
     const unlockedCount = vocab.filter(word => unlockedWords.has(getWordSuffix(word.id))).length;
     const pct = Math.round((unlockedCount / vocab.length) * 100);
 
@@ -449,17 +444,19 @@ function buildDeckCard(word, isUnlocked, keysHeld) {
         lock.innerHTML = canOpen ? DOOR_KEY_SVG : DOOR_LOCK_SVG;
         card.append(lock);
 
-        if (canOpen) {
-            card.classList.add("is-key-ready");
-            card.setAttribute("role", "button");
-            card.tabIndex = 0;
-            card.addEventListener("click", () => openUnlockConfirm(word));
-            card.addEventListener("keydown", event => {
-                if (event.key !== "Enter" && event.key !== " ") return;
-                event.preventDefault();
-                openUnlockConfirm(word);
-            });
-        }
+        if (canOpen) card.classList.add("is-key-ready");
+
+        // Every locked card is clickable, even with 0 keys - the confirm
+        // dialog itself tells the player they need to buy one instead of
+        // the card just doing nothing (see openUnlockConfirm/setNoKeysState).
+        card.setAttribute("role", "button");
+        card.tabIndex = 0;
+        card.addEventListener("click", () => openUnlockConfirm(word, keysHeld));
+        card.addEventListener("keydown", event => {
+            if (event.key !== "Enter" && event.key !== " ") return;
+            event.preventDefault();
+            openUnlockConfirm(word, keysHeld);
+        });
         return card;
     }
 
@@ -507,10 +504,11 @@ function setupUnlockConfirm() {
     el.unlockConfirmBtn?.addEventListener("click", confirmUnlock);
 }
 
-function openUnlockConfirm(word) {
+function openUnlockConfirm(word, keysHeld) {
     if (!el.unlockOverlay || !word) return;
 
     pendingUnlockWord = word;
+    pendingKeysHeld = keysHeld || 0;
     if (el.unlockBody) {
         el.unlockBody.textContent = tr("deck.confirmUnlockBody", {
             word: word.script,
@@ -518,9 +516,22 @@ function openUnlockConfirm(word) {
         });
     }
     setUnlockError("");
+    setNoKeysState(pendingKeysHeld <= 0);
 
     el.unlockOverlay.hidden = false;
     requestAnimationFrame(() => el.unlockOverlay.classList.add("is-open"));
+}
+
+// With 0 keys, swap the Unlock button for a "Go to Shop" link and show an
+// explanatory note instead - the player can still open the dialog and see
+// why they can't unlock yet, rather than the card doing nothing at all.
+function setNoKeysState(hasNoKeys) {
+    if (el.unlockNoKeys) {
+        el.unlockNoKeys.textContent = hasNoKeys ? tr("deck.noKeysMessage") : "";
+        el.unlockNoKeys.hidden = !hasNoKeys;
+    }
+    if (el.unlockConfirmBtn) el.unlockConfirmBtn.hidden = hasNoKeys;
+    if (el.unlockShopLink) el.unlockShopLink.hidden = !hasNoKeys;
 }
 
 // `force` bypasses the in-flight guard for the programmatic close after a
@@ -541,7 +552,7 @@ function setUnlockError(message) {
 }
 
 async function confirmUnlock() {
-    if (isConfirmingUnlock || !pendingCourseKey || !pendingUnlockWord) return;
+    if (isConfirmingUnlock || !pendingCourseKey || !pendingUnlockWord || pendingKeysHeld <= 0) return;
 
     const wordSuffix = getWordSuffix(pendingUnlockWord.id);
     isConfirmingUnlock = true;

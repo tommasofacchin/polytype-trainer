@@ -16,6 +16,11 @@ module.exports = withAuth(async (data, token) => {
     throw new ApiError(422, "A session needs at least one correct answer to update progress.");
   }
 
+  // Small direct coin reward for any completed session - kept low on
+  // purpose so daily missions (see MISSION_POOL) are clearly the bigger
+  // payout, not something a single round can match.
+  const sessionCoins = Math.max(2, Math.round(xpEarned / 15));
+
   return db.runTransaction(async transaction => {
     const userRef = db.doc(`users/${token.uid}`);
     const courseRef = userRef.collection("courses").doc(session.courseId);
@@ -90,7 +95,7 @@ module.exports = withAuth(async (data, token) => {
     updatedDailyStats.missionsCompleted = missionsCompleted;
 
     const previousCoins = existingUser?.coins || 0;
-    const coins = previousCoins + coinsEarned;
+    const coins = previousCoins + coinsEarned + sessionCoins;
 
     const now = FieldValue.serverTimestamp();
     const userData = {
@@ -198,9 +203,10 @@ module.exports = withAuth(async (data, token) => {
       globalLevel,
       course: courseResponse,
       streak,
-      keys: getKeysHeld(courseXp, unlockedWords.length, purchasedKeys),
+      keys: getKeysHeld(purchasedKeys),
       coins,
       coinsEarned,
+      sessionCoins,
       completedMissions: completedMissions.map(mission => ({ id: mission.id, coinReward: mission.coinReward, labelKey: mission.labelKey })),
       newBadges: newBadges.map(badge => ({ id: badge.id }))
     };

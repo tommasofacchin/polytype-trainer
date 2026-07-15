@@ -254,6 +254,10 @@
         const activeTab = document.body.dataset.tab || "";
 
         mount.innerHTML = `
+            <a href="index.html" class="app-shell-logo" aria-label="${tr("app.name")}">
+                <span class="app-shell-logo-mark">P</span>
+                <span class="app-shell-logo-word">polytype</span>
+            </a>
             <nav class="app-shell-nav">
                 ${TABS.map(tabItem => `
                     <a class="app-shell-nav-item${tabItem.id === activeTab ? " is-active" : ""}${tabItem.desktopOnly ? " app-shell-nav-item-desktop-only" : ""}" href="${tabItem.href}">

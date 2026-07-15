@@ -1,7 +1,6 @@
 const PROFILE_KEY = "polytype-profile";
 const LANGUAGE_KEY = "polytype-language";
 const FALLBACK_LANGUAGE = "norwegian";
-const xpPerDrop = 50; // keep in sync with XP_PER_DROP in api/_lib.js
 const maxKeys = 5; // keep in sync with MAX_KEYS in api/_lib.js
 const keyPriceCoins = 100; // keep in sync with KEY_PRICE_COINS in api/_lib.js
 
@@ -168,16 +167,9 @@ function getUnlockedWordSuffixesFromPrefix(categoryIndex, categoryUnlocked) {
     return unlocked;
 }
 
-// Mirrors getEarnedWordTotal()/getKeysHeld() in api/_lib.js.
-function getEarnedWordTotal(courseXp, unlockedCount) {
-    const totalWords = getSortedCategories().reduce((sum, category) => sum + category.size, 0);
-    const xpEarned = Math.min(totalWords, Math.floor(courseXp / xpPerDrop));
-    return Math.max(unlockedCount, xpEarned);
-}
-
-function getKeysHeld(courseXp, unlockedCount, purchasedKeys) {
-    const earnedKeys = Math.max(0, getEarnedWordTotal(courseXp, unlockedCount) - unlockedCount);
-    return Math.max(0, Math.min(maxKeys, earnedKeys + (purchasedKeys || 0)));
+// Mirrors getKeysHeld() in api/_lib.js.
+function getKeysHeld(purchasedKeys) {
+    return Math.max(0, Math.min(maxKeys, purchasedKeys || 0));
 }
 
 function getCourseProgress() {
@@ -251,7 +243,7 @@ function renderShop() {
     if (el.coinBalance) el.coinBalance.textContent = String(coins);
 
     const courseProgress = getCourseProgress();
-    const keysHeld = getKeysHeld(courseProgress.xp, courseProgress.unlockedCount, courseProgress.purchasedKeys);
+    const keysHeld = getKeysHeld(courseProgress.purchasedKeys);
 
     if (el.keysHeldText) {
         el.keysHeldText.textContent = tr("shop.keysHeldForLanguage", {
