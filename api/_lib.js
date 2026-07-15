@@ -13,6 +13,11 @@ const XP_PER_DROP = 50;
 // A brand-new course needs a handful of words unlocked before any XP exists,
 // otherwise there is nothing to practice to earn that first XP at all.
 const STARTER_WORDS = 5;
+// Words are earned automatically by XP but only become playable once the
+// player explicitly confirms them (see api/unlock-word.js). At most this many
+// can sit "earned but unconfirmed" at once - earning more XP beyond that
+// point doesn't create additional pending slots until one is confirmed.
+const MAX_PENDING_WORDS = 5;
 const COURSE_LEVEL_CAPS = {
   chinese: 60,
   german: 60,
@@ -266,22 +271,14 @@ function getUnlockedWordCount(categoryIndex, categoryUnlocked) {
   return total + Math.max(0, categoryUnlocked);
 }
 
-// Walks a course's category/drop progress forward to match the XP it has
-// earned so far. Categories unlock in sequence: a category only starts
-// dropping words once every earlier category is fully unlocked. `isNewCourse`
-// grants the starter baseline as the walk's starting point (only for a
-// course's very first save) so a fresh course isn't stuck with zero words.
-function advanceCategoryProgress(categoryIndex, categoryUnlocked, courseXp, isNewCourse) {
-  const initialUnlocked = isNewCourse
-    ? Math.min(STARTER_WORDS, CATEGORY_SIZES[0] || 0)
-    : categoryUnlocked;
-  const previousTotal = getUnlockedWordCount(categoryIndex, initialUnlocked);
-  const targetTotal = Math.min(TOTAL_CATEGORY_WORDS, Math.floor(courseXp / XP_PER_DROP));
-  const newlyUnlocked = Math.max(0, targetTotal - previousTotal);
-
+// Walks a course's category/drop progress forward by exactly `wordsToAdd`
+// words, in the fixed per-category order. Categories unlock in sequence: a
+// category only starts dropping words once every earlier category is fully
+// unlocked.
+function stepCategoryProgress(categoryIndex, categoryUnlocked, wordsToAdd) {
   let index = Math.min(categoryIndex, CATEGORY_SIZES.length - 1);
-  let unlocked = initialUnlocked;
-  let remaining = newlyUnlocked;
+  let unlocked = categoryUnlocked;
+  let remaining = Math.max(0, wordsToAdd);
 
   while (remaining > 0 && index < CATEGORY_SIZES.length) {
     const capacity = CATEGORY_SIZES[index] - unlocked;
@@ -303,9 +300,40 @@ function advanceCategoryProgress(categoryIndex, categoryUnlocked, courseXp, isNe
   return {
     categoryIndex: index,
     categoryUnlocked: unlocked,
-    totalWordsUnlocked: getUnlockedWordCount(index, unlocked),
-    newlyUnlocked
+    totalWordsUnlocked: getUnlockedWordCount(index, unlocked)
   };
+}
+
+// Retained as a reference implementation of the old fully-automatic unlock
+// algorithm (XP alone decided how many words were unlocked). No longer
+// called by complete-practice-session - unlocking now requires an explicit
+// confirmation via api/unlock-word.js. See getEarnedWordTotal/
+// getPendingWordCount for the new "earned but not yet confirmed" model.
+function advanceCategoryProgress(categoryIndex, categoryUnlocked, courseXp, isNewCourse) {
+  const initialUnlocked = isNewCourse
+    ? Math.min(STARTER_WORDS, CATEGORY_SIZES[0] || 0)
+    : categoryUnlocked;
+  const previousTotal = getUnlockedWordCount(categoryIndex, initialUnlocked);
+  const targetTotal = Math.min(TOTAL_CATEGORY_WORDS, Math.floor(courseXp / XP_PER_DROP));
+  const newlyUnlocked = Math.max(0, targetTotal - previousTotal);
+  const stepped = stepCategoryProgress(categoryIndex, initialUnlocked, newlyUnlocked);
+
+  return { ...stepped, newlyUnlocked };
+}
+
+// How many words the course's XP alone would justify unlocking, floored at
+// the count already confirmed (a brand-new course's fixed starter grant can
+// exceed what its XP alone would justify).
+function getEarnedWordTotal(courseXp, confirmedTotal) {
+  const xpEarned = Math.min(TOTAL_CATEGORY_WORDS, Math.floor(courseXp / XP_PER_DROP));
+  return Math.max(confirmedTotal, xpEarned);
+}
+
+// How many earned-but-unconfirmed words are waiting for the player to
+// explicitly unlock, capped at MAX_PENDING_WORDS - earning more XP beyond
+// that cap doesn't grow this further until a pending word is confirmed.
+function getPendingWordCount(courseXp, confirmedTotal) {
+  return Math.max(0, Math.min(MAX_PENDING_WORDS, getEarnedWordTotal(courseXp, confirmedTotal) - confirmedTotal));
 }
 
 function getXpForLevel(level) {
@@ -487,6 +515,9 @@ module.exports = {
   getCourseLevel,
   getUnlockedWordCount,
   advanceCategoryProgress,
+  stepCategoryProgress,
+  getEarnedWordTotal,
+  getPendingWordCount,
   normalizeCourseId,
   normalizeUid,
   normalizeHandle,
@@ -512,6 +543,7 @@ module.exports = {
   TOTAL_CATEGORY_WORDS,
   XP_PER_DROP,
   STARTER_WORDS,
+  MAX_PENDING_WORDS,
   GAME_TYPES,
   CHEST_COIN_REWARD,
   CHEST_XP_REWARD,

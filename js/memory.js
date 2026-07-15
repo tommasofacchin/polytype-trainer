@@ -6,6 +6,8 @@
     const LANGUAGE_KEY = "polytype-language";
     const SFX_MUTED_KEY = "polytype-sfx-muted";
     const FALLBACK_LANGUAGE = "norwegian";
+    const xpPerDrop = 50; // keep in sync with XP_PER_DROP in api/_lib.js
+    const maxPendingWords = 5; // keep in sync with MAX_PENDING_WORDS in api/_lib.js
     const LANGUAGE_FLAGS = {
         chinese: "assets/flags/china.svg",
         german: "assets/flags/germany.svg",
@@ -463,13 +465,32 @@
         // baseline rather than zero (mirrors main.js) so a course the player
         // has never opened in the Trainer still has something to play here.
         if (!course) {
-            return { categoryIndex: 0, categoryUnlocked: getStarterWordCount() };
+            return { categoryIndex: 0, categoryUnlocked: getStarterWordCount(), xp: 0 };
         }
 
         return {
             categoryIndex: Math.max(0, Math.trunc(Number(course.categoryIndex) || 0)),
-            categoryUnlocked: Math.max(0, Math.trunc(Number(course.categoryUnlocked) || 0))
+            categoryUnlocked: Math.max(0, Math.trunc(Number(course.categoryUnlocked) || 0)),
+            xp: Math.max(0, Number(course.xp) || 0)
         };
+    }
+
+    // Mirrors getEarnedWordTotal()/getPendingWordCount() in api/_lib.js - how
+    // many words are earned-but-unconfirmed, waiting on the Deck page.
+    function getEarnedWordTotal(courseXp, confirmedTotal) {
+        const totalWords = [...(window.POLYTYPE_CATEGORIES || [])].reduce((sum, category) => sum + category.size, 0);
+        const xpEarned = Math.min(totalWords, Math.floor(courseXp / xpPerDrop));
+        return Math.max(confirmedTotal, xpEarned);
+    }
+
+    function getPendingWordCount(courseXp, confirmedTotal) {
+        return Math.max(0, Math.min(maxPendingWords, getEarnedWordTotal(courseXp, confirmedTotal) - confirmedTotal));
+    }
+
+    function getCoursePendingCount(deckId) {
+        const progress = getCategoryProgress(deckId);
+        const confirmedTotal = getUnlockedWordSuffixes(progress.categoryIndex, progress.categoryUnlocked).size;
+        return getPendingWordCount(progress.xp, confirmedTotal);
     }
 
     function getStarterWordCount() {
@@ -782,8 +803,7 @@
 
         el.resultSaveStatus.textContent = tr("trainer.savingProgress");
 
-        const { categoryIndex: prevCategoryIndex, categoryUnlocked: prevCategoryUnlocked } = getCategoryProgress();
-        const previousUnlockedSuffixes = getUnlockedWordSuffixes(prevCategoryIndex, prevCategoryUnlocked);
+        const previousPending = getCoursePendingCount(activeDeckMeta?.id);
 
         const payload = {
             courseId: activeLanguage,
@@ -801,13 +821,15 @@
                 : (await firebaseClient.completePracticeSession(payload))?.data;
             el.resultSaveStatus.textContent = tr("trainer.progressSaved");
 
-            if (progress?.newlyUnlockedWords > 0 && progress.course) {
-                const newUnlockedSuffixes = getUnlockedWordSuffixes(progress.course.categoryIndex, progress.course.categoryUnlocked);
-                const newWords = state.vocab.filter(word => {
-                    const suffix = getWordSuffix(word.id);
-                    return newUnlockedSuffixes.has(suffix) && !previousUnlockedSuffixes.has(suffix);
-                });
-                if (newWords.length) celebrateWordDrop(newWords, getSortedCategories()[progress.course.categoryIndex] || null);
+            if (progress?.course) {
+                const newPending = typeof progress.pendingWords === "number"
+                    ? progress.pendingWords
+                    : getPendingWordCount(
+                        progress.course.xp || 0,
+                        getUnlockedWordSuffixes(progress.course.categoryIndex, progress.course.categoryUnlocked).size
+                    );
+                const gained = Math.max(0, newPending - previousPending);
+                if (gained > 0) notifyPendingWords(gained);
             }
 
             if (progress?.completedMissions?.length) {
@@ -818,35 +840,25 @@
         }
     }
 
-    function celebrateWordDrop(newWords, category) {
+    function notifyPendingWords(count) {
         document.querySelector(".drop-toast")?.remove();
 
         const toast = document.createElement("div");
-        toast.className = "drop-toast";
+        toast.className = "drop-toast drop-toast-notice";
         toast.innerHTML = `
             <div class="drop-toast-head">
-                <span class="drop-toast-icon">\u{1F381}</span>
+                <span class="drop-toast-icon">\u{1F514}</span>
                 <div class="drop-toast-heading">
                     <strong></strong>
-                    <span></span>
+                    <a href="deck.html"></a>
                 </div>
             </div>
-            <div class="levelup-unlocks-grid drop-toast-grid"></div>
         `;
-        toast.querySelector("strong").textContent = tr("trainer.newWordsUnlocked", {
-            count: newWords.length,
-            word: newWords.length === 1 ? tr("common.word") : tr("common.words")
+        toast.querySelector("strong").textContent = tr("trainer.newWordsReady", {
+            count,
+            word: count === 1 ? tr("common.word") : tr("common.words")
         });
-        toast.querySelector(".drop-toast-heading span").textContent = category ? tr(category.labelKey) : "";
-
-        const grid = toast.querySelector(".drop-toast-grid");
-        newWords.forEach(word => {
-            const chip = document.createElement("span");
-            chip.className = "levelup-unlock-chip";
-            chip.textContent = word.script;
-            if (word.meaning) chip.title = word.meaning;
-            grid.appendChild(chip);
-        });
+        toast.querySelector(".drop-toast-heading a").textContent = `${tr("trainer.goToDeck")} →`;
 
         document.body.appendChild(toast);
         window.setTimeout(() => {

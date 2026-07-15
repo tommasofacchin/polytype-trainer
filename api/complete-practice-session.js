@@ -2,8 +2,10 @@ const { db, FieldValue, Timestamp } = require("./_firebase");
 const {
   withAuth, getAuthProfile, buildDefaultUserProfile, buildPublicProfile,
   normalizeSessionPayload, calculateSessionXp, calculateStreakUpdate,
-  getLevelInfo, getCourseLevel, advanceCategoryProgress, getDateKeyForTimezone, normalizeTimezone,
+  getLevelInfo, getCourseLevel, getUnlockedWordCount, getPendingWordCount,
+  getDateKeyForTimezone, normalizeTimezone,
   getNewlyCompletedMissions, evaluateNewBadges,
+  STARTER_WORDS, CATEGORY_SIZES,
   ApiError
 } = require("./_lib");
 
@@ -51,12 +53,21 @@ module.exports = withAuth(async (data, token) => {
     const previousCategoryUnlocked = courseSnap.exists
       ? courseSnap.data().categoryUnlocked || 0
       : existingCourse?.categoryUnlocked || 0;
-    const categoryProgress = advanceCategoryProgress(
-      previousCategoryIndex,
-      previousCategoryUnlocked,
-      courseXp,
-      !hasExistingCourse
-    );
+    // Earning XP no longer auto-unlocks words - categoryIndex/categoryUnlocked
+    // ("confirmed" words) only ever change here once, as a fixed starter
+    // grant on a brand-new course. Any further unlocking happens exclusively
+    // through the player's explicit confirmation in api/unlock-word.js.
+    const categoryProgress = hasExistingCourse
+      ? {
+          categoryIndex: previousCategoryIndex,
+          categoryUnlocked: previousCategoryUnlocked,
+          totalWordsUnlocked: getUnlockedWordCount(previousCategoryIndex, previousCategoryUnlocked)
+        }
+      : {
+          categoryIndex: 0,
+          categoryUnlocked: Math.min(STARTER_WORDS, CATEGORY_SIZES[0] || 0),
+          totalWordsUnlocked: Math.min(STARTER_WORDS, CATEGORY_SIZES[0] || 0)
+        };
     const streak = calculateStreakUpdate({
       currentStreak: existingUser?.currentStreak || 0,
       longestStreak: existingUser?.longestStreak || 0,
@@ -206,7 +217,7 @@ module.exports = withAuth(async (data, token) => {
       course: courseResponse,
       streak,
       unlockedWords: courseData.wordsUnlocked,
-      newlyUnlockedWords: categoryProgress.newlyUnlocked,
+      pendingWords: getPendingWordCount(courseXp, categoryProgress.totalWordsUnlocked),
       coins,
       rupees,
       coinsEarned,

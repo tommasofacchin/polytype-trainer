@@ -33,8 +33,7 @@ const state = {
     progressSaved: false,
     saveInFlight: false,
     savePromise: null,
-    pendingUnlockedWords: [],
-    pendingUnlockedCategory: null,
+    pendingNewlyEarnedWords: 0,
     pendingCompletedMissions: []
 };
 
@@ -96,6 +95,7 @@ const audioBaseUrl = stripTrailingSlash(window.POLYTYPE_AUDIO_BASE_URL || "");
 const audioPrefix = stripSlashes(window.POLYTYPE_AUDIO_PREFIX || "audio/v1");
 const audioPreloadConcurrency = 4;
 const xpPerDrop = 50; // keep in sync with XP_PER_DROP in api/_lib.js / functions/index.js
+const maxPendingWords = 5; // keep in sync with MAX_PENDING_WORDS in api/_lib.js
 const higherUnlockedLevelDrawBoost = 1;
 const answerTimeoutMs = 10000;
 const timedAnswerTimeoutMs = 5000;
@@ -913,8 +913,7 @@ function resetState() {
     state.progressSaved = false;
     state.saveInFlight = false;
     state.savePromise = null;
-    state.pendingUnlockedWords = [];
-    state.pendingUnlockedCategory = null;
+    state.pendingNewlyEarnedWords = 0;
     state.pendingCompletedMissions = [];
 }
 
@@ -1424,12 +1423,20 @@ function awardComboPoints() {
     state.sessionXp += points;
 
     if (!isFirebaseSignedIn()) {
+        const previousPending = getCoursePendingCount(getCurrentCourseProgress());
         addLocalCourseXp(points);
         saveProfile();
         renderProfile();
+        const newPending = getCoursePendingCount(getCurrentCourseProgress());
+        state.pendingNewlyEarnedWords += Math.max(0, newPending - previousPending);
     }
 }
 
+// Earning XP no longer auto-unlocks words, locally or on the server -
+// categoryIndex/categoryUnlocked ("confirmed" words) only ever change here
+// once, as a fixed starter grant on a brand-new course. Any further
+// unlocking happens exclusively through the player's explicit confirmation
+// on the Deck page (see js/deck.js), mirroring api/complete-practice-session.js.
 function addLocalCourseXp(points) {
     const courseId = getCurrentCourseKey();
     const currentCourse = getCurrentCourseProgress();
@@ -1438,12 +1445,17 @@ function addLocalCourseXp(points) {
     const levelInfo = getLevelInfo(xp);
     const previousCategoryIndex = Math.max(0, Math.trunc(Number(currentCourse?.categoryIndex) || 0));
     const previousCategoryUnlocked = Math.max(0, Math.trunc(Number(currentCourse?.categoryUnlocked) || 0));
-    const categoryProgress = advanceLocalCategoryProgress(
-        previousCategoryIndex,
-        previousCategoryUnlocked,
-        xp,
-        isNewCourse
-    );
+    const categoryProgress = isNewCourse
+        ? {
+            categoryIndex: 0,
+            categoryUnlocked: getStarterWordCount(),
+            totalWordsUnlocked: getStarterWordCount()
+        }
+        : {
+            categoryIndex: previousCategoryIndex,
+            categoryUnlocked: previousCategoryUnlocked,
+            totalWordsUnlocked: getUnlockedWordCountForCategoryState(previousCategoryIndex, previousCategoryUnlocked)
+        };
 
     profile.xp = Math.max(0, Number(profile.xp) || 0) + points;
     profile.courses = {
@@ -1461,43 +1473,6 @@ function addLocalCourseXp(points) {
     };
 }
 
-// Mirrors advanceCategoryProgress() in api/_lib.js / functions/index.js for the
-// signed-out/local-only progress path (no server round trip available there).
-function advanceLocalCategoryProgress(categoryIndex, categoryUnlocked, courseXp, isNewCourse) {
-    const categories = getSortedCategories();
-    const totalWords = categories.reduce((sum, category) => sum + category.size, 0);
-    const initialUnlocked = isNewCourse ? getStarterWordCount() : categoryUnlocked;
-    const previousTotal = getUnlockedWordCountForCategoryState(categoryIndex, initialUnlocked);
-    const targetTotal = Math.min(totalWords, Math.floor(courseXp / xpPerDrop));
-
-    let index = Math.min(categoryIndex, categories.length - 1);
-    let unlocked = initialUnlocked;
-    let remaining = Math.max(0, targetTotal - previousTotal);
-
-    while (remaining > 0 && index < categories.length) {
-        const capacity = categories[index].size - unlocked;
-        if (remaining < capacity) {
-            unlocked += remaining;
-            remaining = 0;
-        } else {
-            remaining -= capacity;
-            index += 1;
-            unlocked = 0;
-        }
-    }
-
-    if (index >= categories.length) {
-        index = categories.length - 1;
-        unlocked = categories[index].size;
-    }
-
-    return {
-        categoryIndex: index,
-        categoryUnlocked: unlocked,
-        totalWordsUnlocked: getUnlockedWordCountForCategoryState(index, unlocked)
-    };
-}
-
 function getUnlockedWordCountForCategoryState(categoryIndex, categoryUnlocked) {
     const categories = getSortedCategories();
     let total = 0;
@@ -1505,6 +1480,33 @@ function getUnlockedWordCountForCategoryState(categoryIndex, categoryUnlocked) {
         total += categories[i].size;
     }
     return total + Math.max(0, categoryUnlocked);
+}
+
+// How many words a course's XP alone would justify unlocking, floored at the
+// count already confirmed (a brand-new course's fixed starter grant can
+// exceed what its XP alone would justify). Mirrors getEarnedWordTotal() in
+// api/_lib.js.
+function getEarnedWordTotal(courseXp, confirmedTotal) {
+    const categories = getSortedCategories();
+    const totalWords = categories.reduce((sum, category) => sum + category.size, 0);
+    const xpEarned = Math.min(totalWords, Math.floor(courseXp / xpPerDrop));
+    return Math.max(confirmedTotal, xpEarned);
+}
+
+// How many earned-but-unconfirmed words are waiting for the player to
+// explicitly unlock, capped at maxPendingWords. Mirrors getPendingWordCount()
+// in api/_lib.js.
+function getPendingWordCount(courseXp, confirmedTotal) {
+    return Math.max(0, Math.min(maxPendingWords, getEarnedWordTotal(courseXp, confirmedTotal) - confirmedTotal));
+}
+
+function getCoursePendingCount(courseProgress) {
+    if (!courseProgress) return 0;
+    const confirmedTotal = getUnlockedWordCountForCategoryState(
+        Math.max(0, Math.trunc(Number(courseProgress.categoryIndex) || 0)),
+        Math.max(0, Math.trunc(Number(courseProgress.categoryUnlocked) || 0))
+    );
+    return getPendingWordCount(Math.max(0, Number(courseProgress.xp) || 0), confirmedTotal);
 }
 
 function getComboMultiplier(streak) {
@@ -1656,11 +1658,10 @@ function celebrateLevelUp(level) {
     document.body.appendChild(overlay);
 }
 
-function flushPendingWordDrop() {
-    if (!state.pendingUnlockedWords.length) return;
-    celebrateWordDrop(state.pendingUnlockedWords, state.pendingUnlockedCategory);
-    state.pendingUnlockedWords = [];
-    state.pendingUnlockedCategory = null;
+function flushPendingWordNotice() {
+    if (!state.pendingNewlyEarnedWords) return;
+    notifyPendingWords(state.pendingNewlyEarnedWords);
+    state.pendingNewlyEarnedWords = 0;
 }
 
 function flushPendingMissionCelebration() {
@@ -1670,47 +1671,37 @@ function flushPendingMissionCelebration() {
     return window.PolytypeMissionCelebrate?.show?.(missions) || Promise.resolve();
 }
 
-function celebrateWordDrop(newWords, category) {
-    if (!newWords.length) return;
+function notifyPendingWords(count) {
+    if (!count) return;
 
     document.querySelector(".drop-toast")?.remove();
 
     const toast = document.createElement("div");
-    toast.className = "drop-toast";
+    toast.className = "drop-toast drop-toast-notice";
 
     const header = document.createElement("div");
     header.className = "drop-toast-head";
 
     const icon = document.createElement("span");
     icon.className = "drop-toast-icon";
-    icon.textContent = "\u{1F381}";
+    icon.textContent = "\u{1F514}";
 
     const heading = document.createElement("div");
     heading.className = "drop-toast-heading";
 
     const title = document.createElement("strong");
-    title.textContent = tr("trainer.newWordsUnlocked", {
-        count: newWords.length,
-        word: newWords.length === 1 ? tr("common.word") : tr("common.words")
+    title.textContent = tr("trainer.newWordsReady", {
+        count,
+        word: count === 1 ? tr("common.word") : tr("common.words")
     });
 
-    const subtitle = document.createElement("span");
-    subtitle.textContent = category ? tr(category.labelKey) : "";
+    const subtitle = document.createElement("a");
+    subtitle.href = "deck.html";
+    subtitle.textContent = `${tr("trainer.goToDeck")} →`;
 
     heading.append(title, subtitle);
     header.append(icon, heading);
-
-    const grid = document.createElement("div");
-    grid.className = "levelup-unlocks-grid drop-toast-grid";
-    newWords.forEach(word => {
-        const chip = document.createElement("span");
-        chip.className = "levelup-unlock-chip";
-        chip.textContent = word.script;
-        if (word.meaning) chip.title = word.meaning;
-        grid.appendChild(chip);
-    });
-
-    toast.append(header, grid);
+    toast.append(header);
     document.body.appendChild(toast);
 
     window.setTimeout(() => {
@@ -1807,7 +1798,7 @@ async function endSession() {
     renderProfile();
     window.PolytypeGameState?.refresh?.();
     await flushPendingMissionCelebration();
-    flushPendingWordDrop();
+    flushPendingWordNotice();
 }
 
 function hideSessionResult() {
@@ -1853,11 +1844,7 @@ async function saveCurrentSessionProgress() {
     state.saveInFlight = true;
     if (isAnyResultVisible()) setResultSaveStatus(tr("trainer.savingProgress"));
 
-    const previousCategoryProgress = getCurrentCategoryProgress();
-    const previousUnlockedSuffixes = getUnlockedWordSuffixes(
-        previousCategoryProgress.categoryIndex,
-        previousCategoryProgress.categoryUnlocked
-    );
+    const previousPending = getCoursePendingCount(getCurrentCourseProgress());
 
     state.savePromise = (async () => {
         const result = await firebaseClient.completePracticeSession(payload);
@@ -1884,24 +1871,18 @@ async function saveCurrentSessionProgress() {
             // coin/rupee counters only refresh once play has actually paused.
             if (!isActivelyPlayingSession()) window.PolytypeGameState?.refresh?.();
 
-            if (progress.newlyUnlockedWords > 0 && progress.course?.courseId === getCurrentCourseKey()) {
-                const newUnlockedSuffixes = getUnlockedWordSuffixes(
-                    progress.course.categoryIndex,
-                    progress.course.categoryUnlocked
-                );
-                const newWords = state.fullDeck.filter(word => {
-                    const suffix = getWordSuffix(word.id);
-                    return newUnlockedSuffixes.has(suffix) && !previousUnlockedSuffixes.has(suffix);
-                });
+            if (progress.course?.courseId === getCurrentCourseKey()) {
+                const newPending = typeof progress.pendingWords === "number"
+                    ? progress.pendingWords
+                    : getCoursePendingCount(progress.course);
+                const gained = Math.max(0, newPending - previousPending);
 
-                if (newWords.length) {
-                    scheduleAudioPreload(newWords);
-                    // Accumulate rather than celebrate immediately - a session
+                if (gained > 0) {
+                    // Accumulate rather than notify immediately - a session
                     // can flush progress multiple times mid-play, and the
                     // reveal only happens once, at the end (see endSession).
-                    state.pendingUnlockedWords.push(...newWords);
-                    state.pendingUnlockedCategory = getSortedCategories()[progress.course.categoryIndex] || state.pendingUnlockedCategory;
-                    if (!isActivelyPlayingSession()) flushPendingWordDrop();
+                    state.pendingNewlyEarnedWords += gained;
+                    if (!isActivelyPlayingSession()) flushPendingWordNotice();
                 }
             }
 

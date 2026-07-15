@@ -27,6 +27,7 @@
         signOut,
         isSignedIn,
         completePracticeSession,
+        unlockWord,
         setUserHandle,
         setDisplayName,
         uploadProfileAvatar,
@@ -151,6 +152,22 @@
             ...payload,
             timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
         });
+        const progress = result.data;
+
+        if (progress) {
+            state.profile = applyProgressToProfile(state.profile, progress);
+            syncProfileToLocalStorage(state.profile);
+            notify();
+        }
+
+        return result;
+    }
+
+    async function unlockWord(courseId) {
+        assertConfigured();
+        if (!state.user) throw new Error(tr("auth.signInRequired"));
+
+        const result = await callApi("unlock-word", { courseId });
         const progress = result.data;
 
         if (progress) {
