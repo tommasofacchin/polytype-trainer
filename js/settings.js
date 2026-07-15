@@ -3,6 +3,7 @@ const supportedAvatarTypes = new Set(["image/jpeg", "image/png", "image/webp"]);
 const maxSourceAvatarBytes = 10 * 1024 * 1024;
 const maxUploadAvatarBytes = 2 * 1024 * 1024;
 const avatarCanvasSize = 512;
+const sfxMutedKey = "polytype-sfx-muted";
 let isSavingHandle = false;
 let isSavingName = false;
 let isUploadingAvatar = false;
@@ -15,12 +16,37 @@ document.addEventListener("DOMContentLoaded", () => {
     renderFromCache();
     setupProfileControls();
     setupFirebaseSync();
+    setupSoundToggle();
 
     document.getElementById("settings-logout-btn")?.addEventListener("click", async () => {
         await window.PolytypeFirebase?.signOut?.();
         window.location.href = "auth.html";
     });
 });
+
+function setupSoundToggle() {
+    const button = document.getElementById("settings-sound-toggle");
+    if (!button) return;
+
+    let muted = false;
+    try {
+        muted = localStorage.getItem(sfxMutedKey) === "true";
+    } catch (error) {
+        muted = false;
+    }
+    button.setAttribute("aria-pressed", String(!muted));
+
+    button.addEventListener("click", () => {
+        const soundOn = button.getAttribute("aria-pressed") === "true";
+        muted = soundOn;
+        button.setAttribute("aria-pressed", String(!muted));
+        try {
+            localStorage.setItem(sfxMutedKey, String(muted));
+        } catch (error) {
+            // localStorage may be unavailable in private browsing.
+        }
+    });
+}
 
 function readCachedProfile() {
     try {

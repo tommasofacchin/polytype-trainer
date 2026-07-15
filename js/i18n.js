@@ -358,6 +358,11 @@
 
             "settings.title": "Settings",
             "settings.pageTitle": "Settings - Polytype Trainer",
+            "settings.sectionProfile": "Profile",
+            "settings.sectionPreferences": "Preferences",
+            "settings.sectionSession": "Session",
+            "settings.soundEffects": "Sound effects",
+            "settings.soundEffectsHelp": "Play a sound on correct and incorrect answers.",
 
             "auth.or": "OR",
             "auth.continueWithGoogle": "Continue with Google",
@@ -720,6 +725,11 @@
 
             "settings.title": "Impostazioni",
             "settings.pageTitle": "Impostazioni - Polytype Trainer",
+            "settings.sectionProfile": "Profilo",
+            "settings.sectionPreferences": "Preferenze",
+            "settings.sectionSession": "Sessione",
+            "settings.soundEffects": "Effetti sonori",
+            "settings.soundEffectsHelp": "Riproduci un suono per le risposte corrette e sbagliate.",
 
             "auth.or": "OPPURE",
             "auth.continueWithGoogle": "Continua con Google",

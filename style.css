@@ -3904,3 +3904,236 @@ body {
     font-weight: 900;
     font-size: 15px;
 }
+
+/* ---- Settings page ---------------------------------------------------------- */
+
+.settings-avatar-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.settings-avatar-wrap {
+    position: relative;
+    width: 84px;
+    margin-bottom: 10px;
+}
+
+.settings-avatar-wrap .profile-avatar {
+    width: 84px;
+    height: 84px;
+    font-size: 32px;
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 24%, transparent);
+}
+
+.settings-avatar-edit-btn {
+    position: absolute;
+    right: -2px;
+    bottom: -2px;
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 3px solid var(--bg);
+    border-radius: var(--radius-pill);
+    background: var(--accent);
+    color: var(--accent-on);
+    cursor: pointer;
+    transition: transform var(--transition), background var(--transition);
+}
+
+.settings-avatar-edit-btn:hover, .settings-avatar-edit-btn:focus-visible {
+    background: var(--accent-hover);
+}
+
+.settings-avatar-edit-btn:active {
+    transform: scale(0.94);
+}
+
+.settings-avatar-name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 19px;
+    color: var(--text);
+    margin: 2px 0 0;
+}
+
+.settings-avatar-handle {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-faint);
+    margin: 2px 0 0;
+}
+
+.settings-section {
+    margin-bottom: 22px;
+}
+
+.settings-section-title {
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    margin: 0 2px 8px;
+}
+
+.settings-card {
+    background: color-mix(in srgb, var(--surface) 84%, var(--bg-soft));
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+}
+
+.settings-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+}
+
+.settings-row + .settings-row {
+    border-top: 1px solid var(--border);
+}
+
+.settings-row-icon {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: var(--accent-soft);
+    color: var(--accent);
+}
+
+.settings-row-body {
+    flex: 1;
+    min-width: 0;
+    display: grid;
+    gap: 2px;
+}
+
+.settings-row-body form {
+    display: flex;
+    gap: 8px;
+}
+
+.settings-row-label {
+    font-weight: 800;
+    font-size: 13px;
+    color: var(--text);
+}
+
+.settings-row-help {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-faint);
+    margin: 0;
+}
+
+.settings-input {
+    flex: 1;
+    min-width: 0;
+    box-sizing: border-box;
+    background: var(--bg);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-md);
+    padding: 10px 13px;
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 13px;
+}
+
+.settings-input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+}
+
+.settings-save-btn {
+    padding: 0 16px;
+    font-size: 12px;
+    flex: 0 0 auto;
+}
+
+.settings-status {
+    margin: 8px 2px 0;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-faint);
+    min-height: 15px;
+}
+
+.settings-status[data-tone="success"] {
+    color: var(--accent);
+}
+
+.settings-status[data-tone="error"] {
+    color: var(--danger);
+}
+
+.settings-switch {
+    position: relative;
+    flex: 0 0 auto;
+    width: 44px;
+    height: 26px;
+    padding: 0;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-pill);
+    background: var(--surface-soft);
+    cursor: pointer;
+    transition: background var(--transition), border-color var(--transition);
+}
+
+.settings-switch::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--text-soft);
+    transition: transform var(--transition), background var(--transition);
+}
+
+.settings-switch[aria-pressed="true"] {
+    background: var(--accent);
+    border-color: var(--accent);
+}
+
+.settings-switch[aria-pressed="true"]::after {
+    transform: translateX(18px);
+    background: var(--accent-on);
+}
+
+.settings-logout-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--danger-soft);
+    color: var(--danger);
+    border: 1px solid var(--danger-border);
+    border-radius: var(--radius-lg);
+    padding: 14px;
+    font-family: var(--font-sans);
+    font-weight: 800;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background var(--transition);
+}
+
+.settings-logout-btn:hover, .settings-logout-btn:focus-visible {
+    background: color-mix(in srgb, var(--danger-soft) 70%, var(--danger) 12%);
+}
+
+.settings-logout-btn:active {
+    transform: translateY(1px);
+}

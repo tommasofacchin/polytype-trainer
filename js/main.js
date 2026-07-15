@@ -106,6 +106,7 @@ const errorSfxUrl = "assets/sfx/error1.mp3";
 const errorSfxVolume = 0.22;
 const levelUpSfxUrl = "assets/sfx/levelup2.mp3";
 const levelUpSfxVolume = 0.38;
+const sfxMutedKey = "polytype-sfx-muted";
 let correctSfxAudio = null;
 let errorSfxAudio = null;
 let levelUpSfxAudio = null;
@@ -1396,7 +1397,7 @@ function playLevelUpSfx() {
 }
 
 function playSfx(sourceAudio, volume) {
-    if (!sourceAudio) return;
+    if (!sourceAudio || isSfxMuted()) return;
 
     try {
         const audio = sourceAudio.cloneNode();
@@ -1404,6 +1405,14 @@ function playSfx(sourceAudio, volume) {
         audio.play().catch(() => {});
     } catch {
         // Browsers may block audio until the first user gesture.
+    }
+}
+
+function isSfxMuted() {
+    try {
+        return localStorage.getItem(sfxMutedKey) === "true";
+    } catch {
+        return false;
     }
 }
 
