@@ -37,9 +37,6 @@
     --color-violet-light: #a084ff;
     --color-violet-lighter: #b7a3ff;
     --color-violet-deep: #6b4dff;
-    --color-rupee: #3fd07a;
-    --color-rupee-stroke: #1c9a52;
-    --color-rupee-text: #6fe0a0;
     --color-gold-medal: #ffc73a;
     --color-silver-medal: #c9cdd6;
     --color-bronze-medal: #c98a4b;
@@ -3302,7 +3299,6 @@ body {
 .app-shell-stat svg { flex: 0 0 auto; }
 .app-shell-stat-streak { color: var(--color-streak-light); }
 .app-shell-stat-coin { color: var(--color-gold-text); }
-.app-shell-stat-rupee { color: var(--color-rupee-text); }
 
 .app-shell-identity {
     display: flex;

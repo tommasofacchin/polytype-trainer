@@ -12,7 +12,6 @@
     const ICONS = {
         streak: '<svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M12 2c3 4 5 6 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 1 2 2 2 3 2 0-3-1-5 0-8z"/></svg>',
         coin: '<svg viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="10" fill="#ffc73a"/><circle cx="12" cy="12" r="6.5" fill="none" stroke="#d99a1c" stroke-width="2"/></svg>',
-        rupee: '<svg viewBox="0 0 24 24" width="15" height="15"><path d="M12 2 L18 8 L15 16 L12 22 L9 16 L6 8 Z" fill="#3fd07a" stroke="#1c9a52" stroke-width="1.2" stroke-linejoin="round"/><path d="M12 2 L18 8 L15 16 L12 22 Z" fill="rgba(0,0,0,.14)"/><path d="M12 8 L15 10 L13.5 15 L12 18 L10.5 15 L9 10 Z" fill="rgba(255,255,255,.35)"/></svg>',
         person: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><circle cx="12" cy="9" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6z"/></svg>',
         home: '<svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>',
         games: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><rect x="3" y="4" width="7" height="7" rx="1.6"/><rect x="14" y="4" width="7" height="7" rx="1.6"/><rect x="3" y="14" width="7" height="7" rx="1.6"/><rect x="14" y="14" width="7" height="7" rx="1.6"/></svg>',
@@ -101,7 +100,6 @@
                 <div class="app-shell-stats">
                     <span class="app-shell-stat app-shell-stat-streak" id="app-shell-streak">${ICONS.streak}${cached.dayStreak || 0}</span>
                     <span class="app-shell-stat app-shell-stat-coin" id="app-shell-coins">${ICONS.coin}${cached.coins || 0}</span>
-                    <span class="app-shell-stat app-shell-stat-rupee" id="app-shell-rupees">${ICONS.rupee}${cached.rupees || 0}</span>
                 </div>
                 <div class="app-shell-identity">
                     <div class="language-menu app-shell-lang-menu">
@@ -237,16 +235,14 @@
     }
 
     function renderHeaderStats(gameState) {
-        // gamestate.js's own state defaults coins/rupees to 0 before its first
-        // real fetch resolves - only trust it once `loaded` confirms that
+        // gamestate.js's own state defaults coins to 0 before its first real
+        // fetch resolves - only trust it once `loaded` confirms that
         // happened, otherwise this would stomp the cached value renderHeader()
         // just painted with a false zero.
         if (!gameState.loaded) return;
 
         const coinsEl = document.getElementById("app-shell-coins");
-        const rupeesEl = document.getElementById("app-shell-rupees");
         if (coinsEl && typeof gameState.coins === "number") coinsEl.innerHTML = `${ICONS.coin}${gameState.coins}`;
-        if (rupeesEl && typeof gameState.rupees === "number") rupeesEl.innerHTML = `${ICONS.rupee}${gameState.rupees}`;
     }
 
     function renderBottomNav() {

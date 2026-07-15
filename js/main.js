@@ -1868,7 +1868,7 @@ async function saveCurrentSessionProgress() {
             saveProfile();
             renderProfile();
             // Same "not during the match" rule as the pill: the header's
-            // coin/rupee counters only refresh once play has actually paused.
+            // coin counter only refreshes once play has actually paused.
             if (!isActivelyPlayingSession()) window.PolytypeGameState?.refresh?.();
 
             if (progress.course?.courseId === getCurrentCourseKey()) {

@@ -4,7 +4,6 @@
     const state = {
         loaded: false,
         coins: 0,
-        rupees: 0,
         chestReady: false,
         missions: [],
         friendsPreview: []
@@ -13,9 +12,9 @@
 
     // Seed synchronously from the last successful fetch (if any) so every
     // page that reads gamestate - Home's chest/missions/friends preview, the
-    // header's coin/rupee counters - paints real numbers on the very first
-    // frame instead of the 0/empty defaults while the network round trip
-    // catches up.
+    // header's coin counter - paints real numbers on the very first frame
+    // instead of the 0/empty defaults while the network round trip catches
+    // up.
     restoreFromCache();
 
     window.PolytypeGameState = {
@@ -51,7 +50,6 @@
         try {
             localStorage.setItem(CACHE_KEY, JSON.stringify({
                 coins: state.coins,
-                rupees: state.rupees,
                 chestReady: state.chestReady,
                 missions: state.missions,
                 friendsPreview: state.friendsPreview
@@ -93,7 +91,6 @@
 
         if (progress) {
             state.coins = progress.coins ?? state.coins;
-            state.rupees = progress.rupees ?? state.rupees;
             saveToCache();
             notify();
         }
@@ -105,7 +102,6 @@
     function reset() {
         state.loaded = false;
         state.coins = 0;
-        state.rupees = 0;
         state.chestReady = false;
         state.missions = [];
         state.friendsPreview = [];

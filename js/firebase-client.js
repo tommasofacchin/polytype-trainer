@@ -498,7 +498,6 @@
             streakFreezes: remoteProfile.streakFreezes || 0,
             maxStreakFreezes: remoteProfile.maxStreakFreezes || 2,
             coins: remoteProfile.coins || 0,
-            rupees: remoteProfile.rupees || 0,
             badges: remoteProfile.badges || [],
             courses: remoteProfile.courses || {}
         };
@@ -523,7 +522,6 @@
             longestStreak: progress.streak?.longestStreak ?? currentProfile?.longestStreak ?? 0,
             streakFreezes: progress.streak?.streakFreezes ?? currentProfile?.streakFreezes ?? 0,
             coins: progress.coins ?? currentProfile?.coins ?? 0,
-            rupees: progress.rupees ?? currentProfile?.rupees ?? 0,
             courses: {
                 ...(currentProfile?.courses || {})
             }

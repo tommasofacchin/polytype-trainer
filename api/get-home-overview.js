@@ -37,7 +37,6 @@ module.exports = withAuth(async (data, token) => {
 
   return {
     coins: user.coins || 0,
-    rupees: user.rupees || 0,
     chestReady,
     missions,
     friendsPreview

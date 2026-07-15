@@ -52,16 +52,11 @@ let hasLoadedOverview = false;
 
 function setupAuthGate() {
     const firebaseClient = window.PolytypeFirebase;
-    const notice = document.getElementById("friends-signin-notice");
 
-    if (!firebaseClient) {
-        if (notice) notice.hidden = false;
-        return;
-    }
+    if (!firebaseClient) return;
 
     firebaseClient.onChange(authState => {
         const signedIn = Boolean(authState.user);
-        if (notice) notice.hidden = signedIn;
 
         // onChange fires synchronously with the *unresolved* state before
         // Firebase has even checked whether there's a session - don't treat

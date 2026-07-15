@@ -76,10 +76,6 @@ module.exports = withAuth(async (data, token) => {
       todayKey
     });
 
-    const previousGlobalLevel = existingUser?.globalLevel || 1;
-    const leveledUp = globalLevel > previousGlobalLevel;
-    const rupeesEarned = leveledUp ? (globalLevel - previousGlobalLevel) : 0;
-
     // Compute the *resulting* daily totals ourselves (rather than trusting
     // FieldValue.increment, whose applied value isn't readable within this
     // same transaction) so mission progress/completion can be evaluated now.
@@ -105,9 +101,7 @@ module.exports = withAuth(async (data, token) => {
     updatedDailyStats.missionsCompleted = missionsCompleted;
 
     const previousCoins = existingUser?.coins || 0;
-    const previousRupees = existingUser?.rupees || 0;
     const coins = previousCoins + coinsEarned;
-    const rupees = previousRupees + rupeesEarned;
 
     const now = FieldValue.serverTimestamp();
     const userData = {
@@ -125,7 +119,6 @@ module.exports = withAuth(async (data, token) => {
       streakFreezes: streak.streakFreezes,
       maxStreakFreezes: existingUser?.maxStreakFreezes || 2,
       coins,
-      rupees,
       updatedAt: now,
       lastActiveAt: now
     };
@@ -219,9 +212,7 @@ module.exports = withAuth(async (data, token) => {
       unlockedWords: courseData.wordsUnlocked,
       pendingWords: getPendingWordCount(courseXp, categoryProgress.totalWordsUnlocked),
       coins,
-      rupees,
       coinsEarned,
-      rupeesEarned,
       completedMissions: completedMissions.map(mission => ({ id: mission.id, coinReward: mission.coinReward, labelKey: mission.labelKey })),
       newBadges: newBadges.map(badge => ({ id: badge.id }))
     };

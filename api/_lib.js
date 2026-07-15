@@ -31,7 +31,6 @@ const COURSE_LEVEL_CAPS = {
 const GAME_TYPES = ["trainer", "memory", "dictate"];
 const CHEST_COIN_REWARD = 50;
 const CHEST_XP_REWARD = 20;
-const LEVEL_UP_RUPEE_REWARD = 1;
 // Debug-only: set DEBUG_ALWAYS_CLAIM_CHEST=true in the environment to let the
 // daily chest be reopened on every claim instead of once per day. Never set
 // this in production - it lets any signed-in user farm coins/XP at will.
@@ -113,7 +112,6 @@ function buildDefaultUserProfile(uid, authProfile, timezone) {
     maxStreakFreezes: MAX_STREAK_FREEZES,
     friendCount: 0,
     coins: 0,
-    rupees: 0,
     lastChestClaimedDate: null,
     chestsClaimed: 0,
     courses: {}
@@ -149,7 +147,6 @@ function sanitizeUserProfile(user) {
     maxStreakFreezes: user.maxStreakFreezes || MAX_STREAK_FREEZES,
     friendCount: user.friendCount || 0,
     coins: user.coins || 0,
-    rupees: user.rupees || 0,
     lastChestClaimedDate: user.lastChestClaimedDate || null,
     chestsClaimed: user.chestsClaimed || 0,
     courses: sanitizeCoursesSummary(user.courses)
@@ -547,7 +544,6 @@ module.exports = {
   GAME_TYPES,
   CHEST_COIN_REWARD,
   CHEST_XP_REWARD,
-  LEVEL_UP_RUPEE_REWARD,
   DEBUG_ALWAYS_CLAIM_CHEST,
   MISSION_POOL,
   BADGE_DEFINITIONS
