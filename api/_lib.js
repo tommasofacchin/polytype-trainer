@@ -170,7 +170,15 @@ function sanitizeCoursesSummary(courses) {
       // the client's own "no course yet" starter-word fallback only
       // triggers when the course object is entirely missing, not when it's
       // present but missing this field.
-      const unlockedWords = sanitizeUnlockedWords(course.unlockedWords);
+      // Use resolveUnlockedWords (not a raw sanitizeUnlockedWords pass-
+      // through) so a course still on the legacy categoryIndex/
+      // categoryUnlocked format - never yet migrated to a real
+      // unlockedWords array by an unlock/practice-session write - resolves
+      // to the same set api/unlock-word.js validates against server-side.
+      // Without this, such a course looked permanently locked to the
+      // client while the server already considered its words unlocked,
+      // producing "already unlocked" errors on cards still showing a lock.
+      const unlockedWords = resolveUnlockedWords(course, false);
       return [
         courseId,
         {
