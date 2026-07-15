@@ -29,10 +29,22 @@
         completePracticeSession
     };
 
+    let refreshedForUid = null;
+
     document.addEventListener("DOMContentLoaded", () => {
         window.PolytypeFirebase?.onChange?.(authState => {
-            if (authState.ready && authState.user) refresh();
-            if (authState.ready && !authState.user) reset();
+            // onChange now notifies once immediately on sign-in (before the
+            // profile fetch resolves) and again once it completes, so this
+            // can fire twice per login - only kick off one overview fetch
+            // per signed-in uid.
+            if (authState.ready && authState.user && refreshedForUid !== authState.user.uid) {
+                refreshedForUid = authState.user.uid;
+                refresh();
+            }
+            if (authState.ready && !authState.user) {
+                refreshedForUid = null;
+                reset();
+            }
         });
     });
 

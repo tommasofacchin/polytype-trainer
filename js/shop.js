@@ -234,6 +234,10 @@ function setupBuyButton() {
             setStatus(tr("shop.purchaseSuccess"), "success");
         } catch (error) {
             setStatus(error?.message || tr("shop.purchaseFailed"), "error");
+            // The server rejected this against state we don't have locally
+            // (e.g. stale cached coin balance or key count) - re-sync so
+            // the shop reflects reality right away.
+            await window.PolytypeFirebase.refreshProfile?.();
         } finally {
             isBuying = false;
             renderShop();

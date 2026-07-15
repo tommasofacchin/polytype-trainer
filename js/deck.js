@@ -557,6 +557,13 @@ async function confirmUnlock() {
         closeUnlockConfirm(true);
     } catch (error) {
         setUnlockError(error?.message || tr("deck.unlockFailed"));
+        // The server rejected this against state we don't have locally
+        // (e.g. "already unlocked"/"no keys" while the cache still shows
+        // the old numbers) - re-sync from the server so the deck reflects
+        // reality right away instead of staying stuck showing stale cards.
+        if (window.PolytypeFirebase?.isSignedIn?.()) {
+            await window.PolytypeFirebase.refreshProfile?.();
+        }
     } finally {
         isConfirmingUnlock = false;
         if (el.unlockConfirmBtn) el.unlockConfirmBtn.disabled = false;

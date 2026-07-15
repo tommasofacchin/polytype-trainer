@@ -26,6 +26,7 @@
         signInWithGoogle,
         signOut,
         isSignedIn,
+        refreshProfile,
         completePracticeSession,
         unlockWord,
         buyKey,
@@ -107,6 +108,13 @@
             return;
         }
 
+        // Notify now, before the profile fetch resolves, so listeners that
+        // only need `ready`+`user` (e.g. gamestate's coin/chest/missions
+        // fetch) can start their own request in parallel instead of
+        // waiting on ensure-user-profile to finish first - that serial
+        // chain was the main cause of the slow post-login paint.
+        notify();
+
         try {
             const result = await callApi("ensure-user-profile", {
                 timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
@@ -118,6 +126,22 @@
         }
 
         notify();
+    }
+
+    async function refreshProfile() {
+        if (!state.user) return null;
+
+        try {
+            const result = await callApi("ensure-user-profile", {
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+            });
+            state.profile = result.data?.user || null;
+            syncProfileToLocalStorage(state.profile);
+            notify();
+            return state.profile;
+        } catch {
+            return null;
+        }
     }
 
     async function signIn(email, password) {
@@ -545,7 +569,20 @@
         };
 
         if (progress.course?.courseId) {
-            profile.courses[progress.course.courseId] = progress.course;
+            const incoming = progress.course;
+            const cached = profile.courses[incoming.courseId];
+            // xp and unlockedWords only ever grow for a course, so a reply
+            // reporting fewer of either than what's already cached must be
+            // an out-of-order response (e.g. a Trainer autosave that was
+            // in flight when a Deck-page unlock committed, or two tabs
+            // open on the same course) - applying it would revert the
+            // newer state and desync the cache from what the server
+            // actually has, which is exactly what caused unlocked cards to
+            // render as locked and "already unlocked"/"no keys" errors.
+            const incomingIsFresh = !cached ||
+                ((incoming.xp || 0) >= (cached.xp || 0) &&
+                    (incoming.unlockedWords?.length || 0) >= (cached.unlockedWords?.length || 0));
+            if (incomingIsFresh) profile.courses[incoming.courseId] = incoming;
         }
 
         return profile;
