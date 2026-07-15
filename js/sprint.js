@@ -9,8 +9,12 @@
     const audioPrefix = (window.POLYTYPE_AUDIO_PREFIX || "audio/v1").replace(/^\/+|\/+$/g, "");
 
     // Delay between a round's answer being locked in and the next round
-    // starting, so the correct/wrong feedback is actually visible.
-    const ROUND_ADVANCE_DELAY = 800;
+    // starting, so the correct/wrong feedback is actually visible. Split in
+    // two: FEEDBACK_HOLD shows the result, then the exercise fades out
+    // (sprint-round-out, style.css) for FADE_OUT before the next round's
+    // markup replaces it and fades back in (sprint-round-in).
+    const FEEDBACK_HOLD_DELAY = 550;
+    const FADE_OUT_DELAY = 220;
     const MATCH_WRONG_FLASH_DELAY = 450;
 
     const ALL_ROUND_TYPES = ["mc", "match", "audio", "trueFalse", "type"];
@@ -155,7 +159,10 @@
     function advanceRound(featuredWordIds) {
         state.lastWordIds = featuredWordIds;
         state.roundIndex += 1;
-        window.setTimeout(nextRound, ROUND_ADVANCE_DELAY);
+        window.setTimeout(() => {
+            el.exerciseRoot.querySelector(".sprint-exercise")?.classList.add("is-leaving");
+            window.setTimeout(nextRound, FADE_OUT_DELAY);
+        }, FEEDBACK_HOLD_DELAY);
     }
 
     // ── Word / distractor selection ─────────────────────────────────────────
@@ -181,17 +188,53 @@
 
     // ── Scoring ──────────────────────────────────────────────────────────────
 
-    function recordAnswer(isCorrect) {
+    function recordAnswer(isCorrect, anchorEl) {
+        const prevStreak = state.streak;
+        const prevTier = getComboTier(prevStreak);
+
         if (isCorrect) {
-            state.score += Math.round(10 * getComboMultiplier(state.streak));
+            const pts = Math.round(10 * getComboMultiplier(state.streak));
+            state.score += pts;
             state.streak += 1;
             state.bestStreak = Math.max(state.bestStreak, state.streak);
             state.correctAnswers += 1;
+
+            const tier = getComboTier(state.streak);
+            animateStreakPop(tier > prevTier);
+            if (anchorEl) showPointsFloat(pts, tier, anchorEl);
         } else {
             state.wrongAnswers += 1;
             state.streak = 0;
+            if (prevStreak > 0) animateStreakBreak();
         }
         updateHud();
+    }
+
+    function animateStreakPop(big) {
+        const cls = big ? "streak-pop-big" : "streak-pop";
+        el.streakText.classList.remove("streak-pop", "streak-pop-big", "streak-shake");
+        void el.streakText.offsetWidth;
+        el.streakText.classList.add(cls);
+        el.streakText.addEventListener("animationend", () => el.streakText.classList.remove(cls), { once: true });
+    }
+
+    function animateStreakBreak() {
+        el.streakText.classList.remove("streak-pop", "streak-pop-big", "streak-shake");
+        void el.streakText.offsetWidth;
+        el.streakText.classList.add("streak-shake");
+        el.streakText.addEventListener("animationend", () => el.streakText.classList.remove("streak-shake"), { once: true });
+    }
+
+    function showPointsFloat(pts, tier, anchorEl) {
+        const rect = anchorEl.getBoundingClientRect();
+        const node = document.createElement("span");
+        node.className = "xp-float";
+        node.textContent = `+${pts}`;
+        if (tier > 1) node.dataset.tier = String(tier);
+        node.style.left = `${rect.left + rect.width / 2 - 18}px`;
+        node.style.top = `${rect.top - 4}px`;
+        document.body.appendChild(node);
+        node.addEventListener("animationend", () => node.remove(), { once: true });
     }
 
     function updateHud() {
@@ -247,7 +290,7 @@
                     if (node !== btn) node.classList.add("is-disabled");
                     if (!isCorrect && node.textContent === textOf(word)) node.classList.add("is-correct");
                 });
-                recordAnswer(isCorrect);
+                recordAnswer(isCorrect, btn);
                 advanceRound([word.id]);
             });
             grid.appendChild(btn);
@@ -308,7 +351,7 @@
                     btn.disabled = true;
                     selectedLeft = null;
                     lockedCount += 2;
-                    recordAnswer(true);
+                    recordAnswer(true, btn);
                     if (lockedCount === words.length * 2) {
                         state.wordsUsed += words.length;
                         advanceRound(words.map(w => w.id));
@@ -317,7 +360,7 @@
                     const wrongLeft = selectedLeft;
                     wrongLeft.classList.add("is-wrong");
                     btn.classList.add("is-wrong");
-                    recordAnswer(false);
+                    recordAnswer(false, btn);
                     selectedLeft = null;
                     window.setTimeout(() => {
                         wrongLeft.classList.remove("is-selected", "is-wrong");
@@ -365,7 +408,7 @@
                     if (node !== btn) node.classList.add("is-disabled");
                     if (!isCorrect && node.textContent === word.script) node.classList.add("is-correct");
                 });
-                recordAnswer(isCorrect);
+                recordAnswer(isCorrect, btn);
                 advanceRound([word.id]);
             });
             grid.appendChild(btn);
@@ -402,7 +445,7 @@
                 el.exerciseRoot.querySelectorAll(".sprint-tf-btn").forEach(node => {
                     if (node !== btn) node.classList.add("is-disabled");
                 });
-                recordAnswer(isCorrect);
+                recordAnswer(isCorrect, btn);
                 advanceRound([word.id]);
             });
         });
@@ -446,7 +489,7 @@
             if (!isCorrect) {
                 feedback.textContent = toTarget ? word.script : word.meaning;
             }
-            recordAnswer(isCorrect);
+            recordAnswer(isCorrect, input);
             advanceRound([word.id]);
         });
     }
