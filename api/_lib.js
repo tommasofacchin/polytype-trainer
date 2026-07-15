@@ -34,7 +34,7 @@ const COURSE_LEVEL_CAPS = {
   swedish: 60
 };
 
-const GAME_TYPES = ["trainer", "memory", "dictate"];
+const GAME_TYPES = ["trainer", "memory", "dictate", "sprint"];
 const CHEST_COIN_REWARD = 50;
 const CHEST_XP_REWARD = 20;
 // Debug-only: set DEBUG_ALWAYS_CLAIM_CHEST=true in the environment to let the
@@ -51,6 +51,7 @@ const MISSION_POOL = [
   { id: "play_trainer", metric: "gameSessions.trainer", target: 1, coinReward: 40, labelKey: "mission.playTrainer" },
   { id: "play_memory", metric: "gameSessions.memory", target: 1, coinReward: 60, labelKey: "mission.playMemory" },
   { id: "play_dictate", metric: "gameSessions.dictate", target: 1, coinReward: 50, labelKey: "mission.playDictate" },
+  { id: "play_sprint", metric: "gameSessions.sprint", target: 1, coinReward: 50, labelKey: "mission.playSprint" },
   { id: "correct_20", metric: "correctAnswers", target: 20, coinReward: 50, labelKey: "mission.correct20" }
 ];
 

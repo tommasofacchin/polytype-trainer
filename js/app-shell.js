@@ -12,6 +12,7 @@
     const ICONS = {
         streak: '<svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M12 2c3 4 5 6 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 1 2 2 2 3 2 0-3-1-5 0-8z"/></svg>',
         coin: '<svg viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="10" fill="#ffc73a"/><circle cx="12" cy="12" r="6.5" fill="none" stroke="#d99a1c" stroke-width="2"/></svg>',
+        key: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="7" cy="12" r="4.2" fill="color-mix(in srgb, currentColor 12%, transparent)"></circle><circle cx="7" cy="12" r="1.4"></circle><path d="M10.6 12h10"></path><path d="M17 12v3"></path><path d="M20 12v2.4"></path></svg>',
         person: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><circle cx="12" cy="9" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6z"/></svg>',
         home: '<svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>',
         games: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><rect x="3" y="4" width="7" height="7" rx="1.6"/><rect x="14" y="4" width="7" height="7" rx="1.6"/><rect x="3" y="14" width="7" height="7" rx="1.6"/><rect x="14" y="14" width="7" height="7" rx="1.6"/></svg>',
@@ -47,6 +48,11 @@
             renderHeader();
             renderBottomNav();
         });
+        // Fires after any unlock/purchase/session-save syncs the local
+        // profile cache - keep the header's key count live without needing
+        // a full reload (unlike the study-language flag switch, which does
+        // reload the page and so re-renders the header from scratch anyway).
+        document.addEventListener("polytype-profile-updated", renderHeaderKeys);
     });
 
     // Keeps the friends.html cache warm from every other page, so opening
@@ -88,6 +94,17 @@
         }
     }
 
+    // Keep in sync with MAX_KEYS in api/_lib.js.
+    const MAX_KEYS = 5;
+
+    // Keys are purchase-only (api/buy-key.js) and per-course - the header
+    // shows the count for whichever language is currently selected, same
+    // language the flag switcher above it reflects.
+    function getKeysHeldForLanguage(language, cached) {
+        const purchasedKeys = Number(cached.courses?.[language]?.purchasedKeys) || 0;
+        return Math.max(0, Math.min(MAX_KEYS, Math.trunc(purchasedKeys)));
+    }
+
     function renderHeader() {
         const mount = document.getElementById("app-header");
         if (!mount) return;
@@ -96,12 +113,14 @@
         const flagSrc = LANGUAGE_FLAGS[language] || LANGUAGE_FLAGS.chinese;
         const cached = readCachedProfile();
         const avatarInner = cached.avatarUrl ? `<img src="${cached.avatarUrl}" alt="">` : ICONS.person;
+        const keysHeld = getKeysHeldForLanguage(language, cached);
 
         mount.innerHTML = `
             <div class="app-shell-header">
                 <div class="app-shell-stats">
                     <span class="app-shell-stat app-shell-stat-streak" id="app-shell-streak">${ICONS.streak}${cached.dayStreak || 0}</span>
                     <span class="app-shell-stat app-shell-stat-coin" id="app-shell-coins">${ICONS.coin}${cached.coins || 0}</span>
+                    <span class="app-shell-stat app-shell-stat-key" id="app-shell-keys">${ICONS.key}${keysHeld}</span>
                 </div>
                 <div class="app-shell-identity">
                     <div class="language-menu app-shell-lang-menu">
@@ -245,6 +264,15 @@
 
         const coinsEl = document.getElementById("app-shell-coins");
         if (coinsEl && typeof gameState.coins === "number") coinsEl.innerHTML = `${ICONS.coin}${gameState.coins}`;
+    }
+
+    function renderHeaderKeys(event) {
+        const keysEl = document.getElementById("app-shell-keys");
+        if (!keysEl) return;
+
+        const language = localStorage.getItem("polytype-language") || "chinese";
+        const cached = event?.detail || readCachedProfile();
+        keysEl.innerHTML = `${ICONS.key}${getKeysHeldForLanguage(language, cached)}`;
     }
 
     function renderBottomNav() {

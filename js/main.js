@@ -46,13 +46,8 @@ const defaultProfile = {
     courses: {}
 };
 
-let levelSelect;
-let levelField;
-let romajiField;
-let romajiToggle;
 let rowsContainer;
 let themeToggle;
-let durationButtons;
 let timerText;
 let hudScoreText;
 let streakText;
@@ -63,19 +58,6 @@ let resultScore;
 let resultDetail;
 let resultSaveStatus;
 let playAgainBtn;
-let languageMenuToggle;
-let languageMenu;
-let currentLanguageFlag;
-let miniProfileAvatar;
-let miniProfileLevel;
-let miniProfileXp;
-let miniProfileStreak;
-let myDeckBtn;
-let myDeckOverlay;
-let deckGroups;
-let deckModalSub;
-let deckProgressFill;
-let deckProgressText;
 let timerResultModal;
 let timedResultScore;
 let timedResultDetail;
@@ -126,15 +108,8 @@ function getAppLanguage() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    levelSelect = document.getElementById("level-select");
-    levelField = document.getElementById("level-field");
-    romajiField = document.getElementById("romaji-field");
-    romajiToggle = document.getElementById("romaji-toggle");
     rowsContainer = document.getElementById("rows-container");
     themeToggle = document.getElementById("theme-toggle");
-    // [data-seconds] scopes this to the persistent in-toolbar buttons only -
-    // the start gate's buttons share the same class but use [data-gate-seconds].
-    durationButtons = Array.from(document.querySelectorAll(".trainer-duration-btn[data-seconds]"));
     timerText = document.getElementById("timer-text");
     hudScoreText = document.getElementById("hud-score-text");
     streakText = document.getElementById("streak-text");
@@ -145,19 +120,6 @@ document.addEventListener("DOMContentLoaded", () => {
     resultDetail = document.getElementById("result-detail");
     resultSaveStatus = document.getElementById("result-save-status");
     playAgainBtn = document.getElementById("play-again-btn");
-    languageMenuToggle = document.getElementById("language-menu-toggle");
-    languageMenu = document.getElementById("language-menu");
-    currentLanguageFlag = document.getElementById("current-language-flag");
-    miniProfileAvatar = document.getElementById("mini-profile-avatar");
-    miniProfileLevel = document.getElementById("mini-profile-level");
-    miniProfileXp = document.getElementById("mini-profile-xp");
-    miniProfileStreak = document.getElementById("mini-profile-streak");
-    myDeckBtn = document.getElementById("my-deck-btn");
-    myDeckOverlay = document.getElementById("my-deck-overlay");
-    deckGroups = document.getElementById("deck-groups");
-    deckModalSub = document.getElementById("deck-modal-sub");
-    deckProgressFill = document.getElementById("deck-progress-fill");
-    deckProgressText = document.getElementById("deck-progress-text");
     timerResultModal = document.getElementById("timer-result-modal");
     timedResultScore = document.getElementById("timed-result-score");
     timedResultDetail = document.getElementById("timed-result-detail");
@@ -166,16 +128,6 @@ document.addEventListener("DOMContentLoaded", () => {
     timedPlayAgainBtn = document.getElementById("timed-play-again-btn");
     trainerStartGate = document.getElementById("trainer-start-gate");
 
-    myDeckBtn.addEventListener("click", openMyDeck);
-    myDeckOverlay.addEventListener("click", event => {
-        if (event.target.closest("[data-deck-close]")) closeMyDeck();
-    });
-
-    levelSelect.addEventListener("change", onLevelChange);
-    romajiToggle.addEventListener("change", onRomajiToggle);
-    durationButtons.forEach(btn => {
-        btn.addEventListener("click", () => startSession(Number(btn.dataset.seconds)));
-    });
     trainerStartGate.querySelectorAll("[data-gate-seconds]").forEach(btn => {
         btn.addEventListener("click", () => {
             gateResolved = true;
@@ -185,10 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     playAgainBtn.addEventListener("click", () => startSession());
     timedPlayAgainBtn.addEventListener("click", () => startSession());
-    languageMenuToggle.addEventListener("click", toggleLanguageMenu);
-    document.addEventListener("keydown", onGlobalKeyDown);
     document.addEventListener("polytype-app-language-changed", onAppLanguageChange);
-    document.addEventListener("click", onDocumentClick);
     document.addEventListener("pointerdown", unlockAudioPlayback, true);
     document.addEventListener("keydown", unlockAudioPlayback, true);
 
@@ -279,36 +228,13 @@ function isActivelyPlayingSession() {
 }
 
 // Rewards (XP/level/streak/coins) are revealed on the end-of-session result
-// screen, not ticking live while a round is in progress - skip the pill
-// repaint (and any level-up celebration) entirely until the session ends.
+// screen, not ticking live while a round is in progress - skip the level-up
+// celebration check entirely until the session ends.
 function renderProfile() {
     if (isActivelyPlayingSession()) return;
 
     const levelInfo = getCurrentCourseLevelInfo();
-
-    miniProfileLevel.textContent = tr("common.levelNumber", { level: levelInfo.level });
-    miniProfileXp.textContent = `${levelInfo.currentXp} / ${levelInfo.nextXp} XP`;
-    miniProfileStreak.textContent = `\u{1F525} ${profile.dayStreak}`;
-    renderProfileAvatar(miniProfileAvatar, profile);
-
     maybeCelebrateLevelUp(levelInfo.level);
-}
-
-function renderProfileAvatar(element, profileData) {
-    if (!element) return;
-
-    if (profileData.avatarUrl) {
-        const image = document.createElement("img");
-        image.src = profileData.avatarUrl;
-        image.alt = "";
-        element.classList.add("has-image");
-        element.replaceChildren(image);
-        return;
-    }
-
-    element.classList.remove("has-image");
-    const source = profileData.handle || profileData.name || "P";
-    element.textContent = source.trim().charAt(0).toUpperCase() || "P";
 }
 
 function maybeCelebrateLevelUp(level) {
@@ -419,10 +345,6 @@ function getUnlockedWordSuffixesFromPrefix(categoryIndex, categoryUnlocked) {
     return unlocked;
 }
 
-function getCategoryForSuffix(suffix) {
-    return getSortedCategories().find(category => category.wordSuffixes.includes(suffix));
-}
-
 function getWordDropRanks() {
     const ranks = new Map();
     let rank = 0;
@@ -437,53 +359,22 @@ function getWordDropRanks() {
     return ranks;
 }
 
+// Study language now comes solely from the shared header's flag switcher
+// (app-shell.js), which does a full page reload on change - so this just
+// needs to read the value back from localStorage, no in-page menu to build.
 function populateLanguageSelect() {
-    const languages = uniqueBy(
-        AVAILABLE_DECKS.map(deck => ({
-            value: deck.language,
-            label: getLanguageLabel(deck.language),
-            flagSrc: getLanguageFlagSrc(deck.language)
-        })),
-        item => item.value
-    );
-
-    languageMenu.replaceChildren(
-        ...languages.map(language => {
-            const item = document.createElement("button");
-            item.type = "button";
-            item.className = "language-menu-item";
-            item.dataset.language = language.value;
-            item.setAttribute("role", "menuitemradio");
-            item.setAttribute("aria-checked", "false");
-            item.innerHTML = `
-                <img class="flag-mark" src="${language.flagSrc}" alt="">
-                <span>${language.label}</span>
-            `;
-            item.addEventListener("click", () => selectLanguage(language.value));
-            return item;
-        })
-    );
+    const languages = uniqueBy(AVAILABLE_DECKS.map(deck => deck.language), value => value);
 
     const savedLanguage = localStorage.getItem("polytype-language");
-    settings.language = languages.find(l => l.value === savedLanguage) ? savedLanguage : (languages[0]?.value || "");
-    syncLanguageMenu();
+    settings.language = languages.includes(savedLanguage) ? savedLanguage : (languages[0] || "");
     populateLevelSelect();
 }
 
+// Every language currently ships exactly one level ("A1"), so this just
+// picks the first one automatically - no picker needed unless that changes.
 function populateLevelSelect() {
-    const levels = uniqueBy(
-        getDecksForLanguage(settings.language)
-            .filter(deck => deck.level !== "A1")
-            .map(deck => ({ value: deck.level, label: deck.level })),
-        item => item.value
-    );
-
-    levelSelect.replaceChildren(
-        ...levels.map(level => option(level.value, level.label))
-    );
-
-    levelField.hidden = levels.length <= 1;
-    settings.level = levelSelect.value;
+    const levels = uniqueBy(getDecksForLanguage(settings.language).map(deck => deck.level), value => value);
+    settings.level = levels[0] || "";
     populateDeckSelect();
 }
 
@@ -497,26 +388,10 @@ function languageHasHints() {
     return settings.language === "chinese" || settings.language === "japanese";
 }
 
+// Romanization hints are always shown when the language has them (Pinyin/
+// Romaji) - no per-user toggle anymore.
 function updateRomajiUI() {
-    const labels = { chinese: "Pinyin", japanese: "Romaji" };
-    const hasHints = languageHasHints();
-
-    romajiField.hidden = !hasHints;
-
-    if (!hasHints) {
-        settings.showRomanization = false;
-        document.body.classList.add("hide-romaji");
-    } else {
-        const label = romajiField.querySelector(".cbx span");
-        if (label) label.textContent = labels[settings.language] || "Hints";
-    }
-}
-
-function onLanguageChange() {
-    populateLevelSelect();
-    updateRomajiUI();
-    renderProfile();
-    startSession();
+    settings.showRomanization = languageHasHints();
 }
 
 // On login, adopt the study language from the account's courses (the one with
@@ -541,68 +416,8 @@ function applyAccountLanguage() {
 
     settings.language = best.language;
     localStorage.setItem("polytype-language", best.language);
-    syncLanguageMenu();
     populateLevelSelect();
     updateRomajiUI();
-}
-
-async function selectLanguage(language) {
-    if (settings.language === language) {
-        closeLanguageMenu();
-        return;
-    }
-
-    await saveCurrentSessionProgress();
-    settings.language = language;
-    localStorage.setItem("polytype-language", language);
-    syncLanguageMenu();
-    onLanguageChange();
-    closeLanguageMenu();
-}
-
-function syncLanguageMenu() {
-    currentLanguageFlag.src = getLanguageFlagSrc(settings.language);
-    languageMenuToggle.setAttribute(
-        "aria-label",
-        tr("trainer.studyLanguage", { language: getLanguageLabel(settings.language) })
-    );
-    document.getElementById("memory-link")?.setAttribute("href", "memory.html");
-    document.getElementById("dictate-link")?.setAttribute("href", "dictate.html");
-
-    languageMenu.querySelectorAll(".language-menu-item").forEach(item => {
-        const isSelected = item.dataset.language === settings.language;
-        item.classList.toggle("is-active", isSelected);
-        item.setAttribute("aria-checked", String(isSelected));
-    });
-}
-
-function toggleLanguageMenu() {
-    const willOpen = languageMenu.hidden;
-    languageMenu.hidden = !willOpen;
-    languageMenuToggle.setAttribute("aria-expanded", String(willOpen));
-}
-
-function closeLanguageMenu() {
-    languageMenu.hidden = true;
-    languageMenuToggle.setAttribute("aria-expanded", "false");
-}
-
-function onDocumentClick(event) {
-    if (
-        languageMenu.hidden ||
-        languageMenu.contains(event.target) ||
-        languageMenuToggle.contains(event.target)
-    ) {
-        return;
-    }
-
-    closeLanguageMenu();
-}
-
-function onLevelChange() {
-    settings.level = levelSelect.value;
-    populateDeckSelect();
-    startSession();
 }
 
 function onAppLanguageChange() {
@@ -612,23 +427,6 @@ function onAppLanguageChange() {
     updateRomajiUI();
     renderProfile();
     startSession();
-}
-
-function onGlobalKeyDown(event) {
-    if (event.key === "Escape" && !myDeckOverlay.hidden) {
-        closeMyDeck();
-        return;
-    }
-
-    if (event.key === "Escape" && !languageMenu.hidden) {
-        closeLanguageMenu();
-        languageMenuToggle.focus();
-    }
-}
-
-function onRomajiToggle() {
-    settings.showRomanization = romajiToggle.checked;
-    applyInitialVisibilityClasses();
 }
 
 function showStartGate() {
@@ -644,12 +442,11 @@ function hideStartGate() {
 }
 
 async function startSession(seconds) {
-    // Blocks every (re)start trigger - toolbar buttons, play-again,
-    // language/level changes, account switches - until the player has
-    // picked a duration from the mandatory start gate at least once.
+    // Blocks every (re)start trigger - play-again, language/level changes,
+    // account switches - until the player has picked a duration from the
+    // mandatory start gate at least once.
     if (!gateResolved) return;
     if (typeof seconds === "number") settings.timeLimitSeconds = seconds;
-    syncDurationButtons();
 
     await saveCurrentSessionProgress();
     stopTimer();
@@ -664,12 +461,6 @@ async function startSession(seconds) {
     preloadCurrentDeckAudio();
     spawnInitialRows();
     beginActivePlay();
-}
-
-function syncDurationButtons() {
-    durationButtons.forEach(btn => {
-        btn.classList.toggle("is-active", Number(btn.dataset.seconds) === settings.timeLimitSeconds);
-    });
 }
 
 async function loadDeck(deckId) {
@@ -778,158 +569,6 @@ function prepareCurrentDeck() {
 
 function preloadCurrentDeckAudio() {
     scheduleAudioPreload(state.currentDeck);
-}
-
-const LOCK_SVG =
-    '<svg viewBox="0 0 24 24" aria-hidden="true">' +
-    '<rect x="4.5" y="10.5" width="15" height="10" rx="2.4"></rect>' +
-    '<path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"></path>' +
-    '<circle cx="12" cy="15" r="1.5"></circle>' +
-    '</svg>';
-
-function openMyDeck() {
-    buildMyDeck();
-    myDeckOverlay.hidden = false;
-    document.body.classList.add("deck-overlay-open");
-    requestAnimationFrame(() => myDeckOverlay.classList.add("is-open"));
-}
-
-function closeMyDeck() {
-    myDeckOverlay.classList.remove("is-open");
-    document.body.classList.remove("deck-overlay-open");
-    window.setTimeout(() => { myDeckOverlay.hidden = true; }, 240);
-    myDeckBtn.focus();
-}
-
-function buildMyDeck() {
-    const words = state.fullDeck;
-    deckGroups.replaceChildren();
-
-    if (!words.length) {
-        const empty = document.createElement("p");
-        empty.className = "deck-empty";
-        empty.textContent = tr("trainer.noWordsLoaded");
-        deckGroups.appendChild(empty);
-        deckModalSub.textContent = "";
-        deckProgressFill.style.width = "0%";
-        deckProgressText.textContent = "";
-        return;
-    }
-
-    const unlockedSuffixes = getCurrentUnlockedWords();
-    const unlockedCount = words.filter(word => unlockedSuffixes.has(getWordSuffix(word.id))).length;
-    const pct = Math.round((unlockedCount / words.length) * 100);
-
-    deckModalSub.textContent = tr("trainer.deckSummary", {
-        language: getLanguageLabel(settings.language),
-        count: words.length
-    });
-    deckProgressFill.style.width = `${pct}%`;
-    deckProgressText.textContent = tr("trainer.deckProgress", {
-        unlocked: unlockedCount,
-        total: words.length
-    });
-
-    const byCategory = new Map();
-    words.forEach(word => {
-        const category = getCategoryForSuffix(getWordSuffix(word.id));
-        if (!category) return;
-        if (!byCategory.has(category.id)) byCategory.set(category.id, []);
-        byCategory.get(category.id).push(word);
-    });
-
-    getSortedCategories().forEach(category => {
-        const categoryWords = byCategory.get(category.id);
-        if (!categoryWords || !categoryWords.length) return;
-        deckGroups.appendChild(buildDeckGroup(category, categoryWords, unlockedSuffixes));
-    });
-}
-
-// Read-only mirror of the Deck page's own card rendering (no click-to-unlock
-// here - this is the compact in-Trainer "My Deck" peek).
-function buildDeckGroup(category, words, unlockedSuffixes) {
-    const total = words.length;
-    const unlockedInCategory = words.filter(word => unlockedSuffixes.has(getWordSuffix(word.id))).length;
-    const isComplete = unlockedInCategory === total;
-
-    const group = document.createElement("section");
-    group.className = "deck-group";
-    if (!isComplete) group.classList.add("is-locked");
-
-    const head = document.createElement("div");
-    head.className = "deck-group-head";
-
-    const badge = document.createElement("span");
-    badge.className = "deck-group-badge";
-    badge.innerHTML = isComplete ? "&#10003;" : LOCK_SVG;
-
-    const title = document.createElement("span");
-    title.className = "deck-group-title";
-    title.textContent = tr(category.labelKey);
-
-    const meta = document.createElement("span");
-    meta.className = "deck-group-meta";
-    meta.textContent = isComplete
-        ? tr("trainer.wordCount", {
-            count: total,
-            word: total === 1 ? tr("common.word") : tr("common.words")
-        })
-        : tr("trainer.categoryProgress", { unlocked: unlockedInCategory, total });
-
-    head.append(badge, title, meta);
-
-    const grid = document.createElement("div");
-    grid.className = "deck-grid";
-    words.forEach(word => grid.appendChild(buildDeckCard(word, !unlockedSuffixes.has(getWordSuffix(word.id)))));
-
-    group.append(head, grid);
-    return group;
-}
-
-function buildDeckCard(word, locked) {
-    const card = document.createElement("div");
-    card.className = "deck-card";
-
-    if (locked) {
-        card.classList.add("is-locked");
-        card.setAttribute("aria-label", tr("trainer.lockedWord"));
-
-        const lock = document.createElement("span");
-        lock.className = "deck-card-lock";
-        lock.innerHTML = LOCK_SVG;
-
-        card.append(lock);
-        return card;
-    }
-
-    card.setAttribute("role", "button");
-    card.tabIndex = 0;
-    card.setAttribute("aria-label", tr("trainer.playAudioFor", { word: word.script || word.meaning }));
-    card.addEventListener("click", () => playWordAudio(word));
-    card.addEventListener("keydown", event => {
-        if (event.key !== "Enter" && event.key !== " ") return;
-        event.preventDefault();
-        playWordAudio(word);
-    });
-
-    const script = document.createElement("span");
-    script.className = "deck-card-script";
-    script.textContent = word.script;
-    card.appendChild(script);
-
-    if (languageHasHints() && word.romanization) {
-        const roman = document.createElement("span");
-        roman.className = "deck-card-roman";
-        roman.textContent = word.romanization;
-        card.appendChild(roman);
-    }
-
-    const meaning = document.createElement("span");
-    meaning.className = "deck-card-meaning";
-    meaning.textContent = word.meaning;
-    card.appendChild(meaning);
-
-    return card;
 }
 
 function resetState() {
@@ -1898,24 +1537,6 @@ function getDecksForLanguage(language) {
     return AVAILABLE_DECKS.filter(deck => deck.language === language);
 }
 
-function getLanguageFlagSrc(language) {
-    const flags = {
-        chinese: "assets/flags/china.svg",
-        german: "assets/flags/germany.svg",
-        italian: "assets/flags/italy.svg",
-        japanese: "assets/flags/japan.svg",
-        norwegian: "assets/flags/norway.svg",
-        spanish: "assets/flags/spain.svg",
-        swedish: "assets/flags/sweden.svg"
-    };
-
-    return flags[language] || "assets/flags/china.svg";
-}
-
-function getLanguageLabel(language) {
-    return window.PolytypeI18n?.languageLabel?.(language) || language || tr("language.fallback");
-}
-
 function uniqueBy(items, getKey) {
     const seen = new Set();
     return items.filter(item => {
@@ -1924,13 +1545,6 @@ function uniqueBy(items, getKey) {
         seen.add(key);
         return true;
     });
-}
-
-function option(value, label) {
-    const optionElement = document.createElement("option");
-    optionElement.value = value;
-    optionElement.textContent = label;
-    return optionElement;
 }
 
 function isSubmitKey(event) {

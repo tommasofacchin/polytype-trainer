@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title data-i18n="sprint.pageTitle">Sprint - Polytype Trainer</title>
+  <link rel="icon" type="image/svg+xml" href="assets/flags/china.svg">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap">
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body class="has-app-shell is-fixed-page" data-tab="games">
+  <div id="app-header"></div>
+  <main class="app">
+    <section class="game-hud" aria-label="Session score">
+      <div class="hud-item">
+        <span class="hud-label" data-i18n="sprint.round">Round</span>
+        <strong id="sprint-round-text">1/1</strong>
+      </div>
+      <div class="hud-item">
+        <span class="hud-label" data-i18n="trainer.score">Score</span>
+        <strong id="sprint-hud-score-text">0 pts</strong>
+      </div>
+      <div class="hud-item" id="sprint-streak-hud">
+        <span class="hud-label" data-i18n="trainer.combo">Combo</span>
+        <div class="streak-display">
+          <strong id="sprint-streak-text">0</strong>
+          <span id="sprint-streak-chip" class="streak-chip" hidden></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="list-card sprint-stage" aria-label="Sprint exercise">
+      <div id="sprint-exercise-root"></div>
+
+      <div id="sprint-result-modal" class="timer-modal" role="dialog" aria-modal="true" hidden>
+        <div class="timer-modal-backdrop"></div>
+        <div class="timer-modal-card">
+          <span class="result-label" data-i18n="sprint.sessionComplete">Sprint complete</span>
+          <strong id="sprint-result-score" class="result-score-text">0 pts</strong>
+          <span id="sprint-result-detail" class="result-detail-text"></span>
+          <span id="sprint-result-coins" class="result-coins-text"></span>
+          <span id="sprint-result-save-status" class="result-save-status"></span>
+          <button id="sprint-play-again-btn" class="restart-btn" type="button" data-i18n="trainer.playAgain">Play again</button>
+        </div>
+      </div>
+    </section>
+  </main>
+  <div id="app-bottom-nav"></div>
+
+  <script src="js/firebase-config.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-auth-compat.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/firebase-client.js"></script>
+  <script src="js/gamestate.js"></script>
+  <script src="js/app-shell.js"></script>
+  <script src="js/mission-celebrate.js"></script>
+  <script src="decks/index.js"></script>
+  <script src="decks/categories.js"></script>
+  <script src="js/sprint.js"></script>
+</body>
+</html>

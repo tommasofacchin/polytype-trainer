@@ -7,7 +7,17 @@
       "Bash(node -e ' *)",
       "Bash(node \"C:\\\\Users\\\\wangf\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-wangf-OneDrive----Tommaso-polytype-trainer\\\\2f0defb5-bfbd-414c-917f-f7b854f436a6\\\\scratchpad\\\\shot_home_check.js\")",
       "Bash(node \"C:\\\\Users\\\\wangf\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-wangf-OneDrive----Tommaso-polytype-trainer\\\\2f0defb5-bfbd-414c-917f-f7b854f436a6\\\\scratchpad\\\\verify_logo.js\")",
-      "Bash(taskkill //F //PID 22008 //T)"
+      "Bash(taskkill //F //PID 22008 //T)",
+      "Bash(node \"C:\\\\Users\\\\wangf\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-wangf-OneDrive----Tommaso-polytype-trainer\\\\2f0defb5-bfbd-414c-917f-f7b854f436a6\\\\scratchpad\\\\verify_trainer_cleanup.js\")",
+      "Bash(node \"C:\\\\Users\\\\wangf\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-wangf-OneDrive----Tommaso-polytype-trainer\\\\2f0defb5-bfbd-414c-917f-f7b854f436a6\\\\scratchpad\\\\verify_keys_deck.js\")",
+      "Bash(taskkill //F //PID 21940 //T)",
+      "Bash(node --check js/sprint.js)",
+      "Bash(node -e \"JSON.parse\\(require\\('fs'\\).readFileSync\\('package.json','utf8'\\)\\); console.log\\('valid JSON'\\)\")",
+      "Bash(node \"C:\\\\Users\\\\wangf\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-wangf-OneDrive----Tommaso-polytype-trainer\\\\2f0defb5-bfbd-414c-917f-f7b854f436a6\\\\scratchpad\\\\verify_sprint.js\")",
+      "Bash(node \"C:\\\\Users\\\\wangf\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-wangf-OneDrive----Tommaso-polytype-trainer\\\\2f0defb5-bfbd-414c-917f-f7b854f436a6\\\\scratchpad\\\\debug_sprint.js\")",
+      "Bash(node \"C:\\\\Users\\\\wangf\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-wangf-OneDrive----Tommaso-polytype-trainer\\\\2f0defb5-bfbd-414c-917f-f7b854f436a6\\\\scratchpad\\\\verify_desktop_layout.js\")",
+      "Bash(taskkill //F //PID 4172 //T)",
+      "Bash(taskkill //F //PID 17856 //T)"
     ]
   }
 }
