@@ -2,10 +2,9 @@ const { db, FieldValue, Timestamp } = require("./_firebase");
 const {
   withAuth, getAuthProfile, buildDefaultUserProfile, buildPublicProfile,
   normalizeSessionPayload, calculateSessionXp, calculateStreakUpdate,
-  getLevelInfo, getCourseLevel, getUnlockedWordCount, getPendingWordCount,
+  getLevelInfo, getCourseLevel, resolveUnlockedWords, getKeysHeld,
   getDateKeyForTimezone, normalizeTimezone,
   getNewlyCompletedMissions, evaluateNewBadges,
-  STARTER_WORDS, CATEGORY_SIZES,
   ApiError
 } = require("./_lib");
 
@@ -47,27 +46,17 @@ module.exports = withAuth(async (data, token) => {
     const globalLevel = getLevelInfo(totalXp).level;
     const courseLevel = getCourseLevel(session.courseId, courseXp);
     const hasExistingCourse = courseSnap.exists || Boolean(existingCourse);
-    const previousCategoryIndex = courseSnap.exists
-      ? courseSnap.data().categoryIndex || 0
-      : existingCourse?.categoryIndex || 0;
-    const previousCategoryUnlocked = courseSnap.exists
-      ? courseSnap.data().categoryUnlocked || 0
-      : existingCourse?.categoryUnlocked || 0;
-    // Earning XP no longer auto-unlocks words - categoryIndex/categoryUnlocked
-    // ("confirmed" words) only ever change here once, as a fixed starter
-    // grant on a brand-new course. Any further unlocking happens exclusively
-    // through the player's explicit confirmation in api/unlock-word.js.
-    const categoryProgress = hasExistingCourse
-      ? {
-          categoryIndex: previousCategoryIndex,
-          categoryUnlocked: previousCategoryUnlocked,
-          totalWordsUnlocked: getUnlockedWordCount(previousCategoryIndex, previousCategoryUnlocked)
-        }
-      : {
-          categoryIndex: 0,
-          categoryUnlocked: Math.min(STARTER_WORDS, CATEGORY_SIZES[0] || 0),
-          totalWordsUnlocked: Math.min(STARTER_WORDS, CATEGORY_SIZES[0] || 0)
-        };
+    // Earning XP never directly unlocks words - it only grows the pool of
+    // keys the player can spend (see getKeysHeld below). unlockedWords only
+    // ever changes through an explicit key spend in api/unlock-word.js,
+    // except for the one-time starter grant on a brand-new course, or a
+    // lazy migration of a legacy prefix-based course (categoryIndex/
+    // categoryUnlocked) into a real suffix set the first time it's touched.
+    const existingCourseData = courseSnap.exists ? courseSnap.data() : existingCourse;
+    const unlockedWords = resolveUnlockedWords(existingCourseData, !hasExistingCourse);
+    // Never touched by XP - carried forward unchanged so it survives the
+    // round trip to the client (api/buy-key.js is the only writer).
+    const purchasedKeys = existingCourseData?.purchasedKeys || 0;
     const streak = calculateStreakUpdate({
       currentStreak: existingUser?.currentStreak || 0,
       longestStreak: existingUser?.longestStreak || 0,
@@ -133,10 +122,10 @@ module.exports = withAuth(async (data, token) => {
       xp: courseXp,
       level: courseLevel,
       unlockedLevel: courseLevel,
-      categoryIndex: categoryProgress.categoryIndex,
-      categoryUnlocked: categoryProgress.categoryUnlocked,
-      wordsUnlocked: categoryProgress.totalWordsUnlocked,
+      unlockedWords,
+      wordsUnlocked: unlockedWords.length,
       wordsMastered: courseSnap.exists ? courseSnap.data().wordsMastered || 0 : 0,
+      purchasedKeys,
       lastPlayedAt: now,
       updatedAt: now
     };
@@ -145,10 +134,10 @@ module.exports = withAuth(async (data, token) => {
       xp: courseXp,
       level: courseLevel,
       unlockedLevel: courseLevel,
-      categoryIndex: categoryProgress.categoryIndex,
-      categoryUnlocked: categoryProgress.categoryUnlocked,
+      unlockedWords,
       wordsUnlocked: courseData.wordsUnlocked,
-      wordsMastered: courseData.wordsMastered
+      wordsMastered: courseData.wordsMastered,
+      purchasedKeys
     };
 
     userData.courses = {
@@ -209,8 +198,7 @@ module.exports = withAuth(async (data, token) => {
       globalLevel,
       course: courseResponse,
       streak,
-      unlockedWords: courseData.wordsUnlocked,
-      pendingWords: getPendingWordCount(courseXp, categoryProgress.totalWordsUnlocked),
+      keys: getKeysHeld(courseXp, unlockedWords.length, purchasedKeys),
       coins,
       coinsEarned,
       completedMissions: completedMissions.map(mission => ({ id: mission.id, coinReward: mission.coinReward, labelKey: mission.labelKey })),

@@ -1,17 +1,18 @@
 const { db, FieldValue, Timestamp } = require("./_firebase");
 const {
-  withAuth, normalizeCourseId, getUnlockedWordCount, getEarnedWordTotal,
-  getPendingWordCount, stepCategoryProgress,
+  withAuth, normalizeCourseId, resolveUnlockedWords,
+  getEarnedWordTotal, getKeysHeld, VALID_WORD_SUFFIXES,
   ApiError
 } = require("./_lib");
 
-// Advances a single course by exactly one word once the player explicitly
-// confirms it - the "earned" word count (from XP, see getEarnedWordTotal) is
-// computed automatically by complete-practice-session, but categoryIndex/
-// categoryUnlocked (the "confirmed"/actually-playable words) only ever move
-// here, one word at a time.
+// Spends one key to unlock a single, player-chosen word. Unlike XP (which
+// only grows the pool of keys - see getKeysHeld), unlockedWords only ever
+// changes here (plus the one-time starter grant / legacy migration in
+// resolveUnlockedWords). The player may pick ANY currently-locked word in
+// the course, in any order - there is no per-category gating.
 module.exports = withAuth(async (data, token) => {
   const courseId = normalizeCourseId(data.courseId);
+  const wordSuffix = normalizeWordSuffix(data.wordSuffix);
 
   return db.runTransaction(async transaction => {
     const userRef = db.doc(`users/${token.uid}`);
@@ -30,26 +31,39 @@ module.exports = withAuth(async (data, token) => {
     }
 
     const courseXp = existingCourse.xp || 0;
-    const categoryIndex = existingCourse.categoryIndex || 0;
-    const categoryUnlocked = existingCourse.categoryUnlocked || 0;
-    const confirmedTotal = getUnlockedWordCount(categoryIndex, categoryUnlocked);
-    const earnedTotal = getEarnedWordTotal(courseXp, confirmedTotal);
+    const purchasedKeys = existingCourse.purchasedKeys || 0;
+    const unlockedWords = resolveUnlockedWords(existingCourse, false);
 
-    if (confirmedTotal >= earnedTotal) {
-      throw new ApiError(409, "No word ready to unlock yet.");
+    if (unlockedWords.includes(wordSuffix)) {
+      throw new ApiError(409, "Word already unlocked.");
     }
 
-    const stepped = stepCategoryProgress(categoryIndex, categoryUnlocked, 1);
+    // Earned-via-XP keys aren't a stored number - growing unlockedWords by 1
+    // below automatically reduces getEarnedWordTotal(...)-unlockedCount by 1
+    // on its own. Only draw down the separately-stored purchasedKeys pool
+    // when the earned pool was already at its floor (0) *before* this spend
+    // - otherwise both pools would shrink for the same single spend, or (if
+    // purchasedKeys were folded directly into the earned formula instead of
+    // being spent explicitly) a bought key would regenerate forever once
+    // unlockedCount overtakes the XP-justified total. See getKeysHeld().
+    const earnedKeysBefore = Math.max(0, getEarnedWordTotal(courseXp, unlockedWords.length) - unlockedWords.length);
+    const keysHeld = getKeysHeld(courseXp, unlockedWords.length, purchasedKeys);
+    if (keysHeld <= 0) {
+      throw new ApiError(409, "No keys available.");
+    }
+    const nextPurchasedKeys = earnedKeysBefore > 0 ? purchasedKeys : Math.max(0, purchasedKeys - 1);
+
+    const nextUnlockedWords = [...unlockedWords, wordSuffix];
     const now = FieldValue.serverTimestamp();
     const courseResponse = {
       courseId,
       xp: courseXp,
       level: existingCourse.level || 1,
       unlockedLevel: existingCourse.unlockedLevel || existingCourse.level || 1,
-      categoryIndex: stepped.categoryIndex,
-      categoryUnlocked: stepped.categoryUnlocked,
-      wordsUnlocked: stepped.totalWordsUnlocked,
-      wordsMastered: existingCourse.wordsMastered || 0
+      unlockedWords: nextUnlockedWords,
+      wordsUnlocked: nextUnlockedWords.length,
+      wordsMastered: existingCourse.wordsMastered || 0,
+      purchasedKeys: nextPurchasedKeys
     };
 
     transaction.set(userRef, {
@@ -64,7 +78,15 @@ module.exports = withAuth(async (data, token) => {
 
     return {
       course: courseResponse,
-      pendingWords: getPendingWordCount(courseXp, stepped.totalWordsUnlocked)
+      keys: getKeysHeld(courseXp, nextUnlockedWords.length, nextPurchasedKeys)
     };
   });
 });
+
+function normalizeWordSuffix(value) {
+  const suffix = Number(value);
+  if (!Number.isInteger(suffix) || !VALID_WORD_SUFFIXES.has(suffix)) {
+    throw new ApiError(400, "Invalid wordSuffix.");
+  }
+  return suffix;
+}

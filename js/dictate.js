@@ -6,7 +6,7 @@
     const PROFILE_KEY  = "polytype-profile";
     const FALLBACK_LANGUAGE = "norwegian";
     const xpPerDrop = 50; // keep in sync with XP_PER_DROP in api/_lib.js
-    const maxPendingWords = 5; // keep in sync with MAX_PENDING_WORDS in api/_lib.js
+    const maxKeys = 5; // keep in sync with MAX_KEYS in api/_lib.js
 
     const LANGUAGE_FLAGS = {
         chinese:   "assets/flags/china.svg",
@@ -298,51 +298,64 @@
 
     // ── Session ───────────────────────────────────────────────────────────────
 
-    // ── Category/drop gating (mirrors the trainer's profile + XP math) ──
-    function getCategoryProgress() {
+    // ── Unlock gating (mirrors the trainer's profile + XP math) ──
+    // Returns the course's real unlocked-word set, migrating a legacy
+    // prefix-based local course (categoryIndex/categoryUnlocked, no
+    // unlockedWords array yet) on the fly.
+    function getCourseProgress() {
         try {
             const profile = JSON.parse(localStorage.getItem(PROFILE_KEY) || "{}");
             const courses = profile.courses || {};
             const course = courses[activeLanguage] || (activeDeckMeta?.id && courses[activeDeckMeta.id]) || null;
 
             // No progress saved for this course yet: fall back to the starter
-            // baseline rather than zero (mirrors main.js) so a course the
+            // baseline rather than empty (mirrors main.js) so a course the
             // player has never opened in the Trainer still has words to play.
             if (!course) {
-                return { categoryIndex: 0, categoryUnlocked: getStarterWordCount(), xp: 0 };
+                const sorted = getSortedCategories();
+                return { unlockedWords: new Set(sorted[0]?.wordSuffixes.slice(0, getStarterWordCount()) || []), xp: 0, purchasedKeys: 0 };
             }
 
+            const unlockedWords = Array.isArray(course.unlockedWords)
+                ? new Set(course.unlockedWords)
+                : getUnlockedWordSuffixesFromPrefix(
+                    Math.max(0, Math.trunc(Number(course.categoryIndex) || 0)),
+                    Math.max(0, Math.trunc(Number(course.categoryUnlocked) || 0))
+                );
+
             return {
-                categoryIndex: Math.max(0, Math.trunc(Number(course.categoryIndex) || 0)),
-                categoryUnlocked: Math.max(0, Math.trunc(Number(course.categoryUnlocked) || 0)),
-                xp: Math.max(0, Number(course.xp) || 0)
+                unlockedWords,
+                xp: Math.max(0, Number(course.xp) || 0),
+                // Guests never have coins/shop access (sign-in required), so
+                // this is always 0 for them in practice.
+                purchasedKeys: Math.max(0, Math.trunc(Number(course.purchasedKeys) || 0))
             };
         } catch {
-            return { categoryIndex: 0, categoryUnlocked: getStarterWordCount(), xp: 0 };
+            return { unlockedWords: new Set(), xp: 0, purchasedKeys: 0 };
         }
     }
 
-    // Mirrors getEarnedWordTotal()/getPendingWordCount() in api/_lib.js - how
-    // many words are earned-but-unconfirmed, waiting on the Deck page.
-    function getEarnedWordTotal(courseXp, confirmedTotal) {
+    // Mirrors getEarnedWordTotal()/getKeysHeld() in api/_lib.js - how many
+    // keys the player holds, earned via XP but not yet spent on the Deck
+    // page (plus any shop-bought keys).
+    function getEarnedWordTotal(courseXp, unlockedCount) {
         const totalWords = getSortedCategories().reduce((sum, category) => sum + category.size, 0);
         const xpEarned = Math.min(totalWords, Math.floor(courseXp / xpPerDrop));
-        return Math.max(confirmedTotal, xpEarned);
+        return Math.max(unlockedCount, xpEarned);
     }
 
-    function getPendingWordCount(courseXp, confirmedTotal) {
-        return Math.max(0, Math.min(maxPendingWords, getEarnedWordTotal(courseXp, confirmedTotal) - confirmedTotal));
+    function getKeysHeld(courseXp, unlockedCount, purchasedKeys) {
+        const earnedKeys = Math.max(0, getEarnedWordTotal(courseXp, unlockedCount) - unlockedCount);
+        return Math.max(0, Math.min(maxKeys, earnedKeys + (purchasedKeys || 0)));
     }
 
-    function getCoursePendingCount() {
-        const progress = getCategoryProgress();
-        const confirmedTotal = getUnlockedWordSuffixes(progress.categoryIndex, progress.categoryUnlocked).size;
-        return getPendingWordCount(progress.xp, confirmedTotal);
+    function getCourseKeysHeld() {
+        const progress = getCourseProgress();
+        return getKeysHeld(progress.xp, progress.unlockedWords.size, progress.purchasedKeys);
     }
 
     function getStarterWordCount() {
-        const sorted = [...(window.POLYTYPE_CATEGORIES || [])].sort((a, b) => a.order - b.order);
-        return Math.min(5, sorted[0]?.size || 0);
+        return Math.min(5, getSortedCategories()[0]?.size || 0);
     }
 
     function getWordSuffix(wordId) {
@@ -354,7 +367,10 @@
         return [...(window.POLYTYPE_CATEGORIES || [])].sort((a, b) => a.order - b.order);
     }
 
-    function getUnlockedWordSuffixes(categoryIndex, categoryUnlocked) {
+    // Legacy (pre-keys) unlock state was a contiguous prefix. Used only to
+    // migrate old local courses into a real unlockedWords set the first
+    // time they're touched under the new model.
+    function getUnlockedWordSuffixesFromPrefix(categoryIndex, categoryUnlocked) {
         const unlocked = new Set();
 
         getSortedCategories().forEach(category => {
@@ -369,9 +385,8 @@
     }
 
     function getUnlockedDeck() {
-        const progress = getCategoryProgress();
-        const unlockedSuffixes = getUnlockedWordSuffixes(progress.categoryIndex, progress.categoryUnlocked);
-        const unlocked = state.vocab.filter(item => unlockedSuffixes.has(getWordSuffix(item.id)));
+        const progress = getCourseProgress();
+        const unlocked = state.vocab.filter(item => progress.unlockedWords.has(getWordSuffix(item.id)));
         return unlocked.length > 0 ? unlocked : state.vocab;
     }
 
@@ -522,7 +537,7 @@
             sessionSeconds: Math.round((Date.now() - state.batchStartTime) / 1000)
         };
 
-        const previousPending = getCoursePendingCount();
+        const previousKeys = getCourseKeysHeld();
 
         state.saveInFlight = true;
         if (el.saveStatus) el.saveStatus.textContent = tr("trainer.savingProgress");
@@ -543,14 +558,15 @@
             if (el.saveStatus) el.saveStatus.textContent = tr("trainer.progressSaved");
 
             if (progress?.course) {
-                const newPending = typeof progress.pendingWords === "number"
-                    ? progress.pendingWords
-                    : getPendingWordCount(
+                const newKeys = typeof progress.keys === "number"
+                    ? progress.keys
+                    : getKeysHeld(
                         progress.course.xp || 0,
-                        getUnlockedWordSuffixes(progress.course.categoryIndex, progress.course.categoryUnlocked).size
+                        (progress.course.unlockedWords || []).length,
+                        progress.course.purchasedKeys || 0
                     );
-                const gained = Math.max(0, newPending - previousPending);
-                if (gained > 0) notifyPendingWords(gained);
+                const gained = Math.max(0, newKeys - previousKeys);
+                if (gained > 0) notifyNewKeys(gained);
             }
 
             if (progress?.completedMissions?.length) {
@@ -567,23 +583,23 @@
         }
     }
 
-    function notifyPendingWords(count) {
+    function notifyNewKeys(count) {
         document.querySelector(".drop-toast")?.remove();
 
         const toast = document.createElement("div");
         toast.className = "drop-toast drop-toast-notice";
         toast.innerHTML = `
             <div class="drop-toast-head">
-                <span class="drop-toast-icon">\u{1F514}</span>
+                <span class="drop-toast-icon">\u{1F511}</span>
                 <div class="drop-toast-heading">
                     <strong></strong>
                     <a href="deck.html"></a>
                 </div>
             </div>
         `;
-        toast.querySelector("strong").textContent = tr("trainer.newWordsReady", {
+        toast.querySelector("strong").textContent = tr("trainer.newKeysReady", {
             count,
-            word: count === 1 ? tr("common.word") : tr("common.words")
+            key: count === 1 ? tr("common.key") : tr("common.keys")
         });
         toast.querySelector(".drop-toast-heading a").textContent = `${tr("trainer.goToDeck")} →`;
 

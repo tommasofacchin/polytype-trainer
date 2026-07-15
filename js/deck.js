@@ -12,24 +12,48 @@ const LANGUAGE_FLAGS = {
     swedish: "assets/flags/sweden.svg"
 };
 
-const LOCK_SVG =
+// Dungeon-door lock plate - a shield-shaped plate with corner rivets and a
+// keyhole, heavier/more ornate than a plain padlock (Zelda Twilight
+// Princess dungeon-door styling). Iron/bronze for a door with no key
+// available; the same shape gets a gold treatment via CSS (.is-key-ready)
+// when the player can afford to open it. Parts are classed so CSS can style
+// the rivets/plate/keyhole slot independently.
+const DOOR_LOCK_SVG =
     '<svg viewBox="0 0 24 24" aria-hidden="true">' +
-    '<rect x="4.5" y="10.5" width="15" height="10" rx="2.4"></rect>' +
-    '<path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"></path>' +
-    '<circle cx="12" cy="15" r="1.5"></circle>' +
+    '<path class="dl-plate" d="M12 2.4 20.5 6v6.4c0 5-3.6 8.4-8.5 9.6-4.9-1.2-8.5-4.6-8.5-9.6V6L12 2.4Z"></path>' +
+    '<circle class="dl-rivet" cx="6.2" cy="6.6" r="0.9"></circle>' +
+    '<circle class="dl-rivet" cx="17.8" cy="6.6" r="0.9"></circle>' +
+    '<circle class="dl-rivet" cx="6.2" cy="15.5" r="0.9"></circle>' +
+    '<circle class="dl-rivet" cx="17.8" cy="15.5" r="0.9"></circle>' +
+    '<circle class="dl-hole" cx="12" cy="11.4" r="3.1"></circle>' +
+    '<path class="dl-slot" d="M12 12.6v2.6"></path>' +
     "</svg>";
 
-// Open-shackle padlock - distinguishes a "ready to unlock" card from a fully
-// locked one (LOCK_SVG's closed shackle) at a glance.
-const UNLOCK_SVG =
+// Same door plate, shackle open at the keyhole - signals "you hold a key
+// that fits this door".
+const DOOR_KEY_SVG =
     '<svg viewBox="0 0 24 24" aria-hidden="true">' +
-    '<rect x="4.5" y="10.5" width="15" height="10" rx="2.4"></rect>' +
-    '<path d="M8 10.5V8a4 4 0 0 1 7.4-2.2"></path>' +
-    '<circle cx="12" cy="15" r="1.5"></circle>' +
+    '<path class="dl-plate" d="M12 2.4 20.5 6v6.4c0 5-3.6 8.4-8.5 9.6-4.9-1.2-8.5-4.6-8.5-9.6V6L12 2.4Z"></path>' +
+    '<circle class="dl-rivet" cx="6.2" cy="6.6" r="0.9"></circle>' +
+    '<circle class="dl-rivet" cx="17.8" cy="6.6" r="0.9"></circle>' +
+    '<circle class="dl-rivet" cx="6.2" cy="15.5" r="0.9"></circle>' +
+    '<circle class="dl-rivet" cx="17.8" cy="15.5" r="0.9"></circle>' +
+    '<circle class="dl-hole" cx="12" cy="11.4" r="3.1"></circle>' +
+    '<path class="dl-slot" d="M12.9 9.6 15 7.5"></path>' +
+    "</svg>";
+
+// Classic fantasy key (ring + shaft + teeth) for the keys-held counter badge.
+const KEY_SVG =
+    '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+    '<circle class="k-ring" cx="7" cy="12" r="4.2"></circle>' +
+    '<circle class="k-hole" cx="7" cy="12" r="1.4"></circle>' +
+    '<path class="k-shaft" d="M10.6 12h10"></path>' +
+    '<path class="k-tooth" d="M17 12v3"></path>' +
+    '<path class="k-tooth" d="M20 12v2.4"></path>' +
     "</svg>";
 
 const xpPerDrop = 50; // keep in sync with XP_PER_DROP in api/_lib.js
-const maxPendingWords = 5; // keep in sync with MAX_PENDING_WORDS in api/_lib.js
+const maxKeys = 5; // keep in sync with MAX_KEYS in api/_lib.js
 
 let activeDeckMeta = null;
 let activeLanguage = FALLBACK_LANGUAGE;
@@ -37,7 +61,7 @@ let vocab = [];
 let activeAudio = null;
 let isConfirmingUnlock = false;
 let pendingCourseKey = null;
-let nextPendingWord = null;
+let pendingUnlockWord = null;
 
 const el = {};
 
@@ -51,13 +75,15 @@ document.addEventListener("DOMContentLoaded", () => {
     el.currentLanguageFlag = document.getElementById("current-language-flag");
     el.progressFill = document.getElementById("deck-progress-fill");
     el.progressText = document.getElementById("deck-progress-text");
-    el.pendingSummary = document.getElementById("deck-pending-summary");
+    el.keysIcon = document.getElementById("deck-keys-icon");
+    el.keysCount = document.getElementById("deck-keys-count");
     el.emptyHint = document.getElementById("deck-empty-hint");
     el.groups = document.getElementById("deck-groups");
     el.unlockOverlay = document.getElementById("unlock-confirm-overlay");
     el.unlockBody = document.getElementById("unlock-confirm-body");
     el.unlockError = document.getElementById("unlock-confirm-error");
     el.unlockConfirmBtn = document.getElementById("unlock-confirm-btn");
+    if (el.keysIcon) el.keysIcon.innerHTML = KEY_SVG;
 
     setupLanguageMenu();
     setupUnlockConfirm();
@@ -237,57 +263,48 @@ function getStarterWordCount() {
     return Math.min(5, getSortedCategories()[0]?.size || 0);
 }
 
-function getCategoryProgress() {
+// Returns the active course's real unlocked-word set, migrating a legacy
+// prefix-based local course (categoryIndex/categoryUnlocked, no
+// unlockedWords array yet) on the fly using the exact same derivation the
+// old auto-unlock model used - so a returning guest sees exactly the same
+// words already unlocked, nothing reshuffled or reset.
+function getCourseProgress() {
     const profile = getStoredProfile();
     const courses = profile.courses || {};
     const course = courses[activeLanguage] || (activeDeckMeta?.id && courses[activeDeckMeta.id]);
 
     if (!course) {
-        return { courseKey: activeLanguage, categoryIndex: 0, categoryUnlocked: getStarterWordCount(), xp: 0 };
+        return {
+            courseKey: activeLanguage,
+            xp: 0,
+            unlockedWords: new Set(getSortedCategories()[0]?.wordSuffixes.slice(0, getStarterWordCount()) || []),
+            purchasedKeys: 0
+        };
     }
+
+    const unlockedWords = Array.isArray(course.unlockedWords)
+        ? new Set(course.unlockedWords)
+        : getUnlockedWordSuffixesFromPrefix(
+            Math.max(0, Math.trunc(Number(course.categoryIndex) || 0)),
+            Math.max(0, Math.trunc(Number(course.categoryUnlocked) || 0))
+        );
 
     return {
         courseKey: course.courseId || activeLanguage,
-        categoryIndex: Math.max(0, Math.trunc(Number(course.categoryIndex) || 0)),
-        categoryUnlocked: Math.max(0, Math.trunc(Number(course.categoryUnlocked) || 0)),
-        xp: Math.max(0, Number(course.xp) || 0)
+        xp: Math.max(0, Number(course.xp) || 0),
+        unlockedWords,
+        // Guests never have coins/shop access (sign-in required), so this is
+        // always 0 for them in practice - just reading it defensively here.
+        purchasedKeys: Math.max(0, Math.trunc(Number(course.purchasedKeys) || 0))
     };
 }
 
-// Mirrors getEarnedWordTotal()/getPendingWordCount() in api/_lib.js for the
-// Deck page's own render pass.
-function getEarnedWordTotal(courseXp, confirmedTotal) {
-    const totalWords = getSortedCategories().reduce((sum, category) => sum + category.size, 0);
-    const xpEarned = Math.min(totalWords, Math.floor(courseXp / xpPerDrop));
-    return Math.max(confirmedTotal, xpEarned);
-}
-
-function getPendingWordCount(courseXp, confirmedTotal) {
-    return Math.max(0, Math.min(maxPendingWords, getEarnedWordTotal(courseXp, confirmedTotal) - confirmedTotal));
-}
-
-// Flattened suffix -> global unlock-order rank across every category, in the
-// fixed shuffle order (decks/categories.js). Ported from js/main.js.
-function getWordDropRanks() {
-    const ranks = new Map();
-    let rank = 0;
-
-    getSortedCategories().forEach(category => {
-        category.wordSuffixes.forEach(suffix => {
-            ranks.set(suffix, rank);
-            rank += 1;
-        });
-    });
-
-    return ranks;
-}
-
-function getWordSuffix(wordId) {
-    const match = /(\d+)$/.exec(wordId || "");
-    return match ? Number.parseInt(match[0], 10) : 0;
-}
-
-function getUnlockedWordSuffixes(categoryIndex, categoryUnlocked) {
+// Legacy (pre-keys) unlock state was a contiguous prefix: every category
+// before `categoryIndex` fully unlocked, plus the first `categoryUnlocked`
+// suffixes of the category at `categoryIndex`. Mirrors the same migration
+// logic in api/_lib.js, for guest/local courses that never round-trip
+// through the server.
+function getUnlockedWordSuffixesFromPrefix(categoryIndex, categoryUnlocked) {
     const unlocked = new Set();
     getSortedCategories().forEach(category => {
         if (category.order < categoryIndex) {
@@ -299,8 +316,22 @@ function getUnlockedWordSuffixes(categoryIndex, categoryUnlocked) {
     return unlocked;
 }
 
-function getCategoryForSuffix(suffix) {
-    return getSortedCategories().find(category => category.wordSuffixes.includes(suffix));
+// Mirrors getEarnedWordTotal()/getKeysHeld() in api/_lib.js for the Deck
+// page's own render pass.
+function getEarnedWordTotal(courseXp, unlockedCount) {
+    const totalWords = getSortedCategories().reduce((sum, category) => sum + category.size, 0);
+    const xpEarned = Math.min(totalWords, Math.floor(courseXp / xpPerDrop));
+    return Math.max(unlockedCount, xpEarned);
+}
+
+function getKeysHeld(courseXp, unlockedCount, purchasedKeys) {
+    const earnedKeys = Math.max(0, getEarnedWordTotal(courseXp, unlockedCount) - unlockedCount);
+    return Math.max(0, Math.min(maxKeys, earnedKeys + (purchasedKeys || 0)));
+}
+
+function getWordSuffix(wordId) {
+    const match = /(\d+)$/.exec(wordId || "");
+    return match ? Number.parseInt(match[0], 10) : 0;
 }
 
 function languageHasHints() {
@@ -318,17 +349,14 @@ function renderDeck() {
         el.groups.appendChild(empty);
         if (el.progressFill) el.progressFill.style.width = "0%";
         if (el.progressText) el.progressText.textContent = "";
-        if (el.pendingSummary) el.pendingSummary.hidden = true;
+        if (el.keysCount) el.keysCount.textContent = "";
         return;
     }
 
-    const courseProgress = getCategoryProgress();
-    const { categoryIndex, categoryUnlocked } = courseProgress;
-    const unlockedSuffixes = getUnlockedWordSuffixes(categoryIndex, categoryUnlocked);
-    const confirmedTotal = unlockedSuffixes.size;
-    const pendingCount = getPendingWordCount(courseProgress.xp, confirmedTotal);
-    const dropRanks = getWordDropRanks();
-    const unlockedCount = vocab.filter(word => unlockedSuffixes.has(getWordSuffix(word.id))).length;
+    const courseProgress = getCourseProgress();
+    const { unlockedWords } = courseProgress;
+    const keysHeld = getKeysHeld(courseProgress.xp, unlockedWords.size, courseProgress.purchasedKeys);
+    const unlockedCount = vocab.filter(word => unlockedWords.has(getWordSuffix(word.id))).length;
     const pct = Math.round((unlockedCount / vocab.length) * 100);
 
     if (el.progressFill) el.progressFill.style.width = `${pct}%`;
@@ -340,6 +368,13 @@ function renderDeck() {
     }
     if (el.emptyHint) el.emptyHint.hidden = unlockedCount > 0;
 
+    pendingCourseKey = courseProgress.courseKey;
+
+    if (el.keysCount) {
+        el.keysCount.textContent = tr("deck.keysBadge", { count: keysHeld });
+    }
+    document.getElementById("deck-keys-badge")?.classList.toggle("has-keys", keysHeld > 0);
+
     // Order each category's words by their actual unlock sequence
     // (category.wordSuffixes), not by CSV row order - the drop order is a
     // fixed shuffle (see scripts/generate-categories.cjs), so listing by
@@ -348,56 +383,19 @@ function renderDeck() {
     const wordBySuffix = new Map();
     vocab.forEach(word => wordBySuffix.set(getWordSuffix(word.id), word));
 
-    pendingCourseKey = courseProgress.courseKey;
-    nextPendingWord = findNextPendingWord(wordBySuffix, dropRanks, confirmedTotal, pendingCount);
-
-    if (el.pendingSummary) {
-        el.pendingSummary.hidden = pendingCount <= 0;
-        if (pendingCount > 0) {
-            el.pendingSummary.textContent = tr("deck.pendingSummary", { count: pendingCount });
-        }
-    }
-
-    function getCardState(word) {
-        const rank = dropRanks.get(getWordSuffix(word.id));
-        if (rank === undefined) return "locked";
-        if (rank < confirmedTotal) return "unlocked";
-        if (rank < confirmedTotal + pendingCount) return "pending";
-        return "locked";
-    }
-
     getSortedCategories().forEach(category => {
         const categoryWords = category.wordSuffixes
             .map(suffix => wordBySuffix.get(suffix))
             .filter(Boolean);
         if (!categoryWords.length) return;
-        el.groups.appendChild(buildDeckGroup(category, categoryWords, categoryIndex, unlockedSuffixes, getCardState));
+        el.groups.appendChild(buildDeckGroup(category, categoryWords, unlockedWords, keysHeld));
     });
 }
 
-// Picks the word that will actually unlock next (lowest unlock-order rank
-// among the pending band) - since unlocking is strictly sequential, clicking
-// any of the (up to 5) pending cards always confirms this same word.
-function findNextPendingWord(wordBySuffix, dropRanks, confirmedTotal, pendingCount) {
-    if (pendingCount <= 0) return null;
-
-    let best = null;
-    let bestRank = Infinity;
-    wordBySuffix.forEach((word, suffix) => {
-        const rank = dropRanks.get(suffix);
-        if (rank === undefined || rank < confirmedTotal || rank >= confirmedTotal + pendingCount) return;
-        if (rank < bestRank) {
-            bestRank = rank;
-            best = word;
-        }
-    });
-    return best;
-}
-
-function buildDeckGroup(category, words, courseCategoryIndex, unlockedSuffixes, getCardState) {
+function buildDeckGroup(category, words, unlockedWords, keysHeld) {
     const total = words.length;
-    const unlockedInCategory = words.filter(word => unlockedSuffixes.has(getWordSuffix(word.id))).length;
-    const isComplete = courseCategoryIndex > category.order;
+    const unlockedInCategory = words.filter(word => unlockedWords.has(getWordSuffix(word.id))).length;
+    const isComplete = unlockedInCategory === total;
 
     const group = document.createElement("section");
     group.className = "deck-group";
@@ -408,7 +406,7 @@ function buildDeckGroup(category, words, courseCategoryIndex, unlockedSuffixes, 
 
     const badge = document.createElement("span");
     badge.className = "deck-group-badge";
-    badge.innerHTML = isComplete ? "&#10003;" : LOCK_SVG;
+    badge.innerHTML = isComplete ? "&#10003;" : DOOR_LOCK_SVG;
 
     const title = document.createElement("span");
     title.className = "deck-group-title";
@@ -424,41 +422,44 @@ function buildDeckGroup(category, words, courseCategoryIndex, unlockedSuffixes, 
 
     const grid = document.createElement("div");
     grid.className = "deck-grid";
-    words.forEach(word => grid.appendChild(buildDeckCard(word, getCardState(word))));
+    words.forEach(word => {
+        const isUnlocked = unlockedWords.has(getWordSuffix(word.id));
+        grid.appendChild(buildDeckCard(word, isUnlocked, keysHeld));
+    });
 
     group.append(head, grid);
     return group;
 }
 
-function buildDeckCard(word, cardState) {
+// The player may open ANY currently-locked door (no forced order/category
+// gating) as long as they hold at least one key - so, unlike the old
+// sequential model, a card's own suffix (not some globally-computed "next"
+// word) is exactly what gets unlocked when this specific card is clicked.
+function buildDeckCard(word, isUnlocked, keysHeld) {
     const card = document.createElement("div");
     card.className = "deck-card";
 
-    if (cardState === "locked") {
+    if (!isUnlocked) {
+        const canOpen = keysHeld > 0;
         card.classList.add("is-locked");
-        card.setAttribute("aria-label", tr("trainer.lockedWord"));
+        card.setAttribute("aria-label", canOpen ? tr("trainer.pendingWord") : tr("trainer.lockedWord"));
+
         const lock = document.createElement("span");
         lock.className = "deck-card-lock";
-        lock.innerHTML = LOCK_SVG;
+        lock.innerHTML = canOpen ? DOOR_KEY_SVG : DOOR_LOCK_SVG;
         card.append(lock);
-        return card;
-    }
 
-    if (cardState === "pending") {
-        card.classList.add("is-pending");
-        card.setAttribute("role", "button");
-        card.tabIndex = 0;
-        card.setAttribute("aria-label", tr("trainer.pendingWord"));
-        card.addEventListener("click", openUnlockConfirm);
-        card.addEventListener("keydown", event => {
-            if (event.key !== "Enter" && event.key !== " ") return;
-            event.preventDefault();
-            openUnlockConfirm();
-        });
-        const lock = document.createElement("span");
-        lock.className = "deck-card-lock is-pending";
-        lock.innerHTML = UNLOCK_SVG;
-        card.append(lock);
+        if (canOpen) {
+            card.classList.add("is-key-ready");
+            card.setAttribute("role", "button");
+            card.tabIndex = 0;
+            card.addEventListener("click", () => openUnlockConfirm(word));
+            card.addEventListener("keydown", event => {
+                if (event.key !== "Enter" && event.key !== " ") return;
+                event.preventDefault();
+                openUnlockConfirm(word);
+            });
+        }
         return card;
     }
 
@@ -506,13 +507,14 @@ function setupUnlockConfirm() {
     el.unlockConfirmBtn?.addEventListener("click", confirmUnlock);
 }
 
-function openUnlockConfirm() {
-    if (!el.unlockOverlay || !nextPendingWord) return;
+function openUnlockConfirm(word) {
+    if (!el.unlockOverlay || !word) return;
 
+    pendingUnlockWord = word;
     if (el.unlockBody) {
         el.unlockBody.textContent = tr("deck.confirmUnlockBody", {
-            word: nextPendingWord.script,
-            meaning: nextPendingWord.meaning
+            word: word.script,
+            meaning: word.meaning
         });
     }
     setUnlockError("");
@@ -539,17 +541,18 @@ function setUnlockError(message) {
 }
 
 async function confirmUnlock() {
-    if (isConfirmingUnlock || !pendingCourseKey) return;
+    if (isConfirmingUnlock || !pendingCourseKey || !pendingUnlockWord) return;
 
+    const wordSuffix = getWordSuffix(pendingUnlockWord.id);
     isConfirmingUnlock = true;
     if (el.unlockConfirmBtn) el.unlockConfirmBtn.disabled = true;
     setUnlockError("");
 
     try {
         if (window.PolytypeFirebase?.isSignedIn?.()) {
-            await window.PolytypeFirebase.unlockWord(pendingCourseKey);
+            await window.PolytypeFirebase.unlockWord(pendingCourseKey, wordSuffix);
         } else {
-            confirmUnlockGuest(pendingCourseKey);
+            confirmUnlockGuest(pendingCourseKey, wordSuffix);
         }
         closeUnlockConfirm(true);
     } catch (error) {
@@ -562,11 +565,15 @@ async function confirmUnlock() {
 
 // Guest (signed-out) confirm path - no server round trip available, so this
 // mutates localStorage["polytype-profile"] directly, matching the shape
-// js/firebase-client.js's syncProfileToLocalStorage normally writes.
-function confirmUnlockGuest(courseKey) {
-    const { categoryIndex, categoryUnlocked } = getCategoryProgress();
-    const stepped = advanceCategoryStateByOne(categoryIndex, categoryUnlocked);
+// js/firebase-client.js's syncProfileToLocalStorage normally writes. Reuses
+// getCourseProgress()'s migration so a legacy prefix-based local course gets
+// converted to a real unlockedWords array at the same moment it's first
+// spent against, rather than needing a separate migration path.
+function confirmUnlockGuest(courseKey, wordSuffix) {
+    const { unlockedWords } = getCourseProgress();
+    if (unlockedWords.has(wordSuffix)) return;
 
+    const nextUnlockedWords = [...unlockedWords, wordSuffix];
     const profile = getStoredProfile();
     const courses = profile.courses || {};
     const existing = courses[courseKey] || {};
@@ -578,56 +585,14 @@ function confirmUnlockGuest(courseKey) {
             [courseKey]: {
                 ...existing,
                 courseId: courseKey,
-                categoryIndex: stepped.categoryIndex,
-                categoryUnlocked: stepped.categoryUnlocked,
-                wordsUnlocked: stepped.totalWordsUnlocked
+                unlockedWords: nextUnlockedWords,
+                wordsUnlocked: nextUnlockedWords.length
             }
         }
     };
 
     localStorage.setItem(PROFILE_KEY, JSON.stringify(nextProfile));
     document.dispatchEvent(new CustomEvent("polytype-profile-updated", { detail: nextProfile }));
-}
-
-// Mirrors stepCategoryProgress() in api/_lib.js for the signed-out/local-only
-// confirm path (no server round trip available there).
-function advanceCategoryStateByOne(categoryIndex, categoryUnlocked) {
-    const categories = getSortedCategories();
-    let index = Math.min(categoryIndex, categories.length - 1);
-    let unlocked = categoryUnlocked;
-    let remaining = 1;
-
-    while (remaining > 0 && index < categories.length) {
-        const capacity = categories[index].size - unlocked;
-        if (remaining < capacity) {
-            unlocked += remaining;
-            remaining = 0;
-        } else {
-            remaining -= capacity;
-            index += 1;
-            unlocked = 0;
-        }
-    }
-
-    if (index >= categories.length) {
-        index = categories.length - 1;
-        unlocked = categories[index].size;
-    }
-
-    return {
-        categoryIndex: index,
-        categoryUnlocked: unlocked,
-        totalWordsUnlocked: getUnlockedWordCountForCategoryState(index, unlocked)
-    };
-}
-
-function getUnlockedWordCountForCategoryState(categoryIndex, categoryUnlocked) {
-    const categories = getSortedCategories();
-    let total = 0;
-    for (let i = 0; i < categoryIndex && i < categories.length; i += 1) {
-        total += categories[i].size;
-    }
-    return total + Math.max(0, categoryUnlocked);
 }
 
 function playWordAudio(word) {

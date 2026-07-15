@@ -55,11 +55,20 @@ function setupProfileSync() {
     }
 
     firebaseClient.onChange(authState => {
-        // Ignore the synchronous "not resolved yet" tick - only repaint once
+        // Ignore the synchronous "not resolved yet" tick - only act once
         // Firebase has actually confirmed signed-in vs signed-out, otherwise
-        // this immediately flips the optimistic render above back to guest.
+        // this immediately flips the optimistic render above back to guest
+        // (or redirects away) before a real session had a chance to load.
         if (!authState.ready) return;
-        renderGreeting(Boolean(authState.user));
+
+        // Home is the app's main entry point and is gated: signed-out
+        // visitors belong on the marketing landing page, not the dashboard.
+        if (!authState.user) {
+            window.location.href = "landing.html";
+            return;
+        }
+
+        renderGreeting(true);
     });
 }
 

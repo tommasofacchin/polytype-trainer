@@ -138,19 +138,41 @@ function getSortedCategories() {
     return [...(window.POLYTYPE_CATEGORIES || [])].sort((a, b) => a.order - b.order);
 }
 
-function getCategoryProgress(language) {
+// Returns the course's real unlocked-word set, migrating a legacy
+// prefix-based local course (categoryIndex/categoryUnlocked, no
+// unlockedWords array yet) on the fly.
+function getUnlockedWords(language) {
     const profile = getStoredProfile();
     const courses = profile.courses || {};
     const course = courses[language];
 
     if (!course) {
-        return { categoryIndex: 0, categoryUnlocked: getStarterWordCount() };
+        return new Set(getSortedCategories()[0]?.wordSuffixes.slice(0, getStarterWordCount()) || []);
     }
 
-    return {
-        categoryIndex: Math.max(0, Math.trunc(Number(course.categoryIndex) || 0)),
-        categoryUnlocked: Math.max(0, Math.trunc(Number(course.categoryUnlocked) || 0))
-    };
+    return Array.isArray(course.unlockedWords)
+        ? new Set(course.unlockedWords)
+        : getUnlockedWordSuffixesFromPrefix(
+            Math.max(0, Math.trunc(Number(course.categoryIndex) || 0)),
+            Math.max(0, Math.trunc(Number(course.categoryUnlocked) || 0))
+        );
+}
+
+// Legacy (pre-keys) unlock state was a contiguous prefix. Used only to
+// migrate old local courses into a real unlockedWords set the first time
+// they're touched under the new model.
+function getUnlockedWordSuffixesFromPrefix(categoryIndex, categoryUnlocked) {
+    const unlocked = new Set();
+
+    getSortedCategories().forEach(category => {
+        if (category.order < categoryIndex) {
+            category.wordSuffixes.forEach(suffix => unlocked.add(suffix));
+        } else if (category.order === categoryIndex) {
+            category.wordSuffixes.slice(0, categoryUnlocked).forEach(suffix => unlocked.add(suffix));
+        }
+    });
+
+    return unlocked;
 }
 
 function getStarterWordCount() {
@@ -163,29 +185,35 @@ function renderCategories() {
     if (!currentLanguage || !list) return;
 
     const categories = getSortedCategories();
-    const progress = getCategoryProgress(currentLanguage);
+    const unlockedWords = getUnlockedWords(currentLanguage);
     const totalWords = categories.reduce((sum, category) => sum + category.size, 0);
-    const unlockedWords = categories.reduce((sum, category) => {
-        if (category.order < progress.categoryIndex) return sum + category.size;
-        if (category.order === progress.categoryIndex) return sum + progress.categoryUnlocked;
-        return sum;
-    }, 0);
+    const unlockedCount = categories.reduce(
+        (sum, category) => sum + category.wordSuffixes.filter(suffix => unlockedWords.has(suffix)).length,
+        0
+    );
 
     if (summary) {
         summary.textContent = tr("categories.overallProgress", {
             language: getLanguageLabel(currentLanguage),
-            unlocked: unlockedWords,
+            unlocked: unlockedCount,
             total: totalWords
         });
     }
 
-    list.replaceChildren(...categories.map(category => buildCategoryCard(category, progress)));
+    // "Active" = the first category (in drop order) that isn't fully
+    // unlocked yet - a purely visual progress-ladder indicator now that a
+    // key can be spent on any word in any category, not a real gate.
+    const activeOrder = categories.find(category =>
+        category.wordSuffixes.some(suffix => !unlockedWords.has(suffix))
+    )?.order ?? categories.length;
+
+    list.replaceChildren(...categories.map(category => buildCategoryCard(category, unlockedWords, activeOrder)));
 }
 
-function buildCategoryCard(category, progress) {
-    const isComplete = progress.categoryIndex > category.order;
-    const isActive = !isComplete && progress.categoryIndex === category.order;
-    const unlockedInCategory = isComplete ? category.size : (isActive ? progress.categoryUnlocked : 0);
+function buildCategoryCard(category, unlockedWords, activeOrder) {
+    const unlockedInCategory = category.wordSuffixes.filter(suffix => unlockedWords.has(suffix)).length;
+    const isComplete = unlockedInCategory === category.size;
+    const isActive = !isComplete && category.order === activeOrder;
     const pct = category.size ? Math.round((unlockedInCategory / category.size) * 100) : 0;
 
     const card = document.createElement("article");

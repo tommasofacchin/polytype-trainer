@@ -5,19 +5,25 @@ const MAX_SESSION_XP = 500;
 const SEARCH_RESULTS_LIMIT = 10;
 const MIN_SEARCH_LENGTH = 2;
 const HANDLE_PATTERN = /^[a-z0-9_]{3,20}$/;
-// Keep in sync with decks/categories.js (see scripts/generate-categories.cjs) -
-// these are just the `size` of each generated category, in order.
-const CATEGORY_SIZES = [20, 15, 20, 35, 25, 30, 25, 20, 25, 15, 10, 15, 10, 25, 10];
+// Real category/word-suffix data, sorted by `order` - same file the browser
+// loads as window.POLYTYPE_CATEGORIES (see scripts/generate-categories.cjs,
+// which emits both a browser global and this CommonJS export).
+const CATEGORIES = require("../decks/categories.js").slice().sort((a, b) => a.order - b.order);
+const CATEGORY_SIZES = CATEGORIES.map(category => category.size);
 const TOTAL_CATEGORY_WORDS = CATEGORY_SIZES.reduce((sum, size) => sum + size, 0);
+const VALID_WORD_SUFFIXES = new Set(CATEGORIES.flatMap(category => category.wordSuffixes));
 const XP_PER_DROP = 50;
 // A brand-new course needs a handful of words unlocked before any XP exists,
 // otherwise there is nothing to practice to earn that first XP at all.
 const STARTER_WORDS = 5;
 // Words are earned automatically by XP but only become playable once the
-// player explicitly confirms them (see api/unlock-word.js). At most this many
-// can sit "earned but unconfirmed" at once - earning more XP beyond that
-// point doesn't create additional pending slots until one is confirmed.
-const MAX_PENDING_WORDS = 5;
+// player spends a key to unlock a specific one (see api/unlock-word.js). At
+// most this many keys can be held at once - earning more XP beyond that
+// point doesn't grant additional keys until one is spent.
+const MAX_KEYS = 5;
+// Coins price of one shop-bought key (api/buy-key.js). Roughly "2 daily
+// chests" - a meaningful but not trivial trade against XP-earned keys.
+const KEY_PRICE_COINS = 100;
 const COURSE_LEVEL_CAPS = {
   chinese: 60,
   german: 60,
@@ -156,28 +162,38 @@ function sanitizeUserProfile(user) {
 function sanitizeCoursesSummary(courses) {
   if (!courses || typeof courses !== "object") return {};
   return Object.fromEntries(
-    Object.entries(courses).map(([courseId, course]) => [
-      courseId,
-      {
-        courseId: course.courseId || courseId,
-        xp: course.xp || 0,
-        level: course.level || 1,
-        unlockedLevel: course.unlockedLevel || course.level || 1,
-        // Must round-trip categoryIndex/categoryUnlocked (not just
-        // wordsUnlocked) - the trainer/memory/dictate/deck pages all derive
-        // their actual playable word list from these two fields via
-        // getUnlockedWordSuffixes(). Dropping them here made every page
-        // reload silently reset a real course back to 0 unlocked words,
-        // since the client's own "no course yet" starter-word fallback only
-        // triggers when the course object is entirely missing, not when
-        // it's present but missing these fields.
-        categoryIndex: Math.max(0, Math.trunc(Number(course.categoryIndex) || 0)),
-        categoryUnlocked: Math.max(0, Math.trunc(Number(course.categoryUnlocked) || 0)),
-        wordsUnlocked: course.wordsUnlocked || WORDS_PER_LEVEL,
-        wordsMastered: course.wordsMastered || 0
-      }
-    ])
+    Object.entries(courses).map(([courseId, course]) => {
+      // Must round-trip the actual unlockedWords array, not just a count -
+      // the trainer/memory/dictate/deck pages all derive their playable word
+      // list from this set directly. Dropping it here made every page
+      // reload silently reset a real course back to 0 unlocked words, since
+      // the client's own "no course yet" starter-word fallback only
+      // triggers when the course object is entirely missing, not when it's
+      // present but missing this field.
+      const unlockedWords = sanitizeUnlockedWords(course.unlockedWords);
+      return [
+        courseId,
+        {
+          courseId: course.courseId || courseId,
+          xp: course.xp || 0,
+          level: course.level || 1,
+          unlockedLevel: course.unlockedLevel || course.level || 1,
+          unlockedWords,
+          wordsUnlocked: unlockedWords.length,
+          wordsMastered: course.wordsMastered || 0,
+          // Must also round-trip purchasedKeys (api/buy-key.js) - otherwise a
+          // page reload right after a purchase would silently drop it from
+          // the client's cached course until the next full profile fetch.
+          purchasedKeys: Math.max(0, Math.trunc(Number(course.purchasedKeys) || 0))
+        }
+      ];
+    })
   );
+}
+
+function sanitizeUnlockedWords(value) {
+  if (!Array.isArray(value)) return [];
+  return value.filter(suffix => Number.isInteger(suffix) && VALID_WORD_SUFFIXES.has(suffix));
 }
 
 function getAuthProfile(token) {
@@ -260,77 +276,57 @@ function getCourseLevel(courseId, totalXp) {
   return cap ? Math.min(level, cap) : level;
 }
 
-function getUnlockedWordCount(categoryIndex, categoryUnlocked) {
-  let total = 0;
-  for (let i = 0; i < categoryIndex && i < CATEGORY_SIZES.length; i += 1) {
-    total += CATEGORY_SIZES[i];
-  }
-  return total + Math.max(0, categoryUnlocked);
-}
-
-// Walks a course's category/drop progress forward by exactly `wordsToAdd`
-// words, in the fixed per-category order. Categories unlock in sequence: a
-// category only starts dropping words once every earlier category is fully
-// unlocked.
-function stepCategoryProgress(categoryIndex, categoryUnlocked, wordsToAdd) {
-  let index = Math.min(categoryIndex, CATEGORY_SIZES.length - 1);
-  let unlocked = categoryUnlocked;
-  let remaining = Math.max(0, wordsToAdd);
-
-  while (remaining > 0 && index < CATEGORY_SIZES.length) {
-    const capacity = CATEGORY_SIZES[index] - unlocked;
-    if (remaining < capacity) {
-      unlocked += remaining;
-      remaining = 0;
-    } else {
-      remaining -= capacity;
-      index += 1;
-      unlocked = 0;
+// Legacy (pre-keys) unlock state was a contiguous prefix: every category
+// before `categoryIndex` fully unlocked, plus the first `categoryUnlocked`
+// suffixes (in that category's fixed drop order) of the category at
+// `categoryIndex`. Used only to migrate old course docs into a real
+// unlockedWords set the first time they're touched under the new model.
+function getUnlockedWordSuffixesFromPrefix(categoryIndex, categoryUnlocked) {
+  const suffixes = [];
+  CATEGORIES.forEach(category => {
+    if (category.order < categoryIndex) {
+      suffixes.push(...category.wordSuffixes);
+    } else if (category.order === categoryIndex) {
+      suffixes.push(...category.wordSuffixes.slice(0, categoryUnlocked));
     }
-  }
-
-  if (index >= CATEGORY_SIZES.length) {
-    index = CATEGORY_SIZES.length - 1;
-    unlocked = CATEGORY_SIZES[index];
-  }
-
-  return {
-    categoryIndex: index,
-    categoryUnlocked: unlocked,
-    totalWordsUnlocked: getUnlockedWordCount(index, unlocked)
-  };
+  });
+  return suffixes;
 }
 
-// Retained as a reference implementation of the old fully-automatic unlock
-// algorithm (XP alone decided how many words were unlocked). No longer
-// called by complete-practice-session - unlocking now requires an explicit
-// confirmation via api/unlock-word.js. See getEarnedWordTotal/
-// getPendingWordCount for the new "earned but not yet confirmed" model.
-function advanceCategoryProgress(categoryIndex, categoryUnlocked, courseXp, isNewCourse) {
-  const initialUnlocked = isNewCourse
-    ? Math.min(STARTER_WORDS, CATEGORY_SIZES[0] || 0)
-    : categoryUnlocked;
-  const previousTotal = getUnlockedWordCount(categoryIndex, initialUnlocked);
-  const targetTotal = Math.min(TOTAL_CATEGORY_WORDS, Math.floor(courseXp / XP_PER_DROP));
-  const newlyUnlocked = Math.max(0, targetTotal - previousTotal);
-  const stepped = stepCategoryProgress(categoryIndex, initialUnlocked, newlyUnlocked);
-
-  return { ...stepped, newlyUnlocked };
+// Resolves a course's actual set of unlocked word suffixes, migrating
+// legacy prefix-based progress (categoryIndex/categoryUnlocked) or granting
+// the fixed starter set for a brand-new course. Never touches courseXp -
+// unlockedWords only ever grows through an explicit key spend
+// (api/unlock-word.js).
+function resolveUnlockedWords(existingCourse, isNewCourse) {
+  if (Array.isArray(existingCourse?.unlockedWords)) {
+    return sanitizeUnlockedWords(existingCourse.unlockedWords);
+  }
+  if (existingCourse && !isNewCourse) {
+    return getUnlockedWordSuffixesFromPrefix(
+      existingCourse.categoryIndex || 0,
+      existingCourse.categoryUnlocked || 0
+    );
+  }
+  return (CATEGORIES.find(category => category.order === 0)?.wordSuffixes || []).slice(0, STARTER_WORDS);
 }
 
 // How many words the course's XP alone would justify unlocking, floored at
-// the count already confirmed (a brand-new course's fixed starter grant can
+// the count already unlocked (a brand-new course's fixed starter grant can
 // exceed what its XP alone would justify).
-function getEarnedWordTotal(courseXp, confirmedTotal) {
+function getEarnedWordTotal(courseXp, unlockedCount) {
   const xpEarned = Math.min(TOTAL_CATEGORY_WORDS, Math.floor(courseXp / XP_PER_DROP));
-  return Math.max(confirmedTotal, xpEarned);
+  return Math.max(unlockedCount, xpEarned);
 }
 
-// How many earned-but-unconfirmed words are waiting for the player to
-// explicitly unlock, capped at MAX_PENDING_WORDS - earning more XP beyond
-// that cap doesn't grow this further until a pending word is confirmed.
-function getPendingWordCount(courseXp, confirmedTotal) {
-  return Math.max(0, Math.min(MAX_PENDING_WORDS, getEarnedWordTotal(courseXp, confirmedTotal) - confirmedTotal));
+// How many keys the player currently holds: earned via XP (one per word) plus
+// any shop-bought keys (api/buy-key.js), capped at MAX_KEYS - earning more
+// XP or buying more keys beyond that cap doesn't grant more until one is
+// spent (see api/unlock-word.js's spend rule for how purchasedKeys is drawn
+// down without double-counting against the XP-earned pool).
+function getKeysHeld(courseXp, unlockedCount, purchasedKeys) {
+  const earnedKeys = Math.max(0, getEarnedWordTotal(courseXp, unlockedCount) - unlockedCount);
+  return Math.max(0, Math.min(MAX_KEYS, earnedKeys + (purchasedKeys || 0)));
 }
 
 function getXpForLevel(level) {
@@ -510,11 +506,11 @@ module.exports = {
   calculateStreakUpdate,
   getLevelInfo,
   getCourseLevel,
-  getUnlockedWordCount,
-  advanceCategoryProgress,
-  stepCategoryProgress,
+  getUnlockedWordSuffixesFromPrefix,
+  resolveUnlockedWords,
+  sanitizeUnlockedWords,
   getEarnedWordTotal,
-  getPendingWordCount,
+  getKeysHeld,
   normalizeCourseId,
   normalizeUid,
   normalizeHandle,
@@ -536,11 +532,14 @@ module.exports = {
   WORDS_PER_LEVEL,
   SEARCH_RESULTS_LIMIT,
   MIN_SEARCH_LENGTH,
+  CATEGORIES,
   CATEGORY_SIZES,
   TOTAL_CATEGORY_WORDS,
+  VALID_WORD_SUFFIXES,
   XP_PER_DROP,
   STARTER_WORDS,
-  MAX_PENDING_WORDS,
+  MAX_KEYS,
+  KEY_PRICE_COINS,
   GAME_TYPES,
   CHEST_COIN_REWARD,
   CHEST_XP_REWARD,
