@@ -113,7 +113,14 @@
       "Bash(node \"/c/Users/wangf/AppData/Local/Temp/claude/c--Users-wangf-OneDrive----Tommaso-polytype-trainer/630468e9-50a5-4999-885d-597bdd165615/scratchpad/test_page_cleanup.js\")",
       "Bash(node \"/c/Users/wangf/AppData/Local/Temp/claude/c--Users-wangf-OneDrive----Tommaso-polytype-trainer/630468e9-50a5-4999-885d-597bdd165615/scratchpad/test_header_deck.js\")",
       "Bash(node \"/c/Users/wangf/AppData/Local/Temp/claude/c--Users-wangf-OneDrive----Tommaso-polytype-trainer/630468e9-50a5-4999-885d-597bdd165615/scratchpad/test_sprint_audio.js\")",
-      "Bash(node \"/c/Users/wangf/AppData/Local/Temp/claude/c--Users-wangf-OneDrive----Tommaso-polytype-trainer/630468e9-50a5-4999-885d-597bdd165615/scratchpad/test_language_gate.js\")"
+      "Bash(node \"/c/Users/wangf/AppData/Local/Temp/claude/c--Users-wangf-OneDrive----Tommaso-polytype-trainer/630468e9-50a5-4999-885d-597bdd165615/scratchpad/test_language_gate.js\")",
+      "Bash(node \"/c/Users/wangf/AppData/Local/Temp/claude/c--Users-wangf-OneDrive----Tommaso-polytype-trainer/630468e9-50a5-4999-885d-597bdd165615/scratchpad/test_friends_prefetch.js\")",
+      "Bash(node \"/c/Users/wangf/AppData/Local/Temp/claude/c--Users-wangf-OneDrive----Tommaso-polytype-trainer/630468e9-50a5-4999-885d-597bdd165615/scratchpad/test_icon_and_sprintbtn.js\")",
+      "Bash(awk -F, 'NR==1{for\\(i=1;i<=NF;i++\\) h[i]=$i} NR>1{print NR-1, $0}' decks/italian_a1.csv)",
+      "Bash(node \"/c/Users/wangf/AppData/Local/Temp/claude/c--Users-wangf-OneDrive----Tommaso-polytype-trainer/630468e9-50a5-4999-885d-597bdd165615/scratchpad/test_deck_order.js\")",
+      "Bash(node \"/c/Users/wangf/AppData/Local/Temp/claude/c--Users-wangf-OneDrive----Tommaso-polytype-trainer/630468e9-50a5-4999-885d-597bdd165615/scratchpad/test_dictate_flow.js\")",
+      "Bash(node \"/c/Users/wangf/AppData/Local/Temp/claude/c--Users-wangf-OneDrive----Tommaso-polytype-trainer/630468e9-50a5-4999-885d-597bdd165615/scratchpad/test_trainer_result.js\")",
+      "Bash(node \"/c/Users/wangf/AppData/Local/Temp/claude/c--Users-wangf-OneDrive----Tommaso-polytype-trainer/630468e9-50a5-4999-885d-597bdd165615/scratchpad/test_memory_result.js\")"
     ],
     "additionalDirectories": [
       "C:\\Users\\wangf\\AppData\\Local\\Temp\\pw-test2",

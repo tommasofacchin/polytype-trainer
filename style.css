@@ -790,10 +790,17 @@ input[type="password"]:focus {
     flex: 0 0 auto;
 }
 
-.restart-btn:disabled {
+.restart-btn:disabled,
+.restart-btn.is-disabled {
     cursor: not-allowed;
     opacity: 0.55;
     transform: none;
+}
+
+/* <a>-based buttons (e.g. Sprint's Home link) have no disabled attribute -
+   pointer-events is what actually blocks the click. */
+.restart-btn.is-disabled {
+    pointer-events: none;
 }
 
 .sprint-result-actions {
@@ -2509,16 +2516,17 @@ input[type="password"]:focus {
     animation: levelup-backdrop-in 200ms ease forwards;
 }
 
-/* Sprint's result screen carries a lot more than .timer-modal's other reuse
-   (trainer.html's short timed-summary): a breakdown list plus a friends
-   list. Nested inside .list-card's bounded, overflow:hidden box, the extra
-   content was getting silently clipped instead of scrolling into view.
-   Promoted to a real viewport-level overlay, same footing as
-   .confirm-overlay/.levelup-overlay - it's a <main> sibling in sprint.html
-   now, not a child of the exercise card. place-items: start (not center)
-   is what lets it scroll instead of clipping when content is taller than
-   the viewport. */
-.sprint-result-overlay {
+/* Shared end-of-game overlay: full viewport, same footing as
+   .confirm-overlay/.levelup-overlay, used by every exercise's result screen
+   (Sprint, Trainer, Memory, Dictate) instead of each having its own
+   bespoke result UI. Originally added for Sprint's result screen, which
+   carries more than .timer-modal's old bounded-inside-the-card usage could
+   fit (a breakdown list plus a friends list) without silently clipping. A
+   <main> sibling in each page's HTML, not a child of the exercise card -
+   flex-direction:column + align-items:center + the child's own
+   margin:auto (below) is what lets it center gracefully AND still scroll
+   instead of clipping when content is taller than the viewport. */
+.game-result-overlay {
     position: fixed;
     inset: 0;
     z-index: 600;
@@ -2529,6 +2537,16 @@ input[type="password"]:focus {
     padding: clamp(16px, 4vw, 40px) clamp(12px, 3vw, 24px);
 }
 
+/* Self-sufficient [hidden] handling - this class is meant to be usable on
+   its own (js/memory.js's result modal only carries this class, not
+   .timer-modal), not just paired with .timer-modal's own [hidden] rule.
+   Author-level `display` rules always beat the UA stylesheet's default
+   [hidden] { display: none }, so without this the element would stay
+   visibly rendered despite the hidden attribute being set. */
+.game-result-overlay[hidden] {
+    display: none;
+}
+
 /* margin: auto (not justify-content/align-items: center on the container)
    is what centers this vertically AND still lets it scroll gracefully
    instead of clipping at the top when content is taller than the
@@ -2536,7 +2554,7 @@ input[type="password"]:focus {
    space, so it falls back to starting from the top like place-items:
    start used to, but centers whenever it actually fits on screen (the
    common case this was reported clipped-looking for). */
-.sprint-result-overlay .timer-modal-card {
+.game-result-overlay .timer-modal-card {
     margin: auto 0;
 }
 
@@ -2834,17 +2852,6 @@ body.deck-overlay-open {
     flex: 1;
 }
 
-#unlock-go-shop-link {
-    flex: 1;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    height: 44px;
-    padding: 0 var(--space-4);
-    text-decoration: none;
-    text-align: center;
-}
-
 .btn-ghost {
     height: 44px;
     padding: 0 var(--space-4);
@@ -3055,8 +3062,8 @@ body.deck-overlay-open {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 34px;
-    height: 34px;
+    width: 44px;
+    height: 44px;
     padding: 0;
     appearance: none;
     border: 0;
@@ -3068,8 +3075,8 @@ body.deck-overlay-open {
 }
 
 .deck-card-toggle svg {
-    width: 20px;
-    height: 20px;
+    width: 26px;
+    height: 26px;
 }
 
 .deck-card-toggle:hover,

@@ -81,6 +81,7 @@
         el.resultFriends = document.getElementById("sprint-result-friends");
         el.resultFriendsList = document.getElementById("sprint-result-friends-list");
         el.playAgainBtn = document.getElementById("sprint-play-again-btn");
+        el.homeBtn = document.getElementById("sprint-home-btn");
 
         el.playAgainBtn.addEventListener("click", () => {
             el.resultModal.hidden = true;
@@ -656,42 +657,57 @@
         el.resultFriendsList.replaceChildren();
         el.resultModal.hidden = false;
 
-        if (state.correctAnswers <= 0) return;
+        // Play again/Home stay disabled for at least this long, instead of
+        // a "Saving progress..." status line - the buttons turning
+        // clickable (Play again's already-green background) *is* the
+        // "you're good to go" signal, so a save that resolves faster than
+        // this doesn't just flash text and vanish.
+        setResultButtonsBusy(true);
+        const minDelay = new Promise(resolve => window.setTimeout(resolve, 1000));
 
-        const firebaseClient = window.PolytypeFirebase;
-        if (!firebaseClient?.isSignedIn?.()) {
-            el.resultSaveStatus.textContent = tr("trainer.signInSave");
-            return;
+        if (state.correctAnswers > 0) {
+            const firebaseClient = window.PolytypeFirebase;
+            if (!firebaseClient?.isSignedIn?.()) {
+                el.resultSaveStatus.textContent = tr("trainer.signInSave");
+            } else {
+                const payload = {
+                    courseId: activeLanguage,
+                    gameType: "sprint",
+                    correctAnswers: state.correctAnswers,
+                    wrongAnswers: state.wrongAnswers,
+                    bestCombo: state.bestStreak,
+                    wordsUsed: state.wordsUsed,
+                    sessionSeconds
+                };
+
+                try {
+                    const progress = window.PolytypeGameState?.completePracticeSession
+                        ? await window.PolytypeGameState.completePracticeSession(payload)
+                        : (await firebaseClient.completePracticeSession(payload))?.data;
+
+                    if (typeof progress?.sessionCoins === "number" && progress.sessionCoins > 0) {
+                        el.resultCoins.textContent = tr("trainer.coinsEarned", { count: progress.sessionCoins });
+                    }
+                    renderFriendsStatus(progress?.friendsStatus);
+                    if (progress?.completedMissions?.length) {
+                        await window.PolytypeMissionCelebrate?.show?.(progress.completedMissions);
+                    }
+                } catch (error) {
+                    el.resultSaveStatus.textContent = error?.message || tr("trainer.signInSave");
+                }
+            }
         }
 
-        el.resultSaveStatus.textContent = tr("trainer.savingProgress");
+        await minDelay;
+        setResultButtonsBusy(false);
+    }
 
-        const payload = {
-            courseId: activeLanguage,
-            gameType: "sprint",
-            correctAnswers: state.correctAnswers,
-            wrongAnswers: state.wrongAnswers,
-            bestCombo: state.bestStreak,
-            wordsUsed: state.wordsUsed,
-            sessionSeconds
-        };
-
-        try {
-            const progress = window.PolytypeGameState?.completePracticeSession
-                ? await window.PolytypeGameState.completePracticeSession(payload)
-                : (await firebaseClient.completePracticeSession(payload))?.data;
-
-            el.resultSaveStatus.textContent = "";
-            if (typeof progress?.sessionCoins === "number" && progress.sessionCoins > 0) {
-                el.resultCoins.textContent = tr("trainer.coinsEarned", { count: progress.sessionCoins });
-            }
-            renderFriendsStatus(progress?.friendsStatus);
-            if (progress?.completedMissions?.length) {
-                await window.PolytypeMissionCelebrate?.show?.(progress.completedMissions);
-            }
-        } catch (error) {
-            el.resultSaveStatus.textContent = error?.message || tr("trainer.signInSave");
-        }
+    function setResultButtonsBusy(busy) {
+        if (el.playAgainBtn) el.playAgainBtn.disabled = busy;
+        // <a> has no disabled attribute - pointer-events:none is what
+        // actually blocks the click (including js/router.js's global link
+        // interceptor, which never sees a click event to intercept).
+        if (el.homeBtn) el.homeBtn.classList.toggle("is-disabled", busy);
     }
 
     // Breaks the final score down into what it was actually earned for: a

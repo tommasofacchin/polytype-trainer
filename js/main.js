@@ -53,17 +53,13 @@ let hudScoreText;
 let streakText;
 let streakChip;
 let streakHud;
-let sessionResult;
-let resultScore;
-let resultDetail;
-let resultSaveStatus;
-let playAgainBtn;
 let timerResultModal;
 let timedResultScore;
 let timedResultDetail;
 let timedResultCoins;
 let timedResultSaveStatus;
 let timedPlayAgainBtn;
+let timedHomeBtn;
 let trainerStartGate;
 let profile = { ...defaultProfile };
 // Last level reflected in the UI. Used to detect level-ups in renderProfile.
@@ -121,17 +117,13 @@ function initTrainerPage() {
     streakText = document.getElementById("streak-text");
     streakChip = document.getElementById("streak-chip");
     streakHud = document.getElementById("streak-hud");
-    sessionResult = document.getElementById("session-result");
-    resultScore = document.getElementById("result-score");
-    resultDetail = document.getElementById("result-detail");
-    resultSaveStatus = document.getElementById("result-save-status");
-    playAgainBtn = document.getElementById("play-again-btn");
     timerResultModal = document.getElementById("timer-result-modal");
     timedResultScore = document.getElementById("timed-result-score");
     timedResultDetail = document.getElementById("timed-result-detail");
     timedResultCoins = document.getElementById("timed-result-coins");
     timedResultSaveStatus = document.getElementById("timed-result-save-status");
     timedPlayAgainBtn = document.getElementById("timed-play-again-btn");
+    timedHomeBtn = document.getElementById("timed-home-btn");
     trainerStartGate = document.getElementById("trainer-start-gate");
 
     trainerStartGate.querySelectorAll("[data-gate-seconds]").forEach(btn => {
@@ -141,7 +133,6 @@ function initTrainerPage() {
             startSession(Number(btn.dataset.gateSeconds));
         });
     });
-    playAgainBtn.addEventListener("click", () => startSession());
     timedPlayAgainBtn.addEventListener("click", () => startSession());
     // Delegated through js/router.js's shared hook slot (see there) instead
     // of a direct document-level listener - this file gets re-executed on
@@ -1404,18 +1395,19 @@ async function endSession() {
         xp: state.sessionXp
     });
 
-    if (settings.timeLimitSeconds && timerResultModal) {
-        timedResultScore.textContent = scoreText;
-        timedResultDetail.textContent = detailText;
-        if (timedResultCoins) timedResultCoins.textContent = "";
-        timedResultSaveStatus.textContent = "";
-        timerResultModal.hidden = false;
-    } else {
-        resultScore.textContent = scoreText;
-        resultDetail.textContent = detailText;
-        resultSaveStatus.textContent = "";
-        sessionResult.hidden = false;
-    }
+    timedResultScore.textContent = scoreText;
+    timedResultDetail.textContent = detailText;
+    if (timedResultCoins) timedResultCoins.textContent = "";
+    timedResultSaveStatus.textContent = "";
+    timerResultModal.hidden = false;
+
+    // Play again/Home stay disabled for at least this long instead of a
+    // "Saving progress..." status line - same reasoning as js/sprint.js's
+    // finishSession(): the buttons turning clickable again *is* the "you're
+    // good to go" signal, so a save that resolves faster than this doesn't
+    // just flash text and vanish.
+    setResultButtonsBusy(true);
+    const minDelay = new Promise(resolve => window.setTimeout(resolve, 1000));
 
     await saveCurrentSessionProgress();
 
@@ -1430,25 +1422,30 @@ async function endSession() {
     }
     state.pendingSessionCoins = 0;
     await flushPendingMissionCelebration();
+
+    await minDelay;
+    setResultButtonsBusy(false);
+}
+
+function setResultButtonsBusy(busy) {
+    if (timedPlayAgainBtn) timedPlayAgainBtn.disabled = busy;
+    // <a> has no disabled attribute - pointer-events:none is what actually
+    // blocks the click (including js/router.js's global link interceptor,
+    // which never sees a click event to intercept).
+    if (timedHomeBtn) timedHomeBtn.classList.toggle("is-disabled", busy);
 }
 
 function hideSessionResult() {
-    sessionResult.hidden = true;
-    if (resultSaveStatus) resultSaveStatus.textContent = "";
     if (timerResultModal) timerResultModal.hidden = true;
     if (timedResultSaveStatus) timedResultSaveStatus.textContent = "";
 }
 
 function isAnyResultVisible() {
-    return !sessionResult.hidden || (timerResultModal && !timerResultModal.hidden);
+    return Boolean(timerResultModal && !timerResultModal.hidden);
 }
 
 function setResultSaveStatus(text) {
-    if (timerResultModal && !timerResultModal.hidden) {
-        if (timedResultSaveStatus) timedResultSaveStatus.textContent = text;
-    } else if (!sessionResult.hidden) {
-        if (resultSaveStatus) resultSaveStatus.textContent = text;
-    }
+    if (timedResultSaveStatus) timedResultSaveStatus.textContent = text;
 }
 
 async function saveCurrentSessionProgress() {
@@ -1473,7 +1470,6 @@ async function saveCurrentSessionProgress() {
     };
 
     state.saveInFlight = true;
-    if (isAnyResultVisible()) setResultSaveStatus(tr("trainer.savingProgress"));
 
     state.savePromise = (async () => {
         const result = await firebaseClient.completePracticeSession(payload);

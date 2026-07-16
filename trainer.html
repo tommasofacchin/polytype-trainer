@@ -36,31 +36,24 @@
       </div>
 
       <div id="rows-container"></div>
-
-      <div id="timer-result-modal" class="timer-modal" role="dialog" aria-modal="true" hidden>
-        <div class="timer-modal-backdrop"></div>
-        <div class="timer-modal-card">
-          <span class="result-label" data-i18n="trainer.timeUp">Time up</span>
-          <strong id="timed-result-score" class="result-score-text">0 pts</strong>
-          <span id="timed-result-detail" class="result-detail-text">0 correct / 0 fields</span>
-          <span id="timed-result-coins" class="result-coins-text"></span>
-          <span id="timed-result-save-status" class="result-save-status"></span>
-          <button id="timed-play-again-btn" class="restart-btn" type="button" data-i18n="trainer.playAgain">Play again</button>
-        </div>
-      </div>
-    </section>
-
-    <section id="session-result" class="session-result" aria-live="polite" hidden>
-      <div>
-        <span class="result-label" data-i18n="trainer.timeUp">Time up</span>
-        <strong id="result-score">0 pts</strong>
-        <span id="result-detail">0 correct / 0 fields</span>
-        <span id="result-save-status" class="result-save-status"></span>
-      </div>
-      <button id="play-again-btn" class="restart-btn" type="button" data-i18n="trainer.playAgain">Play again</button>
     </section>
   </main>
   <div id="app-bottom-nav"></div>
+
+  <div id="timer-result-modal" class="timer-modal game-result-overlay" role="dialog" aria-modal="true" hidden>
+    <div class="timer-modal-backdrop"></div>
+    <div class="timer-modal-card">
+      <span class="result-label" data-i18n="trainer.timeUp">Time up</span>
+      <strong id="timed-result-score" class="result-score-text">0 pts</strong>
+      <span id="timed-result-detail" class="result-detail-text">0 correct / 0 fields</span>
+      <span id="timed-result-coins" class="result-coins-text"></span>
+      <span id="timed-result-save-status" class="result-save-status"></span>
+      <div class="sprint-result-actions">
+        <button id="timed-play-again-btn" class="restart-btn" type="button" data-i18n="trainer.playAgain">Play again</button>
+        <a id="timed-home-btn" href="index.html" class="restart-btn is-secondary" data-i18n="common.home">Home</a>
+      </div>
+    </div>
+  </div>
 
   <div id="trainer-start-gate" class="confirm-overlay" role="dialog" aria-modal="true" aria-labelledby="trainer-gate-title" hidden>
     <div class="confirm-overlay-backdrop"></div>

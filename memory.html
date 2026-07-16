@@ -762,7 +762,7 @@
         </div>
     </div>
 
-    <div id="result-modal" class="mem-overlay" role="dialog" aria-modal="true" aria-labelledby="result-title" hidden>
+    <div id="result-modal" class="game-result-overlay" role="dialog" aria-modal="true" aria-labelledby="result-title" hidden>
         <div class="mem-overlay-backdrop"></div>
         <div class="mem-overlay-card">
             <span class="mem-overlay-kicker" data-i18n="memory.cleared">Cleared!</span>
@@ -771,11 +771,12 @@
             <span id="result-detail" class="mem-result-detail">&mdash;</span>
             <span id="result-combo" class="mem-result-detail" hidden>&mdash;</span>
             <span id="result-perfect" class="mem-result-detail" hidden data-i18n="memory.perfectClear">Perfect clear &mdash; no misses!</span>
+            <span id="result-coins" class="result-coins-text"></span>
             <span id="result-save-status" class="mem-result-detail" aria-live="polite"></span>
             <div class="mem-result-actions">
                 <button id="play-again-btn" class="restart-btn" type="button" data-i18n="trainer.playAgain">Play again</button>
                 <button id="change-difficulty-btn" class="theme-toggle" type="button" data-i18n="memory.changeDifficulty">Change difficulty</button>
-                <a id="home-btn" class="theme-toggle" href="games.html" data-i18n="nav.games">Games</a>
+                <a id="home-btn" class="restart-btn is-secondary" href="index.html" data-i18n="common.home">Home</a>
             </div>
         </div>
     </div>

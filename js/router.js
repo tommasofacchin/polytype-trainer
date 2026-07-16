@@ -118,6 +118,15 @@
         const token = ++navToken;
         document.body.classList.add(LOADING_CLASS);
 
+        // Runs in parallel with the page fetch below, on every navigation -
+        // keeps friends.html's cache warm regardless of how long someone
+        // browses before actually opening it (see js/app-shell.js's own
+        // comment on prefetchFriendsOverview for why the DOMContentLoaded-
+        // only trigger isn't enough on its own). Self-throttled and
+        // no-ops for signed-out users, so this is cheap to call on every
+        // single navigation.
+        window.PolytypeAppShell?.prefetchFriendsOverview?.(window.PolytypeFirebase?.state || {});
+
         let html;
         try {
             const response = await fetch(path);
@@ -190,10 +199,25 @@
         document.body.classList.remove(LOADING_CLASS);
     }
 
+    // These two only ever define static global data (window.DECK_INDEX /
+    // window.POLYTYPE_CATEGORIES) - no per-page listeners, no DOM
+    // dependencies, nothing that needs a fresh run per visit the way every
+    // other page script does. Re-fetching and re-evaling the same data on
+    // every single visit to any of the many pages that list them (Shop,
+    // Deck, Trainer, Sprint, Dictate, Memory, Categories, Languages) was a
+    // real, visible delay in front of content that's otherwise already
+    // sitting in localStorage and could render instantly (e.g. Shop's coin
+    // balance, already shown in the header) - loaded once per tab session,
+    // skipped on every visit after that.
+    const STATIC_DATA_SCRIPTS = new Set(["decks/index.js", "decks/categories.js"]);
+    const loadedStaticScripts = new Set();
+
     async function loadPageScripts(page) {
         const scripts = PAGE_SCRIPTS[page] || [];
         for (const src of scripts) {
+            if (STATIC_DATA_SCRIPTS.has(src) && loadedStaticScripts.has(src)) continue;
             await runScript(src);
+            if (STATIC_DATA_SCRIPTS.has(src)) loadedStaticScripts.add(src);
         }
     }
 

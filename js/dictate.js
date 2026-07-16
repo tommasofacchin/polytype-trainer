@@ -37,7 +37,11 @@
         unsavedWordsUsed:  0,
         unsavedBestStreak: 0,
         saveInFlight:      false,
-        batchStartTime:    0
+        batchStartTime:    0,
+        timeLimitSeconds:  0,
+        remainingSeconds:  0,
+        timerId:           null,
+        pendingSessionCoins: 0
     };
     const SAVE_BATCH_SIZE = 5;
 
@@ -46,6 +50,11 @@
     let activeWordAudio = null;
     let playingTimeout  = null;
     let scrollFrame     = null;
+    // Lives outside state (which resetState() zeroes every restart) so
+    // "Play again" can restart with the same duration without re-prompting
+    // the picker - mirrors js/main.js's settings.timeLimitSeconds living
+    // outside its own per-session state object for the same reason.
+    let lastChosenDuration = 0;
 
     const el = {};
 
@@ -57,19 +66,29 @@
         el.rows         = document.getElementById("dictate-rows");
         el.audioViz     = document.getElementById("audio-viz");
         el.replayBtn    = document.getElementById("replay-btn");
+        el.timerText    = document.getElementById("dictate-timer");
         el.scoreText    = document.getElementById("dictate-score");
         el.streakText   = document.getElementById("dictate-streak");
         el.accuracyText = document.getElementById("dictate-accuracy");
         el.flagImg      = document.getElementById("current-language-flag");
         el.startModal   = document.getElementById("dictate-start-modal");
-        el.startBtn     = document.getElementById("dictate-start-btn");
         el.langMenu     = document.getElementById("dictate-lang-menu");
         el.langToggle   = document.getElementById("dictate-lang-toggle");
         el.saveStatus   = document.getElementById("dictate-save-status");
+        el.resultModal       = document.getElementById("dictate-result-modal");
+        el.resultScore       = document.getElementById("dictate-result-score");
+        el.resultDetail      = document.getElementById("dictate-result-detail");
+        el.resultCoins        = document.getElementById("dictate-result-coins");
+        el.resultSaveStatus  = document.getElementById("dictate-result-save-status");
+        el.playAgainBtn      = document.getElementById("dictate-play-again-btn");
+        el.homeBtn           = document.getElementById("dictate-home-btn");
 
         el.replayBtn.addEventListener("click", replayAudio);
         el.langToggle.addEventListener("click", toggleLangMenu);
-        el.startBtn.addEventListener("click", startSession);
+        el.startModal?.querySelectorAll("[data-gate-seconds]").forEach(btn => {
+            btn.addEventListener("click", () => startSession(Number(btn.dataset.gateSeconds)));
+        });
+        el.playAgainBtn.addEventListener("click", () => startSession(lastChosenDuration));
         document.addEventListener("click", onDocClick);
         document.addEventListener("keydown", onGlobalKeyDown);
         document.addEventListener("pointerdown", unlockAudio, { once: true });
@@ -398,20 +417,34 @@
         state.unsavedWordsUsed = 0;
         state.unsavedBestStreak = 0;
         state.batchStartTime = Date.now();
+        state.pendingSessionCoins = 0;
+        stopTimer();
+        state.timeLimitSeconds = 0;
+        state.remainingSeconds = 0;
+        updateTimerDisplay();
         if (el.saveStatus) el.saveStatus.textContent = "";
     }
 
     function showStartModal() {
         window.PolytypeKeyboard?.hide?.();
+        if (el.resultModal) el.resultModal.hidden = true;
         if (el.startModal) {
             el.startModal.hidden = false;
-            requestAnimationFrame(() => el.startBtn?.focus());
+            requestAnimationFrame(() => el.startModal.querySelector("[data-gate-seconds]")?.focus());
         }
     }
 
-    function startSession() {
+    function startSession(seconds) {
+        lastChosenDuration = seconds;
+        resetState();
+        state.timeLimitSeconds = seconds;
+        state.remainingSeconds = seconds;
+        updateTimerDisplay();
+
         if (el.startModal) el.startModal.hidden = true;
+        if (el.resultModal) el.resultModal.hidden = true;
         state.started = true;
+        startTimer();
         clearRows();
         spawnRow();
         playCurrentAudio();
@@ -436,6 +469,74 @@
                 submitActive();
             }
         });
+    }
+
+    // ── Timer ────────────────────────────────────────────────────────────────
+
+    function startTimer() {
+        stopTimer();
+        state.timerId = window.setInterval(() => {
+            state.remainingSeconds = Math.max(0, state.remainingSeconds - 1);
+            updateTimerDisplay();
+            if (state.remainingSeconds <= 0) endSession();
+        }, 1000);
+    }
+
+    function stopTimer() {
+        if (state.timerId) {
+            window.clearInterval(state.timerId);
+            state.timerId = null;
+        }
+    }
+
+    function updateTimerDisplay() {
+        if (!el.timerText) return;
+        const minutes = Math.floor(state.remainingSeconds / 60);
+        const seconds = state.remainingSeconds % 60;
+        el.timerText.textContent = minutes > 0
+            ? `${minutes}:${String(seconds).padStart(2, "0")}`
+            : `${seconds}s`;
+    }
+
+    // ── Session end ──────────────────────────────────────────────────────────
+
+    async function endSession() {
+        stopTimer();
+        state.started = false;
+        window.PolytypeKeyboard?.hide?.();
+
+        const accuracy = state.total > 0 ? Math.round((state.correct / state.total) * 100) : 0;
+        if (el.resultScore) el.resultScore.textContent = `${state.score} ${tr("common.points")}`;
+        if (el.resultDetail) {
+            el.resultDetail.textContent = `${tr("sprint.resultDetail", { correct: state.correct, total: state.total })} (${accuracy}%)`;
+        }
+        if (el.resultCoins) el.resultCoins.textContent = "";
+        if (el.resultSaveStatus) el.resultSaveStatus.textContent = "";
+        if (el.resultModal) el.resultModal.hidden = false;
+
+        // Play again/Home stay disabled for at least this long instead of a
+        // "Saving progress..." status line - same reasoning as
+        // js/sprint.js's finishSession().
+        setResultButtonsBusy(true);
+        const minDelay = new Promise(resolve => window.setTimeout(resolve, 1000));
+
+        await flushSessionProgress();
+
+        if (el.resultCoins && state.pendingSessionCoins > 0) {
+            el.resultCoins.textContent = tr("trainer.coinsEarned", { count: state.pendingSessionCoins });
+        }
+        state.pendingSessionCoins = 0;
+
+        await minDelay;
+        setResultButtonsBusy(false);
+    }
+
+    function setResultButtonsBusy(busy) {
+        if (el.playAgainBtn) el.playAgainBtn.disabled = busy;
+        // <a> has no disabled attribute - pointer-events:none is what
+        // actually blocks the click (including js/router.js's global link
+        // interceptor, which never sees a click event to intercept).
+        if (el.homeBtn) el.homeBtn.classList.toggle("is-disabled", busy);
     }
 
     // ── Rows ──────────────────────────────────────────────────────────────────
@@ -531,8 +632,12 @@
     }
 
     // ── Progress sync ────────────────────────────────────────────────────────
+    // Tracks its own in-flight promise (state.savePromise) so endSession()
+    // can await a batch that was already mid-flight when the timer hit 0,
+    // instead of just skipping it and reporting an incomplete coin total.
     async function flushSessionProgress() {
-        if (state.saveInFlight || state.unsavedCorrect <= 0) return;
+        if (state.saveInFlight) return state.savePromise?.catch(() => {});
+        if (state.unsavedCorrect <= 0) return;
 
         const firebaseClient = window.PolytypeFirebase;
         if (!firebaseClient?.isSignedIn?.()) {
@@ -562,15 +667,26 @@
         state.unsavedBestStreak = 0;
         state.batchStartTime = Date.now();
 
-        try {
+        state.savePromise = (async () => {
             const progress = window.PolytypeGameState?.completePracticeSession
                 ? await window.PolytypeGameState.completePracticeSession(payload)
                 : (await firebaseClient.completePracticeSession(payload))?.data;
             if (el.saveStatus) el.saveStatus.textContent = "";
 
+            if (typeof progress?.sessionCoins === "number") {
+                // Shown once, when the session actually ends (see
+                // endSession) - same accumulate-then-flush rule as
+                // js/main.js's state.pendingSessionCoins.
+                state.pendingSessionCoins += progress.sessionCoins;
+            }
+
             if (progress?.completedMissions?.length) {
                 await window.PolytypeMissionCelebrate?.show?.(progress.completedMissions);
             }
+        })();
+
+        try {
+            await state.savePromise;
         } catch (error) {
             // Put the unsaved counts back so the next batch retries them.
             state.unsavedCorrect += savedCorrect;
@@ -579,6 +695,7 @@
             if (el.saveStatus) el.saveStatus.textContent = error?.message || tr("trainer.signInSave");
         } finally {
             state.saveInFlight = false;
+            state.savePromise = null;
         }
     }
 

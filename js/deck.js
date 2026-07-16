@@ -80,7 +80,6 @@ function initDeckPage() {
     el.unlockError = document.getElementById("unlock-confirm-error");
     el.unlockNoKeys = document.getElementById("unlock-confirm-no-keys");
     el.unlockConfirmBtn = document.getElementById("unlock-confirm-btn");
-    el.unlockShopLink = document.getElementById("unlock-go-shop-link");
 
     resolveActiveLanguage();
     setupUnlockConfirm();
@@ -329,18 +328,24 @@ function renderDeck() {
     }
     pendingCourseKey = courseProgress.courseKey;
 
-    // Order each category's words by their actual unlock sequence
-    // (category.wordSuffixes), not by CSV row order - the drop order is a
-    // fixed shuffle (see scripts/generate-categories.cjs), so listing by
-    // suffix number would show unlocked words scattered through the grid
-    // instead of as a clean, in-order block at the top.
+    // category.wordSuffixes is a fixed shuffle (see scripts/generate-
+    // categories.cjs) - it decides which key-spend order words unlock in,
+    // not display order, and several files (this one's own migration path,
+    // js/main.js, js/dictate.js, js/memory.js, js/sprint.js, api/_lib.js)
+    // rely on its exact ordering for legacy-course/starter-word logic, so
+    // it must never be reordered itself. For DISPLAY, sort by suffix
+    // (word_id) ascending instead - words were originally authored in CSV
+    // row order for a reason (numbers as 1,2,3..., pronouns as io/tu/lui/
+    // lei/noi/voi/loro...), and the shuffle was otherwise just scrambling
+    // that for no display benefit.
     const wordBySuffix = new Map();
     vocab.forEach(word => wordBySuffix.set(getWordSuffix(word.id), word));
 
     getSortedCategories().forEach(category => {
         const categoryWords = category.wordSuffixes
             .map(suffix => wordBySuffix.get(suffix))
-            .filter(Boolean);
+            .filter(Boolean)
+            .sort((a, b) => getWordSuffix(a.id) - getWordSuffix(b.id));
         if (!categoryWords.length) return;
         el.groups.appendChild(buildDeckGroup(category, categoryWords, unlockedWords, disabledWords, keysHeld, courseProgress.courseKey));
     });
@@ -510,16 +515,15 @@ function openUnlockConfirm(word, keysHeld) {
     requestAnimationFrame(() => el.unlockOverlay.classList.add("is-open"));
 }
 
-// With 0 keys, swap the Unlock button for a "Go to Shop" link and show an
-// explanatory note instead - the player can still open the dialog and see
-// why they can't unlock yet, rather than the card doing nothing at all.
+// With 0 keys, hide the Unlock button and show an explanatory note instead
+// - the player can still open the dialog and see why they can't unlock
+// yet, rather than the card doing nothing at all.
 function setNoKeysState(hasNoKeys) {
     if (el.unlockNoKeys) {
         el.unlockNoKeys.textContent = hasNoKeys ? tr("deck.noKeysMessage") : "";
         el.unlockNoKeys.hidden = !hasNoKeys;
     }
     if (el.unlockConfirmBtn) el.unlockConfirmBtn.hidden = hasNoKeys;
-    if (el.unlockShopLink) el.unlockShopLink.hidden = !hasNoKeys;
 }
 
 // `force` bypasses the in-flight guard for the programmatic close after a

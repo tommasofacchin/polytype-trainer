@@ -145,7 +145,7 @@
 /* ── HUD ─────────────────────────────────────────────────── */
         .dictate-hud {
             display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
+            grid-template-columns: repeat(4, minmax(0, 1fr));
             gap: var(--space-3);
             flex-shrink: 0;
         }
@@ -420,6 +420,10 @@
     <!-- Score HUD -->
     <div class="dictate-hud" aria-label="Session score">
         <div class="dictate-hud-item">
+            <span class="dictate-hud-label" data-i18n="trainer.time">Time</span>
+            <strong id="dictate-timer">--</strong>
+        </div>
+        <div class="dictate-hud-item">
             <span class="dictate-hud-label">Score</span>
             <strong id="dictate-score">0 pts</strong>
         </div>
@@ -442,15 +446,34 @@
             <div class="dictate-modal-backdrop"></div>
             <div class="dictate-modal-card">
                 <span class="dictate-modal-kicker">Dictate</span>
-                <h2 id="dictate-modal-title" class="dictate-modal-title">Listen &amp; write</h2>
-                <p class="dictate-modal-sub">Audio plays automatically. Type what you hear and press Enter to submit. Press R to replay.</p>
-                <button id="dictate-start-btn" class="restart-btn" type="button">Start</button>
+                <h2 id="dictate-modal-title" class="dictate-modal-title" data-i18n="trainer.chooseTimeTitle">How long do you want to play?</h2>
+                <p class="dictate-modal-sub" data-i18n="trainer.chooseTimeBody">Pick a session length to start.</p>
+                <div class="trainer-duration-grid">
+                    <button type="button" class="trainer-duration-btn" data-gate-seconds="30" data-i18n="trainer.duration30s">30 sec</button>
+                    <button type="button" class="trainer-duration-btn" data-gate-seconds="120" data-i18n="trainer.duration2m">2 min</button>
+                    <button type="button" class="trainer-duration-btn" data-gate-seconds="300" data-i18n="trainer.duration5m">5 min</button>
+                </div>
             </div>
         </div>
     </section>
 
 </main>
 <div id="app-bottom-nav"></div>
+
+<div id="dictate-result-modal" class="timer-modal game-result-overlay" role="dialog" aria-modal="true" hidden>
+    <div class="timer-modal-backdrop"></div>
+    <div class="timer-modal-card">
+        <span class="result-label" data-i18n="trainer.timeUp">Time up</span>
+        <strong id="dictate-result-score" class="result-score-text">0 pts</strong>
+        <span id="dictate-result-detail" class="result-detail-text"></span>
+        <span id="dictate-result-coins" class="result-coins-text"></span>
+        <span id="dictate-result-save-status" class="result-save-status"></span>
+        <div class="sprint-result-actions">
+            <button id="dictate-play-again-btn" class="restart-btn" type="button" data-i18n="trainer.playAgain">Play again</button>
+            <a id="dictate-home-btn" href="index.html" class="restart-btn is-secondary" data-i18n="common.home">Home</a>
+        </div>
+    </div>
+</div>
 
 <script src="js/firebase-config.js"></script>
 <script src="js/i18n.js"></script>

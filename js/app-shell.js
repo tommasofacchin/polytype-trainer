@@ -282,8 +282,13 @@
 
     // Exposed so js/router.js can re-highlight the active tab after a soft
     // navigation updates document.body.dataset.tab, without a full header
-    // re-render (the header itself doesn't depend on which page you're on).
-    window.PolytypeAppShell = { renderBottomNav };
+    // re-render (the header itself doesn't depend on which page you're on),
+    // and so it can also nudge the friends cache on every navigation - see
+    // the call site in js/router.js for why (the DOMContentLoaded prefetch
+    // below only ever fires once per tab, on sign-in/out; without a repeat
+    // trigger the cache goes stale the moment someone browses for more than
+    // FRIENDS_CACHE_STALE_MS before actually opening Friends).
+    window.PolytypeAppShell = { renderBottomNav, prefetchFriendsOverview };
 
     // Paint the header/nav immediately instead of waiting for
     // DOMContentLoaded: every *.html that includes this script places its

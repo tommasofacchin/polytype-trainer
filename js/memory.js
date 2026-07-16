@@ -157,7 +157,9 @@
         el.sfxToggle = document.getElementById("sfx-toggle");
         el.resultCombo = document.getElementById("result-combo");
         el.resultPerfect = document.getElementById("result-perfect");
+        el.resultCoins = document.getElementById("result-coins");
         el.resultSaveStatus = document.getElementById("result-save-status");
+        el.homeBtn = document.getElementById("home-btn");
 
         initSfxToggle();
         preloadSfx();
@@ -795,23 +797,40 @@
         }
 
         el.resultPerfect.hidden = state.maxStreak !== state.pairCount;
+        if (el.resultCoins) el.resultCoins.textContent = "";
 
         celebrateBoardCleared();
         el.resultModal.hidden = false;
         saveSessionProgress(ms);
     }
 
+    function setResultButtonsBusy(busy) {
+        if (el.playAgainBtn) el.playAgainBtn.disabled = busy;
+        if (el.changeDiffBtn) el.changeDiffBtn.disabled = busy;
+        // <a> has no disabled attribute - pointer-events:none is what
+        // actually blocks the click (including js/router.js's global link
+        // interceptor, which never sees a click event to intercept).
+        if (el.homeBtn) el.homeBtn.classList.toggle("is-disabled", busy);
+    }
+
     // ── Progress sync ────────────────────────────────────────
     async function saveSessionProgress(ms) {
         if (!el.resultSaveStatus) return;
 
+        // Play again/Change difficulty/Home stay disabled for at least this
+        // long instead of a "Saving progress..." status line - same
+        // reasoning as js/sprint.js's finishSession(): the buttons turning
+        // clickable again *is* the "you're good to go" signal.
+        setResultButtonsBusy(true);
+        const minDelay = new Promise(resolve => window.setTimeout(resolve, 1000));
+
         const firebaseClient = window.PolytypeFirebase;
         if (!firebaseClient?.isSignedIn?.()) {
             el.resultSaveStatus.textContent = tr("trainer.signInSave");
+            await minDelay;
+            setResultButtonsBusy(false);
             return;
         }
-
-        el.resultSaveStatus.textContent = tr("trainer.savingProgress");
 
         const payload = {
             courseId: activeLanguage,
@@ -827,7 +846,10 @@
             const progress = window.PolytypeGameState?.completePracticeSession
                 ? await window.PolytypeGameState.completePracticeSession(payload)
                 : (await firebaseClient.completePracticeSession(payload))?.data;
-            el.resultSaveStatus.textContent = "";
+
+            if (el.resultCoins && typeof progress?.sessionCoins === "number" && progress.sessionCoins > 0) {
+                el.resultCoins.textContent = tr("trainer.coinsEarned", { count: progress.sessionCoins });
+            }
 
             if (progress?.completedMissions?.length) {
                 await window.PolytypeMissionCelebrate?.show?.(progress.completedMissions);
@@ -835,6 +857,9 @@
         } catch (error) {
             el.resultSaveStatus.textContent = error?.message || tr("trainer.signInSave");
         }
+
+        await minDelay;
+        setResultButtonsBusy(false);
     }
 
     // Perfect (instant) play scores pairs * 100, scaled by difficulty.
