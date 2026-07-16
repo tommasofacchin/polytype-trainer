@@ -50,7 +50,9 @@
       "Bash(npx playwright *)",
       "Bash(node verify.js)",
       "Bash(node diag.js)",
-      "Bash(pkill -f \"http.server 5173\")"
+      "Bash(pkill -f \"http.server 5173\")",
+      "Bash(timeout 25 node slow-network-test.js)",
+      "Bash(node --check \"c:/Users/wangf/OneDrive/文档/Tommaso/polytype-trainer/js/app-shell.js\")"
     ],
     "additionalDirectories": [
       "C:\\Users\\wangf\\AppData\\Local\\Temp\\pw-test2"

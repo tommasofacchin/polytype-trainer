@@ -37,24 +37,6 @@
         return window.PolytypeI18n?.t?.(key, params) || key;
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-        renderHeader();
-        renderBottomNav();
-
-        window.PolytypeFirebase?.onChange?.(renderHeaderAuth);
-        window.PolytypeFirebase?.onChange?.(prefetchFriendsOverview);
-        window.PolytypeGameState?.onChange?.(renderHeaderStats);
-        document.addEventListener("polytype-app-language-changed", () => {
-            renderHeader();
-            renderBottomNav();
-        });
-        // Fires after any unlock/purchase/session-save syncs the local
-        // profile cache - keep the header's key count live without needing
-        // a full reload (unlike the study-language flag switch, which does
-        // reload the page and so re-renders the header from scratch anyway).
-        document.addEventListener("polytype-profile-updated", renderHeaderKeys);
-    });
-
     // Keeps the friends.html cache warm from every other page, so opening
     // the Friends tab renders instantly instead of waiting on a cold fetch.
     const FRIENDS_CACHE_KEY = "polytype-friends-cache";
@@ -296,4 +278,38 @@
             </nav>
         `;
     }
+
+    // Paint the header/nav immediately instead of waiting for
+    // DOMContentLoaded: every *.html that includes this script places its
+    // <script> tag right after the #app-header/#app-bottom-nav mounts, and
+    // both render functions above only need localStorage + i18n.js (loaded
+    // just before this script, see script order in each page) - not
+    // Firebase. Waiting for DOMContentLoaded used to mean sitting behind the
+    // Firebase SDK <script> tags too (external CDN, sometimes slow), which
+    // made the navbar visibly disappear on every page navigation. This has
+    // to run after every function/const above it is defined (MAX_KEYS etc.
+    // are still in their temporal dead zone earlier in the file), which is
+    // exactly why this block sits at the bottom instead of the top.
+    renderHeader();
+    renderBottomNav();
+
+    document.addEventListener("polytype-app-language-changed", () => {
+        renderHeader();
+        renderBottomNav();
+    });
+    // Fires after any unlock/purchase/session-save syncs the local
+    // profile cache - keep the header's key count live without needing
+    // a full reload (unlike the study-language flag switch, which does
+    // reload the page and so re-renders the header from scratch anyway).
+    document.addEventListener("polytype-profile-updated", renderHeaderKeys);
+
+    // Unlike the paint above, these need window.PolytypeFirebase /
+    // PolytypeGameState to already exist - only DOMContentLoaded guarantees
+    // that (it waits for every blocking script, Firebase SDKs included,
+    // regardless of where this script tag sits relative to them).
+    document.addEventListener("DOMContentLoaded", () => {
+        window.PolytypeFirebase?.onChange?.(renderHeaderAuth);
+        window.PolytypeFirebase?.onChange?.(prefetchFriendsOverview);
+        window.PolytypeGameState?.onChange?.(renderHeaderStats);
+    });
 })();
