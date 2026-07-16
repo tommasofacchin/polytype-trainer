@@ -317,7 +317,47 @@
         const leftCol = el.exerciseRoot.querySelector('[data-side="left"]');
         const rightCol = el.exerciseRoot.querySelector('[data-side="right"]');
         let lockedCount = 0;
-        let selectedLeft = null;
+        // Either column can be picked first: `selected` tracks whichever
+        // item is currently pending a match, from either side.
+        let selected = null;
+
+        function handleItemClick(btn, col) {
+            if (btn.disabled) return;
+
+            if (!selected || selected.col === col) {
+                col.querySelectorAll(".sprint-match-item").forEach(node => node.classList.remove("is-selected"));
+                btn.classList.add("is-selected");
+                selected = { btn, col };
+                return;
+            }
+
+            const otherBtn = selected.btn;
+            const isMatch = otherBtn.dataset.pair === btn.dataset.pair;
+            selected = null;
+
+            if (isMatch) {
+                otherBtn.classList.remove("is-selected");
+                otherBtn.classList.add("is-locked");
+                btn.classList.add("is-locked");
+                otherBtn.disabled = true;
+                btn.disabled = true;
+                lockedCount += 2;
+                recordAnswer(true, btn);
+                if (lockedCount === words.length * 2) {
+                    state.wordsUsed += words.length;
+                    advanceRound(words.map(w => w.id));
+                }
+            } else {
+                otherBtn.classList.remove("is-selected");
+                otherBtn.classList.add("is-wrong");
+                btn.classList.add("is-wrong");
+                recordAnswer(false, btn);
+                window.setTimeout(() => {
+                    otherBtn.classList.remove("is-wrong");
+                    btn.classList.remove("is-wrong");
+                }, MATCH_WRONG_FLASH_DELAY);
+            }
+        }
 
         shuffle(words.slice()).forEach(word => {
             const btn = document.createElement("button");
@@ -325,12 +365,7 @@
             btn.className = "sprint-match-item";
             btn.dataset.pair = word.id;
             btn.textContent = word.meaning;
-            btn.addEventListener("click", () => {
-                if (btn.disabled) return;
-                leftCol.querySelectorAll(".sprint-match-item").forEach(node => node.classList.remove("is-selected"));
-                btn.classList.add("is-selected");
-                selectedLeft = btn;
-            });
+            btn.addEventListener("click", () => handleItemClick(btn, leftCol));
             leftCol.appendChild(btn);
         });
 
@@ -340,35 +375,7 @@
             btn.className = "sprint-match-item";
             btn.dataset.pair = word.id;
             btn.textContent = word.script;
-            btn.addEventListener("click", () => {
-                if (btn.disabled || !selectedLeft) return;
-                const isMatch = selectedLeft.dataset.pair === btn.dataset.pair;
-
-                if (isMatch) {
-                    selectedLeft.classList.remove("is-selected");
-                    selectedLeft.classList.add("is-locked");
-                    btn.classList.add("is-locked");
-                    selectedLeft.disabled = true;
-                    btn.disabled = true;
-                    selectedLeft = null;
-                    lockedCount += 2;
-                    recordAnswer(true, btn);
-                    if (lockedCount === words.length * 2) {
-                        state.wordsUsed += words.length;
-                        advanceRound(words.map(w => w.id));
-                    }
-                } else {
-                    const wrongLeft = selectedLeft;
-                    wrongLeft.classList.add("is-wrong");
-                    btn.classList.add("is-wrong");
-                    recordAnswer(false, btn);
-                    selectedLeft = null;
-                    window.setTimeout(() => {
-                        wrongLeft.classList.remove("is-selected", "is-wrong");
-                        btn.classList.remove("is-wrong");
-                    }, MATCH_WRONG_FLASH_DELAY);
-                }
-            });
+            btn.addEventListener("click", () => handleItemClick(btn, rightCol));
             rightCol.appendChild(btn);
         });
     }

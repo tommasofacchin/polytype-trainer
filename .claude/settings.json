@@ -24,7 +24,14 @@
       "Bash(sed -i 's/8803/8806/' \"C:\\\\Users\\\\wangf\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-wangf-OneDrive----Tommaso-polytype-trainer\\\\2f0defb5-bfbd-414c-917f-f7b854f436a6\\\\scratchpad\\\\verify_sprint.js\")",
       "Bash(taskkill //F //PID 15660 //T)",
       "Bash(node \"C:\\\\Users\\\\wangf\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-wangf-OneDrive----Tommaso-polytype-trainer\\\\2f0defb5-bfbd-414c-917f-f7b854f436a6\\\\scratchpad\\\\verify_checklist.js\")",
-      "Bash(taskkill //F //PID 18412 //T)"
+      "Bash(taskkill //F //PID 18412 //T)",
+      "Bash(chromium-cli --help)",
+      "Read(//c//**)",
+      "Read(//c/Users/wangf/.claude/**)",
+      "Bash(node -e \"require.resolve\\('playwright'\\)\")",
+      "Read(//c/Program Files/Google/Chrome/Application//**)",
+      "Read(//c/Program Files \\\\\\(x86\\\\\\)/Google/Chrome/**)",
+      "Read(//c/Program Files \\\\\\(x86\\\\\\)/Microsoft/Edge/Application//**)"
     ]
   }
 }
