@@ -24,6 +24,10 @@ const MAX_KEYS = 5;
 // Coins price of one shop-bought key (api/buy-key.js). Roughly "2 daily
 // chests" - a meaningful but not trivial trade against XP-earned keys.
 const KEY_PRICE_COINS = 100;
+// Coins price of a word chest (api/buy-word-chest.js) - unlocks one random
+// still-locked word directly, no key/hand-picking involved. Same price as a
+// key today but tracked as its own constant so the two can diverge later.
+const WORD_CHEST_PRICE_COINS = 100;
 const COURSE_LEVEL_CAPS = {
   chinese: 60,
   german: 60,
@@ -518,6 +522,7 @@ module.exports = {
   cleanOptionalString,
   clampInteger,
   getDateKeyForTimezone,
+  diffDateKeys,
   getFriendPairId,
   pickFriendProfile,
   buildLeaderboard,
@@ -537,6 +542,7 @@ module.exports = {
   STARTER_WORDS,
   MAX_KEYS,
   KEY_PRICE_COINS,
+  WORD_CHEST_PRICE_COINS,
   GAME_TYPES,
   CHEST_COIN_REWARD,
   CHEST_XP_REWARD,

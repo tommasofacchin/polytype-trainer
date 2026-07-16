@@ -444,6 +444,16 @@ function buildDeckCard(word, isUnlocked, keysHeld) {
         lock.innerHTML = canOpen ? DOOR_KEY_SVG : DOOR_LOCK_SVG;
         card.append(lock);
 
+        // Shown even while locked (unlike the script/pronunciation, which
+        // stays hidden) so the player can pick which word to spend a key on
+        // instead of unlocking blind.
+        if (word.meaning) {
+            const meaning = document.createElement("span");
+            meaning.className = "deck-card-meaning";
+            meaning.textContent = word.meaning;
+            card.append(meaning);
+        }
+
         if (canOpen) card.classList.add("is-key-ready");
 
         // Every locked card is clickable, even with 0 keys - the confirm

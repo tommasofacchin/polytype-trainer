@@ -3,6 +3,7 @@ const LANGUAGE_KEY = "polytype-language";
 const FALLBACK_LANGUAGE = "norwegian";
 const maxKeys = 5; // keep in sync with MAX_KEYS in api/_lib.js
 const keyPriceCoins = 100; // keep in sync with KEY_PRICE_COINS in api/_lib.js
+const wordChestPriceCoins = 100; // keep in sync with WORD_CHEST_PRICE_COINS in api/_lib.js
 
 const LANGUAGE_FLAGS = {
     chinese: "assets/flags/china.svg",
@@ -22,11 +23,22 @@ const COIN_SVG =
 const KEY_SVG =
     '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="7" cy="12" r="4.2" fill="color-mix(in srgb, currentColor 12%, transparent)"></circle><circle cx="7" cy="12" r="1.4"></circle><path d="M10.6 12h10"></path><path d="M17 12v3"></path><path d="M20 12v2.4"></path></svg>';
 
+// Same chest shape as the daily-chest reward overlay (js/chest.js), shrunk
+// to icon size for visual consistency between the two chest surfaces.
+const CHEST_SVG =
+    '<svg viewBox="0 0 48 48" width="18" height="18">' +
+    '<rect x="6" y="20" width="36" height="20" rx="4" fill="#8b6cff"/>' +
+    '<path d="M6 22a18 12 0 0 1 36 0z" fill="#a084ff"/>' +
+    '<rect x="6" y="25" width="36" height="4" fill="#6b4dff"/>' +
+    '<rect x="21" y="23" width="6" height="9" rx="2" fill="#ffc73a"/>' +
+    "</svg>";
+
 let activeLanguage = FALLBACK_LANGUAGE;
 let activeDeckMeta = null;
 let isSignedIn = false;
 let authResolved = false;
 let isBuying = false;
+let isBuyingChest = false;
 
 const el = {};
 
@@ -43,13 +55,19 @@ document.addEventListener("DOMContentLoaded", () => {
     el.keyIcon = document.getElementById("shop-key-icon");
     el.keysHeldText = document.getElementById("shop-item-keys-held");
     el.buyBtn = document.getElementById("shop-buy-btn");
-    el.status = document.getElementById("shop-status");
+    el.keyStatus = document.getElementById("shop-key-status");
+    el.chestIcon = document.getElementById("shop-chest-icon");
+    el.chestMissingText = document.getElementById("shop-item-chest-missing");
+    el.buyChestBtn = document.getElementById("shop-buy-chest-btn");
+    el.chestStatus = document.getElementById("shop-chest-status");
 
     if (el.coinIcon) el.coinIcon.innerHTML = COIN_SVG;
     if (el.keyIcon) el.keyIcon.innerHTML = KEY_SVG;
+    if (el.chestIcon) el.chestIcon.innerHTML = CHEST_SVG;
 
     setupLanguageMenu();
     setupBuyButton();
+    setupBuyChestButton();
     setupAuthGate();
 
     document.addEventListener("polytype-app-language-changed", renderShop);
@@ -152,6 +170,13 @@ function getStarterWordCount() {
     return Math.min(5, getSortedCategories()[0]?.size || 0);
 }
 
+// Every course shares the same word-suffix numbering scheme (see
+// VALID_WORD_SUFFIXES in api/_lib.js) - only the translations differ per
+// language - so the total word count is the same across all languages.
+function getTotalWordCount() {
+    return getSortedCategories().reduce((sum, category) => sum + (category.size || 0), 0);
+}
+
 // Legacy (pre-keys) unlock state was a contiguous prefix. Used only to
 // migrate old local courses into a real unlocked-word count the first time
 // they're touched under the new model.
@@ -219,13 +244,13 @@ function setupBuyButton() {
         const courseProgress = getCourseProgress();
         isBuying = true;
         el.buyBtn.disabled = true;
-        setStatus(tr("shop.buying"), "");
+        setStatus(el.keyStatus, tr("shop.buying"), "");
 
         try {
             await window.PolytypeFirebase.buyKey(courseProgress.courseKey);
-            setStatus(tr("shop.purchaseSuccess"), "success");
+            setStatus(el.keyStatus, tr("shop.purchaseSuccess"), "success");
         } catch (error) {
-            setStatus(error?.message || tr("shop.purchaseFailed"), "error");
+            setStatus(el.keyStatus, error?.message || tr("shop.purchaseFailed"), "error");
             // The server rejected this against state we don't have locally
             // (e.g. stale cached coin balance or key count) - re-sync so
             // the shop reflects reality right away.
@@ -237,6 +262,33 @@ function setupBuyButton() {
     });
 }
 
+function setupBuyChestButton() {
+    el.buyChestBtn?.addEventListener("click", async () => {
+        if (isBuyingChest || !isSignedIn) return;
+
+        const courseProgress = getCourseProgress();
+        isBuyingChest = true;
+        el.buyChestBtn.disabled = true;
+        setStatus(el.chestStatus, tr("shop.buying"), "");
+
+        try {
+            await window.PolytypeFirebase.buyWordChest(courseProgress.courseKey);
+            setStatus(el.chestStatus, tr("shop.chestPurchaseSuccess"), "success");
+        } catch (error) {
+            setStatus(el.chestStatus, error?.message || tr("shop.purchaseFailed"), "error");
+            // Same reasoning as setupBuyButton above - re-sync against the
+            // server's real coin/unlocked-word count on rejection.
+            await window.PolytypeFirebase.refreshProfile?.();
+        } finally {
+            isBuyingChest = false;
+            renderShop();
+        }
+    });
+}
+
+// Key and chest are independent purchases (their own coin/availability
+// gating, their own status line) so one being mid-purchase never blocks the
+// other's row from re-rendering.
 function renderShop() {
     const gameState = window.PolytypeGameState?.state;
     const coins = gameState?.loaded ? Math.max(0, Number(gameState.coins) || 0) : 0;
@@ -244,6 +296,7 @@ function renderShop() {
 
     const courseProgress = getCourseProgress();
     const keysHeld = getKeysHeld(courseProgress.purchasedKeys);
+    const missingWords = Math.max(0, getTotalWordCount() - courseProgress.unlockedCount);
 
     if (el.keysHeldText) {
         el.keysHeldText.textContent = tr("shop.keysHeldForLanguage", {
@@ -252,40 +305,60 @@ function renderShop() {
             language: getLanguageLabel(activeLanguage)
         });
     }
-
     if (el.buyBtn) el.buyBtn.textContent = tr("shop.buyKey", { price: keyPriceCoins });
 
-    if (isBuying) return;
+    if (el.chestMissingText) {
+        el.chestMissingText.textContent = tr("shop.chestMissingWords", { count: missingWords });
+    }
+    if (el.buyChestBtn) el.buyChestBtn.textContent = tr("shop.buyChest", { price: wordChestPriceCoins });
 
-    // Keep the button disabled and say nothing definitive until Firebase has
-    // actually resolved signed-in vs signed-out - showing "sign in required"
-    // during that brief unresolved window would flash it for signed-in
-    // users too on every page load.
+    // Keep both buttons disabled and say nothing definitive until Firebase
+    // has actually resolved signed-in vs signed-out - showing "sign in
+    // required" during that brief unresolved window would flash it for
+    // signed-in users too on every page load.
     if (!authResolved) {
         if (el.buyBtn) el.buyBtn.disabled = true;
+        if (el.buyChestBtn) el.buyChestBtn.disabled = true;
         return;
     }
 
     if (!isSignedIn) {
         if (el.buyBtn) el.buyBtn.disabled = true;
-        setStatus(tr("shop.signInRequired"), "");
+        if (el.buyChestBtn) el.buyChestBtn.disabled = true;
+        setStatus(el.keyStatus, tr("shop.signInRequired"), "");
+        setStatus(el.chestStatus, tr("shop.signInRequired"), "");
         return;
     }
 
-    if (keysHeld >= maxKeys) {
+    if (isBuying) {
+        el.buyBtn.disabled = true;
+    } else if (keysHeld >= maxKeys) {
         if (el.buyBtn) el.buyBtn.disabled = true;
-        setStatus(tr("shop.keysFull"), "");
+        setStatus(el.keyStatus, tr("shop.keysFull"), "");
     } else if (coins < keyPriceCoins) {
         if (el.buyBtn) el.buyBtn.disabled = true;
-        setStatus(tr("shop.insufficientCoins"), "");
+        setStatus(el.keyStatus, tr("shop.insufficientCoins"), "");
     } else {
         if (el.buyBtn) el.buyBtn.disabled = false;
-        setStatus("", "");
+        setStatus(el.keyStatus, "", "");
+    }
+
+    if (isBuyingChest) {
+        el.buyChestBtn.disabled = true;
+    } else if (missingWords <= 0) {
+        if (el.buyChestBtn) el.buyChestBtn.disabled = true;
+        setStatus(el.chestStatus, tr("shop.chestNoWordsLeft"), "");
+    } else if (coins < wordChestPriceCoins) {
+        if (el.buyChestBtn) el.buyChestBtn.disabled = true;
+        setStatus(el.chestStatus, tr("shop.insufficientCoins"), "");
+    } else {
+        if (el.buyChestBtn) el.buyChestBtn.disabled = false;
+        setStatus(el.chestStatus, "", "");
     }
 }
 
-function setStatus(text, tone) {
-    if (!el.status) return;
-    el.status.textContent = text;
-    el.status.dataset.tone = tone || "";
+function setStatus(statusEl, text, tone) {
+    if (!statusEl) return;
+    statusEl.textContent = text;
+    statusEl.dataset.tone = tone || "";
 }

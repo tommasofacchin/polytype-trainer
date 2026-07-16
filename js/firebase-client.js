@@ -30,6 +30,7 @@
         completePracticeSession,
         unlockWord,
         buyKey,
+        buyWordChest,
         setUserHandle,
         setDisplayName,
         uploadProfileAvatar,
@@ -209,6 +210,22 @@
         if (!state.user) throw new Error(tr("auth.signInRequired"));
 
         const result = await callApi("buy-key", { courseId });
+        const progress = result.data;
+
+        if (progress) {
+            state.profile = applyProgressToProfile(state.profile, progress);
+            syncProfileToLocalStorage(state.profile);
+            notify();
+        }
+
+        return result;
+    }
+
+    async function buyWordChest(courseId) {
+        assertConfigured();
+        if (!state.user) throw new Error(tr("auth.signInRequired"));
+
+        const result = await callApi("buy-word-chest", { courseId });
         const progress = result.data;
 
         if (progress) {

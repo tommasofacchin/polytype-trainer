@@ -86,6 +86,16 @@
     --transition: 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
+/* ---- Cross-document view transitions ---------------------------------------
+   Soft crossfade between full page navigations (navbar tabs, internal links)
+   instead of the default hard white flash - Chromium only, and pure CSS: a
+   browser without support just ignores this at-rule and keeps today's
+   instant navigation, so this is progressive enhancement with no JS and no
+   regression risk. Disabled under prefers-reduced-motion below. */
+@view-transition {
+    navigation: auto;
+}
+
 /* ---- Reset & base elements -------------------------------------------------- */
 
 *,
@@ -1486,6 +1496,27 @@ input[type="password"]:focus {
     color: var(--text);
 }
 
+.sprint-result-friends {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.sprint-result-friends[hidden] {
+    display: none;
+}
+
+.sprint-result-friends-title {
+    margin: 0;
+    font-size: var(--text-xs);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-faint);
+    text-align: left;
+}
+
 .sprint-load-error {
     margin: auto;
     color: var(--text-faint);
@@ -2376,6 +2407,12 @@ input[type="password"]:focus {
     .deck-progress-fill,
     .deck-card {
         transition: none;
+    }
+
+    ::view-transition-group(root),
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+        animation: none !important;
     }
 }
 
@@ -3336,6 +3373,11 @@ body.deck-overlay-open {
     font-size: var(--text-xs);
     font-weight: 700;
     white-space: nowrap;
+}
+
+.friends-status-badge.is-played {
+    background: color-mix(in srgb, var(--success) 16%, var(--surface));
+    color: var(--success);
 }
 
 .friends-chip {

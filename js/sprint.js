@@ -73,6 +73,8 @@
         el.resultBreakdown = document.getElementById("sprint-result-breakdown");
         el.resultCoins = document.getElementById("sprint-result-coins");
         el.resultSaveStatus = document.getElementById("sprint-result-save-status");
+        el.resultFriends = document.getElementById("sprint-result-friends");
+        el.resultFriendsList = document.getElementById("sprint-result-friends-list");
         el.playAgainBtn = document.getElementById("sprint-play-again-btn");
 
         el.playAgainBtn.addEventListener("click", () => {
@@ -610,6 +612,8 @@
         renderResultBreakdown();
         el.resultCoins.textContent = "";
         el.resultSaveStatus.textContent = "";
+        el.resultFriends.hidden = true;
+        el.resultFriendsList.replaceChildren();
         el.resultModal.hidden = false;
 
         if (state.correctAnswers <= 0) return;
@@ -641,6 +645,7 @@
             if (typeof progress?.sessionCoins === "number" && progress.sessionCoins > 0) {
                 el.resultCoins.textContent = tr("trainer.coinsEarned", { count: progress.sessionCoins });
             }
+            renderFriendsStatus(progress?.friendsStatus);
             if (progress?.completedMissions?.length) {
                 await window.PolytypeMissionCelebrate?.show?.(progress.completedMissions);
             }
@@ -697,6 +702,58 @@
                 rowEl.querySelector(".sprint-result-row-label").textContent = row.label;
                 rowEl.querySelector(".sprint-result-row-value").textContent = row.value;
                 return rowEl;
+            })
+        );
+    }
+
+    // Friend list under the score: each entry's friendshipStreak only rises
+    // on a day both the player and that friend play a sprint (see
+    // updateFriendshipStreaksForSprint in api/complete-practice-session.js);
+    // playedToday reflects that same friend's sprint activity today.
+    function renderFriendsStatus(list) {
+        if (!el.resultFriends || !el.resultFriendsList) return;
+        const entries = Array.isArray(list) ? list : [];
+
+        el.resultFriends.hidden = entries.length === 0;
+        if (!entries.length) {
+            el.resultFriendsList.replaceChildren();
+            return;
+        }
+
+        el.resultFriendsList.replaceChildren(
+            ...entries.map(entry => {
+                const row = document.createElement("div");
+                row.className = "friends-row";
+
+                const avatar = document.createElement("span");
+                avatar.className = "profile-pill-avatar friends-row-avatar";
+                avatar.setAttribute("aria-hidden", "true");
+                if (entry.avatarUrl) {
+                    const image = document.createElement("img");
+                    image.src = entry.avatarUrl;
+                    image.alt = "";
+                    avatar.classList.add("has-image");
+                    avatar.append(image);
+                } else {
+                    avatar.textContent = (entry.displayName || "?").trim().charAt(0).toUpperCase() || "?";
+                }
+
+                const copy = document.createElement("span");
+                copy.className = "friends-row-copy";
+                const name = document.createElement("strong");
+                name.textContent = entry.displayName || "Player";
+                copy.append(name);
+
+                const streak = document.createElement("span");
+                streak.className = "friends-row-streak";
+                streak.textContent = `\u{1F525} ${entry.friendshipStreak || 0}`;
+
+                const status = document.createElement("span");
+                status.className = entry.playedToday ? "friends-status-badge is-played" : "friends-status-badge";
+                status.textContent = entry.playedToday ? tr("sprint.friendPlayedToday") : tr("sprint.friendNotPlayedToday");
+
+                row.append(avatar, copy, streak, status);
+                return row;
             })
         );
     }

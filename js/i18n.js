@@ -334,6 +334,11 @@
             "shop.keysFull": "Keys are full for this language - spend one on the Deck first.",
             "shop.insufficientCoins": "Not enough coins yet.",
             "shop.signInRequired": "Sign in to earn coins and buy keys.",
+            "shop.chestItemTitle": "Word chest",
+            "shop.chestMissingWords": "{count} words left to unlock",
+            "shop.buyChest": "Buy - {price} coins",
+            "shop.chestNoWordsLeft": "Every word in this language is already unlocked!",
+            "shop.chestPurchaseSuccess": "New word unlocked! Check it out on your Deck.",
 
             "games.pageTitle": "Games - Polytype Trainer",
             "games.title": "Games",
@@ -365,6 +370,9 @@
             "sprint.breakdownCorrect": "Correct answers ({count} × 10)",
             "sprint.breakdownCombo": "Best combo bonus ({streak} in a row)",
             "sprint.breakdownRetry": "Corrected on retry ({count} × 5)",
+            "sprint.friendsTitle": "Friends",
+            "sprint.friendPlayedToday": "Played today",
+            "sprint.friendNotPlayedToday": "Not yet today",
 
             "home.thisWeek": "This week ›",
             "home.playAgain": "Play another round",
@@ -753,6 +761,11 @@
             "shop.keysFull": "Chiavi piene per questa lingua - spendine una nel Deck prima di comprarne altre.",
             "shop.insufficientCoins": "Non hai ancora abbastanza monete.",
             "shop.signInRequired": "Accedi per guadagnare monete e comprare chiavi.",
+            "shop.chestItemTitle": "Forziere di parole",
+            "shop.chestMissingWords": "{count} parole ancora da sbloccare",
+            "shop.buyChest": "Compra - {price} monete",
+            "shop.chestNoWordsLeft": "Hai già sbloccato tutte le parole di questa lingua!",
+            "shop.chestPurchaseSuccess": "Nuova parola sbloccata! Vai a scoprirla nel tuo Deck.",
 
             "games.pageTitle": "Giochi - Polytype Trainer",
             "games.title": "Giochi",
@@ -784,6 +797,9 @@
             "sprint.breakdownCorrect": "Risposte corrette ({count} × 10)",
             "sprint.breakdownCombo": "Bonus combo migliore ({streak} di fila)",
             "sprint.breakdownRetry": "Corrette al recupero ({count} × 5)",
+            "sprint.friendsTitle": "Amici",
+            "sprint.friendPlayedToday": "Giocato oggi",
+            "sprint.friendNotPlayedToday": "Non ancora oggi",
 
             "home.thisWeek": "Questa settimana ›",
             "home.playAgain": "Gioca un'altra partita",

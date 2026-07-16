@@ -3,7 +3,7 @@ const {
   withAuth, getAuthProfile, buildDefaultUserProfile, buildPublicProfile,
   normalizeSessionPayload, calculateSessionXp, calculateStreakUpdate,
   getLevelInfo, getCourseLevel, resolveUnlockedWords, getKeysHeld,
-  getDateKeyForTimezone, normalizeTimezone,
+  getDateKeyForTimezone, diffDateKeys, normalizeTimezone, getFriendPairId,
   getNewlyCompletedMissions, evaluateNewBadges,
   ApiError
 } = require("./_lib");
@@ -21,7 +21,7 @@ module.exports = withAuth(async (data, token) => {
   // payout, not something a single round can match.
   const sessionCoins = Math.max(2, Math.round(xpEarned / 15));
 
-  return db.runTransaction(async transaction => {
+  const result = await db.runTransaction(async transaction => {
     const userRef = db.doc(`users/${token.uid}`);
     const courseRef = userRef.collection("courses").doc(session.courseId);
     const publicRef = db.doc(`publicProfiles/${token.uid}`);
@@ -211,4 +211,77 @@ module.exports = withAuth(async (data, token) => {
       newBadges: newBadges.map(badge => ({ id: badge.id }))
     };
   });
+
+  // Sprint-only, best-effort: a failure here should never cost the player
+  // their already-committed XP/coins, so it's kept outside the transaction
+  // above and never throws.
+  const friendsStatus = session.gameType === "sprint"
+    ? await updateFriendshipStreaksForSprint(token.uid).catch(err => {
+        console.error("friendship streak update failed", err);
+        return [];
+      })
+    : [];
+
+  return { ...result, friendsStatus };
 });
+
+// Pair-wise "friendship streak", shown on the sprint result screen: rises by
+// 1 for a pair only on a day both members play at least one sprint. Uses a
+// UTC day boundary (not each user's own timezone, unlike the personal streak
+// in calculateStreakUpdate) so both sides of a friendship agree on what
+// "today" means regardless of where each player lives. Updates lazily -
+// whichever friend plays sprint *second* on a given day is the one whose
+// call actually advances the shared streak.
+async function updateFriendshipStreaksForSprint(uid) {
+  const todayKey = getDateKeyForTimezone(new Date(), "UTC");
+  const now = FieldValue.serverTimestamp();
+
+  await db.doc(`publicProfiles/${uid}`).set({ lastSprintPlayedDate: todayKey }, { merge: true });
+
+  const friendsSnap = await db.collection(`users/${uid}/friends`).get();
+  if (friendsSnap.empty) return [];
+
+  const friendUids = friendsSnap.docs.map(doc => doc.id);
+
+  const [friendPublicSnaps, pairSnaps] = await Promise.all([
+    db.getAll(...friendUids.map(friendUid => db.doc(`publicProfiles/${friendUid}`))),
+    db.getAll(...friendUids.map(friendUid => db.doc(`friendships/${getFriendPairId(uid, friendUid)}`)))
+  ]);
+
+  const statuses = await Promise.all(friendUids.map(async (friendUid, index) => {
+    const friendPublic = friendPublicSnaps[index].exists ? friendPublicSnaps[index].data() : null;
+    const playedToday = friendPublic?.lastSprintPlayedDate === todayKey;
+    const pairSnap = pairSnaps[index];
+    const pairData = pairSnap.exists ? pairSnap.data() : null;
+    let streak = pairData?.streak || 0;
+
+    if (playedToday && pairData?.lastBothPlayedDate !== todayKey) {
+      const elapsedDays = pairData?.lastBothPlayedDate
+        ? diffDateKeys(pairData.lastBothPlayedDate, todayKey)
+        : null;
+      streak = elapsedDays === 1 ? streak + 1 : 1;
+      await pairSnap.ref.set({
+        uids: [uid, friendUid].sort(),
+        streak,
+        lastBothPlayedDate: todayKey,
+        updatedAt: now
+      }, { merge: true });
+    }
+
+    return {
+      uid: friendUid,
+      displayName: friendPublic?.displayName || "Player",
+      avatarUrl: friendPublic?.avatarUrl || null,
+      handle: friendPublic?.handle || null,
+      playedToday,
+      friendshipStreak: streak
+    };
+  }));
+
+  statuses.sort((a, b) => {
+    if (a.playedToday !== b.playedToday) return a.playedToday ? -1 : 1;
+    return (b.friendshipStreak || 0) - (a.friendshipStreak || 0);
+  });
+
+  return statuses;
+}

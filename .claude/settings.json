@@ -33,7 +33,24 @@
       "Read(//c/Program Files \\\\\\(x86\\\\\\)/Google/Chrome/**)",
       "Read(//c/Program Files \\\\\\(x86\\\\\\)/Microsoft/Edge/Application//**)",
       "Bash(node --check js/i18n.js)",
-      "Bash(pkill -f \"http.server 8877\")"
+      "Bash(pkill -f \"http.server 8877\")",
+      "Bash(node --check \"api/complete-practice-session.js\")",
+      "Bash(node --check \"js/sprint.js\")",
+      "Bash(node --check \"api/_lib.js\")",
+      "Skill(run)",
+      "Skill(run:*)",
+      "Bash(node -e \"console.log\\('node ok'\\)\")",
+      "Bash(npx --yes playwright install chromium --with-deps)",
+      "Read(//c/tmp/**)",
+      "Bash(npx --yes playwright install chromium)",
+      "Bash(echo \"EXIT:$?\")",
+      "Bash(mkdir -p /c/Users/wangf/AppData/Local/Temp/claude/c--Users-wangf-OneDrive----Tommaso-polytype-trainer/630468e9-50a5-4999-885d-597bdd165615/scratchpad/pw-check)",
+      "Read(//c/Users/wangf/AppData/Local/Temp/claude/c--Users-wangf-OneDrive----Tommaso-polytype-trainer/630468e9-50a5-4999-885d-597bdd165615/scratchpad/**)",
+      "Read(//c/Users/wangf/AppData/Local/Temp/claude/c--Users-wangf-OneDrive----Tommaso-polytype-trainer/630468e9-50a5-4999-885d-597bdd165615/scratchpad/pw-check/**)",
+      "Bash(npx playwright *)",
+      "Bash(node verify.js)",
+      "Bash(node diag.js)",
+      "Bash(pkill -f \"http.server 5173\")"
     ],
     "additionalDirectories": [
       "C:\\Users\\wangf\\AppData\\Local\\Temp\\pw-test2"
