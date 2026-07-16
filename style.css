@@ -1544,6 +1544,23 @@ input[type="password"]:focus {
     text-align: center;
 }
 
+.sprint-empty-state {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    padding: 24px;
+    text-align: center;
+}
+
+.sprint-empty-state p {
+    margin: 0;
+    color: var(--text-soft);
+    font-weight: 600;
+    max-width: 280px;
+}
+
 .sprint-exercise {
     display: flex;
     flex-direction: column;
@@ -2822,6 +2839,22 @@ body.deck-overlay-open {
 .btn-solid:disabled {
     opacity: 0.6;
     cursor: default;
+}
+
+/* In-button busy indicator - replaces "Buying..." style debug-looking text
+   statuses with a spinner, shown in place of the button's label. */
+.btn-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid color-mix(in srgb, currentColor 30%, transparent);
+    border-top-color: currentColor;
+    border-radius: 50%;
+    animation: btn-spinner-spin 0.7s linear infinite;
+}
+
+@keyframes btn-spinner-spin {
+    to { transform: rotate(360deg); }
 }
 
 .deck-progress {

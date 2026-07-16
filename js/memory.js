@@ -69,8 +69,6 @@
     let scriptFlag = LANGUAGE_FLAGS[FALLBACK_LANGUAGE];
     let activeAudio = null;
 
-    document.addEventListener("DOMContentLoaded", init);
-
     function tr(key, params = {}) {
         return window.PolytypeI18n?.t?.(key, params) || key;
     }
@@ -874,5 +872,16 @@
             '"': "&quot;",
             "'": "&#39;"
         })[ch]);
+    }
+
+    // Runs immediately if the DOM is already parsed (true whenever
+    // js/router.js re-injects this file on a soft navigation - being
+    // IIFE-wrapped only made re-running safe, it didn't make
+    // DOMContentLoaded fire again, since that event only ever fires once
+    // per live document) and waits for it otherwise (a genuine hard load).
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init, { once: true });
+    } else {
+        init();
     }
 })();

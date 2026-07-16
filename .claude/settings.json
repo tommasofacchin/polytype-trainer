@@ -80,10 +80,27 @@
       "Bash(timeout 55 node router-full-sweep.js)",
       "Bash(timeout 30 node router-modals-check.js)",
       "Bash(timeout 30 node tutorial-check.js)",
-      "Bash(timeout 40 node final-consolidated-check.js)"
+      "Bash(timeout 40 node final-consolidated-check.js)",
+      "Bash(node --check \"c:/Users/wangf/OneDrive/文档/Tommaso/polytype-trainer/js/sprint.js\")",
+      "Bash(node --check \"c:/Users/wangf/OneDrive/文档/Tommaso/polytype-trainer/js/dictate.js\")",
+      "Bash(node --check \"c:/Users/wangf/OneDrive/文档/Tommaso/polytype-trainer/js/memory.js\")",
+      "Bash(timeout 30 node revisit-interactivity-check.js)",
+      "Bash(timeout 40 node perfect-session-check.js)",
+      "Bash(timeout 50 node perfect-session-check.js)",
+      "Bash(timeout 50 node perfect-session-guaranteed.js)",
+      "Bash(timeout 55 node perfect-session-guaranteed.js)",
+      "Bash(mkdir -p \"/c/Users/wangf/AppData/Local/Temp/claude/c--Users-wangf-OneDrive----Tommaso-polytype-trainer/630468e9-50a5-4999-885d-597bdd165615/scratchpad\")",
+      "Bash(node \"/c/Users/wangf/AppData/Local/Temp/claude/c--Users-wangf-OneDrive----Tommaso-polytype-trainer/630468e9-50a5-4999-885d-597bdd165615/scratchpad/test_shop_spinner.js\")",
+      "Bash(node -e \"console.log\\(require.resolve\\('playwright'\\)\\)\")",
+      "Bash(where chromium-cli *)",
+      "Bash(npm ls *)",
+      "Bash(npm config *)",
+      "Bash(timeout 20 npx --no-install playwright --version)",
+      "Bash(taskkill //IM python.exe //F)"
     ],
     "additionalDirectories": [
-      "C:\\Users\\wangf\\AppData\\Local\\Temp\\pw-test2"
+      "C:\\Users\\wangf\\AppData\\Local\\Temp\\pw-test2",
+      "C:\\Users\\wangf\\AppData\\Local\\Temp\\claude\\c--Users-wangf-OneDrive----Tommaso-polytype-trainer\\630468e9-50a5-4999-885d-597bdd165615\\scratchpad"
     ]
   }
 }

@@ -250,14 +250,19 @@ function setupBuyButton() {
 
         const courseProgress = getCourseProgress();
         isBuying = true;
-        el.buyBtn.disabled = true;
-        setStatus(el.keyStatus, tr("shop.buying"), "");
+        showButtonSpinner(el.buyBtn);
+        setStatus(el.keyStatus, "", "");
 
+        // Captured and applied *after* the finally block below, since
+        // renderShop() there unconditionally recomputes the status line
+        // from current state - setting it before would just get it
+        // overwritten before ever reaching the screen.
+        let outcome = null;
         try {
             await window.PolytypeFirebase.buyKey(courseProgress.courseKey);
-            setStatus(el.keyStatus, tr("shop.purchaseSuccess"), "success");
+            outcome = { text: tr("shop.purchaseSuccess"), tone: "success" };
         } catch (error) {
-            setStatus(el.keyStatus, error?.message || tr("shop.purchaseFailed"), "error");
+            outcome = { text: error?.message || tr("shop.purchaseFailed"), tone: "error" };
             // The server rejected this against state we don't have locally
             // (e.g. stale cached coin balance or key count) - re-sync so
             // the shop reflects reality right away.
@@ -266,6 +271,7 @@ function setupBuyButton() {
             isBuying = false;
             renderShop();
         }
+        setStatus(el.keyStatus, outcome.text, outcome.tone);
     });
 }
 
@@ -275,20 +281,24 @@ function setupBuyChestButton() {
 
         const courseProgress = getCourseProgress();
         isBuyingChest = true;
-        el.buyChestBtn.disabled = true;
-        setStatus(el.chestStatus, tr("shop.buying"), "");
+        showButtonSpinner(el.buyChestBtn);
+        setStatus(el.chestStatus, "", "");
 
+        // Same reasoning as setupBuyButton above: apply after the finally
+        // block's renderShop() call, not before, or it gets clobbered
+        // before ever reaching the screen. Stays null for the word-reveal
+        // case since the overlay itself is the success feedback there.
+        let outcome = null;
         try {
             const result = await window.PolytypeFirebase.buyWordChest(courseProgress.courseKey);
             const word = await resolveUnlockedWord(result?.data?.unlockedWordSuffix);
             if (word) {
-                setStatus(el.chestStatus, "", "");
                 await showWordChestReveal(word);
             } else {
-                setStatus(el.chestStatus, tr("shop.chestPurchaseSuccess"), "success");
+                outcome = { text: tr("shop.chestPurchaseSuccess"), tone: "success" };
             }
         } catch (error) {
-            setStatus(el.chestStatus, error?.message || tr("shop.purchaseFailed"), "error");
+            outcome = { text: error?.message || tr("shop.purchaseFailed"), tone: "error" };
             // Same reasoning as setupBuyButton above - re-sync against the
             // server's real coin/unlocked-word count on rejection.
             await window.PolytypeFirebase.refreshProfile?.();
@@ -296,6 +306,7 @@ function setupBuyChestButton() {
             isBuyingChest = false;
             renderShop();
         }
+        if (outcome) setStatus(el.chestStatus, outcome.text, outcome.tone);
     });
 }
 
@@ -511,6 +522,16 @@ function setStatus(statusEl, text, tone) {
     if (!statusEl) return;
     statusEl.textContent = text;
     statusEl.dataset.tone = tone || "";
+}
+
+// Swaps the button's label for a spinner while a purchase is in flight,
+// instead of a "Buying..." text status - the subsequent renderShop() call
+// in the click handler's finally block unconditionally resets textContent,
+// which naturally clears the spinner back to the normal label.
+function showButtonSpinner(btn) {
+    if (!btn) return;
+    btn.disabled = true;
+    btn.innerHTML = '<span class="btn-spinner" aria-hidden="true"></span>';
 }
 
 // Runs after every function/let/const above is defined - same reasoning as

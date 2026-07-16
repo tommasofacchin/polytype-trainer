@@ -46,6 +46,20 @@ module.exports = withAuth(async (data, token) => {
       if (legacyCoins !== null) {
         updatePayload.coins = FieldValue.delete();
         updatePayload.courses = userProfile.courses;
+        // The embedded map above isn't the only copy of a course's coins -
+        // every coin-spending endpoint (api/buy-key.js, buy-word-chest.js,
+        // unlock-word.js, complete-practice-session.js, claim-daily-
+        // chest.js) reads the SEPARATE users/{uid}/courses/{courseId}
+        // subcollection document preferentially, falling back to this
+        // embedded map only if that document doesn't exist yet. Without
+        // this, a returning player's subcollection docs stay stuck at
+        // their pre-migration (often zero) balance forever - the header
+        // and shop UI (which read the embedded map) would show the
+        // correct migrated total while every purchase still failed with
+        // "not enough coins".
+        Object.entries(userProfile.courses).forEach(([courseId, course]) => {
+          transaction.set(userRef.collection("courses").doc(courseId), { coins: course.coins }, { merge: true });
+        });
       }
       transaction.set(userRef, updatePayload, { merge: true });
     }

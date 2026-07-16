@@ -18,6 +18,10 @@
     const MATCH_WRONG_FLASH_DELAY = 450;
 
     const ALL_ROUND_TYPES = ["mc", "match", "audio", "trueFalse", "type"];
+    // Flat bonus for a session with zero wrong answers (main rounds - a
+    // retry-phase correction doesn't erase the original mistake, so any
+    // retry activity at all already means this can't be perfect).
+    const PERFECT_SESSION_BONUS = 50;
 
     const state = {
         vocab: [],
@@ -43,7 +47,8 @@
         retryRoundIndex: 0,
         retryRoundTotal: 0,
         retryBonus: 0,
-        retryCorrectCount: 0
+        retryCorrectCount: 0,
+        perfectBonus: 0
     };
 
     let activeDeckMeta = null;
@@ -60,7 +65,7 @@
         return window.PolytypeI18n?.getLanguage?.() || "en";
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
+    function initSprintPage() {
         el.roundText = document.getElementById("sprint-round-text");
         el.hudScoreText = document.getElementById("sprint-hud-score-text");
         el.streakText = document.getElementById("sprint-streak-text");
@@ -83,7 +88,7 @@
         });
 
         init();
-    });
+    }
 
     async function init() {
         activeDeckMeta = getActiveDeckMeta();
@@ -108,7 +113,11 @@
         state.unlocked = state.vocab.filter(item => courseProgress.unlockedWords.has(getWordSuffix(item.id)));
 
         if (!state.unlocked.length) {
-            showLoadError();
+            // A real, reachable state now (not just a load failure): a
+            // freshly-picked language starts with 0 unlocked words until
+            // keys get spent on the Deck page - a generic "couldn't load"
+            // message would be actively misleading here.
+            showNoWordsState();
             return;
         }
 
@@ -119,6 +128,16 @@
         if (el.exerciseRoot) {
             el.exerciseRoot.innerHTML = `<p class="sprint-load-error">${tr("sprint.loadError")}</p>`;
         }
+    }
+
+    function showNoWordsState() {
+        if (!el.exerciseRoot) return;
+        el.exerciseRoot.innerHTML = `
+            <div class="sprint-empty-state">
+                <p>${tr("sprint.noWordsError")}</p>
+                <a href="deck.html" class="restart-btn">${tr("sprint.goToDeck")}</a>
+            </div>
+        `;
     }
 
     // ── Session lifecycle ──────────────────────────────────────────────────
@@ -142,6 +161,7 @@
         state.retryRoundTotal = 0;
         state.retryBonus = 0;
         state.retryCorrectCount = 0;
+        state.perfectBonus = 0;
 
         // Computed once per session, not per round: a round type that can't
         // build a distractor/second pair with the current unlocked pool
@@ -606,6 +626,11 @@
         const total = state.correctAnswers + state.wrongAnswers;
         const accuracy = total > 0 ? Math.round((state.correctAnswers / total) * 100) : 0;
 
+        if (state.correctAnswers > 0 && state.wrongAnswers === 0) {
+            state.perfectBonus = PERFECT_SESSION_BONUS;
+            state.score += state.perfectBonus;
+        }
+
         el.exerciseRoot.innerHTML = "";
         el.resultScore.textContent = `${state.score} ${tr("common.points")}`;
         el.resultDetail.textContent = `${tr("sprint.resultDetail", { correct: state.correctAnswers, total })} (${accuracy}%)`;
@@ -656,16 +681,17 @@
 
     // Breaks the final score down into what it was actually earned for: a
     // flat 10 pts per correct answer, plus whatever extra the combo
-    // multiplier added on top, plus the retry-phase bonus. Every correct
-    // answer already banks `10 * getComboMultiplier(streakAtTheTime)` (see
-    // recordAnswer), so the combo's contribution is the total score minus
-    // the flat base minus the (separately tallied) retry bonus - no
-    // separate running combo tally needed.
+    // multiplier added on top, plus the retry-phase bonus, plus the flat
+    // perfect-session bonus. Every correct answer already banks
+    // `10 * getComboMultiplier(streakAtTheTime)` (see recordAnswer), so the
+    // combo's contribution is the total score minus the flat base minus the
+    // two other (separately tallied) bonuses - no separate running combo
+    // tally needed.
     function renderResultBreakdown() {
         if (!el.resultBreakdown) return;
 
         const basePoints = state.correctAnswers * 10;
-        const comboBonus = Math.max(0, state.score - basePoints - state.retryBonus);
+        const comboBonus = Math.max(0, state.score - basePoints - state.retryBonus - state.perfectBonus);
         const rows = [];
 
         if (state.correctAnswers > 0) {
@@ -684,6 +710,12 @@
             rows.push({
                 label: tr("sprint.breakdownRetry", { count: state.retryCorrectCount }),
                 value: `+${state.retryBonus} ${tr("common.points")}`
+            });
+        }
+        if (state.perfectBonus > 0) {
+            rows.push({
+                label: tr("sprint.breakdownPerfect"),
+                value: `+${state.perfectBonus} ${tr("common.points")}`
             });
         }
 
@@ -992,5 +1024,16 @@
             '"': "&quot;",
             "'": "&#39;"
         }[ch]));
+    }
+
+    // Runs immediately if the DOM is already parsed (true whenever
+    // js/router.js re-injects this file on a soft navigation - being
+    // IIFE-wrapped only made re-running safe, it didn't make
+    // DOMContentLoaded fire again, since that event only ever fires once
+    // per live document) and waits for it otherwise (a genuine hard load).
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initSprintPage, { once: true });
+    } else {
+        initSprintPage();
     }
 })();
