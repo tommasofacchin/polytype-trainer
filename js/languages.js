@@ -12,9 +12,14 @@ function tr(key, params = {}) {
     return window.PolytypeI18n?.t?.(key, params) || key;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+function goTo(path) {
+    if (window.PolytypeRouter?.navigate) window.PolytypeRouter.navigate(path);
+    else window.location.href = path;
+}
+
+function initLanguagesPage() {
     renderLanguages();
-});
+}
 
 function getStoredProfile() {
     try {
@@ -61,9 +66,37 @@ function buildLanguageCard(deck, courses, activeLanguage) {
         </span>
         ${deck.language === activeLanguage ? `<span class="profile-stat-pill">${tr("languages.current")}</span>` : ""}
     `;
-    card.addEventListener("click", () => {
+    card.addEventListener("click", async () => {
         localStorage.setItem("polytype-language", deck.language);
-        window.location.href = "trainer.html";
+
+        // Signed-in players no longer get free starter words on their first
+        // session in a language (see api/start-course.js) - a course needs
+        // to exist, with either the tutorial's 500 gifted coins or 5 free
+        // keys already in it, before Trainer/Memory/Dictate/Sprint have
+        // anything to practice. Guests keep the old local fallback
+        // (starter words granted automatically) untouched, so they still
+        // land on Trainer directly.
+        const firebaseClient = window.PolytypeFirebase;
+        if (firebaseClient?.isSignedIn?.()) {
+            card.disabled = true;
+            try {
+                await firebaseClient.startCourse(deck.language);
+            } catch {
+                // Best-effort - Deck still handles a missing/partial course.
+            }
+            goTo("deck.html");
+            return;
+        }
+
+        goTo("trainer.html");
     });
     return card;
+}
+
+// Runs after every function/let/const above is defined - same reasoning as
+// js/app-shell.js and js/main.js.
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initLanguagesPage, { once: true });
+} else {
+    initLanguagesPage();
 }

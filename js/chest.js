@@ -39,7 +39,12 @@
             collectBtn.addEventListener("click", async () => {
                 collectBtn.disabled = true;
                 try {
-                    const reward = await window.PolytypeGameState.claimDailyChest();
+                    // Reward coins land on whichever language is currently
+                    // selected (see api/claim-daily-chest.js) - coins are
+                    // per-language, unlike the chest claim itself which
+                    // stays one-per-day for the whole account.
+                    const courseId = localStorage.getItem("polytype-language") || "chinese";
+                    const reward = await window.PolytypeGameState.claimDailyChest(courseId);
                     if (reward) {
                         overlay.querySelector("#chest-coin-reward").textContent = `+${reward.coinsEarned}`;
                         overlay.querySelector("#chest-xp-reward").textContent = `+${reward.xpEarned} XP`;

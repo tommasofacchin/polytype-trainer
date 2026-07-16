@@ -36,7 +36,6 @@ module.exports = withAuth(async (data, token) => {
   const friendsPreview = buildLeaderboard(entries).slice(0, 3);
 
   return {
-    coins: user.coins || 0,
     chestReady,
     missions,
     friendsPreview

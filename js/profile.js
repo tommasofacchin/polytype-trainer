@@ -4,7 +4,6 @@ const defaultProfile = {
     avatarUrl: null,
     xp: 0,
     dayStreak: 0,
-    coins: 0,
     friendCount: 0,
     badges: [],
     courses: {}
@@ -39,16 +38,19 @@ function tr(key, params = {}) {
     return window.PolytypeI18n?.t?.(key, params) || key;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+function initProfilePage() {
     currentProfile = loadProfile();
     renderProfilePage(currentProfile);
     setupFirebaseSync();
     setupLocalProfileSync();
 
-    document.addEventListener("polytype-app-language-changed", () => {
+    // Delegated through js/router.js's shared hook slot instead of a direct
+    // document-level listener - see js/main.js's identical comment for why.
+    window.__polytypePageHooks = window.__polytypePageHooks || {};
+    window.__polytypePageHooks.onLanguageChanged = () => {
         renderProfilePage(currentProfile);
-    });
-});
+    };
+}
 
 function loadProfile() {
     const stored = localStorage.getItem("polytype-profile");
@@ -80,7 +82,6 @@ function setupFirebaseSync() {
             avatarUrl: authState.profile.avatarUrl,
             xp: authState.profile.totalXp,
             dayStreak: authState.profile.currentStreak,
-            coins: authState.profile.coins,
             friendCount: authState.profile.friendCount,
             badges: authState.profile.badges,
             courses: authState.profile.courses
@@ -91,10 +92,11 @@ function setupFirebaseSync() {
 }
 
 function setupLocalProfileSync() {
-    document.addEventListener("polytype-profile-updated", event => {
+    window.__polytypePageHooks = window.__polytypePageHooks || {};
+    window.__polytypePageHooks.onProfileUpdated = event => {
         currentProfile = sanitizeProfile({ ...currentProfile, ...event.detail });
         renderProfilePage(currentProfile);
-    });
+    };
 }
 
 function renderProfilePage(profile) {
@@ -238,7 +240,6 @@ function sanitizeProfile(value = {}) {
         avatarUrl,
         xp: Math.max(0, Number(value.xp ?? value.totalXp) || 0),
         dayStreak: Math.max(0, Math.trunc(Number(value.dayStreak ?? value.currentStreak) || 0)),
-        coins: Math.max(0, Math.trunc(Number(value.coins) || 0)),
         friendCount: Math.max(0, Math.trunc(Number(value.friendCount) || 0)),
         badges: Array.isArray(value.badges) ? value.badges : [],
         courses: sanitizeCourses(value.courses)
@@ -273,4 +274,12 @@ function getCourseLabel(courseId) {
         return window.PolytypeI18n?.languageLabel?.(safeCourseId) || courseLabels[safeCourseId];
     }
     return `${safeCourseId[0].toUpperCase()}${safeCourseId.slice(1)}`;
+}
+
+// Runs after every function/let/const above is defined - same reasoning as
+// js/app-shell.js and js/main.js.
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initProfilePage, { once: true });
+} else {
+    initProfilePage();
 }

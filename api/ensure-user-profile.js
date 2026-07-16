@@ -17,14 +17,37 @@ module.exports = withAuth(async (data, token) => {
     const baseProfile = buildDefaultUserProfile(token.uid, authProfile, timezone);
     const now = FieldValue.serverTimestamp();
 
-    const userProfile = userSnap.exists
-      ? { ...baseProfile, ...userSnap.data(), email: userSnap.data().email || authProfile.email, timezone }
+    const rawExisting = userSnap.exists ? userSnap.data() : null;
+    const userProfile = rawExisting
+      ? { ...baseProfile, ...rawExisting, email: rawExisting.email || authProfile.email, timezone }
       : baseProfile;
+
+    // One-time migration: coins used to be a single balance shared across
+    // every language: now each course has its own (see start-course.js/
+    // buy-key.js). Copy the legacy balance onto every course already in
+    // progress, rather than splitting it, so nobody feels like they lost
+    // coins. A brand-new account never has this field, so this only ever
+    // runs once per pre-existing player.
+    const legacyCoins = typeof rawExisting?.coins === "number" ? Math.max(0, Math.trunc(rawExisting.coins)) : null;
+    if (legacyCoins !== null) {
+      userProfile.courses = Object.fromEntries(
+        Object.entries(userProfile.courses || {}).map(([courseId, course]) => [
+          courseId,
+          { ...course, coins: (course.coins || 0) + legacyCoins }
+        ])
+      );
+    }
+    delete userProfile.coins;
 
     if (!userSnap.exists) {
       transaction.set(userRef, { ...userProfile, createdAt: now, updatedAt: now, lastActiveAt: now });
     } else {
-      transaction.set(userRef, { email: userProfile.email, timezone, updatedAt: now, lastActiveAt: now }, { merge: true });
+      const updatePayload = { email: userProfile.email, timezone, updatedAt: now, lastActiveAt: now };
+      if (legacyCoins !== null) {
+        updatePayload.coins = FieldValue.delete();
+        updatePayload.courses = userProfile.courses;
+      }
+      transaction.set(userRef, updatePayload, { merge: true });
     }
 
     const publicProfile = buildPublicProfile(

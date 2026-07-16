@@ -12,7 +12,7 @@ function tr(key, params = {}) {
     return window.PolytypeI18n?.t?.(key, params) || key;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+function initSettingsPage() {
     renderFromCache();
     setupProfileControls();
     setupFirebaseSync();
@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
         await window.PolytypeFirebase?.signOut?.();
         window.location.href = "auth.html";
     });
-});
+}
 
 function setupSoundToggle() {
     const button = document.getElementById("settings-sound-toggle");
@@ -363,4 +363,12 @@ function normalizeHandleInput(value) {
     return typeof value === "string"
         ? value.trim().replace(/^@+/, "").toLowerCase()
         : "";
+}
+
+// Runs after every function/let/const above is defined - same reasoning as
+// js/app-shell.js and js/main.js.
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initSettingsPage, { once: true });
+} else {
+    initSettingsPage();
 }

@@ -15,15 +15,23 @@ function tr(key, params = {}) {
     return window.PolytypeI18n?.t?.(key, params) || key;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+function goTo(path) {
+    if (window.PolytypeRouter?.navigate) window.PolytypeRouter.navigate(path);
+    else window.location.href = path;
+}
+
+function initDashboardPage() {
     initProfile();
     setupProfileSync();
     setupGameStateSync();
 
-    document.addEventListener("polytype-app-language-changed", () => {
+    // Delegated through js/router.js's shared hook slot instead of a direct
+    // document-level listener - see js/main.js's identical comment for why.
+    window.__polytypePageHooks = window.__polytypePageHooks || {};
+    window.__polytypePageHooks.onLanguageChanged = () => {
         renderGreeting(Boolean(window.PolytypeFirebase?.isSignedIn?.()));
-    });
-});
+    };
+}
 
 function initProfile() {
     const storedProfile = localStorage.getItem(profileStorageKey);
@@ -38,9 +46,10 @@ function initProfile() {
 }
 
 function setupProfileSync() {
-    document.addEventListener("polytype-profile-updated", event => {
+    window.__polytypePageHooks = window.__polytypePageHooks || {};
+    window.__polytypePageHooks.onProfileUpdated = event => {
         profile = { ...defaultProfile, ...profile, ...event.detail };
-    });
+    };
 
     // Optimistic initial paint: a cached profile means we were signed in
     // last time this browser loaded the app, so assume that's still true and
@@ -197,10 +206,18 @@ function renderFriendsPreview(state) {
                             data: { ...entry, relationship: "friends" }
                         }));
                     } catch {}
-                    window.location.href = `visit-profile.html?uid=${encodeURIComponent(entry.uid)}`;
+                    goTo(`visit-profile.html?uid=${encodeURIComponent(entry.uid)}`);
                 });
             }
             return row;
         })
     );
+}
+
+// Runs after every function/let/const above is defined - same reasoning as
+// js/app-shell.js and js/main.js.
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initDashboardPage, { once: true });
+} else {
+    initDashboardPage();
 }

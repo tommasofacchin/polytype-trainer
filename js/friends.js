@@ -5,15 +5,23 @@ function tr(key, params = {}) {
     return window.PolytypeI18n?.t?.(key, params) || key;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+function goTo(path) {
+    if (window.PolytypeRouter?.navigate) window.PolytypeRouter.navigate(path);
+    else window.location.href = path;
+}
+
+function initFriendsPage() {
     applyStoredTheme();
     renderFromCache();
     setupAuthGate();
 
-    document.addEventListener("polytype-app-language-changed", () => {
+    // Delegated through js/router.js's shared hook slot instead of a direct
+    // document-level listener - see js/main.js's identical comment for why.
+    window.__polytypePageHooks = window.__polytypePageHooks || {};
+    window.__polytypePageHooks.onLanguageChanged = () => {
         if (window.PolytypeFirebase?.isSignedIn?.()) loadOverview();
-    });
-});
+    };
+}
 
 function applyStoredTheme() {
     const storedTheme = localStorage.getItem(themeStorageKey);
@@ -262,7 +270,7 @@ function makeRowVisitable(row, profile) {
     row.classList.add("is-clickable");
     row.addEventListener("click", () => {
         stashProfilePreview(profile);
-        window.location.href = `visit-profile.html?uid=${encodeURIComponent(uid)}`;
+        goTo(`visit-profile.html?uid=${encodeURIComponent(uid)}`);
     });
 }
 
@@ -303,4 +311,15 @@ function getFriendsErrorMessage(error) {
     };
 
     return messages[code] || error?.message || tr("friends.genericError");
+}
+
+// Runs after every function/let/const above is defined - initFriendsPage
+// (and anything it calls synchronously, like setupAuthGate's Firebase
+// onChange callback firing immediately on registration) can reference
+// module-level bindings declared anywhere in this file, so this trigger has
+// to sit at the very bottom, same reasoning as js/app-shell.js.
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initFriendsPage, { once: true });
+} else {
+    initFriendsPage();
 }

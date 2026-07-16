@@ -107,7 +107,13 @@ function getAppLanguage() {
     return window.PolytypeI18n?.getLanguage?.() || "en";
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+// Runs immediately if the DOM is already parsed (true whenever js/router.js
+// re-injects this file on a soft navigation, since DOMContentLoaded already
+// fired long ago for the live document) and waits for DOMContentLoaded
+// otherwise (a genuine hard page load, where the script tag - placed at the
+// end of <body> - still runs before the event fires in practice, but this
+// keeps the two paths symmetric and correct either way).
+function initTrainerPage() {
     rowsContainer = document.getElementById("rows-container");
     themeToggle = document.getElementById("theme-toggle");
     timerText = document.getElementById("timer-text");
@@ -137,7 +143,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     playAgainBtn.addEventListener("click", () => startSession());
     timedPlayAgainBtn.addEventListener("click", () => startSession());
-    document.addEventListener("polytype-app-language-changed", onAppLanguageChange);
+    // Delegated through js/router.js's shared hook slot (see there) instead
+    // of a direct document-level listener - this file gets re-executed on
+    // every soft-navigation visit to trainer.html, and a plain
+    // addEventListener here would pile up one more handler (each calling
+    // startSession() again) per revisit.
+    window.__polytypePageHooks = window.__polytypePageHooks || {};
+    window.__polytypePageHooks.onLanguageChanged = onAppLanguageChange;
     document.addEventListener("pointerdown", unlockAudioPlayback, true);
     document.addEventListener("keydown", unlockAudioPlayback, true);
 
@@ -154,7 +166,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderProfile();
     applyInitialVisibilityClasses();
     showStartGate();
-});
+}
 
 function initProfile() {
     const storedProfile = localStorage.getItem(profileStorageKey);
@@ -175,12 +187,13 @@ function setupFirebaseProfileSync() {
     let lastFirebaseUid = null;
 
     if (!firebaseClient) {
-        document.addEventListener("polytype-profile-updated", event => {
+        window.__polytypePageHooks = window.__polytypePageHooks || {};
+        window.__polytypePageHooks.onProfileUpdated = event => {
             profile = { ...defaultProfile, ...profile, ...event.detail };
             renderProfile();
             applyAccountLanguage();
             startSession();
-        });
+        };
         return;
     }
 
@@ -1679,4 +1692,15 @@ function smoothScrollTo(container, targetTop, duration = 450) {
     }
 
     activeScrollFrame = requestAnimationFrame(step);
+}
+
+// Runs after every function/let/const above is defined - initTrainerPage
+// (and anything it calls synchronously, like a Firebase onChange callback
+// firing immediately on registration) can reference module-level bindings
+// declared anywhere in this file, so this trigger has to sit at the very
+// bottom, same reasoning as js/app-shell.js.
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initTrainerPage, { once: true });
+} else {
+    initTrainerPage();
 }

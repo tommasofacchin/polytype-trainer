@@ -54,10 +54,25 @@ module.exports = withAuth(async (data, token) => {
       unlockedWords: nextUnlockedWords,
       wordsUnlocked: nextUnlockedWords.length,
       wordsMastered: existingCourse.wordsMastered || 0,
-      purchasedKeys: nextPurchasedKeys
+      purchasedKeys: nextPurchasedKeys,
+      // Untouched by this endpoint, but every course-returning response has
+      // to round-trip the full course shape - the client replaces its
+      // cached course wholesale with whatever comes back (see
+      // applyProgressToProfile in js/firebase-client.js), so omitting this
+      // would silently zero out the cached coin balance.
+      coins: existingCourse.coins || 0
     };
 
+    // Tutorial's third step (see api/start-course.js): spending the last of
+    // the 5 tutorial keys on a chosen word advances to the Sprint step.
+    let tutorial = existingUser?.tutorial || null;
+    if (tutorial?.active && tutorial.step === "choose-words" &&
+        tutorial.courseId === courseId && nextPurchasedKeys <= 0) {
+      tutorial = { ...tutorial, step: "play-sprint" };
+    }
+
     transaction.set(userRef, {
+      tutorial,
       courses: {
         ...(existingUser?.courses || {}),
         [courseId]: { ...courseResponse, updatedAt: Timestamp.now() }
@@ -69,7 +84,8 @@ module.exports = withAuth(async (data, token) => {
 
     return {
       course: courseResponse,
-      keys: getKeysHeld(nextPurchasedKeys)
+      keys: getKeysHeld(nextPurchasedKeys),
+      tutorial
     };
   });
 });

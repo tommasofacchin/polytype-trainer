@@ -22,7 +22,7 @@ function tr(key, params = {}) {
 
 const PREVIEW_CACHE_KEY = "polytype-visit-profile-cache";
 
-document.addEventListener("DOMContentLoaded", () => {
+function initVisitProfilePage() {
     const uid = new URLSearchParams(window.location.search).get("uid");
     if (!uid) {
         setStatus(tr("friends.userNotFound"));
@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         loadProfile(uid);
     });
-});
+}
 
 function readPreviewCache(uid) {
     try {
@@ -235,4 +235,13 @@ function getErrorMessage(error) {
     };
 
     return messages[code] || error?.message || tr("friends.genericError");
+}
+
+// Runs after every function/let/const above is defined (hasLoaded/
+// hasCachedPaint included) - same reasoning as js/app-shell.js and
+// js/main.js.
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initVisitProfilePage, { once: true });
+} else {
+    initVisitProfilePage();
 }

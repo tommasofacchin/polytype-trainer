@@ -46,11 +46,12 @@ function tr(key, params = {}) {
     return window.PolytypeI18n?.t?.(key, params) || key;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+function initShopPage() {
     el.languageMenuToggle = document.getElementById("language-menu-toggle");
     el.languageMenu = document.getElementById("language-menu");
     el.currentLanguageFlag = document.getElementById("current-language-flag");
     el.coinIcon = document.getElementById("shop-coin-icon");
+    el.coinLabel = document.getElementById("shop-coin-label");
     el.coinBalance = document.getElementById("shop-coin-balance");
     el.keyIcon = document.getElementById("shop-key-icon");
     el.keysHeldText = document.getElementById("shop-item-keys-held");
@@ -70,10 +71,13 @@ document.addEventListener("DOMContentLoaded", () => {
     setupBuyChestButton();
     setupAuthGate();
 
-    document.addEventListener("polytype-app-language-changed", renderShop);
-    document.addEventListener("polytype-profile-updated", renderShop);
+    // Delegated through js/router.js's shared hook slot instead of a direct
+    // document-level listener - see js/main.js's identical comment for why.
+    window.__polytypePageHooks = window.__polytypePageHooks || {};
+    window.__polytypePageHooks.onLanguageChanged = renderShop;
+    window.__polytypePageHooks.onProfileUpdated = renderShop;
     window.PolytypeGameState?.onChange?.(renderShop);
-});
+}
 
 function getAvailableLanguages() {
     const decks = window.DECK_INDEX || [];
@@ -203,7 +207,7 @@ function getCourseProgress() {
     const course = courses[activeLanguage] || (activeDeckMeta?.id && courses[activeDeckMeta.id]);
 
     if (!course) {
-        return { courseKey: activeLanguage, xp: 0, unlockedCount: getStarterWordCount(), purchasedKeys: 0 };
+        return { courseKey: activeLanguage, xp: 0, unlockedCount: getStarterWordCount(), purchasedKeys: 0, coins: 0 };
     }
 
     const unlockedCount = Array.isArray(course.unlockedWords)
@@ -217,6 +221,9 @@ function getCourseProgress() {
         courseKey: course.courseId || activeLanguage,
         xp: Math.max(0, Number(course.xp) || 0),
         unlockedCount,
+        // Coins are per-course (this language's own balance) - see
+        // api/_lib.js/start-course.js.
+        coins: Math.max(0, Math.trunc(Number(course.coins) || 0)),
         purchasedKeys: Math.max(0, Math.trunc(Number(course.purchasedKeys) || 0))
     };
 }
@@ -272,8 +279,14 @@ function setupBuyChestButton() {
         setStatus(el.chestStatus, tr("shop.buying"), "");
 
         try {
-            await window.PolytypeFirebase.buyWordChest(courseProgress.courseKey);
-            setStatus(el.chestStatus, tr("shop.chestPurchaseSuccess"), "success");
+            const result = await window.PolytypeFirebase.buyWordChest(courseProgress.courseKey);
+            const word = await resolveUnlockedWord(result?.data?.unlockedWordSuffix);
+            if (word) {
+                setStatus(el.chestStatus, "", "");
+                await showWordChestReveal(word);
+            } else {
+                setStatus(el.chestStatus, tr("shop.chestPurchaseSuccess"), "success");
+            }
         } catch (error) {
             setStatus(el.chestStatus, error?.message || tr("shop.purchaseFailed"), "error");
             // Same reasoning as setupBuyButton above - re-sync against the
@@ -286,15 +299,152 @@ function setupBuyChestButton() {
     });
 }
 
+// ── Word chest reveal ───────────────────────────────────────────────────
+// buy-word-chest.js only returns the unlocked word's numeric suffix, not
+// its text - the shop page doesn't otherwise load vocab, so this fetches
+// and parses the deck CSV (mirrors js/deck.js's own copy) lazily, once,
+// the first time a chest is actually opened.
+let vocabCache = null; // { language, words }
+
+async function resolveUnlockedWord(wordSuffix) {
+    if (wordSuffix == null) return null;
+    const words = await loadVocabForActiveLanguage();
+    return words.find(word => getWordSuffix(word.id) === wordSuffix) || null;
+}
+
+async function loadVocabForActiveLanguage() {
+    if (vocabCache?.language === activeLanguage) return vocabCache.words;
+    if (!activeDeckMeta) return [];
+
+    try {
+        const response = await fetch(activeDeckMeta.path);
+        if (!response.ok) throw new Error("fetch failed");
+        const words = parseDeckCsv(await response.text(), activeDeckMeta.columns);
+        vocabCache = { language: activeLanguage, words };
+        return words;
+    } catch {
+        return [];
+    }
+}
+
+function parseDeckCsv(csvText, columns) {
+    const rows = parseCsv(csvText.trim());
+    const headers = (rows.shift() || []).map(h => h.trim());
+
+    return rows
+        .map((row, i) => {
+            const record = {};
+            headers.forEach((header, j) => { record[header] = (row[j] || "").trim(); });
+            return {
+                id: record[columns.wordId]?.trim() || `w-${i}`,
+                script: record[columns.script] || "",
+                romanization: record[columns.romanization] || "",
+                meaning: record[columns.meaning] || record[columns.italianMeaning] || ""
+            };
+        })
+        .filter(item => item.script && item.meaning);
+}
+
+function parseCsv(csvText) {
+    const rows = [];
+    let row = [];
+    let field = "";
+    let inQuotes = false;
+
+    for (let i = 0; i < csvText.length; i += 1) {
+        const char = csvText[i];
+        const nextChar = csvText[i + 1];
+
+        if (char === '"' && inQuotes && nextChar === '"') {
+            field += '"';
+            i += 1;
+        } else if (char === '"') {
+            inQuotes = !inQuotes;
+        } else if (char === "," && !inQuotes) {
+            row.push(field);
+            field = "";
+        } else if ((char === "\n" || char === "\r") && !inQuotes) {
+            if (char === "\r" && nextChar === "\n") i += 1;
+            row.push(field);
+            rows.push(row);
+            row = [];
+            field = "";
+        } else {
+            field += char;
+        }
+    }
+
+    row.push(field);
+    rows.push(row);
+    return rows.filter(values => values.some(value => value.trim() !== ""));
+}
+
+function getWordSuffix(wordId) {
+    const match = /(\d+)$/.exec(wordId || "");
+    return match ? Number.parseInt(match[0], 10) : 0;
+}
+
+function languageHasHints() {
+    return activeLanguage === "chinese" || activeLanguage === "japanese";
+}
+
+function escapeHtml(value) {
+    return String(value || "").replace(/[&<>"']/g, ch => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    }[ch]));
+}
+
+// Same chest-bursting-open treatment as the daily chest (js/chest.js), but
+// revealing the actual word card that got unlocked instead of coin/XP
+// reward chips.
+function showWordChestReveal(word) {
+    const overlay = document.createElement("div");
+    overlay.className = "chest-overlay";
+    overlay.innerHTML = `
+        <div class="chest-overlay-art">
+            <div class="chest-overlay-rays"></div>
+            <div class="chest-overlay-flash"></div>
+            <svg class="chest-overlay-icon" width="130" height="130" viewBox="0 0 48 48">
+                <rect x="6" y="20" width="36" height="20" rx="4" fill="#8b6cff"/>
+                <path d="M6 22a18 12 0 0 1 36 0z" fill="#a084ff"/>
+                <rect x="6" y="25" width="36" height="4" fill="#6b4dff"/>
+                <rect x="21" y="23" width="6" height="9" rx="2" fill="#ffc73a"/>
+            </svg>
+        </div>
+        <div class="chest-overlay-title">${tr("shop.chestRevealTitle")}</div>
+        <div class="word-reveal-card">
+            <strong class="word-reveal-script">${escapeHtml(word.script)}</strong>
+            ${languageHasHints() && word.romanization ? `<span class="word-reveal-roman">${escapeHtml(word.romanization)}</span>` : ""}
+            <span class="word-reveal-meaning">${escapeHtml(word.meaning)}</span>
+        </div>
+        <button class="chest-collect-btn" type="button">${tr("shop.chestRevealCta")}</button>
+    `;
+    document.body.append(overlay);
+
+    return new Promise(resolve => {
+        overlay.querySelector(".chest-collect-btn").addEventListener("click", () => {
+            overlay.remove();
+            resolve();
+        });
+    });
+}
+
 // Key and chest are independent purchases (their own coin/availability
 // gating, their own status line) so one being mid-purchase never blocks the
 // other's row from re-rendering.
 function renderShop() {
-    const gameState = window.PolytypeGameState?.state;
-    const coins = gameState?.loaded ? Math.max(0, Number(gameState.coins) || 0) : 0;
+    // Coins are per-language (see api/_lib.js/start-course.js), so - unlike
+    // the old single global balance - this reads straight from the active
+    // course, same as keysHeld below, not from gamestate.
+    const courseProgress = getCourseProgress();
+    const coins = courseProgress.coins;
+    if (el.coinLabel) el.coinLabel.textContent = tr("shop.yourCoinsForLanguage", { language: getLanguageLabel(activeLanguage) });
     if (el.coinBalance) el.coinBalance.textContent = String(coins);
 
-    const courseProgress = getCourseProgress();
     const keysHeld = getKeysHeld(courseProgress.purchasedKeys);
     const missingWords = Math.max(0, getTotalWordCount() - courseProgress.unlockedCount);
 
@@ -361,4 +511,12 @@ function setStatus(statusEl, text, tone) {
     if (!statusEl) return;
     statusEl.textContent = text;
     statusEl.dataset.tone = tone || "";
+}
+
+// Runs after every function/let/const above is defined - same reasoning as
+// js/app-shell.js and js/main.js.
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initShopPage, { once: true });
+} else {
+    initShopPage();
 }

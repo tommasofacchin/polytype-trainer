@@ -31,6 +31,8 @@
         unlockWord,
         buyKey,
         buyWordChest,
+        startCourse,
+        advanceTutorial,
         setUserHandle,
         setDisplayName,
         uploadProfileAvatar,
@@ -237,6 +239,37 @@
         return result;
     }
 
+    async function startCourse(courseId) {
+        assertConfigured();
+        if (!state.user) throw new Error(tr("auth.signInRequired"));
+
+        const result = await callApi("start-course", { courseId });
+        const progress = result.data;
+
+        if (progress) {
+            state.profile = applyProgressToProfile(state.profile, progress);
+            syncProfileToLocalStorage(state.profile);
+            notify();
+        }
+
+        return result;
+    }
+
+    async function advanceTutorial() {
+        assertConfigured();
+        if (!state.user) throw new Error(tr("auth.signInRequired"));
+
+        const result = await callApi("update-profile", { action: "advanceTutorial" });
+
+        if (result.data?.tutorial) {
+            state.profile = { ...(state.profile || {}), tutorial: result.data.tutorial };
+            syncProfileToLocalStorage(state.profile);
+            notify();
+        }
+
+        return result;
+    }
+
     async function setUserHandle(handle) {
         assertConfigured();
         if (!state.user) throw new Error(tr("auth.signInRequired"));
@@ -351,21 +384,20 @@
         });
     }
 
-    async function claimDailyChest() {
+    async function claimDailyChest(courseId) {
         assertConfigured();
         if (!state.user) throw new Error(tr("auth.signInRequired"));
 
         const result = await callApi("claim-daily-chest", {
+            courseId,
             timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
         });
 
         if (result.data) {
-            state.profile = {
-                ...(state.profile || {}),
-                totalXp: result.data.totalXp,
-                globalLevel: result.data.globalLevel,
-                coins: result.data.coins
-            };
+            // Reuses the same course-merge logic as buy-key/unlock-word/etc
+            // - the reward lands on courseId's own coin balance (see
+            // api/claim-daily-chest.js), not a shared user-level total.
+            state.profile = applyProgressToProfile(state.profile, result.data);
             syncProfileToLocalStorage(state.profile);
             notify();
         }
@@ -555,7 +587,7 @@
             dayStreak: remoteProfile.currentStreak || 0,
             streakFreezes: remoteProfile.streakFreezes || 0,
             maxStreakFreezes: remoteProfile.maxStreakFreezes || 2,
-            coins: remoteProfile.coins || 0,
+            tutorial: remoteProfile.tutorial || null,
             badges: remoteProfile.badges || [],
             courses: remoteProfile.courses || {}
         };
@@ -579,7 +611,7 @@
             currentStreak: progress.streak?.currentStreak ?? currentProfile?.currentStreak ?? 0,
             longestStreak: progress.streak?.longestStreak ?? currentProfile?.longestStreak ?? 0,
             streakFreezes: progress.streak?.streakFreezes ?? currentProfile?.streakFreezes ?? 0,
-            coins: progress.coins ?? currentProfile?.coins ?? 0,
+            tutorial: "tutorial" in progress ? progress.tutorial : (currentProfile?.tutorial ?? null),
             courses: {
                 ...(currentProfile?.courses || {})
             }

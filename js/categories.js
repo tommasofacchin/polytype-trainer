@@ -28,7 +28,7 @@ function tr(key, params = {}) {
     return window.PolytypeI18n?.t?.(key, params) || key;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+function initCategoriesPage() {
     applyStoredTheme();
 
     languageMenuToggle = document.getElementById("language-menu-toggle");
@@ -38,9 +38,12 @@ document.addEventListener("DOMContentLoaded", () => {
     setupLanguageMenu();
     renderCategories();
 
-    document.addEventListener("polytype-app-language-changed", renderCategories);
-    document.addEventListener("polytype-profile-updated", renderCategories);
-});
+    // Delegated through js/router.js's shared hook slot instead of a direct
+    // document-level listener - see js/main.js's identical comment for why.
+    window.__polytypePageHooks = window.__polytypePageHooks || {};
+    window.__polytypePageHooks.onLanguageChanged = renderCategories;
+    window.__polytypePageHooks.onProfileUpdated = renderCategories;
+}
 
 function applyStoredTheme() {
     const storedTheme = localStorage.getItem(themeStorageKey);
@@ -251,4 +254,12 @@ function buildCategoryCard(category, unlockedWords, activeOrder) {
 
     card.append(head, track);
     return card;
+}
+
+// Runs after every function/let/const above is defined - same reasoning as
+// js/app-shell.js and js/main.js.
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initCategoriesPage, { once: true });
+} else {
+    initCategoriesPage();
 }

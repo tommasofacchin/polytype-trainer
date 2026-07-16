@@ -796,6 +796,27 @@ input[type="password"]:focus {
     transform: none;
 }
 
+.sprint-result-actions {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+.sprint-result-actions .restart-btn {
+    flex: 1;
+}
+
+.restart-btn.is-secondary {
+    background: var(--surface-soft);
+    color: var(--text);
+    border: 1px solid var(--border);
+    text-decoration: none;
+}
+
+.restart-btn.is-secondary:hover {
+    background: var(--surface);
+}
+
 .theme-toggle {
     width: 100%;
     min-height: 40px;
@@ -4241,7 +4262,7 @@ body {
     gap: 18px;
     background: var(--scrim);
     padding: 24px;
-    animation: chest-fadein 0.25s ease;
+    animation: chest-fadein 0.25s ease forwards;
 }
 
 .chest-overlay-art {
@@ -4290,6 +4311,116 @@ body {
     display: flex;
     gap: 12px;
     animation: chest-rewardpop 1.5s ease-out forwards;
+}
+
+/* Word chest reveal (js/shop.js) - same chest-overlay burst as the daily
+   chest, but the payoff is the actual unlocked word instead of coin/XP
+   chips. */
+.word-reveal-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 20px 32px;
+    min-width: 200px;
+    border-radius: 18px;
+    background: linear-gradient(160deg, var(--surface), color-mix(in srgb, var(--color-gold-medal) 12%, var(--surface)));
+    border: 1px solid color-mix(in srgb, var(--color-gold-medal) 45%, var(--border));
+    box-shadow: var(--shadow-md);
+    animation: chest-rewardpop 1.5s ease-out forwards;
+}
+
+.word-reveal-script {
+    color: #fff;
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    text-align: center;
+}
+
+.word-reveal-roman {
+    color: var(--color-gold-text);
+    font-size: var(--text-sm);
+    font-weight: 700;
+}
+
+.word-reveal-meaning {
+    margin-top: 4px;
+    color: var(--text-soft);
+    font-size: var(--text-md);
+    font-weight: 600;
+    text-align: center;
+}
+
+/* ---- First-course guided tutorial (js/tutorial.js) ---------------------
+   Four-rectangle spotlight mask: dims the whole viewport except the
+   highlighted element's own rect, which stays genuinely clickable since no
+   overlay actually covers it (not just a visual cutout). */
+
+.tutorial-mask {
+    position: fixed;
+    background: rgba(10, 8, 16, 0.72);
+    z-index: 9000;
+}
+
+.tutorial-ring {
+    position: fixed;
+    border: 3px solid var(--accent);
+    border-radius: var(--radius-md);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 25%, transparent);
+    z-index: 9001;
+    pointer-events: none;
+}
+
+.tutorial-tooltip {
+    position: fixed;
+    z-index: 9002;
+    max-width: 280px;
+    padding: 14px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+}
+
+.tutorial-tooltip strong {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--text);
+    font-size: var(--text-sm);
+    font-weight: 800;
+}
+
+.tutorial-tooltip p {
+    margin: 0;
+    color: var(--text-soft);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.tutorial-banner {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: 90px;
+    z-index: 500;
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 12px 16px;
+    background: var(--accent);
+    color: var(--accent-on);
+    border-radius: var(--radius-pill);
+    box-shadow: var(--shadow-md);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    text-align: center;
+}
+
+@media (min-width: 900px) {
+    .tutorial-banner {
+        bottom: 24px;
+    }
 }
 
 .chest-reward-chip {
@@ -4370,7 +4501,7 @@ body {
     gap: 18px;
     background: var(--scrim);
     padding: 24px;
-    animation: chest-fadein 0.25s ease;
+    animation: chest-fadein 0.25s ease forwards;
 }
 
 .mission-overlay-art {

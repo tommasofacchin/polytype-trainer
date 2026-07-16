@@ -3,7 +3,6 @@
 
     const state = {
         loaded: false,
-        coins: 0,
         chestReady: false,
         missions: [],
         friendsPreview: []
@@ -61,7 +60,6 @@
     function saveToCache() {
         try {
             localStorage.setItem(CACHE_KEY, JSON.stringify({
-                coins: state.coins,
                 chestReady: state.chestReady,
                 missions: state.missions,
                 friendsPreview: state.friendsPreview
@@ -85,11 +83,8 @@
         }
     }
 
-    async function claimDailyChest() {
-        const result = await window.PolytypeFirebase.claimDailyChest();
-        state.coins = result.data?.coins ?? state.coins;
-        saveToCache();
-        notify();
+    async function claimDailyChest(courseId) {
+        const result = await window.PolytypeFirebase.claimDailyChest(courseId);
         // Re-fetch chestReady from the server rather than assuming false -
         // in the DEBUG_ALWAYS_CLAIM_CHEST test mode it stays claimable so
         // the reward animation can be replayed on demand.
@@ -99,21 +94,12 @@
 
     async function completePracticeSession(payload) {
         const result = await window.PolytypeFirebase.completePracticeSession(payload);
-        const progress = result.data;
-
-        if (progress) {
-            state.coins = progress.coins ?? state.coins;
-            saveToCache();
-            notify();
-        }
-
         refresh();
-        return progress;
+        return result.data;
     }
 
     function reset() {
         state.loaded = false;
-        state.coins = 0;
         state.chestReady = false;
         state.missions = [];
         state.friendsPreview = [];

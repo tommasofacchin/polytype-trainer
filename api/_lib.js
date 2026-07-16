@@ -39,6 +39,15 @@ const COURSE_LEVEL_CAPS = {
 };
 
 const GAME_TYPES = ["trainer", "memory", "dictate", "sprint"];
+// Guided first-course tutorial (see api/start-course.js): deck-intro (read
+// the Deck explainer) -> buy-keys (spend the gifted 500 coins on 5 keys in
+// the Shop) -> choose-words (spend those keys on 5 chosen words in the
+// Deck) -> play-sprint (finish one Sprint session) -> done. Only ever
+// started for a brand-new account's very first course - every other course
+// (this one included, for returning players) just gets 5 keys silently.
+const TUTORIAL_STEPS = ["deck-intro", "buy-keys", "choose-words", "play-sprint", "done"];
+const TUTORIAL_STARTER_COINS = 500;
+const TUTORIAL_STARTER_KEYS = 5;
 const CHEST_COIN_REWARD = 50;
 const CHEST_XP_REWARD = 20;
 // Debug-only: set DEBUG_ALWAYS_CLAIM_CHEST=true in the environment to let the
@@ -122,9 +131,9 @@ function buildDefaultUserProfile(uid, authProfile, timezone) {
     streakFreezes: 0,
     maxStreakFreezes: MAX_STREAK_FREEZES,
     friendCount: 0,
-    coins: 0,
     lastChestClaimedDate: null,
     chestsClaimed: 0,
+    tutorial: null,
     courses: {}
   };
 }
@@ -157,10 +166,22 @@ function sanitizeUserProfile(user) {
     streakFreezes: user.streakFreezes || 0,
     maxStreakFreezes: user.maxStreakFreezes || MAX_STREAK_FREEZES,
     friendCount: user.friendCount || 0,
-    coins: user.coins || 0,
     lastChestClaimedDate: user.lastChestClaimedDate || null,
     chestsClaimed: user.chestsClaimed || 0,
+    tutorial: sanitizeTutorial(user.tutorial),
     courses: sanitizeCoursesSummary(user.courses)
+  };
+}
+
+// Coins are per-course (see sanitizeCoursesSummary) - XP/level are the only
+// progression numbers shared across every language a user studies.
+function sanitizeTutorial(tutorial) {
+  if (!tutorial || typeof tutorial !== "object") return null;
+  if (!TUTORIAL_STEPS.includes(tutorial.step)) return null;
+  return {
+    active: Boolean(tutorial.active),
+    step: tutorial.step,
+    courseId: tutorial.courseId || null
   };
 }
 
@@ -197,7 +218,10 @@ function sanitizeCoursesSummary(courses) {
           // Must also round-trip purchasedKeys (api/buy-key.js) - otherwise a
           // page reload right after a purchase would silently drop it from
           // the client's cached course until the next full profile fetch.
-          purchasedKeys: Math.max(0, Math.trunc(Number(course.purchasedKeys) || 0))
+          purchasedKeys: Math.max(0, Math.trunc(Number(course.purchasedKeys) || 0)),
+          // Coins are per-course (this language's own balance), not a
+          // shared user-level pool - see start-course.js/buy-key.js.
+          coins: Math.max(0, Math.trunc(Number(course.coins) || 0))
         }
       ];
     })
@@ -544,6 +568,9 @@ module.exports = {
   KEY_PRICE_COINS,
   WORD_CHEST_PRICE_COINS,
   GAME_TYPES,
+  TUTORIAL_STEPS,
+  TUTORIAL_STARTER_COINS,
+  TUTORIAL_STARTER_KEYS,
   CHEST_COIN_REWARD,
   CHEST_XP_REWARD,
   DEBUG_ALWAYS_CLAIM_CHEST,

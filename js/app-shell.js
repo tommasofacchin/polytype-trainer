@@ -87,6 +87,13 @@
         return Math.max(0, Math.min(MAX_KEYS, Math.trunc(purchasedKeys)));
     }
 
+    // Coins are per-course too (see api/_lib.js/start-course.js) - unlike
+    // XP/level, which stay shared across every language the player studies.
+    function getCoinsForLanguage(language, cached) {
+        const coins = Number(cached.courses?.[language]?.coins) || 0;
+        return Math.max(0, Math.trunc(coins));
+    }
+
     function renderHeader() {
         const mount = document.getElementById("app-header");
         if (!mount) return;
@@ -96,12 +103,13 @@
         const cached = readCachedProfile();
         const avatarInner = cached.avatarUrl ? `<img src="${cached.avatarUrl}" alt="">` : ICONS.person;
         const keysHeld = getKeysHeldForLanguage(language, cached);
+        const coinsHeld = getCoinsForLanguage(language, cached);
 
         mount.innerHTML = `
             <div class="app-shell-header">
                 <div class="app-shell-stats">
                     <span class="app-shell-stat app-shell-stat-streak" id="app-shell-streak">${ICONS.streak}${cached.dayStreak || 0}</span>
-                    <span class="app-shell-stat app-shell-stat-coin" id="app-shell-coins">${ICONS.coin}${cached.coins || 0}</span>
+                    <span class="app-shell-stat app-shell-stat-coin" id="app-shell-coins">${ICONS.coin}${coinsHeld}</span>
                     <span class="app-shell-stat app-shell-stat-key" id="app-shell-keys">${ICONS.key}${keysHeld}</span>
                 </div>
                 <div class="app-shell-identity">
@@ -115,7 +123,6 @@
         `;
 
         renderHeaderAuth(window.PolytypeFirebase?.state || {});
-        renderHeaderStats(window.PolytypeGameState?.state || {});
         setupFlagMenu();
     }
 
@@ -213,10 +220,9 @@
 
         avatar.href = authState.user ? "profile.html" : "auth.html";
 
-        // Same "don't stomp the cache with a false default" problem as
-        // renderHeaderStats: onChange fires synchronously before Firebase has
-        // resolved anything, with profile still null. Only repaint once we
-        // have a real profile, or have definitively confirmed signed-out.
+        // onChange fires synchronously before Firebase has resolved
+        // anything, with profile still null. Only repaint once we have a
+        // real profile, or have definitively confirmed signed-out.
         const definitivelySignedOut = authState.ready && !authState.user;
         const hasFreshProfile = Boolean(authState.profile);
 
@@ -237,24 +243,19 @@
         }
     }
 
-    function renderHeaderStats(gameState) {
-        // gamestate.js's own state defaults coins to 0 before its first real
-        // fetch resolves - only trust it once `loaded` confirms that
-        // happened, otherwise this would stomp the cached value renderHeader()
-        // just painted with a false zero.
-        if (!gameState.loaded) return;
-
-        const coinsEl = document.getElementById("app-shell-coins");
-        if (coinsEl && typeof gameState.coins === "number") coinsEl.innerHTML = `${ICONS.coin}${gameState.coins}`;
-    }
-
-    function renderHeaderKeys(event) {
-        const keysEl = document.getElementById("app-shell-keys");
-        if (!keysEl) return;
-
+    // Coins and keys are both per-course, both sourced from the same cached
+    // profile, and both change together whenever a purchase/session-save
+    // fires polytype-profile-updated - so one function keeps them in sync
+    // instead of two separate (and separately wired) renderers.
+    function renderHeaderCurrency(event) {
         const language = localStorage.getItem("polytype-language") || "chinese";
         const cached = event?.detail || readCachedProfile();
-        keysEl.innerHTML = `${ICONS.key}${getKeysHeldForLanguage(language, cached)}`;
+
+        const coinsEl = document.getElementById("app-shell-coins");
+        if (coinsEl) coinsEl.innerHTML = `${ICONS.coin}${getCoinsForLanguage(language, cached)}`;
+
+        const keysEl = document.getElementById("app-shell-keys");
+        if (keysEl) keysEl.innerHTML = `${ICONS.key}${getKeysHeldForLanguage(language, cached)}`;
     }
 
     function renderBottomNav() {
@@ -279,6 +280,11 @@
         `;
     }
 
+    // Exposed so js/router.js can re-highlight the active tab after a soft
+    // navigation updates document.body.dataset.tab, without a full header
+    // re-render (the header itself doesn't depend on which page you're on).
+    window.PolytypeAppShell = { renderBottomNav };
+
     // Paint the header/nav immediately instead of waiting for
     // DOMContentLoaded: every *.html that includes this script places its
     // <script> tag right after the #app-header/#app-bottom-nav mounts, and
@@ -298,18 +304,18 @@
         renderBottomNav();
     });
     // Fires after any unlock/purchase/session-save syncs the local
-    // profile cache - keep the header's key count live without needing
-    // a full reload (unlike the study-language flag switch, which does
-    // reload the page and so re-renders the header from scratch anyway).
-    document.addEventListener("polytype-profile-updated", renderHeaderKeys);
+    // profile cache - keep the header's coin/key counts live without
+    // needing a full reload (unlike the study-language flag switch, which
+    // does reload the page and so re-renders the header from scratch
+    // anyway).
+    document.addEventListener("polytype-profile-updated", renderHeaderCurrency);
 
-    // Unlike the paint above, these need window.PolytypeFirebase /
-    // PolytypeGameState to already exist - only DOMContentLoaded guarantees
-    // that (it waits for every blocking script, Firebase SDKs included,
-    // regardless of where this script tag sits relative to them).
+    // Unlike the paint above, this needs window.PolytypeFirebase to already
+    // exist - only DOMContentLoaded guarantees that (it waits for every
+    // blocking script, Firebase SDKs included, regardless of where this
+    // script tag sits relative to them).
     document.addEventListener("DOMContentLoaded", () => {
         window.PolytypeFirebase?.onChange?.(renderHeaderAuth);
         window.PolytypeFirebase?.onChange?.(prefetchFriendsOverview);
-        window.PolytypeGameState?.onChange?.(renderHeaderStats);
     });
 })();

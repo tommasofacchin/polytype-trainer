@@ -70,7 +70,7 @@ function tr(key, params = {}) {
     return window.PolytypeI18n?.t?.(key, params) || key;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+function initDeckPage() {
     el.languageMenuToggle = document.getElementById("language-menu-toggle");
     el.languageMenu = document.getElementById("language-menu");
     el.currentLanguageFlag = document.getElementById("current-language-flag");
@@ -78,7 +78,6 @@ document.addEventListener("DOMContentLoaded", () => {
     el.progressText = document.getElementById("deck-progress-text");
     el.keysIcon = document.getElementById("deck-keys-icon");
     el.keysCount = document.getElementById("deck-keys-count");
-    el.emptyHint = document.getElementById("deck-empty-hint");
     el.groups = document.getElementById("deck-groups");
     el.unlockOverlay = document.getElementById("unlock-confirm-overlay");
     el.unlockBody = document.getElementById("unlock-confirm-body");
@@ -92,9 +91,12 @@ document.addEventListener("DOMContentLoaded", () => {
     setupUnlockConfirm();
     loadDeck();
 
-    document.addEventListener("polytype-app-language-changed", renderDeck);
-    document.addEventListener("polytype-profile-updated", renderDeck);
-});
+    // Delegated through js/router.js's shared hook slot instead of a direct
+    // document-level listener - see main.js's identical comment for why.
+    window.__polytypePageHooks = window.__polytypePageHooks || {};
+    window.__polytypePageHooks.onLanguageChanged = renderDeck;
+    window.__polytypePageHooks.onProfileUpdated = renderDeck;
+}
 
 function getAvailableLanguages() {
     const decks = window.DECK_INDEX || [];
@@ -361,14 +363,14 @@ function renderDeck() {
             total: vocab.length
         });
     }
-    if (el.emptyHint) el.emptyHint.hidden = unlockedCount > 0;
-
     pendingCourseKey = courseProgress.courseKey;
 
     if (el.keysCount) {
         el.keysCount.textContent = tr("deck.keysBadge", { count: keysHeld });
     }
-    document.getElementById("deck-keys-badge")?.classList.toggle("has-keys", keysHeld > 0);
+    const keysBadge = document.getElementById("deck-keys-badge");
+    keysBadge?.classList.toggle("has-keys", keysHeld > 0);
+    if (keysBadge) keysBadge.hidden = keysHeld <= 0;
 
     // Order each category's words by their actual unlock sequence
     // (category.wordSuffixes), not by CSV row order - the drop order is a
@@ -634,4 +636,12 @@ function playWordAudio(word) {
         activeAudio = new Audio(url);
         activeAudio.play().catch(() => {});
     } catch {}
+}
+
+// Runs after every function/let/const above is defined - same reasoning as
+// js/app-shell.js and js/main.js.
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initDeckPage, { once: true });
+} else {
+    initDeckPage();
 }

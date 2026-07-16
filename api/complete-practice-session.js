@@ -94,8 +94,10 @@ module.exports = withAuth(async (data, token) => {
     };
     updatedDailyStats.missionsCompleted = missionsCompleted;
 
-    const previousCoins = existingUser?.coins || 0;
-    const coins = previousCoins + coinsEarned + sessionCoins;
+    // Coins are per-course (this language's own balance), not shared across
+    // languages the way totalXp/globalLevel are - see start-course.js.
+    const previousCourseCoins = existingCourseData?.coins || 0;
+    const courseCoins = previousCourseCoins + coinsEarned + sessionCoins;
 
     const now = FieldValue.serverTimestamp();
     const userData = {
@@ -112,7 +114,6 @@ module.exports = withAuth(async (data, token) => {
       lastPracticeDate: todayKey,
       streakFreezes: streak.streakFreezes,
       maxStreakFreezes: existingUser?.maxStreakFreezes || 2,
-      coins,
       updatedAt: now,
       lastActiveAt: now
     };
@@ -131,6 +132,7 @@ module.exports = withAuth(async (data, token) => {
       wordsUnlocked: unlockedWords.length,
       wordsMastered: courseSnap.exists ? courseSnap.data().wordsMastered || 0 : 0,
       purchasedKeys,
+      coins: courseCoins,
       lastPlayedAt: now,
       updatedAt: now
     };
@@ -142,13 +144,21 @@ module.exports = withAuth(async (data, token) => {
       unlockedWords,
       wordsUnlocked: courseData.wordsUnlocked,
       wordsMastered: courseData.wordsMastered,
-      purchasedKeys
+      purchasedKeys,
+      coins: courseCoins
     };
 
     userData.courses = {
       ...(existingUser?.courses || {}),
       [session.courseId]: { ...courseResponse, updatedAt: Timestamp.now() }
     };
+
+    // Tutorial's final step (see api/start-course.js): finishing one Sprint
+    // session in the tutorial course completes it.
+    if (userData.tutorial?.active && userData.tutorial.step === "play-sprint" &&
+        userData.tutorial.courseId === session.courseId && session.gameType === "sprint") {
+      userData.tutorial = { ...userData.tutorial, active: false, step: "done" };
+    }
 
     if (!userSnap.exists) courseData.createdAt = now;
     if (!userSnap.exists) userData.createdAt = now;
@@ -204,9 +214,9 @@ module.exports = withAuth(async (data, token) => {
       course: courseResponse,
       streak,
       keys: getKeysHeld(purchasedKeys),
-      coins,
       coinsEarned,
       sessionCoins,
+      tutorial: userData.tutorial || null,
       completedMissions: completedMissions.map(mission => ({ id: mission.id, coinReward: mission.coinReward, labelKey: mission.labelKey })),
       newBadges: newBadges.map(badge => ({ id: badge.id }))
     };

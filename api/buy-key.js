@@ -27,7 +27,9 @@ module.exports = withAuth(async (data, token) => {
       throw new ApiError(404, "Course not found. Play a session in this language first.");
     }
 
-    const coins = existingUser?.coins || 0;
+    // Coins are per-course (this language's own balance) - see
+    // start-course.js.
+    const coins = existingCourse.coins || 0;
     if (coins < KEY_PRICE_COINS) {
       throw new ApiError(409, "Not enough coins.");
     }
@@ -41,7 +43,7 @@ module.exports = withAuth(async (data, token) => {
       throw new ApiError(409, "Keys are already full.");
     }
 
-    const nextCoins = coins - KEY_PRICE_COINS;
+    const nextCourseCoins = coins - KEY_PRICE_COINS;
     const nextPurchasedKeys = purchasedKeys + 1;
     const now = FieldValue.serverTimestamp();
     const courseResponse = {
@@ -52,11 +54,20 @@ module.exports = withAuth(async (data, token) => {
       unlockedWords,
       wordsUnlocked: unlockedWords.length,
       wordsMastered: existingCourse.wordsMastered || 0,
-      purchasedKeys: nextPurchasedKeys
+      purchasedKeys: nextPurchasedKeys,
+      coins: nextCourseCoins
     };
 
+    // Tutorial's second step (see api/start-course.js): buying the 5th key
+    // in the tutorial course advances to picking words in the Deck.
+    let tutorial = existingUser?.tutorial || null;
+    if (tutorial?.active && tutorial.step === "buy-keys" &&
+        tutorial.courseId === courseId && nextPurchasedKeys >= MAX_KEYS) {
+      tutorial = { ...tutorial, step: "choose-words" };
+    }
+
     transaction.set(userRef, {
-      coins: nextCoins,
+      tutorial,
       courses: {
         ...(existingUser?.courses || {}),
         [courseId]: { ...courseResponse, updatedAt: Timestamp.now() }
@@ -67,9 +78,9 @@ module.exports = withAuth(async (data, token) => {
     transaction.set(courseRef, { ...courseResponse, updatedAt: now }, { merge: true });
 
     return {
-      coins: nextCoins,
       course: courseResponse,
-      keys: getKeysHeld(nextPurchasedKeys)
+      keys: getKeysHeld(nextPurchasedKeys),
+      tutorial
     };
   });
 });

@@ -21,6 +21,7 @@ module.exports = withAuth(async (data, token) => {
     case "handle": return setHandle(data, token);
     case "name": return setDisplayName(data, token);
     case "avatar": return uploadAvatar(data, token);
+    case "advanceTutorial": return advanceTutorial(data, token);
     default: throw new ApiError(400, "Unknown profile action.");
   }
 });
@@ -116,6 +117,31 @@ async function uploadAvatar(data, token) {
       avatarUrl,
       user: sanitizeUserProfile(userProfile)
     };
+  });
+}
+
+// Only the deck-intro -> buy-keys transition is a pure "player read the
+// explainer, tapped continue" step with no other data change to hang it off
+// - every later tutorial step advances itself inside the transaction for
+// the action it's gating (see api/buy-key.js, api/unlock-word.js,
+// api/complete-practice-session.js), so this is intentionally the only step
+// reachable through this action.
+async function advanceTutorial(data, token) {
+  const userRef = db.doc(`users/${token.uid}`);
+
+  return db.runTransaction(async transaction => {
+    const userSnap = await transaction.get(userRef);
+    if (!userSnap.exists) throw new ApiError(404, "Profile not found.");
+
+    const tutorial = userSnap.data().tutorial;
+    if (!tutorial?.active || tutorial.step !== "deck-intro") {
+      throw new ApiError(409, "Tutorial is not on the deck-intro step.");
+    }
+
+    const nextTutorial = { ...tutorial, step: "buy-keys" };
+    transaction.set(userRef, { tutorial: nextTutorial, updatedAt: FieldValue.serverTimestamp() }, { merge: true });
+
+    return { tutorial: nextTutorial };
   });
 }
 

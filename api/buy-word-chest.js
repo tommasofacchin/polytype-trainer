@@ -27,7 +27,9 @@ module.exports = withAuth(async (data, token) => {
       throw new ApiError(404, "Course not found. Play a session in this language first.");
     }
 
-    const coins = existingUser?.coins || 0;
+    // Coins are per-course (this language's own balance) - see
+    // start-course.js.
+    const coins = existingCourse.coins || 0;
     if (coins < WORD_CHEST_PRICE_COINS) {
       throw new ApiError(409, "Not enough coins.");
     }
@@ -42,7 +44,7 @@ module.exports = withAuth(async (data, token) => {
 
     const wordSuffix = missingWords[Math.floor(Math.random() * missingWords.length)];
     const nextUnlockedWords = [...unlockedWords, wordSuffix];
-    const nextCoins = coins - WORD_CHEST_PRICE_COINS;
+    const nextCourseCoins = coins - WORD_CHEST_PRICE_COINS;
     const now = FieldValue.serverTimestamp();
 
     const courseResponse = {
@@ -53,11 +55,11 @@ module.exports = withAuth(async (data, token) => {
       unlockedWords: nextUnlockedWords,
       wordsUnlocked: nextUnlockedWords.length,
       wordsMastered: existingCourse.wordsMastered || 0,
-      purchasedKeys: existingCourse.purchasedKeys || 0
+      purchasedKeys: existingCourse.purchasedKeys || 0,
+      coins: nextCourseCoins
     };
 
     transaction.set(userRef, {
-      coins: nextCoins,
       courses: {
         ...(existingUser?.courses || {}),
         [courseId]: { ...courseResponse, updatedAt: Timestamp.now() }
@@ -68,7 +70,6 @@ module.exports = withAuth(async (data, token) => {
     transaction.set(courseRef, { ...courseResponse, updatedAt: now }, { merge: true });
 
     return {
-      coins: nextCoins,
       course: courseResponse,
       unlockedWordSuffix: wordSuffix
     };

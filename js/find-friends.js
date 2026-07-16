@@ -5,7 +5,12 @@ function tr(key, params = {}) {
     return window.PolytypeI18n?.t?.(key, params) || key;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+function goTo(path) {
+    if (window.PolytypeRouter?.navigate) window.PolytypeRouter.navigate(path);
+    else window.location.href = path;
+}
+
+function initFindFriendsPage() {
     const form = document.getElementById("find-friends-form");
     const input = document.getElementById("find-friends-input");
 
@@ -22,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
             renderResults([]);
         }
     });
-});
+}
 
 async function runSearch(value) {
     const query = value.trim();
@@ -89,7 +94,7 @@ function renderResultRow(result) {
     row.className = "friends-row is-clickable";
     row.addEventListener("click", () => {
         stashProfilePreview(result);
-        window.location.href = `visit-profile.html?uid=${encodeURIComponent(result.uid)}`;
+        goTo(`visit-profile.html?uid=${encodeURIComponent(result.uid)}`);
     });
     row.append(
         buildAvatar(result),
@@ -211,4 +216,12 @@ function getFindFriendsErrorMessage(error) {
     };
 
     return messages[code] || error?.message || tr("friends.genericError");
+}
+
+// Runs after every function/let/const above is defined - same reasoning as
+// js/app-shell.js and js/main.js.
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initFindFriendsPage, { once: true });
+} else {
+    initFindFriendsPage();
 }
