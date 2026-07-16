@@ -31,29 +31,29 @@
 
     <section class="list-card sprint-stage" aria-label="Sprint exercise">
       <div id="sprint-exercise-root"></div>
-
-      <div id="sprint-result-modal" class="timer-modal" role="dialog" aria-modal="true" hidden>
-        <div class="timer-modal-backdrop"></div>
-        <div class="timer-modal-card">
-          <span class="result-label" data-i18n="sprint.sessionComplete">Sprint complete</span>
-          <strong id="sprint-result-score" class="result-score-text">0 pts</strong>
-          <span id="sprint-result-detail" class="result-detail-text"></span>
-          <div id="sprint-result-breakdown" class="sprint-result-breakdown"></div>
-          <span id="sprint-result-coins" class="result-coins-text"></span>
-          <span id="sprint-result-save-status" class="result-save-status"></span>
-          <div id="sprint-result-friends" class="sprint-result-friends" hidden>
-            <h3 class="sprint-result-friends-title" data-i18n="sprint.friendsTitle">Friends</h3>
-            <div id="sprint-result-friends-list" class="friends-result-list"></div>
-          </div>
-          <div class="sprint-result-actions">
-            <button id="sprint-play-again-btn" class="restart-btn" type="button" data-i18n="trainer.playAgain">Play again</button>
-            <a id="sprint-home-btn" href="index.html" class="restart-btn is-secondary" data-i18n="common.home">Home</a>
-          </div>
-        </div>
-      </div>
     </section>
   </main>
   <div id="app-bottom-nav"></div>
+
+  <div id="sprint-result-modal" class="timer-modal sprint-result-overlay" role="dialog" aria-modal="true" hidden>
+    <div class="timer-modal-backdrop"></div>
+    <div class="timer-modal-card">
+      <span class="result-label" data-i18n="sprint.sessionComplete">Sprint complete</span>
+      <strong id="sprint-result-score" class="result-score-text">0 pts</strong>
+      <span id="sprint-result-detail" class="result-detail-text"></span>
+      <div id="sprint-result-breakdown" class="sprint-result-breakdown"></div>
+      <span id="sprint-result-coins" class="result-coins-text"></span>
+      <span id="sprint-result-save-status" class="result-save-status"></span>
+      <div id="sprint-result-friends" class="sprint-result-friends" hidden>
+        <h3 class="sprint-result-friends-title" data-i18n="sprint.friendsTitle">Friends</h3>
+        <div id="sprint-result-friends-list" class="friends-result-list"></div>
+      </div>
+      <div class="sprint-result-actions">
+        <button id="sprint-play-again-btn" class="restart-btn" type="button" data-i18n="trainer.playAgain">Play again</button>
+        <a id="sprint-home-btn" href="index.html" class="restart-btn is-secondary" data-i18n="common.home">Home</a>
+      </div>
+    </div>
+  </div>
 
   <script src="js/firebase-config.js"></script>
   <script src="js/i18n.js"></script>

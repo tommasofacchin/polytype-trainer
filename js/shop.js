@@ -5,16 +5,6 @@ const maxKeys = 5; // keep in sync with MAX_KEYS in api/_lib.js
 const keyPriceCoins = 100; // keep in sync with KEY_PRICE_COINS in api/_lib.js
 const wordChestPriceCoins = 100; // keep in sync with WORD_CHEST_PRICE_COINS in api/_lib.js
 
-const LANGUAGE_FLAGS = {
-    chinese: "assets/flags/china.svg",
-    german: "assets/flags/germany.svg",
-    italian: "assets/flags/italy.svg",
-    japanese: "assets/flags/japan.svg",
-    norwegian: "assets/flags/norway.svg",
-    spanish: "assets/flags/spain.svg",
-    swedish: "assets/flags/sweden.svg"
-};
-
 const COIN_SVG =
     '<svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="10" fill="#ffc73a"/><circle cx="12" cy="12" r="6.5" fill="none" stroke="#d99a1c" stroke-width="2"/></svg>';
 
@@ -47,9 +37,6 @@ function tr(key, params = {}) {
 }
 
 function initShopPage() {
-    el.languageMenuToggle = document.getElementById("language-menu-toggle");
-    el.languageMenu = document.getElementById("language-menu");
-    el.currentLanguageFlag = document.getElementById("current-language-flag");
     el.coinIcon = document.getElementById("shop-coin-icon");
     el.coinLabel = document.getElementById("shop-coin-label");
     el.coinBalance = document.getElementById("shop-coin-balance");
@@ -66,7 +53,7 @@ function initShopPage() {
     if (el.keyIcon) el.keyIcon.innerHTML = KEY_SVG;
     if (el.chestIcon) el.chestIcon.innerHTML = CHEST_SVG;
 
-    setupLanguageMenu();
+    resolveActiveLanguage();
     setupBuyButton();
     setupBuyChestButton();
     setupAuthGate();
@@ -91,67 +78,15 @@ function getAvailableLanguages() {
     return languages;
 }
 
-function setupLanguageMenu() {
-    if (!el.languageMenuToggle || !el.languageMenu) return;
-
+// The study-language switcher now lives only in the shared header
+// (app-shell.js's flag menu, which reloads the page on change) - this page
+// just needs to read whichever language that left in localStorage.
+function resolveActiveLanguage() {
     const languages = getAvailableLanguages();
     const savedLanguage = localStorage.getItem(LANGUAGE_KEY);
     activeLanguage = languages.includes(savedLanguage) ? savedLanguage : (languages[0] || FALLBACK_LANGUAGE);
     activeDeckMeta = (window.DECK_INDEX || []).find(deck => deck.language === activeLanguage) || null;
-
-    el.languageMenu.replaceChildren(
-        ...languages.map(language => {
-            const item = document.createElement("button");
-            item.type = "button";
-            item.className = "language-menu-item";
-            item.setAttribute("role", "menuitemradio");
-            item.innerHTML = `
-                <img class="flag-mark" src="${LANGUAGE_FLAGS[language] || ""}" alt="">
-                <span>${getLanguageLabel(language)}</span>
-            `;
-            item.addEventListener("click", () => {
-                activeLanguage = language;
-                activeDeckMeta = (window.DECK_INDEX || []).find(deck => deck.language === language) || null;
-                localStorage.setItem(LANGUAGE_KEY, language);
-                closeLanguageMenu();
-                syncLanguageMenu();
-                renderShop();
-            });
-            return item;
-        })
-    );
-
-    syncLanguageMenu();
     renderShop();
-
-    el.languageMenuToggle.addEventListener("click", () => {
-        const isOpen = !el.languageMenu.hidden;
-        el.languageMenu.hidden = isOpen;
-        el.languageMenuToggle.setAttribute("aria-expanded", String(!isOpen));
-    });
-
-    document.addEventListener("click", event => {
-        if (el.languageMenu.hidden) return;
-        if (el.languageMenuToggle.contains(event.target) || el.languageMenu.contains(event.target)) return;
-        closeLanguageMenu();
-    });
-}
-
-function closeLanguageMenu() {
-    if (!el.languageMenu) return;
-    el.languageMenu.hidden = true;
-    el.languageMenuToggle?.setAttribute("aria-expanded", "false");
-}
-
-function syncLanguageMenu() {
-    if (el.currentLanguageFlag) el.currentLanguageFlag.src = LANGUAGE_FLAGS[activeLanguage] || "";
-
-    const languages = getAvailableLanguages();
-    el.languageMenu?.querySelectorAll(".language-menu-item").forEach((item, index) => {
-        const isActive = languages[index] === activeLanguage;
-        item.classList.toggle("is-active", isActive);
-        item.setAttribute("aria-checked", String(isActive));
-    });
 }
 
 function getLanguageLabel(language) {

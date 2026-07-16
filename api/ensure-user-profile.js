@@ -39,6 +39,31 @@ module.exports = withAuth(async (data, token) => {
     }
     delete userProfile.coins;
 
+    // One-time repair for accounts caught by an earlier, incomplete version
+    // of the migration above: it boosted only the embedded courses map on
+    // this document, never the users/{uid}/courses/{courseId} subcollection
+    // doc that buy-key.js and friends actually check first (see the comment
+    // by that Object.entries().forEach below) - and by the time that fix
+    // shipped, legacyCoins was already gone for those accounts (deleted by
+    // their first, broken migration run), so the block below never re-runs
+    // for them. This instead compares each course's two copies directly,
+    // independent of legacyCoins, and heals the subcollection whenever it's
+    // behind - gated on coinsRepairDone so it's still only ever a single
+    // extra read per course, once per account.
+    let coinsRepair = null;
+    if (userSnap.exists && !rawExisting?.coinsRepairDone) {
+      const courseEntries = Object.entries(userProfile.courses || {});
+      const courseSnaps = await Promise.all(
+        courseEntries.map(([courseId]) => transaction.get(userRef.collection("courses").doc(courseId)))
+      );
+      coinsRepair = courseEntries.map(([courseId, course], index) => {
+        const subSnap = courseSnaps[index];
+        const subCoins = subSnap.exists ? Number(subSnap.data().coins) || 0 : 0;
+        const embeddedCoins = Number(course.coins) || 0;
+        return { courseId, coins: Math.max(embeddedCoins, subCoins) };
+      });
+    }
+
     if (!userSnap.exists) {
       transaction.set(userRef, { ...userProfile, createdAt: now, updatedAt: now, lastActiveAt: now });
     } else {
@@ -59,6 +84,13 @@ module.exports = withAuth(async (data, token) => {
         // "not enough coins".
         Object.entries(userProfile.courses).forEach(([courseId, course]) => {
           transaction.set(userRef.collection("courses").doc(courseId), { coins: course.coins }, { merge: true });
+        });
+      }
+      if (coinsRepair) {
+        updatePayload.coinsRepairDone = true;
+        coinsRepair.forEach(({ courseId, coins }) => {
+          transaction.set(userRef.collection("courses").doc(courseId), { coins }, { merge: true });
+          if (userProfile.courses?.[courseId]) userProfile.courses[courseId].coins = coins;
         });
       }
       transaction.set(userRef, updatePayload, { merge: true });

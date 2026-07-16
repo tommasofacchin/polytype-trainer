@@ -363,8 +363,22 @@
 
     function getUnlockedDeck() {
         const progress = getCourseProgress();
-        const unlocked = state.vocab.filter(item => progress.unlockedWords.has(getWordSuffix(item.id)));
+        const disabledSuffixes = getDisabledWordSuffixes(activeLanguage);
+        const unlocked = state.vocab.filter(item =>
+            progress.unlockedWords.has(getWordSuffix(item.id)) && !disabledSuffixes.has(getWordSuffix(item.id))
+        );
         return unlocked.length > 0 ? unlocked : state.vocab;
+    }
+
+    // Words hidden from exercises via the Deck page's per-card toggle
+    // (js/deck.js) - see that file's DISABLED_WORDS_KEY comment.
+    function getDisabledWordSuffixes(courseKey) {
+        try {
+            const map = JSON.parse(localStorage.getItem("polytype-disabled-words")) || {};
+            return new Set(map[courseKey] || []);
+        } catch {
+            return new Set();
+        }
     }
 
     function resetState() {

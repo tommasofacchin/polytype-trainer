@@ -317,6 +317,8 @@
             "deck.unlockFailed": "Couldn't unlock that word. Try again.",
             "deck.noKeysMessage": "You don't have any keys yet. Buy one in the Shop to unlock this word.",
             "deck.goToShop": "Go to Shop",
+            "deck.disableWord": "Hide this word from exercises",
+            "deck.enableWord": "Show this word in exercises again",
 
             "shop.pageTitle": "Shop - Polytype Trainer",
             "shop.title": "Shop",
@@ -756,6 +758,8 @@
             "deck.unlockFailed": "Impossibile sbloccare quella parola. Riprova.",
             "deck.noKeysMessage": "Non hai ancora nessuna chiave. Comprane una nello Shop per sbloccare questa parola.",
             "deck.goToShop": "Vai allo Shop",
+            "deck.disableWord": "Nascondi questa parola dagli esercizi",
+            "deck.enableWord": "Mostra di nuovo questa parola negli esercizi",
 
             "shop.pageTitle": "Negozio - Polytype Trainer",
             "shop.title": "Negozio",

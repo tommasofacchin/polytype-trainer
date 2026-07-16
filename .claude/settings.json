@@ -105,7 +105,12 @@
       "Bash(node \"/c/Users/wangf/AppData/Local/Temp/claude/c--Users-wangf-OneDrive----Tommaso-polytype-trainer/630468e9-50a5-4999-885d-597bdd165615/scratchpad/test_vkbd_trainer.js\")",
       "Bash(node \"/c/Users/wangf/AppData/Local/Temp/claude/c--Users-wangf-OneDrive----Tommaso-polytype-trainer/630468e9-50a5-4999-885d-597bdd165615/scratchpad/test_vkbd_sprint.js\")",
       "Bash(node \"/c/Users/wangf/AppData/Local/Temp/claude/c--Users-wangf-OneDrive----Tommaso-polytype-trainer/630468e9-50a5-4999-885d-597bdd165615/scratchpad/test_vkbd_dictate.js\")",
-      "Bash(node \"/c/Users/wangf/AppData/Local/Temp/claude/c--Users-wangf-OneDrive----Tommaso-polytype-trainer/630468e9-50a5-4999-885d-597bdd165615/scratchpad/test_vkbd_navigation.js\")"
+      "Bash(node \"/c/Users/wangf/AppData/Local/Temp/claude/c--Users-wangf-OneDrive----Tommaso-polytype-trainer/630468e9-50a5-4999-885d-597bdd165615/scratchpad/test_vkbd_navigation.js\")",
+      "Bash(node --check api/ensure-user-profile.js)",
+      "Bash(node \"/c/Users/wangf/AppData/Local/Temp/claude/c--Users-wangf-OneDrive----Tommaso-polytype-trainer/630468e9-50a5-4999-885d-597bdd165615/scratchpad/test_sprint_result_overlay.js\")",
+      "Bash(node \"/c/Users/wangf/AppData/Local/Temp/claude/c--Users-wangf-OneDrive----Tommaso-polytype-trainer/630468e9-50a5-4999-885d-597bdd165615/scratchpad/test_deck_toggle.js\")",
+      "Bash(node \"/c/Users/wangf/AppData/Local/Temp/claude/c--Users-wangf-OneDrive----Tommaso-polytype-trainer/630468e9-50a5-4999-885d-597bdd165615/scratchpad/test_deck_disable_exercise.js\")",
+      "Bash(node \"/c/Users/wangf/AppData/Local/Temp/claude/c--Users-wangf-OneDrive----Tommaso-polytype-trainer/630468e9-50a5-4999-885d-597bdd165615/scratchpad/test_page_cleanup.js\")"
     ],
     "additionalDirectories": [
       "C:\\Users\\wangf\\AppData\\Local\\Temp\\pw-test2",

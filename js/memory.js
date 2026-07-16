@@ -381,7 +381,10 @@
             // Only words unlocked so far (key spends on the Deck page) are
             // playable, matching the trainer's unlock gating.
             const courseProgress = getCourseProgress(activeDeckMeta.id);
-            state.unlocked = state.vocab.filter(item => courseProgress.unlockedWords.has(getWordSuffix(item.id)));
+            const disabledSuffixes = getDisabledWordSuffixes(activeLanguage);
+            state.unlocked = state.vocab.filter(item =>
+                courseProgress.unlockedWords.has(getWordSuffix(item.id)) && !disabledSuffixes.has(getWordSuffix(item.id))
+            );
 
             applyDifficultyLocks();
             updateDifficultyHint();
@@ -482,6 +485,17 @@
             // this is always 0 for them in practice.
             purchasedKeys: Math.max(0, Math.trunc(Number(course.purchasedKeys) || 0))
         };
+    }
+
+    // Words hidden from exercises via the Deck page's per-card toggle
+    // (js/deck.js) - see that file's DISABLED_WORDS_KEY comment.
+    function getDisabledWordSuffixes(courseKey) {
+        try {
+            const map = JSON.parse(localStorage.getItem("polytype-disabled-words")) || {};
+            return new Set(map[courseKey] || []);
+        } catch {
+            return new Set();
+        }
     }
 
     function getSortedCategories() {

@@ -2,16 +2,6 @@ const PROFILE_KEY = "polytype-profile";
 const LANGUAGE_KEY = "polytype-language";
 const FALLBACK_LANGUAGE = "norwegian";
 
-const LANGUAGE_FLAGS = {
-    chinese: "assets/flags/china.svg",
-    german: "assets/flags/germany.svg",
-    italian: "assets/flags/italy.svg",
-    japanese: "assets/flags/japan.svg",
-    norwegian: "assets/flags/norway.svg",
-    spanish: "assets/flags/spain.svg",
-    swedish: "assets/flags/sweden.svg"
-};
-
 // Dungeon-door lock plate - a shield-shaped plate with corner rivets and a
 // keyhole, heavier/more ornate than a plain padlock (Zelda Twilight
 // Princess dungeon-door styling). Iron/bronze for a door with no key
@@ -52,8 +42,29 @@ const KEY_SVG =
     '<path class="k-tooth" d="M20 12v2.4"></path>' +
     "</svg>";
 
+// "Included"/"excluded from exercises" eye icon pair for the per-card
+// practice toggle - same line-icon style (24x24 viewbox, currentColor
+// stroke) as the rest of the app's inline SVGs.
+const EYE_SVG =
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+    '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"></path>' +
+    '<circle cx="12" cy="12" r="3"></circle>' +
+    "</svg>";
+const EYE_OFF_SVG =
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+    '<path d="M3 3l18 18"></path>' +
+    '<path d="M10.6 5.2C11 5.1 11.5 5 12 5c6.5 0 10 7 10 7a15.6 15.6 0 0 1-3.2 4.2M6.6 6.6C4 8.3 2 12 2 12s3.5 7 10 7c1.3 0 2.5-.2 3.6-.6"></path>' +
+    '<path d="M9.5 9.5a3 3 0 0 0 4.2 4.2"></path>' +
+    "</svg>";
+
 const xpPerDrop = 50; // keep in sync with XP_PER_DROP in api/_lib.js
 const maxKeys = 5; // keep in sync with MAX_KEYS in api/_lib.js
+// Which unlocked words the player has chosen to exclude from exercises -
+// entirely local/per-device by design (a lightweight practice preference,
+// not game progression), stored separately from the profile cache so it's
+// never wiped by a server profile refresh. Keyed by courseKey, same as
+// unlockedWords/purchasedKeys elsewhere in this file.
+const DISABLED_WORDS_KEY = "polytype-disabled-words";
 
 let activeDeckMeta = null;
 let activeLanguage = FALLBACK_LANGUAGE;
@@ -71,9 +82,6 @@ function tr(key, params = {}) {
 }
 
 function initDeckPage() {
-    el.languageMenuToggle = document.getElementById("language-menu-toggle");
-    el.languageMenu = document.getElementById("language-menu");
-    el.currentLanguageFlag = document.getElementById("current-language-flag");
     el.progressFill = document.getElementById("deck-progress-fill");
     el.progressText = document.getElementById("deck-progress-text");
     el.keysIcon = document.getElementById("deck-keys-icon");
@@ -87,7 +95,7 @@ function initDeckPage() {
     el.unlockShopLink = document.getElementById("unlock-go-shop-link");
     if (el.keysIcon) el.keysIcon.innerHTML = KEY_SVG;
 
-    setupLanguageMenu();
+    resolveActiveLanguage();
     setupUnlockConfirm();
     loadDeck();
 
@@ -110,64 +118,13 @@ function getAvailableLanguages() {
     return languages;
 }
 
-function setupLanguageMenu() {
-    if (!el.languageMenuToggle || !el.languageMenu) return;
-
+// The study-language switcher now lives only in the shared header
+// (app-shell.js's flag menu, which reloads the page on change) - this page
+// just needs to read whichever language that left in localStorage.
+function resolveActiveLanguage() {
     const languages = getAvailableLanguages();
     const savedLanguage = localStorage.getItem(LANGUAGE_KEY);
     activeLanguage = languages.includes(savedLanguage) ? savedLanguage : (languages[0] || FALLBACK_LANGUAGE);
-
-    el.languageMenu.replaceChildren(
-        ...languages.map(language => {
-            const item = document.createElement("button");
-            item.type = "button";
-            item.className = "language-menu-item";
-            item.setAttribute("role", "menuitemradio");
-            item.innerHTML = `
-                <img class="flag-mark" src="${LANGUAGE_FLAGS[language] || ""}" alt="">
-                <span>${getLanguageLabel(language)}</span>
-            `;
-            item.addEventListener("click", () => {
-                activeLanguage = language;
-                localStorage.setItem(LANGUAGE_KEY, language);
-                closeLanguageMenu();
-                syncLanguageMenu();
-                loadDeck();
-            });
-            return item;
-        })
-    );
-
-    syncLanguageMenu();
-
-    el.languageMenuToggle.addEventListener("click", () => {
-        const isOpen = !el.languageMenu.hidden;
-        el.languageMenu.hidden = isOpen;
-        el.languageMenuToggle.setAttribute("aria-expanded", String(!isOpen));
-    });
-
-    document.addEventListener("click", event => {
-        if (el.languageMenu.hidden) return;
-        if (el.languageMenuToggle.contains(event.target) || el.languageMenu.contains(event.target)) return;
-        closeLanguageMenu();
-    });
-}
-
-function closeLanguageMenu() {
-    if (!el.languageMenu) return;
-    el.languageMenu.hidden = true;
-    el.languageMenuToggle?.setAttribute("aria-expanded", "false");
-}
-
-function syncLanguageMenu() {
-    if (el.currentLanguageFlag) el.currentLanguageFlag.src = LANGUAGE_FLAGS[activeLanguage] || "";
-
-    const languages = getAvailableLanguages();
-    el.languageMenu?.querySelectorAll(".language-menu-item").forEach((item, index) => {
-        const isActive = languages[index] === activeLanguage;
-        item.classList.toggle("is-active", isActive);
-        item.setAttribute("aria-checked", String(isActive));
-    });
 }
 
 function getLanguageLabel(language) {
@@ -177,7 +134,6 @@ function getLanguageLabel(language) {
 async function loadDeck() {
     const decks = window.DECK_INDEX || [];
     activeDeckMeta = decks.find(deck => deck.language === activeLanguage) || decks[0] || null;
-    syncLanguageMenu();
 
     if (!activeDeckMeta) {
         vocab = [];
@@ -258,6 +214,26 @@ function getStoredProfile() {
     } catch {
         return {};
     }
+}
+
+function getDisabledWordsMap() {
+    try {
+        return JSON.parse(localStorage.getItem(DISABLED_WORDS_KEY)) || {};
+    } catch {
+        return {};
+    }
+}
+
+function getDisabledWords(courseKey) {
+    return new Set(getDisabledWordsMap()[courseKey] || []);
+}
+
+function toggleWordDisabled(courseKey, suffix) {
+    const map = getDisabledWordsMap();
+    const current = new Set(map[courseKey] || []);
+    if (current.has(suffix)) current.delete(suffix); else current.add(suffix);
+    map[courseKey] = [...current];
+    localStorage.setItem(DISABLED_WORDS_KEY, JSON.stringify(map));
 }
 
 function getSortedCategories() {
@@ -352,6 +328,7 @@ function renderDeck() {
 
     const courseProgress = getCourseProgress();
     const { unlockedWords } = courseProgress;
+    const disabledWords = getDisabledWords(courseProgress.courseKey);
     const keysHeld = getKeysHeld(courseProgress.purchasedKeys);
     const unlockedCount = vocab.filter(word => unlockedWords.has(getWordSuffix(word.id))).length;
     const pct = Math.round((unlockedCount / vocab.length) * 100);
@@ -385,11 +362,11 @@ function renderDeck() {
             .map(suffix => wordBySuffix.get(suffix))
             .filter(Boolean);
         if (!categoryWords.length) return;
-        el.groups.appendChild(buildDeckGroup(category, categoryWords, unlockedWords, keysHeld));
+        el.groups.appendChild(buildDeckGroup(category, categoryWords, unlockedWords, disabledWords, keysHeld, courseProgress.courseKey));
     });
 }
 
-function buildDeckGroup(category, words, unlockedWords, keysHeld) {
+function buildDeckGroup(category, words, unlockedWords, disabledWords, keysHeld, courseKey) {
     const total = words.length;
     const unlockedInCategory = words.filter(word => unlockedWords.has(getWordSuffix(word.id))).length;
     const isComplete = unlockedInCategory === total;
@@ -421,7 +398,8 @@ function buildDeckGroup(category, words, unlockedWords, keysHeld) {
     grid.className = "deck-grid";
     words.forEach(word => {
         const isUnlocked = unlockedWords.has(getWordSuffix(word.id));
-        grid.appendChild(buildDeckCard(word, isUnlocked, keysHeld));
+        const isDisabled = disabledWords.has(getWordSuffix(word.id));
+        grid.appendChild(buildDeckCard(word, isUnlocked, isDisabled, keysHeld, courseKey));
     });
 
     group.append(head, grid);
@@ -432,7 +410,7 @@ function buildDeckGroup(category, words, unlockedWords, keysHeld) {
 // gating) as long as they hold at least one key - so, unlike the old
 // sequential model, a card's own suffix (not some globally-computed "next"
 // word) is exactly what gets unlocked when this specific card is clicked.
-function buildDeckCard(word, isUnlocked, keysHeld) {
+function buildDeckCard(word, isUnlocked, isDisabled, keysHeld, courseKey) {
     const card = document.createElement("div");
     card.className = "deck-card";
 
@@ -472,6 +450,7 @@ function buildDeckCard(word, isUnlocked, keysHeld) {
         return card;
     }
 
+    card.classList.toggle("is-disabled", isDisabled);
     card.setAttribute("role", "button");
     card.tabIndex = 0;
     card.setAttribute("aria-label", tr("trainer.playAudioFor", { word: word.script || word.meaning }));
@@ -498,6 +477,23 @@ function buildDeckCard(word, isUnlocked, keysHeld) {
     meaning.className = "deck-card-meaning";
     meaning.textContent = word.meaning;
     card.appendChild(meaning);
+
+    // Separate control from the card's own click (which plays the word's
+    // audio) - toggles whether this word turns up in Trainer/Sprint/Dictate/
+    // Memory sessions, without touching its unlock state.
+    const toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.className = "deck-card-toggle";
+    toggle.innerHTML = isDisabled ? EYE_OFF_SVG : EYE_SVG;
+    toggle.setAttribute("aria-pressed", String(!isDisabled));
+    toggle.setAttribute("aria-label", isDisabled ? tr("deck.enableWord") : tr("deck.disableWord"));
+    toggle.title = isDisabled ? tr("deck.enableWord") : tr("deck.disableWord");
+    toggle.addEventListener("click", event => {
+        event.stopPropagation();
+        toggleWordDisabled(courseKey, getWordSuffix(word.id));
+        renderDeck();
+    });
+    card.appendChild(toggle);
 
     return card;
 }

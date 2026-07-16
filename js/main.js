@@ -330,6 +330,19 @@ function getStarterWordCount() {
     return Math.min(5, getSortedCategories()[0]?.size || 0);
 }
 
+// Words the player has hidden from exercises via the Deck page's per-card
+// toggle (js/deck.js) - a local/per-device practice preference, not game
+// progression, so it lives in its own localStorage key rather than the
+// profile cache (which a server refresh can overwrite wholesale).
+function getDisabledWordSuffixes(courseKey) {
+    try {
+        const map = JSON.parse(localStorage.getItem("polytype-disabled-words")) || {};
+        return new Set(map[courseKey] || []);
+    } catch {
+        return new Set();
+    }
+}
+
 function getWordSuffix(wordId) {
     const match = /(\d+)$/.exec(wordId || "");
     return match ? Number.parseInt(match[0], 10) : 0;
@@ -571,7 +584,10 @@ function parseCsv(csvText) {
 
 function prepareCurrentDeck() {
     const unlockedSuffixes = getCurrentUnlockedWords();
-    const unlockedWords = state.fullDeck.filter(item => unlockedSuffixes.has(getWordSuffix(item.id)));
+    const disabledSuffixes = getDisabledWordSuffixes(getCurrentCourseKey());
+    const unlockedWords = state.fullDeck.filter(item =>
+        unlockedSuffixes.has(getWordSuffix(item.id)) && !disabledSuffixes.has(getWordSuffix(item.id))
+    );
     state.currentDeck = shuffleDeckByUnlockLevel(unlockedWords);
     state.currentIndex = 0;
     // NB: do not reset state.wordsUsed here. It is the monotonic row counter
