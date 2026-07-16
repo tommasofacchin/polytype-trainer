@@ -572,7 +572,7 @@
                 <span class="sprint-exercise-kicker">${tr("sprint.type.prompt")}</span>
                 <strong class="sprint-prompt-word">${escapeHtml(promptText)}</strong>
                 <form id="sprint-type-form" class="sprint-type-form" autocomplete="off">
-                    <input type="text" id="sprint-type-input" class="sprint-type-input" placeholder="${tr("sprint.type.placeholder")}">
+                    <input type="text" id="sprint-type-input" class="sprint-type-input" placeholder="${tr("sprint.type.placeholder")}" inputmode="none" autocapitalize="off" autocorrect="off" spellcheck="false" data-vkbd="true">
                     <button type="submit" class="sprint-type-submit">${tr("sprint.type.submit")}</button>
                 </form>
                 <div id="sprint-type-feedback" class="sprint-type-feedback"></div>

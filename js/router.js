@@ -144,11 +144,12 @@
         // modals, deck.html's unlock-confirm dialog) place full-screen
         // overlay markup as a <main> *sibling*, not inside it - swapping
         // <main> alone silently lost those on a revisit. #app-header/
-        // #app-bottom-nav are the only nodes that belong to the persistent
-        // shell and must survive untouched; <script> tags are left alone
-        // too (already executed - removing the tag wouldn't undo that, and
-        // page scripts are re-run explicitly via loadPageScripts below).
-        const SHELL_IDS = new Set(["app-header", "app-bottom-nav"]);
+        // #app-bottom-nav/#polytype-vkbd are the only nodes that belong to
+        // the persistent shell and must survive untouched; <script> tags
+        // are left alone too (already executed - removing the tag wouldn't
+        // undo that, and page scripts are re-run explicitly via
+        // loadPageScripts below).
+        const SHELL_IDS = new Set(["app-header", "app-bottom-nav", "polytype-vkbd"]);
         const ownedNodes = root => Array.from(root.children).filter(node =>
             node.tagName !== "SCRIPT" && !SHELL_IDS.has(node.id));
 
@@ -177,6 +178,11 @@
 
         currentPage = page;
         window.__polytypePageHooks = {};
+        // The next page re-attaches it (on focus, or explicitly for
+        // callback-mode exercises) only if it actually needs it - without
+        // this it would linger, still targeting an input/callback that just
+        // got ripped out of the DOM above.
+        window.PolytypeKeyboard?.hide?.();
         await loadPageScripts(page);
         if (token !== navToken) return;
 

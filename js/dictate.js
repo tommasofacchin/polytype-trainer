@@ -388,6 +388,7 @@
     }
 
     function showStartModal() {
+        window.PolytypeKeyboard?.hide?.();
         if (el.startModal) {
             el.startModal.hidden = false;
             requestAnimationFrame(() => el.startBtn?.focus());
@@ -400,6 +401,27 @@
         clearRows();
         spawnRow();
         playCurrentAudio();
+        // No real <input> here (see the comment on onGlobalKeyDown below) -
+        // js/virtual-keyboard.js's callback mode feeds taps through the same
+        // state.currentTyped buffer a physical keyboard's keydown already
+        // does, so both work interchangeably.
+        window.PolytypeKeyboard?.attachCallbacks?.({
+            onKey: char => {
+                if (!state.started || state.submitted || !el.langMenu.hidden) return;
+                state.currentTyped += char;
+                updateActiveDisplay();
+                autoCheckActive();
+            },
+            onBackspace: () => {
+                if (!state.started || state.submitted || !el.langMenu.hidden) return;
+                state.currentTyped = state.currentTyped.slice(0, -1);
+                updateActiveDisplay();
+            },
+            onEnter: () => {
+                if (!state.started || state.submitted || !el.langMenu.hidden) return;
+                submitActive();
+            }
+        });
     }
 
     // ── Rows ──────────────────────────────────────────────────────────────────

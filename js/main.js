@@ -716,6 +716,15 @@ function createAnswerInput(className) {
     input.type = "text";
     input.className = className;
     input.autocomplete = "off";
+    // Opts this input into js/virtual-keyboard.js's custom on-screen
+    // keyboard (auto-shown on focus) instead of the device's native one -
+    // inputmode="none" is what actually suppresses the native keyboard;
+    // the rest just stop the OS from second-guessing foreign-language text.
+    input.setAttribute("inputmode", "none");
+    input.setAttribute("autocapitalize", "off");
+    input.setAttribute("autocorrect", "off");
+    input.setAttribute("spellcheck", "false");
+    input.dataset.vkbd = "true";
     return input;
 }
 
