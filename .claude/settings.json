@@ -31,7 +31,12 @@
       "Bash(node -e \"require.resolve\\('playwright'\\)\")",
       "Read(//c/Program Files/Google/Chrome/Application//**)",
       "Read(//c/Program Files \\\\\\(x86\\\\\\)/Google/Chrome/**)",
-      "Read(//c/Program Files \\\\\\(x86\\\\\\)/Microsoft/Edge/Application//**)"
+      "Read(//c/Program Files \\\\\\(x86\\\\\\)/Microsoft/Edge/Application//**)",
+      "Bash(node --check js/i18n.js)",
+      "Bash(pkill -f \"http.server 8877\")"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\wangf\\AppData\\Local\\Temp\\pw-test2"
     ]
   }
 }

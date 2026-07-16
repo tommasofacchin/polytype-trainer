@@ -348,6 +348,7 @@
 
             "sprint.pageTitle": "Sprint - Polytype Trainer",
             "sprint.round": "Round",
+            "sprint.retryRound": "Retry {index}/{total}",
             "sprint.sessionComplete": "Sprint complete",
             "sprint.resultDetail": "{correct} / {total} correct",
             "sprint.loadError": "Couldn't load this deck.",
@@ -363,6 +364,7 @@
             "sprint.type.submit": "Check",
             "sprint.breakdownCorrect": "Correct answers ({count} × 10)",
             "sprint.breakdownCombo": "Best combo bonus ({streak} in a row)",
+            "sprint.breakdownRetry": "Corrected on retry ({count} × 5)",
 
             "home.thisWeek": "This week ›",
             "home.playAgain": "Play another round",
@@ -765,6 +767,7 @@
 
             "sprint.pageTitle": "Sprint - Polytype Trainer",
             "sprint.round": "Round",
+            "sprint.retryRound": "Recupero {index}/{total}",
             "sprint.sessionComplete": "Sprint completato",
             "sprint.resultDetail": "{correct} / {total} corrette",
             "sprint.loadError": "Impossibile caricare questo mazzo.",
@@ -780,6 +783,7 @@
             "sprint.type.submit": "Controlla",
             "sprint.breakdownCorrect": "Risposte corrette ({count} × 10)",
             "sprint.breakdownCombo": "Bonus combo migliore ({streak} di fila)",
+            "sprint.breakdownRetry": "Corrette al recupero ({count} × 5)",
 
             "home.thisWeek": "Questa settimana ›",
             "home.playAgain": "Gioca un'altra partita",

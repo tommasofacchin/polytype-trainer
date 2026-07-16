@@ -33,7 +33,17 @@
         wrongAnswers: 0,
         wordsUsed: 0,
         sessionStartTime: 0,
-        roundLocked: false
+        roundLocked: false,
+        // Single-shot rounds (mc/audio/trueFalse/type) answered wrong get one
+        // more shot in a retry phase after the main rounds are done; match
+        // rounds are excluded since they already let you retry in place.
+        wrongRetryable: [],
+        inRetryPhase: false,
+        retryQueue: [],
+        retryRoundIndex: 0,
+        retryRoundTotal: 0,
+        retryBonus: 0,
+        retryCorrectCount: 0
     };
 
     let activeDeckMeta = null;
@@ -123,6 +133,13 @@
         state.wordsUsed = 0;
         state.sessionStartTime = Date.now();
         state.roundLocked = false;
+        state.wrongRetryable = [];
+        state.inRetryPhase = false;
+        state.retryQueue = [];
+        state.retryRoundIndex = 0;
+        state.retryRoundTotal = 0;
+        state.retryBonus = 0;
+        state.retryCorrectCount = 0;
 
         // Computed once per session, not per round: a round type that can't
         // build a distractor/second pair with the current unlocked pool
@@ -141,7 +158,7 @@
 
     function nextRound() {
         if (state.roundIndex >= state.totalRounds) {
-            finishSession();
+            startRetryPhaseOrFinish();
             return;
         }
 
@@ -150,20 +167,79 @@
         el.roundText.textContent = `${state.roundIndex + 1}/${state.totalRounds}`;
 
         el.exerciseRoot.innerHTML = "";
-        if (type === "mc") renderMcRound();
-        else if (type === "match") renderMatchRound();
-        else if (type === "audio") renderAudioRound();
-        else if (type === "trueFalse") renderTrueFalseRound();
-        else renderTypeRound();
+        if (type === "match") renderMatchRound();
+        else renderSingleShotRound(type, null);
+    }
+
+    function renderSingleShotRound(type, forcedWord) {
+        if (type === "mc") renderMcRound(forcedWord);
+        else if (type === "audio") renderAudioRound(forcedWord);
+        else if (type === "trueFalse") renderTrueFalseRound(forcedWord);
+        else renderTypeRound(forcedWord);
     }
 
     function advanceRound(featuredWordIds) {
         state.lastWordIds = featuredWordIds;
-        state.roundIndex += 1;
+        if (!state.inRetryPhase) state.roundIndex += 1;
         window.setTimeout(() => {
             el.exerciseRoot.querySelector(".sprint-exercise")?.classList.add("is-leaving");
-            window.setTimeout(nextRound, FADE_OUT_DELAY);
+            window.setTimeout(() => {
+                if (state.inRetryPhase) nextRetryRound();
+                else nextRound();
+            }, FADE_OUT_DELAY);
         }, FEEDBACK_HOLD_DELAY);
+    }
+
+    // ── Retry phase: one extra shot at whatever was answered wrong ─────────
+
+    function startRetryPhaseOrFinish() {
+        if (!state.wrongRetryable.length) {
+            finishSession();
+            return;
+        }
+
+        state.inRetryPhase = true;
+        state.retryQueue = state.wrongRetryable;
+        state.wrongRetryable = [];
+        state.retryRoundTotal = state.retryQueue.length;
+        state.retryRoundIndex = 0;
+        nextRetryRound();
+    }
+
+    function nextRetryRound() {
+        if (!state.retryQueue.length) {
+            finishSession();
+            return;
+        }
+
+        state.roundLocked = false;
+        state.retryRoundIndex += 1;
+        el.roundText.textContent = tr("sprint.retryRound", { index: state.retryRoundIndex, total: state.retryRoundTotal });
+
+        const { type, word } = state.retryQueue.shift();
+        el.exerciseRoot.innerHTML = "";
+        renderSingleShotRound(type, word);
+    }
+
+    // Routes a single-shot round's answer to normal scoring, or - during the
+    // retry phase - to the 50%-value bonus without touching streak/accuracy.
+    function finishSingleShotRound(type, word, isCorrect, anchorEl) {
+        if (state.inRetryPhase) {
+            if (isCorrect) awardRetryBonus(anchorEl);
+        } else {
+            recordAnswer(isCorrect, anchorEl);
+            if (!isCorrect) state.wrongRetryable.push({ type, word });
+        }
+        advanceRound([word.id]);
+    }
+
+    function awardRetryBonus(anchorEl) {
+        const pts = 5; // 50% of the flat 10-point base award
+        state.score += pts;
+        state.retryBonus += pts;
+        state.retryCorrectCount += 1;
+        updateHud();
+        if (anchorEl) showPointsFloat(pts, 0, anchorEl);
     }
 
     // ── Word / distractor selection ─────────────────────────────────────────
@@ -259,8 +335,8 @@
 
     // ── Round type 1: multiple choice translation ───────────────────────────
 
-    function renderMcRound() {
-        const [word] = pickFeaturedWords(1);
+    function renderMcRound(forcedWord) {
+        const word = forcedWord || pickFeaturedWords(1)[0];
         const toTarget = Math.random() < 0.5;
         const textOf = toTarget ? w => w.script : w => w.meaning;
         const promptText = toTarget ? word.meaning : word.script;
@@ -291,8 +367,7 @@
                     if (node !== btn) node.classList.add("is-disabled");
                     if (!isCorrect && node.textContent === textOf(word)) node.classList.add("is-correct");
                 });
-                recordAnswer(isCorrect, btn);
-                advanceRound([word.id]);
+                finishSingleShotRound("mc", word, isCorrect, btn);
             });
             grid.appendChild(btn);
         });
@@ -323,6 +398,12 @@
 
         function handleItemClick(btn, col) {
             if (btn.disabled) return;
+
+            if (selected && selected.btn === btn) {
+                btn.classList.remove("is-selected");
+                selected = null;
+                return;
+            }
 
             if (!selected || selected.col === col) {
                 col.querySelectorAll(".sprint-match-item").forEach(node => node.classList.remove("is-selected"));
@@ -382,8 +463,8 @@
 
     // ── Round type 3: audio -> multiple choice ──────────────────────────────
 
-    function renderAudioRound() {
-        const [word] = pickFeaturedWords(1);
+    function renderAudioRound(forcedWord) {
+        const word = forcedWord || pickFeaturedWords(1)[0];
         const distractorCount = Math.min(3, state.unlocked.length - 1);
         const options = shuffle([word, ...pickDistractors(word, distractorCount, w => w.script)]);
 
@@ -416,8 +497,7 @@
                     if (node !== btn) node.classList.add("is-disabled");
                     if (!isCorrect && node.textContent === word.script) node.classList.add("is-correct");
                 });
-                recordAnswer(isCorrect, btn);
-                advanceRound([word.id]);
+                finishSingleShotRound("audio", word, isCorrect, btn);
             });
             grid.appendChild(btn);
         });
@@ -425,8 +505,8 @@
 
     // ── Round type 4: true / false ──────────────────────────────────────────
 
-    function renderTrueFalseRound() {
-        const [word] = pickFeaturedWords(1);
+    function renderTrueFalseRound(forcedWord) {
+        const word = forcedWord || pickFeaturedWords(1)[0];
         const distractor = pickDistractors(word, 1, w => w.meaning)[0];
         const showTrue = !distractor || Math.random() < 0.5;
         const claim = showTrue ? word.meaning : distractor.meaning;
@@ -453,16 +533,15 @@
                 el.exerciseRoot.querySelectorAll(".sprint-tf-btn").forEach(node => {
                     if (node !== btn) node.classList.add("is-disabled");
                 });
-                recordAnswer(isCorrect, btn);
-                advanceRound([word.id]);
+                finishSingleShotRound("trueFalse", word, isCorrect, btn);
             });
         });
     }
 
     // ── Round type 5: type the answer ───────────────────────────────────────
 
-    function renderTypeRound() {
-        const [word] = pickFeaturedWords(1);
+    function renderTypeRound(forcedWord) {
+        const word = forcedWord || pickFeaturedWords(1)[0];
         const toTarget = Math.random() < 0.5;
         const promptText = toTarget ? word.meaning : word.script;
 
@@ -497,8 +576,7 @@
             if (!isCorrect) {
                 feedback.textContent = toTarget ? word.script : word.meaning;
             }
-            recordAnswer(isCorrect, input);
-            advanceRound([word.id]);
+            finishSingleShotRound("type", word, isCorrect, input);
         });
     }
 
@@ -573,15 +651,16 @@
 
     // Breaks the final score down into what it was actually earned for: a
     // flat 10 pts per correct answer, plus whatever extra the combo
-    // multiplier added on top. Every correct answer already banks
-    // `10 * getComboMultiplier(streakAtTheTime)` (see recordAnswer), so the
-    // combo's contribution is simply the total score minus the flat base -
-    // no separate running tally needed.
+    // multiplier added on top, plus the retry-phase bonus. Every correct
+    // answer already banks `10 * getComboMultiplier(streakAtTheTime)` (see
+    // recordAnswer), so the combo's contribution is the total score minus
+    // the flat base minus the (separately tallied) retry bonus - no
+    // separate running combo tally needed.
     function renderResultBreakdown() {
         if (!el.resultBreakdown) return;
 
         const basePoints = state.correctAnswers * 10;
-        const comboBonus = Math.max(0, state.score - basePoints);
+        const comboBonus = Math.max(0, state.score - basePoints - state.retryBonus);
         const rows = [];
 
         if (state.correctAnswers > 0) {
@@ -594,6 +673,12 @@
             rows.push({
                 label: tr("sprint.breakdownCombo", { streak: state.bestStreak }),
                 value: `+${comboBonus} ${tr("common.points")}`
+            });
+        }
+        if (state.retryBonus > 0) {
+            rows.push({
+                label: tr("sprint.breakdownRetry", { count: state.retryCorrectCount }),
+                value: `+${state.retryBonus} ${tr("common.points")}`
             });
         }
 
