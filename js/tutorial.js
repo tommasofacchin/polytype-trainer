@@ -50,9 +50,41 @@
     // branch below for why this matters.
     let hasEvaluatedOnce = false;
 
+    // A signed-in player with zero courses has nothing to do anywhere else
+    // in the app yet - languages.html is the only page that gets them one
+    // (and, for their first ever course, is what starts the tutorial via
+    // api/start-course.js). Without this, a brand-new signup just landed on
+    // Home with no course, no picker, and no tutorial - see the pages that
+    // implicitly create a "chinese" course as a side effect of saving a
+    // session (js/main.js's populateLanguageSelect fallback +
+    // api/complete-practice-session.js) for how that happened.
+    //
+    // profile.courses is only ever `undefined` before the very first
+    // ensure-user-profile.js response has synced into localStorage
+    // (js/firebase-client.js's syncProfileToLocalStorage always sets a real,
+    // possibly-empty, object) - checking for the key's presence, not just
+    // truthiness, is what keeps this from misfiring during that load window
+    // for a *returning* player who does have courses. Guests are
+    // intentionally exempt (isSignedIn() false) - the "just start playing"
+    // path is how the app lets someone try it before creating an account.
+    function shouldForceLanguagePicker(profile) {
+        if (!window.PolytypeFirebase?.isSignedIn?.()) return false;
+        if (!profile?.courses) return false;
+        if (Object.keys(profile.courses).length > 0) return false;
+        return getCurrentPage() !== "languages.html";
+    }
+
     function evaluate(profile) {
         const tutorial = profile?.tutorial;
         clearStepUi();
+
+        if (shouldForceLanguagePicker(profile)) {
+            // Same hard-vs-soft redirect reasoning as the tutorial step
+            // redirect below.
+            if (hasEvaluatedOnce && window.PolytypeRouter?.navigate) window.PolytypeRouter.navigate("languages.html");
+            else window.location.href = "languages.html";
+            return;
+        }
 
         if (!tutorial?.active) {
             hasEvaluatedOnce = true;

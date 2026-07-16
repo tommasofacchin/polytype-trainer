@@ -32,16 +32,6 @@ const DOOR_KEY_SVG =
     '<path class="dl-slot" d="M12.9 9.6 15 7.5"></path>' +
     "</svg>";
 
-// Classic fantasy key (ring + shaft + teeth) for the keys-held counter badge.
-const KEY_SVG =
-    '<svg viewBox="0 0 24 24" aria-hidden="true">' +
-    '<circle class="k-ring" cx="7" cy="12" r="4.2"></circle>' +
-    '<circle class="k-hole" cx="7" cy="12" r="1.4"></circle>' +
-    '<path class="k-shaft" d="M10.6 12h10"></path>' +
-    '<path class="k-tooth" d="M17 12v3"></path>' +
-    '<path class="k-tooth" d="M20 12v2.4"></path>' +
-    "</svg>";
-
 // "Included"/"excluded from exercises" eye icon pair for the per-card
 // practice toggle - same line-icon style (24x24 viewbox, currentColor
 // stroke) as the rest of the app's inline SVGs.
@@ -84,8 +74,6 @@ function tr(key, params = {}) {
 function initDeckPage() {
     el.progressFill = document.getElementById("deck-progress-fill");
     el.progressText = document.getElementById("deck-progress-text");
-    el.keysIcon = document.getElementById("deck-keys-icon");
-    el.keysCount = document.getElementById("deck-keys-count");
     el.groups = document.getElementById("deck-groups");
     el.unlockOverlay = document.getElementById("unlock-confirm-overlay");
     el.unlockBody = document.getElementById("unlock-confirm-body");
@@ -93,7 +81,6 @@ function initDeckPage() {
     el.unlockNoKeys = document.getElementById("unlock-confirm-no-keys");
     el.unlockConfirmBtn = document.getElementById("unlock-confirm-btn");
     el.unlockShopLink = document.getElementById("unlock-go-shop-link");
-    if (el.keysIcon) el.keysIcon.innerHTML = KEY_SVG;
 
     resolveActiveLanguage();
     setupUnlockConfirm();
@@ -341,13 +328,6 @@ function renderDeck() {
         });
     }
     pendingCourseKey = courseProgress.courseKey;
-
-    if (el.keysCount) {
-        el.keysCount.textContent = tr("deck.keysBadge", { count: keysHeld });
-    }
-    const keysBadge = document.getElementById("deck-keys-badge");
-    keysBadge?.classList.toggle("has-keys", keysHeld > 0);
-    if (keysBadge) keysBadge.hidden = keysHeld <= 0;
 
     // Order each category's words by their actual unlock sequence
     // (category.wordSuffixes), not by CSV row order - the drop order is a

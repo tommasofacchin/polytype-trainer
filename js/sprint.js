@@ -377,6 +377,11 @@
             </div>
         `;
 
+        // Only when the prompt itself is the target-language word (not when
+        // it's the options that are, which would make "play the word" for a
+        // single one of several choices ambiguous/give away the answer).
+        if (!toTarget) playWordAudio(word);
+
         const grid = el.exerciseRoot.querySelector(".sprint-mc-grid");
         options.forEach(option => {
             const btn = document.createElement("button");
@@ -548,6 +553,9 @@
             </div>
         `;
 
+        // The prompt here is always the target-language word.
+        playWordAudio(word);
+
         el.exerciseRoot.querySelectorAll(".sprint-tf-btn").forEach(btn => {
             btn.addEventListener("click", () => {
                 if (state.roundLocked) return;
@@ -575,12 +583,16 @@
                 <span class="sprint-exercise-kicker">${tr("sprint.type.prompt")}</span>
                 <strong class="sprint-prompt-word">${escapeHtml(promptText)}</strong>
                 <form id="sprint-type-form" class="sprint-type-form" autocomplete="off">
-                    <input type="text" id="sprint-type-input" class="sprint-type-input" placeholder="${tr("sprint.type.placeholder")}" inputmode="none" autocapitalize="off" autocorrect="off" spellcheck="false" data-vkbd="true">
+                    <input type="text" id="sprint-type-input" class="sprint-type-input" placeholder="${tr("sprint.type.placeholder")}" inputmode="none" autocapitalize="off" autocorrect="off" spellcheck="false" data-vkbd="true" data-vkbd-enter="false">
                     <button type="submit" class="sprint-type-submit">${tr("sprint.type.submit")}</button>
                 </form>
                 <div id="sprint-type-feedback" class="sprint-type-feedback"></div>
             </div>
         `;
+
+        // Only when the prompt itself is the target-language word - not when
+        // typing it is the answer being asked for, which would give it away.
+        if (!toTarget) playWordAudio(word);
 
         const form = document.getElementById("sprint-type-form");
         const input = document.getElementById("sprint-type-input");
@@ -800,7 +812,7 @@
         return [audioBaseUrl, audioPrefix, encodeURIComponent(activeDeckMeta.id), `${encodeURIComponent(item.id)}.mp3`].join("/");
     }
 
-    function playWordAudio(item) {
+    function playWordAudio(item, attempt = 0) {
         if (!item?.id || !audioBaseUrl) return;
         const url = getWordAudioUrl(item);
         if (!url) return;
@@ -810,8 +822,21 @@
                 activeAudio.pause();
                 activeAudio.currentTime = 0;
             }
-            activeAudio = new Audio(url);
-            activeAudio.play().catch(() => {});
+            const audio = new Audio(url);
+            activeAudio = audio;
+            audio.play().catch(() => {
+                // The CDN link this streams from occasionally has a slow or
+                // failed node for a given file - one silent retry covers
+                // that without the player needing to notice and hit replay
+                // themselves. Only if nothing newer (a fresh round, or the
+                // player already hitting replay again) has superseded this
+                // exact attempt in the meantime.
+                if (attempt < 1 && activeAudio === audio) {
+                    window.setTimeout(() => {
+                        if (activeAudio === audio) playWordAudio(item, attempt + 1);
+                    }, 400);
+                }
+            });
         } catch {
             // Ignore - the replay button is always available as a fallback.
         }

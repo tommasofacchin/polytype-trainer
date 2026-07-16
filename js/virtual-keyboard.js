@@ -33,9 +33,18 @@
         ["z", "x", "c", "v", "b", "n", "m"]
     ];
 
+    // Mirrors #app-bottom-nav's own mobile/desktop switch (style.css) - a
+    // desktop user already has a physical keyboard, so the custom one would
+    // just be redundant screen space taken from whatever's underneath it.
+    const MOBILE_BREAKPOINT_QUERY = "(max-width: 859px)";
+
     let root = null;
     let activeInput = null; // real <input>/<textarea> mode
     let activeCallbacks = null; // { onKey, onBackspace, onEnter } mode
+
+    function isMobileViewport() {
+        return window.matchMedia(MOBILE_BREAKPOINT_QUERY).matches;
+    }
 
     function escapeHtml(value) {
         return String(value).replace(/[&<>"']/g, ch => ({
@@ -49,16 +58,25 @@
 
     function render() {
         const extra = EXTRA_CHARS[localStorage.getItem(LANGUAGE_KEY)] || [];
+        // Opt-out per input (js/sprint.js's type-round input sets this -
+        // it already has its own visible "Check" submit button, so a
+        // duplicate Enter key on the keyboard is just clutter there).
+        // Defaults to shown, since js/main.js's per-row inputs and
+        // js/dictate.js's callback mode have no equivalent button - Enter
+        // is the only way to submit for them.
+        const showEnter = activeInput?.dataset?.vkbdEnter !== "false";
         root.innerHTML = `
             ${extra.length ? `<div class="vkbd-row vkbd-row-extra">${extra.map(ch => keyButton(ch, ch)).join("")}</div>` : ""}
             <div class="vkbd-row">${LETTER_ROWS[0].map(ch => keyButton(ch, ch)).join("")}</div>
             <div class="vkbd-row">${LETTER_ROWS[1].map(ch => keyButton(ch, ch)).join("")}</div>
             <div class="vkbd-row">
-                ${keyButton("⌫", "backspace", "vkbd-key-wide")}
                 ${LETTER_ROWS[2].map(ch => keyButton(ch, ch)).join("")}
-                ${keyButton("⏎", "enter", "vkbd-key-wide vkbd-key-enter")}
+                ${keyButton("⌫", "backspace", "vkbd-key-wide")}
             </div>
-            <div class="vkbd-row">${keyButton("space", "space", "vkbd-key-space")}</div>
+            <div class="vkbd-row">
+                ${keyButton("space", "space", "vkbd-key-space")}
+                ${showEnter ? keyButton("⏎", "enter", "vkbd-key-wide vkbd-key-enter") : ""}
+            </div>
         `;
 
         root.querySelectorAll("[data-vkbd-key]").forEach(btn => {
@@ -128,6 +146,7 @@
     }
 
     function show() {
+        if (!isMobileViewport()) { hide(); return; }
         render();
         root.hidden = false;
     }
@@ -182,5 +201,12 @@
     // step behind the input it's serving.
     document.addEventListener("polytype-app-language-changed", () => {
         if (!root.hidden) render();
+    });
+
+    // Covers a desktop window resized/maximized past the breakpoint (or a
+    // tablet rotated) while the keyboard happens to be up - without this it
+    // would just sit there stale until the next focus change.
+    window.addEventListener("resize", () => {
+        if (!root.hidden && !isMobileViewport()) hide();
     });
 })();
