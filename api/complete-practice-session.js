@@ -4,7 +4,8 @@ const {
   normalizeSessionPayload, calculateSessionXp, calculateStreakUpdate,
   getLevelInfo, getCourseLevel, resolveUnlockedWords, getKeysHeld,
   getDateKeyForTimezone, diffDateKeys, normalizeTimezone, getFriendPairId,
-  getNewlyCompletedMissions, evaluateNewBadges,
+  getNewlyCompletedMissions, evaluateNewBadges, sanitizeLessonsCompleted,
+  LESSON_COIN_REWARD, LESSON_IDS_BY_COURSE,
   ApiError
 } = require("./_lib");
 
@@ -62,6 +63,26 @@ module.exports = withAuth(async (data, token) => {
     // Never touched by XP - carried forward unchanged so it survives the
     // round trip to the client (api/buy-key.js is the only writer).
     const purchasedKeys = existingCourseData?.purchasedKeys || 0;
+
+    // Lessons (see decks/lessons-norwegian.js) unlock strictly in sequence:
+    // lessonId is only "new" - and only then worth a coin bonus/unlock
+    // advance - if it's exactly the next one past everything already
+    // completed (its position in the fixed lesson order equals how many the
+    // player has completed so far). Replaying an earlier lesson, or a
+    // lessonId normalizeSessionPayload already rejected as invalid/
+    // out-of-course, still earns normal XP/coins above but leaves the lesson
+    // list untouched.
+    const existingLessonsCompleted = sanitizeLessonsCompleted(existingCourseData?.lessonsCompleted, session.courseId);
+    const courseLessonIds = LESSON_IDS_BY_COURSE[session.courseId] || [];
+    const lessonOrderIndex = session.lessonId ? courseLessonIds.indexOf(session.lessonId) : -1;
+    const isNewLessonCompletion = lessonOrderIndex !== -1 &&
+      !existingLessonsCompleted.includes(session.lessonId) &&
+      lessonOrderIndex === existingLessonsCompleted.length;
+    const lessonsCompleted = isNewLessonCompletion
+      ? [...existingLessonsCompleted, session.lessonId]
+      : existingLessonsCompleted;
+    const lessonCoinsAwarded = isNewLessonCompletion ? LESSON_COIN_REWARD : 0;
+
     const streak = calculateStreakUpdate({
       currentStreak: existingUser?.currentStreak || 0,
       longestStreak: existingUser?.longestStreak || 0,
@@ -97,7 +118,7 @@ module.exports = withAuth(async (data, token) => {
     // Coins are per-course (this language's own balance), not shared across
     // languages the way totalXp/globalLevel are - see start-course.js.
     const previousCourseCoins = existingCourseData?.coins || 0;
-    const courseCoins = previousCourseCoins + coinsEarned + sessionCoins;
+    const courseCoins = previousCourseCoins + coinsEarned + sessionCoins + lessonCoinsAwarded;
 
     const now = FieldValue.serverTimestamp();
     const userData = {
@@ -133,6 +154,7 @@ module.exports = withAuth(async (data, token) => {
       wordsMastered: courseSnap.exists ? courseSnap.data().wordsMastered || 0 : 0,
       purchasedKeys,
       coins: courseCoins,
+      lessonsCompleted,
       lastPlayedAt: now,
       updatedAt: now
     };
@@ -145,7 +167,8 @@ module.exports = withAuth(async (data, token) => {
       wordsUnlocked: courseData.wordsUnlocked,
       wordsMastered: courseData.wordsMastered,
       purchasedKeys,
-      coins: courseCoins
+      coins: courseCoins,
+      lessonsCompleted
     };
 
     userData.courses = {
@@ -216,6 +239,8 @@ module.exports = withAuth(async (data, token) => {
       keys: getKeysHeld(purchasedKeys),
       coinsEarned,
       sessionCoins,
+      newLessonCompletion: isNewLessonCompletion,
+      lessonCoinsAwarded,
       tutorial: userData.tutorial || null,
       completedMissions: completedMissions.map(mission => ({ id: mission.id, coinReward: mission.coinReward, labelKey: mission.labelKey })),
       newBadges: newBadges.map(badge => ({ id: badge.id }))

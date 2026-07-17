@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title data-i18n="lessons.pageTitle">Lessons - Polytype Trainer</title>
+    <link rel="icon" type="image/svg+xml" href="assets/flags/norway.svg">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap">
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body class="has-app-shell is-scroll-page" data-tab="games">
+    <div id="app-header"></div>
+
+    <main class="page-content lessons-page">
+        <nav class="profile-topbar" aria-label="Lessons navigation">
+            <a class="back-link-mini" href="games.html">&lsaquo; <span data-i18n="nav.games">Games</span></a>
+        </nav>
+
+        <div id="lessons-path-view">
+            <h1 class="page-title" data-i18n="lessons.title">Lessons</h1>
+            <p class="page-subtitle" data-i18n="lessons.subtitle">Learn Norwegian grammar step by step</p>
+            <div id="lessons-modules" class="lessons-modules"></div>
+        </div>
+
+        <div id="lessons-player-view" hidden>
+            <button type="button" id="lessons-back-btn" class="back-link-mini lessons-player-back">&lsaquo; <span data-i18n="lessons.backBtn">Back</span></button>
+
+            <section id="lessons-explanation-screen" class="lessons-card lessons-explanation-screen">
+                <span id="lessons-explanation-kicker" class="profile-kicker"></span>
+                <h2 id="lessons-explanation-title" class="lessons-explanation-title"></h2>
+                <div id="lessons-explanation-body" class="lessons-explanation-body"></div>
+                <button type="button" id="lessons-start-btn" class="restart-btn" data-i18n="lessons.startBtn">Start lesson</button>
+            </section>
+
+            <section id="lessons-exercise-screen" class="lessons-card lessons-exercise-screen" hidden>
+                <div id="lessons-review-banner" class="lessons-review-banner" hidden></div>
+                <span id="lessons-exercise-progress" class="lessons-exercise-progress"></span>
+                <div id="lessons-exercise-root"></div>
+            </section>
+
+            <section id="lessons-complete-screen" class="lessons-card lessons-complete-screen" hidden>
+                <h2 id="lessons-complete-title" class="lessons-complete-title"></h2>
+                <span id="lessons-complete-coins" class="lessons-complete-coins"></span>
+                <span id="lessons-complete-status" class="lessons-complete-status"></span>
+                <button type="button" id="lessons-continue-btn" class="restart-btn" data-i18n="lessons.continueBtn">Continue</button>
+            </section>
+        </div>
+    </main>
+    <div id="app-bottom-nav"></div>
+
+    <script src="js/firebase-config.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/app-shell.js"></script>
+    <script src="js/router.js"></script>
+    <script src="js/tutorial.js"></script>
+    <script src="js/virtual-keyboard.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-auth-compat.js"></script>
+    <script src="js/firebase-client.js"></script>
+    <script src="js/gamestate.js"></script>
+    <script src="decks/lessons-norwegian.js"></script>
+    <script src="js/lessons.js"></script>
+</body>
+</html>

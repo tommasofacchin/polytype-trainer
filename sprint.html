@@ -14,7 +14,7 @@
     <section class="game-hud" aria-label="Session score">
       <div class="hud-item">
         <span class="hud-label" data-i18n="sprint.round">Round</span>
-        <strong id="sprint-round-text">1/1</strong>
+        <strong id="sprint-round-text">--</strong>
       </div>
       <div class="hud-item">
         <span class="hud-label" data-i18n="trainer.score">Score</span>
@@ -30,7 +30,12 @@
     </section>
 
     <section class="list-card sprint-stage" aria-label="Sprint exercise">
-      <div id="sprint-exercise-root"></div>
+      <div id="sprint-exercise-root">
+        <div class="game-loading-screen">
+          <div class="game-loading-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+          <p class="game-loading-text" data-i18n="common.loadingWords">Loading your words...</p>
+        </div>
+      </div>
     </section>
   </main>
   <div id="app-bottom-nav"></div>

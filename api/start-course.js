@@ -52,7 +52,8 @@ module.exports = withAuth(async (data, token) => {
       wordsUnlocked: 0,
       wordsMastered: 0,
       purchasedKeys: isFirstCourse ? 0 : TUTORIAL_STARTER_KEYS,
-      coins: isFirstCourse ? TUTORIAL_STARTER_COINS : 0
+      coins: isFirstCourse ? TUTORIAL_STARTER_COINS : 0,
+      lessonsCompleted: []
     };
 
     const tutorial = isFirstCourse ? { active: true, step: "deck-intro", courseId } : (existingUser?.tutorial || null);

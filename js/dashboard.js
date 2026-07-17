@@ -114,6 +114,13 @@ function renderGreeting(signedIn) {
 
     const signedInSections = document.getElementById("home-signed-in");
     if (signedInSections) signedInSections.hidden = !signedIn;
+
+    // Norwegian-only for now (see decks/lessons-norwegian.js) - no
+    // onLanguageChanged wiring needed, since picking a different study
+    // language always does a full page reload (js/app-shell.js's flag menu),
+    // so a one-time check here already reflects whatever's active.
+    const lessonsBtn = document.getElementById("home-lessons-btn");
+    if (lessonsBtn) lessonsBtn.hidden = localStorage.getItem("polytype-language") !== "norwegian";
 }
 
 function renderChest(state) {

@@ -1,7 +1,7 @@
 const { db, FieldValue, Timestamp } = require("./_firebase");
 const {
   withAuth, normalizeCourseId, resolveUnlockedWords, getKeysHeld,
-  KEY_PRICE_COINS, MAX_KEYS,
+  KEY_PRICE_COINS, MAX_KEYS, sanitizeLessonsCompleted,
   ApiError
 } = require("./_lib");
 
@@ -55,7 +55,13 @@ module.exports = withAuth(async (data, token) => {
       wordsUnlocked: unlockedWords.length,
       wordsMastered: existingCourse.wordsMastered || 0,
       purchasedKeys: nextPurchasedKeys,
-      coins: nextCourseCoins
+      coins: nextCourseCoins,
+      // Untouched by this endpoint, but every course-returning response has
+      // to round-trip the full course shape - the client replaces its
+      // cached course wholesale with whatever comes back (see
+      // applyProgressToProfile in js/firebase-client.js), so omitting this
+      // would silently wipe the player's lesson progress.
+      lessonsCompleted: sanitizeLessonsCompleted(existingCourse.lessonsCompleted, courseId)
     };
 
     // Tutorial's second step (see api/start-course.js): buying the 5th key

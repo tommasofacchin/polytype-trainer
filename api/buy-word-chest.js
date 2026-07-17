@@ -1,7 +1,7 @@
 const { db, FieldValue, Timestamp } = require("./_firebase");
 const {
   withAuth, normalizeCourseId, resolveUnlockedWords,
-  WORD_CHEST_PRICE_COINS, VALID_WORD_SUFFIXES,
+  WORD_CHEST_PRICE_COINS, VALID_WORD_SUFFIXES, sanitizeLessonsCompleted,
   ApiError
 } = require("./_lib");
 
@@ -56,7 +56,9 @@ module.exports = withAuth(async (data, token) => {
       wordsUnlocked: nextUnlockedWords.length,
       wordsMastered: existingCourse.wordsMastered || 0,
       purchasedKeys: existingCourse.purchasedKeys || 0,
-      coins: nextCourseCoins
+      coins: nextCourseCoins,
+      // Same round-trip requirement noted in api/buy-key.js.
+      lessonsCompleted: sanitizeLessonsCompleted(existingCourse.lessonsCompleted, courseId)
     };
 
     transaction.set(userRef, {

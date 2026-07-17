@@ -468,7 +468,7 @@ async function startSession(seconds) {
     await saveCurrentSessionProgress();
     stopTimer();
     resetState();
-    clearRows();
+    showRowsLoading();
     hideSessionResult();
     updateStats();
     updateTimerDisplay();
@@ -621,6 +621,15 @@ function resetState() {
 
 function clearRows() {
     rowsContainer.innerHTML = "";
+}
+
+function showRowsLoading() {
+    rowsContainer.innerHTML = `
+        <div class="game-loading-screen">
+            <div class="game-loading-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+            <p class="game-loading-text">${tr("common.loadingWords")}</p>
+        </div>
+    `;
 }
 
 function spawnInitialRows() {

@@ -1,7 +1,7 @@
 const { db, FieldValue, Timestamp } = require("./_firebase");
 const {
   withAuth, normalizeCourseId, resolveUnlockedWords,
-  getKeysHeld, VALID_WORD_SUFFIXES,
+  getKeysHeld, VALID_WORD_SUFFIXES, sanitizeLessonsCompleted,
   ApiError
 } = require("./_lib");
 
@@ -60,7 +60,9 @@ module.exports = withAuth(async (data, token) => {
       // cached course wholesale with whatever comes back (see
       // applyProgressToProfile in js/firebase-client.js), so omitting this
       // would silently zero out the cached coin balance.
-      coins: existingCourse.coins || 0
+      coins: existingCourse.coins || 0,
+      // Same round-trip requirement as the coins comment just above.
+      lessonsCompleted: sanitizeLessonsCompleted(existingCourse.lessonsCompleted, courseId)
     };
 
     // Tutorial's third step (see api/start-course.js): spending the last of

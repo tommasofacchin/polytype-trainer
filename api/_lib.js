@@ -12,6 +12,17 @@ const CATEGORIES = require("../decks/categories.js").slice().sort((a, b) => a.or
 const CATEGORY_SIZES = CATEGORIES.map(category => category.size);
 const TOTAL_CATEGORY_WORDS = CATEGORY_SIZES.reduce((sum, size) => sum + size, 0);
 const VALID_WORD_SUFFIXES = new Set(CATEGORIES.flatMap(category => category.wordSuffixes));
+// Same file the browser loads as window.POLYTYPE_LESSONS (see
+// decks/lessons-norwegian.js) - lesson id order IS unlock order, so this is
+// the one place a lessonId's position in the sequence is validated against.
+const LESSONS_BY_COURSE = require("../decks/lessons-norwegian.js");
+const LESSON_IDS_BY_COURSE = Object.fromEntries(
+  Object.entries(LESSONS_BY_COURSE).map(([courseId, lessons]) => [courseId, lessons.map(lesson => lesson.id)])
+);
+// Flat coin bonus for a lesson's very first completion (see
+// api/complete-practice-session.js) - on top of that session's normal
+// sessionCoins, same "small but real" scale as a single daily mission.
+const LESSON_COIN_REWARD = 15;
 const XP_PER_DROP = 50;
 // A brand-new course needs a handful of words unlocked before any XP exists,
 // otherwise there is nothing to practice to earn that first XP at all.
@@ -38,7 +49,7 @@ const COURSE_LEVEL_CAPS = {
   swedish: 60
 };
 
-const GAME_TYPES = ["trainer", "memory", "dictate", "sprint"];
+const GAME_TYPES = ["trainer", "memory", "dictate", "sprint", "lesson"];
 // Guided first-course tutorial (see api/start-course.js): deck-intro (read
 // the Deck explainer) -> buy-keys (spend the gifted 500 coins on 5 keys in
 // the Shop) -> choose-words (spend those keys on 5 chosen words in the
@@ -221,11 +232,28 @@ function sanitizeCoursesSummary(courses) {
           purchasedKeys: Math.max(0, Math.trunc(Number(course.purchasedKeys) || 0)),
           // Coins are per-course (this language's own balance), not a
           // shared user-level pool - see start-course.js/buy-key.js.
-          coins: Math.max(0, Math.trunc(Number(course.coins) || 0))
+          coins: Math.max(0, Math.trunc(Number(course.coins) || 0)),
+          // Must also round-trip like purchasedKeys above, for the same
+          // reason - api/start-course.js, api/buy-key.js, api/unlock-word.js,
+          // api/buy-word-chest.js and api/claim-daily-chest.js all copy this
+          // field forward unchanged in their own courseResponse for the same
+          // reason (see api/complete-practice-session.js for where it's
+          // actually appended to).
+          lessonsCompleted: sanitizeLessonsCompleted(course.lessonsCompleted, courseId)
         }
       ];
     })
   );
+}
+
+// Keeps only ids that are real, known lessons for this course, in case the
+// lesson curriculum is ever trimmed/renamed - an unrecognized id just quietly
+// drops instead of corrupting the unlock-frontier math in
+// api/complete-practice-session.js (lessonIndex === lessonsCompleted.length).
+function sanitizeLessonsCompleted(value, courseId) {
+  if (!Array.isArray(value)) return [];
+  const validIds = new Set(LESSON_IDS_BY_COURSE[courseId] || []);
+  return value.filter(id => typeof id === "string" && validIds.has(id));
 }
 
 function sanitizeUnlockedWords(value) {
@@ -242,10 +270,19 @@ function getAuthProfile(token) {
 }
 
 function normalizeSessionPayload(data = {}) {
+  const courseId = normalizeCourseId(data.courseId);
+  const lessonId = cleanOptionalString(data.lessonId);
+  const validLessonIds = new Set(LESSON_IDS_BY_COURSE[courseId] || []);
+
   return {
-    courseId: normalizeCourseId(data.courseId),
+    courseId,
     timezone: cleanOptionalString(data.timezone),
     gameType: GAME_TYPES.includes(data.gameType) ? data.gameType : "trainer",
+    // Only meaningful for gameType "lesson" - an unrecognized/mismatched id
+    // (wrong course, typo, stale client) is dropped rather than throwing, so
+    // the session's XP/coins/streak still land normally; it just won't
+    // advance the lesson-unlock frontier (see complete-practice-session.js).
+    lessonId: lessonId && validLessonIds.has(lessonId) ? lessonId : null,
     correctAnswers: clampInteger(data.correctAnswers, 0, 1000),
     wrongAnswers: clampInteger(data.wrongAnswers, 0, 1000),
     bestCombo: clampInteger(data.bestCombo, 0, 1000),
@@ -568,6 +605,9 @@ module.exports = {
   KEY_PRICE_COINS,
   WORD_CHEST_PRICE_COINS,
   GAME_TYPES,
+  LESSON_IDS_BY_COURSE,
+  LESSON_COIN_REWARD,
+  sanitizeLessonsCompleted,
   TUTORIAL_STEPS,
   TUTORIAL_STARTER_COINS,
   TUTORIAL_STARTER_KEYS,
