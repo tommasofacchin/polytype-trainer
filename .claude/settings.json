@@ -149,7 +149,8 @@
       "Bash(pkill -f \"http.server 8792\")",
       "Bash(node full-path-test.js)",
       "Bash(rm -f _test-seed.html)",
-      "Bash(pkill -f \"http.server 8793\")"
+      "Bash(pkill -f \"http.server 8793\")",
+      "Bash(node complete-anim-test.js)"
     ],
     "additionalDirectories": [
       "C:\\Users\\wangf\\AppData\\Local\\Temp\\pw-test2",

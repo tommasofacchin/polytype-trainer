@@ -402,8 +402,8 @@
         el.exerciseScreen.hidden = true;
         el.reviewBanner.hidden = true;
         el.completeScreen.hidden = false;
-        el.completeCoins.textContent = "";
-        el.completeStatus.textContent = "";
+        clearRevealed(el.completeCoins);
+        clearRevealed(el.completeStatus);
         el.completeTitle.textContent = tr("lessons.completeTitle");
         el.continueBtn.disabled = true;
 
@@ -421,7 +421,7 @@
 
         const firebaseClient = window.PolytypeFirebase;
         if (!firebaseClient?.isSignedIn?.()) {
-            el.completeStatus.textContent = tr("trainer.signInSave");
+            revealText(el.completeStatus, tr("trainer.signInSave"));
             el.continueBtn.disabled = false;
             return;
         }
@@ -437,16 +437,34 @@
 
             if (progress?.newLessonCompletion) {
                 if (progress.lessonCoinsAwarded > 0) {
-                    el.completeCoins.textContent = tr("lessons.coinsEarned", { count: progress.lessonCoinsAwarded });
+                    revealText(el.completeCoins, tr("lessons.coinsEarned", { count: progress.lessonCoinsAwarded }));
                 }
             } else {
                 el.completeTitle.textContent = tr("lessons.replayTitle");
             }
         } catch (error) {
-            el.completeStatus.textContent = error?.message || tr("trainer.signInSave");
+            revealText(el.completeStatus, error?.message || tr("trainer.signInSave"));
         }
 
         el.continueBtn.disabled = false;
+    }
+
+    // Sets text and (re-)triggers the quick pop-in animation, instead of the
+    // text just silently appearing whenever the save round-trip resolves -
+    // the remove/reflow/add dance is needed because these same elements get
+    // reused across multiple lesson plays, and re-adding a class that's
+    // already present doesn't restart a CSS animation on its own (mirrors
+    // js/sprint.js's animateStreakPop).
+    function revealText(target, text) {
+        target.classList.remove("is-revealed");
+        target.textContent = text;
+        void target.offsetWidth;
+        target.classList.add("is-revealed");
+    }
+
+    function clearRevealed(target) {
+        target.classList.remove("is-revealed");
+        target.textContent = "";
     }
 
     // ── Small generic helpers (mirrors js/sprint.js's own copies) ───────────
