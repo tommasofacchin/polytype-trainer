@@ -87,7 +87,50 @@ const BADGE_DEFINITIONS = [
   { id: "streak_30", icon: "flame", labelKey: "badge.streak30", descriptionKey: "badge.streak30Desc", condition: user => (user.currentStreak || 0) >= 30 },
   { id: "word_master", icon: "book", labelKey: "badge.wordMaster", descriptionKey: "badge.wordMasterDesc", condition: user => Object.values(user.courses || {}).some(course => (course.wordsUnlocked || 0) >= 100) },
   { id: "chest_hunter", icon: "chest", labelKey: "badge.chestHunter", descriptionKey: "badge.chestHunterDesc", condition: (user, extra) => (extra.chestsClaimed || 0) >= 7 },
-  { id: "level_10", icon: "star", labelKey: "badge.level10", descriptionKey: "badge.level10Desc", condition: user => (user.globalLevel || 1) >= 10 }
+  { id: "level_10", icon: "star", labelKey: "badge.level10", descriptionKey: "badge.level10Desc", condition: user => (user.globalLevel || 1) >= 10 },
+  { id: "lessons_10", icon: "book", labelKey: "badge.lessons10", descriptionKey: "badge.lessons10Desc", condition: user => Object.values(user.courses || {}).some(course => (course.lessonsCompleted?.length || 0) >= 10) },
+  { id: "lessons_25", icon: "book", labelKey: "badge.lessons25", descriptionKey: "badge.lessons25Desc", condition: user => Object.values(user.courses || {}).some(course => (course.lessonsCompleted?.length || 0) >= 25) },
+  // Only courses with an authored lesson sequence (LESSON_IDS_BY_COURSE) can
+  // ever satisfy this - a course with 0 lessons defined must never read as
+  // "all lessons complete" by vacuous truth.
+  { id: "lessons_all", icon: "crown", labelKey: "badge.lessonsAll", descriptionKey: "badge.lessonsAllDesc", condition: user => Object.entries(user.courses || {}).some(([courseId, course]) => {
+    const total = LESSON_IDS_BY_COURSE[courseId]?.length || 0;
+    return total > 0 && (course.lessonsCompleted?.length || 0) >= total;
+  }) },
+
+  // Streak tiers above streak_30.
+  { id: "streak_50", icon: "flame", labelKey: "badge.streak50", descriptionKey: "badge.streak50Desc", condition: user => (user.currentStreak || 0) >= 50 },
+  { id: "streak_100", icon: "flame", labelKey: "badge.streak100", descriptionKey: "badge.streak100Desc", condition: user => (user.currentStreak || 0) >= 100 },
+  { id: "streak_365", icon: "flame", labelKey: "badge.streak365", descriptionKey: "badge.streak365Desc", condition: user => (user.currentStreak || 0) >= 365 },
+
+  // Vocabulary tiers around word_master (100): a lighter one below it, and
+  // full-deck completion above it. TOTAL_CATEGORY_WORDS is the same constant
+  // that caps how many words a course can ever have unlocked.
+  { id: "words_50", icon: "book", labelKey: "badge.words50", descriptionKey: "badge.words50Desc", condition: user => Object.values(user.courses || {}).some(course => (course.wordsUnlocked || 0) >= 50) },
+  { id: "deck_complete", icon: "crown", labelKey: "badge.deckComplete", descriptionKey: "badge.deckCompleteDesc", condition: user => Object.values(user.courses || {}).some(course => (course.wordsUnlocked || 0) >= TOTAL_CATEGORY_WORDS) },
+
+  // Chest tiers above chest_hunter (7).
+  { id: "chest_30", icon: "chest", labelKey: "badge.chest30", descriptionKey: "badge.chest30Desc", condition: (user, extra) => (extra.chestsClaimed || 0) >= 30 },
+  { id: "chest_100", icon: "chest", labelKey: "badge.chest100", descriptionKey: "badge.chest100Desc", condition: (user, extra) => (extra.chestsClaimed || 0) >= 100 },
+
+  // Languages studied and friends made.
+  { id: "polyglot", icon: "globe", labelKey: "badge.polyglot", descriptionKey: "badge.polyglotDesc", condition: user => Object.keys(user.courses || {}).length >= 3 },
+  { id: "social_butterfly", icon: "friends", labelKey: "badge.socialButterfly", descriptionKey: "badge.socialButterflyDesc", condition: user => (user.friendCount || 0) >= 5 },
+  { id: "friend_squad", icon: "friends", labelKey: "badge.friendSquad", descriptionKey: "badge.friendSquadDesc", condition: user => (user.friendCount || 0) >= 20 },
+
+  // In-session skill - only complete-practice-session.js's extra bag carries
+  // sessionBestCombo/sessionCorrectAnswers/sessionWrongAnswers/practiceHour,
+  // so these can only ever be newly earned from a practice session, never
+  // from a daily chest claim (extra.foo defaults to falsy there, same as an
+  // account that just hasn't played yet).
+  { id: "combo_master", icon: "bolt", labelKey: "badge.comboMaster", descriptionKey: "badge.comboMasterDesc", condition: (user, extra) => (extra.sessionBestCombo || 0) >= 20 },
+  { id: "flawless_round", icon: "target", labelKey: "badge.flawlessRound", descriptionKey: "badge.flawlessRoundDesc", condition: (user, extra) => (extra.sessionCorrectAnswers || 0) >= 20 && extra.sessionWrongAnswers === 0 },
+  { id: "night_owl", icon: "moon", labelKey: "badge.nightOwl", descriptionKey: "badge.nightOwlDesc", condition: (user, extra) => typeof extra.practiceHour === "number" && extra.practiceHour < 7 },
+
+  // Lifetime play patterns (see sessionsCompleted/gameTypesPlayed in
+  // buildDefaultUserProfile and their updates in complete-practice-session.js).
+  { id: "well_rounded", icon: "grid", labelKey: "badge.wellRounded", descriptionKey: "badge.wellRoundedDesc", condition: user => ["trainer", "memory", "dictate", "sprint"].every(type => user.gameTypesPlayed?.[type]) },
+  { id: "veteran", icon: "medal", labelKey: "badge.veteran", descriptionKey: "badge.veteranDesc", condition: user => (user.sessionsCompleted || 0) >= 100 }
 ];
 
 class ApiError extends Error {
@@ -144,6 +187,11 @@ function buildDefaultUserProfile(uid, authProfile, timezone) {
     friendCount: 0,
     lastChestClaimedDate: null,
     chestsClaimed: 0,
+    // Both are pure server bookkeeping for badge conditions below (well_
+    // rounded / veteran) - never sanitized into the client-facing profile,
+    // since the client only ever needs the resulting earned-badge ids.
+    sessionsCompleted: 0,
+    gameTypesPlayed: {},
     tutorial: null,
     courses: {}
   };
@@ -466,6 +514,19 @@ function getDateKeyForTimezone(date, timezone) {
   return `${year}-${month}-${day}`;
 }
 
+// Used only for the "night_owl" badge condition below. hour12:false can
+// report midnight as "24" instead of "00" depending on the ICU data the
+// runtime ships with - the modulo normalizes that back to 0 either way.
+function getHourForTimezone(date, timezone) {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: timezone,
+    hour: "2-digit",
+    hour12: false
+  }).formatToParts(date);
+
+  return Number(parts.find(p => p.type === "hour").value) % 24;
+}
+
 function diffDateKeys(fromKey, toKey) {
   return Math.round((dateKeyToUtc(toKey) - dateKeyToUtc(fromKey)) / 86400000);
 }
@@ -583,6 +644,7 @@ module.exports = {
   cleanOptionalString,
   clampInteger,
   getDateKeyForTimezone,
+  getHourForTimezone,
   diffDateKeys,
   getFriendPairId,
   pickFriendProfile,

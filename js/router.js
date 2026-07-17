@@ -40,6 +40,29 @@
     let currentPage = getPageName(location.pathname);
     let navToken = 0;
 
+    // In-memory caches of in-flight/finished fetches, keyed by request URL.
+    // A hover-triggered prefetch and the real navigation that follows it
+    // share the same Promise here instead of firing two separate requests,
+    // and a rejected fetch removes its own entry so one transient failure
+    // never poisons a later real navigation. Entries are consumed (deleted)
+    // by the navigation that uses them, so a later visit still refetches
+    // fresh HTML/script text - matching the original always-fetch behaviour.
+    const htmlPrefetch = new Map();
+    const scriptPrefetch = new Map();
+
+    function fetchText(cache, key, url) {
+        let promise = cache.get(key);
+        if (!promise) {
+            promise = fetch(url).then(response => {
+                if (!response.ok) throw new Error(`fetch failed ${url}: ${response.status}`);
+                return response.text();
+            });
+            promise.catch(() => cache.delete(key));
+            cache.set(key, promise);
+        }
+        return promise;
+    }
+
     // Two events almost every page listens for (language switch, profile
     // sync) - rather than each page's own document.addEventListener call
     // piling up one more handler per revisit, pages register themselves
@@ -101,6 +124,43 @@
         navigate(location.pathname + location.search, { push: false });
     });
 
+    // Warm the HTML + page-script caches the moment a routable internal link
+    // is hovered, focused, or touched - the click / Enter / tap that usually
+    // follows within a few hundred ms then reuses an already in-flight (or
+    // finished) fetch instead of starting from cold, which is what made
+    // navigation feel laggy. Cheap to fire on every hover: each target is
+    // fetched at most once (fetchText dedups), and external, non-routable, or
+    // current-page links no-op immediately.
+    let lastPrefetchedKey = "";
+    function prefetchFromEvent(event) {
+        const link = event.target.closest?.("a[href]");
+        if (!link || (link.target && link.target !== "_self") || link.hasAttribute("download")) return;
+
+        let url;
+        try {
+            url = new URL(link.href, location.href);
+        } catch {
+            return;
+        }
+        if (url.origin !== location.origin) return;
+
+        const page = getPageName(url.pathname);
+        if (!isRoutable(page) || page === currentPage) return;
+
+        const key = url.pathname + url.search;
+        if (key === lastPrefetchedKey) return;
+        lastPrefetchedKey = key;
+
+        fetchText(htmlPrefetch, key, key).catch(() => {});
+        for (const src of PAGE_SCRIPTS[page] || []) {
+            if (STATIC_DATA_SCRIPTS.has(src) && loadedStaticScripts.has(src)) continue;
+            fetchText(scriptPrefetch, src, src).catch(() => {});
+        }
+    }
+    document.addEventListener("mouseover", prefetchFromEvent);
+    document.addEventListener("focusin", prefetchFromEvent);
+    document.addEventListener("touchstart", prefetchFromEvent, { passive: true });
+
     // Exposed for other shell scripts (js/tutorial.js's "keep the player on
     // rails" redirect and its intro CTA) that need to trigger a soft
     // navigation programmatically instead of only reacting to link clicks.
@@ -130,12 +190,12 @@
 
         let html;
         try {
-            const response = await fetch(path);
-            if (!response.ok) throw new Error(`navigation fetch failed: ${response.status}`);
-            html = await response.text();
+            html = await fetchText(htmlPrefetch, path, path);
         } catch {
             window.location.href = path; // Best-effort fallback: a real navigation always works.
             return;
+        } finally {
+            htmlPrefetch.delete(path); // Consume: the next visit refetches fresh HTML.
         }
         if (token !== navToken) return;
 
@@ -215,14 +275,35 @@
 
     async function loadPageScripts(page) {
         const scripts = PAGE_SCRIPTS[page] || [];
-        for (const src of scripts) {
-            if (STATIC_DATA_SCRIPTS.has(src) && loadedStaticScripts.has(src)) continue;
-            await runScript(src);
+
+        // Kick every script's fetch off up front, in parallel (reusing any
+        // hover-prefetched request already in flight), then execute them in
+        // strict document order below. Fetching is side-effect-free, so
+        // overlapping the downloads is safe; only *execution* order matters,
+        // for the const/let and global-dependency reasons runScript
+        // documents. The old code fetched-then-ran one script at a time, so a
+        // page like Trainer (four scripts, main.js ~60KB) paid four serial
+        // round trips end to end before its first line ran.
+        const pending = scripts.map(src => {
+            if (STATIC_DATA_SCRIPTS.has(src) && loadedStaticScripts.has(src)) return null;
+            return fetchText(scriptPrefetch, src, src).catch(err => {
+                console.error("router: script load failed", src, err);
+                return null;
+            });
+        });
+
+        for (let i = 0; i < scripts.length; i++) {
+            if (pending[i] === null) continue;
+            const src = scripts[i];
+            const code = await pending[i];
+            scriptPrefetch.delete(src);
+            if (code === null) continue;
+            runScript(src, code);
             if (STATIC_DATA_SCRIPTS.has(src)) loadedStaticScripts.add(src);
         }
     }
 
-    // Fetches a script's source and evals it wrapped in a fresh IIFE via an
+    // Executes already-fetched script source wrapped in a fresh IIFE via an
     // inline <script> tag (not src=) - this is what makes it safe to
     // re-execute the same file on every revisit: each run's top-level
     // const/let live in their own function scope, never colliding with a
@@ -230,18 +311,12 @@
     // insertions of the same file would (a second "already declared"
     // SyntaxError, since classic scripts share one global scope). The
     // sourceURL comment keeps the file identifiable in DevTools despite
-    // being inlined.
-    async function runScript(src) {
-        try {
-            const response = await fetch(src);
-            if (!response.ok) throw new Error(`failed to load ${src}: ${response.status}`);
-            const code = await response.text();
-            const script = document.createElement("script");
-            script.textContent = `(function () {\n${code}\n})();\n//# sourceURL=${location.origin}/${src}`;
-            document.body.appendChild(script);
-            script.remove();
-        } catch (err) {
-            console.error("router: script load failed", src, err);
-        }
+    // being inlined. The fetch itself now happens up front in
+    // loadPageScripts, so every script a page needs downloads in parallel.
+    function runScript(src, code) {
+        const script = document.createElement("script");
+        script.textContent = `(function () {\n${code}\n})();\n//# sourceURL=${location.origin}/${src}`;
+        document.body.appendChild(script);
+        script.remove();
     }
 })();

@@ -3,7 +3,7 @@ const {
   withAuth, getAuthProfile, buildDefaultUserProfile, buildPublicProfile,
   normalizeSessionPayload, calculateSessionXp, calculateStreakUpdate,
   getLevelInfo, getCourseLevel, resolveUnlockedWords, getKeysHeld,
-  getDateKeyForTimezone, diffDateKeys, normalizeTimezone, getFriendPairId,
+  getDateKeyForTimezone, getHourForTimezone, diffDateKeys, normalizeTimezone, getFriendPairId,
   getNewlyCompletedMissions, evaluateNewBadges, sanitizeLessonsCompleted,
   LESSON_COIN_REWARD, LESSON_IDS_BY_COURSE,
   ApiError
@@ -33,7 +33,12 @@ module.exports = withAuth(async (data, token) => {
     const authProfile = getAuthProfile(token);
     const existingUser = userSnap.exists ? userSnap.data() : null;
     const timezone = normalizeTimezone(session.timezone || existingUser?.timezone);
-    const todayKey = getDateKeyForTimezone(new Date(), timezone);
+    // One Date instance shared by both reads below (rather than two separate
+    // `new Date()` calls) so todayKey and practiceHour can never disagree
+    // about "now" if this happens to run right at an hour/day boundary.
+    const requestTime = new Date();
+    const todayKey = getDateKeyForTimezone(requestTime, timezone);
+    const practiceHour = getHourForTimezone(requestTime, timezone);
 
     const dailyStatsRef = userRef.collection("dailyStats").doc(todayKey);
     const badgesSnap = await transaction.get(userRef.collection("badges"));
@@ -135,11 +140,19 @@ module.exports = withAuth(async (data, token) => {
       lastPracticeDate: todayKey,
       streakFreezes: streak.streakFreezes,
       maxStreakFreezes: existingUser?.maxStreakFreezes || 2,
+      sessionsCompleted: (existingUser?.sessionsCompleted || 0) + 1,
+      gameTypesPlayed: { ...(existingUser?.gameTypesPlayed || {}), [session.gameType]: true },
       updatedAt: now,
       lastActiveAt: now
     };
 
-    const newBadges = evaluateNewBadges(userData, { chestsClaimed: userData.chestsClaimed || 0 }, earnedBadgeIds);
+    const newBadges = evaluateNewBadges(userData, {
+      chestsClaimed: userData.chestsClaimed || 0,
+      sessionBestCombo: session.bestCombo,
+      sessionCorrectAnswers: session.correctAnswers,
+      sessionWrongAnswers: session.wrongAnswers,
+      practiceHour
+    }, earnedBadgeIds);
 
     const previousCourseLevel = courseSnap.exists
       ? courseSnap.data().level || 1
