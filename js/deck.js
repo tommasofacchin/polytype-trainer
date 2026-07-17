@@ -74,6 +74,7 @@ function tr(key, params = {}) {
 function initDeckPage() {
     el.progressFill = document.getElementById("deck-progress-fill");
     el.progressText = document.getElementById("deck-progress-text");
+    el.masteredText = document.getElementById("deck-mastered-text");
     el.groups = document.getElementById("deck-groups");
     el.unlockOverlay = document.getElementById("unlock-confirm-overlay");
     el.unlockBody = document.getElementById("unlock-confirm-body");
@@ -245,7 +246,8 @@ function getCourseProgress() {
             courseKey: activeLanguage,
             xp: 0,
             unlockedWords: new Set(getSortedCategories()[0]?.wordSuffixes.slice(0, getStarterWordCount()) || []),
-            purchasedKeys: 0
+            purchasedKeys: 0,
+            wordsMastered: 0
         };
     }
 
@@ -262,7 +264,8 @@ function getCourseProgress() {
         unlockedWords,
         // Guests never have coins/shop access (sign-in required), so this is
         // always 0 for them in practice - just reading it defensively here.
-        purchasedKeys: Math.max(0, Math.trunc(Number(course.purchasedKeys) || 0))
+        purchasedKeys: Math.max(0, Math.trunc(Number(course.purchasedKeys) || 0)),
+        wordsMastered: Math.max(0, Math.trunc(Number(course.wordsMastered) || 0))
     };
 }
 
@@ -308,6 +311,7 @@ function renderDeck() {
         el.groups.appendChild(empty);
         if (el.progressFill) el.progressFill.style.width = "0%";
         if (el.progressText) el.progressText.textContent = "";
+        if (el.masteredText) el.masteredText.textContent = "";
         if (el.keysCount) el.keysCount.textContent = "";
         return;
     }
@@ -325,6 +329,15 @@ function renderDeck() {
             unlocked: unlockedCount,
             total: vocab.length
         });
+    }
+    // wordsMastered only ever grows once a word's been answered correctly
+    // WORD_MASTERY_THRESHOLD times (see api/_lib.js's applyWordResults) -
+    // hidden until at least one word has actually crossed that bar, rather
+    // than cluttering a brand-new course's page with a "0 mastered" line.
+    if (el.masteredText) {
+        el.masteredText.textContent = courseProgress.wordsMastered > 0
+            ? tr("deck.wordsMastered", { count: courseProgress.wordsMastered })
+            : "";
     }
     pendingCourseKey = courseProgress.courseKey;
 

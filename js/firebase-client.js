@@ -41,6 +41,7 @@
         respondFriendRequest,
         removeFriend,
         getSocialOverview,
+        getActivityFeed,
         getFriendProfile,
         getHomeOverview,
         claimDailyChest
@@ -366,6 +367,13 @@
         if (!state.user) throw new Error(tr("auth.signInRequired"));
 
         return callApi("friends", { action: "overview" });
+    }
+
+    async function getActivityFeed() {
+        assertConfigured();
+        if (!state.user) throw new Error(tr("auth.signInRequired"));
+
+        return callApi("friends", { action: "activity" });
     }
 
     async function getFriendProfile(uid) {

@@ -179,6 +179,11 @@ function buildDefaultUserProfile(uid, authProfile, timezone) {
     timezone,
     totalXp: 0,
     globalLevel: 1,
+    // Friends-leaderboard-only counter, reset lazily every Monday (see
+    // getWeekKey/calculateWeeklyXpUpdate) - totalXp above never resets and
+    // stays the source of truth for level/XP everywhere else.
+    weeklyXp: 0,
+    weekKey: null,
     currentStreak: 0,
     longestStreak: 0,
     lastPracticeDate: null,
@@ -205,6 +210,8 @@ function buildPublicProfile(uid, user, authProfile) {
     avatarUrl: user.avatarUrl || authProfile.avatarUrl || null,
     totalXp: user.totalXp || 0,
     globalLevel: user.globalLevel || 1,
+    weeklyXp: user.weeklyXp || 0,
+    weekKey: typeof user.weekKey === "number" ? user.weekKey : null,
     currentStreak: user.currentStreak || 0,
     friendCount: user.friendCount || 0
   };
@@ -309,6 +316,46 @@ function sanitizeUnlockedWords(value) {
   return value.filter(suffix => Number.isInteger(suffix) && VALID_WORD_SUFFIXES.has(suffix));
 }
 
+// A word is "mastered" once it's been answered correctly this many times
+// total (cumulative across sessions, not necessarily consecutive - a wrong
+// answer doesn't erase progress already made, it's just a lighter bar than a
+// streak-based scheme).
+const WORD_MASTERY_THRESHOLD = 3;
+// Bounds how many per-word results a single session can report - well above
+// what any real session could produce (a course tops out at
+// TOTAL_CATEGORY_WORDS=300 words), just here so a malformed/hostile payload
+// can't force an unbounded write.
+const MAX_WORD_RESULTS_PER_SESSION = 400;
+
+function sanitizeWordResults(value) {
+  if (!Array.isArray(value)) return [];
+  return value
+    .filter(entry =>
+      entry && Number.isInteger(entry.id) && VALID_WORD_SUFFIXES.has(entry.id) && typeof entry.correct === "boolean")
+    .slice(0, MAX_WORD_RESULTS_PER_SESSION)
+    .map(entry => ({ id: entry.id, correct: entry.correct }));
+}
+
+// Pure so complete-practice-session.js can call it inside a transaction
+// without any Firestore-specific shape leaking in here. Firestore map keys
+// must be strings, hence String(id) - the numeric suffix is still what
+// VALID_WORD_SUFFIXES/sanitizeWordResults validate against.
+function applyWordResults(previousWordStats, wordResults) {
+  const wordStats = { ...(previousWordStats || {}) };
+  let wordsMasteredDelta = 0;
+
+  for (const { id, correct } of wordResults) {
+    const key = String(id);
+    const prev = wordStats[key] || { correct: 0, wrong: 0, mastered: false };
+    const nextCorrect = prev.correct + (correct ? 1 : 0);
+    const nextMastered = prev.mastered || nextCorrect >= WORD_MASTERY_THRESHOLD;
+    if (nextMastered && !prev.mastered) wordsMasteredDelta += 1;
+    wordStats[key] = { correct: nextCorrect, wrong: prev.wrong + (correct ? 0 : 1), mastered: nextMastered };
+  }
+
+  return { wordStats, wordsMasteredDelta };
+}
+
 function getAuthProfile(token) {
   return {
     displayName: cleanOptionalString(token.name) || "Player",
@@ -335,7 +382,8 @@ function normalizeSessionPayload(data = {}) {
     wrongAnswers: clampInteger(data.wrongAnswers, 0, 1000),
     bestCombo: clampInteger(data.bestCombo, 0, 1000),
     wordsUsed: clampInteger(data.wordsUsed, 0, 1000),
-    sessionSeconds: clampInteger(data.sessionSeconds, 0, 86400)
+    sessionSeconds: clampInteger(data.sessionSeconds, 0, 86400),
+    wordResults: sanitizeWordResults(data.wordResults)
   };
 }
 
@@ -527,6 +575,29 @@ function getHourForTimezone(date, timezone) {
   return Number(parts.find(p => p.type === "hour").value) % 24;
 }
 
+// Weekly leaderboard boundary: a fixed Monday 00:00 UTC anchor, not each
+// player's own timezone - the leaderboard compares players across
+// timezones, so everyone needs to share one clock or the reset would land
+// on a different real-world moment for each of them. 2024-01-01 was a
+// Monday. Only ever used for equality comparisons (see buildLeaderboard and
+// the weeklyXp update below), never displayed, so it doesn't need to be a
+// real ISO week number - just a value that changes exactly once a week.
+const WEEK_EPOCH_MS = Date.UTC(2024, 0, 1);
+const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+
+function getWeekKey(date) {
+  return Math.floor((date.getTime() - WEEK_EPOCH_MS) / WEEK_MS);
+}
+
+// Lazy weekly reset, same shape as calculateStreakUpdate's date-key
+// comparison above: no cron job needed, a stale weekKey just means the
+// counter restarts from this session's xpEarned instead of adding to it.
+function calculateWeeklyXpUpdate(previousWeeklyXp, previousWeekKey, xpEarned, now) {
+  const currentWeekKey = getWeekKey(now);
+  const weeklyXp = previousWeekKey === currentWeekKey ? (previousWeeklyXp || 0) + xpEarned : xpEarned;
+  return { weeklyXp, weekKey: currentWeekKey };
+}
+
 function diffDateKeys(fromKey, toKey) {
   return Math.round((dateKeyToUtc(toKey) - dateKeyToUtc(fromKey)) / 86400000);
 }
@@ -548,12 +619,28 @@ function pickFriendProfile(profile) {
     avatarUrl: profile.avatarUrl || null,
     totalXp: profile.totalXp || 0,
     globalLevel: profile.globalLevel || 1,
+    weeklyXp: profile.weeklyXp || 0,
+    weekKey: typeof profile.weekKey === "number" ? profile.weekKey : null,
     currentStreak: profile.currentStreak || 0
   };
 }
 
+// Ranks by weeklyXp, live-zeroing any entry whose weekKey isn't THIS week -
+// a publicProfiles doc only gets a fresh weekKey/weeklyXp when its owner
+// next completes a practice session (see calculateWeeklyXpUpdate), so
+// without this check a player who stopped playing last week would keep
+// showing (and ranking on) last week's total forever. Ties - most visibly
+// everyone sitting at 0 right after Monday's reset - fall back to totalXp
+// so the board doesn't look randomly shuffled before this week's scores
+// start coming in.
 function buildLeaderboard(entries) {
-  const sorted = [...entries].sort((a, b) => (b.totalXp || 0) - (a.totalXp || 0));
+  const currentWeekKey = getWeekKey(new Date());
+  const sorted = entries
+    .map(entry => ({
+      ...entry,
+      weeklyXp: entry.weekKey === currentWeekKey ? (entry.weeklyXp || 0) : 0
+    }))
+    .sort((a, b) => (b.weeklyXp - a.weeklyXp) || ((b.totalXp || 0) - (a.totalXp || 0)));
   return sorted.map((entry, index) => ({ ...entry, rank: index + 1 }));
 }
 
@@ -633,6 +720,8 @@ module.exports = {
   getUnlockedWordSuffixesFromPrefix,
   resolveUnlockedWords,
   sanitizeUnlockedWords,
+  applyWordResults,
+  WORD_MASTERY_THRESHOLD,
   getKeysHeld,
   normalizeCourseId,
   normalizeUid,
@@ -645,6 +734,8 @@ module.exports = {
   clampInteger,
   getDateKeyForTimezone,
   getHourForTimezone,
+  getWeekKey,
+  calculateWeeklyXpUpdate,
   diffDateKeys,
   getFriendPairId,
   pickFriendProfile,

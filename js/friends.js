@@ -38,6 +38,7 @@ function renderFromCache() {
     renderIncoming(cached.incomingRequests || []);
     renderOutgoing(cached.outgoingRequests || []);
     renderLeaderboard(cached.leaderboard || []);
+    renderActivityFeed(cached.activity || []);
 }
 
 function readCache() {
@@ -77,6 +78,7 @@ function setupAuthGate() {
             renderIncoming([]);
             renderOutgoing([]);
             renderLeaderboard([]);
+            renderActivityFeed([]);
             return;
         }
 
@@ -96,11 +98,21 @@ async function loadOverview() {
     if (!firebaseClient?.isSignedIn?.()) return;
 
     try {
-        const result = await firebaseClient.getSocialOverview();
-        const data = result.data || {};
+        // Independent reads (overview's leaderboard/requests vs the activity
+        // feed) - run in parallel rather than one after another, same reason
+        // js/app-shell.js's prefetch runs alongside the router's page fetch.
+        const [overviewResult, activityResult] = await Promise.all([
+            firebaseClient.getSocialOverview(),
+            firebaseClient.getActivityFeed().catch(() => null)
+        ]);
+        const data = {
+            ...(overviewResult.data || {}),
+            activity: activityResult?.data?.activities || []
+        };
         renderIncoming(data.incomingRequests || []);
         renderOutgoing(data.outgoingRequests || []);
         renderLeaderboard(data.leaderboard || []);
+        renderActivityFeed(data.activity);
         writeCache(data);
     } catch (error) {
         setPageStatus(getFriendsErrorMessage(error));
@@ -205,7 +217,7 @@ function renderLeaderboard(list) {
         row.append(
             rank,
             buildAvatar(entry),
-            buildNameCopy(entry, `${tr("common.levelNumber", { level: entry.globalLevel || 1 })} - ${entry.totalXp || 0} XP`, entry.isSelf),
+            buildNameCopy(entry, `${tr("common.levelNumber", { level: entry.globalLevel || 1 })} - ${entry.weeklyXp || 0} XP`, entry.isSelf),
             streak
         );
 
@@ -215,6 +227,43 @@ function renderLeaderboard(list) {
 
         return row;
     }));
+}
+
+// Sourced from the `activities` collection (api/complete-practice-session.js
+// publishes one whenever a session levels a course up, lands a streak
+// multiple of 7, or earns 100+ XP in one go) via friends.js's "activity"
+// action - previously written on every qualifying session but never read
+// back anywhere.
+function renderActivityFeed(list) {
+    const card = document.getElementById("friends-activity-card");
+    const container = document.getElementById("friends-activity-list");
+    if (!card || !container) return;
+
+    card.hidden = list.length === 0;
+    if (!list.length) {
+        container.replaceChildren();
+        return;
+    }
+
+    container.replaceChildren(...list.map(activity => {
+        const actor = activity.actor || {};
+        const row = document.createElement("div");
+        row.className = "friends-row";
+        if (!activity.isSelf) makeRowVisitable(row, { ...actor, relationship: "friends" });
+
+        row.append(buildAvatar(actor), buildNameCopy(actor, getActivityText(activity), activity.isSelf));
+        return row;
+    }));
+}
+
+function getActivityText(activity) {
+    if (activity.type === "level_up" && activity.courseLevel) {
+        return tr("friends.activityLevelUp", { level: activity.courseLevel });
+    }
+    if (activity.streak > 0 && activity.streak % 7 === 0) {
+        return tr("friends.activityStreak", { streak: activity.streak });
+    }
+    return tr("friends.activityXp", { xp: activity.xp || 0 });
 }
 
 function buildAvatar(profileData) {

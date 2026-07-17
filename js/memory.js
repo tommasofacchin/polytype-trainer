@@ -60,7 +60,11 @@
         comboPoints: 0,
         startTime: 0,
         timerId: null,
-        started: false
+        started: false,
+        // Successful matches only (see onCardClick) - sent alongside the
+        // aggregate matched/moves counts so the server can track real
+        // mastery per word (api/_lib.js's applyWordResults).
+        wordResults: []
     };
 
     const el = {};
@@ -611,6 +615,7 @@
         state.streak = 0;
         state.maxStreak = 0;
         state.comboPoints = 0;
+        state.wordResults = [];
         state.started = false;
         state.startTime = 0;
         stopTimer();
@@ -685,6 +690,12 @@
         const isMatch = state.first.card.pairId === card.pairId;
 
         if (isMatch) {
+            // Exactly one of the pair's two cards carries wordId (the
+            // "script" card - see the deck-building loop above; its
+            // "meaning" sibling shares the same pairId but not this field).
+            const matchedWordId = state.first.card.wordId || card.wordId;
+            if (matchedWordId) state.wordResults.push({ id: getWordSuffix(matchedWordId), correct: true });
+
             const prevTier = getComboTier(state.streak);
             state.streak += 1;
             state.maxStreak = Math.max(state.maxStreak, state.streak);
@@ -839,7 +850,8 @@
             wrongAnswers: Math.max(0, state.moves - state.matched),
             bestCombo: state.maxStreak,
             wordsUsed: state.pairCount,
-            sessionSeconds: Math.round(ms / 1000)
+            sessionSeconds: Math.round(ms / 1000),
+            wordResults: state.wordResults
         };
 
         try {
@@ -853,6 +865,9 @@
 
             if (progress?.completedMissions?.length) {
                 await window.PolytypeMissionCelebrate?.show?.(progress.completedMissions);
+            }
+            if (progress?.newBadges?.length) {
+                await window.PolytypeBadgeCelebrate?.show?.(progress.newBadges);
             }
         } catch (error) {
             el.resultSaveStatus.textContent = error?.message || tr("trainer.signInSave");

@@ -8,6 +8,17 @@
     const audioBaseUrl = (window.POLYTYPE_AUDIO_BASE_URL || "").replace(/\/+$/, "");
     const audioPrefix = (window.POLYTYPE_AUDIO_PREFIX || "audio/v1").replace(/^\/+|\/+$/g, "");
 
+    // Same shared mute flag js/main.js and js/settings.js read/write, and
+    // same asset files as Trainer's correct/error feedback - Sprint had no
+    // answer-feedback sound at all before this.
+    const sfxMutedKey = "polytype-sfx-muted";
+    const correctSfxUrl = "assets/sfx/correct3.mp3";
+    const correctSfxVolume = 0.28;
+    const errorSfxUrl = "assets/sfx/error1.mp3";
+    const errorSfxVolume = 0.22;
+    let correctSfxAudio = null;
+    let errorSfxAudio = null;
+
     // Delay between a round's answer being locked in and the next round
     // starting, so the correct/wrong feedback is actually visible. Split in
     // two: FEEDBACK_HOLD shows the result, then the exercise fades out
@@ -36,6 +47,11 @@
         correctAnswers: 0,
         wrongAnswers: 0,
         wordsUsed: 0,
+        // Per-word correct/wrong tally for this session, sent alongside the
+        // aggregate counts above so the server can track real mastery per
+        // word (api/_lib.js's applyWordResults) instead of just a session-
+        // level total.
+        wordResults: [],
         sessionStartTime: 0,
         roundLocked: false,
         // Single-shot rounds (mc/audio/trueFalse/type) answered wrong get one
@@ -92,6 +108,7 @@
     }
 
     async function init() {
+        preloadSfx();
         activeDeckMeta = getActiveDeckMeta();
         activeLanguage = activeDeckMeta?.language || FALLBACK_LANGUAGE;
 
@@ -156,6 +173,7 @@
         state.correctAnswers = 0;
         state.wrongAnswers = 0;
         state.wordsUsed = 0;
+        state.wordResults = [];
         state.sessionStartTime = Date.now();
         state.roundLocked = false;
         state.wrongRetryable = [];
@@ -253,7 +271,7 @@
         if (state.inRetryPhase) {
             if (isCorrect) awardRetryBonus(anchorEl);
         } else {
-            recordAnswer(isCorrect, anchorEl);
+            recordAnswer(isCorrect, anchorEl, word.id);
             if (!isCorrect) state.wrongRetryable.push({ type, word });
         }
         advanceRound([word.id]);
@@ -291,11 +309,14 @@
 
     // ── Scoring ──────────────────────────────────────────────────────────────
 
-    function recordAnswer(isCorrect, anchorEl) {
+    function recordAnswer(isCorrect, anchorEl, wordId) {
         const prevStreak = state.streak;
         const prevTier = getComboTier(prevStreak);
 
+        if (wordId != null) state.wordResults.push({ id: getWordSuffix(String(wordId)), correct: isCorrect });
+
         if (isCorrect) {
+            playCorrectSfx();
             const pts = Math.round(10 * getComboMultiplier(state.streak));
             state.score += pts;
             state.streak += 1;
@@ -306,6 +327,7 @@
             animateStreakPop(tier > prevTier);
             if (anchorEl) showPointsFloat(pts, tier, anchorEl);
         } else {
+            playErrorSfx();
             state.wrongAnswers += 1;
             state.streak = 0;
             if (prevStreak > 0) animateStreakBreak();
@@ -454,7 +476,7 @@
                 otherBtn.disabled = true;
                 btn.disabled = true;
                 lockedCount += 2;
-                recordAnswer(true, btn);
+                recordAnswer(true, btn, btn.dataset.pair);
                 if (lockedCount === words.length * 2) {
                     state.wordsUsed += words.length;
                     advanceRound(words.map(w => w.id));
@@ -463,7 +485,7 @@
                 otherBtn.classList.remove("is-selected");
                 otherBtn.classList.add("is-wrong");
                 btn.classList.add("is-wrong");
-                recordAnswer(false, btn);
+                recordAnswer(false, btn, btn.dataset.pair);
                 window.setTimeout(() => {
                     otherBtn.classList.remove("is-wrong");
                     btn.classList.remove("is-wrong");
@@ -677,7 +699,8 @@
                     wrongAnswers: state.wrongAnswers,
                     bestCombo: state.bestStreak,
                     wordsUsed: state.wordsUsed,
-                    sessionSeconds
+                    sessionSeconds,
+                    wordResults: state.wordResults
                 };
 
                 try {
@@ -691,6 +714,9 @@
                     renderFriendsStatus(progress?.friendsStatus);
                     if (progress?.completedMissions?.length) {
                         await window.PolytypeMissionCelebrate?.show?.(progress.completedMissions);
+                    }
+                    if (progress?.newBadges?.length) {
+                        await window.PolytypeBadgeCelebrate?.show?.(progress.newBadges);
                     }
                 } catch (error) {
                     el.resultSaveStatus.textContent = error?.message || tr("trainer.signInSave");
@@ -991,6 +1017,40 @@
     function getWordSuffix(wordId) {
         const match = /(\d+)$/.exec(wordId || "");
         return match ? Number.parseInt(match[0], 10) : 0;
+    }
+
+    function preloadSfx() {
+        correctSfxAudio = new Audio(correctSfxUrl);
+        correctSfxAudio.preload = "auto";
+        correctSfxAudio.volume = correctSfxVolume;
+        correctSfxAudio.load();
+
+        errorSfxAudio = new Audio(errorSfxUrl);
+        errorSfxAudio.preload = "auto";
+        errorSfxAudio.volume = errorSfxVolume;
+        errorSfxAudio.load();
+    }
+
+    function playCorrectSfx() { playSfx(correctSfxAudio, correctSfxVolume); }
+    function playErrorSfx()   { playSfx(errorSfxAudio, errorSfxVolume); }
+
+    function playSfx(sourceAudio, volume) {
+        if (!sourceAudio || isSfxMuted()) return;
+        try {
+            const audio = sourceAudio.cloneNode();
+            audio.volume = volume;
+            audio.play().catch(() => {});
+        } catch {
+            // Browsers may block audio until the first user gesture.
+        }
+    }
+
+    function isSfxMuted() {
+        try {
+            return localStorage.getItem(sfxMutedKey) === "true";
+        } catch {
+            return false;
+        }
     }
 
     function getUnlockedWordSuffixesFromPrefix(categoryIndex, categoryUnlocked) {

@@ -16,9 +16,67 @@ module.exports = withAuth(async (data, token) => {
     case "send": return sendFriendRequest(data, token);
     case "respond": return respondFriendRequest(data, token);
     case "remove": return removeFriend(data, token);
+    case "activity": return getActivityFeed(token);
     default: throw new ApiError(400, "Unknown friends action.");
   }
 });
+
+// Firestore's `in` operator caps at 30 values per query - chunk uids into
+// groups that size, run one query per chunk, and merge/re-sort/trim in
+// memory. Keeps this correct regardless of friend-list size instead of
+// silently dropping activity from friend #31 onward.
+const ACTIVITY_QUERY_CHUNK_SIZE = 30;
+const ACTIVITY_FEED_LIMIT = 20;
+
+async function getActivityFeed(token) {
+  const friendsSnap = await db.collection(`users/${token.uid}/friends`).get();
+  const uids = [token.uid, ...friendsSnap.docs.map(doc => doc.id)];
+
+  const chunks = [];
+  for (let i = 0; i < uids.length; i += ACTIVITY_QUERY_CHUNK_SIZE) {
+    chunks.push(uids.slice(i, i + ACTIVITY_QUERY_CHUNK_SIZE));
+  }
+
+  const snaps = await Promise.all(chunks.map(chunkUids =>
+    db.collection("activities")
+      .where("uid", "in", chunkUids)
+      .orderBy("createdAt", "desc")
+      .limit(ACTIVITY_FEED_LIMIT)
+      .get()
+  ));
+
+  const activities = snaps
+    .flatMap(snap => snap.docs.map(doc => doc.data()))
+    .sort((a, b) => (toMillis(b.createdAt) || 0) - (toMillis(a.createdAt) || 0))
+    .slice(0, ACTIVITY_FEED_LIMIT);
+
+  if (!activities.length) return { activities: [] };
+
+  // activity docs (see api/complete-practice-session.js) only carry uid, not
+  // a display name/avatar - join against publicProfiles for whichever
+  // actors actually show up in this page, capped at ACTIVITY_FEED_LIMIT
+  // distinct uids either way.
+  const actorUids = Array.from(new Set(activities.map(activity => activity.uid)));
+  const actorSnaps = await db.getAll(...actorUids.map(uid => db.doc(`publicProfiles/${uid}`)));
+  const actorsByUid = new Map(
+    actorSnaps.filter(snap => snap.exists).map(snap => [snap.id, pickFriendProfile(snap.data())])
+  );
+
+  return {
+    activities: activities
+      .map(activity => ({
+        type: activity.type,
+        courseId: activity.courseId || null,
+        xp: activity.xp || 0,
+        courseLevel: activity.courseLevel || null,
+        streak: activity.streak || 0,
+        createdAt: toMillis(activity.createdAt),
+        actor: actorsByUid.get(activity.uid) || null,
+        isSelf: activity.uid === token.uid
+      }))
+      .filter(entry => entry.actor)
+  };
+}
 
 async function getOverview(token) {
   const [selfSnap, friendsSnap, incomingSnap, outgoingSnap] = await Promise.all([

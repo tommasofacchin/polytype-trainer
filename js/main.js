@@ -23,6 +23,11 @@ const state = {
     unsavedWrongFields: 0,
     unsavedWordsUsed: 0,
     unsavedBestStreak: 0,
+    // Per-word correct/wrong tally, sent alongside each autosave so the
+    // server can track real mastery per word (api/_lib.js's
+    // applyWordResults) - reconciled after a successful save the same way
+    // the unsaved* counters above are (see saveCurrentSessionProgress).
+    unsavedWordResults: [],
     unsavedCourseId: null,
     remainingSeconds: 0,
     timerId: null,
@@ -34,7 +39,8 @@ const state = {
     saveInFlight: false,
     savePromise: null,
     pendingSessionCoins: 0,
-    pendingCompletedMissions: []
+    pendingCompletedMissions: [],
+    pendingNewBadges: []
 };
 
 const defaultProfile = {
@@ -606,6 +612,7 @@ function resetState() {
     state.unsavedWrongFields = 0;
     state.unsavedWordsUsed = 0;
     state.unsavedBestStreak = 0;
+    state.unsavedWordResults = [];
     state.unsavedCourseId = null;
     state.remainingSeconds = settings.timeLimitSeconds;
     clearAnswerTimeout();
@@ -617,6 +624,7 @@ function resetState() {
     state.savePromise = null;
     state.pendingSessionCoins = 0;
     state.pendingCompletedMissions = [];
+    state.pendingNewBadges = [];
 }
 
 function clearRows() {
@@ -1052,6 +1060,9 @@ function registerAnswer(isCorrect, meaningInput, options = {}) {
 
     state.unsavedCourseId = state.unsavedCourseId || getCurrentCourseKey();
     state.totalChecked += 1;
+    if (meaningInput?.deckItem?.id) {
+        state.unsavedWordResults.push({ id: getWordSuffix(meaningInput.deckItem.id), correct: isCorrect });
+    }
     if (isCorrect) {
         playCorrectSfx();
         state.totalCorrectFields += 1;
@@ -1338,6 +1349,17 @@ function flushPendingMissionCelebration() {
     return window.PolytypeMissionCelebrate?.show?.(missions) || Promise.resolve();
 }
 
+// Same accumulate-then-flush rule as flushPendingMissionCelebration above -
+// see the call sites for why (Trainer autosaves mid-session, so a badge
+// earned by an early autosave must wait for the session to actually pause
+// before it celebrates).
+function flushPendingBadgeCelebration() {
+    if (!state.pendingNewBadges.length) return Promise.resolve();
+    const badges = state.pendingNewBadges;
+    state.pendingNewBadges = [];
+    return window.PolytypeBadgeCelebrate?.show?.(badges) || Promise.resolve();
+}
+
 function getComboColor(tier) {
     return getComputedStyle(document.documentElement)
         .getPropertyValue(`--combo-${tier}`).trim() || "var(--accent)";
@@ -1431,6 +1453,7 @@ async function endSession() {
     }
     state.pendingSessionCoins = 0;
     await flushPendingMissionCelebration();
+    await flushPendingBadgeCelebration();
 
     await minDelay;
     setResultButtonsBusy(false);
@@ -1475,8 +1498,17 @@ async function saveCurrentSessionProgress() {
         wrongAnswers: state.unsavedWrongFields,
         bestCombo: state.unsavedBestStreak,
         wordsUsed: state.unsavedWordsUsed,
-        sessionSeconds: settings.timeLimitSeconds
+        sessionSeconds: settings.timeLimitSeconds,
+        // .slice() copy, not a live reference - callApi awaits an ID token
+        // before it actually serializes the request body, and
+        // registerAnswer keeps appending to state.unsavedWordResults during
+        // that gap; without the copy, a same-tick answer could sneak into
+        // this payload yet still get "kept" by the reconciliation slice()
+        // below (which trusts sentWordResultCount to match what was really
+        // sent).
+        wordResults: state.unsavedWordResults.slice()
     };
+    const sentWordResultCount = payload.wordResults.length;
 
     state.saveInFlight = true;
 
@@ -1527,11 +1559,21 @@ async function saveCurrentSessionProgress() {
                 state.pendingCompletedMissions.push(...progress.completedMissions);
                 if (!isActivelyPlayingSession()) flushPendingMissionCelebration();
             }
+
+            if (progress.newBadges?.length) {
+                state.pendingNewBadges.push(...progress.newBadges);
+                if (!isActivelyPlayingSession()) flushPendingBadgeCelebration();
+            }
         }
 
         state.unsavedCorrectFields = Math.max(0, state.unsavedCorrectFields - payload.correctAnswers);
         state.unsavedWrongFields = Math.max(0, state.unsavedWrongFields - payload.wrongAnswers);
         state.unsavedWordsUsed = Math.max(0, state.unsavedWordsUsed - payload.wordsUsed);
+        // Same idea as the counters above, but for a list instead of a
+        // count: drop exactly the entries this payload sent (always a
+        // prefix, since registerAnswer only ever appends) and keep whatever
+        // was pushed after this payload was built.
+        state.unsavedWordResults = state.unsavedWordResults.slice(sentWordResultCount);
         state.unsavedBestStreak = getUnsavedAnswerCount() > 0 ? state.streak : 0;
         state.progressSaved = getUnsavedAnswerCount() === 0;
         if (state.progressSaved) state.unsavedCourseId = null;

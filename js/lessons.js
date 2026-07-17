@@ -442,6 +442,13 @@
             } else {
                 el.completeTitle.textContent = tr("lessons.replayTitle");
             }
+
+            if (progress?.completedMissions?.length) {
+                await window.PolytypeMissionCelebrate?.show?.(progress.completedMissions);
+            }
+            if (progress?.newBadges?.length) {
+                await window.PolytypeBadgeCelebrate?.show?.(progress.newBadges);
+            }
         } catch (error) {
             revealText(el.completeStatus, error?.message || tr("trainer.signInSave"));
         }

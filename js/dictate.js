@@ -19,6 +19,19 @@
     const audioBaseUrl = stripTrailingSlash(window.POLYTYPE_AUDIO_BASE_URL || "");
     const audioPrefix  = stripSlashes(window.POLYTYPE_AUDIO_PREFIX || "audio/v1");
 
+    // Same shared mute flag js/main.js and js/settings.js read/write -
+    // muting from Settings (or from any other game) applies here too. Reuses
+    // the same asset files as Trainer's correct/error feedback (js/main.js)
+    // rather than new ones, since Dictate had no answer-feedback sound at
+    // all before this - only the word-pronunciation audio below.
+    const sfxMutedKey = "polytype-sfx-muted";
+    const correctSfxUrl = "assets/sfx/correct3.mp3";
+    const correctSfxVolume = 0.28;
+    const errorSfxUrl = "assets/sfx/error1.mp3";
+    const errorSfxVolume = 0.22;
+    let correctSfxAudio = null;
+    let errorSfxAudio = null;
+
     const state = {
         vocab:        [],
         deck:         [],
@@ -41,7 +54,18 @@
         timeLimitSeconds:  0,
         remainingSeconds:  0,
         timerId:           null,
-        pendingSessionCoins: 0
+        pendingSessionCoins: 0,
+        // Same accumulate-then-flush rule as pendingSessionCoins - a batch
+        // autosave fires mid-session (every SAVE_BATCH_SIZE answers), and a
+        // mission/badge earned by an early batch must wait for the session
+        // to actually end before celebrating, instead of popping a full-
+        // screen overlay over active gameplay.
+        pendingCompletedMissions: [],
+        pendingNewBadges: [],
+        // Per-word correct/wrong tally, sent alongside each batch so the
+        // server can track real mastery per word (api/_lib.js's
+        // applyWordResults) instead of just a batch-level total.
+        unsavedWordResults: []
     };
     const SAVE_BATCH_SIZE = 5;
 
@@ -94,6 +118,7 @@
         document.addEventListener("pointerdown", unlockAudio, { once: true });
 
         populateLangMenu();
+        preloadSfx();
         loadAndStart();
     }
 
@@ -416,8 +441,11 @@
         state.unsavedWrong = 0;
         state.unsavedWordsUsed = 0;
         state.unsavedBestStreak = 0;
+        state.unsavedWordResults = [];
         state.batchStartTime = Date.now();
         state.pendingSessionCoins = 0;
+        state.pendingCompletedMissions = [];
+        state.pendingNewBadges = [];
         stopTimer();
         state.timeLimitSeconds = 0;
         state.remainingSeconds = 0;
@@ -526,9 +554,27 @@
             el.resultCoins.textContent = tr("trainer.coinsEarned", { count: state.pendingSessionCoins });
         }
         state.pendingSessionCoins = 0;
+        await flushPendingMissionCelebration();
+        await flushPendingBadgeCelebration();
 
         await minDelay;
         setResultButtonsBusy(false);
+    }
+
+    // Mirrors js/main.js's identically-named functions - see the
+    // accumulate-then-flush comment on state.pendingCompletedMissions above.
+    function flushPendingMissionCelebration() {
+        if (!state.pendingCompletedMissions.length) return Promise.resolve();
+        const missions = state.pendingCompletedMissions;
+        state.pendingCompletedMissions = [];
+        return window.PolytypeMissionCelebrate?.show?.(missions) || Promise.resolve();
+    }
+
+    function flushPendingBadgeCelebration() {
+        if (!state.pendingNewBadges.length) return Promise.resolve();
+        const badges = state.pendingNewBadges;
+        state.pendingNewBadges = [];
+        return window.PolytypeBadgeCelebrate?.show?.(badges) || Promise.resolve();
     }
 
     function setResultButtonsBusy(busy) {
@@ -592,8 +638,10 @@
         const feedback = row?.querySelector(".dictate-feedback");
 
         state.total++;
+        if (item?.id) state.unsavedWordResults.push({ id: getWordSuffix(item.id), correct: isCorrect });
 
         if (isCorrect) {
+            playCorrectSfx();
             state.correct++;
             state.streak++;
             state.bestStreak = Math.max(state.bestStreak, state.streak);
@@ -612,6 +660,7 @@
                 }
             }
         } else {
+            playErrorSfx();
             state.streak = 0;
             state.unsavedWrong++;
             // Replace typed text with correct word in red
@@ -652,7 +701,8 @@
             wrongAnswers: state.unsavedWrong,
             bestCombo: state.unsavedBestStreak,
             wordsUsed: state.unsavedWordsUsed,
-            sessionSeconds: Math.round((Date.now() - state.batchStartTime) / 1000)
+            sessionSeconds: Math.round((Date.now() - state.batchStartTime) / 1000),
+            wordResults: state.unsavedWordResults
         };
 
         state.saveInFlight = true;
@@ -661,10 +711,12 @@
         const savedCorrect = state.unsavedCorrect;
         const savedWrong = state.unsavedWrong;
         const savedWordsUsed = state.unsavedWordsUsed;
+        const savedWordResults = state.unsavedWordResults;
         state.unsavedCorrect = 0;
         state.unsavedWrong = 0;
         state.unsavedWordsUsed = 0;
         state.unsavedBestStreak = 0;
+        state.unsavedWordResults = [];
         state.batchStartTime = Date.now();
 
         state.savePromise = (async () => {
@@ -680,8 +732,14 @@
                 state.pendingSessionCoins += progress.sessionCoins;
             }
 
+            // Same accumulate-then-flush rule: celebrating here (mid-batch,
+            // mid-session) would pop a full-screen overlay over active
+            // typing - queued instead, flushed once by endSession below.
             if (progress?.completedMissions?.length) {
-                await window.PolytypeMissionCelebrate?.show?.(progress.completedMissions);
+                state.pendingCompletedMissions.push(...progress.completedMissions);
+            }
+            if (progress?.newBadges?.length) {
+                state.pendingNewBadges.push(...progress.newBadges);
             }
         })();
 
@@ -692,6 +750,7 @@
             state.unsavedCorrect += savedCorrect;
             state.unsavedWrong += savedWrong;
             state.unsavedWordsUsed += savedWordsUsed;
+            state.unsavedWordResults = savedWordResults.concat(state.unsavedWordResults);
             if (el.saveStatus) el.saveStatus.textContent = error?.message || tr("trainer.signInSave");
         } finally {
             state.saveInFlight = false;
@@ -862,6 +921,40 @@
 
     function stripSlashes(v)       { return String(v || "").replace(/^\/+|\/+$/g, ""); }
     function stripTrailingSlash(v) { return String(v || "").replace(/\/+$/, ""); }
+
+    function preloadSfx() {
+        correctSfxAudio = new Audio(correctSfxUrl);
+        correctSfxAudio.preload = "auto";
+        correctSfxAudio.volume = correctSfxVolume;
+        correctSfxAudio.load();
+
+        errorSfxAudio = new Audio(errorSfxUrl);
+        errorSfxAudio.preload = "auto";
+        errorSfxAudio.volume = errorSfxVolume;
+        errorSfxAudio.load();
+    }
+
+    function playCorrectSfx() { playSfx(correctSfxAudio, correctSfxVolume); }
+    function playErrorSfx()   { playSfx(errorSfxAudio, errorSfxVolume); }
+
+    function playSfx(sourceAudio, volume) {
+        if (!sourceAudio || isSfxMuted()) return;
+        try {
+            const audio = sourceAudio.cloneNode();
+            audio.volume = volume;
+            audio.play().catch(() => {});
+        } catch {
+            // Browsers may block audio until the first user gesture.
+        }
+    }
+
+    function isSfxMuted() {
+        try {
+            return localStorage.getItem(sfxMutedKey) === "true";
+        } catch {
+            return false;
+        }
+    }
 
     function centerRow(row) {
         if (!el.rows || !row) return;

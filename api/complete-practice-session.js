@@ -2,6 +2,7 @@ const { db, FieldValue, Timestamp } = require("./_firebase");
 const {
   withAuth, getAuthProfile, buildDefaultUserProfile, buildPublicProfile,
   normalizeSessionPayload, calculateSessionXp, calculateStreakUpdate,
+  calculateWeeklyXpUpdate, applyWordResults,
   getLevelInfo, getCourseLevel, resolveUnlockedWords, getKeysHeld,
   getDateKeyForTimezone, getHourForTimezone, diffDateKeys, normalizeTimezone, getFriendPairId,
   getNewlyCompletedMissions, evaluateNewBadges, sanitizeLessonsCompleted,
@@ -125,6 +126,8 @@ module.exports = withAuth(async (data, token) => {
     const previousCourseCoins = existingCourseData?.coins || 0;
     const courseCoins = previousCourseCoins + coinsEarned + sessionCoins + lessonCoinsAwarded;
 
+    const weeklyXpUpdate = calculateWeeklyXpUpdate(existingUser?.weeklyXp, existingUser?.weekKey, xpEarned, requestTime);
+
     const now = FieldValue.serverTimestamp();
     const userData = {
       ...buildDefaultUserProfile(token.uid, authProfile, timezone),
@@ -135,6 +138,8 @@ module.exports = withAuth(async (data, token) => {
       timezone,
       totalXp,
       globalLevel,
+      weeklyXp: weeklyXpUpdate.weeklyXp,
+      weekKey: weeklyXpUpdate.weekKey,
       currentStreak: streak.currentStreak,
       longestStreak: streak.longestStreak,
       lastPracticeDate: todayKey,
@@ -157,6 +162,16 @@ module.exports = withAuth(async (data, token) => {
     const previousCourseLevel = courseSnap.exists
       ? courseSnap.data().level || 1
       : existingCourse?.level || 1;
+
+    // A word is "mastered" once it's been answered correctly
+    // WORD_MASTERY_THRESHOLD times total - see applyWordResults. wordStats
+    // is per-word bookkeeping only, kept in Firestore but never round-
+    // tripped back to the client (courseResponse only needs the aggregate
+    // count below, not per-word detail for all 300 words every session).
+    const previousWordStats = existingCourseData?.wordStats || {};
+    const { wordStats, wordsMasteredDelta } = applyWordResults(previousWordStats, session.wordResults);
+    const wordsMastered = (existingCourseData?.wordsMastered || 0) + wordsMasteredDelta;
+
     const courseData = {
       courseId: session.courseId,
       xp: courseXp,
@@ -164,7 +179,8 @@ module.exports = withAuth(async (data, token) => {
       unlockedLevel: courseLevel,
       unlockedWords,
       wordsUnlocked: unlockedWords.length,
-      wordsMastered: courseSnap.exists ? courseSnap.data().wordsMastered || 0 : 0,
+      wordsMastered,
+      wordStats,
       purchasedKeys,
       coins: courseCoins,
       lessonsCompleted,

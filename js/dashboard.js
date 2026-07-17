@@ -49,6 +49,13 @@ function setupProfileSync() {
     window.__polytypePageHooks = window.__polytypePageHooks || {};
     window.__polytypePageHooks.onProfileUpdated = event => {
         profile = { ...defaultProfile, ...profile, ...event.detail };
+        // event.detail is the trimmed localStorage mirror (js/firebase-
+        // client.js's syncProfileToLocalStorage) and has no
+        // lastPracticeDate - read the live Firebase state instead, which by
+        // this point already reflects whatever session/chest action just
+        // fired this event, so a session played just now immediately clears
+        // the banner instead of waiting for the next full page load.
+        renderStreakRiskBanner(window.PolytypeFirebase?.state?.profile);
     };
 
     // Optimistic initial paint: a cached profile means we were signed in
@@ -78,7 +85,34 @@ function setupProfileSync() {
         }
 
         renderGreeting(true);
+        renderStreakRiskBanner(authState.profile);
     });
+}
+
+// Same "you haven't practiced today yet" check the server does when a
+// session completes (see calculateStreakUpdate in api/_lib.js), computed
+// here purely to decide whether to show a reminder - never trust this for
+// anything that actually touches XP/coins/streak, only the API is
+// authoritative for that. Uses the browser's own timezone, matching what
+// every completePracticeSession call already sends the server.
+function getTodayKeyForBrowserTimezone() {
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    return new Intl.DateTimeFormat("en-CA", { timeZone: timezone }).format(new Date());
+}
+
+function renderStreakRiskBanner(profile) {
+    const banner = document.getElementById("home-streak-risk-banner");
+    if (!banner) return;
+
+    const streak = profile?.currentStreak || 0;
+    const alreadyPracticedToday = profile?.lastPracticeDate === getTodayKeyForBrowserTimezone();
+    const atRisk = streak > 0 && !alreadyPracticedToday;
+
+    banner.hidden = !atRisk;
+    if (!atRisk) return;
+
+    const titleEl = document.getElementById("home-streak-risk-title");
+    if (titleEl) titleEl.textContent = tr("home.streakRiskTitle", { count: streak });
 }
 
 function setupGameStateSync() {
@@ -202,7 +236,7 @@ function renderFriendsPreview(state) {
                 <span class="leaderboard-rank is-plain">${entry.rank}</span>
                 <span class="leaderboard-avatar" style="background:${entry.isSelf ? "#2fe6a4" : "#8b6cff"};color:${entry.isSelf ? "#0d2b22" : "#fff"}">${initial}</span>
                 <span class="leaderboard-name">${entry.isSelf ? tr("common.you") : (entry.displayName || entry.handle || "")}</span>
-                <span class="leaderboard-xp"><svg width="14" height="14" viewBox="0 0 24 24" fill="#2fe6a4"><path d="M12 2l2.9 6.2 6.6.7-4.9 4.5 1.3 6.6L12 17.8 6.1 20.6l1.3-6.6L2.5 8.9l6.6-.7z"/></svg>${(entry.totalXp || 0).toLocaleString()}</span>
+                <span class="leaderboard-xp"><svg width="14" height="14" viewBox="0 0 24 24" fill="#2fe6a4"><path d="M12 2l2.9 6.2 6.6.7-4.9 4.5 1.3 6.6L12 17.8 6.1 20.6l1.3-6.6L2.5 8.9l6.6-.7z"/></svg>${(entry.weeklyXp || 0).toLocaleString()}</span>
             `;
             if (!entry.isSelf && entry.uid) {
                 row.addEventListener("click", () => {

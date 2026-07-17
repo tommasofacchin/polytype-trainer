@@ -1030,6 +1030,14 @@ input[type="password"]:focus {
     font-weight: 700;
 }
 
+.profile-card-hint {
+    flex: 0 0 auto;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-faintest, var(--text-faint));
+    white-space: nowrap;
+}
+
 .profile-hero h1 {
     margin: 0;
     color: var(--text);
@@ -2993,6 +3001,16 @@ body.deck-overlay-open {
     font-weight: 700;
 }
 
+.deck-mastered-text {
+    color: var(--text-faint);
+    font-size: var(--text-xs);
+}
+
+.deck-mastered-text:not(:empty)::before {
+    content: "\00b7";
+    margin: 0 4px;
+}
+
 .deck-groups {
     flex: 1;
     overflow-y: auto;
@@ -4507,6 +4525,52 @@ body {
     background: var(--color-violet-deep);
 }
 
+.streak-risk-banner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    margin-bottom: 16px;
+    padding: 12px 14px;
+    border-radius: 16px;
+    background: color-mix(in srgb, #ff7a2d 14%, var(--surface));
+    border: 1px solid color-mix(in srgb, #ff7a2d 35%, var(--border));
+    text-decoration: none;
+    transition: background var(--transition), transform var(--transition);
+}
+
+.streak-risk-banner:hover, .streak-risk-banner:focus-visible {
+    background: color-mix(in srgb, #ff7a2d 22%, var(--surface));
+}
+
+.streak-risk-banner:active {
+    transform: translateY(1px);
+}
+
+.streak-risk-banner[hidden] {
+    display: none;
+}
+
+.streak-risk-banner-copy {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.streak-risk-banner-copy strong {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--text);
+}
+
+.streak-risk-banner-copy span {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-faint);
+}
+
 .chest-overlay {
     position: fixed;
     inset: 0;
@@ -4851,6 +4915,136 @@ body {
 }
 
 .mission-collect-btn {
+    margin-top: 6px;
+    background: var(--accent);
+    color: var(--accent-on);
+    border: 0;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 16px;
+    padding: 13px 44px;
+    border-radius: 16px;
+    cursor: pointer;
+    animation: chest-rewardpop 1.7s ease-out forwards;
+}
+
+/* ---- Badge celebration (js/mission-celebrate.js's showBadges) --------------- */
+/* Same shell/animations as .mission-overlay above, gold-toned instead of green
+   so a badge unlock reads as a distinct, higher-tier moment. */
+
+.badge-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    background: var(--scrim);
+    padding: 24px;
+    animation: chest-fadein 0.25s ease forwards;
+}
+
+.badge-overlay-art {
+    position: relative;
+    width: 190px;
+    height: 170px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.badge-overlay-rays {
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    background: repeating-conic-gradient(from 0deg, rgba(255, 199, 58, 0.22) 0 9deg, transparent 9deg 18deg);
+    border-radius: 50%;
+    animation: chest-rayspin 16s linear infinite;
+}
+
+.badge-overlay-flash {
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.95), transparent 62%);
+    animation: chest-flashburst 1.4s ease-out forwards;
+}
+
+.badge-overlay-icon {
+    position: relative;
+    animation: chest-shakepop 1.1s ease-out forwards;
+    filter: drop-shadow(0 12px 22px rgba(255, 199, 58, 0.55));
+}
+
+.badge-overlay-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 24px;
+    color: #fff;
+    text-align: center;
+    animation: chest-rewardpop 1.3s ease-out forwards;
+}
+
+.badge-overlay-subtitle {
+    margin-top: -10px;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--text-soft);
+    text-align: center;
+    animation: chest-rewardpop 1.3s ease-out forwards;
+}
+
+.badge-rewards-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    max-width: 320px;
+}
+
+.badge-reward-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 11px 14px;
+    opacity: 0;
+    animation: chest-rewardpop 0.6s ease-out forwards;
+    animation-delay: var(--delay, 0s);
+}
+
+.badge-reward-icon {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.badge-reward-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.badge-reward-copy strong {
+    font-weight: 800;
+    font-size: 13px;
+    color: var(--text);
+}
+
+.badge-reward-copy span {
+    font-weight: 600;
+    font-size: 11px;
+    color: var(--text-faint);
+}
+
+.badge-collect-btn {
     margin-top: 6px;
     background: var(--accent);
     color: var(--accent-on);
