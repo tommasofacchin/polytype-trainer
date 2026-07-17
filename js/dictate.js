@@ -81,6 +81,7 @@
         el.resultCoins        = document.getElementById("dictate-result-coins");
         el.resultSaveStatus  = document.getElementById("dictate-result-save-status");
         el.playAgainBtn      = document.getElementById("dictate-play-again-btn");
+        el.gamesBtn          = document.getElementById("dictate-games-btn");
         el.homeBtn           = document.getElementById("dictate-home-btn");
 
         el.replayBtn.addEventListener("click", replayAudio);
@@ -536,6 +537,7 @@
         // <a> has no disabled attribute - pointer-events:none is what
         // actually blocks the click (including js/router.js's global link
         // interceptor, which never sees a click event to intercept).
+        if (el.gamesBtn) el.gamesBtn.classList.toggle("is-disabled", busy);
         if (el.homeBtn) el.homeBtn.classList.toggle("is-disabled", busy);
     }
 

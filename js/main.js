@@ -59,6 +59,7 @@ let timedResultDetail;
 let timedResultCoins;
 let timedResultSaveStatus;
 let timedPlayAgainBtn;
+let timedGamesBtn;
 let timedHomeBtn;
 let trainerStartGate;
 let profile = { ...defaultProfile };
@@ -123,6 +124,7 @@ function initTrainerPage() {
     timedResultCoins = document.getElementById("timed-result-coins");
     timedResultSaveStatus = document.getElementById("timed-result-save-status");
     timedPlayAgainBtn = document.getElementById("timed-play-again-btn");
+    timedGamesBtn = document.getElementById("timed-games-btn");
     timedHomeBtn = document.getElementById("timed-home-btn");
     trainerStartGate = document.getElementById("trainer-start-gate");
 
@@ -1432,6 +1434,7 @@ function setResultButtonsBusy(busy) {
     // <a> has no disabled attribute - pointer-events:none is what actually
     // blocks the click (including js/router.js's global link interceptor,
     // which never sees a click event to intercept).
+    if (timedGamesBtn) timedGamesBtn.classList.toggle("is-disabled", busy);
     if (timedHomeBtn) timedHomeBtn.classList.toggle("is-disabled", busy);
 }
 
