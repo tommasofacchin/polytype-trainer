@@ -807,15 +807,14 @@ input[type="password"]:focus {
    (added later, once Play again was already the sole primary action)
    share the row below it instead of all three squeezing into one row,
    where "Play again" was the only label wide enough to wrap awkwardly. */
+/* Exactly two buttons here now (Play again + whichever single secondary
+   action fits this exercise - Home for Sprint, Games for Trainer/Dictate,
+   never both), so a plain even split is all this needs. */
 .sprint-result-actions {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
     width: 100%;
-}
-
-.sprint-result-actions > :first-child {
-    grid-column: 1 / -1;
 }
 
 .restart-btn.is-secondary {
@@ -6192,7 +6191,7 @@ body {
 
 .mem-result-actions {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: var(--space-2);
     margin-top: var(--space-5);
 }

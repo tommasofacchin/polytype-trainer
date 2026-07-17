@@ -81,7 +81,6 @@
         el.resultFriends = document.getElementById("sprint-result-friends");
         el.resultFriendsList = document.getElementById("sprint-result-friends-list");
         el.playAgainBtn = document.getElementById("sprint-play-again-btn");
-        el.gamesBtn = document.getElementById("sprint-games-btn");
         el.homeBtn = document.getElementById("sprint-home-btn");
 
         el.playAgainBtn.addEventListener("click", () => {
@@ -708,7 +707,6 @@
         // <a> has no disabled attribute - pointer-events:none is what
         // actually blocks the click (including js/router.js's global link
         // interceptor, which never sees a click event to intercept).
-        if (el.gamesBtn) el.gamesBtn.classList.toggle("is-disabled", busy);
         if (el.homeBtn) el.homeBtn.classList.toggle("is-disabled", busy);
     }
 

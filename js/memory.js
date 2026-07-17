@@ -160,7 +160,6 @@
         el.resultCoins = document.getElementById("result-coins");
         el.resultSaveStatus = document.getElementById("result-save-status");
         el.gamesBtn = document.getElementById("games-btn");
-        el.homeBtn = document.getElementById("home-btn");
 
         initSfxToggle();
         preloadSfx();
@@ -812,7 +811,6 @@
         // actually blocks the click (including js/router.js's global link
         // interceptor, which never sees a click event to intercept).
         if (el.gamesBtn) el.gamesBtn.classList.toggle("is-disabled", busy);
-        if (el.homeBtn) el.homeBtn.classList.toggle("is-disabled", busy);
     }
 
     // ── Progress sync ────────────────────────────────────────
