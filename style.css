@@ -2338,7 +2338,10 @@ input[type="password"]:focus {
 .levelup-overlay {
     position: fixed;
     inset: 0;
-    z-index: 300;
+    /* Above .game-result-overlay's z-index:600 - same reasoning as
+       .mission-overlay: js/main.js's maybeCelebrateLevelUp fires right
+       after the result screen is already showing, not mid-game. */
+    z-index: 700;
     display: grid;
     place-items: center;
     background: radial-gradient(circle at center, rgba(9, 23, 23, 0.52), rgba(9, 23, 23, 0.24) 60%, transparent);
@@ -4574,7 +4577,10 @@ body {
 .chest-overlay {
     position: fixed;
     inset: 0;
-    z-index: 100;
+    /* Above .game-result-overlay's z-index:600 - a mission/badge celebration
+       (this overlay's siblings below) is meant to layer on top of an
+       already-visible game result screen, not get hidden behind it. */
+    z-index: 700;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -4813,7 +4819,11 @@ body {
 .mission-overlay {
     position: fixed;
     inset: 0;
-    z-index: 100;
+    /* Above .game-result-overlay's z-index:600 - every call site shows this
+       after the game's result modal is already up (Trainer/Sprint/Memory/
+       Dictate all set resultModal.hidden = false first), so it must layer
+       on top of that modal, not render invisibly behind it. */
+    z-index: 700;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -4935,7 +4945,9 @@ body {
 .badge-overlay {
     position: fixed;
     inset: 0;
-    z-index: 100;
+    /* Same reasoning as .mission-overlay's z-index above - always shown
+       after a game's result modal (z-index:600) is already up. */
+    z-index: 700;
     display: flex;
     flex-direction: column;
     align-items: center;
