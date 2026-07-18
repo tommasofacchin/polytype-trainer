@@ -78,6 +78,18 @@
         const tutorial = profile?.tutorial;
         clearStepUi();
 
+        // Clicking a nav tab/logo mid-tutorial used to navigate away and
+        // then immediately get bounced back by the redirect below - a
+        // jarring flash for a click that was never going to work anyway.
+        // `inert` makes the whole rail genuinely unclickable and
+        // untabbable (same "not just dimmed" reasoning as showBuyKeysCoach
+        // below), not just visually disabled - #app-bottom-nav is the one
+        // persistent shell element the router never replaces, so this
+        // stays correctly set across every soft navigation without needing
+        // to be re-applied per page.
+        const navEl = document.getElementById("app-bottom-nav");
+        if (navEl) navEl.inert = Boolean(tutorial?.active);
+
         if (shouldForceLanguagePicker(profile)) {
             // Same hard-vs-soft redirect reasoning as the tutorial step
             // redirect below.

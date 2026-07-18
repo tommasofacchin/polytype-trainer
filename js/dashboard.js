@@ -123,6 +123,7 @@ function setupGameStateSync() {
         renderChest(state);
         renderMissions(state);
         renderFriendsPreview(state);
+        renderDailyGoal(state);
     });
 
     const chestCard = document.getElementById("home-chest-open-btn");
@@ -187,6 +188,20 @@ function renderChest(state) {
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2fe6a4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
         `;
     }
+}
+
+function renderDailyGoal(state) {
+    const textEl = document.getElementById("home-daily-goal-text");
+    const fillEl = document.getElementById("home-daily-goal-fill");
+    if (!textEl || !fillEl || !state.loaded) return;
+
+    const goal = state.dailyGoalXp || 50;
+    const earned = state.todayXp || 0;
+    const pct = Math.min(100, Math.round((earned / goal) * 100));
+
+    textEl.textContent = `${Math.min(earned, goal)} / ${goal} XP`;
+    fillEl.style.width = `${pct}%`;
+    fillEl.style.background = earned >= goal ? "var(--success)" : "var(--accent)";
 }
 
 function renderMissions(state) {

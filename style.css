@@ -86,6 +86,32 @@
     --transition: 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
+/* First-pass light theme: overrides the same tokens the dark palette above
+   defines, so anything already built on var(--bg)/var(--surface)/var(--text)
+   etc. adapts automatically. Accent/status/badge colors are left as-is
+   (they're used as vivid highlights on cards in both themes) - only the
+   neutral surface/text/border scale flips. Set via [data-theme] on <html> by
+   js/app-shell.js's PolytypeTheme (localStorage key "polytype-theme"). */
+:root[data-theme="light"] {
+    color-scheme: light;
+
+    --bg: #f5f3fa;
+    --bg-soft: #eeebf6;
+    --surface: #ffffff;
+    --surface-soft: #f3f1fa;
+    --surface-alt: #efe8fc;
+    --surface-empty: #edeaf2;
+    --border: rgba(20, 12, 40, 0.08);
+    --border-strong: rgba(20, 12, 40, 0.16);
+
+    --text: #1c1930;
+    --text-soft: #5b5570;
+    --text-faint: #7b7594;
+    --text-faintest: #a39dbb;
+
+    --scrim: rgba(20, 16, 32, 0.6);
+}
+
 /* ---- Cross-document view transitions ---------------------------------------
    Soft crossfade between full page navigations (navbar tabs, internal links)
    instead of the default hard white flash - Chromium only, and pure CSS: a
@@ -4054,6 +4080,13 @@ body {
     box-shadow: 0 -1px 0 var(--border);
 }
 
+/* Set via js/tutorial.js's evaluate() while a tutorial step is active - the
+   [inert] attribute already blocks clicks/focus, this just makes that state
+   visible instead of the nav looking clickable but silently doing nothing. */
+#app-bottom-nav[inert] {
+    opacity: 0.4;
+}
+
 .app-shell-nav {
     max-width: var(--container);
     margin: 0 auto;
@@ -5106,7 +5139,7 @@ body {
 
 .mission-bar {
     height: 7px;
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--border-strong);
     border-radius: 999px;
     overflow: hidden;
 }

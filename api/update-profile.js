@@ -1,6 +1,6 @@
-const { db, FieldValue } = require("./_firebase");
+const { db, auth: adminAuth, FieldValue } = require("./_firebase");
 const {
-  withAuth, normalizeHandle, normalizeDisplayName, getAuthProfile,
+  withAuth, normalizeHandle, normalizeDisplayName, normalizeDailyGoalXp, getAuthProfile,
   buildDefaultUserProfile, buildPublicProfile, sanitizeUserProfile,
   normalizeTimezone, ApiError
 } = require("./_lib");
@@ -22,6 +22,8 @@ module.exports = withAuth(async (data, token) => {
     case "name": return setDisplayName(data, token);
     case "avatar": return uploadAvatar(data, token);
     case "advanceTutorial": return advanceTutorial(data, token);
+    case "dailyGoal": return setDailyGoal(data, token);
+    case "delete": return deleteAccount(data, token);
     default: throw new ApiError(400, "Unknown profile action.");
   }
 });
@@ -143,6 +145,52 @@ async function advanceTutorial(data, token) {
 
     return { tutorial: nextTutorial };
   });
+}
+
+async function setDailyGoal(data, token) {
+  const dailyGoalXp = normalizeDailyGoalXp(data.dailyGoalXp);
+  const userRef = db.doc(`users/${token.uid}`);
+
+  await userRef.set({ dailyGoalXp, updatedAt: FieldValue.serverTimestamp() }, { merge: true });
+
+  return { dailyGoalXp };
+}
+
+// Deletes everything this account's uid owns or is referenced by, then the
+// Firebase Auth user itself - in that order, so a crash partway through
+// never leaves an Auth user pointing at already-gone Firestore data. Doesn't
+// chase every possible reference (e.g. a still-pending friendRequests doc
+// naming this uid) - those just resolve to "user not found" wherever they're
+// later read, the same way any other deleted-but-still-referenced uid does.
+async function deleteAccount(data, token) {
+  const userRef = db.doc(`users/${token.uid}`);
+  const userSnap = await userRef.get();
+  const handle = userSnap.exists ? userSnap.data().handle : null;
+
+  const friendsSnap = await db.collection(`users/${token.uid}/friends`).get();
+  const badgesSnap = await db.collection(`users/${token.uid}/badges`).get();
+  const dailyStatsSnap = await db.collection(`users/${token.uid}/dailyStats`).get();
+
+  const batch = db.batch();
+  const now = FieldValue.serverTimestamp();
+  friendsSnap.docs.forEach(doc => {
+    // Remove the mutual-friend edge on both sides (same pair of doc paths
+    // api/friends.js's removeFriend uses) without touching the rest of that
+    // friend's own user doc - only their friendCount changes.
+    batch.delete(doc.ref);
+    batch.delete(db.doc(`users/${doc.id}/friends/${token.uid}`));
+    batch.set(db.doc(`users/${doc.id}`), { friendCount: FieldValue.increment(-1), updatedAt: now }, { merge: true });
+  });
+  badgesSnap.docs.forEach(doc => batch.delete(doc.ref));
+  dailyStatsSnap.docs.forEach(doc => batch.delete(doc.ref));
+  batch.delete(userRef);
+  batch.delete(db.doc(`publicProfiles/${token.uid}`));
+  if (handle) batch.delete(db.doc(`usernames/${handle}`));
+
+  await batch.commit();
+  await adminAuth.deleteUser(token.uid);
+
+  return { deleted: true };
 }
 
 function parseImageDataUrl(value) {

@@ -17,11 +17,156 @@ function initSettingsPage() {
     setupProfileControls();
     setupFirebaseSync();
     setupSoundToggle();
+    setupThemeToggle();
+    setupLanguageSelect();
+    setupDailyGoalSelect();
+    setupPasswordForm();
+    setupDeleteAccount();
 
     document.getElementById("settings-logout-btn")?.addEventListener("click", async () => {
         await window.PolytypeFirebase?.signOut?.();
         window.location.href = "auth.html";
     });
+}
+
+function setupThemeToggle() {
+    const button = document.getElementById("settings-theme-toggle");
+    if (!button || !window.PolytypeTheme) return;
+
+    button.setAttribute("aria-pressed", String(window.PolytypeTheme.getTheme() === "light"));
+
+    button.addEventListener("click", () => {
+        const isLight = button.getAttribute("aria-pressed") === "true";
+        window.PolytypeTheme.setTheme(isLight ? "dark" : "light");
+        button.setAttribute("aria-pressed", String(!isLight));
+    });
+}
+
+function setupLanguageSelect() {
+    const select = document.getElementById("settings-language-select");
+    if (!select || !window.PolytypeI18n) return;
+
+    select.value = window.PolytypeI18n.getLanguage();
+    select.addEventListener("change", () => {
+        window.PolytypeI18n.setLanguage(select.value);
+    });
+}
+
+function setupDailyGoalSelect() {
+    const select = document.getElementById("settings-daily-goal-select");
+    if (!select) return;
+
+    const cached = readCachedProfile();
+    if (cached?.dailyGoalXp) select.value = String(cached.dailyGoalXp);
+
+    select.addEventListener("change", async () => {
+        const firebaseClient = window.PolytypeFirebase;
+        if (!firebaseClient?.isSignedIn?.()) {
+            setEditStatus(tr("profile.signInToEdit"), "error");
+            return;
+        }
+
+        try {
+            await firebaseClient.setDailyGoal(Number(select.value));
+        } catch (error) {
+            setEditStatus(getProfileErrorMessage(error), "error");
+        }
+    });
+}
+
+function setupPasswordForm() {
+    const form = document.getElementById("settings-password-form");
+    if (!form) return;
+
+    form.addEventListener("submit", async event => {
+        event.preventDefault();
+        await savePassword();
+    });
+}
+
+async function savePassword() {
+    const firebaseClient = window.PolytypeFirebase;
+    const currentInput = document.getElementById("settings-current-password");
+    const newInput = document.getElementById("settings-new-password");
+    const confirmInput = document.getElementById("settings-confirm-new-password");
+    if (!currentInput || !newInput || !confirmInput) return;
+
+    if (newInput.value !== confirmInput.value) {
+        setPasswordStatus(tr("auth.passwordMismatch"), "error");
+        confirmInput.focus();
+        return;
+    }
+
+    if (newInput.value.length < 6) {
+        setPasswordStatus(tr("auth.weakPassword"), "error");
+        newInput.focus();
+        return;
+    }
+
+    setPasswordStatus(tr("settings.savingPassword"));
+
+    try {
+        await firebaseClient.reauthenticate(currentInput.value);
+        await firebaseClient.changePassword(newInput.value);
+        setPasswordStatus(tr("settings.passwordUpdated"), "success");
+        currentInput.value = "";
+        newInput.value = "";
+        confirmInput.value = "";
+    } catch (error) {
+        setPasswordStatus(firebaseClient.getErrorMessage(error), "error");
+    }
+}
+
+function setPasswordStatus(value, tone = "") {
+    const element = document.getElementById("settings-password-status");
+    if (!element) return;
+    element.textContent = value;
+    element.dataset.tone = tone;
+}
+
+function setupDeleteAccount() {
+    const deleteBtn = document.getElementById("settings-delete-account-btn");
+    const confirmBox = document.getElementById("settings-delete-confirm");
+    const confirmBtn = document.getElementById("settings-delete-confirm-btn");
+    const cancelBtn = document.getElementById("settings-delete-cancel-btn");
+    const passwordInput = document.getElementById("settings-delete-password");
+    if (!deleteBtn || !confirmBox || !confirmBtn || !cancelBtn || !passwordInput) return;
+
+    deleteBtn.addEventListener("click", () => {
+        const isGoogleUser = window.PolytypeFirebase?.getAuthProvider?.() === "google.com";
+        passwordInput.hidden = isGoogleUser;
+        confirmBox.hidden = false;
+        deleteBtn.hidden = true;
+    });
+
+    cancelBtn.addEventListener("click", () => {
+        confirmBox.hidden = true;
+        deleteBtn.hidden = false;
+        passwordInput.value = "";
+        setDeleteStatus("");
+    });
+
+    confirmBtn.addEventListener("click", async () => {
+        const firebaseClient = window.PolytypeFirebase;
+        confirmBtn.disabled = true;
+        setDeleteStatus(tr("settings.deletingAccount"));
+
+        try {
+            await firebaseClient.reauthenticate(passwordInput.value);
+            await firebaseClient.deleteAccount();
+            window.location.href = "auth.html";
+        } catch (error) {
+            setDeleteStatus(firebaseClient.getErrorMessage(error), "error");
+            confirmBtn.disabled = false;
+        }
+    });
+}
+
+function setDeleteStatus(value, tone = "") {
+    const element = document.getElementById("settings-delete-status");
+    if (!element) return;
+    element.textContent = value;
+    element.dataset.tone = tone;
 }
 
 function setupSoundToggle() {
@@ -131,6 +276,16 @@ function setupFirebaseSync() {
         }
 
         renderAvatar(document.getElementById("profile-page-avatar"), authState.profile);
+
+        const passwordSection = document.getElementById("settings-password-section");
+        if (passwordSection) {
+            passwordSection.hidden = firebaseClient.getAuthProvider?.() !== "password";
+        }
+
+        const dailyGoalSelect = document.getElementById("settings-daily-goal-select");
+        if (dailyGoalSelect && authState.profile?.dailyGoalXp && document.activeElement !== dailyGoalSelect) {
+            dailyGoalSelect.value = String(authState.profile.dailyGoalXp);
+        }
 
         if (!authState.user) {
             setEditStatus(tr("profile.signInToEdit"));

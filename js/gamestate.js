@@ -5,7 +5,9 @@
         loaded: false,
         chestReady: false,
         missions: [],
-        friendsPreview: []
+        friendsPreview: [],
+        todayXp: 0,
+        dailyGoalXp: 50
     };
     const listeners = new Set();
 
@@ -62,7 +64,9 @@
             localStorage.setItem(CACHE_KEY, JSON.stringify({
                 chestReady: state.chestReady,
                 missions: state.missions,
-                friendsPreview: state.friendsPreview
+                friendsPreview: state.friendsPreview,
+                todayXp: state.todayXp,
+                dailyGoalXp: state.dailyGoalXp
             }));
         } catch {}
     }
@@ -103,6 +107,8 @@
         state.chestReady = false;
         state.missions = [];
         state.friendsPreview = [];
+        state.todayXp = 0;
+        state.dailyGoalXp = 50;
         try { localStorage.removeItem(CACHE_KEY); } catch {}
         notify();
     }

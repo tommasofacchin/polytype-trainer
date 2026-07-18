@@ -32,6 +32,14 @@
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff7a2d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
             </a>
 
+            <div id="home-daily-goal-card" class="card" style="background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:14px 16px;margin-bottom:16px">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                    <span style="font-weight:800;font-size:14px" data-i18n="home.dailyGoal">Daily goal</span>
+                    <span id="home-daily-goal-text" style="font-size:12px;font-weight:800;color:var(--text-faint)">0 / 50 XP</span>
+                </div>
+                <div class="mission-bar"><div id="home-daily-goal-fill" class="mission-bar-fill" style="width:0%"></div></div>
+            </div>
+
             <div class="home-chest-missions-row">
                 <div id="home-chest-card" class="chest-card is-claimed"></div>
 

@@ -35,7 +35,13 @@
         advanceTutorial,
         setUserHandle,
         setDisplayName,
+        setDailyGoal,
         uploadProfileAvatar,
+        getAuthProvider,
+        reauthenticate,
+        changePassword,
+        deleteAccount,
+        getErrorMessage: getAuthErrorMessage,
         searchUsers,
         sendFriendRequest,
         respondFriendRequest,
@@ -307,6 +313,65 @@
         }
 
         return result;
+    }
+
+    async function setDailyGoal(dailyGoalXp) {
+        assertConfigured();
+        if (!state.user) throw new Error(tr("auth.signInRequired"));
+
+        const result = await callApi("update-profile", { action: "dailyGoal", dailyGoalXp });
+        const savedGoal = result.data?.dailyGoalXp;
+
+        if (typeof savedGoal === "number") {
+            state.profile = { ...(state.profile || {}), dailyGoalXp: savedGoal };
+            syncProfileToLocalStorage(state.profile);
+            notify();
+        }
+
+        return result;
+    }
+
+    // "password" | "google.com" | null (no signed-in user). A user can only
+    // ever have signed up one way in this app (no account-linking UI), so
+    // the first provider entry is always the only one that matters.
+    function getAuthProvider() {
+        return state.user?.providerData?.[0]?.providerId || null;
+    }
+
+    // Required by Firebase before either updatePassword or delete() below
+    // will succeed if the session isn't fresh (auth/requires-recent-login) -
+    // callers should always call this right before, not cache the result.
+    async function reauthenticate(currentPassword) {
+        assertConfigured();
+        if (!state.user) throw new Error(tr("auth.signInRequired"));
+
+        const provider = getAuthProvider();
+        if (provider === "google.com") {
+            const googleProvider = new window.firebase.auth.GoogleAuthProvider();
+            return state.user.reauthenticateWithPopup(googleProvider);
+        }
+
+        const credential = window.firebase.auth.EmailAuthProvider.credential(state.user.email, currentPassword);
+        return state.user.reauthenticateWithCredential(credential);
+    }
+
+    async function changePassword(newPassword) {
+        assertConfigured();
+        if (!state.user) throw new Error(tr("auth.signInRequired"));
+        return state.user.updatePassword(newPassword);
+    }
+
+    // Deletes all server-side data first (api/update-profile.js's "delete"
+    // action, which also deletes the Auth user via the admin SDK), then
+    // tears down the local client session - in that order, so a failure
+    // partway through the API call leaves the user still signed in with
+    // their data intact instead of locked out with an orphaned account.
+    async function deleteAccount() {
+        assertConfigured();
+        if (!state.user) throw new Error(tr("auth.signInRequired"));
+
+        await callApi("update-profile", { action: "delete" });
+        await signOut();
     }
 
     async function uploadProfileAvatar(imageDataUrl) {
@@ -595,6 +660,7 @@
             dayStreak: remoteProfile.currentStreak || 0,
             streakFreezes: remoteProfile.streakFreezes || 0,
             maxStreakFreezes: remoteProfile.maxStreakFreezes || 2,
+            dailyGoalXp: remoteProfile.dailyGoalXp || 50,
             tutorial: remoteProfile.tutorial || null,
             badges: remoteProfile.badges || [],
             courses: remoteProfile.courses || {}
@@ -668,6 +734,9 @@
             "auth/weak-password": tr("auth.weakPassword"),
             "auth/user-not-found": tr("auth.accountNotFound"),
             "auth/wrong-password": tr("auth.wrongLogin"),
+            "auth/invalid-credential": tr("auth.wrongLogin"),
+            "auth/requires-recent-login": tr("auth.reauthRequired"),
+            "auth/too-many-requests": tr("auth.tooManyRequests"),
             "auth/operation-not-allowed": tr("auth.googleNotEnabled"),
             "auth/popup-closed-by-user": tr("auth.googlePopupClosed"),
             "api/401": tr("auth.signInRequired"),

@@ -1,4 +1,6 @@
 const DEFAULT_TIMEZONE = "UTC";
+const DEFAULT_DAILY_GOAL_XP = 50;
+const DAILY_GOAL_XP_OPTIONS = new Set([20, 50, 100, 200]);
 const MAX_STREAK_FREEZES = 2;
 const WORDS_PER_LEVEL = 5;
 const MAX_SESSION_XP = 500;
@@ -192,6 +194,7 @@ function buildDefaultUserProfile(uid, authProfile, timezone) {
     friendCount: 0,
     lastChestClaimedDate: null,
     chestsClaimed: 0,
+    dailyGoalXp: DEFAULT_DAILY_GOAL_XP,
     // Both are pure server bookkeeping for badge conditions below (well_
     // rounded / veteran) - never sanitized into the client-facing profile,
     // since the client only ever needs the resulting earned-badge ids.
@@ -234,9 +237,15 @@ function sanitizeUserProfile(user) {
     friendCount: user.friendCount || 0,
     lastChestClaimedDate: user.lastChestClaimedDate || null,
     chestsClaimed: user.chestsClaimed || 0,
+    dailyGoalXp: normalizeDailyGoalXp(user.dailyGoalXp),
     tutorial: sanitizeTutorial(user.tutorial),
     courses: sanitizeCoursesSummary(user.courses)
   };
+}
+
+function normalizeDailyGoalXp(value) {
+  const xp = Math.trunc(Number(value));
+  return DAILY_GOAL_XP_OPTIONS.has(xp) ? xp : DEFAULT_DAILY_GOAL_XP;
 }
 
 // Coins are per-course (see sanitizeCoursesSummary) - XP/level are the only
@@ -727,6 +736,7 @@ module.exports = {
   normalizeUid,
   normalizeHandle,
   normalizeDisplayName,
+  normalizeDailyGoalXp,
   normalizeTimezone,
   normalizeSearchQuery,
   cleanRequiredString,
@@ -745,6 +755,8 @@ module.exports = {
   getNewlyCompletedMissions,
   evaluateNewBadges,
   MAX_STREAK_FREEZES,
+  DEFAULT_DAILY_GOAL_XP,
+  DAILY_GOAL_XP_OPTIONS,
   WORDS_PER_LEVEL,
   SEARCH_RESULTS_LIMIT,
   MIN_SEARCH_LENGTH,

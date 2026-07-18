@@ -1,4 +1,31 @@
 (function () {
+    const THEME_KEY = "polytype-theme";
+
+    function getTheme() {
+        try {
+            return localStorage.getItem(THEME_KEY) === "light" ? "light" : "dark";
+        } catch {
+            return "dark";
+        }
+    }
+
+    function applyTheme(theme) {
+        document.documentElement.dataset.theme = theme;
+    }
+
+    function setTheme(theme) {
+        const next = theme === "light" ? "light" : "dark";
+        try {
+            localStorage.setItem(THEME_KEY, next);
+        } catch {}
+        applyTheme(next);
+    }
+
+    // Runs synchronously, before any markup below paints, so pages never
+    // flash the dark default before flipping to a saved light preference.
+    applyTheme(getTheme());
+    window.PolytypeTheme = { getTheme, setTheme };
+
     const LANGUAGE_FLAGS = {
         chinese: "assets/flags/china.svg",
         german: "assets/flags/germany.svg",

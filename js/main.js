@@ -445,7 +445,6 @@ function applyAccountLanguage() {
 
 function onAppLanguageChange() {
     window.PolytypeI18n?.applyStaticTranslations?.();
-    applyTheme(document.documentElement.dataset.theme === "dark" ? "dark" : "light");
     populateLanguageSelect();
     updateRomajiUI();
     renderProfile();

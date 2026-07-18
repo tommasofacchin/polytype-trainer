@@ -1,7 +1,7 @@
 const { db } = require("./_firebase");
 const {
   withAuth, pickFriendProfile, buildLeaderboard, evaluateMissions,
-  getDateKeyForTimezone, normalizeTimezone, DEBUG_ALWAYS_CLAIM_CHEST
+  getDateKeyForTimezone, normalizeTimezone, normalizeDailyGoalXp, DEBUG_ALWAYS_CLAIM_CHEST
 } = require("./_lib");
 
 module.exports = withAuth(async (data, token) => {
@@ -38,6 +38,8 @@ module.exports = withAuth(async (data, token) => {
   return {
     chestReady,
     missions,
-    friendsPreview
+    friendsPreview,
+    todayXp: dailyStats.xp || 0,
+    dailyGoalXp: normalizeDailyGoalXp(user.dailyGoalXp)
   };
 });
