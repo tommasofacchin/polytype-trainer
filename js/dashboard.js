@@ -150,12 +150,15 @@ function renderGreeting(signedIn) {
     const signedInSections = document.getElementById("home-signed-in");
     if (signedInSections) signedInSections.hidden = !signedIn;
 
-    // Norwegian-only for now (see decks/lessons-norwegian.js) - no
-    // onLanguageChanged wiring needed, since picking a different study
-    // language always does a full page reload (js/app-shell.js's flag menu),
-    // so a one-time check here already reflects whatever's active.
+    // Show the Lessons CTA only for study languages that actually have a
+    // lessons curriculum (decks/lessons-*.js). This page doesn't load those
+    // data files, so the set is listed here explicitly - keep it in sync when
+    // a new language's lessons ship. No onLanguageChanged wiring needed, since
+    // picking a different study language always does a full page reload
+    // (js/app-shell.js's flag menu), so a one-time check reflects what's active.
+    const LANGS_WITH_LESSONS = new Set(["norwegian", "swedish"]);
     const lessonsBtn = document.getElementById("home-lessons-btn");
-    if (lessonsBtn) lessonsBtn.hidden = localStorage.getItem("polytype-language") !== "norwegian";
+    if (lessonsBtn) lessonsBtn.hidden = !LANGS_WITH_LESSONS.has(localStorage.getItem("polytype-language"));
 }
 
 function renderChest(state) {

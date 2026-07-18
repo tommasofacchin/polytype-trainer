@@ -357,13 +357,21 @@ function setupFirebaseSync() {
         const emailEl = document.getElementById("settings-account-email");
         if (emailEl) emailEl.textContent = authState.profile?.email || authState.user?.email || "-";
 
+        // Skip repainting the inputs mid-save. saveProfile() writes the name
+        // and the handle in two sequential API calls, and the first one's
+        // notify() lands here with state.profile still holding the OLD handle
+        // (the second call hasn't run yet) - repainting then would flash the
+        // previous username back into the field for the half-second between
+        // the two calls. The field already holds exactly what's being saved,
+        // so there's nothing to repaint anyway. (The activeElement guards
+        // cover the case where the user is still typing in a field.)
         const nameInput = document.getElementById("profile-name-input");
-        if (nameInput && document.activeElement !== nameInput) {
+        if (nameInput && !isSavingProfile && document.activeElement !== nameInput) {
             nameInput.value = authState.profile?.displayName || "";
         }
 
         const handleInput = document.getElementById("profile-handle-input");
-        if (handleInput && document.activeElement !== handleInput) {
+        if (handleInput && !isSavingProfile && document.activeElement !== handleInput) {
             handleInput.value = authState.profile?.handle || "";
         }
 
@@ -412,6 +420,13 @@ async function saveProfile() {
         await firebaseClient.setDisplayName(name);
         stage = "handle";
         await firebaseClient.setUserHandle(handle);
+        // Repaint once, now, with the canonical values we just saved (handle
+        // lowercased / @-stripped by normalizeHandleInput) so the fields show
+        // what actually got stored rather than the raw typed text - the
+        // onChange repaint that used to do this is intentionally skipped while
+        // isSavingProfile is true (see setupFirebaseSync).
+        if (document.activeElement !== nameInput) nameInput.value = name;
+        if (document.activeElement !== handleInput) handleInput.value = handle;
     } catch (error) {
         showToast(getProfileErrorMessage(error, stage));
     } finally {

@@ -2,13 +2,20 @@
 
 (function () {
     const PROFILE_KEY = "polytype-profile";
-    // Lessons are Norwegian-only for now (see decks/lessons-norwegian.js) -
-    // the data file is keyed by course id so a second language can be added
-    // later without a schema change, but there's nowhere else to read the
-    // active course from here (unlike the vocab-drill games, lessons.html
-    // isn't reachable for any other language - see the Home CTA's gating in
-    // js/dashboard.js).
-    const COURSE_ID = "norwegian";
+    // Which course's lessons to show: the active study language, as long as it
+    // actually has a lessons curriculum loaded (decks/lessons-*.js merge into
+    // window.POLYTYPE_LESSONS). Falls back to Norwegian - the Home CTA that
+    // links here is itself gated to languages that have lessons (see
+    // js/dashboard.js), so in practice the stored language is always one with a
+    // curriculum by the time we get here.
+    const COURSE_ID = pickCourseId();
+
+    function pickCourseId() {
+        const available = window.POLYTYPE_LESSONS || {};
+        const stored = localStorage.getItem("polytype-language");
+        if (stored && Array.isArray(available[stored]) && available[stored].length) return stored;
+        return "norwegian";
+    }
 
     // Same two-stage delay sprint.js uses: FEEDBACK_HOLD shows the
     // correct/wrong state, then the exercise fades out before the next one's
@@ -205,11 +212,14 @@
         if (block.type === "example") {
             const row = document.createElement("div");
             row.className = "lessons-example-row";
-            const no = document.createElement("strong");
-            no.textContent = block.no;
+            const term = document.createElement("strong");
+            // Foreign-language term: keyed per course in the data files
+            // (`no` for Norwegian, `sv` for Swedish); `term` is a generic
+            // fallback for any future language.
+            term.textContent = block.no ?? block.sv ?? block.term ?? "";
             const en = document.createElement("span");
             en.textContent = block.en;
-            row.append(no, en);
+            row.append(term, en);
             return row;
         }
         const p = document.createElement("p");

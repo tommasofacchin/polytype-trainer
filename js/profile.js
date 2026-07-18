@@ -53,11 +53,6 @@ const BADGE_ICONS = {
     locked: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>'
 };
 
-const courseLabels = {
-    chinese: "Chinese", german: "German", italian: "Italian", japanese: "Japanese",
-    norwegian: "Norwegian", spanish: "Spanish", swedish: "Swedish"
-};
-
 let currentProfile = { ...defaultProfile };
 
 function tr(key, params = {}) {
@@ -93,14 +88,7 @@ function setupFirebaseSync() {
     if (!firebaseClient) return;
 
     firebaseClient.onChange(authState => {
-        if (!authState.user) {
-            setText("profile-page-sync-status", tr("profile.cloudSignin"));
-            return;
-        }
-        if (!authState.profile) {
-            setText("profile-page-sync-status", tr("profile.cloudLoading"));
-            return;
-        }
+        if (!authState.user || !authState.profile) return;
 
         currentProfile = sanitizeProfile({
             name: authState.profile.displayName,
@@ -113,7 +101,6 @@ function setupFirebaseSync() {
             courses: authState.profile.courses
         });
         renderProfilePage(currentProfile);
-        setText("profile-page-sync-status", tr("profile.cloudSynced"));
     });
 }
 
@@ -143,7 +130,6 @@ function renderProfilePage(profile) {
 
     renderAvatar(document.getElementById("profile-page-avatar"), safeProfile);
     renderBadges(safeProfile.badges);
-    renderCourses(safeProfile.courses);
 }
 
 function renderAvatar(element, profile) {
@@ -173,61 +159,18 @@ function renderBadges(earnedIds) {
             const isEarned = earnedSet.has(badge.id);
             const wrap = document.createElement("div");
             wrap.style.textAlign = "center";
+            // Theme-token backgrounds (not hardcoded white alpha, which was
+            // near-invisible in light theme). Grid sizing keeps the tiles
+            // compact - see .badge-grid in style.css.
             wrap.innerHTML = `
-                <div style="aspect-ratio:1;border-radius:16px;background:${isEarned ? "rgba(255,255,255,.06)" : "rgba(255,255,255,.04)"};display:flex;align-items:center;justify-content:center;margin-bottom:6px;${isEarned ? "" : "color:var(--text-faintest)"}">
+                <div style="aspect-ratio:1;border-radius:13px;border:1px solid var(--border);background:${isEarned ? "var(--surface-soft)" : "var(--surface-empty)"};display:flex;align-items:center;justify-content:center;margin-bottom:5px;${isEarned ? "" : "color:var(--text-faintest)"}">
                     ${isEarned ? BADGE_ICONS[badge.icon] : BADGE_ICONS.locked}
                 </div>
-                <div style="font-size:9px;font-weight:800;color:${isEarned ? "var(--text-soft)" : "var(--text-faintest)"}">${tr(badge.labelKey)}</div>
+                <div style="font-size:9px;font-weight:800;line-height:1.15;color:${isEarned ? "var(--text-soft)" : "var(--text-faintest)"}">${tr(badge.labelKey)}</div>
             `;
             return wrap;
         })
     );
-}
-
-function renderCourses(courses) {
-    const courseGrid = document.getElementById("profile-page-courses");
-    if (!courseGrid) return;
-
-    const entries = Object.values(courses || {})
-        .filter(course => course && typeof course === "object")
-        .sort((a, b) => (b.xp || 0) - (a.xp || 0));
-
-    setText("profile-page-course-count", tr("profile.activeCount", { count: entries.length }));
-
-    if (!entries.length) {
-        const empty = document.createElement("p");
-        empty.className = "profile-muted";
-        empty.textContent = tr("profile.noCourses");
-        courseGrid.replaceChildren(empty);
-        return;
-    }
-
-    courseGrid.replaceChildren(
-        ...entries.map(course => {
-            const courseId = course.courseId || "course";
-            const row = document.createElement("div");
-            row.style.cssText = "display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:12px 14px;grid-column:1/-1";
-            row.innerHTML = `
-                <span style="width:30px;height:20px;border-radius:5px;overflow:hidden;display:flex;box-shadow:0 0 0 1px var(--border-strong)"><img src="${getCourseFlag(courseId)}" alt="" style="width:100%;height:100%;object-fit:cover"></span>
-                <div style="flex:1">
-                    <div style="font-weight:800;font-size:14px;margin-bottom:5px">${getCourseLabel(courseId)} &middot; ${tr("common.levelNumber", { level: course.level || 1 })}</div>
-                    <div style="height:6px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden"><div style="height:100%;width:${Math.min(100, ((course.level || 1) % 10) * 10 || 10)}%;background:var(--accent);border-radius:999px"></div></div>
-                </div>
-            `;
-            return row;
-        })
-    );
-    courseGrid.style.display = "grid";
-    courseGrid.style.gap = "10px";
-}
-
-function getCourseFlag(courseId) {
-    const flags = {
-        chinese: "assets/flags/china.svg", german: "assets/flags/germany.svg", italian: "assets/flags/italy.svg",
-        japanese: "assets/flags/japan.svg", norwegian: "assets/flags/norway.svg", spanish: "assets/flags/spain.svg",
-        swedish: "assets/flags/sweden.svg"
-    };
-    return flags[courseId] || "assets/flags/china.svg";
 }
 
 function setText(id, value) {
@@ -291,15 +234,6 @@ function sanitizeCourses(courses) {
 
 function normalizeHandleInput(value) {
     return typeof value === "string" ? value.trim().replace(/^@+/, "").toLowerCase() : "";
-}
-
-function getCourseLabel(courseId) {
-    const safeCourseId = typeof courseId === "string" ? courseId.trim() : "";
-    if (!safeCourseId) return tr("profile.courseFallback");
-    if (courseLabels[safeCourseId]) {
-        return window.PolytypeI18n?.languageLabel?.(safeCourseId) || courseLabels[safeCourseId];
-    }
-    return `${safeCourseId[0].toUpperCase()}${safeCourseId.slice(1)}`;
 }
 
 // Runs after every function/let/const above is defined - same reasoning as

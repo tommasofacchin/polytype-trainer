@@ -14,57 +14,41 @@
 <body class="has-app-shell is-scroll-page" data-tab="profile">
   <div id="app-header"></div>
   <main class="profile-page">
-    <section class="profile-hero" aria-label="Player profile" data-i18n-aria-label="profile.player" style="flex-direction:column;text-align:center">
-      <div style="position:relative;margin-bottom:4px">
-        <div id="profile-page-avatar" class="profile-avatar profile-avatar-large" aria-hidden="true">T</div>
-      </div>
-      <div class="profile-hero-copy" style="text-align:center">
+    <section class="profile-hero profile-hero-center" aria-label="Player profile" data-i18n-aria-label="profile.player">
+      <div id="profile-page-avatar" class="profile-avatar profile-avatar-large" aria-hidden="true">T</div>
+      <div class="profile-hero-copy">
         <h1 id="profile-page-name">Tommaso</h1>
         <p id="profile-page-handle" class="profile-handle">@tommaso</p>
-        <p id="profile-page-level" class="profile-kicker" style="display:inline-flex;align-items:center;gap:6px;background:var(--accent-soft);color:var(--accent);font-weight:800;padding:6px 14px;border-radius:999px;margin-top:6px">Level 1</p>
+      </div>
+
+      <!-- Game-style level + XP bar: the first thing you see, right under the name. -->
+      <div class="profile-level-block">
+        <div class="profile-level-row">
+          <span id="profile-page-level" class="profile-level-pill">Level 1</span>
+          <span id="profile-page-xp-title" class="profile-level-xp">0 / 200 XP</span>
+        </div>
+        <div class="xp-bar xp-bar-large" aria-hidden="true">
+          <span id="profile-page-xp-fill"></span>
+        </div>
+        <p id="profile-page-next-level" class="profile-next-level">200 XP to Level 2</p>
       </div>
     </section>
-    <p id="profile-page-sync-status" class="profile-muted" data-i18n="common.loadingProfile">Loading profile...</p>
 
-    <section class="profile-detail-grid" aria-label="Profile details" data-i18n-aria-label="profile.details">
-      <article class="profile-detail-card profile-detail-card-wide">
-        <div class="profile-card-head">
-          <div>
-            <span class="profile-card-label" data-i18n="profile.courseProgress">Course progress</span>
-            <strong data-i18n="profile.learningTracks">Learning tracks</strong>
-          </div>
-          <span id="profile-page-course-count" class="profile-stat-pill">0 active</span>
-        </div>
-        <div id="profile-page-courses" class="profile-badge-grid"></div>
-      </article>
-
-      <div class="stat-tile-row profile-detail-card-wide" style="margin:0">
+    <section class="profile-stack" aria-label="Profile details" data-i18n-aria-label="profile.details">
+      <div class="stat-tile-row" style="margin:0">
         <div class="stat-tile">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="#ff7a2d" style="margin-bottom:2px"><path d="M12 2c3 4 5 6 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 1 2 2 2 3 2 0-3-1-5 0-8z"/></svg>
+          <span class="stat-tile-icon"><svg viewBox="0 0 24 24" fill="#ff7a2d"><path d="M12 2c3 4 5 6 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 1 2 2 2 3 2 0-3-1-5 0-8z"/></svg></span>
           <div id="profile-page-day-streak" class="stat-tile-value">0</div>
           <div class="stat-tile-label" data-i18n="profile.dayStreak">day streak</div>
         </div>
         <div class="stat-tile">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="#2fe6a4" style="margin-bottom:2px"><path d="M12 2l2.9 6.2 6.6.7-4.9 4.5 1.3 6.6L12 17.8 6.1 20.6l1.3-6.6L2.5 8.9l6.6-.7z"/></svg>
+          <span class="stat-tile-icon"><svg viewBox="0 0 24 24" fill="#2fe6a4"><path d="M12 2l2.9 6.2 6.6.7-4.9 4.5 1.3 6.6L12 17.8 6.1 20.6l1.3-6.6L2.5 8.9l6.6-.7z"/></svg></span>
           <div id="profile-page-total-xp" class="stat-tile-value">0</div>
           <div class="stat-tile-label" data-i18n="profile.totalXpLabel">total XP</div>
         </div>
       </div>
 
-      <article class="profile-detail-card profile-detail-card-wide">
-        <div class="profile-card-head">
-          <div>
-            <span class="profile-card-label" data-i18n="profile.xpProgress">XP progress</span>
-            <strong id="profile-page-xp-title">0 / 200 XP</strong>
-          </div>
-        </div>
-        <div class="xp-bar xp-bar-large" aria-hidden="true">
-          <span id="profile-page-xp-fill"></span>
-        </div>
-        <p id="profile-page-next-level" class="profile-muted">200 XP to Level 2</p>
-      </article>
-
-      <article class="profile-detail-card profile-detail-card-wide">
+      <article class="profile-detail-card">
         <div class="profile-card-head">
           <div>
             <span class="profile-card-label" data-i18n="profile.badges">Badges</span>
@@ -75,7 +59,7 @@
         <div id="profile-page-badges" class="badge-grid"></div>
       </article>
 
-      <a href="settings.html" class="profile-settings-link profile-detail-card-wide">
+      <a href="settings.html" class="profile-settings-link">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-soft)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         <span data-i18n="settings.title">Settings</span>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-faint)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>

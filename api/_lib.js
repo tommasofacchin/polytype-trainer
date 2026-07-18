@@ -14,10 +14,15 @@ const CATEGORIES = require("../decks/categories.js").slice().sort((a, b) => a.or
 const CATEGORY_SIZES = CATEGORIES.map(category => category.size);
 const TOTAL_CATEGORY_WORDS = CATEGORY_SIZES.reduce((sum, size) => sum + size, 0);
 const VALID_WORD_SUFFIXES = new Set(CATEGORIES.flatMap(category => category.wordSuffixes));
-// Same file the browser loads as window.POLYTYPE_LESSONS (see
-// decks/lessons-norwegian.js) - lesson id order IS unlock order, so this is
-// the one place a lessonId's position in the sequence is validated against.
-const LESSONS_BY_COURSE = require("../decks/lessons-norwegian.js");
+// Same files the browser merges into window.POLYTYPE_LESSONS (see
+// decks/lessons-norwegian.js / decks/lessons-swedish.js) - lesson id order IS
+// unlock order, so this is the one place a lessonId's position in the sequence
+// is validated against. Each file exports its own { <course>: [...] } slice;
+// merge them into one map keyed by course.
+const LESSONS_BY_COURSE = {
+  ...require("../decks/lessons-norwegian.js"),
+  ...require("../decks/lessons-swedish.js")
+};
 const LESSON_IDS_BY_COURSE = Object.fromEntries(
   Object.entries(LESSONS_BY_COURSE).map(([courseId, lessons]) => [courseId, lessons.map(lesson => lesson.id)])
 );

@@ -26,7 +26,7 @@
         "deck.html": ["decks/index.js", "decks/categories.js", "js/deck.js"],
         "categories.html": ["decks/index.js", "decks/categories.js", "js/categories.js"],
         "shop.html": ["decks/index.js", "decks/categories.js", "js/shop.js"],
-        "lessons.html": ["decks/lessons-norwegian.js", "js/mission-celebrate.js", "js/lessons.js"],
+        "lessons.html": ["decks/lessons-norwegian.js", "decks/lessons-swedish.js", "js/mission-celebrate.js", "js/lessons.js"],
         "friends.html": ["js/friends.js"],
         "find-friends.html": ["js/find-friends.js"],
         "visit-profile.html": ["js/visit-profile.js"],
@@ -270,7 +270,7 @@
     // sitting in localStorage and could render instantly (e.g. Shop's coin
     // balance, already shown in the header) - loaded once per tab session,
     // skipped on every visit after that.
-    const STATIC_DATA_SCRIPTS = new Set(["decks/index.js", "decks/categories.js", "decks/lessons-norwegian.js"]);
+    const STATIC_DATA_SCRIPTS = new Set(["decks/index.js", "decks/categories.js", "decks/lessons-norwegian.js", "decks/lessons-swedish.js"]);
     const loadedStaticScripts = new Set();
 
     async function loadPageScripts(page) {

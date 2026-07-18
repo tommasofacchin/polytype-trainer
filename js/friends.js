@@ -128,18 +128,6 @@ async function handleRespond(requestId, accept) {
     }
 }
 
-async function handleRemove(uid, name) {
-    const confirmed = window.confirm(tr("friends.removeConfirm", { name: name || tr("profile.courseFallback") }));
-    if (!confirmed) return;
-
-    try {
-        await window.PolytypeFirebase.removeFriend(uid);
-        await loadOverview();
-    } catch (error) {
-        setPageStatus(getFriendsErrorMessage(error));
-    }
-}
-
 function renderIncoming(list) {
     const card = document.getElementById("friends-incoming-card");
     const container = document.getElementById("friends-incoming-list");
@@ -206,27 +194,38 @@ function renderLeaderboard(list) {
         row.className = entry.isSelf ? "friends-leaderboard-row is-self" : "friends-leaderboard-row";
         if (!entry.isSelf) makeRowVisitable(row, { ...entry, relationship: "friends" });
 
-        const rank = document.createElement("span");
-        rank.className = "friends-rank";
-        rank.textContent = `#${entry.rank}`;
-
-        const streak = document.createElement("span");
-        streak.className = "friends-row-streak";
-        streak.textContent = `\u{1F525} ${entry.currentStreak || 0}`;
-
+        const meta = `${tr("common.levelNumber", { level: entry.globalLevel || 1 })} · ${(entry.weeklyXp || 0).toLocaleString()} XP`;
         row.append(
-            rank,
+            buildRank(entry.rank),
             buildAvatar(entry),
-            buildNameCopy(entry, `${tr("common.levelNumber", { level: entry.globalLevel || 1 })} - ${entry.weeklyXp || 0} XP`, entry.isSelf),
-            streak
+            buildNameCopy(entry, meta, entry.isSelf),
+            buildStreakPill(entry.currentStreak || 0)
         );
-
-        if (!entry.isSelf) {
-            row.append(buildActionButton(tr("friends.remove"), "friends-remove-btn", () => handleRemove(entry.uid, displayName(entry))));
-        }
-
         return row;
     }));
+}
+
+// Rank chip: a plain circle from 4th place on, gold/silver/bronze for the
+// podium. The leaderboard row is now display-only - removing a friend lives
+// solely on their profile page (see js/visit-profile.js).
+function buildRank(rank) {
+    const chip = document.createElement("span");
+    chip.className = "friends-rank";
+    if (rank >= 1 && rank <= 3) chip.classList.add(`is-medal-${rank}`);
+    chip.textContent = String(rank);
+    return chip;
+}
+
+// Streak as a flame pill using the app's flame glyph (not the 🔥 emoji, which
+// renders differently across platforms) - dimmed to a neutral pill at 0.
+function buildStreakPill(streak) {
+    const pill = document.createElement("span");
+    pill.className = streak > 0 ? "friends-streak-pill" : "friends-streak-pill is-zero";
+    pill.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M12 2c3 4 5 6 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 1 2 2 2 3 2 0-3-1-5 0-8z"/></svg>';
+    const count = document.createElement("span");
+    count.textContent = String(streak);
+    pill.append(count);
+    return pill;
 }
 
 // Sourced from the `activities` collection (api/complete-practice-session.js

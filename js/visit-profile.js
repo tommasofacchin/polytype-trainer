@@ -144,11 +144,13 @@ function renderBadges(earnedIds) {
             const isEarned = earnedSet.has(badge.id);
             const wrap = document.createElement("div");
             wrap.style.textAlign = "center";
+            // Theme-token backgrounds (not hardcoded white alpha, which was
+            // near-invisible in light theme) - matches js/profile.js.
             wrap.innerHTML = `
-                <div style="aspect-ratio:1;border-radius:16px;background:${isEarned ? "rgba(255,255,255,.06)" : "rgba(255,255,255,.04)"};display:flex;align-items:center;justify-content:center;margin-bottom:6px;${isEarned ? "" : "color:var(--text-faintest)"}">
+                <div style="aspect-ratio:1;border-radius:13px;border:1px solid var(--border);background:${isEarned ? "var(--surface-soft)" : "var(--surface-empty)"};display:flex;align-items:center;justify-content:center;margin-bottom:5px;${isEarned ? "" : "color:var(--text-faintest)"}">
                     ${isEarned ? BADGE_ICONS[badge.icon] : BADGE_ICONS.locked}
                 </div>
-                <div style="font-size:9px;font-weight:800;color:${isEarned ? "var(--text-soft)" : "var(--text-faintest)"}">${tr(badge.labelKey)}</div>
+                <div style="font-size:9px;font-weight:800;line-height:1.15;color:${isEarned ? "var(--text-soft)" : "var(--text-faintest)"}">${tr(badge.labelKey)}</div>
             `;
             return wrap;
         })
@@ -162,8 +164,15 @@ function renderAction(profile) {
 }
 
 function buildRelationshipAction(profile) {
+    // Already friends: say so, and offer the only place to unfriend someone.
     if (profile.relationship === "friends") {
-        return buildStatusBadge(tr("friends.alreadyFriends"));
+        const wrap = document.createElement("div");
+        wrap.className = "visit-profile-friend-actions";
+        wrap.append(
+            buildFriendsBadge(),
+            buildActionButton(tr("friends.removeFriend"), "btn visit-profile-remove-btn", event => handleRemove(profile, event.currentTarget))
+        );
+        return wrap;
     }
 
     if (profile.relationship === "pending_outgoing") {
@@ -180,7 +189,34 @@ function buildRelationshipAction(profile) {
         return wrap;
     }
 
+    // Not connected yet: send a friend request.
     return buildActionButton(tr("friends.add"), "btn-solid", event => handleAdd(profile.uid, event.currentTarget));
+}
+
+// "✓ You're friends" pill (check glyph + label).
+function buildFriendsBadge() {
+    const badge = document.createElement("span");
+    badge.className = "friends-status-badge is-friends";
+    badge.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
+    const label = document.createElement("span");
+    label.textContent = tr("friends.alreadyFriends");
+    badge.append(label);
+    return badge;
+}
+
+async function handleRemove(profile, button) {
+    const name = profile.displayName || (profile.handle ? `@${profile.handle}` : tr("profile.courseFallback"));
+    if (!window.confirm(tr("friends.removeConfirm", { name }))) return;
+
+    if (button) button.disabled = true;
+    try {
+        await window.PolytypeFirebase.removeFriend(profile.uid);
+        hasLoaded = false;
+        await loadProfile(profile.uid);
+    } catch (error) {
+        setStatus(getErrorMessage(error));
+        if (button) button.disabled = false;
+    }
 }
 
 async function handleAdd(uid, button) {

@@ -1287,5 +1287,7 @@ const LESSONS_DATA = {
     ]
 };
 
-if (typeof window !== "undefined") window.POLYTYPE_LESSONS = LESSONS_DATA;
+// Additive merge (not a plain assignment) so this and decks/lessons-swedish.js
+// can load in either order without one clobbering the other's course.
+if (typeof window !== "undefined") window.POLYTYPE_LESSONS = Object.assign(window.POLYTYPE_LESSONS || {}, LESSONS_DATA);
 if (typeof module !== "undefined" && module.exports) module.exports = LESSONS_DATA;
