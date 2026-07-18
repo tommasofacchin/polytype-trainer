@@ -27,6 +27,18 @@
     const FEEDBACK_HOLD_DELAY = 550;
     const FADE_OUT_DELAY = 220;
     const MATCH_WRONG_FLASH_DELAY = 450;
+    // Result screen: breakdown rows reveal one at a time rather than all at
+    // once. Both rows and the friends block are inserted into the DOM (and
+    // so already claim their layout space) well before they're actually
+    // shown - only opacity/transform animate at reveal time, never a size
+    // change, so the result card never visibly grows or jumps.
+    const RESULT_ROW_STAGGER_DELAY = 160;
+    // Must match .sprint-result-row's CSS transition-duration (style.css).
+    const RESULT_ROW_REVEAL_DURATION = 260;
+    // A match round lets you retry a mismatch in place, but not forever -
+    // after this many wrong attempts the round is given up as wrong (see
+    // failMatchRound in renderMatchRound) instead of allowing endless guesses.
+    const MATCH_MAX_WRONG_ATTEMPTS = 3;
 
     const ALL_ROUND_TYPES = ["mc", "match", "audio", "trueFalse", "type"];
     // Flat bonus for a session with zero wrong answers (main rounds - a
@@ -448,6 +460,14 @@
         // Either column can be picked first: `selected` tracks whichever
         // item is currently pending a match, from either side.
         let selected = null;
+        // Mismatched *attempts* (not clicks - reselecting/deselecting doesn't
+        // count), capped at MATCH_MAX_WRONG_ATTEMPTS before the round is
+        // given up as wrong instead of allowing endless retries in place.
+        let wrongAttempts = 0;
+        // Every word.id that's already had an explicit recordAnswer(false,...)
+        // from a wrong click - so failMatchRound()'s reveal step doesn't
+        // double-record the same word when it marks the rest wrong too.
+        const wrongRecordedIds = new Set();
 
         function handleItemClick(btn, col) {
             if (btn.disabled) return;
@@ -486,11 +506,43 @@
                 otherBtn.classList.add("is-wrong");
                 btn.classList.add("is-wrong");
                 recordAnswer(false, btn, btn.dataset.pair);
+                wrongRecordedIds.add(btn.dataset.pair);
+                wrongAttempts += 1;
+
+                if (wrongAttempts >= MATCH_MAX_WRONG_ATTEMPTS) {
+                    window.setTimeout(() => failMatchRound(), MATCH_WRONG_FLASH_DELAY);
+                    return;
+                }
+
                 window.setTimeout(() => {
                     otherBtn.classList.remove("is-wrong");
                     btn.classList.remove("is-wrong");
                 }, MATCH_WRONG_FLASH_DELAY);
             }
+        }
+
+        // Out of attempts: lock every remaining item, reveal the pairs the
+        // player never got to (in green, like a wrong MC/type round reveals
+        // its answer), and move on - no more free retries.
+        function failMatchRound() {
+            leftCol.querySelectorAll(".sprint-match-item").forEach(node => { node.disabled = true; });
+            rightCol.querySelectorAll(".sprint-match-item").forEach(node => { node.disabled = true; });
+
+            words.forEach(word => {
+                const leftBtn = leftCol.querySelector(`[data-pair="${word.id}"]`);
+                if (leftBtn?.classList.contains("is-locked")) return; // already correctly matched
+
+                const rightBtn = rightCol.querySelector(`[data-pair="${word.id}"]`);
+                leftBtn?.classList.remove("is-wrong");
+                rightBtn?.classList.remove("is-wrong");
+                leftBtn?.classList.add("is-correct");
+                rightBtn?.classList.add("is-correct");
+
+                if (!wrongRecordedIds.has(word.id)) recordAnswer(false, null, word.id);
+            });
+
+            state.wordsUsed += words.length;
+            advanceRound(words.map(w => w.id));
         }
 
         shuffle(words.slice()).forEach(word => {
@@ -672,11 +724,10 @@
         el.exerciseRoot.innerHTML = "";
         el.resultScore.textContent = `${state.score} ${tr("common.points")}`;
         el.resultDetail.textContent = `${tr("sprint.resultDetail", { correct: state.correctAnswers, total })} (${accuracy}%)`;
-        renderResultBreakdown();
+        const breakdownRevealDone = renderResultBreakdown();
         el.resultCoins.textContent = "";
         el.resultSaveStatus.textContent = "";
-        el.resultFriends.hidden = true;
-        el.resultFriendsList.replaceChildren();
+        resetFriendsSection();
         el.resultModal.hidden = false;
 
         // Play again/Home stay disabled for at least this long, instead of
@@ -711,7 +762,7 @@
                     if (typeof progress?.sessionCoins === "number" && progress.sessionCoins > 0) {
                         el.resultCoins.textContent = tr("trainer.coinsEarned", { count: progress.sessionCoins });
                     }
-                    renderFriendsStatus(progress?.friendsStatus);
+                    prepareFriendsStatus(progress?.friendsStatus);
                     if (progress?.completedMissions?.length) {
                         await window.PolytypeMissionCelebrate?.show?.(progress.completedMissions);
                     }
@@ -723,6 +774,13 @@
                 }
             }
         }
+
+        // Friends only fade in once the breakdown rows are fully done
+        // revealing - by now the friends content (if any) is already sitting
+        // in the DOM at opacity 0 from prepareFriendsStatus above, so this is
+        // a pure fade with no layout change.
+        await breakdownRevealDone;
+        revealFriendsSection();
 
         await minDelay;
         setResultButtonsBusy(false);
@@ -744,8 +802,12 @@
     // combo's contribution is the total score minus the flat base minus the
     // two other (separately tallied) bonuses - no separate running combo
     // tally needed.
+    // Builds every row up front (so the card's height is already final - see
+    // the RESULT_ROW_* comment above) then reveals them one at a time.
+    // Returns a promise that resolves once the last row has finished
+    // revealing, so the caller can hold the friends block until this is done.
     function renderResultBreakdown() {
-        if (!el.resultBreakdown) return;
+        if (!el.resultBreakdown) return Promise.resolve();
 
         const basePoints = state.correctAnswers * 10;
         const comboBonus = Math.max(0, state.score - basePoints - state.retryBonus - state.perfectBonus);
@@ -777,38 +839,63 @@
         }
 
         el.resultBreakdown.hidden = rows.length === 0;
-        el.resultBreakdown.replaceChildren(
-            ...rows.map(row => {
-                const rowEl = document.createElement("div");
-                rowEl.className = "sprint-result-row";
-                rowEl.innerHTML = `
-                    <span class="sprint-result-row-check">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
-                    </span>
-                    <span class="sprint-result-row-label"></span>
-                    <span class="sprint-result-row-value"></span>
-                `;
-                rowEl.querySelector(".sprint-result-row-label").textContent = row.label;
-                rowEl.querySelector(".sprint-result-row-value").textContent = row.value;
-                return rowEl;
-            })
-        );
+        const rowEls = rows.map(row => {
+            const rowEl = document.createElement("div");
+            rowEl.className = "sprint-result-row";
+            rowEl.innerHTML = `
+                <span class="sprint-result-row-check">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+                </span>
+                <span class="sprint-result-row-label"></span>
+                <span class="sprint-result-row-value"></span>
+            `;
+            rowEl.querySelector(".sprint-result-row-label").textContent = row.label;
+            rowEl.querySelector(".sprint-result-row-value").textContent = row.value;
+            return rowEl;
+        });
+        el.resultBreakdown.replaceChildren(...rowEls);
+
+        if (!rowEls.length) return Promise.resolve();
+
+        return new Promise(resolve => {
+            rowEls.forEach((rowEl, index) => {
+                window.setTimeout(() => rowEl.classList.add("is-visible"), index * RESULT_ROW_STAGGER_DELAY);
+            });
+            window.setTimeout(resolve, (rowEls.length - 1) * RESULT_ROW_STAGGER_DELAY + RESULT_ROW_REVEAL_DURATION);
+        });
+    }
+
+    // Clears any previous session's friends block and puts it back in its
+    // pre-reveal state (present-but-invisible only once there's real content
+    // to show - see prepareFriendsStatus/revealFriendsSection below).
+    function resetFriendsSection() {
+        if (!el.resultFriends || !el.resultFriendsList) return;
+        el.resultFriends.hidden = true;
+        el.resultFriends.classList.remove("is-visible");
+        el.resultFriendsList.replaceChildren();
     }
 
     // Friend list under the score: each entry's friendshipStreak only rises
     // on a day both the player and that friend play a sprint (see
     // updateFriendshipStreaksForSprint in api/complete-practice-session.js);
     // playedToday reflects that same friend's sprint activity today.
-    function renderFriendsStatus(list) {
+    //
+    // Inserts the content as soon as it's known (claiming its layout space
+    // right away) but leaves it at opacity 0 - revealFriendsSection() is what
+    // actually fades it in, once the breakdown above has finished its own
+    // reveal. Splitting "insert" from "reveal" this way means the moment the
+    // block becomes visible, it's already fully laid out - no jump.
+    function prepareFriendsStatus(list) {
         if (!el.resultFriends || !el.resultFriendsList) return;
         const entries = Array.isArray(list) ? list : [];
 
-        el.resultFriends.hidden = entries.length === 0;
         if (!entries.length) {
+            el.resultFriends.hidden = true;
             el.resultFriendsList.replaceChildren();
             return;
         }
 
+        el.resultFriends.hidden = false;
         el.resultFriendsList.replaceChildren(
             ...entries.map(entry => {
                 const row = document.createElement("div");
@@ -845,6 +932,14 @@
                 return row;
             })
         );
+    }
+
+    // Fades the already-inserted friends block in (see prepareFriendsStatus)
+    // - a no-op if there was nothing to show. Call once the breakdown's own
+    // reveal is done, so the two never compete for attention at the same time.
+    function revealFriendsSection() {
+        if (!el.resultFriends || el.resultFriends.hidden) return;
+        el.resultFriends.classList.add("is-visible");
     }
 
     // ── Audio playback (mirrors js/dictate.js's own copy) ──────────────────

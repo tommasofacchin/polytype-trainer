@@ -1710,6 +1710,18 @@ input[type="password"]:focus {
     border-radius: 14px;
     padding: 10px 14px;
     text-align: left;
+    /* Starts invisible - js/sprint.js's renderResultBreakdown() inserts every
+       row up front (so the card's height is already final) and reveals them
+       one at a time by adding .is-visible, staggered. Transition duration
+       must match RESULT_ROW_REVEAL_DURATION there. */
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 260ms var(--ease-out), transform 260ms var(--ease-out);
+}
+
+.sprint-result-row.is-visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .sprint-result-row-check {
@@ -1738,10 +1750,23 @@ input[type="password"]:focus {
     flex-direction: column;
     gap: 8px;
     width: 100%;
+    /* Same insert-then-reveal split as .sprint-result-row above: js/sprint.js
+       un-hides this (prepareFriendsStatus) as soon as the data is known, so
+       it's already occupying its layout space, then fades it in
+       (revealFriendsSection) only once the breakdown rows are done - so
+       there's never a moment where the card visibly grows. */
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 260ms var(--ease-out), transform 260ms var(--ease-out);
 }
 
 .sprint-result-friends[hidden] {
     display: none;
+}
+
+.sprint-result-friends.is-visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .sprint-result-friends-title {
@@ -1954,6 +1979,17 @@ input[type="password"]:focus {
     background: color-mix(in srgb, var(--danger) 16%, var(--surface));
     color: var(--danger);
     animation: sprint-answer-shake 320ms ease-out;
+}
+
+/* Reveal state when a match round is given up as wrong (failMatchRound) -
+   shows the pairs the player never got, same green language .sprint-mc-
+   option.is-correct uses to reveal a missed multiple-choice answer. */
+.sprint-match-item.is-correct {
+    border-color: var(--success);
+    background: color-mix(in srgb, var(--success) 16%, var(--surface));
+    color: var(--success);
+    opacity: 1;
+    animation: sprint-answer-pop 260ms var(--ease-spring);
 }
 
 .sprint-tf-claim {
@@ -5800,19 +5836,26 @@ body {
     transition: transform var(--transition);
 }
 
+/* Chevron points toward wherever the panel actually opened (up by default;
+   see .settings-select-panel below) - js/settings.js's pickDirection() sets
+   [data-direction] on the toggle each time it opens. */
 .settings-select-toggle[aria-expanded="true"] .settings-select-chevron {
     transform: rotate(180deg);
 }
 
+.settings-select-toggle[data-direction="down"][aria-expanded="true"] .settings-select-chevron {
+    transform: rotate(0deg);
+}
+
 .settings-select-panel {
     position: absolute;
-    /* Open UPWARD (anchored to the toggle's top edge). Both dropdown rows sit
-       at the bottom of the Preferences card, right above the fixed bottom nav
-       - opening downward pushed the panel off the bottom of the screen. Above
-       #app-bottom-nav's z-index:40 so it always layers on top.
+    /* Opens UPWARD by default (anchored to the toggle's top edge) - these
+       rows sit low on the page, close to the fixed bottom nav, and opening
+       downward there would push the panel off the bottom of the screen.
        top:auto cancels the `top` inherited from the shared .language-menu-panel
        class - with both top and bottom set the panel would stretch/squish
-       against its short wrapper instead of sizing to its content. */
+       against its short wrapper instead of sizing to its content. Above
+       #app-bottom-nav's z-index:40 so it always layers on top either way. */
     top: auto;
     bottom: calc(100% + 8px);
     right: 0;
@@ -5821,6 +5864,14 @@ body {
     gap: 4px;
     min-width: 140px;
     padding: 8px;
+}
+
+/* Flips to opening downward when js/settings.js's pickDirection() finds too
+   little room above the toggle (e.g. this row is near the top of the
+   screen) - swaps which edge is anchored instead of the panel's own size. */
+.settings-select-panel.opens-down {
+    top: calc(100% + 8px);
+    bottom: auto;
 }
 
 /* ---- Toast popup (transient error messages, e.g. settings.js) ------------------- */

@@ -76,8 +76,23 @@ function setupCustomSelect({ toggleId, labelId, panelId, options, initialValue, 
         );
     }
 
+    // Opens upward by default (these rows sit low on the page, close to the
+    // fixed bottom nav - see the panel's own CSS comment) but flips downward
+    // when there isn't enough room above the toggle, e.g. this row is near
+    // the top of the screen.
+    function pickDirection() {
+        const rect = toggle.getBoundingClientRect();
+        const spaceAbove = rect.top;
+        const spaceBelow = window.innerHeight - rect.bottom;
+        const PANEL_ROOM_NEEDED = 220;
+        return spaceAbove < PANEL_ROOM_NEEDED && spaceBelow > spaceAbove ? "down" : "up";
+    }
+
     function openPanel() {
         renderPanel();
+        const direction = pickDirection();
+        panel.classList.toggle("opens-down", direction === "down");
+        toggle.dataset.direction = direction;
         panel.hidden = false;
         toggle.setAttribute("aria-expanded", "true");
     }
