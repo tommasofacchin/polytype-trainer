@@ -1856,7 +1856,7 @@ input[type="password"]:focus {
 
 .sprint-prompt-word {
     font-family: var(--font-display);
-    font-size: var(--text-xl);
+    font-size: clamp(26px, 6.5vw, 32px);
     font-weight: 700;
     color: var(--text);
 }
@@ -1877,9 +1877,9 @@ input[type="password"]:focus {
     background: var(--surface);
     color: var(--text);
     font: inherit;
-    font-size: var(--text-sm);
+    font-size: var(--text-md);
     font-weight: 600;
-    padding: 16px 12px;
+    padding: 18px 12px;
     cursor: pointer;
     transition: border-color var(--transition), background var(--transition), color var(--transition);
 }
@@ -1951,9 +1951,9 @@ input[type="password"]:focus {
     background: var(--surface);
     color: var(--text);
     font: inherit;
-    font-size: var(--text-sm);
+    font-size: var(--text-md);
     font-weight: 600;
-    padding: 12px 10px;
+    padding: 14px 10px;
     cursor: pointer;
     transition: border-color var(--transition), background var(--transition), color var(--transition), opacity var(--transition);
 }
@@ -1995,7 +1995,7 @@ input[type="password"]:focus {
 .sprint-tf-claim {
     margin: 0;
     color: var(--text-soft);
-    font-size: var(--text-lg);
+    font-size: clamp(19px, 4.6vw, 22px);
     font-weight: 600;
 }
 
@@ -2013,9 +2013,9 @@ input[type="password"]:focus {
     background: var(--surface);
     color: var(--text);
     font: inherit;
-    font-size: var(--text-sm);
+    font-size: var(--text-md);
     font-weight: 700;
-    padding: 18px 12px;
+    padding: 20px 12px;
     cursor: pointer;
     transition: border-color var(--transition), background var(--transition), color var(--transition);
 }
@@ -2057,8 +2057,8 @@ input[type="password"]:focus {
     background: var(--surface);
     color: var(--text);
     font: inherit;
-    font-size: var(--text-sm);
-    padding: 12px 14px;
+    font-size: var(--text-md);
+    padding: 14px 14px;
     min-width: 0;
 }
 
@@ -2086,7 +2086,7 @@ input[type="password"]:focus {
     background: var(--accent);
     color: var(--accent-on, var(--text-inverse));
     font: inherit;
-    font-size: var(--text-sm);
+    font-size: var(--text-md);
     font-weight: 700;
     padding: 0 var(--space-4);
     cursor: pointer;
@@ -2102,6 +2102,21 @@ input[type="password"]:focus {
     color: var(--danger);
     font-size: var(--text-sm);
     font-weight: 600;
+}
+
+/* Phones: nudge the answer buttons a little bigger (font + tap height) than
+   the already-bumped desktop base, since the exercise column is full-width
+   here and small options are the fiddliest thing to tap on a small screen. */
+@media (max-width: 600px) {
+    .sprint-mc-option,
+    .sprint-tf-btn,
+    .sprint-type-input,
+    .sprint-type-submit {
+        font-size: 17px;
+    }
+
+    .sprint-mc-option { padding: 19px 12px; }
+    .sprint-tf-btn { padding: 22px 12px; }
 }
 
 /* ---- Focus mode ------------------------------------------------------------------ */
@@ -2359,17 +2374,18 @@ input[type="password"]:focus {
         font-size: var(--text-lg);
     }
 
-    /* Word list: tighter type so rows aren't oversized on mobile */
     .list-card {
         padding: 12px 10px;
     }
 
+    /* Bigger word + answer on phones (the row stacks to one column here, so
+       there's the width for it). Was --text-lg (18px). */
     .script {
-        font-size: var(--text-lg);
+        font-size: 22px;
     }
 
     .meaning-input {
-        font-size: var(--text-lg) !important;
+        font-size: 22px !important;
     }
 
     #rows-container {
@@ -6108,7 +6124,7 @@ body {
     width: 100%;
     padding: 6px 0;
     min-height: 2em;
-    font-size: var(--text-lg);
+    font-size: clamp(20px, 5vw, 24px);
     font-family: inherit;
     font-weight: 500;
     color: var(--text);

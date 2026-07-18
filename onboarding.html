@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" class="auth-document">
+<head>
+    <meta charset="UTF-8">
+    <title data-i18n="onboarding.title">Welcome - Polytype Trainer</title>
+    <link rel="icon" type="image/svg+xml" href="assets/flags/china.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://www.gstatic.com">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap">
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body class="auth-page-body">
+  <main class="auth-page">
+    <section id="onboarding-panel" class="auth-panel" aria-label="Set up your profile">
+      <div style="display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:6px">
+        <div style="width:66px;height:66px;border-radius:20px;background:linear-gradient(160deg,#2fe6a4,#17b784);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:600;font-size:38px;color:#0d2b22;box-shadow:0 12px 30px -12px rgba(47,230,164,.6);margin-bottom:16px">P</div>
+        <h2 style="font-family:var(--font-display);font-weight:600;font-size:24px;margin:0" data-i18n="onboarding.heading">Welcome!</h2>
+        <p style="font-size:13px;font-weight:700;color:var(--text-soft);margin:6px 0 0" data-i18n="onboarding.subtitle">Set up your profile to get started.</p>
+      </div>
+
+      <form id="onboarding-form" class="auth-form auth-page-form">
+        <label>
+          <span data-i18n="profile.fullName">Full name</span>
+          <input id="onboarding-name" type="text" autocomplete="name" maxlength="40" placeholder="Tommaso" data-i18n-placeholder="profile.fullNamePlaceholder" required>
+        </label>
+        <label>
+          <span data-i18n="profile.username">Username</span>
+          <input id="onboarding-handle" type="text" autocomplete="username" maxlength="20" inputmode="latin" placeholder="@tommaso" data-i18n-placeholder="profile.usernamePlaceholder" required>
+        </label>
+
+        <button id="onboarding-submit-btn" class="restart-btn auth-submit" type="submit" data-i18n="onboarding.continue">Continue</button>
+        <p id="onboarding-status" class="auth-status" aria-live="polite"></p>
+      </form>
+    </section>
+  </main>
+
+  <script src="js/firebase-config.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-auth-compat.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/firebase-client.js"></script>
+  <script src="js/onboarding.js"></script>
+</body>
+</html>

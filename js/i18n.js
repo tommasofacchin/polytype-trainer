@@ -171,6 +171,12 @@
             "profile.friends": "Friends",
             "profile.viewFriends": "View leaderboard",
 
+            "onboarding.title": "Welcome - Polytype Trainer",
+            "onboarding.heading": "Welcome!",
+            "onboarding.subtitle": "Set up your profile to get started.",
+            "onboarding.continue": "Continue",
+            "onboarding.saving": "Saving...",
+
             "auth.title": "Sign in - Polytype Trainer",
             "auth.form": "Authentication form",
             "auth.signIn": "Sign in",
@@ -709,6 +715,12 @@
             "profile.badgeCleanDesc": "Hai finito un round con ottima precisione.",
             "profile.friends": "Amici",
             "profile.viewFriends": "Vedi classifica",
+
+            "onboarding.title": "Benvenuto - Polytype Trainer",
+            "onboarding.heading": "Benvenuto!",
+            "onboarding.subtitle": "Configura il tuo profilo per iniziare.",
+            "onboarding.continue": "Continua",
+            "onboarding.saving": "Salvataggio...",
 
             "auth.title": "Accesso - Polytype Trainer",
             "auth.form": "Modulo di autenticazione",

@@ -74,6 +74,23 @@
         return getCurrentPage() !== "languages.html";
     }
 
+    // Runs one step earlier than the language picker above: a signed-in
+    // account that has never set a username AND has no courses yet is a
+    // brand-new signup that still needs to say who they are, so it's sent to
+    // onboarding.html (full name + username) before anything else. The
+    // no-courses guard keeps pre-existing players (who may also lack a
+    // handle) out of this - they already know the app and aren't "new". Once
+    // onboarding sets a handle, this returns false and the language-picker
+    // gate takes over. Same profile.courses-presence check as above ensures
+    // the profile has actually loaded before deciding.
+    function shouldForceOnboarding(profile) {
+        if (!window.PolytypeFirebase?.isSignedIn?.()) return false;
+        if (!profile?.courses) return false;
+        if (profile.handle) return false;
+        if (Object.keys(profile.courses).length > 0) return false;
+        return getCurrentPage() !== "onboarding.html";
+    }
+
     function evaluate(profile) {
         const tutorial = profile?.tutorial;
         clearStepUi();
@@ -89,6 +106,15 @@
         // to be re-applied per page.
         const navEl = document.getElementById("app-bottom-nav");
         if (navEl) navEl.inert = Boolean(tutorial?.active);
+
+        // Onboarding comes before the language picker (and before any
+        // tutorial step). onboarding.html isn't a router page - it has its
+        // own script set, not the app shell - so this always uses a full
+        // page load, never the soft router.navigate the gates below can use.
+        if (shouldForceOnboarding(profile)) {
+            window.location.href = "onboarding.html";
+            return;
+        }
 
         if (shouldForceLanguagePicker(profile)) {
             // Same hard-vs-soft redirect reasoning as the tutorial step
