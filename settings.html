@@ -30,30 +30,29 @@
         <div class="settings-section">
             <div class="settings-section-title" data-i18n="settings.sectionProfile">Profile</div>
             <div class="settings-card">
-                <div class="settings-row">
-                    <div class="settings-row-icon" aria-hidden="true">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg>
+                <form id="profile-form">
+                    <div class="settings-row">
+                        <div class="settings-row-icon" aria-hidden="true">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg>
+                        </div>
+                        <div class="settings-row-body">
+                            <span class="settings-row-label" data-i18n="profile.fullName">Full name</span>
+                            <input id="profile-name-input" class="settings-input" type="text" autocomplete="name" maxlength="40" placeholder="Tommaso" data-i18n-placeholder="profile.fullNamePlaceholder" style="width:100%;margin-top:6px">
+                        </div>
                     </div>
-                    <div class="settings-row-body">
-                        <span class="settings-row-label" data-i18n="profile.fullName">Full name</span>
-                        <form id="profile-name-form">
-                            <input id="profile-name-input" class="settings-input" type="text" autocomplete="name" maxlength="40" placeholder="Tommaso" data-i18n-placeholder="profile.fullNamePlaceholder">
-                            <button id="profile-name-save-btn" class="restart-btn settings-save-btn" type="submit" data-i18n="profile.saveName">Edit</button>
-                        </form>
+                    <div class="settings-row">
+                        <div class="settings-row-icon" aria-hidden="true">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5"/><path d="M9 9c0 1.7 1.3 3 3 3s3-1.3 3-3-1.3-4-3-4-3 2.3-3 4Z"/></svg>
+                        </div>
+                        <div class="settings-row-body">
+                            <span class="settings-row-label" data-i18n="profile.username">Username</span>
+                            <input id="profile-handle-input" class="settings-input" type="text" autocomplete="username" maxlength="20" inputmode="latin" pattern="[a-z0-9_]{3,20}" placeholder="@tommaso" data-i18n-placeholder="profile.usernamePlaceholder" style="width:100%;margin-top:6px">
+                        </div>
                     </div>
-                </div>
-                <div class="settings-row">
-                    <div class="settings-row-icon" aria-hidden="true">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5"/><path d="M9 9c0 1.7 1.3 3 3 3s3-1.3 3-3-1.3-4-3-4-3 2.3-3 4Z"/></svg>
+                    <div class="settings-row">
+                        <button id="profile-save-btn" class="restart-btn" type="submit" style="width:100%;justify-content:center" data-i18n="common.save">Save</button>
                     </div>
-                    <div class="settings-row-body">
-                        <span class="settings-row-label" data-i18n="profile.username">Username</span>
-                        <form id="profile-handle-form">
-                            <input id="profile-handle-input" class="settings-input" type="text" autocomplete="username" maxlength="20" inputmode="latin" pattern="[a-z0-9_]{3,20}" placeholder="@tommaso" data-i18n-placeholder="profile.usernamePlaceholder">
-                            <button id="profile-handle-save-btn" class="restart-btn settings-save-btn" type="submit" data-i18n="profile.saveUsername">Edit</button>
-                        </form>
-                    </div>
-                </div>
+                </form>
             </div>
             <p id="profile-edit-status" class="settings-status" aria-live="polite" data-i18n="profile.signInToEdit">Sign in to edit your profile.</p>
         </div>
@@ -89,10 +88,13 @@
                         <span class="settings-row-label" data-i18n="settings.appLanguage">App language</span>
                         <p class="settings-row-help" data-i18n="settings.appLanguageHelp">Language used for menus and instructions.</p>
                     </div>
-                    <select id="settings-language-select" class="settings-input" style="flex:0 0 auto;width:auto" data-i18n-aria-label="settings.appLanguage" aria-label="App language">
-                        <option value="en">English</option>
-                        <option value="it">Italiano</option>
-                    </select>
+                    <div class="settings-select-menu" id="settings-language-menu-wrap">
+                        <button type="button" class="settings-select-toggle" id="settings-language-toggle" aria-haspopup="true" aria-expanded="false" data-i18n-aria-label="settings.appLanguage" aria-label="App language">
+                            <span id="settings-language-toggle-label">English</span>
+                            <svg class="settings-select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                        </button>
+                        <div id="settings-language-panel" class="language-menu-panel settings-select-panel" role="menu" hidden></div>
+                    </div>
                 </div>
                 <div class="settings-row">
                     <div class="settings-row-icon" aria-hidden="true">
@@ -102,12 +104,13 @@
                         <span class="settings-row-label" data-i18n="settings.dailyGoal">Daily XP goal</span>
                         <p class="settings-row-help" data-i18n="settings.dailyGoalHelp">How much XP you aim to earn each day.</p>
                     </div>
-                    <select id="settings-daily-goal-select" class="settings-input" style="flex:0 0 auto;width:auto" data-i18n-aria-label="settings.dailyGoal" aria-label="Daily XP goal">
-                        <option value="20">20 XP</option>
-                        <option value="50">50 XP</option>
-                        <option value="100">100 XP</option>
-                        <option value="200">200 XP</option>
-                    </select>
+                    <div class="settings-select-menu" id="settings-daily-goal-menu-wrap">
+                        <button type="button" class="settings-select-toggle" id="settings-daily-goal-toggle" aria-haspopup="true" aria-expanded="false" data-i18n-aria-label="settings.dailyGoal" aria-label="Daily XP goal">
+                            <span id="settings-daily-goal-toggle-label">50 XP</span>
+                            <svg class="settings-select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                        </button>
+                        <div id="settings-daily-goal-panel" class="language-menu-panel settings-select-panel" role="menu" hidden></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -124,17 +127,14 @@
                         <p id="settings-account-email" class="settings-row-help">-</p>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <div id="settings-password-section" class="settings-section" hidden>
-            <div class="settings-section-title" data-i18n="settings.sectionSecurity">Security</div>
-            <div class="settings-card">
                 <div class="settings-row">
+                    <div class="settings-row-icon" aria-hidden="true">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    </div>
                     <div class="settings-row-body" style="width:100%">
-                        <span class="settings-row-label" data-i18n="settings.changePassword">Change password</span>
+                        <span id="settings-password-label" class="settings-row-label" data-i18n="settings.changePassword">Change password</span>
+                        <p id="settings-password-help" class="settings-row-help" data-i18n="settings.changePasswordHelp">Update the password used to sign in with your email.</p>
                         <form id="settings-password-form" style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
-                            <input id="settings-current-password" class="settings-input" type="password" autocomplete="current-password" data-i18n-placeholder="settings.currentPasswordPlaceholder" placeholder="Current password">
                             <input id="settings-new-password" class="settings-input" type="password" autocomplete="new-password" data-i18n-placeholder="settings.newPasswordPlaceholder" placeholder="New password">
                             <input id="settings-confirm-new-password" class="settings-input" type="password" autocomplete="new-password" data-i18n-placeholder="settings.confirmPasswordPlaceholder" placeholder="Confirm new password">
                             <button id="settings-password-save-btn" class="restart-btn settings-save-btn" type="submit" style="align-self:flex-start" data-i18n="settings.updatePassword">Update password</button>
@@ -146,15 +146,13 @@
         </div>
 
         <div class="settings-section">
-            <div class="settings-section-title" data-i18n="settings.sectionSession">Session</div>
-            <button id="settings-logout-btn" class="settings-logout-btn" type="button">
+            <button id="settings-logout-btn" class="settings-secondary-btn" type="button">
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg>
                 <span data-i18n="trainer.signOut">Log out</span>
             </button>
         </div>
 
         <div class="settings-section">
-            <div class="settings-section-title" data-i18n="settings.sectionDangerZone">Danger zone</div>
             <button id="settings-delete-account-btn" class="settings-logout-btn" type="button">
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
                 <span data-i18n="settings.deleteAccount">Delete account</span>
@@ -170,6 +168,7 @@
             <p id="settings-delete-status" class="settings-status" aria-live="polite"></p>
         </div>
     </main>
+    <div id="settings-toast" class="toast-popup" role="alert" aria-live="assertive"></div>
     <div id="app-bottom-nav"></div>
 
     <script src="js/firebase-config.js"></script>

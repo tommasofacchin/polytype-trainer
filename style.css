@@ -5544,6 +5544,119 @@ body {
     transform: translateY(1px);
 }
 
+.settings-secondary-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--surface-soft);
+    color: var(--text);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-lg);
+    padding: 14px;
+    font-family: var(--font-sans);
+    font-weight: 800;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background var(--transition);
+}
+
+.settings-secondary-btn:hover, .settings-secondary-btn:focus-visible {
+    background: var(--surface-alt);
+}
+
+.settings-secondary-btn:active {
+    transform: translateY(1px);
+}
+
+/* Custom dropdown for Settings rows (App language, Daily XP goal) - same
+   open/close/panel pattern as the topbar's study-language switcher
+   (.language-menu/.language-menu-panel/.language-menu-item in the
+   header section above), reused here instead of a native <select> so it
+   matches the app's own look rather than the browser's. */
+.settings-select-menu {
+    position: relative;
+    flex: 0 0 auto;
+}
+
+.settings-select-toggle {
+    appearance: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bg);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-md);
+    padding: 10px 12px;
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: border-color var(--transition);
+}
+
+.settings-select-toggle:hover, .settings-select-toggle:focus-visible {
+    border-color: var(--border-strong);
+    outline: none;
+}
+
+.settings-select-toggle[aria-expanded="true"] {
+    border-color: color-mix(in srgb, var(--accent) 42%, var(--border));
+}
+
+.settings-select-chevron {
+    flex: 0 0 auto;
+    transition: transform var(--transition);
+}
+
+.settings-select-toggle[aria-expanded="true"] .settings-select-chevron {
+    transform: rotate(180deg);
+}
+
+.settings-select-panel {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    /* Above #app-bottom-nav's z-index:40 - this page's rows can sit close
+       enough to the fixed bottom nav that a panel opening downward would
+       otherwise render underneath it. */
+    z-index: 50;
+    display: grid;
+    gap: 4px;
+    min-width: 140px;
+    padding: 8px;
+}
+
+/* ---- Toast popup (transient error messages, e.g. settings.js) ------------------- */
+
+.toast-popup {
+    position: fixed;
+    left: 50%;
+    bottom: 84px;
+    z-index: 200;
+    max-width: calc(100% - 32px);
+    background: var(--surface);
+    border: 1px solid var(--danger-border);
+    color: var(--text);
+    border-radius: var(--radius-lg);
+    padding: 12px 16px;
+    font-weight: 700;
+    font-size: 13px;
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, 8px);
+    transition: opacity var(--transition), transform var(--transition);
+}
+
+.toast-popup.is-visible {
+    opacity: 1;
+    transform: translate(-50%, 0);
+    pointer-events: auto;
+}
+
 /* ---- Dictate page ------------------------------------------------------------- */
 /* Was an inline <style> block in dictate.html's own <head> - js/router.js's
    soft navigation only ever swaps <body> content (see its navigate()

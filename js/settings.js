@@ -4,8 +4,7 @@ const maxSourceAvatarBytes = 10 * 1024 * 1024;
 const maxUploadAvatarBytes = 2 * 1024 * 1024;
 const avatarCanvasSize = 512;
 const sfxMutedKey = "polytype-sfx-muted";
-let isSavingHandle = false;
-let isSavingName = false;
+let isSavingProfile = false;
 let isUploadingAvatar = false;
 
 function tr(key, params = {}) {
@@ -42,34 +41,113 @@ function setupThemeToggle() {
     });
 }
 
-function setupLanguageSelect() {
-    const select = document.getElementById("settings-language-select");
-    if (!select || !window.PolytypeI18n) return;
+// Generic custom dropdown backing both settings-select-menu rows below (see
+// .settings-select-* / .language-menu-* in style.css) - same
+// open/close/outside-click pattern as the topbar's study-language switcher
+// in js/app-shell.js, just driven by an options array instead of a fixed
+// set of studied languages. Returns { setValue } so callers can resync the
+// displayed label when the profile loads from Firebase after the initial
+// (possibly cache-only) render.
+function setupCustomSelect({ toggleId, labelId, panelId, options, initialValue, onSelect }) {
+    const toggle = document.getElementById(toggleId);
+    const label = document.getElementById(labelId);
+    const panel = document.getElementById(panelId);
+    if (!toggle || !label || !panel) return null;
 
-    select.value = window.PolytypeI18n.getLanguage();
-    select.addEventListener("change", () => {
-        window.PolytypeI18n.setLanguage(select.value);
+    let currentValue = initialValue;
+
+    function renderPanel() {
+        panel.replaceChildren(
+            ...options.map(option => {
+                const item = document.createElement("button");
+                item.type = "button";
+                item.className = `language-menu-item${option.value === currentValue ? " is-active" : ""}`;
+                item.setAttribute("role", "menuitemradio");
+                item.setAttribute("aria-checked", String(option.value === currentValue));
+                item.textContent = option.label;
+                item.addEventListener("click", () => {
+                    closePanel();
+                    if (option.value === currentValue) return;
+                    setValue(option.value);
+                    onSelect(option.value);
+                });
+                return item;
+            })
+        );
+    }
+
+    function openPanel() {
+        renderPanel();
+        panel.hidden = false;
+        toggle.setAttribute("aria-expanded", "true");
+    }
+
+    function closePanel() {
+        panel.hidden = true;
+        toggle.setAttribute("aria-expanded", "false");
+    }
+
+    function setValue(value) {
+        currentValue = value;
+        const match = options.find(option => option.value === value);
+        if (match) label.textContent = match.label;
+    }
+
+    toggle.addEventListener("click", () => {
+        if (panel.hidden) openPanel(); else closePanel();
+    });
+
+    document.addEventListener("click", event => {
+        if (panel.hidden) return;
+        if (toggle.contains(event.target) || panel.contains(event.target)) return;
+        closePanel();
+    });
+
+    setValue(initialValue);
+    return { setValue };
+}
+
+let languageSelectApi = null;
+let dailyGoalSelectApi = null;
+const dailyGoalOptions = [20, 50, 100, 200].map(xp => ({ value: String(xp), label: `${xp} XP` }));
+
+function setupLanguageSelect() {
+    if (!window.PolytypeI18n) return;
+
+    languageSelectApi = setupCustomSelect({
+        toggleId: "settings-language-toggle",
+        labelId: "settings-language-toggle-label",
+        panelId: "settings-language-panel",
+        options: [
+            { value: "en", label: "English" },
+            { value: "it", label: "Italiano" }
+        ],
+        initialValue: window.PolytypeI18n.getLanguage(),
+        onSelect: value => window.PolytypeI18n.setLanguage(value)
     });
 }
 
 function setupDailyGoalSelect() {
-    const select = document.getElementById("settings-daily-goal-select");
-    if (!select) return;
-
     const cached = readCachedProfile();
-    if (cached?.dailyGoalXp) select.value = String(cached.dailyGoalXp);
 
-    select.addEventListener("change", async () => {
-        const firebaseClient = window.PolytypeFirebase;
-        if (!firebaseClient?.isSignedIn?.()) {
-            setEditStatus(tr("profile.signInToEdit"), "error");
-            return;
-        }
+    dailyGoalSelectApi = setupCustomSelect({
+        toggleId: "settings-daily-goal-toggle",
+        labelId: "settings-daily-goal-toggle-label",
+        panelId: "settings-daily-goal-panel",
+        options: dailyGoalOptions,
+        initialValue: String(cached?.dailyGoalXp || 50),
+        onSelect: async value => {
+            const firebaseClient = window.PolytypeFirebase;
+            if (!firebaseClient?.isSignedIn?.()) {
+                showToast(tr("profile.signInToEdit"));
+                return;
+            }
 
-        try {
-            await firebaseClient.setDailyGoal(Number(select.value));
-        } catch (error) {
-            setEditStatus(getProfileErrorMessage(error), "error");
+            try {
+                await firebaseClient.setDailyGoal(Number(value));
+            } catch (error) {
+                showToast(getProfileErrorMessage(error));
+            }
         }
     });
 }
@@ -86,10 +164,14 @@ function setupPasswordForm() {
 
 async function savePassword() {
     const firebaseClient = window.PolytypeFirebase;
-    const currentInput = document.getElementById("settings-current-password");
     const newInput = document.getElementById("settings-new-password");
     const confirmInput = document.getElementById("settings-confirm-new-password");
-    if (!currentInput || !newInput || !confirmInput) return;
+    if (!newInput || !confirmInput) return;
+
+    if (!firebaseClient?.isSignedIn?.()) {
+        setPasswordStatus(tr("profile.signInToEdit"), "error");
+        return;
+    }
 
     if (newInput.value !== confirmInput.value) {
         setPasswordStatus(tr("auth.passwordMismatch"), "error");
@@ -103,18 +185,36 @@ async function savePassword() {
         return;
     }
 
+    const wasLinking = !firebaseClient.hasPasswordProvider();
     setPasswordStatus(tr("settings.savingPassword"));
 
     try {
-        await firebaseClient.reauthenticate(currentInput.value);
-        await firebaseClient.changePassword(newInput.value);
-        setPasswordStatus(tr("settings.passwordUpdated"), "success");
-        currentInput.value = "";
+        await firebaseClient.setPassword(newInput.value);
+        setPasswordStatus(tr(wasLinking ? "settings.passwordSet" : "settings.passwordUpdated"), "success");
         newInput.value = "";
         confirmInput.value = "";
+        refreshPasswordSectionCopy();
     } catch (error) {
         setPasswordStatus(firebaseClient.getErrorMessage(error), "error");
     }
+}
+
+// Reflects whether this account already has an email/password credential
+// linked - "set" copy (first-time linking, e.g. for a Google-only account)
+// vs "change" copy (updating an existing one). Called after sign-in
+// resolves and again right after a successful setPassword, since linking
+// flips this from false to true without a page reload.
+function refreshPasswordSectionCopy() {
+    const firebaseClient = window.PolytypeFirebase;
+    const labelEl = document.getElementById("settings-password-label");
+    const helpEl = document.getElementById("settings-password-help");
+    const btn = document.getElementById("settings-password-save-btn");
+    if (!firebaseClient || !labelEl || !helpEl || !btn) return;
+
+    const hasPassword = firebaseClient.hasPasswordProvider();
+    labelEl.textContent = tr(hasPassword ? "settings.changePassword" : "settings.setPassword");
+    helpEl.textContent = tr(hasPassword ? "settings.changePasswordHelp" : "settings.setPasswordHelp");
+    btn.textContent = tr(hasPassword ? "settings.updatePassword" : "settings.setPassword");
 }
 
 function setPasswordStatus(value, tone = "") {
@@ -218,22 +318,14 @@ function renderFromCache() {
 }
 
 function setupProfileControls() {
-    const nameForm = document.getElementById("profile-name-form");
-    const handleForm = document.getElementById("profile-handle-form");
+    const profileForm = document.getElementById("profile-form");
     const avatarInput = document.getElementById("profile-avatar-input");
     const avatarButton = document.getElementById("profile-avatar-upload-btn");
 
-    if (nameForm) {
-        nameForm.addEventListener("submit", async event => {
+    if (profileForm) {
+        profileForm.addEventListener("submit", async event => {
             event.preventDefault();
-            await saveName();
-        });
-    }
-
-    if (handleForm) {
-        handleForm.addEventListener("submit", async event => {
-            event.preventDefault();
-            await saveHandle();
+            await saveProfile();
         });
     }
 
@@ -277,84 +369,53 @@ function setupFirebaseSync() {
 
         renderAvatar(document.getElementById("profile-page-avatar"), authState.profile);
 
-        const passwordSection = document.getElementById("settings-password-section");
-        if (passwordSection) {
-            passwordSection.hidden = firebaseClient.getAuthProvider?.() !== "password";
+        if (authState.user) refreshPasswordSectionCopy();
+
+        if (authState.profile?.dailyGoalXp) {
+            dailyGoalSelectApi?.setValue(String(authState.profile.dailyGoalXp));
         }
 
-        const dailyGoalSelect = document.getElementById("settings-daily-goal-select");
-        if (dailyGoalSelect && authState.profile?.dailyGoalXp && document.activeElement !== dailyGoalSelect) {
-            dailyGoalSelect.value = String(authState.profile.dailyGoalXp);
-        }
-
-        if (!authState.user) {
-            setEditStatus(tr("profile.signInToEdit"));
-        } else if (authState.profile) {
-            setEditStatus(tr("profile.profileReady"), "success");
-        }
+        setEditStatus(authState.user ? "" : tr("profile.signInToEdit"));
     });
 }
 
-async function saveName() {
+async function saveProfile() {
     const firebaseClient = window.PolytypeFirebase;
-    const input = document.getElementById("profile-name-input");
-    if (!input) return;
+    const nameInput = document.getElementById("profile-name-input");
+    const handleInput = document.getElementById("profile-handle-input");
+    if (!nameInput || !handleInput) return;
 
     if (!firebaseClient?.isSignedIn?.()) {
         setEditStatus(tr("profile.signInToEdit"), "error");
         return;
     }
 
-    const name = input.value.replace(/\s+/g, " ").trim();
+    const name = nameInput.value.replace(/\s+/g, " ").trim();
     if (!name) {
         setEditStatus(tr("profile.nameInvalid"), "error");
-        input.focus();
+        nameInput.focus();
         return;
     }
 
-    isSavingName = true;
-    updateEditControls();
-    setEditStatus(tr("profile.savingName"));
-
-    try {
-        await firebaseClient.setDisplayName(name);
-        setEditStatus(tr("profile.nameSaved"), "success");
-    } catch (error) {
-        setEditStatus(getProfileErrorMessage(error, "name"), "error");
-    } finally {
-        isSavingName = false;
-        updateEditControls();
-    }
-}
-
-async function saveHandle() {
-    const firebaseClient = window.PolytypeFirebase;
-    const input = document.getElementById("profile-handle-input");
-    if (!input) return;
-
-    if (!firebaseClient?.isSignedIn?.()) {
-        setEditStatus(tr("profile.signInToEdit"), "error");
-        return;
-    }
-
-    const handle = normalizeHandleInput(input.value);
+    const handle = normalizeHandleInput(handleInput.value);
     if (!handlePattern.test(handle)) {
         setEditStatus(tr("profile.handleInvalid"), "error");
-        input.focus();
+        handleInput.focus();
         return;
     }
 
-    isSavingHandle = true;
+    isSavingProfile = true;
     updateEditControls();
-    setEditStatus(tr("profile.savingUsername"));
 
+    let stage = "name";
     try {
+        await firebaseClient.setDisplayName(name);
+        stage = "handle";
         await firebaseClient.setUserHandle(handle);
-        setEditStatus(tr("profile.usernameSaved"), "success");
     } catch (error) {
-        setEditStatus(getProfileErrorMessage(error), "error");
+        showToast(getProfileErrorMessage(error, stage));
     } finally {
-        isSavingHandle = false;
+        isSavingProfile = false;
         updateEditControls();
     }
 }
@@ -477,17 +538,15 @@ function renderAvatar(element, profile) {
 
 function updateEditControls() {
     const signedIn = Boolean(window.PolytypeFirebase?.isSignedIn?.());
-    const busy = isSavingHandle || isSavingName || isUploadingAvatar;
+    const busy = isSavingProfile || isUploadingAvatar;
     const nameInput = document.getElementById("profile-name-input");
-    const nameButton = document.getElementById("profile-name-save-btn");
     const handleInput = document.getElementById("profile-handle-input");
-    const handleButton = document.getElementById("profile-handle-save-btn");
+    const saveButton = document.getElementById("profile-save-btn");
     const avatarButton = document.getElementById("profile-avatar-upload-btn");
 
     if (nameInput) nameInput.disabled = !signedIn || busy;
-    if (nameButton) nameButton.disabled = !signedIn || busy;
     if (handleInput) handleInput.disabled = !signedIn || busy;
-    if (handleButton) handleButton.disabled = !signedIn || busy;
+    if (saveButton) saveButton.disabled = !signedIn || busy;
     if (avatarButton) avatarButton.disabled = !signedIn || busy;
 }
 
@@ -497,6 +556,20 @@ function setEditStatus(value, tone = "") {
 
     element.textContent = value;
     element.dataset.tone = tone;
+}
+
+let toastHideTimer = null;
+
+function showToast(message) {
+    const element = document.getElementById("settings-toast");
+    if (!element) return;
+
+    clearTimeout(toastHideTimer);
+    element.textContent = message;
+    element.classList.add("is-visible");
+    toastHideTimer = setTimeout(() => {
+        element.classList.remove("is-visible");
+    }, 4000);
 }
 
 function getProfileErrorMessage(error, context = "handle") {

@@ -38,8 +38,9 @@
         setDailyGoal,
         uploadProfileAvatar,
         getAuthProvider,
+        hasPasswordProvider,
         reauthenticate,
-        changePassword,
+        setPassword,
         deleteAccount,
         getErrorMessage: getAuthErrorMessage,
         searchUsers,
@@ -331,11 +332,22 @@
         return result;
     }
 
-    // "password" | "google.com" | null (no signed-in user). A user can only
-    // ever have signed up one way in this app (no account-linking UI), so
-    // the first provider entry is always the only one that matters.
+    // "password" | "google.com" | null (no signed-in user) - the provider
+    // used for the current sign-in. Only meaningful for choosing HOW to
+    // reauthenticate a stale session (reauthenticate/deleteAccount below);
+    // it does not mean the account only has that one provider linked - see
+    // hasPasswordProvider, which checks all of them.
     function getAuthProvider() {
         return state.user?.providerData?.[0]?.providerId || null;
+    }
+
+    // Whether this account already has an email/password credential linked,
+    // regardless of which provider the current session signed in with -
+    // this app lets an account carry both Google and password sign-in at
+    // once (see setPassword below), so a Google-session user can still
+    // already have one.
+    function hasPasswordProvider() {
+        return Boolean(state.user?.providerData?.some(entry => entry.providerId === "password"));
     }
 
     // Required by Firebase before either updatePassword or delete() below
@@ -355,10 +367,29 @@
         return state.user.reauthenticateWithCredential(credential);
     }
 
-    async function changePassword(newPassword) {
+    // Adds or updates this account's email/password credential - links one
+    // for the first time on an account that only ever signed in with Google
+    // (so it can then sign in either way, per settings.html's Account
+    // section), or updates the existing one otherwise. Either path can hit
+    // auth/requires-recent-login on a stale session; every account here can
+    // sign in with Google (see auth.html), so that's always a safe way to
+    // silently refresh the session without asking for a password the user
+    // may not remember - or, in the linking case, doesn't have yet.
+    async function setPassword(newPassword) {
         assertConfigured();
         if (!state.user) throw new Error(tr("auth.signInRequired"));
-        return state.user.updatePassword(newPassword);
+
+        const apply = () => hasPasswordProvider()
+            ? state.user.updatePassword(newPassword)
+            : state.user.linkWithCredential(window.firebase.auth.EmailAuthProvider.credential(state.user.email, newPassword));
+
+        try {
+            await apply();
+        } catch (error) {
+            if (error?.code !== "auth/requires-recent-login") throw error;
+            await state.user.reauthenticateWithPopup(new window.firebase.auth.GoogleAuthProvider());
+            await apply();
+        }
     }
 
     // Deletes all server-side data first (api/update-profile.js's "delete"
@@ -737,6 +768,9 @@
             "auth/invalid-credential": tr("auth.wrongLogin"),
             "auth/requires-recent-login": tr("auth.reauthRequired"),
             "auth/too-many-requests": tr("auth.tooManyRequests"),
+            "auth/user-mismatch": tr("auth.reauthRequired"),
+            "auth/popup-blocked": tr("auth.popupBlocked"),
+            "auth/credential-already-in-use": tr("auth.credentialInUse"),
             "auth/operation-not-allowed": tr("auth.googleNotEnabled"),
             "auth/popup-closed-by-user": tr("auth.googlePopupClosed"),
             "api/401": tr("auth.signInRequired"),
