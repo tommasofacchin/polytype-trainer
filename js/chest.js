@@ -194,15 +194,6 @@
             card.querySelector(".chest-item-label").textContent = item.label;
             stage.replaceChildren(card);
 
-            // The XP card is where the stars launch from, so the burst reads
-            // as the reward itself flying into the bar.
-            if (item.kind === "xp" && typeof reward?.totalXp === "number") {
-                // In demo mode the profile cache never changed, so letting the
-                // burst release would slide the bar straight back down while
-                // the overlay is still open. Hold it and release on close.
-                window.PolytypeAppShell?.playXpGain?.(reward.totalXp, card, { keepHeld: demo });
-            }
-
             await waitForTap(overlay);
 
             // Dismiss the tapped card - it drops back toward the chest and
@@ -237,9 +228,23 @@
             }, { once: true });
         });
 
-        // Any level-up the chest triggered is still animating out of
-        // playXpGain above; releasing here is a no-op if it already finished.
-        window.PolytypeAppShell?.releaseXpDisplay?.();
+        // Captured before the overlay goes away: the stars fly from where the
+        // XP chip was sitting, but they only fly *after* it's gone, so the
+        // element itself can't be measured by then.
+        const xpChip = finalRewards.querySelector(".chest-reward-chip.is-xp");
+        const xpOrigin = xpChip ? xpChip.getBoundingClientRect() : null;
+
         close();
+
+        // Deliberately after Collect rather than on the XP card's reveal: the
+        // burst is the payoff for banking the reward, and with the overlay
+        // dismissed there's nothing between the stars and the header bar.
+        if (typeof reward?.totalXp === "number" && xpOrigin) {
+            await window.PolytypeAppShell?.playXpGain?.(reward.totalXp, xpOrigin, { keepHeld: demo });
+        }
+
+        // No-op when playXpGain already released; the demo path relies on it,
+        // since keepHeld leaves the inflated value on screen until here.
+        window.PolytypeAppShell?.releaseXpDisplay?.();
     }
 })();

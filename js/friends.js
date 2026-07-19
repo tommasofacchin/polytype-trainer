@@ -190,12 +190,57 @@ function setupLeaderboardTabs() {
     document.querySelectorAll("[data-leaderboard]").forEach(tab => {
         tab.addEventListener("click", () => {
             if (activeLeaderboard === tab.dataset.leaderboard) return;
+
+            // FLIP: measure where every row is now, re-render into the new
+            // order, then animate each row from its old position to its new
+            // one. Cheaper and far smoother than transitioning layout - the
+            // rows are already in their final places, and only a transform is
+            // animated, so nothing reflows mid-flight.
+            const before = measureRowPositions();
             activeLeaderboard = tab.dataset.leaderboard;
             syncLeaderboardTabs();
             renderLeaderboard(lastLeaderboard);
+            animateRowReorder(before);
         });
     });
     syncLeaderboardTabs();
+}
+
+function prefersReducedMotion() {
+    return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches === true;
+}
+
+// uid -> viewport Y of that row, captured before the re-render.
+function measureRowPositions() {
+    const positions = new Map();
+    if (prefersReducedMotion()) return positions;
+
+    document.querySelectorAll("#friends-leaderboard-list .friends-leaderboard-row").forEach(row => {
+        if (row.dataset.uid) positions.set(row.dataset.uid, row.getBoundingClientRect().top);
+    });
+    return positions;
+}
+
+const REORDER_DURATION_MS = 460;
+
+function animateRowReorder(before) {
+    if (!before.size) return;
+
+    document.querySelectorAll("#friends-leaderboard-list .friends-leaderboard-row").forEach(row => {
+        const previousTop = before.get(row.dataset.uid);
+        if (previousTop === undefined) return;
+
+        const delta = previousTop - row.getBoundingClientRect().top;
+        if (!delta) return;
+
+        row.animate(
+            [
+                { transform: `translateY(${delta}px)` },
+                { transform: "translateY(0)" }
+            ],
+            { duration: REORDER_DURATION_MS, easing: "cubic-bezier(0.22, 0.61, 0.36, 1)" }
+        );
+    });
 }
 
 function syncLeaderboardTabs() {
@@ -231,16 +276,26 @@ function renderLeaderboard(list) {
     container.replaceChildren(...rows.map(entry => {
         const row = document.createElement("div");
         row.className = entry.isSelf ? "friends-leaderboard-row is-self" : "friends-leaderboard-row";
+        // Identity across re-renders, so the reorder animation can match each
+        // row to where it used to be (see measureRowPositions).
+        row.dataset.uid = String(entry.uid ?? "");
         if (!entry.isSelf) makeRowVisitable(row, { ...entry, relationship: "friends" });
 
         const xp = isWeekly ? (entry.weeklyXp || 0) : (entry.totalXp || 0);
-        const meta = `${tr("common.levelNumber", { level: entry.globalLevel || 1 })} · ${xp.toLocaleString()} XP`;
 
-        row.append(buildRank(entry.rank), buildAvatar(entry), buildNameCopy(entry, meta, entry.isSelf));
+        // XP is pulled out of the meta line and given its own right-aligned
+        // slot (see .friends-xp) so it reads as the score the ranking is
+        // actually based on, rather than as trailing detail after the level.
+        row.append(
+            buildRank(entry.rank),
+            buildAvatar(entry),
+            buildNameCopy(entry, tr("common.levelNumber", { level: entry.globalLevel || 1 }), entry.isSelf)
+        );
         // Streak flames only belong on the all-time board - a weekly ranking
         // is about this week's XP, and a lifetime streak next to it invites
-        // the wrong comparison.
+        // the wrong comparison. Sits to the left of the XP.
         if (!isWeekly) row.append(buildStreakPill(entry.currentStreak || 0));
+        row.append(buildXpValue(xp));
 
         return row;
     }));
@@ -255,6 +310,30 @@ function buildRank(rank) {
     if (rank >= 1 && rank <= 3) chip.classList.add(`is-medal-${rank}`);
     chip.textContent = String(rank);
     return chip;
+}
+
+// The row's score, right-aligned with the star after the number - same shape
+// as the Home page's leaderboard preview (see .leaderboard-xp / .friends-xp),
+// so the stars column up across both surfaces.
+function buildXpValue(xp) {
+    const wrap = document.createElement("span");
+    wrap.className = "friends-xp";
+
+    const value = document.createElement("span");
+    value.textContent = (xp || 0).toLocaleString();
+
+    const star = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    star.setAttribute("viewBox", "0 0 24 24");
+    star.setAttribute("width", "15");
+    star.setAttribute("height", "15");
+    star.setAttribute("fill", "currentColor");
+    star.setAttribute("aria-hidden", "true");
+    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path.setAttribute("d", "M12 2l2.9 6.2 6.6.7-4.9 4.5 1.3 6.6L12 17.8 6.1 20.6l1.3-6.6L2.5 8.9l6.6-.7z");
+    star.append(path);
+
+    wrap.append(value, star);
+    return wrap;
 }
 
 // Streak as a flame pill using the app's flame glyph (not the 🔥 emoji, which

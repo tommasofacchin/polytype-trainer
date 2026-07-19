@@ -295,7 +295,7 @@ function renderFriendsPreview(state) {
                 <span class="leaderboard-rank is-plain">${entry.rank}</span>
                 <span class="leaderboard-avatar" style="background:${entry.isSelf ? "#2fe6a4" : "#8b6cff"};color:${entry.isSelf ? "#0d2b22" : "#fff"}">${initial}</span>
                 <span class="leaderboard-name">${entry.isSelf ? tr("common.you") : (entry.displayName || entry.handle || "")}</span>
-                <span class="leaderboard-xp"><svg width="14" height="14" viewBox="0 0 24 24" fill="#2fe6a4"><path d="M12 2l2.9 6.2 6.6.7-4.9 4.5 1.3 6.6L12 17.8 6.1 20.6l1.3-6.6L2.5 8.9l6.6-.7z"/></svg>${(entry.weeklyXp || 0).toLocaleString()}</span>
+                <span class="leaderboard-xp"><span class="leaderboard-xp-value">${(entry.weeklyXp || 0).toLocaleString()}</span><svg width="15" height="15" viewBox="0 0 24 24" fill="#2fe6a4"><path d="M12 2l2.9 6.2 6.6.7-4.9 4.5 1.3 6.6L12 17.8 6.1 20.6l1.3-6.6L2.5 8.9l6.6-.7z"/></svg></span>
             `;
             if (!entry.isSelf && entry.uid) {
                 row.addEventListener("click", () => {

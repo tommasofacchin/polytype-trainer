@@ -115,14 +115,13 @@ function setupLocalProfileSync() {
 function renderProfilePage(profile) {
     const safeProfile = sanitizeProfile(profile);
     const levelInfo = getLevelInfo(safeProfile.xp);
-    const xpToNextLevel = levelInfo.nextXp - levelInfo.currentXp;
 
     setText("profile-page-name", safeProfile.name);
     setText("profile-page-handle", safeProfile.handle ? `@${safeProfile.handle}` : tr("profile.noUsername"));
-    setText("profile-page-level", tr("common.levelNumber", { level: levelInfo.level }));
-    setText("profile-page-xp-title", `${levelInfo.currentXp} / ${levelInfo.nextXp} XP`);
+    // Just the number - the badge around it already says "level".
+    setText("profile-page-level", String(levelInfo.level));
+    setText("profile-page-xp-title", `${levelInfo.currentXp} / ${levelInfo.nextXp}`);
     setText("profile-page-total-xp", safeProfile.xp.toLocaleString());
-    setText("profile-page-next-level", tr("profile.xpToLevel", { xp: xpToNextLevel, level: levelInfo.level + 1 }));
     setText("profile-page-day-streak", String(safeProfile.dayStreak));
 
     const xpFill = document.getElementById("profile-page-xp-fill");

@@ -347,7 +347,7 @@
         return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches === true;
     }
 
-    // Flies a handful of stars from `originEl` into the level bar while the
+    // Flies a handful of stars from `origin` into the level bar while the
     // bar itself climbs from the held value to `targetXp`. Always releases the
     // hold, including on an early return, so a failure here can never leave
     // the header frozen for the rest of the session.
@@ -356,7 +356,8 @@
     // the cache was never actually updated - i.e. the demo chest, whose gain
     // isn't real; without it the bar would visibly slide back down while the
     // overlay is still open. Callers that pass it own the release.
-    async function playXpGain(targetXp, originEl, { keepHeld = false } = {}) {
+    // `origin`: the element (or a pre-captured DOMRect) the stars fly from.
+    async function playXpGain(targetXp, origin, { keepHeld = false } = {}) {
         const fromXp = heldFromXp;
         const toXp = Number(targetXp) || 0;
 
@@ -371,7 +372,7 @@
         }
 
         try {
-            launchStars(originEl);
+            launchStars(origin);
             const crossedLevels = await animateLevelBar(fromXp, toXp);
 
             // Fired after the bar has settled on the new level, so the
@@ -443,11 +444,16 @@
         '<path d="M12 1.6l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 16.8 5.9 20.2l1.4-6.8L2.2 8.7l6.9-.8z"/>' +
         "</svg>";
 
-    function launchStars(originEl) {
+    // `origin` is either an element or a plain DOMRect - the chest passes a
+    // rect captured before its overlay closes, since by the time the stars
+    // fly the element they came from is gone.
+    function launchStars(origin) {
         const target = document.querySelector(".app-shell-level-track");
-        if (!originEl || !target) return;
+        if (!origin || !target) return;
 
-        const from = originEl.getBoundingClientRect();
+        const from = typeof origin.getBoundingClientRect === "function"
+            ? origin.getBoundingClientRect()
+            : origin;
         const to = target.getBoundingClientRect();
         if (!from.width && !from.height) return;
 
@@ -458,7 +464,11 @@
 
         const originX = from.left + from.width / 2;
         const originY = from.top + from.height / 2;
-        const targetX = to.left + to.width / 2;
+        // Aimed at the left third of the track, where the fill actually grows
+        // from - not the track's centre. The bar lives in the top-left corner,
+        // so centring the target made the whole flight read as heading for the
+        // middle of the screen.
+        const targetX = to.left + to.width * 0.3;
         const targetY = to.top + to.height / 2;
 
         let longest = 0;
@@ -470,15 +480,17 @@
             layer.appendChild(star);
 
             // Scatter the launch a little so they don't leave as one clump.
-            const spreadX = (Math.random() - 0.5) * Math.max(90, from.width);
+            const spreadX = (Math.random() - 0.5) * Math.min(70, Math.max(40, from.width));
             const spreadY = (Math.random() - 0.5) * 26;
             const startX = originX + spreadX;
             const startY = originY + spreadY;
 
-            // Control point pulled sideways and upward turns the straight run
-            // into an arc - the thing that makes it read as "thrown" rather
-            // than "slid".
-            const midX = (startX + targetX) / 2 + (Math.random() - 0.5) * 160;
+            // Control point sits 70% of the way to the target rather than at
+            // the midpoint, with much less lateral jitter - the stars commit
+            // toward the bar early instead of loitering mid-screen for the
+            // first half of the flight. Still lifted well above both ends, so
+            // it reads as thrown rather than slid.
+            const midX = startX + (targetX - startX) * 0.7 + (Math.random() - 0.5) * 50;
             const midY = Math.min(startY, targetY) - (60 + Math.random() * 90);
 
             const delay = i * 42;

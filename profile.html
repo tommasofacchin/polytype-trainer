@@ -21,16 +21,15 @@
         <p id="profile-page-handle" class="profile-handle">@tommaso</p>
       </div>
 
-      <!-- Game-style level + XP bar: the first thing you see, right under the name. -->
+      <!-- Level badge + XP track, same shape as the header's level pill
+           (.app-shell-level): the number lives inside the badge on the left
+           and the count sits inside the bar itself. -->
       <div class="profile-level-block">
-        <div class="profile-level-row">
-          <span id="profile-page-level" class="profile-level-pill">Level 1</span>
-          <span id="profile-page-xp-title" class="profile-level-xp">0 / 200 XP</span>
+        <span id="profile-page-level" class="profile-level-badge">1</span>
+        <div class="profile-level-track">
+          <span id="profile-page-xp-fill" class="profile-level-fill"></span>
+          <span id="profile-page-xp-title" class="profile-level-count">0 / 200</span>
         </div>
-        <div class="xp-bar xp-bar-large" aria-hidden="true">
-          <span id="profile-page-xp-fill"></span>
-        </div>
-        <p id="profile-page-next-level" class="profile-next-level">200 XP to Level 2</p>
       </div>
     </section>
 
