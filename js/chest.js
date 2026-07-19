@@ -101,16 +101,19 @@
     // previewing the animation - see the debug chest in js/dashboard.js.
     async function open({ demo = false } = {}) {
         const overlay = document.createElement("div");
-        overlay.className = `chest-overlay is-closed${demo ? " is-demo" : ""}`;
+        // is-sequence scopes the tap-sequence layout in style.css (chest
+        // pinned at ~2/3 viewport height, reward row anchored to the bottom)
+        // to this overlay only - js/shop.js's word-chest reveal reuses the
+        // same .chest-overlay/.chest-overlay-art classes for its own,
+        // unrelated one-shot reveal and must keep its original centered
+        // layout untouched.
+        overlay.className = `chest-overlay is-sequence is-closed${demo ? " is-demo" : ""}`;
         overlay.innerHTML = `
             <div class="chest-overlay-art">
-                <div class="chest-overlay-rays"></div>
                 <div class="chest-overlay-flash"></div>
                 ${CHEST_SVG}
                 <div class="chest-item-stage" aria-live="polite"></div>
             </div>
-            <div class="chest-overlay-title">${demo ? tr("chest.demoTitle") : tr("chest.title")}</div>
-            <div class="chest-hint">${tr("chest.tapToOpen")}</div>
             <div class="chest-final-rewards"></div>
         `;
         document.body.append(overlay);
@@ -119,7 +122,6 @@
         // style.css) so each item visibly floats up out of the chest rather
         // than appearing in a separate block further down the card.
         const stage = overlay.querySelector(".chest-item-stage");
-        const hint = overlay.querySelector(".chest-hint");
         // Stays empty until every item has been tapped through - see the
         // final-reveal block at the end of this function. Nothing here
         // accumulates mid-sequence, unlike the stage above.
@@ -134,7 +136,6 @@
 
         overlay.classList.remove("is-closed");
         overlay.classList.add("is-opening");
-        hint.textContent = "";
 
         // Freeze the header's XP bar before the claim lands, so the gain can
         // be animated on the XP item's reveal instead of snapping the moment
@@ -193,9 +194,6 @@
             card.querySelector(".chest-item-label").textContent = item.label;
             stage.replaceChildren(card);
 
-            const isLast = i === items.length - 1;
-            hint.textContent = isLast ? tr("chest.tapToReveal") : tr("chest.tapToContinue");
-
             // The XP card is where the stars launch from, so the burst reads
             // as the reward itself flying into the bar.
             if (item.kind === "xp" && typeof reward?.totalXp === "number") {
@@ -215,7 +213,6 @@
         }
 
         stage.replaceChildren();
-        hint.textContent = "";
 
         // ── Final reveal: every item together, all at once ─────────────────
         finalRewards.replaceChildren(
