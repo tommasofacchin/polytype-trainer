@@ -311,8 +311,14 @@
         const fill = document.getElementById("app-shell-level-fill");
         if (fill) fill.style.width = `${levelInfo.progress}%`;
 
+        // Rounded because animateLevelBar walks a *fractional* XP total frame
+        // by frame - without this the pill reads "145.4233935687812/900"
+        // for the length of the climb.
         const text = document.getElementById("app-shell-level-text");
-        if (text) text.textContent = `${levelInfo.currentXp}/${levelInfo.nextXp}`;
+        if (text) {
+            const label = `${Math.round(levelInfo.currentXp)}/${levelInfo.nextXp}`;
+            if (text.textContent !== label) text.textContent = label;
+        }
     }
 
     // ── End-of-game XP burst ────────────────────────────────────────────
@@ -345,7 +351,12 @@
     // bar itself climbs from the held value to `targetXp`. Always releases the
     // hold, including on an early return, so a failure here can never leave
     // the header frozen for the rest of the session.
-    async function playXpGain(targetXp, originEl) {
+    // `keepHeld` leaves the pill showing the animated value instead of
+    // repainting from the profile cache when the burst ends. Only useful when
+    // the cache was never actually updated - i.e. the demo chest, whose gain
+    // isn't real; without it the bar would visibly slide back down while the
+    // overlay is still open. Callers that pass it own the release.
+    async function playXpGain(targetXp, originEl, { keepHeld = false } = {}) {
         const fromXp = heldFromXp;
         const toXp = Number(targetXp) || 0;
 
@@ -371,7 +382,7 @@
                 await window.PolytypeLevelUp?.show?.(getLevelInfo(toXp).level);
             }
         } finally {
-            releaseXpDisplay();
+            if (!keepHeld) releaseXpDisplay();
         }
     }
 

@@ -121,19 +121,16 @@ function setupGameStateSync() {
 
     gameState.onChange(state => {
         renderChest(state);
+        renderDemoChest();
         renderMissions(state);
         renderFriendsPreview(state);
         renderDailyGoal(state);
     });
 
-    const chestCard = document.getElementById("home-chest-open-btn");
-    if (chestCard) {
-        chestCard.addEventListener("click", async () => {
-            chestCard.disabled = true;
-            await window.PolytypeChest.open();
-            chestCard.disabled = false;
-        });
-    }
+    // The open button's click handler is bound in renderChest, which rebuilds
+    // the button on every state change. A second binding used to live here
+    // too, and whenever renderChest had already run by this point both landed
+    // on the same node - so one tap opened two stacked chest overlays.
 }
 
 function renderGreeting(signedIn) {
@@ -191,6 +188,50 @@ function renderChest(state) {
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2fe6a4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
         `;
     }
+}
+
+// Debug affordance: replays the chest opening as many times as you like,
+// against a canned reward. Nothing is claimed and no coins or XP are granted -
+// see the `demo` branch in js/chest.js.
+//
+// Gated on the signed-in handle, which is a *cosmetic* gate, not a security
+// one: anyone could claim this handle and see the card. That's acceptable
+// only because the demo grants nothing - keep it that way.
+const DEMO_CHEST_HANDLE = "tommaso";
+
+function renderDemoChest() {
+    const mount = document.getElementById("home-demo-chest");
+    if (!mount) return;
+
+    let handle = "";
+    try {
+        const profile = JSON.parse(localStorage.getItem(profileStorageKey)) || {};
+        handle = String(profile.handle || profile.name || "").trim().toLowerCase();
+    } catch {}
+
+    if (handle !== DEMO_CHEST_HANDLE) {
+        mount.hidden = true;
+        mount.replaceChildren();
+        return;
+    }
+
+    if (mount.dataset.built === "true") return;
+    mount.dataset.built = "true";
+    mount.hidden = false;
+    mount.className = "chest-card is-demo";
+    mount.innerHTML = `
+        <svg width="46" height="46" viewBox="0 0 48 48"><rect x="6" y="20" width="36" height="20" rx="4" fill="#8b6cff"/><path d="M6 22a18 12 0 0 1 36 0z" fill="#a084ff"/><rect x="6" y="25" width="36" height="4" fill="#6b4dff"/><rect x="21" y="23" width="6" height="9" rx="2" fill="#ffc73a"/></svg>
+        <div class="chest-card-copy">
+            <strong>${tr("chest.demoTitle")}</strong>
+            <span>${tr("chest.demoDesc")}</span>
+        </div>
+        <button id="home-demo-chest-btn" class="chest-open-btn" type="button">${tr("chest.open")}</button>
+    `;
+    document.getElementById("home-demo-chest-btn").addEventListener("click", async event => {
+        event.target.disabled = true;
+        await window.PolytypeChest.open({ demo: true });
+        event.target.disabled = false;
+    });
 }
 
 function renderDailyGoal(state) {

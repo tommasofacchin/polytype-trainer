@@ -4,7 +4,7 @@ const FALLBACK_LANGUAGE = "norwegian";
 const maxKeys = 5; // keep in sync with MAX_KEYS in api/_lib.js
 const keyPriceCoins = 100; // keep in sync with KEY_PRICE_COINS in api/_lib.js
 const wordChestPriceCoins = 100; // keep in sync with WORD_CHEST_PRICE_COINS in api/_lib.js
-const streakFreezePriceCoins = 200; // keep in sync with STREAK_FREEZE_PRICE_COINS in api/_lib.js
+const streakFreezePriceCoins = 500; // keep in sync with STREAK_FREEZE_PRICE_COINS in api/_lib.js
 const maxStreakFreezes = 2; // keep in sync with MAX_STREAK_FREEZES in api/_lib.js
 
 const COIN_SVG =

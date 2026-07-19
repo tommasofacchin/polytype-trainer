@@ -52,6 +52,10 @@
                 </div>
             </div>
 
+            <!-- Debug-only replay of the chest opening. js/dashboard.js keeps
+                 this hidden unless the signed-in handle matches. -->
+            <div id="home-demo-chest" hidden></div>
+
             <div class="home-cta-row">
                 <a href="sprint.html" class="home-play-again-btn">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
@@ -89,6 +93,7 @@
          the active language's CSV before either of those is opened. -->
     <script src="decks/index.js"></script>
     <script src="js/deck-cache.js"></script>
+    <script src="js/levelup.js"></script>
     <script src="js/chest.js"></script>
     <script src="js/dashboard.js"></script>
 </body>

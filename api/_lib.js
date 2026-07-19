@@ -51,7 +51,7 @@ const WORD_CHEST_PRICE_COINS = 100;
 // have to re-earn, so it should stay a rare purchase rather than a routine
 // way to buy back consistency. Charged against the *active course's* coin
 // balance even though the freeze itself is user-level.
-const STREAK_FREEZE_PRICE_COINS = 200;
+const STREAK_FREEZE_PRICE_COINS = 500;
 const COURSE_LEVEL_CAPS = {
   chinese: 60,
   german: 60,
