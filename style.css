@@ -5436,6 +5436,15 @@ body > main {
     left: 50%;
     bottom: 100%;
     transform: translateX(-50%);
+    /* A left-only absolutely-positioned box with no explicit width shrinks
+       to fit within (containing-block width - left offset), NOT its actual
+       content - the translateX recentring is purely visual and plays no
+       part in that calculation. At left:50% that silently halves the
+       available width, which is what was wrapping "+20 XP" onto two lines
+       despite .chest-item-card having plenty of max-width headroom to
+       spare. width:max-content sizes this box to what its child actually
+       needs instead. */
+    width: max-content;
     margin-bottom: 22px;
     z-index: 3;
     display: flex;
@@ -5450,7 +5459,10 @@ body > main {
     align-items: center;
     gap: 6px;
     padding: 20px 30px;
-    max-width: min(280px, calc(100vw - 64px));
+    /* Headroom for a bigger reward (e.g. "+300 XP") without ever needing to
+       wrap - the viewport-relative half only kicks in on genuinely narrow
+       screens. */
+    max-width: min(340px, calc(100vw - 64px));
     border-radius: 22px;
     background: color-mix(in srgb, var(--surface) 88%, transparent);
     border: 1px solid var(--border-strong);
@@ -5470,6 +5482,11 @@ body > main {
     font-size: 30px;
     line-height: 1;
     color: #fff;
+    /* Belt-and-braces alongside the width:max-content fix above: even with
+       that fix, a genuinely huge reward pressed right up against the card's
+       own max-width cap should overflow rather than silently break onto a
+       second line mid-number. */
+    white-space: nowrap;
 }
 
 .chest-item-card.is-coin .chest-item-amount { color: var(--color-gold-text); }

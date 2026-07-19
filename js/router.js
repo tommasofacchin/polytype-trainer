@@ -244,7 +244,14 @@
         }
 
         window.PolytypeI18n?.applyStaticTranslations?.(document.body);
-        window.scrollTo(0, 0);
+        // Not window.scrollTo(0, 0): html/body both carry overflow:hidden
+        // (style.css) so the window itself never scrolls - .is-scroll-page
+        // pages (Home, Games, Friends, Profile, Settings, ...) scroll via
+        // *body's own* overflow-y:auto instead. window.scrollTo was a no-op
+        // here, which is why a page opened via a soft nav from partway down
+        // a tall page (e.g. Profile -> Settings) kept the old scroll
+        // position instead of opening at the top.
+        document.body.scrollTop = 0;
         window.PolytypeAppShell?.renderBottomNav?.();
 
         currentPage = page;
