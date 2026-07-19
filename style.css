@@ -2606,6 +2606,15 @@ input[type="password"]:focus {
     animation: levelup-backdrop-in 240ms ease forwards;
 }
 
+/* Applied by js/levelup.js (the shared module) - see its comment for why the
+   Trainer's own copy deliberately keeps the lighter default. */
+.levelup-overlay.is-scrimmed {
+    background:
+        radial-gradient(circle at center, rgba(9, 23, 23, 0.62), rgba(9, 23, 23, 0.42) 60%, rgba(9, 23, 23, 0.34)),
+        color-mix(in srgb, var(--bg) 78%, transparent);
+    backdrop-filter: blur(3px);
+}
+
 .levelup-overlay.is-leaving {
     animation: levelup-backdrop-out 360ms ease forwards;
 }
@@ -3848,8 +3857,18 @@ body.deck-overlay-open {
     min-height: 58px;
 }
 
-.friends-row.is-placeholder {
-    border-color: transparent;
+/* Only reachable on a device that has never finished a sprint: the roster is
+   known (from the friends overview cache) but the per-pair streak and
+   played-today flag aren't, so those two hold their space blank rather than
+   showing a zero that would visibly correct itself a moment later. */
+.friends-status-badge.is-pending {
+    min-width: 92px;
+    background: transparent;
+    box-shadow: none;
+}
+
+.friends-row-streak:empty {
+    min-width: 34px;
 }
 
 .friends-row-avatar {

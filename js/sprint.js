@@ -798,6 +798,14 @@
         // burst or releases the hold.
         window.PolytypeAppShell?.holdXpDisplay?.();
 
+        // Kicked off here, *before* the save, and deliberately not awaited
+        // alongside it: the friends block is already painted from cache, so
+        // it can fade in on the breakdown's own schedule. Chaining it after
+        // the save (as this used to) meant a slow round trip held the whole
+        // reveal back, which is what made the list feel like it arrived late
+        // and then stretched the card.
+        const friendsRevealed = breakdownRevealDone.then(revealFriendsSection);
+
         // Play again/Home stay disabled for at least this long, instead of
         // a "Saving progress..." status line - the buttons turning
         // clickable (Play again's already-green background) *is* the
@@ -854,12 +862,8 @@
             }
         }
 
-        // Friends only fade in once the breakdown rows are fully done
-        // revealing - by now the friends content (if any) is already sitting
-        // in the DOM at opacity 0 from prepareFriendsStatus above, so this is
-        // a pure fade with no layout change.
         await breakdownRevealDone;
-        revealFriendsSection();
+        await friendsRevealed;
 
         // playXpGain always releases the header hold, including when there's
         // nothing to animate (signed out, save failed, zero XP) - so the bar
@@ -953,51 +957,62 @@
         });
     }
 
-    // Clears any previous session's friends block, then immediately claims
-    // the space the incoming one will need.
-    //
-    // The friends list arrives bundled in the save response, a round trip
-    // after the modal opens. Leaving the block `hidden` until then meant the
-    // card was laid out without it and then grew - and since .timer-modal
-    // centres the card, everything above visibly jumped upward. So we reserve
-    // the height up front using the friend count app-shell.js already keeps
-    // warm in localStorage, and prepareFriendsStatus swaps real rows into
-    // that same space. Same count (the overwhelmingly common case) means no
-    // movement at all.
+    // Last sprint's friendsStatus, verbatim. Friendship streaks move by at
+    // most one a day and the roster rarely changes, so replaying this is
+    // almost always exactly what the server is about to send back - which is
+    // what lets the block render complete and immediately instead of waiting
+    // out the save.
+    const SPRINT_FRIENDS_CACHE_KEY = "polytype-sprint-friends";
+
+    function readSprintFriendsCache() {
+        try {
+            const entries = JSON.parse(localStorage.getItem(SPRINT_FRIENDS_CACHE_KEY));
+            return Array.isArray(entries) ? entries : [];
+        } catch {
+            return [];
+        }
+    }
+
+    function writeSprintFriendsCache(entries) {
+        try {
+            localStorage.setItem(SPRINT_FRIENDS_CACHE_KEY, JSON.stringify(entries));
+        } catch {}
+    }
+
+    // Names and avatars only - no friendship streak, no played-today. Used
+    // when there's no previous sprint to replay (first session on a device),
+    // so at least the roster is right and only two small values arrive late.
+    function readFriendsOverviewCache() {
+        try {
+            const entry = JSON.parse(localStorage.getItem("polytype-friends-cache"));
+            const leaderboard = entry?.data?.leaderboard;
+            if (!Array.isArray(leaderboard)) return [];
+            return leaderboard
+                .filter(row => row && !row.isSelf)
+                .map(row => ({
+                    uid: row.uid,
+                    displayName: row.displayName,
+                    avatarUrl: row.avatarUrl || null,
+                    pending: true
+                }));
+        } catch {
+            return [];
+        }
+    }
+
+    // Paints the block from cache the moment the modal opens, so it takes its
+    // final height straight away and reveals on the breakdown's own timeline.
+    // prepareFriendsStatus later reconciles it against the real response.
     function resetFriendsSection() {
         if (!el.resultFriends || !el.resultFriendsList) return;
 
         el.resultFriends.classList.remove("is-visible");
-        el.resultFriendsList.replaceChildren();
 
-        const expected = getCachedFriendCount();
-        el.resultFriends.hidden = expected === 0;
+        const cached = readSprintFriendsCache();
+        const entries = cached.length ? cached : readFriendsOverviewCache();
 
-        if (expected > 0) {
-            el.resultFriendsList.replaceChildren(
-                ...Array.from({ length: expected }, () => {
-                    const placeholder = document.createElement("div");
-                    // Same class as a real row, so it reserves exactly the
-                    // height one will occupy - just with nothing in it.
-                    placeholder.className = "friends-row is-placeholder";
-                    placeholder.setAttribute("aria-hidden", "true");
-                    return placeholder;
-                })
-            );
-        }
-    }
-
-    // Written by js/app-shell.js's prefetchFriendsOverview on every
-    // navigation, so by the time a sprint ends this is almost always fresh.
-    // A miss (first-ever session, cleared storage) just means we reserve
-    // nothing and accept one grow - never a wrong-sized reservation.
-    function getCachedFriendCount() {
-        try {
-            const entry = JSON.parse(localStorage.getItem("polytype-friends-cache"));
-            return Math.max(0, Math.trunc(Number(entry?.data?.friendCount) || 0));
-        } catch {
-            return 0;
-        }
+        el.resultFriends.hidden = entries.length === 0;
+        el.resultFriendsList.replaceChildren(...entries.map(buildFriendRow));
     }
 
     // Friend list under the score: each entry's friendshipStreak only rises
@@ -1005,11 +1020,10 @@
     // commitFriendshipStreaksForSprint in api/complete-practice-session.js);
     // playedToday reflects that same friend's sprint activity today.
     //
-    // Inserts the content as soon as it's known (claiming its layout space
-    // right away) but leaves it at opacity 0 - revealFriendsSection() is what
-    // actually fades it in, once the breakdown above has finished its own
-    // reveal. Splitting "insert" from "reveal" this way means the moment the
-    // block becomes visible, it's already fully laid out - no jump.
+    // By the time this runs the block is usually already on screen with
+    // cached rows, so it reconciles in place - same nodes, updated values -
+    // rather than replacing the list. That keeps identical data (the common
+    // case) completely invisible instead of flickering a rebuild.
     function prepareFriendsStatus(list) {
         if (!el.resultFriends || !el.resultFriendsList) return;
         const entries = Array.isArray(list) ? list : [];
@@ -1017,67 +1031,104 @@
         if (!entries.length) {
             el.resultFriends.hidden = true;
             el.resultFriendsList.replaceChildren();
+            writeSprintFriendsCache([]);
             return;
         }
+
+        const rows = [...el.resultFriendsList.children];
+        const sameRoster =
+            rows.length === entries.length &&
+            entries.every((entry, index) => rows[index].dataset.uid === String(entry.uid ?? ""));
 
         el.resultFriends.hidden = false;
-        el.resultFriendsList.replaceChildren(
-            ...entries.map(entry => {
-                const row = document.createElement("div");
-                row.className = "friends-row";
 
-                const avatar = document.createElement("span");
-                avatar.className = "profile-pill-avatar friends-row-avatar";
-                avatar.setAttribute("aria-hidden", "true");
-                if (entry.avatarUrl) {
-                    const image = document.createElement("img");
-                    image.src = entry.avatarUrl;
-                    image.alt = "";
-                    avatar.classList.add("has-image");
-                    avatar.append(image);
-                } else {
-                    avatar.textContent = (entry.displayName || "?").trim().charAt(0).toUpperCase() || "?";
-                }
+        if (sameRoster) {
+            entries.forEach((entry, index) => updateFriendRow(rows[index], entry));
+        } else {
+            el.resultFriendsList.replaceChildren(...entries.map(buildFriendRow));
+        }
 
-                const copy = document.createElement("span");
-                copy.className = "friends-row-copy";
-                const name = document.createElement("strong");
-                name.textContent = entry.displayName || "Player";
-                copy.append(name);
-
-                const streak = document.createElement("span");
-                streak.className = "friends-row-streak";
-                streak.textContent = `\u{1F525} ${entry.friendshipStreak || 0}`;
-
-                const status = document.createElement("span");
-                status.className = entry.playedToday ? "friends-status-badge is-played" : "friends-status-badge";
-                status.textContent = entry.playedToday ? tr("sprint.friendPlayedToday") : tr("sprint.friendNotPlayedToday");
-
-                row.append(avatar, copy, streak, status);
-                return row;
-            })
-        );
+        writeSprintFriendsCache(entries);
     }
 
-    // Fades the already-inserted friends block in (see prepareFriendsStatus)
-    // - a no-op if there was nothing to show. Call once the breakdown's own
-    // reveal is done, so the two never compete for attention at the same time.
-    function revealFriendsSection() {
-        if (!el.resultFriends || el.resultFriends.hidden) return;
+    function buildFriendRow(entry) {
+        const row = document.createElement("div");
+        row.className = "friends-row";
+        row.dataset.uid = String(entry.uid ?? "");
 
-        // Single choke point for every path where the friends data never
-        // arrived - signed out, save rejected, or a session with no correct
-        // answers to save at all. In those cases resetFriendsSection's
-        // reserved placeholders are still sitting there, and fading them in
-        // would show a stack of empty rows. Collapsing the block instead
-        // gives back exactly the space that was being held.
-        const hasRealRows = el.resultFriendsList?.querySelector(".friends-row:not(.is-placeholder)");
-        if (!hasRealRows) {
-            el.resultFriends.hidden = true;
-            el.resultFriendsList?.replaceChildren();
+        const avatar = document.createElement("span");
+        avatar.className = "profile-pill-avatar friends-row-avatar";
+        avatar.setAttribute("aria-hidden", "true");
+
+        const copy = document.createElement("span");
+        copy.className = "friends-row-copy";
+        copy.append(document.createElement("strong"));
+
+        const streak = document.createElement("span");
+        streak.className = "friends-row-streak";
+
+        const status = document.createElement("span");
+        status.className = "friends-status-badge";
+
+        row.append(avatar, copy, streak, status);
+        updateFriendRow(row, entry);
+        return row;
+    }
+
+    function updateFriendRow(row, entry) {
+        const avatar = row.querySelector(".friends-row-avatar");
+        const name = row.querySelector(".friends-row-copy strong");
+        const streak = row.querySelector(".friends-row-streak");
+        const status = row.querySelector(".friends-status-badge");
+
+        row.dataset.uid = String(entry.uid ?? "");
+
+        const displayName = entry.displayName || "Player";
+        if (name.textContent !== displayName) name.textContent = displayName;
+
+        const wantsImage = Boolean(entry.avatarUrl);
+        const currentImage = avatar.querySelector("img");
+        if (wantsImage && currentImage?.getAttribute("src") !== entry.avatarUrl) {
+            const image = document.createElement("img");
+            image.src = entry.avatarUrl;
+            image.alt = "";
+            avatar.classList.add("has-image");
+            avatar.replaceChildren(image);
+        } else if (!wantsImage) {
+            avatar.classList.remove("has-image");
+            const initial = displayName.trim().charAt(0).toUpperCase() || "?";
+            if (avatar.textContent !== initial) avatar.textContent = initial;
+        }
+
+        // `pending` marks a row built from the overview cache, which knows the
+        // roster but not the per-pair values. Those two stay blank (but still
+        // occupy their space) rather than showing a made-up zero that would
+        // visibly correct itself a moment later.
+        if (entry.pending) {
+            streak.textContent = "";
+            status.textContent = "";
+            status.className = "friends-status-badge is-pending";
             return;
         }
 
+        streak.textContent = `\u{1F525} ${entry.friendshipStreak || 0}`;
+        status.className = entry.playedToday ? "friends-status-badge is-played" : "friends-status-badge";
+        status.textContent = entry.playedToday
+            ? tr("sprint.friendPlayedToday")
+            : tr("sprint.friendNotPlayedToday");
+    }
+
+
+    // Fades in the block resetFriendsSection already painted from cache.
+    // Driven purely by the breakdown's reveal timing - never by the save - so
+    // the friends list lands as part of the same animation as everything else
+    // instead of appearing a round trip later.
+    function revealFriendsSection() {
+        if (!el.resultFriends || el.resultFriends.hidden) return;
+        if (!el.resultFriendsList?.firstChild) {
+            el.resultFriends.hidden = true;
+            return;
+        }
         el.resultFriends.classList.add("is-visible");
     }
 

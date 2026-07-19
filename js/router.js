@@ -22,7 +22,7 @@
         "trainer.html": ["decks/index.js", "decks/categories.js", "js/mission-celebrate.js", "js/main.js"],
         "dictate.html": ["decks/index.js", "decks/categories.js", "js/mission-celebrate.js", "js/dictate.js"],
         "memory.html": ["decks/index.js", "decks/categories.js", "js/mission-celebrate.js", "js/memory.js"],
-        "sprint.html": ["decks/index.js", "decks/categories.js", "js/mission-celebrate.js", "js/sprint.js"],
+        "sprint.html": ["decks/index.js", "decks/categories.js", "js/mission-celebrate.js", "js/levelup.js", "js/sprint.js"],
         "deck.html": ["decks/index.js", "decks/categories.js", "js/deck-cache.js", "js/deck.js"],
         "categories.html": ["decks/index.js", "decks/categories.js", "js/categories.js"],
         "shop.html": ["decks/index.js", "decks/categories.js", "js/shop.js"],

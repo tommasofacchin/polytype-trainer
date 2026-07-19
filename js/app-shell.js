@@ -361,7 +361,15 @@
 
         try {
             launchStars(originEl);
-            await animateLevelBar(fromXp, toXp);
+            const crossedLevels = await animateLevelBar(fromXp, toXp);
+
+            // Fired after the bar has settled on the new level, so the
+            // celebration lands on top of a pill already showing it rather
+            // than racing the climb. Optional: pages that don't load
+            // js/levelup.js simply get the bar animation on its own.
+            if (crossedLevels) {
+                await window.PolytypeLevelUp?.show?.(getLevelInfo(toXp).level);
+            }
         } finally {
             releaseXpDisplay();
         }
@@ -378,8 +386,11 @@
         const badge = document.getElementById("app-shell-level-badge");
         fill?.classList.add("is-animating");
 
-        let lastLevel = getLevelInfo(fromXp).level;
+        const startLevel = getLevelInfo(fromXp).level;
+        let lastLevel = startLevel;
 
+        // Resolves with whether the climb crossed at least one level boundary,
+        // so the caller can decide whether to celebrate.
         return new Promise(resolve => {
             const start = performance.now();
 
@@ -408,7 +419,7 @@
                     requestAnimationFrame(step);
                 } else {
                     fill?.classList.remove("is-animating");
-                    resolve();
+                    resolve(lastLevel > startLevel);
                 }
             };
 
