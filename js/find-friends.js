@@ -35,7 +35,10 @@ async function runSearch(value) {
     const requestToken = searchToken;
 
     if (query.length < minSearchLength) {
-        setStatus(tr("friends.searchHint"));
+        // Deliberately blank rather than a "type a username" prompt: the
+        // input's own placeholder already says that, and repeating it as a
+        // status line just adds noise under an empty result list.
+        setStatus("");
         renderResults([]);
         return;
     }
@@ -45,7 +48,10 @@ async function runSearch(value) {
         return;
     }
 
-    setStatus(tr("friends.searching"));
+    // No "Searching..." line either - results usually land fast enough that
+    // it only ever flashed, and a status that appears and vanishes reads as
+    // a glitch rather than as feedback.
+    setStatus("");
 
     try {
         const result = await window.PolytypeFirebase.searchUsers(query);

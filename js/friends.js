@@ -12,6 +12,7 @@ function goTo(path) {
 
 function initFriendsPage() {
     applyStoredTheme();
+    setupLeaderboardTabs();
     renderFromCache();
     setupAuthGate();
 
@@ -177,9 +178,39 @@ function renderOutgoing(list) {
     }));
 }
 
+// Which of the two leaderboard tabs is showing: "total" (all-time XP) or
+// "weekly". The server only ever sends one list, ranked by weekly XP (see
+// buildLeaderboard in api/_lib.js), but every entry carries totalXp too - so
+// the all-time view is just the same entries re-sorted and re-ranked here,
+// with no extra request.
+let activeLeaderboard = "total";
+let lastLeaderboard = [];
+
+function setupLeaderboardTabs() {
+    document.querySelectorAll("[data-leaderboard]").forEach(tab => {
+        tab.addEventListener("click", () => {
+            if (activeLeaderboard === tab.dataset.leaderboard) return;
+            activeLeaderboard = tab.dataset.leaderboard;
+            syncLeaderboardTabs();
+            renderLeaderboard(lastLeaderboard);
+        });
+    });
+    syncLeaderboardTabs();
+}
+
+function syncLeaderboardTabs() {
+    document.querySelectorAll("[data-leaderboard]").forEach(tab => {
+        const isActive = tab.dataset.leaderboard === activeLeaderboard;
+        tab.classList.toggle("is-active", isActive);
+        tab.setAttribute("aria-selected", String(isActive));
+    });
+}
+
 function renderLeaderboard(list) {
     const container = document.getElementById("friends-leaderboard-list");
     if (!container) return;
+
+    lastLeaderboard = list;
 
     if (!list.length) {
         const empty = document.createElement("p");
@@ -189,18 +220,28 @@ function renderLeaderboard(list) {
         return;
     }
 
-    container.replaceChildren(...list.map(entry => {
+    const isWeekly = activeLeaderboard === "weekly";
+    // Re-rank for the all-time view; the incoming ranks are weekly ones.
+    const rows = isWeekly
+        ? list
+        : [...list]
+            .sort((a, b) => ((b.totalXp || 0) - (a.totalXp || 0)) || ((b.weeklyXp || 0) - (a.weeklyXp || 0)))
+            .map((entry, index) => ({ ...entry, rank: index + 1 }));
+
+    container.replaceChildren(...rows.map(entry => {
         const row = document.createElement("div");
         row.className = entry.isSelf ? "friends-leaderboard-row is-self" : "friends-leaderboard-row";
         if (!entry.isSelf) makeRowVisitable(row, { ...entry, relationship: "friends" });
 
-        const meta = `${tr("common.levelNumber", { level: entry.globalLevel || 1 })} · ${(entry.weeklyXp || 0).toLocaleString()} XP`;
-        row.append(
-            buildRank(entry.rank),
-            buildAvatar(entry),
-            buildNameCopy(entry, meta, entry.isSelf),
-            buildStreakPill(entry.currentStreak || 0)
-        );
+        const xp = isWeekly ? (entry.weeklyXp || 0) : (entry.totalXp || 0);
+        const meta = `${tr("common.levelNumber", { level: entry.globalLevel || 1 })} · ${xp.toLocaleString()} XP`;
+
+        row.append(buildRank(entry.rank), buildAvatar(entry), buildNameCopy(entry, meta, entry.isSelf));
+        // Streak flames only belong on the all-time board - a weekly ranking
+        // is about this week's XP, and a lifetime streak next to it invites
+        // the wrong comparison.
+        if (!isWeekly) row.append(buildStreakPill(entry.currentStreak || 0));
+
         return row;
     }));
 }

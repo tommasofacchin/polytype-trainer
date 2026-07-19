@@ -3808,9 +3808,67 @@ body.deck-overlay-open {
     display: none;
 }
 
+/* Segmented control heading the leaderboard card - replaces the old single
+   label + "resets every Monday" hint. */
+.friends-leaderboard-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+    border-radius: var(--radius-md);
+    background: var(--surface-soft);
+    box-shadow: inset 0 0 0 1px var(--border);
+}
+
+.friends-leaderboard-tab {
+    flex: 1;
+    min-width: 0;
+    padding: 9px 8px;
+    border: 0;
+    border-radius: calc(var(--radius-md) - 4px);
+    background: transparent;
+    color: var(--text-faint);
+    font-family: var(--font-sans);
+    font-size: var(--text-xs);
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: background var(--transition), color var(--transition);
+}
+
+.friends-leaderboard-tab:hover:not(.is-active) {
+    color: var(--text-soft);
+}
+
+.friends-leaderboard-tab.is-active {
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: var(--shadow-sm);
+}
+
 .friends-search-input {
     width: 100%;
     padding: 0 14px;
+}
+
+/* Column layout so the Find-friends button can be pushed to the bottom with
+   margin-top:auto below. `flex: 1 0 auto` (not plain `flex: 1`) so a long
+   friends list still grows past the viewport and scrolls normally instead of
+   being squashed to fit. Scoped to .friends-page - .profile-page is shared
+   with the Profile/visit-profile pages, which want none of this. */
+.friends-page {
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 auto;
+    /* Also the minimum separation above the bottom-anchored button on a page
+       long enough that margin-top:auto resolves to zero. */
+    gap: var(--space-4);
+}
+
+.friends-page-title {
+    margin: 0;
 }
 
 .friends-find-btn {
@@ -3822,7 +3880,10 @@ body.deck-overlay-open {
     box-sizing: border-box;
     padding: 13px;
     text-decoration: none;
-    margin-bottom: var(--space-4);
+    /* Bottom-anchored: sits just above the fixed bottom nav on a short page,
+       and simply follows the content on a long one. */
+    margin-top: auto;
+    margin-bottom: 0;
 }
 
 .friends-find-btn[hidden] {

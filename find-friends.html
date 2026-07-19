@@ -24,7 +24,10 @@
             <button id="find-friends-submit" class="btn-solid" type="submit" style="padding:0 20px" data-i18n="findFriends.find">Find</button>
         </form>
 
-        <p id="find-friends-status" class="profile-muted" aria-live="polite" data-i18n="findFriends.hint">Type a username and press Find.</p>
+        <!-- Starts empty: js/find-friends.js only ever fills this with a real
+             outcome (no results, or an error), never a prompt or a
+             "searching" placeholder. -->
+        <p id="find-friends-status" class="profile-muted" aria-live="polite"></p>
         <div id="find-friends-results" class="friends-result-list"></div>
     </main>
     <div id="app-bottom-nav"></div>
