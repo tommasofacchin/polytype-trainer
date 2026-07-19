@@ -22,7 +22,7 @@
         '<svg width="34" height="34" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#ffc73a"/><circle cx="12" cy="12" r="6.5" fill="none" stroke="#d99a1c" stroke-width="2"/></svg>';
 
     const XP_SVG =
-        '<svg width="32" height="32" viewBox="0 0 24 24" fill="#2fe6a4"><path d="M12 2l2.9 6.2 6.6.7-4.9 4.5 1.3 6.6L12 17.8 6.1 20.6l1.3-6.6L2.5 8.9l6.6-.7z"/></svg>';
+        '<svg width="32" height="32" viewBox="0 0 24 24" fill="#ffa24b"><path d="M12 2l2.9 6.2 6.6.7-4.9 4.5 1.3 6.6L12 17.8 6.1 20.6l1.3-6.6L2.5 8.9l6.6-.7z"/></svg>';
 
     function prefersReducedMotion() {
         return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches === true;

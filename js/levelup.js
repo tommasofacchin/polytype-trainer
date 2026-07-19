@@ -14,7 +14,7 @@
         "var(--success, var(--accent))",
         "var(--color-gold-text, #ffc73a)",
         "var(--color-violet, #8b6cff)",
-        "var(--color-streak, #ff7a2d)"
+        "var(--color-streak, #f2452f)"
     ];
 
     function tr(key, params = {}) {

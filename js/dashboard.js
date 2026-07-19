@@ -185,7 +185,7 @@ function renderChest(state) {
                 <strong>${tr("chest.claimed")}</strong>
                 <span>${tr("chest.claimedDesc")}</span>
             </div>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2fe6a4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffa24b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
         `;
     }
 }
@@ -257,7 +257,7 @@ function renderMissions(state) {
     const completedCount = missions.filter(mission => mission.completed).length;
     if (countEl) countEl.textContent = `${completedCount} / ${missions.length}`;
 
-    const icons = ["#2fe6a4", "#8b6cff", "#ffc73a"];
+    const icons = ["#ffa24b", "#8b6cff", "#ffc73a"];
     list.replaceChildren(
         ...missions.map((mission, index) => {
             const row = document.createElement("div");
@@ -293,9 +293,9 @@ function renderFriendsPreview(state) {
             const initial = (entry.handle || entry.displayName || "?").trim().charAt(0).toUpperCase();
             row.innerHTML = `
                 <span class="leaderboard-rank is-plain">${entry.rank}</span>
-                <span class="leaderboard-avatar" style="background:${entry.isSelf ? "#2fe6a4" : "#8b6cff"};color:${entry.isSelf ? "#0d2b22" : "#fff"}">${initial}</span>
+                <span class="leaderboard-avatar" style="background:${entry.isSelf ? "#ffa24b" : "#8b6cff"};color:${entry.isSelf ? "#3a1e05" : "#fff"}">${initial}</span>
                 <span class="leaderboard-name">${entry.isSelf ? tr("common.you") : (entry.displayName || entry.handle || "")}</span>
-                <span class="leaderboard-xp"><span class="leaderboard-xp-value">${(entry.weeklyXp || 0).toLocaleString()}</span><svg width="15" height="15" viewBox="0 0 24 24" fill="#2fe6a4"><path d="M12 2l2.9 6.2 6.6.7-4.9 4.5 1.3 6.6L12 17.8 6.1 20.6l1.3-6.6L2.5 8.9l6.6-.7z"/></svg></span>
+                <span class="leaderboard-xp"><span class="leaderboard-xp-value">${(entry.weeklyXp || 0).toLocaleString()}</span><svg width="15" height="15" viewBox="0 0 24 24" fill="#ffa24b"><path d="M12 2l2.9 6.2 6.6.7-4.9 4.5 1.3 6.6L12 17.8 6.1 20.6l1.3-6.6L2.5 8.9l6.6-.7z"/></svg></span>
             `;
             if (!entry.isSelf && entry.uid) {
                 row.addEventListener("click", () => {
