@@ -219,9 +219,20 @@ function buildCategoryCard(category, unlockedWords, activeOrder) {
     const isActive = !isComplete && category.order === activeOrder;
     const pct = category.size ? Math.round((unlockedInCategory / category.size) * 100) : 0;
 
-    const card = document.createElement("article");
+    // A category is playable once it has at least one unlocked word - sprint
+    // draws only from unlocked words, so an untouched category would just
+    // bounce the player straight back with an empty state.
+    const isPlayable = unlockedInCategory > 0;
+
+    const card = document.createElement(isPlayable ? "a" : "article");
     card.className = "category-card";
     card.classList.add(isComplete ? "is-complete" : (isActive ? "is-active" : "is-locked"));
+
+    if (isPlayable) {
+        card.classList.add("is-playable");
+        card.href = `sprint.html?category=${encodeURIComponent(category.id)}`;
+        card.setAttribute("aria-label", tr("categories.playCategory", { category: tr(category.labelKey) }));
+    }
 
     const head = document.createElement("div");
     head.className = "category-card-head";
@@ -244,6 +255,14 @@ function buildCategoryCard(category, unlockedWords, activeOrder) {
 
     copy.append(title, meta);
     head.append(badge, copy);
+
+    if (isPlayable) {
+        const play = document.createElement("span");
+        play.className = "category-card-play";
+        play.setAttribute("aria-hidden", "true");
+        play.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+        head.append(play);
+    }
 
     const track = document.createElement("div");
     track.className = "category-progress-track";

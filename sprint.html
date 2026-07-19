@@ -14,11 +14,14 @@
 <body class="has-app-shell is-fixed-page" data-tab="games">
   <div id="app-header"></div>
   <main class="app">
-    <section class="game-hud" aria-label="Session score">
-      <div class="hud-item">
-        <span class="hud-label" data-i18n="sprint.round">Round</span>
-        <strong id="sprint-round-text">--</strong>
+    <div class="sprint-topline">
+      <span id="sprint-category-chip" class="sprint-category-chip" hidden></span>
+      <div id="sprint-progress" class="sprint-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" data-i18n-aria-label="sprint.round" aria-label="Round">
+        <div id="sprint-progress-fill" class="sprint-progress-fill"></div>
       </div>
+    </div>
+
+    <section class="game-hud is-two-up" aria-label="Session score">
       <div class="hud-item">
         <span class="hud-label" data-i18n="trainer.score">Score</span>
         <strong id="sprint-hud-score-text">0 pts</strong>

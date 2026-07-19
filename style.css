@@ -1401,6 +1401,76 @@ input[type="password"]:focus {
     margin-bottom: var(--space-5);
 }
 
+/* Sprint's session progress, in the grid row the .app-header would occupy on
+   pages that have one (sprint.html puts its header outside .app, so row 1 is
+   free). Replaces the old "Round 3/12" HUD tile. */
+.sprint-topline {
+    grid-column: 1;
+    grid-row: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+/* Only present when the sprint was started for one category (Categories page
+   links in with ?category=), so the player can tell a focused run from a
+   full-deck one. */
+.sprint-category-chip {
+    flex: 0 1 auto;
+    /* Capped so a long category name can't squeeze the bar next to it down to
+       a stub on a narrow phone - it ellipsises instead. */
+    max-width: 42%;
+    min-width: 0;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 800;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sprint-category-chip[hidden] {
+    display: none;
+}
+
+.sprint-progress {
+    flex: 1;
+    min-width: 0;
+    height: 10px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: var(--surface-soft);
+    box-shadow: inset 0 0 0 1px var(--border);
+}
+
+.sprint-progress-fill {
+    width: 0;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 72%, #fff), var(--accent));
+    transition: width 320ms cubic-bezier(0.22, 0.61, 0.36, 1), background var(--transition);
+}
+
+/* The retry phase is a second, shorter run - a different colour keeps it from
+   reading as "you went backwards" when the bar drops back to empty. */
+.sprint-progress.is-retry .sprint-progress-fill {
+    background: linear-gradient(90deg, color-mix(in srgb, var(--color-streak) 72%, #fff), var(--color-streak));
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sprint-progress-fill {
+        transition: none;
+    }
+}
+
+.game-hud.is-two-up {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .hud-item {
     display: grid;
     gap: 2px;
@@ -3963,6 +4033,42 @@ body.deck-overlay-open {
     opacity: 0.6;
 }
 
+/* Categories with at least one unlocked word render as <a> and start a sprint
+   scoped to them (js/categories.js). */
+.category-card.is-playable {
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
+}
+
+.category-card.is-playable:hover,
+.category-card.is-playable:focus-visible {
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+    box-shadow: var(--shadow-md);
+    outline: 0;
+    transform: translateY(-2px);
+}
+
+.category-card-play {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    flex: 0 0 auto;
+    margin-left: auto;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .category-card.is-playable:hover,
+    .category-card.is-playable:focus-visible {
+        transform: none;
+    }
+}
+
 .category-card-head {
     display: flex;
     align-items: center;
@@ -4172,6 +4278,33 @@ body {
     background: var(--bg);
 }
 
+/* Page entrance. Deliberately keyed to <main> rather than driven from JS:
+   js/router.js's soft navigation replaces the whole <main> node, and a
+   freshly-inserted element runs its animation on its own - so the same rule
+   covers both a soft route change and a cold page load, with nothing to
+   re-trigger. Kept to opacity + a few pixels so it reads as settling rather
+   than sliding. */
+@keyframes polytype-page-enter {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+body > main {
+    animation: polytype-page-enter 260ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body > main {
+        animation: none;
+    }
+}
+
 .app-shell-header {
     max-width: var(--container);
     margin: 0 auto;
@@ -4218,7 +4351,7 @@ body {
     align-items: center;
     justify-content: center;
     min-width: 0;
-    width: 82px;
+    width: 118px;
     height: 18px;
     margin-left: -8px;
     padding-left: 8px;
@@ -4247,6 +4380,25 @@ body {
        rather than a fixed black, which would muddy the light theme. */
     text-shadow: 0 1px 2px var(--bg);
     white-space: nowrap;
+}
+
+/* Desktop has room to spare in the header, so the XP meter gets to be a real
+   readable bar there rather than the compact mobile chip. */
+@media (min-width: 860px) {
+    .app-shell-level-badge {
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+    }
+
+    .app-shell-level-track {
+        width: 190px;
+        height: 21px;
+    }
+
+    .app-shell-level-text {
+        font-size: 11px;
+    }
 }
 
 .app-shell-stats {
@@ -4830,13 +4982,22 @@ body {
     font-size: 12px;
 }
 
+/* Play and Lessons sit side by side. Lessons is hidden for study languages
+   with no curriculum (js/dashboard.js), and flex:1 means Play simply takes
+   the whole row back when that happens - no separate one-button rule. */
+.home-cta-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
 .home-play-again-btn {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    width: 100%;
-    margin-bottom: 20px;
+    flex: 1;
+    min-width: 0;
     padding: 13px;
     border-radius: 14px;
     border: 0;

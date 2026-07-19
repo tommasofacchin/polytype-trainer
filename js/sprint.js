@@ -94,7 +94,8 @@
     }
 
     function initSprintPage() {
-        el.roundText = document.getElementById("sprint-round-text");
+        el.progress = document.getElementById("sprint-progress");
+        el.progressFill = document.getElementById("sprint-progress-fill");
         el.hudScoreText = document.getElementById("sprint-hud-score-text");
         el.streakText = document.getElementById("sprint-streak-text");
         el.streakChip = document.getElementById("sprint-streak-chip");
@@ -141,16 +142,24 @@
 
         const courseProgress = getCourseProgress();
         const disabledSuffixes = getDisabledWordSuffixes(activeLanguage);
-        state.unlocked = state.vocab.filter(item =>
-            courseProgress.unlockedWords.has(getWordSuffix(item.id)) && !disabledSuffixes.has(getWordSuffix(item.id))
-        );
+        const category = getRequestedCategory();
+        const categorySuffixes = category ? new Set(category.wordSuffixes) : null;
+
+        state.unlocked = state.vocab.filter(item => {
+            const suffix = getWordSuffix(item.id);
+            if (!courseProgress.unlockedWords.has(suffix)) return false;
+            if (disabledSuffixes.has(suffix)) return false;
+            return !categorySuffixes || categorySuffixes.has(suffix);
+        });
+
+        renderCategoryChip(category);
 
         if (!state.unlocked.length) {
             // A real, reachable state now (not just a load failure): a
             // freshly-picked language starts with 0 unlocked words until
             // keys get spent on the Deck page - a generic "couldn't load"
             // message would be actively misleading here.
-            showNoWordsState();
+            showNoWordsState(category);
             return;
         }
 
@@ -163,14 +172,42 @@
         }
     }
 
-    function showNoWordsState() {
+    // A sprint can be scoped to one category via ?category=<id> (the
+    // Categories page links in that way). Read per call rather than cached:
+    // js/router.js re-runs this script on soft navigation, so the query
+    // string can differ between runs within the same document.
+    function getRequestedCategory() {
+        const id = new URLSearchParams(window.location.search).get("category");
+        if (!id) return null;
+        return (window.POLYTYPE_CATEGORIES || []).find(category => category.id === id) || null;
+    }
+
+    function renderCategoryChip(category) {
+        const chip = document.getElementById("sprint-category-chip");
+        if (!chip) return;
+        chip.hidden = !category;
+        chip.textContent = category ? tr(category.labelKey) : "";
+    }
+
+    // Two different dead ends: nothing unlocked at all (go spend keys on the
+    // Deck), versus nothing unlocked *in the category you picked* (go pick a
+    // different one) - pointing both at the Deck would be a dead end for the
+    // second.
+    function showNoWordsState(category) {
         if (!el.exerciseRoot) return;
-        el.exerciseRoot.innerHTML = `
-            <div class="sprint-empty-state">
-                <p>${tr("sprint.noWordsError")}</p>
-                <a href="deck.html" class="restart-btn">${tr("sprint.goToDeck")}</a>
-            </div>
-        `;
+        el.exerciseRoot.innerHTML = category
+            ? `
+                <div class="sprint-empty-state">
+                    <p>${tr("sprint.noWordsInCategory", { category: tr(category.labelKey) })}</p>
+                    <a href="categories.html" class="restart-btn">${tr("sprint.backToCategories")}</a>
+                </div>
+            `
+            : `
+                <div class="sprint-empty-state">
+                    <p>${tr("sprint.noWordsError")}</p>
+                    <a href="deck.html" class="restart-btn">${tr("sprint.goToDeck")}</a>
+                </div>
+            `;
     }
 
     // ── Session lifecycle ──────────────────────────────────────────────────
@@ -212,6 +249,19 @@
         nextRound();
     }
 
+    // The bar replaced the old "Round 3/12" HUD tile. The count it used to
+    // show survives as aria-valuetext, so screen readers still get the exact
+    // position instead of only a percentage.
+    function setProgress(fraction, label, isRetry) {
+        if (!el.progress || !el.progressFill) return;
+
+        const percent = Math.max(0, Math.min(100, Math.round(fraction * 100)));
+        el.progressFill.style.width = `${percent}%`;
+        el.progress.classList.toggle("is-retry", Boolean(isRetry));
+        el.progress.setAttribute("aria-valuenow", percent);
+        el.progress.setAttribute("aria-valuetext", label);
+    }
+
     function nextRound() {
         if (state.roundIndex >= state.totalRounds) {
             startRetryPhaseOrFinish();
@@ -220,7 +270,9 @@
 
         state.roundLocked = false;
         const type = state.availableRoundTypes[Math.floor(Math.random() * state.availableRoundTypes.length)];
-        el.roundText.textContent = `${state.roundIndex + 1}/${state.totalRounds}`;
+        // Fills as rounds are *completed*, so the bar reads empty on round 1
+        // and only hits 100% once the last answer is in.
+        setProgress(state.roundIndex / state.totalRounds, `${state.roundIndex + 1}/${state.totalRounds}`, false);
 
         el.exerciseRoot.innerHTML = "";
         if (type === "match") renderMatchRound();
@@ -270,7 +322,14 @@
 
         state.roundLocked = false;
         state.retryRoundIndex += 1;
-        el.roundText.textContent = tr("sprint.retryRound", { index: state.retryRoundIndex, total: state.retryRoundTotal });
+        // The retry phase is its own run through a shorter queue, so the bar
+        // restarts from empty and switches colour rather than staying pinned
+        // at 100% from the main rounds.
+        setProgress(
+            (state.retryRoundIndex - 1) / state.retryRoundTotal,
+            tr("sprint.retryRound", { index: state.retryRoundIndex, total: state.retryRoundTotal }),
+            true
+        );
 
         const { type, word } = state.retryQueue.shift();
         el.exerciseRoot.innerHTML = "";
@@ -877,7 +936,7 @@
 
     // Friend list under the score: each entry's friendshipStreak only rises
     // on a day both the player and that friend play a sprint (see
-    // updateFriendshipStreaksForSprint in api/complete-practice-session.js);
+    // commitFriendshipStreaksForSprint in api/complete-practice-session.js);
     // playedToday reflects that same friend's sprint activity today.
     //
     // Inserts the content as soon as it's known (claiming its layout space
