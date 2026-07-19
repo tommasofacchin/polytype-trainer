@@ -77,9 +77,17 @@
         return items;
     }
 
-    function buildChip(item) {
+    // How long a tapped item's dismiss animation gets before the next one
+    // appears, and how the final row of chips cascades in - kept together so
+    // the two stay easy to tune against each other.
+    const CHEST_ITEM_DISMISS_MS = 220;
+    const CHEST_CHIP_STAGGER_MS = 90;
+    const CHEST_BTN_EXTRA_DELAY_MS = 160;
+
+    function buildChip(item, delayMs = 0) {
         const chip = document.createElement("div");
         chip.className = `chest-reward-chip is-${item.kind}`;
+        if (delayMs) chip.style.animationDelay = `${delayMs}ms`;
         chip.innerHTML = item.icon;
         const span = document.createElement("span");
         span.textContent = item.amount;
@@ -99,18 +107,23 @@
                 <div class="chest-overlay-rays"></div>
                 <div class="chest-overlay-flash"></div>
                 ${CHEST_SVG}
+                <div class="chest-item-stage" aria-live="polite"></div>
             </div>
             <div class="chest-overlay-title">${demo ? tr("chest.demoTitle") : tr("chest.title")}</div>
-            <div class="chest-item-stage" aria-live="polite"></div>
             <div class="chest-hint">${tr("chest.tapToOpen")}</div>
-            <div class="chest-collected"></div>
+            <div class="chest-final-rewards"></div>
         `;
         document.body.append(overlay);
 
-        const art = overlay.querySelector(".chest-overlay-art");
+        // Lives inside .chest-overlay-art (absolutely positioned there, see
+        // style.css) so each item visibly floats up out of the chest rather
+        // than appearing in a separate block further down the card.
         const stage = overlay.querySelector(".chest-item-stage");
         const hint = overlay.querySelector(".chest-hint");
-        const collected = overlay.querySelector(".chest-collected");
+        // Stays empty until every item has been tapped through - see the
+        // final-reveal block at the end of this function. Nothing here
+        // accumulates mid-sequence, unlike the stage above.
+        const finalRewards = overlay.querySelector(".chest-final-rewards");
 
         function close() {
             overlay.remove();
@@ -159,6 +172,13 @@
         }
 
         // ── One tap per item ──────────────────────────────────────────────
+        // Exactly one item card lives in the stage at a time - replaceChildren
+        // below discards whatever was there before, so item 1 is completely
+        // gone (not just visually covered) by the time item 2 appears. Every
+        // item is only shown together, all at once, in the final-reveal block
+        // after this loop.
+        const dismissDelay = prefersReducedMotion() ? 0 : CHEST_ITEM_DISMISS_MS;
+
         for (let i = 0; i < items.length; i += 1) {
             const item = items[i];
 
@@ -174,7 +194,7 @@
             stage.replaceChildren(card);
 
             const isLast = i === items.length - 1;
-            hint.textContent = isLast ? tr("chest.tapToFinish") : tr("chest.tapToContinue");
+            hint.textContent = isLast ? tr("chest.tapToReveal") : tr("chest.tapToContinue");
 
             // The XP card is where the stars launch from, so the burst reads
             // as the reward itself flying into the bar.
@@ -187,21 +207,28 @@
 
             await waitForTap(overlay);
 
-            // Settle the revealed item into the row along the bottom, so by
-            // the end every item is on screen together.
-            card.classList.add("is-collecting");
-            collected.append(buildChip(item));
-            if (prefersReducedMotion()) stage.replaceChildren();
+            // Dismiss the tapped card - it drops back toward the chest and
+            // fades, rather than settling anywhere else on screen. Nothing
+            // from it survives into the next item's turn.
+            card.classList.add("is-dismissing");
+            await new Promise(resolve => window.setTimeout(resolve, dismissDelay));
         }
 
         stage.replaceChildren();
         hint.textContent = "";
 
-        // ── Final state: everything revealed, plus a way out ──────────────
+        // ── Final reveal: every item together, all at once ─────────────────
+        finalRewards.replaceChildren(
+            ...items.map((item, index) => buildChip(item, prefersReducedMotion() ? 0 : index * CHEST_CHIP_STAGGER_MS))
+        );
+
         const collectBtn = document.createElement("button");
         collectBtn.type = "button";
         collectBtn.className = "chest-collect-btn";
         collectBtn.textContent = tr("chest.collect");
+        if (!prefersReducedMotion()) {
+            collectBtn.style.animationDelay = `${items.length * CHEST_CHIP_STAGGER_MS + CHEST_BTN_EXTRA_DELAY_MS}ms`;
+        }
         overlay.append(collectBtn);
 
         await new Promise(resolve => {

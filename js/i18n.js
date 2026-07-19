@@ -459,7 +459,7 @@
             "chest.demoTitle": "Test chest",
             "chest.demoDesc": "Replays the opening - grants nothing",
             "chest.tapToContinue": "Tap to continue",
-            "chest.tapToFinish": "Tap for the last one",
+            "chest.tapToReveal": "Tap to reveal your rewards",
             "chest.itemCoins": "Coins",
             "chest.itemXp": "Experience",
 
@@ -1018,7 +1018,7 @@
             "chest.demoTitle": "Forziere di prova",
             "chest.demoDesc": "Ripete l'apertura - non dà nulla",
             "chest.tapToContinue": "Tocca per continuare",
-            "chest.tapToFinish": "Tocca per l'ultimo",
+            "chest.tapToReveal": "Tocca per svelare i premi",
             "chest.itemCoins": "Monete",
             "chest.itemXp": "Esperienza",
 
