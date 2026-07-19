@@ -960,7 +960,14 @@
         if (!el.rows || !row) return;
         const rowRect = row.getBoundingClientRect();
         const containerRect = el.rows.getBoundingClientRect();
-        smoothScroll(el.rows, el.rows.scrollTop + (rowRect.bottom - containerRect.bottom) + 40, 450);
+
+        // Same reasoning as centerRowInViewport in js/main.js: the fixed
+        // on-screen keyboard covers the bottom of this container, so the
+        // target has to be its visible edge, not its real one.
+        const keyboardTop = window.PolytypeKeyboard?.getVisibleBottom?.() ?? Infinity;
+        const visibleBottom = Math.min(containerRect.bottom, keyboardTop);
+
+        smoothScroll(el.rows, el.rows.scrollTop + (rowRect.bottom - visibleBottom) + 40, 450);
     }
 
     function smoothScroll(container, targetTop, duration) {

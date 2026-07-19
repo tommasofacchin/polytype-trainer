@@ -1548,6 +1548,14 @@ input[type="password"]:focus {
     scrollbar-width: none;
 }
 
+/* Without this the last rows physically can't scroll clear of the keyboard -
+   the container is already at max scroll, so centerRowInViewport's corrected
+   target (js/main.js) would just clamp and leave the active row covered.
+   --vkbd-height is published by js/virtual-keyboard.js while it's open. */
+.is-vkbd-open #rows-container {
+    padding-bottom: calc(80px + var(--vkbd-height, 0px));
+}
+
 #rows-container::-webkit-scrollbar {
     display: none;
 }
@@ -4863,13 +4871,27 @@ body > main {
     font-weight: 600;
     touch-action: manipulation;
     user-select: none;
-    transition: background 80ms ease, transform 80ms ease;
+    /* Release only - the press itself is applied instantly by the
+       .is-pressed override below. */
+    transition: background 140ms ease-out, transform 140ms ease-out;
 }
 
-.vkbd-key:active {
+/* .is-pressed is set by js/virtual-keyboard.js for a fixed ~130ms. :active is
+   kept alongside it only as a desktop-mouse nicety - on touch it's
+   unreliable here, because the keydown handler's preventDefault() suppresses
+   it on most mobile browsers, and even when it does apply it lasts only as
+   long as the finger is down, which at typing speed is too brief to see. */
+.vkbd-key:active,
+.vkbd-key.is-pressed {
     background: var(--accent);
     color: var(--accent-on, var(--text-inverse));
     transform: translateY(1px);
+}
+
+/* Snap on, ease off: the press must register the instant the finger lands,
+   but fading out reads far better than a hard cut at speed. */
+.vkbd-key.is-pressed {
+    transition: background 0s, transform 0s;
 }
 
 .vkbd-key-wide {
@@ -6673,6 +6695,12 @@ body > main {
     padding: var(--space-3) 0;
     scroll-behavior: auto;
     scrollbar-width: none;
+}
+
+/* Same reason as #rows-container above: room to actually scroll the active
+   row out from under the keyboard. */
+.is-vkbd-open #dictate-rows {
+    padding-bottom: calc(var(--space-3) + var(--vkbd-height, 0px));
 }
 
 #dictate-rows::-webkit-scrollbar { display: none; }

@@ -87,9 +87,36 @@
             // before the click event this key relies on ever runs.
             btn.addEventListener("pointerdown", event => {
                 event.preventDefault();
+                flashKey(btn);
                 handleKey(btn.dataset.vkbdKey);
             });
         });
+    }
+
+    // How long a key stays visibly lit after being tapped. Long enough to
+    // register at speed, short enough not to smear into the next keystroke.
+    const KEY_FLASH_MS = 130;
+    const flashTimers = new WeakMap();
+
+    // The pressed state is driven from here rather than left to CSS :active,
+    // because the preventDefault() above suppresses :active on most mobile
+    // browsers - and even where it survives, :active only lasts as long as
+    // the finger is down, so fast typing produced taps too brief to see. A
+    // timed class guarantees every keystroke gets the same visible flash.
+    function flashKey(btn) {
+        window.clearTimeout(flashTimers.get(btn));
+
+        // Re-tapping a key that's still lit has to restart the animation,
+        // not no-op - without the reflow the class is never actually absent
+        // between the two taps, so repeated letters would look like one long
+        // press instead of two distinct hits.
+        btn.classList.remove("is-pressed");
+        void btn.offsetWidth;
+        btn.classList.add("is-pressed");
+
+        flashTimers.set(btn, window.setTimeout(() => {
+            btn.classList.remove("is-pressed");
+        }, KEY_FLASH_MS));
     }
 
     function handleKey(key) {
@@ -153,11 +180,17 @@
         render();
         root.hidden = false;
         document.body.classList.add("is-vkbd-open");
+        // Published so scrolling exercise lists can reserve matching space at
+        // their bottom (see .is-vkbd-open rules in style.css). Measured after
+        // unhiding, and safe to read mid-slide: the panel animates on
+        // transform, which doesn't affect its laid-out height.
+        document.body.style.setProperty("--vkbd-height", `${root.offsetHeight}px`);
     }
 
     function hide() {
         if (root) root.hidden = true;
         document.body.classList.remove("is-vkbd-open");
+        document.body.style.removeProperty("--vkbd-height");
         activeInput = null;
         activeCallbacks = null;
     }
@@ -193,7 +226,22 @@
         show();
     }
 
-    window.PolytypeKeyboard = { attachCallbacks, hide };
+    // Viewport Y at which the keyboard starts covering the page, or the
+    // viewport bottom when it's down. The keyboard is position:fixed, so a
+    // scrolling exercise list underneath it has no other way to know which
+    // part of itself is actually visible - see centerRowInViewport in
+    // js/main.js and centerRow in js/dictate.js, both of which used to scroll
+    // rows to the container's real bottom edge and so parked them behind the
+    // keyboard.
+    function getVisibleBottom() {
+        if (!root || root.hidden) return window.innerHeight;
+        const top = root.getBoundingClientRect().top;
+        // Guard against a mid-transition measurement (the panel slides in
+        // from translateY(100%)) reporting a top below the viewport.
+        return Math.min(top, window.innerHeight);
+    }
+
+    window.PolytypeKeyboard = { attachCallbacks, hide, getVisibleBottom };
 
     root = document.createElement("div");
     root.id = "polytype-vkbd";

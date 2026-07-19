@@ -1723,9 +1723,16 @@ function shuffleArray(arr) {
 function centerRowInViewport(row) {
     const rowRect = row.getBoundingClientRect();
     const containerRect = rowsContainer.getBoundingClientRect();
+
+    // The on-screen keyboard is position:fixed and covers the bottom of the
+    // container, so scrolling a row flush with containerRect.bottom parked it
+    // underneath the keys. Aim at whichever edge is actually visible.
+    const keyboardTop = window.PolytypeKeyboard?.getVisibleBottom?.() ?? Infinity;
+    const visibleBottom = Math.min(containerRect.bottom, keyboardTop);
+
     const targetScrollTop =
         rowsContainer.scrollTop +
-        (rowRect.bottom - containerRect.bottom) +
+        (rowRect.bottom - visibleBottom) +
         40;
 
     smoothScrollTo(rowsContainer, targetScrollTop, 450);
