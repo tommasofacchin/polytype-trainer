@@ -19,9 +19,9 @@ const KEY_SVG =
 // to icon size for visual consistency between the two chest surfaces.
 const CHEST_SVG =
     '<svg viewBox="0 0 48 48" width="18" height="18">' +
-    '<rect x="6" y="20" width="36" height="20" rx="4" fill="#8b6cff"/>' +
-    '<path d="M6 22a18 12 0 0 1 36 0z" fill="#a084ff"/>' +
-    '<rect x="6" y="25" width="36" height="4" fill="#6b4dff"/>' +
+    '<rect x="6" y="20" width="36" height="20" rx="4" fill="#17b8c9"/>' +
+    '<path d="M6 22a18 12 0 0 1 36 0z" fill="#3ed0de"/>' +
+    '<rect x="6" y="25" width="36" height="4" fill="#0e8fa0"/>' +
     '<rect x="21" y="23" width="6" height="9" rx="2" fill="#ffc73a"/>' +
     "</svg>";
 
@@ -409,9 +409,9 @@ function showWordChestReveal(word) {
             <div class="chest-overlay-rays"></div>
             <div class="chest-overlay-flash"></div>
             <svg class="chest-overlay-icon" width="130" height="130" viewBox="0 0 48 48">
-                <rect x="6" y="20" width="36" height="20" rx="4" fill="#8b6cff"/>
-                <path d="M6 22a18 12 0 0 1 36 0z" fill="#a084ff"/>
-                <rect x="6" y="25" width="36" height="4" fill="#6b4dff"/>
+                <rect x="6" y="20" width="36" height="20" rx="4" fill="#17b8c9"/>
+                <path d="M6 22a18 12 0 0 1 36 0z" fill="#3ed0de"/>
+                <rect x="6" y="25" width="36" height="4" fill="#0e8fa0"/>
                 <rect x="21" y="23" width="6" height="9" rx="2" fill="#ffc73a"/>
             </svg>
         </div>

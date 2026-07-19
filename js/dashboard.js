@@ -165,7 +165,7 @@ function renderChest(state) {
     if (state.chestReady) {
         mount.className = "chest-card is-ready";
         mount.innerHTML = `
-            <svg width="46" height="46" viewBox="0 0 48 48"><rect x="6" y="20" width="36" height="20" rx="4" fill="#8b6cff"/><path d="M6 22a18 12 0 0 1 36 0z" fill="#a084ff"/><rect x="6" y="25" width="36" height="4" fill="#6b4dff"/><rect x="21" y="23" width="6" height="9" rx="2" fill="#ffc73a"/></svg>
+            <svg width="46" height="46" viewBox="0 0 48 48"><rect x="6" y="20" width="36" height="20" rx="4" fill="#17b8c9"/><path d="M6 22a18 12 0 0 1 36 0z" fill="#3ed0de"/><rect x="6" y="25" width="36" height="4" fill="#0e8fa0"/><rect x="21" y="23" width="6" height="9" rx="2" fill="#ffc73a"/></svg>
             <div class="chest-card-copy">
                 <strong>${tr("chest.ready")}</strong>
                 <span>${tr("chest.readyDesc")}</span>
@@ -180,12 +180,12 @@ function renderChest(state) {
     } else {
         mount.className = "chest-card is-claimed";
         mount.innerHTML = `
-            <svg width="40" height="40" viewBox="0 0 48 48" style="opacity:.5"><rect x="6" y="20" width="36" height="20" rx="4" fill="#8b6cff"/><path d="M6 22a18 12 0 0 1 36 0z" fill="#a084ff"/><rect x="6" y="25" width="36" height="4" fill="#6b4dff"/></svg>
+            <svg width="40" height="40" viewBox="0 0 48 48" style="opacity:.5"><rect x="6" y="20" width="36" height="20" rx="4" fill="#17b8c9"/><path d="M6 22a18 12 0 0 1 36 0z" fill="#3ed0de"/><rect x="6" y="25" width="36" height="4" fill="#0e8fa0"/></svg>
             <div class="chest-card-copy">
                 <strong>${tr("chest.claimed")}</strong>
                 <span>${tr("chest.claimedDesc")}</span>
             </div>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffa24b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4d9fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
         `;
     }
 }
@@ -220,7 +220,7 @@ function renderDemoChest() {
     mount.hidden = false;
     mount.className = "chest-card is-demo";
     mount.innerHTML = `
-        <svg width="46" height="46" viewBox="0 0 48 48"><rect x="6" y="20" width="36" height="20" rx="4" fill="#8b6cff"/><path d="M6 22a18 12 0 0 1 36 0z" fill="#a084ff"/><rect x="6" y="25" width="36" height="4" fill="#6b4dff"/><rect x="21" y="23" width="6" height="9" rx="2" fill="#ffc73a"/></svg>
+        <svg width="46" height="46" viewBox="0 0 48 48"><rect x="6" y="20" width="36" height="20" rx="4" fill="#17b8c9"/><path d="M6 22a18 12 0 0 1 36 0z" fill="#3ed0de"/><rect x="6" y="25" width="36" height="4" fill="#0e8fa0"/><rect x="21" y="23" width="6" height="9" rx="2" fill="#ffc73a"/></svg>
         <div class="chest-card-copy">
             <strong>${tr("chest.demoTitle")}</strong>
             <span>${tr("chest.demoDesc")}</span>
@@ -257,7 +257,7 @@ function renderMissions(state) {
     const completedCount = missions.filter(mission => mission.completed).length;
     if (countEl) countEl.textContent = `${completedCount} / ${missions.length}`;
 
-    const icons = ["#ffa24b", "#8b6cff", "#ffc73a"];
+    const icons = ["#4d9fff", "#17b8c9", "#ffc73a"];
     list.replaceChildren(
         ...missions.map((mission, index) => {
             const row = document.createElement("div");
@@ -293,9 +293,9 @@ function renderFriendsPreview(state) {
             const initial = (entry.handle || entry.displayName || "?").trim().charAt(0).toUpperCase();
             row.innerHTML = `
                 <span class="leaderboard-rank is-plain">${entry.rank}</span>
-                <span class="leaderboard-avatar" style="background:${entry.isSelf ? "#ffa24b" : "#8b6cff"};color:${entry.isSelf ? "#3a1e05" : "#fff"}">${initial}</span>
+                <span class="leaderboard-avatar" style="background:${entry.isSelf ? "#4d9fff" : "#17b8c9"};color:${entry.isSelf ? "#05203d" : "#fff"}">${initial}</span>
                 <span class="leaderboard-name">${entry.isSelf ? tr("common.you") : (entry.displayName || entry.handle || "")}</span>
-                <span class="leaderboard-xp"><span class="leaderboard-xp-value">${(entry.weeklyXp || 0).toLocaleString()}</span><svg width="15" height="15" viewBox="0 0 24 24" fill="#ffa24b"><path d="M12 2l2.9 6.2 6.6.7-4.9 4.5 1.3 6.6L12 17.8 6.1 20.6l1.3-6.6L2.5 8.9l6.6-.7z"/></svg></span>
+                <span class="leaderboard-xp"><span class="leaderboard-xp-value">${(entry.weeklyXp || 0).toLocaleString()}</span><svg width="15" height="15" viewBox="0 0 24 24" fill="#4d9fff"><path d="M12 2l2.9 6.2 6.6.7-4.9 4.5 1.3 6.6L12 17.8 6.1 20.6l1.3-6.6L2.5 8.9l6.6-.7z"/></svg></span>
             `;
             if (!entry.isSelf && entry.uid) {
                 row.addEventListener("click", () => {

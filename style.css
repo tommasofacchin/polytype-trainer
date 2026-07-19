@@ -3,50 +3,55 @@
 :root {
     color-scheme: dark;
 
-    --bg: #14121c;
-    --bg-soft: #17141f;
-    --surface: #201d30;
-    --surface-soft: #2a2640;
-    --surface-alt: #2a2350;
-    --surface-empty: #1a1826;
+    /* Neutrals are blue-tinted rather than neutral-grey, so the chrome reads
+       as part of the blue brand instead of a grey shell with blue buttons. */
+    --bg: #0e141f;
+    --bg-soft: #111926;
+    --surface: #1a2434;
+    --surface-soft: #243044;
+    --surface-alt: #1f2c46;
+    --surface-empty: #141c28;
     --border: rgba(255, 255, 255, 0.07);
     --border-strong: rgba(255, 255, 255, 0.12);
 
-    --text: #f5f2ff;
-    --text-soft: #a9a3c4;
-    --text-faint: #726c8c;
-    --text-faintest: #524d6b;
-    --text-inverse: #3a1e05;
+    --text: #eaf1fb;
+    --text-soft: #9fb2ca;
+    --text-faint: #6d829e;
+    --text-faintest: #4e6076;
+    --text-inverse: #05203d;
 
-    --accent: #ffa24b;
-    --accent-hover: #f08324;
-    --accent-soft: rgba(255, 162, 75, 0.14);
-    --accent-on: #3a1e05;
+    --accent: #4d9fff;
+    --accent-hover: #2b7fe0;
+    --accent-soft: rgba(77, 159, 255, 0.14);
+    --accent-on: #05203d;
     --danger: #ff7a94;
     --danger-soft: rgba(255, 77, 109, 0.12);
     --danger-border: rgba(255, 77, 109, 0.3);
-    /* Deliberately NOT the brand colour. This drives the right/wrong feedback
+    /* Deliberately NOT the brand colour: this drives the right/wrong feedback
        on every exercise (.is-correct against --danger's .is-wrong), so it has
-       to stay readable as "correct" on its own - and the accent is now an
-       orange sitting close to --danger's pink and to --color-streak. It used
-       to be the same value as --accent, which is why it looked like brand
-       green rather than a semantic one. */
-    --success: #35d69b;
+       to read as "correct" on its own rather than as "brand". It used to hold
+       the same value as --accent, which is why it looked like brand green. */
+    --success: #2fbf71;
     --warning: #ffc73a;
 
-    /* Pushed red-ward now that the brand is orange. At the old #ff7a2d /
-       #ff9a5c the flame pill sat right next to the XP figure in a leaderboard
-       row (and next to the level badge in the header) in near-identical hues,
-       so the two read as one blob instead of two separate stats. */
+    /* Warm anchors, deliberately left warm: with a blue brand they're the
+       only heat in the palette, which is what keeps coins, flames and combo
+       tiers instantly separable from anything interactive. */
     --color-streak: #f2452f;
     --color-streak-light: #ff6a52;
     --color-gold: #ffc73a;
     --color-gold-text: #ffd268;
     --color-gold-ring: #d99a1c;
-    --color-violet: #8b6cff;
-    --color-violet-light: #a084ff;
-    --color-violet-lighter: #b7a3ff;
-    --color-violet-deep: #6b4dff;
+
+    /* Secondary reward colour - chests, keys, the Lessons CTA, several badge
+       icons. Was --color-secondary (#17b8c9); renamed because the value is now a
+       teal and a token called "violet" holding cyan is a trap for the next
+       person. Sits greener and deeper than --accent so the two don't blur
+       where they meet (e.g. the header's key chip beside the level pill). */
+    --color-secondary: #17b8c9;
+    --color-secondary-light: #3ed0de;
+    --color-secondary-lighter: #7ce0ea;
+    --color-secondary-deep: #0e8fa0;
     --color-gold-medal: #ffc73a;
     --color-silver-medal: #c9cdd6;
     --color-bronze-medal: #c98a4b;
@@ -87,8 +92,8 @@
     --shadow-sm: none;
     --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.28);
     --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.38);
-    --shadow-chest: 0 6px 20px -12px rgba(139, 108, 255, 0.55);
-    --shadow-cta: 0 14px 34px -12px rgba(255, 162, 75, 0.7);
+    --shadow-chest: 0 6px 20px -12px rgba(23, 184, 201, 0.55);
+    --shadow-cta: 0 14px 34px -12px rgba(77, 159, 255, 0.7);
 
     --scrim: rgba(10, 8, 18, 0.92);
 
@@ -125,21 +130,24 @@
 :root[data-theme="light"] {
     color-scheme: light;
 
-    --bg: #f5f3fa;
-    --bg-soft: #eeebf6;
+    /* Blue-tinted to match the dark theme's own neutrals - these were mauve
+       (#f5f3fa / #efe8fc), left over from the purple era, and read visibly
+       warm next to the blue brand. */
+    --bg: #f2f6fc;
+    --bg-soft: #e9eff8;
     --surface: #ffffff;
-    --surface-soft: #f3f1fa;
-    --surface-alt: #efe8fc;
-    --surface-empty: #edeaf2;
-    --border: rgba(20, 12, 40, 0.08);
-    --border-strong: rgba(20, 12, 40, 0.16);
+    --surface-soft: #eff4fb;
+    --surface-alt: #e4eefc;
+    --surface-empty: #e9eef5;
+    --border: rgba(12, 26, 46, 0.08);
+    --border-strong: rgba(12, 26, 46, 0.16);
 
-    --text: #1c1930;
-    --text-soft: #5b5570;
-    --text-faint: #7b7594;
-    --text-faintest: #a39dbb;
+    --text: #16202f;
+    --text-soft: #51607a;
+    --text-faint: #6f8099;
+    --text-faintest: #9aa9bd;
 
-    --scrim: rgba(20, 16, 32, 0.6);
+    --scrim: rgba(10, 20, 34, 0.6);
 }
 
 /* ---- Cross-document view transitions ---------------------------------------
@@ -1706,7 +1714,7 @@ input[type="password"]:focus {
 }
 
 .game-loading-dots span:nth-child(2) {
-    background: var(--color-violet);
+    background: var(--color-secondary);
     animation-delay: 0.15s;
 }
 
@@ -4632,7 +4640,7 @@ body > main {
 }
 .app-shell-stat-streak { color: var(--color-streak-light); }
 .app-shell-stat-coin { color: var(--color-gold-text); }
-.app-shell-stat-key { color: var(--color-violet-lighter); }
+.app-shell-stat-key { color: var(--color-secondary-lighter); }
 
 .app-shell-lang-menu {
     position: relative;
@@ -5147,7 +5155,7 @@ body > main {
 
 .chest-card.is-ready {
     background: linear-gradient(135deg, var(--surface-alt), var(--surface));
-    border: 1px solid rgba(139, 108, 255, 0.28);
+    border: 1px solid rgba(23, 184, 201, 0.28);
     box-shadow: var(--shadow-chest);
 }
 
@@ -5173,7 +5181,7 @@ body > main {
 .chest-card-copy span {
     font-size: 11px;
     font-weight: 700;
-    color: var(--color-violet-lighter);
+    color: var(--color-secondary-lighter);
 }
 
 .chest-card.is-claimed .chest-card-copy span {
@@ -5181,7 +5189,7 @@ body > main {
 }
 
 .chest-open-btn {
-    background: var(--color-violet);
+    background: var(--color-secondary);
     color: #fff;
     font-weight: 800;
     font-size: 13px;
@@ -5304,12 +5312,12 @@ body > main {
 }
 
 .home-play-again-btn.is-secondary {
-    background: var(--color-violet);
+    background: var(--color-secondary);
     color: #fff;
 }
 
 .home-play-again-btn.is-secondary:hover, .home-play-again-btn.is-secondary:focus-visible {
-    background: var(--color-violet-deep);
+    background: var(--color-secondary-deep);
 }
 
 .streak-risk-banner {
@@ -5437,7 +5445,7 @@ body > main {
 .chest-overlay-icon {
     position: relative;
     animation: chest-shakepop 1.1s ease-out forwards;
-    filter: drop-shadow(0 12px 22px rgba(139, 108, 255, 0.5));
+    filter: drop-shadow(0 12px 22px rgba(23, 184, 201, 0.5));
 }
 
 .chest-overlay-title {
@@ -5744,8 +5752,8 @@ body > main {
 
 .chest-reward-chip.is-xp {
     background: var(--accent-soft);
-    border: 1px solid rgba(255, 162, 75, 0.4);
-    color: #ffc38a;
+    border: 1px solid rgba(77, 159, 255, 0.4);
+    color: #a9d3ff;
 }
 
 .chest-collect-btn {
@@ -5828,7 +5836,7 @@ body > main {
     position: absolute;
     width: 260px;
     height: 260px;
-    background: repeating-conic-gradient(from 0deg, rgba(255, 162, 75, 0.2) 0 9deg, transparent 9deg 18deg);
+    background: repeating-conic-gradient(from 0deg, rgba(77, 159, 255, 0.2) 0 9deg, transparent 9deg 18deg);
     border-radius: 50%;
     animation: chest-rayspin 16s linear infinite;
 }
@@ -5845,7 +5853,7 @@ body > main {
 .mission-overlay-icon {
     position: relative;
     animation: chest-shakepop 1.1s ease-out forwards;
-    filter: drop-shadow(0 12px 22px rgba(255, 162, 75, 0.5));
+    filter: drop-shadow(0 12px 22px rgba(77, 159, 255, 0.5));
 }
 
 .mission-overlay-title {
@@ -6120,7 +6128,7 @@ body > main {
 
 .leaderboard-row.is-self {
     background: var(--accent-soft);
-    box-shadow: inset 0 0 0 1px rgba(255, 162, 75, 0.28);
+    box-shadow: inset 0 0 0 1px rgba(77, 159, 255, 0.28);
 }
 
 .leaderboard-row.is-clickable {

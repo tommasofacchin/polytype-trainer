@@ -13,7 +13,7 @@
         "var(--accent)",
         "var(--success, var(--accent))",
         "var(--color-gold-text, #ffc73a)",
-        "var(--color-violet, #8b6cff)",
+        "var(--color-secondary, #17b8c9)",
         "var(--color-streak, #f2452f)"
     ];
 
