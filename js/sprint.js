@@ -105,6 +105,7 @@
         el.resultScore = document.getElementById("sprint-result-score");
         el.resultDetail = document.getElementById("sprint-result-detail");
         el.resultBreakdown = document.getElementById("sprint-result-breakdown");
+        el.resultXp = document.getElementById("sprint-result-xp");
         el.resultCoins = document.getElementById("sprint-result-coins");
         el.resultSaveStatus = document.getElementById("sprint-result-save-status");
         el.resultFriends = document.getElementById("sprint-result-friends");
@@ -322,11 +323,11 @@
 
         state.roundLocked = false;
         state.retryRoundIndex += 1;
-        // The retry phase is its own run through a shorter queue, so the bar
-        // restarts from empty and switches colour rather than staying pinned
-        // at 100% from the main rounds.
+        // Stays pinned at 100%: the main rounds really are all done by now,
+        // and draining the bar back to empty read as losing progress. The
+        // colour switch is what marks the phase instead.
         setProgress(
-            (state.retryRoundIndex - 1) / state.retryRoundTotal,
+            1,
             tr("sprint.retryRound", { index: state.retryRoundIndex, total: state.retryRoundTotal }),
             true
         );
@@ -784,10 +785,18 @@
         el.resultScore.textContent = `${state.score} ${tr("common.points")}`;
         el.resultDetail.textContent = `${tr("sprint.resultDetail", { correct: state.correctAnswers, total })} (${accuracy}%)`;
         const breakdownRevealDone = renderResultBreakdown();
+        if (el.resultXp) el.resultXp.textContent = "";
         el.resultCoins.textContent = "";
         el.resultSaveStatus.textContent = "";
         resetFriendsSection();
         el.resultModal.hidden = false;
+
+        // Freeze the header's level bar at its pre-session value *before* the
+        // save goes out: the save's profile update would otherwise snap it to
+        // the new total while the result card is still animating in, and
+        // there'd be no gain left to show. Every path below either plays the
+        // burst or releases the hold.
+        window.PolytypeAppShell?.holdXpDisplay?.();
 
         // Play again/Home stay disabled for at least this long, instead of
         // a "Saving progress..." status line - the buttons turning
@@ -796,6 +805,11 @@
         // this doesn't just flash text and vanish.
         setResultButtonsBusy(true);
         const minDelay = new Promise(resolve => window.setTimeout(resolve, 1000));
+
+        // Set by the save below, then handed to the burst once the breakdown
+        // has finished revealing - so the stars fly into a header the player
+        // has had a beat to notice, not on top of the card's own entrance.
+        let earnedTotalXp = null;
 
         if (state.correctAnswers > 0) {
             const firebaseClient = window.PolytypeFirebase;
@@ -818,6 +832,12 @@
                         ? await window.PolytypeGameState.completePracticeSession(payload)
                         : (await firebaseClient.completePracticeSession(payload))?.data;
 
+                    if (typeof progress?.xpEarned === "number" && progress.xpEarned > 0 && el.resultXp) {
+                        el.resultXp.textContent = tr("sprint.xpEarned", { xp: progress.xpEarned });
+                    }
+                    if (typeof progress?.totalXp === "number") {
+                        earnedTotalXp = progress.totalXp;
+                    }
                     if (typeof progress?.sessionCoins === "number" && progress.sessionCoins > 0) {
                         el.resultCoins.textContent = tr("trainer.coinsEarned", { count: progress.sessionCoins });
                     }
@@ -840,6 +860,15 @@
         // a pure fade with no layout change.
         await breakdownRevealDone;
         revealFriendsSection();
+
+        // playXpGain always releases the header hold, including when there's
+        // nothing to animate (signed out, save failed, zero XP) - so the bar
+        // can never be left frozen for the rest of the session.
+        if (earnedTotalXp !== null) {
+            window.PolytypeAppShell?.playXpGain?.(earnedTotalXp, el.resultXp);
+        } else {
+            window.PolytypeAppShell?.releaseXpDisplay?.();
+        }
 
         await minDelay;
         setResultButtonsBusy(false);
@@ -924,14 +953,51 @@
         });
     }
 
-    // Clears any previous session's friends block and puts it back in its
-    // pre-reveal state (present-but-invisible only once there's real content
-    // to show - see prepareFriendsStatus/revealFriendsSection below).
+    // Clears any previous session's friends block, then immediately claims
+    // the space the incoming one will need.
+    //
+    // The friends list arrives bundled in the save response, a round trip
+    // after the modal opens. Leaving the block `hidden` until then meant the
+    // card was laid out without it and then grew - and since .timer-modal
+    // centres the card, everything above visibly jumped upward. So we reserve
+    // the height up front using the friend count app-shell.js already keeps
+    // warm in localStorage, and prepareFriendsStatus swaps real rows into
+    // that same space. Same count (the overwhelmingly common case) means no
+    // movement at all.
     function resetFriendsSection() {
         if (!el.resultFriends || !el.resultFriendsList) return;
-        el.resultFriends.hidden = true;
+
         el.resultFriends.classList.remove("is-visible");
         el.resultFriendsList.replaceChildren();
+
+        const expected = getCachedFriendCount();
+        el.resultFriends.hidden = expected === 0;
+
+        if (expected > 0) {
+            el.resultFriendsList.replaceChildren(
+                ...Array.from({ length: expected }, () => {
+                    const placeholder = document.createElement("div");
+                    // Same class as a real row, so it reserves exactly the
+                    // height one will occupy - just with nothing in it.
+                    placeholder.className = "friends-row is-placeholder";
+                    placeholder.setAttribute("aria-hidden", "true");
+                    return placeholder;
+                })
+            );
+        }
+    }
+
+    // Written by js/app-shell.js's prefetchFriendsOverview on every
+    // navigation, so by the time a sprint ends this is almost always fresh.
+    // A miss (first-ever session, cleared storage) just means we reserve
+    // nothing and accept one grow - never a wrong-sized reservation.
+    function getCachedFriendCount() {
+        try {
+            const entry = JSON.parse(localStorage.getItem("polytype-friends-cache"));
+            return Math.max(0, Math.trunc(Number(entry?.data?.friendCount) || 0));
+        } catch {
+            return 0;
+        }
     }
 
     // Friend list under the score: each entry's friendshipStreak only rises
@@ -998,6 +1064,20 @@
     // reveal is done, so the two never compete for attention at the same time.
     function revealFriendsSection() {
         if (!el.resultFriends || el.resultFriends.hidden) return;
+
+        // Single choke point for every path where the friends data never
+        // arrived - signed out, save rejected, or a session with no correct
+        // answers to save at all. In those cases resetFriendsSection's
+        // reserved placeholders are still sitting there, and fading them in
+        // would show a stack of empty rows. Collapsing the block instead
+        // gives back exactly the space that was being held.
+        const hasRealRows = el.resultFriendsList?.querySelector(".friends-row:not(.is-placeholder)");
+        if (!hasRealRows) {
+            el.resultFriends.hidden = true;
+            el.resultFriendsList?.replaceChildren();
+            return;
+        }
+
         el.resultFriends.classList.add("is-visible");
     }
 

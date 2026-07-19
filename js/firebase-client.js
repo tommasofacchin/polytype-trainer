@@ -31,6 +31,7 @@
         unlockWord,
         buyKey,
         buyWordChest,
+        buyStreakFreeze,
         startCourse,
         advanceTutorial,
         setUserHandle,
@@ -236,6 +237,22 @@
         if (!state.user) throw new Error(tr("auth.signInRequired"));
 
         const result = await callApi("buy-word-chest", { courseId });
+        const progress = result.data;
+
+        if (progress) {
+            state.profile = applyProgressToProfile(state.profile, progress);
+            syncProfileToLocalStorage(state.profile);
+            notify();
+        }
+
+        return result;
+    }
+
+    async function buyStreakFreeze(courseId) {
+        assertConfigured();
+        if (!state.user) throw new Error(tr("auth.signInRequired"));
+
+        const result = await callApi("buy-streak-freeze", { courseId });
         const progress = result.data;
 
         if (progress) {
@@ -715,7 +732,12 @@
             globalLevel: progress.globalLevel || currentProfile?.globalLevel || 1,
             currentStreak: progress.streak?.currentStreak ?? currentProfile?.currentStreak ?? 0,
             longestStreak: progress.streak?.longestStreak ?? currentProfile?.longestStreak ?? 0,
-            streakFreezes: progress.streak?.streakFreezes ?? currentProfile?.streakFreezes ?? 0,
+            // Session saves report freezes nested under `streak` (that's where
+            // calculateStreakUpdate puts them); buy-streak-freeze reports the
+            // new count at the top level, since it isn't a streak update.
+            streakFreezes:
+                progress.streak?.streakFreezes ?? progress.streakFreezes ?? currentProfile?.streakFreezes ?? 0,
+            maxStreakFreezes: progress.maxStreakFreezes ?? currentProfile?.maxStreakFreezes ?? 2,
             tutorial: "tutorial" in progress ? progress.tutorial : (currentProfile?.tutorial ?? null),
             courses: {
                 ...(currentProfile?.courses || {})

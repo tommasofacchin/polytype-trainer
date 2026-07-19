@@ -84,6 +84,11 @@
     <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-auth-compat.js"></script>
     <script src="js/firebase-client.js"></script>
     <script src="js/gamestate.js"></script>
+    <!-- Home doesn't show vocabulary itself, but it's the usual way into Deck
+         and Sprint - loading the manifest + cache here lets app-shell.js warm
+         the active language's CSV before either of those is opened. -->
+    <script src="decks/index.js"></script>
+    <script src="js/deck-cache.js"></script>
     <script src="js/chest.js"></script>
     <script src="js/dashboard.js"></script>
 </body>

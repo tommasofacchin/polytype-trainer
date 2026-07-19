@@ -18,12 +18,12 @@
     // gamestate, app-shell, tutorial, this file) already loaded once on the
     // very first hard page load and never touched again.
     const PAGE_SCRIPTS = {
-        "index.html": ["js/chest.js", "js/dashboard.js"],
+        "index.html": ["decks/index.js", "js/deck-cache.js", "js/chest.js", "js/dashboard.js"],
         "trainer.html": ["decks/index.js", "decks/categories.js", "js/mission-celebrate.js", "js/main.js"],
         "dictate.html": ["decks/index.js", "decks/categories.js", "js/mission-celebrate.js", "js/dictate.js"],
         "memory.html": ["decks/index.js", "decks/categories.js", "js/mission-celebrate.js", "js/memory.js"],
         "sprint.html": ["decks/index.js", "decks/categories.js", "js/mission-celebrate.js", "js/sprint.js"],
-        "deck.html": ["decks/index.js", "decks/categories.js", "js/deck.js"],
+        "deck.html": ["decks/index.js", "decks/categories.js", "js/deck-cache.js", "js/deck.js"],
         "categories.html": ["decks/index.js", "decks/categories.js", "js/categories.js"],
         "shop.html": ["decks/index.js", "decks/categories.js", "js/shop.js"],
         "lessons.html": ["decks/lessons-norwegian.js", "decks/lessons-swedish.js", "js/mission-celebrate.js", "js/lessons.js"],
@@ -33,7 +33,7 @@
         "profile.html": ["js/profile.js"],
         "settings.html": ["js/settings.js"],
         "languages.html": ["decks/index.js", "js/languages.js"],
-        "games.html": []
+        "games.html": ["decks/index.js", "js/deck-cache.js"]
     };
 
     const LOADING_CLASS = "is-route-loading";
@@ -187,6 +187,7 @@
         // no-ops for signed-out users, so this is cheap to call on every
         // single navigation.
         window.PolytypeAppShell?.prefetchFriendsOverview?.(window.PolytypeFirebase?.state || {});
+        window.PolytypeAppShell?.prefetchActiveDeck?.();
 
         let html;
         try {
@@ -270,7 +271,11 @@
     // sitting in localStorage and could render instantly (e.g. Shop's coin
     // balance, already shown in the header) - loaded once per tab session,
     // skipped on every visit after that.
-    const STATIC_DATA_SCRIPTS = new Set(["decks/index.js", "decks/categories.js", "decks/lessons-norwegian.js", "decks/lessons-swedish.js"]);
+    // js/deck-cache.js belongs here for the same reason: it defines one
+    // window-level cache and nothing per-page. Re-running it would be
+    // harmless (it self-guards) but would throw away the parsed decks it
+    // exists to hold onto.
+    const STATIC_DATA_SCRIPTS = new Set(["decks/index.js", "decks/categories.js", "decks/lessons-norwegian.js", "decks/lessons-swedish.js", "js/deck-cache.js"]);
     const loadedStaticScripts = new Set();
 
     async function loadPageScripts(page) {

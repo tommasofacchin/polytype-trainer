@@ -65,5 +65,9 @@
     <script src="https://www.gstatic.com/firebasejs/12.14.0/firebase-auth-compat.js"></script>
     <script src="js/firebase-client.js"></script>
     <script src="js/gamestate.js"></script>
+    <!-- Same reason as index.html: every game on this page needs the deck,
+         so warm it while the player is still choosing one. -->
+    <script src="decks/index.js"></script>
+    <script src="js/deck-cache.js"></script>
 </body>
 </html>

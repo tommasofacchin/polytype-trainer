@@ -128,10 +128,22 @@ async function loadDeck() {
         return;
     }
 
+    // Goes through the shared window-level cache (js/deck-cache.js) instead
+    // of fetching directly. On a revisit peek() returns the parsed rows right
+    // here, in this same frame - no fetch, no parse, and crucially no await,
+    // so the page never gets a chance to commit an empty first paint. That
+    // empty-then-populated flash on every single visit is what this fixes.
+    const cache = window.PolytypeDeckCache;
+    const alreadyLoaded = cache?.peek(activeDeckMeta);
+
+    if (alreadyLoaded) {
+        vocab = alreadyLoaded;
+        renderDeck();
+        return;
+    }
+
     try {
-        const response = await fetch(activeDeckMeta.path);
-        if (!response.ok) throw new Error("fetch failed");
-        vocab = parseDeckCsv(await response.text(), activeDeckMeta.columns);
+        vocab = await cache.load(activeDeckMeta);
     } catch {
         vocab = [];
     }

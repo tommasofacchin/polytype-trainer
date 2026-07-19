@@ -2949,8 +2949,81 @@ input[type="password"]:focus {
     font-weight: 700;
 }
 
-.result-coins-text:empty {
-    display: none;
+/* Holds its line whether or not there's a coin reward to announce. It used to
+   collapse (display:none) while empty and then appear once the save
+   responded, which shoved the rest of the result card around a beat after it
+   had already settled - same class of jump as the friends block below it. */
+.result-coins-text {
+    min-height: 1lh;
+}
+
+/* The XP award, and the launch point for the stars that fly up into the
+   header's level bar (see playXpGain in js/app-shell.js). Reserves its line
+   for the same reason .result-coins-text does. */
+.result-xp-text {
+    min-height: 1lh;
+    color: var(--accent);
+    font-size: var(--text-lg, 18px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+/* ---- End-of-game XP burst ---------------------------------------------- */
+
+/* The result overlay is fixed at z-index 600 and would otherwise bury the
+   header - but the header is exactly where the XP is flying *to*, so it has
+   to stay visible and on top for the length of the result screen. */
+body:has(.game-result-overlay:not([hidden])) #app-header {
+    z-index: 620;
+}
+
+/* Keeps a tall result card from sliding under the now-visible header. */
+body:has(.game-result-overlay:not([hidden])) .game-result-overlay {
+    padding-top: calc(clamp(16px, 4vw, 40px) + 56px);
+}
+
+.xp-star-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 640;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.xp-star {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 14px;
+    height: 14px;
+    margin: -7px 0 0 -7px;
+    color: var(--accent);
+    /* Only transform and opacity are animated, so each star stays on the
+       compositor and the flight doesn't touch layout. */
+    will-change: transform, opacity;
+}
+
+.app-shell-level-fill.is-animating {
+    /* The rAF loop below drives width directly; the CSS transition that
+       normally smooths a static repaint would fight it frame by frame. */
+    transition: none;
+}
+
+/* Pulse on the badge each time the bar rolls past a level boundary. */
+@keyframes app-shell-levelup-pop {
+    0%   { transform: scale(1); }
+    45%  { transform: scale(1.32); box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 28%, transparent); }
+    100% { transform: scale(1); }
+}
+
+.app-shell-level-badge.is-levelup {
+    animation: app-shell-levelup-pop 460ms var(--ease-spring, cubic-bezier(0.34, 1.56, 0.64, 1));
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .app-shell-level-badge.is-levelup {
+        animation: none;
+    }
 }
 
 /* ---- My Deck ----------------------------------------------------------- */
@@ -3764,6 +3837,19 @@ body.deck-overlay-open {
     padding: 10px;
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
+}
+
+/* Pins every row to one deterministic height (36px avatar + 10px padding
+   either side + 1px border, under the global border-box), so an empty
+   placeholder measures exactly the same as a filled row - which is what lets
+   the sprint result reserve its friends space before the data lands. See
+   resetFriendsSection in js/sprint.js. */
+.friends-row {
+    min-height: 58px;
+}
+
+.friends-row.is-placeholder {
+    border-color: transparent;
 }
 
 .friends-row-avatar {
@@ -4743,16 +4829,18 @@ body > main {
     outline: 0;
     cursor: pointer;
     flex: 1;
-    max-width: 40px;
-    height: 42px;
+    max-width: 46px;
+    height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: var(--radius-sm);
+    /* Squarer than --radius-sm on purpose: at this key size the 10px pill
+       shape ate into the tap target's visible edges. */
+    border-radius: 7px;
     background: var(--surface-alt);
     color: var(--text);
     font-family: var(--font-sans);
-    font-size: 15px;
+    font-size: 18px;
     font-weight: 600;
     touch-action: manipulation;
     user-select: none;
@@ -4767,7 +4855,7 @@ body > main {
 
 .vkbd-key-wide {
     flex: 1.3;
-    max-width: 52px;
+    max-width: 60px;
     background: var(--surface-soft);
 }
 
@@ -4779,10 +4867,21 @@ body > main {
 .vkbd-key-space {
     flex: 1;
     max-width: none;
-    font-size: 12px;
+    font-size: 13px;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: var(--text-soft);
+}
+
+/* The keyboard is position:fixed and overlays the exercise, so while it's up
+   the sprint round anchors near the top of its card instead of centring in
+   space the keyboard is covering. Targets the stage, not .sprint-exercise:
+   the exercise lives inside #sprint-exercise-root, so it's the root that the
+   stage's justify-content actually positions. Mobile-only in practice - the
+   keyboard never shows above the desktop breakpoint (isMobileViewport in
+   js/virtual-keyboard.js). */
+.is-vkbd-open .sprint-stage {
+    justify-content: flex-start;
 }
 
 @media (min-width: 860px) {

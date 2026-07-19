@@ -46,6 +46,12 @@ const KEY_PRICE_COINS = 100;
 // still-locked word directly, no key/hand-picking involved. Same price as a
 // key today but tracked as its own constant so the two can diverge later.
 const WORD_CHEST_PRICE_COINS = 100;
+// Coins price of a streak freeze (api/buy-streak-freeze.js). Deliberately
+// dearer than a key: a freeze protects a streak the player would otherwise
+// have to re-earn, so it should stay a rare purchase rather than a routine
+// way to buy back consistency. Charged against the *active course's* coin
+// balance even though the freeze itself is user-level.
+const STREAK_FREEZE_PRICE_COINS = 200;
 const COURSE_LEVEL_CAPS = {
   chinese: 60,
   german: 60,
@@ -226,15 +232,24 @@ function buildPublicProfile(uid, user, authProfile) {
 }
 
 function sanitizeUserProfile(user) {
+  const timezone = user.timezone || DEFAULT_TIMEZONE;
+
   return {
     uid: user.uid,
     handle: user.handle || null,
     displayName: user.displayName || "Player",
     avatarUrl: user.avatarUrl || null,
-    timezone: user.timezone || DEFAULT_TIMEZONE,
+    timezone,
     totalXp: user.totalXp || 0,
     globalLevel: user.globalLevel || 1,
-    currentStreak: user.currentStreak || 0,
+    // Resolved rather than echoed: see resolveCurrentStreak. The stored value
+    // stays untouched until the next session writes it.
+    currentStreak: resolveCurrentStreak({
+      currentStreak: user.currentStreak || 0,
+      lastPracticeDate: user.lastPracticeDate || null,
+      streakFreezes: user.streakFreezes || 0,
+      todayKey: getDateKeyForTimezone(new Date(), timezone)
+    }),
     longestStreak: user.longestStreak || 0,
     lastPracticeDate: user.lastPracticeDate || null,
     streakFreezes: user.streakFreezes || 0,
@@ -438,6 +453,27 @@ function calculateStreakUpdate({ currentStreak, longestStreak, lastPracticeDate,
   }
 
   return { currentStreak: 1, longestStreak, lastPracticeDate: todayKey, streakFreezes: 0, freezeUsed: Math.min(streakFreezes, missedDays), streakAdvanced: true, streakReset: true };
+}
+
+// calculateStreakUpdate only ever runs when a session completes, so a stored
+// currentStreak is a snapshot of the last day the player practised - someone
+// who stops playing keeps that number on screen forever. This resolves what
+// the stored streak is actually worth *today*.
+//
+// Read-only on purpose: the write (and the freeze spend) still happens on the
+// next session via calculateStreakUpdate, and the two agree by construction -
+// the freeze arithmetic below is the same one used there.
+function resolveCurrentStreak({ currentStreak, lastPracticeDate, streakFreezes, todayKey }) {
+  if (!currentStreak || !lastPracticeDate) return 0;
+
+  const elapsedDays = diffDateKeys(lastPracticeDate, todayKey);
+
+  // Practised today (0), or yesterday with today still open (1) - either way
+  // the streak is alive and unchanged until they actually play again.
+  if (elapsedDays <= 1) return currentStreak;
+
+  const missedDays = elapsedDays - 1;
+  return missedDays <= (streakFreezes || 0) ? currentStreak : 0;
 }
 
 function getLevelInfo(totalXp) {
@@ -729,6 +765,7 @@ module.exports = {
   normalizeSessionPayload,
   calculateSessionXp,
   calculateStreakUpdate,
+  resolveCurrentStreak,
   getLevelInfo,
   getCourseLevel,
   getUnlockedWordSuffixesFromPrefix,
@@ -774,6 +811,7 @@ module.exports = {
   MAX_KEYS,
   KEY_PRICE_COINS,
   WORD_CHEST_PRICE_COINS,
+  STREAK_FREEZE_PRICE_COINS,
   GAME_TYPES,
   LESSON_IDS_BY_COURSE,
   LESSON_COIN_REWARD,

@@ -145,14 +145,19 @@
         }
     }
 
+    // The body class is what lets pages reflow around the keyboard (see
+    // .is-vkbd-open in style.css) - the keyboard itself is position:fixed, so
+    // nothing underneath it can tell it's there otherwise.
     function show() {
         if (!isMobileViewport()) { hide(); return; }
         render();
         root.hidden = false;
+        document.body.classList.add("is-vkbd-open");
     }
 
     function hide() {
         if (root) root.hidden = true;
+        document.body.classList.remove("is-vkbd-open");
         activeInput = null;
         activeCallbacks = null;
     }

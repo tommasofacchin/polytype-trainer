@@ -4,6 +4,8 @@ const FALLBACK_LANGUAGE = "norwegian";
 const maxKeys = 5; // keep in sync with MAX_KEYS in api/_lib.js
 const keyPriceCoins = 100; // keep in sync with KEY_PRICE_COINS in api/_lib.js
 const wordChestPriceCoins = 100; // keep in sync with WORD_CHEST_PRICE_COINS in api/_lib.js
+const streakFreezePriceCoins = 200; // keep in sync with STREAK_FREEZE_PRICE_COINS in api/_lib.js
+const maxStreakFreezes = 2; // keep in sync with MAX_STREAK_FREEZES in api/_lib.js
 
 const COIN_SVG =
     '<svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="10" fill="#ffc73a"/><circle cx="12" cy="12" r="6.5" fill="none" stroke="#d99a1c" stroke-width="2"/></svg>';
@@ -23,12 +25,20 @@ const CHEST_SVG =
     '<rect x="21" y="23" width="6" height="9" rx="2" fill="#ffc73a"/>' +
     "</svg>";
 
+// Snowflake over the streak flame's colour - reads as "the fire, paused".
+const FREEZE_SVG =
+    '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#5bc8ff" stroke-width="1.8" stroke-linecap="round">' +
+    '<path d="M12 2v20"></path><path d="M4 7l16 10"></path><path d="M20 7L4 17"></path>' +
+    '<path d="M12 6l2.4-2.4M12 6L9.6 3.6"></path><path d="M12 18l2.4 2.4M12 18l-2.4 2.4"></path>' +
+    "</svg>";
+
 let activeLanguage = FALLBACK_LANGUAGE;
 let activeDeckMeta = null;
 let isSignedIn = false;
 let authResolved = false;
 let isBuying = false;
 let isBuyingChest = false;
+let isBuyingFreeze = false;
 
 const el = {};
 
@@ -48,14 +58,20 @@ function initShopPage() {
     el.chestMissingText = document.getElementById("shop-item-chest-missing");
     el.buyChestBtn = document.getElementById("shop-buy-chest-btn");
     el.chestStatus = document.getElementById("shop-chest-status");
+    el.freezeIcon = document.getElementById("shop-freeze-icon");
+    el.freezesHeldText = document.getElementById("shop-item-freezes-held");
+    el.buyFreezeBtn = document.getElementById("shop-buy-freeze-btn");
+    el.freezeStatus = document.getElementById("shop-freeze-status");
 
     if (el.coinIcon) el.coinIcon.innerHTML = COIN_SVG;
     if (el.keyIcon) el.keyIcon.innerHTML = KEY_SVG;
     if (el.chestIcon) el.chestIcon.innerHTML = CHEST_SVG;
+    if (el.freezeIcon) el.freezeIcon.innerHTML = FREEZE_SVG;
 
     resolveActiveLanguage();
     setupBuyButton();
     setupBuyChestButton();
+    setupBuyFreezeButton();
     setupAuthGate();
 
     // Delegated through js/router.js's shared hook slot instead of a direct
@@ -245,6 +261,44 @@ function setupBuyChestButton() {
     });
 }
 
+function setupBuyFreezeButton() {
+    el.buyFreezeBtn?.addEventListener("click", async () => {
+        if (isBuyingFreeze || !isSignedIn) return;
+
+        const courseProgress = getCourseProgress();
+        isBuyingFreeze = true;
+        showButtonSpinner(el.buyFreezeBtn);
+        setStatus(el.freezeStatus, "", "");
+
+        // Same apply-after-finally reasoning as setupBuyButton above.
+        let outcome = null;
+        try {
+            await window.PolytypeFirebase.buyStreakFreeze(courseProgress.courseKey);
+            outcome = { text: tr("shop.freezePurchaseSuccess"), tone: "success" };
+        } catch (error) {
+            outcome = { text: error?.message || tr("shop.purchaseFailed"), tone: "error" };
+            await window.PolytypeFirebase.refreshProfile?.();
+        } finally {
+            isBuyingFreeze = false;
+            renderShop();
+        }
+        setStatus(el.freezeStatus, outcome.text, outcome.tone);
+    });
+}
+
+// Freezes are user-level, not per-course (see api/buy-streak-freeze.js), so
+// unlike coins/keys this reads the profile root rather than the active course.
+function getStreakFreezesHeld() {
+    const profile = getStoredProfile();
+    const held = Math.max(0, Math.trunc(Number(profile.streakFreezes) || 0));
+    return Math.min(held, getMaxStreakFreezes());
+}
+
+function getMaxStreakFreezes() {
+    const profile = getStoredProfile();
+    return Math.max(1, Math.trunc(Number(profile.maxStreakFreezes) || maxStreakFreezes));
+}
+
 // ── Word chest reveal ───────────────────────────────────────────────────
 // buy-word-chest.js only returns the unlocked word's numeric suffix, not
 // its text - the shop page doesn't otherwise load vocab, so this fetches
@@ -408,6 +462,13 @@ function renderShop() {
     }
     if (el.buyChestBtn) el.buyChestBtn.textContent = tr("shop.buyChest", { price: wordChestPriceCoins });
 
+    const freezesHeld = getStreakFreezesHeld();
+    const freezeCap = getMaxStreakFreezes();
+    if (el.freezesHeldText) {
+        el.freezesHeldText.textContent = tr("shop.freezesHeld", { count: freezesHeld, max: freezeCap });
+    }
+    if (el.buyFreezeBtn) el.buyFreezeBtn.textContent = tr("shop.buyFreeze", { price: streakFreezePriceCoins });
+
     // Keep both buttons disabled and say nothing definitive until Firebase
     // has actually resolved signed-in vs signed-out - showing "sign in
     // required" during that brief unresolved window would flash it for
@@ -415,14 +476,17 @@ function renderShop() {
     if (!authResolved) {
         if (el.buyBtn) el.buyBtn.disabled = true;
         if (el.buyChestBtn) el.buyChestBtn.disabled = true;
+        if (el.buyFreezeBtn) el.buyFreezeBtn.disabled = true;
         return;
     }
 
     if (!isSignedIn) {
         if (el.buyBtn) el.buyBtn.disabled = true;
         if (el.buyChestBtn) el.buyChestBtn.disabled = true;
+        if (el.buyFreezeBtn) el.buyFreezeBtn.disabled = true;
         setStatus(el.keyStatus, tr("shop.signInRequired"), "");
         setStatus(el.chestStatus, tr("shop.signInRequired"), "");
+        setStatus(el.freezeStatus, tr("shop.signInRequired"), "");
         return;
     }
 
@@ -450,6 +514,19 @@ function renderShop() {
     } else {
         if (el.buyChestBtn) el.buyChestBtn.disabled = false;
         setStatus(el.chestStatus, "", "");
+    }
+
+    if (isBuyingFreeze) {
+        if (el.buyFreezeBtn) el.buyFreezeBtn.disabled = true;
+    } else if (freezesHeld >= freezeCap) {
+        if (el.buyFreezeBtn) el.buyFreezeBtn.disabled = true;
+        setStatus(el.freezeStatus, tr("shop.freezesFull"), "");
+    } else if (coins < streakFreezePriceCoins) {
+        if (el.buyFreezeBtn) el.buyFreezeBtn.disabled = true;
+        setStatus(el.freezeStatus, tr("shop.insufficientCoins"), "");
+    } else {
+        if (el.buyFreezeBtn) el.buyFreezeBtn.disabled = false;
+        setStatus(el.freezeStatus, "", "");
     }
 }
 

@@ -63,6 +63,21 @@
         return window.PolytypeI18n?.t?.(key, params) || key;
     }
 
+    // Same idea as prefetchFriendsOverview below, for vocabulary: warm the
+    // active language's deck from whatever page the player happens to be on,
+    // so Deck/Sprint/Memory open against an already-parsed CSV instead of
+    // fetching one. Cheap (~11KB, cached per tab by js/deck-cache.js) and
+    // idempotent, so it's safe to call on every navigation.
+    function prefetchActiveDeck() {
+        const cache = window.PolytypeDeckCache;
+        const decks = window.DECK_INDEX;
+        if (!cache || !decks) return;
+
+        const language = localStorage.getItem("polytype-language") || "chinese";
+        const meta = decks.find(deck => deck.language === language);
+        if (meta) cache.prefetch(meta);
+    }
+
     // Keeps the friends.html cache warm from every other page, so opening
     // the Friends tab renders instantly instead of waiting on a cold fetch.
     const FRIENDS_CACHE_KEY = "polytype-friends-cache";
@@ -279,16 +294,187 @@
     // The level pill reads totalXp, which - unlike coins/keys - is shared
     // across every language, so it needs no language argument.
     function renderHeaderLevel(totalXp) {
-        const levelInfo = getLevelInfo(totalXp);
+        // While a burst owns the pill, profile updates must not snap it to the
+        // final value - the whole point is to show the climb.
+        if (xpDisplayHeld) return;
+        paintLevel(getLevelInfo(totalXp));
+    }
 
+    // Low-level painter, deliberately below the hold check above so the burst
+    // can drive the pill while everything else is frozen out.
+    function paintLevel(levelInfo) {
         const badge = document.getElementById("app-shell-level-badge");
-        if (badge) badge.textContent = levelInfo.level;
+        if (badge && badge.textContent !== String(levelInfo.level)) {
+            badge.textContent = levelInfo.level;
+        }
 
         const fill = document.getElementById("app-shell-level-fill");
         if (fill) fill.style.width = `${levelInfo.progress}%`;
 
         const text = document.getElementById("app-shell-level-text");
         if (text) text.textContent = `${levelInfo.currentXp}/${levelInfo.nextXp}`;
+    }
+
+    // ── End-of-game XP burst ────────────────────────────────────────────
+    // A game that wants to *show* its XP award calls holdXpDisplay() before
+    // saving (the save's profile update would otherwise snap the bar to its
+    // new value while the result screen is still animating in), then
+    // playXpGain() once the result card is on screen.
+
+    let xpDisplayHeld = false;
+    // Captured at hold time, not at play time: the save writes the new total
+    // into the profile cache well before the result screen asks for the
+    // animation, so by then the "before" value is already gone.
+    let heldFromXp = 0;
+
+    function holdXpDisplay() {
+        heldFromXp = Number(readCachedProfile().xp) || 0;
+        xpDisplayHeld = true;
+    }
+
+    function releaseXpDisplay() {
+        xpDisplayHeld = false;
+        renderHeaderLevel(readCachedProfile().xp);
+    }
+
+    function prefersReducedMotion() {
+        return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches === true;
+    }
+
+    // Flies a handful of stars from `originEl` into the level bar while the
+    // bar itself climbs from the held value to `targetXp`. Always releases the
+    // hold, including on an early return, so a failure here can never leave
+    // the header frozen for the rest of the session.
+    async function playXpGain(targetXp, originEl) {
+        const fromXp = heldFromXp;
+        const toXp = Number(targetXp) || 0;
+
+        if (!xpDisplayHeld || toXp <= fromXp) {
+            releaseXpDisplay();
+            return;
+        }
+
+        if (prefersReducedMotion()) {
+            releaseXpDisplay();
+            return;
+        }
+
+        try {
+            launchStars(originEl);
+            await animateLevelBar(fromXp, toXp);
+        } finally {
+            releaseXpDisplay();
+        }
+    }
+
+    const XP_BURST_DURATION = 1150;
+    const XP_STAR_COUNT = 14;
+    // Stars land over the first stretch of the flight; the bar keeps climbing
+    // a little past the last arrival so it settles rather than stopping dead.
+    const XP_BAR_LEAD_IN = 260;
+
+    function animateLevelBar(fromXp, toXp) {
+        const fill = document.getElementById("app-shell-level-fill");
+        const badge = document.getElementById("app-shell-level-badge");
+        fill?.classList.add("is-animating");
+
+        let lastLevel = getLevelInfo(fromXp).level;
+
+        return new Promise(resolve => {
+            const start = performance.now();
+
+            const step = now => {
+                const elapsed = now - start - XP_BAR_LEAD_IN;
+                const t = Math.max(0, Math.min(1, elapsed / XP_BURST_DURATION));
+                // easeOutCubic: quick to move, slow to settle.
+                const eased = 1 - Math.pow(1 - t, 3);
+                const info = getLevelInfo(fromXp + (toXp - fromXp) * eased);
+
+                // Rollover comes free: getLevelInfo recomputes level and
+                // progress from the running total, so the bar fills, flips to
+                // the next level and carries on from empty on its own.
+                if (info.level !== lastLevel) {
+                    lastLevel = info.level;
+                    if (badge) {
+                        badge.classList.remove("is-levelup");
+                        void badge.offsetWidth; // restart the animation
+                        badge.classList.add("is-levelup");
+                    }
+                }
+
+                paintLevel(info);
+
+                if (t < 1) {
+                    requestAnimationFrame(step);
+                } else {
+                    fill?.classList.remove("is-animating");
+                    resolve();
+                }
+            };
+
+            requestAnimationFrame(step);
+        });
+    }
+
+    const STAR_SVG =
+        '<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">' +
+        '<path d="M12 1.6l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 16.8 5.9 20.2l1.4-6.8L2.2 8.7l6.9-.8z"/>' +
+        "</svg>";
+
+    function launchStars(originEl) {
+        const target = document.querySelector(".app-shell-level-track");
+        if (!originEl || !target) return;
+
+        const from = originEl.getBoundingClientRect();
+        const to = target.getBoundingClientRect();
+        if (!from.width && !from.height) return;
+
+        const layer = document.createElement("div");
+        layer.className = "xp-star-layer";
+        layer.setAttribute("aria-hidden", "true");
+        document.body.appendChild(layer);
+
+        const originX = from.left + from.width / 2;
+        const originY = from.top + from.height / 2;
+        const targetX = to.left + to.width / 2;
+        const targetY = to.top + to.height / 2;
+
+        let longest = 0;
+
+        for (let i = 0; i < XP_STAR_COUNT; i += 1) {
+            const star = document.createElement("span");
+            star.className = "xp-star";
+            star.innerHTML = STAR_SVG;
+            layer.appendChild(star);
+
+            // Scatter the launch a little so they don't leave as one clump.
+            const spreadX = (Math.random() - 0.5) * Math.max(90, from.width);
+            const spreadY = (Math.random() - 0.5) * 26;
+            const startX = originX + spreadX;
+            const startY = originY + spreadY;
+
+            // Control point pulled sideways and upward turns the straight run
+            // into an arc - the thing that makes it read as "thrown" rather
+            // than "slid".
+            const midX = (startX + targetX) / 2 + (Math.random() - 0.5) * 160;
+            const midY = Math.min(startY, targetY) - (60 + Math.random() * 90);
+
+            const delay = i * 42;
+            const duration = 720 + Math.random() * 260;
+            longest = Math.max(longest, delay + duration);
+
+            star.animate(
+                [
+                    { transform: `translate3d(${startX}px, ${startY}px, 0) scale(0.35) rotate(0deg)`, opacity: 0 },
+                    { transform: `translate3d(${startX}px, ${startY}px, 0) scale(1) rotate(40deg)`, opacity: 1, offset: 0.12 },
+                    { transform: `translate3d(${midX}px, ${midY}px, 0) scale(1.05) rotate(160deg)`, opacity: 1, offset: 0.55 },
+                    { transform: `translate3d(${targetX}px, ${targetY}px, 0) scale(0.3) rotate(300deg)`, opacity: 0 }
+                ],
+                { duration, delay, easing: "cubic-bezier(0.33, 0, 0.4, 1)", fill: "forwards" }
+            );
+        }
+
+        window.setTimeout(() => layer.remove(), longest + 200);
     }
 
     // Coins and keys are both per-course, both sourced from the same cached
@@ -343,7 +529,14 @@
     // below only ever fires once per tab, on sign-in/out; without a repeat
     // trigger the cache goes stale the moment someone browses for more than
     // FRIENDS_CACHE_STALE_MS before actually opening Friends).
-    window.PolytypeAppShell = { renderBottomNav, prefetchFriendsOverview };
+    window.PolytypeAppShell = {
+        renderBottomNav,
+        prefetchFriendsOverview,
+        prefetchActiveDeck,
+        holdXpDisplay,
+        releaseXpDisplay,
+        playXpGain
+    };
 
     // Paint the header/nav immediately instead of waiting for
     // DOMContentLoaded: every *.html that includes this script places its
@@ -377,5 +570,10 @@
     document.addEventListener("DOMContentLoaded", () => {
         window.PolytypeFirebase?.onChange?.(renderHeaderAuth);
         window.PolytypeFirebase?.onChange?.(prefetchFriendsOverview);
+        // js/router.js warms this on every *soft* navigation, but a cold load
+        // (typing a URL, refreshing, following an external link) never goes
+        // through the router - without this the very first Deck/Sprint open of
+        // a tab would still pay for the fetch.
+        prefetchActiveDeck();
     });
 })();
