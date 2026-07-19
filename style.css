@@ -4178,40 +4178,109 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 14px 20px 10px;
-    gap: var(--space-3);
+    padding: 10px 14px;
+    gap: 10px;
+}
+
+/* Level pill: badge + XP track, modelled on Clash Royale's top-left level
+   meter. The badge deliberately overlaps the track so the two read as one
+   control rather than two chips sitting next to each other. */
+.app-shell-level {
+    display: inline-flex;
+    align-items: center;
+    flex: 0 1 auto;
+    min-width: 0;
+    text-decoration: none;
+}
+
+.app-shell-level-badge {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: linear-gradient(180deg, var(--accent), color-mix(in srgb, var(--accent) 62%, #000));
+    box-shadow: 0 0 0 2px var(--bg), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    color: var(--accent-on, var(--text-inverse));
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 1;
+}
+
+.app-shell-level-track {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    width: 82px;
+    height: 18px;
+    margin-left: -8px;
+    padding-left: 8px;
+    border-radius: 0 9px 9px 0;
+    overflow: hidden;
+    background: var(--surface-soft);
+    box-shadow: inset 0 0 0 1px var(--border-strong);
+}
+
+.app-shell-level-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 85%, #fff), var(--accent));
+    transition: width var(--transition);
+}
+
+.app-shell-level-text {
+    position: relative;
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.01em;
+    /* Sits on top of the accent fill, so it needs a scrim - keyed to --bg
+       rather than a fixed black, which would muddy the light theme. */
+    text-shadow: 0 1px 2px var(--bg);
+    white-space: nowrap;
 }
 
 .app-shell-stats {
     display: flex;
-    gap: 14px;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+    min-width: 0;
 }
 
 .app-shell-stat {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
+    gap: 4px;
+    padding: 4px 8px 4px 5px;
+    border-radius: 999px;
+    background: var(--surface-soft);
+    box-shadow: inset 0 0 0 1px var(--border);
     font-weight: 800;
-    font-size: 15px;
+    font-size: 13px;
 }
 
 .app-shell-stat svg {
     flex: 0 0 auto;
-    width: 22px;
-    height: 22px;
+    width: 17px;
+    height: 17px;
 }
 .app-shell-stat-streak { color: var(--color-streak-light); }
 .app-shell-stat-coin { color: var(--color-gold-text); }
 .app-shell-stat-key { color: var(--color-violet-lighter); }
 
-.app-shell-identity {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
 .app-shell-lang-menu {
     position: relative;
+    flex: 0 0 auto;
 }
 
 .app-shell-flag {
@@ -4258,28 +4327,6 @@ body {
     flex: 0 0 auto;
 }
 
-.app-shell-avatar {
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    background: var(--surface-soft);
-    box-shadow: 0 0 0 1px var(--border-strong);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    color: var(--text-faint);
-    flex: 0 0 auto;
-    text-decoration: none;
-}
-
-.app-shell-avatar.has-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-
 #app-bottom-nav {
     position: fixed;
     left: 0;
@@ -4287,7 +4334,8 @@ body {
     bottom: 0;
     z-index: 40;
     background: var(--bg-soft);
-    box-shadow: 0 -1px 0 var(--border);
+    border-top: 1px solid var(--border-strong);
+    box-shadow: 0 -10px 24px -18px rgba(0, 0, 0, 0.9);
 }
 
 /* Set via js/tutorial.js's evaluate() while a tutorial step is active - the
@@ -4301,41 +4349,87 @@ body {
     max-width: var(--container);
     margin: 0 auto;
     display: flex;
-    padding: 8px 10px calc(10px + env(safe-area-inset-bottom, 0px));
+    gap: 2px;
+    padding: 6px 6px calc(6px + env(safe-area-inset-bottom, 0px));
 }
 
+/* Clash Royale's bottom bar: every tab is a slot, and the selected one sits
+   on a lit plate that rises slightly out of the bar. The plate is a
+   pseudo-element so raising it never shifts the icon/label baseline of the
+   neighbouring tabs. */
 .app-shell-nav-item {
+    position: relative;
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
-    padding: 0;
+    justify-content: center;
+    gap: 3px;
+    min-width: 0;
+    padding: 7px 0 5px;
     text-decoration: none;
     color: var(--text-faint);
+    transition: color var(--transition), transform var(--transition);
+}
+
+.app-shell-nav-item::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 14px;
+    background: transparent;
+    box-shadow: none;
+    transition: background var(--transition), box-shadow var(--transition);
+}
+
+.app-shell-nav-icon,
+.app-shell-nav-label {
+    position: relative;
 }
 
 .app-shell-nav-icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 46px;
-    height: 30px;
-    border-radius: 11px;
-    transition: background var(--transition), color var(--transition);
+    height: 24px;
+    transition: transform var(--transition);
 }
 
 .app-shell-nav-item.is-active {
     color: var(--accent);
+    transform: translateY(-3px);
+}
+
+.app-shell-nav-item.is-active::before {
+    background: linear-gradient(180deg, var(--accent-soft), color-mix(in srgb, var(--accent-soft) 25%, transparent));
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, var(--accent) 32%, transparent),
+        inset 0 2px 0 var(--accent),
+        0 8px 18px -12px var(--accent);
 }
 
 .app-shell-nav-item.is-active .app-shell-nav-icon {
-    background: var(--accent-soft);
+    transform: scale(1.08);
 }
 
 .app-shell-nav-label {
     font-size: 10px;
     font-weight: 800;
+    letter-spacing: -0.01em;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .app-shell-nav-item,
+    .app-shell-nav-item.is-active,
+    .app-shell-nav-icon,
+    .app-shell-nav-item.is-active .app-shell-nav-icon {
+        transform: none;
+        transition: none;
+    }
 }
 
 /* Settings only shows in the desktop sidebar; on mobile the bottom bar stays
@@ -4423,18 +4517,23 @@ body {
         outline: 0;
     }
 
+    /* The raised plate is a mobile-bar affordance; the sidebar just tints the
+       row instead, so the pseudo-element and the lift are both dropped here. */
+    .app-shell-nav-item::before {
+        content: none;
+    }
+
     .app-shell-nav-item.is-active {
         background: var(--accent-soft);
+        transform: none;
     }
 
     .app-shell-nav-icon {
-        width: auto;
         height: auto;
-        border-radius: 0;
     }
 
     .app-shell-nav-item.is-active .app-shell-nav-icon {
-        background: none;
+        transform: none;
     }
 
     .app-shell-nav-label {

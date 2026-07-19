@@ -40,7 +40,6 @@
         streak: '<svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M12 2c3 4 5 6 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 1 2 2 2 3 2 0-3-1-5 0-8z"/></svg>',
         coin: '<svg viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="10" fill="#ffc73a"/><circle cx="12" cy="12" r="6.5" fill="none" stroke="#d99a1c" stroke-width="2"/></svg>',
         key: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="7" cy="12" r="4.2" fill="color-mix(in srgb, currentColor 12%, transparent)"></circle><circle cx="7" cy="12" r="1.4"></circle><path d="M10.6 12h10"></path><path d="M17 12v3"></path><path d="M20 12v2.4"></path></svg>',
-        person: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><circle cx="12" cy="9" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6z"/></svg>',
         home: '<svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>',
         games: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><rect x="3" y="4" width="7" height="7" rx="1.6"/><rect x="14" y="4" width="7" height="7" rx="1.6"/><rect x="3" y="14" width="7" height="7" rx="1.6"/><rect x="14" y="14" width="7" height="7" rx="1.6"/></svg>',
         deck: '<svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>',
@@ -121,6 +120,27 @@
         return Math.max(0, Math.trunc(coins));
     }
 
+    // Global (cross-language) level, same curve the server levels users on.
+    // Keep in sync with getXpForLevel in api/_lib.js - and with the copies in
+    // js/profile.js / js/visit-profile.js, which level the same totalXp.
+    function getXpForLevel(level) {
+        return 400 + (level - 1) * 250;
+    }
+
+    function getLevelInfo(totalXp) {
+        let level = 1;
+        let currentXp = Math.max(0, Number(totalXp) || 0);
+        let nextXp = getXpForLevel(level);
+
+        while (currentXp >= nextXp) {
+            currentXp -= nextXp;
+            level += 1;
+            nextXp = getXpForLevel(level);
+        }
+
+        return { level, currentXp, nextXp, progress: Math.round((currentXp / nextXp) * 100) };
+    }
+
     function renderHeader() {
         const mount = document.getElementById("app-header");
         if (!mount) return;
@@ -128,23 +148,27 @@
         const language = localStorage.getItem("polytype-language") || "chinese";
         const flagSrc = LANGUAGE_FLAGS[language] || LANGUAGE_FLAGS.chinese;
         const cached = readCachedProfile();
-        const avatarInner = cached.avatarUrl ? `<img src="${cached.avatarUrl}" alt="">` : ICONS.person;
         const keysHeld = getKeysHeldForLanguage(language, cached);
         const coinsHeld = getCoinsForLanguage(language, cached);
+        const levelInfo = getLevelInfo(cached.xp);
 
         mount.innerHTML = `
             <div class="app-shell-header">
+                <a class="app-shell-level" href="profile.html" aria-label="${tr("common.levelNumber", { level: levelInfo.level })}">
+                    <span class="app-shell-level-badge" id="app-shell-level-badge">${levelInfo.level}</span>
+                    <span class="app-shell-level-track">
+                        <span class="app-shell-level-fill" id="app-shell-level-fill" style="width:${levelInfo.progress}%"></span>
+                        <span class="app-shell-level-text" id="app-shell-level-text">${levelInfo.currentXp}/${levelInfo.nextXp}</span>
+                    </span>
+                </a>
                 <div class="app-shell-stats">
                     <span class="app-shell-stat app-shell-stat-streak" id="app-shell-streak">${ICONS.streak}${cached.dayStreak || 0}</span>
                     <span class="app-shell-stat app-shell-stat-coin" id="app-shell-coins">${ICONS.coin}${coinsHeld}</span>
                     <span class="app-shell-stat app-shell-stat-key" id="app-shell-keys">${ICONS.key}${keysHeld}</span>
                 </div>
-                <div class="app-shell-identity">
-                    <div class="language-menu app-shell-lang-menu">
-                        <span class="app-shell-flag" id="app-shell-flag-toggle" tabindex="0" role="button" aria-haspopup="true" aria-expanded="false"><img src="${flagSrc}" alt=""></span>
-                        <div id="app-shell-language-menu" class="language-menu-panel" role="menu" hidden></div>
-                    </div>
-                    <a id="app-shell-avatar" class="app-shell-avatar${cached.avatarUrl ? " has-image" : ""}" href="profile.html" aria-label="${tr("trainer.openProfile")}">${avatarInner}</a>
+                <div class="language-menu app-shell-lang-menu">
+                    <span class="app-shell-flag" id="app-shell-flag-toggle" tabindex="0" role="button" aria-haspopup="true" aria-expanded="false"><img src="${flagSrc}" alt=""></span>
+                    <div id="app-shell-language-menu" class="language-menu-panel" role="menu" hidden></div>
                 </div>
             </div>
         `;
@@ -242,32 +266,29 @@
     }
 
     function renderHeaderAuth(authState) {
-        const avatar = document.getElementById("app-shell-avatar");
-        if (!avatar) return;
-
-        avatar.href = authState.user ? "profile.html" : "auth.html";
-
-        // onChange fires synchronously before Firebase has resolved
-        // anything, with profile still null. Only repaint once we have a
-        // real profile, or have definitively confirmed signed-out.
-        const definitivelySignedOut = authState.ready && !authState.user;
-        const hasFreshProfile = Boolean(authState.profile);
-
-        if (hasFreshProfile || definitivelySignedOut) {
-            const avatarUrl = authState.profile?.avatarUrl;
-            if (avatarUrl) {
-                avatar.classList.add("has-image");
-                avatar.innerHTML = `<img src="${avatarUrl}" alt="">`;
-            } else {
-                avatar.classList.remove("has-image");
-                avatar.innerHTML = ICONS.person;
-            }
-        }
-
         const streakEl = document.getElementById("app-shell-streak");
         if (streakEl && typeof authState.profile?.currentStreak === "number") {
             streakEl.innerHTML = `${ICONS.streak}${authState.profile.currentStreak}`;
         }
+
+        if (typeof authState.profile?.totalXp === "number") {
+            renderHeaderLevel(authState.profile.totalXp);
+        }
+    }
+
+    // The level pill reads totalXp, which - unlike coins/keys - is shared
+    // across every language, so it needs no language argument.
+    function renderHeaderLevel(totalXp) {
+        const levelInfo = getLevelInfo(totalXp);
+
+        const badge = document.getElementById("app-shell-level-badge");
+        if (badge) badge.textContent = levelInfo.level;
+
+        const fill = document.getElementById("app-shell-level-fill");
+        if (fill) fill.style.width = `${levelInfo.progress}%`;
+
+        const text = document.getElementById("app-shell-level-text");
+        if (text) text.textContent = `${levelInfo.currentXp}/${levelInfo.nextXp}`;
     }
 
     // Coins and keys are both per-course, both sourced from the same cached
@@ -283,6 +304,13 @@
 
         const keysEl = document.getElementById("app-shell-keys");
         if (keysEl) keysEl.innerHTML = `${ICONS.key}${getKeysHeldForLanguage(language, cached)}`;
+
+        const streakEl = document.getElementById("app-shell-streak");
+        if (streakEl) streakEl.innerHTML = `${ICONS.streak}${cached.dayStreak || 0}`;
+
+        // The local mirror calls it `xp`; the remote profile calls the same
+        // number `totalXp` (see syncProfileToLocalStorage in firebase-client.js).
+        renderHeaderLevel(cached.xp);
     }
 
     function renderBottomNav() {

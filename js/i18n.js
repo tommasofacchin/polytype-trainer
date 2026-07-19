@@ -420,7 +420,7 @@
             "lessons.loadError": "Couldn't load the lessons.",
 
             "home.thisWeek": "This week ›",
-            "home.playAgain": "Play another round",
+            "home.playAgain": "Play",
             "home.dailyGoal": "Daily goal",
             "home.lessonsCta": "Lessons",
             "home.streakRiskTitle": "Your {count}-day streak is at risk!",
@@ -965,7 +965,7 @@
             "lessons.loadError": "Impossibile caricare le lezioni.",
 
             "home.thisWeek": "Questa settimana ›",
-            "home.playAgain": "Gioca un'altra partita",
+            "home.playAgain": "Gioca",
             "home.dailyGoal": "Obiettivo giornaliero",
             "home.lessonsCta": "Lezioni",
             "home.streakRiskTitle": "Il tuo streak di {count} giorni è a rischio!",
