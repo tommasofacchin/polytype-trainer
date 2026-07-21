@@ -795,6 +795,12 @@
     // ── Audio ─────────────────────────────────────────────────────────────────
 
     function unlockAudio() {
+        // Prime the shared element inside this first real tap even when the
+        // session hasn't started yet - the tap on a duration button IS the
+        // page's first pointerdown, and returning early here used to consume
+        // the {once} listener without unlocking anything, leaving every
+        // later (non-gesture) play blocked on iPhone for the whole session.
+        primeWordAudio();
         if (!state.started) return;
         playCurrentAudio();
     }
@@ -813,22 +819,51 @@
         return [audioBaseUrl, audioPrefix, encodeURIComponent(activeDeckMeta.id), `${encodeURIComponent(item.id)}.mp3`].join("/");
     }
 
+    // One persistent element for every word playback (created lazily, viz
+    // listeners attached exactly once). iOS Safari only lets sound start
+    // from within a user gesture and remembers that permission *per
+    // element* - the old new-Audio-per-play meant each auto-advanced row's
+    // playback was a brand-new never-unlocked element, silently blocked on
+    // iPhone; reusing one unlocked element (primed via unlockAudio above)
+    // keeps every later play allowed, and replaying the same word reuses
+    // its already-buffered data instead of re-downloading the mp3.
+    const SILENT_WAV = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=";
+    let activeWordAudioUrl = null;
+
+    function ensureWordAudio() {
+        if (!activeWordAudio) {
+            activeWordAudio = new Audio();
+            // Guarded so the silent priming wav (which fires play/ended too)
+            // never pulses the viz rings - only real word playback does.
+            activeWordAudio.addEventListener("play",  () => { if (activeWordAudioUrl) setAudioPlaying(true); });
+            activeWordAudio.addEventListener("ended", () => setAudioPlaying(false));
+            activeWordAudio.addEventListener("pause", () => setAudioPlaying(false));
+            activeWordAudio.addEventListener("error", () => setAudioPlaying(false));
+        }
+        return activeWordAudio;
+    }
+
+    function primeWordAudio() {
+        const audio = ensureWordAudio();
+        if (audio.src) return;
+        audio.src = SILENT_WAV;
+        audio.play().catch(() => {});
+    }
+
     function playWordAudio(item) {
         if (!item?.id || !audioBaseUrl) return;
         const url = getWordAudioUrl(item);
         if (!url) return;
 
         try {
-            if (activeWordAudio) {
-                activeWordAudio.pause();
-                activeWordAudio.currentTime = 0;
+            const audio = ensureWordAudio();
+            if (activeWordAudioUrl !== url) {
+                audio.src = url;
+                activeWordAudioUrl = url;
+            } else {
+                audio.currentTime = 0;
             }
-            activeWordAudio = new Audio(url);
-            activeWordAudio.addEventListener("play",  () => setAudioPlaying(true));
-            activeWordAudio.addEventListener("ended", () => setAudioPlaying(false));
-            activeWordAudio.addEventListener("pause", () => setAudioPlaying(false));
-            activeWordAudio.addEventListener("error", () => setAudioPlaying(false));
-            activeWordAudio.play().catch(() => setAudioPlaying(false));
+            audio.play().catch(() => setAudioPlaying(false));
         } catch {
             setAudioPlaying(false);
         }

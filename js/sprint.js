@@ -1139,18 +1139,50 @@
         return [audioBaseUrl, audioPrefix, encodeURIComponent(activeDeckMeta.id), `${encodeURIComponent(item.id)}.mp3`].join("/");
     }
 
+    // One persistent element for every word playback, primed inside the
+    // session's first real tap. iOS Safari only lets sound start from
+    // within a user gesture and remembers that permission *per element* -
+    // the old new-Audio-per-play meant every autoplayed round (they render
+    // behind FEEDBACK_HOLD timeouts, so no gesture context survives) and
+    // every 400ms retry was a brand-new never-unlocked element, silently
+    // blocked with NotAllowedError on iPhone. Reusing one unlocked element
+    // also means a replay tap of the same word continues from its
+    // already-buffered data instead of restarting the whole mp3 download
+    // from the CDN - which is what made replay feel dead on slow
+    // connections even where it wasn't blocked.
+    const SILENT_WAV = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=";
+    let activeAudioUrl = null;
+    let wordAudioPlayId = 0;
+
+    function ensureWordAudio() {
+        if (!activeAudio) activeAudio = new Audio();
+        return activeAudio;
+    }
+
+    // The zero-sample wav gives the element a real src to "play" during the
+    // gesture; WebKit keeps the element user-activated afterwards even as
+    // src is swapped to real word files.
+    function primeWordAudio() {
+        const audio = ensureWordAudio();
+        if (audio.src) return;
+        audio.src = SILENT_WAV;
+        audio.play().catch(() => {});
+    }
+
     function playWordAudio(item, attempt = 0) {
         if (!item?.id || !audioBaseUrl) return;
         const url = getWordAudioUrl(item);
         if (!url) return;
 
         try {
-            if (activeAudio) {
-                activeAudio.pause();
-                activeAudio.currentTime = 0;
+            const audio = ensureWordAudio();
+            const playId = ++wordAudioPlayId;
+            if (activeAudioUrl !== url) {
+                audio.src = url;
+                activeAudioUrl = url;
+            } else {
+                audio.currentTime = 0;
             }
-            const audio = new Audio(url);
-            activeAudio = audio;
             audio.play().catch(() => {
                 // The CDN link this streams from occasionally has a slow or
                 // failed node for a given file - one silent retry covers
@@ -1158,9 +1190,9 @@
                 // themselves. Only if nothing newer (a fresh round, or the
                 // player already hitting replay again) has superseded this
                 // exact attempt in the meantime.
-                if (attempt < 1 && activeAudio === audio) {
+                if (attempt < 1 && wordAudioPlayId === playId) {
                     window.setTimeout(() => {
-                        if (activeAudio === audio) playWordAudio(item, attempt + 1);
+                        if (wordAudioPlayId === playId) playWordAudio(item, attempt + 1);
                     }, 400);
                 }
             });
@@ -1168,6 +1200,12 @@
             // Ignore - the replay button is always available as a fallback.
         }
     }
+
+    // Sprint auto-starts (no duration modal), so the first tap this catches
+    // is usually the first round's own answer - the round *before* any
+    // audio round, in practice, since round types rotate. {once} is safe:
+    // priming is a one-shot need.
+    document.addEventListener("pointerdown", primeWordAudio, { once: true });
 
     // ── Deck / language helpers (mirrors js/memory.js's own copies) ────────
 

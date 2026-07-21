@@ -19,8 +19,11 @@
 
     // Same two-stage delay sprint.js uses: FEEDBACK_HOLD shows the
     // correct/wrong state, then the exercise fades out before the next one's
-    // markup replaces it.
+    // markup replaces it. A wrong answer holds noticeably longer, since it's
+    // also showing the correct answer (see revealCorrection) and the player
+    // needs a beat to actually read it before the next exercise slides in.
     const FEEDBACK_HOLD_DELAY = 550;
+    const FEEDBACK_HOLD_WRONG_DELAY = 2000;
     const FADE_OUT_DELAY = 220;
 
     const LOCK_SVG = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
@@ -268,7 +271,7 @@
                 state.wrongAttempts += 1;
             }
             state.mainIndex += 1;
-            advanceAfterFeedback(showNextMainExercise);
+            advanceAfterFeedback(showNextMainExercise, isCorrect);
         });
     }
 
@@ -296,15 +299,29 @@
                 state.wrongAttempts += 1;
                 state.retryQueue.push(exercise);
             }
-            advanceAfterFeedback(showNextRetryExercise);
+            advanceAfterFeedback(showNextRetryExercise, isCorrect);
         });
     }
 
-    function advanceAfterFeedback(next) {
+    function advanceAfterFeedback(next, isCorrect = true) {
+        const hold = isCorrect ? FEEDBACK_HOLD_DELAY : FEEDBACK_HOLD_WRONG_DELAY;
         window.setTimeout(() => {
             el.exerciseRoot.querySelector(".sprint-exercise")?.classList.add("is-leaving");
             window.setTimeout(next, FADE_OUT_DELAY);
-        }, FEEDBACK_HOLD_DELAY);
+        }, hold);
+    }
+
+    // Appended below a wrong answer so the player is told what the right one
+    // was. Used by the `type` round (which otherwise shows nothing) and the
+    // true/false round; the `mc` round already turns its correct option green
+    // (see renderMcExercise), which reads clearly enough on its own.
+    function revealCorrection(answerText) {
+        const wrap = el.exerciseRoot.querySelector(".sprint-exercise");
+        if (!wrap) return;
+        const note = document.createElement("p");
+        note.className = "lessons-correction";
+        note.textContent = tr("lessons.correctAnswer", { answer: answerText });
+        wrap.appendChild(note);
     }
 
     // onAnswered(isCorrect) fires once, right when the answer is locked in -
@@ -367,6 +384,12 @@
                 btn.classList.add(isCorrect ? "is-correct" : "is-wrong");
                 el.exerciseRoot.querySelectorAll(".sprint-tf-btn").forEach(node => {
                     if (node !== btn) node.classList.add("is-disabled");
+                    // Light up the actually-correct button too, so a wrong
+                    // pick clearly shows which of True/False was right - the
+                    // same green cue the mc round gives its correct option.
+                    if (!isCorrect && (node.dataset.answer === "true") === exercise.answer) {
+                        node.classList.add("is-correct");
+                    }
                 });
                 onAnswered(isCorrect);
             });
@@ -395,6 +418,9 @@
             const isCorrect = isAcceptableAnswer(input.value, exercise);
             input.disabled = true;
             input.classList.add(isCorrect ? "is-correct" : "is-wrong");
+            // Nothing else on a type round reveals the answer, so a wrong
+            // guess has to be told outright what the canonical answer was.
+            if (!isCorrect) revealCorrection(exercise.answer);
             onAnswered(isCorrect);
         });
     }

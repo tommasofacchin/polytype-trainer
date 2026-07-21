@@ -5565,6 +5565,17 @@ body > main {
     font-size: var(--text-sm);
     font-weight: 700;
     text-align: center;
+    opacity: 1;
+    transition: opacity 260ms ease, transform 260ms ease;
+}
+
+/* The play-sprint step's reminder auto-hides a few seconds in (see
+   PLAY_SPRINT_BANNER_HIDE_MS in js/tutorial.js) - once the round is
+   actually under way it shouldn't keep sitting over the game board. */
+.tutorial-banner.is-hiding {
+    opacity: 0;
+    transform: translateY(6px);
+    pointer-events: none;
 }
 
 @media (min-width: 900px) {
@@ -7861,6 +7872,19 @@ body > main {
     font-size: var(--text-xs);
     font-weight: 800;
     letter-spacing: 0.02em;
+}
+
+/* Shown under a wrong answer to spell out the correct one (see
+   revealCorrection in js/lessons.js). Green to match the correct-option cue
+   the mc/true-false rounds already give; the red input/button above it is
+   what still signals "you got this one wrong". */
+.lessons-correction {
+    margin: 4px 0 0;
+    color: var(--success);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    text-align: center;
+    animation: sprint-answer-pop 260ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .lessons-complete-title {

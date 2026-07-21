@@ -219,17 +219,31 @@
 
     // Step 4: play-sprint - just a reminder banner; Sprint's own flow
     // already auto-starts, and completion is detected server-side (see
-    // api/complete-practice-session.js), not by this script.
+    // api/complete-practice-session.js), not by this script. Auto-hides
+    // shortly after appearing - once the round is actually under way it's
+    // the timer/word/input that need the player's attention and the screen
+    // space, not a reminder they've already read.
+    const PLAY_SPRINT_BANNER_HIDE_MS = 8000;
+
     function showPlaySprintBanner() {
-        showBanner(tr("tutorial.playSprintBanner"));
+        showBanner(tr("tutorial.playSprintBanner"), { autoHideMs: PLAY_SPRINT_BANNER_HIDE_MS });
     }
 
-    function showBanner(text) {
+    function showBanner(text, { autoHideMs = null } = {}) {
         const banner = document.createElement("div");
         banner.id = "tutorial-banner";
         banner.className = "tutorial-banner";
         banner.textContent = text;
         document.body.appendChild(banner);
+
+        if (autoHideMs) {
+            // Fades out rather than popping away - matches the "is-dismissing"
+            // fade timing js/chest.js uses for its own tapped-card cleanup.
+            window.setTimeout(() => {
+                banner.classList.add("is-hiding");
+                window.setTimeout(() => banner.remove(), 260);
+            }, autoHideMs);
+        }
     }
 
     // Generic 4-rectangle spotlight: dims everything except `target`'s own

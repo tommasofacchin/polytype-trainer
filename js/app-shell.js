@@ -36,6 +36,24 @@
         swedish: "assets/flags/sweden.svg"
     };
 
+    // Every *.html ships with the same hardcoded china.svg <link rel="icon">
+    // (or, on the two pages with their own favicon logic - js/memory.js and
+    // js/lessons.js - norway.svg) as a static fallback for the instant
+    // before any script runs. Without this, every other page (Trainer,
+    // Sprint, Dictate, Deck, Categories...) just kept that fallback forever,
+    // regardless of which course was actually active - the browser tab kept
+    // showing China's flag through an entire Norwegian, German... session.
+    // Same fallback language as renderHeader's own flagSrc below, so the
+    // header pill and the browser tab can never disagree about which flag
+    // is "the" one for an unrecognized/missing language.
+    function applyFavicon() {
+        const language = localStorage.getItem("polytype-language") || "chinese";
+        const icon = document.querySelector('link[rel="icon"]');
+        if (icon) icon.href = LANGUAGE_FLAGS[language] || LANGUAGE_FLAGS.chinese;
+    }
+
+    applyFavicon();
+
     const ICONS = {
         streak: '<svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M12 2c3 4 5 6 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 1 2 2 2 3 2 0-3-1-5 0-8z"/></svg>',
         coin: '<svg viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="10" fill="#ffc73a"/><circle cx="12" cy="12" r="6.5" fill="none" stroke="#d99a1c" stroke-width="2"/></svg>',

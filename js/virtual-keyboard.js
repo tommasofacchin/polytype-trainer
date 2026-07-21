@@ -172,6 +172,29 @@
         }
     }
 
+    // Keeps the panel glued to the *visible* bottom edge. position:fixed
+    // pins to the layout viewport, which on iOS Safari is not the visible
+    // area whenever the collapsing URL bar sits expanded or focusing an
+    // input has panned the visual viewport - on iPhones that left the
+    // bottom key row clipped behind the browser chrome. visualViewport is
+    // the one API that reports the truly visible rect, so the panel gets a
+    // bottom offset matching however much of the layout viewport's bottom
+    // is currently covered/off-screen (0 on desktop and stable mobile).
+    function syncViewportOffset() {
+        if (!root || root.hidden) return;
+        const viewport = window.visualViewport;
+        const covered = viewport
+            ? Math.max(0, window.innerHeight - viewport.height - viewport.offsetTop)
+            : 0;
+        root.style.bottom = `${covered}px`;
+        // Published so scrolling exercise lists can reserve matching space at
+        // their bottom (see .is-vkbd-open rules in style.css) - offset
+        // included, since a raised panel covers that much more of the page.
+        // Measured after unhiding, and safe to read mid-slide: the panel
+        // animates on transform, which doesn't affect its laid-out height.
+        document.body.style.setProperty("--vkbd-height", `${root.offsetHeight + covered}px`);
+    }
+
     // The body class is what lets pages reflow around the keyboard (see
     // .is-vkbd-open in style.css) - the keyboard itself is position:fixed, so
     // nothing underneath it can tell it's there otherwise.
@@ -180,15 +203,14 @@
         render();
         root.hidden = false;
         document.body.classList.add("is-vkbd-open");
-        // Published so scrolling exercise lists can reserve matching space at
-        // their bottom (see .is-vkbd-open rules in style.css). Measured after
-        // unhiding, and safe to read mid-slide: the panel animates on
-        // transform, which doesn't affect its laid-out height.
-        document.body.style.setProperty("--vkbd-height", `${root.offsetHeight}px`);
+        syncViewportOffset();
     }
 
     function hide() {
-        if (root) root.hidden = true;
+        if (root) {
+            root.hidden = true;
+            root.style.bottom = "";
+        }
         document.body.classList.remove("is-vkbd-open");
         document.body.style.removeProperty("--vkbd-height");
         activeInput = null;
@@ -262,4 +284,13 @@
     window.addEventListener("resize", () => {
         if (!root.hidden && !isMobileViewport()) hide();
     });
+
+    // Re-anchor whenever the visible area shifts under the open panel -
+    // iOS Safari fires these as its URL bar expands/collapses and when
+    // focusing an input pans the page. syncViewportOffset no-ops while
+    // hidden, so leaving these permanently attached costs nothing.
+    if (window.visualViewport) {
+        window.visualViewport.addEventListener("resize", syncViewportOffset);
+        window.visualViewport.addEventListener("scroll", syncViewportOffset);
+    }
 })();
