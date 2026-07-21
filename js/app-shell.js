@@ -347,6 +347,10 @@
         return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches === true;
     }
 
+    function clamp(value, min, max) {
+        return Math.min(max, Math.max(min, value));
+    }
+
     // Flies a handful of stars from `origin` into the level bar while the
     // bar itself climbs from the held value to `targetXp`. Always releases the
     // hold, including on an early return, so a failure here can never leave
@@ -392,6 +396,13 @@
     // Stars land over the first stretch of the flight; the bar keeps climbing
     // a little past the last arrival so it settles rather than stopping dead.
     const XP_BAR_LEAD_IN = 260;
+    // How many points sample each star's arc (see launchStars). More points
+    // = a smoother curve; 10 is already far more than the eye needs for an
+    // ~800ms flight, since the browser interpolates linearly between them.
+    const XP_STAR_PATH_STEPS = 10;
+    // Kept clear of every viewport edge - see launchStars for why this is
+    // what actually guarantees a star can never fly off-screen.
+    const XP_STAR_EDGE_MARGIN = 16;
 
     function animateLevelBar(fromXp, toXp) {
         const fill = document.getElementById("app-shell-level-fill");
@@ -447,6 +458,18 @@
     // `origin` is either an element or a plain DOMRect - the chest passes a
     // rect captured before its overlay closes, since by the time the stars
     // fly the element they came from is gone.
+    //
+    // The flight is a quadratic Bezier (start -> lifted control point ->
+    // target), sampled by hand into real keyframes instead of leaning on a
+    // single CSS easing curve to fake a curve out of a straight line - that's
+    // what used to send stars shooting off the top of the screen: an easing
+    // curve chosen to *look* like an arc can overshoot its own endpoints, and
+    // with the target sitting right at the top of the viewport, any overshoot
+    // there has nowhere to go but off-screen. A sampled Bezier can't do that:
+    // every point it ever produces is a weighted average of its three control
+    // points (that's the convex-hull property of Bezier curves), so as long
+    // as all three are clamped inside the visible viewport, the whole curve
+    // is too - no matter how the flight's start/end points end up measured.
     function launchStars(origin) {
         const target = document.querySelector(".app-shell-level-track");
         if (!origin || !target) return;
@@ -455,21 +478,31 @@
             ? origin.getBoundingClientRect()
             : origin;
         const to = target.getBoundingClientRect();
-        if (!from.width && !from.height) return;
+        if ((!from.width && !from.height) || (!to.width && !to.height)) return;
+
+        // `visualViewport` is the actual visible area - it shrinks for an
+        // on-screen keyboard or a mobile browser's collapsing URL bar, unlike
+        // `innerWidth/innerHeight` which can lag behind. Falling back to the
+        // latter only for browsers without it.
+        const viewport = window.visualViewport;
+        const minX = (viewport?.offsetLeft ?? 0) + XP_STAR_EDGE_MARGIN;
+        const maxX = (viewport?.offsetLeft ?? 0) + (viewport?.width ?? window.innerWidth) - XP_STAR_EDGE_MARGIN;
+        const minY = (viewport?.offsetTop ?? 0) + XP_STAR_EDGE_MARGIN;
+        const maxY = (viewport?.offsetTop ?? 0) + (viewport?.height ?? window.innerHeight) - XP_STAR_EDGE_MARGIN;
 
         const layer = document.createElement("div");
         layer.className = "xp-star-layer";
         layer.setAttribute("aria-hidden", "true");
         document.body.appendChild(layer);
 
-        const originX = from.left + from.width / 2;
-        const originY = from.top + from.height / 2;
+        const originX = clamp(from.left + from.width / 2, minX, maxX);
+        const originY = clamp(from.top + from.height / 2, minY, maxY);
         // Aimed at the left third of the track, where the fill actually grows
         // from - not the track's centre. The bar lives in the top-left corner,
         // so centring the target made the whole flight read as heading for the
         // middle of the screen.
-        const targetX = to.left + to.width * 0.3;
-        const targetY = to.top + to.height / 2;
+        const targetX = clamp(to.left + to.width * 0.3, minX, maxX);
+        const targetY = clamp(to.top + to.height / 2, minY, maxY);
 
         let longest = 0;
 
@@ -480,32 +513,76 @@
             layer.appendChild(star);
 
             // Scatter the launch a little so they don't leave as one clump.
-            const spreadX = (Math.random() - 0.5) * Math.min(70, Math.max(40, from.width));
+            const spreadX = (Math.random() - 0.5) * clamp(from.width, 40, 70);
             const spreadY = (Math.random() - 0.5) * 26;
-            const startX = originX + spreadX;
-            const startY = originY + spreadY;
+            const startX = clamp(originX + spreadX, minX, maxX);
+            const startY = clamp(originY + spreadY, minY, maxY);
 
-            // Control point sits 70% of the way to the target rather than at
-            // the midpoint, with much less lateral jitter - the stars commit
-            // toward the bar early instead of loitering mid-screen for the
-            // first half of the flight. Still lifted well above both ends, so
-            // it reads as thrown rather than slid.
-            const midX = startX + (targetX - startX) * 0.7 + (Math.random() - 0.5) * 50;
-            const midY = Math.min(startY, targetY) - (60 + Math.random() * 90);
+            // The control point sits above the flight's midpoint, lifted by a
+            // fraction of the travel distance (capped so a long flight - say,
+            // from a card near the bottom of a tall phone screen - doesn't
+            // arc absurdly high). Clamping its Y to `minY`, the same floor
+            // every other point respects, is what makes the "no overshoot"
+            // guarantee above actually hold: the control point can pull the
+            // curve UP, but never past the floor the other two points already
+            // live within.
+            const liftDistance = Math.min(130, Math.hypot(targetX - startX, targetY - startY) * 0.35);
+            const controlX = clamp((startX + targetX) / 2 + (Math.random() - 0.5) * 40, minX, maxX);
+            const controlY = Math.max(minY, (startY + targetY) / 2 - liftDistance);
 
-            const delay = i * 42;
-            const duration = 720 + Math.random() * 260;
+            const delay = i * 40;
+            const duration = 760 + Math.random() * 180;
             longest = Math.max(longest, delay + duration);
 
-            star.animate(
-                [
-                    { transform: `translate3d(${startX}px, ${startY}px, 0) scale(0.35) rotate(0deg)`, opacity: 0 },
-                    { transform: `translate3d(${startX}px, ${startY}px, 0) scale(1) rotate(40deg)`, opacity: 1, offset: 0.12 },
-                    { transform: `translate3d(${midX}px, ${midY}px, 0) scale(1.05) rotate(160deg)`, opacity: 1, offset: 0.55 },
-                    { transform: `translate3d(${targetX}px, ${targetY}px, 0) scale(0.3) rotate(300deg)`, opacity: 0 }
-                ],
-                { duration, delay, easing: "cubic-bezier(0.33, 0, 0.4, 1)", fill: "forwards" }
-            );
+            // Baking the ease into the sampled points (rather than handing a
+            // curve to `.animate()`'s own `easing`) keeps the path's shape
+            // fully in our hands: quick off the pad, a confident glide
+            // through the arc, a gentle settle into the bar - continuous the
+            // whole way, with none of the old "frozen in place while it
+            // scales up, then suddenly darts off" hitch.
+            const keyframes = [];
+            for (let step = 0; step <= XP_STAR_PATH_STEPS; step += 1) {
+                const t = step / XP_STAR_PATH_STEPS;
+                // easeOutCubic: quick to move, slow to settle - same curve
+                // animateLevelBar uses for the fill, so the stars' arrival
+                // and the bar's climb feel like one motion.
+                const eased = 1 - Math.pow(1 - t, 3);
+                const inv = 1 - eased;
+                // Quadratic Bezier at parameter `eased`, weighting the three
+                // control points - see the function-level comment for why
+                // this can never leave the clamped box the points live in.
+                const x = inv * inv * startX + 2 * inv * eased * controlX + eased * eased * targetX;
+                const y = inv * inv * startY + 2 * inv * eased * controlY + eased * eased * targetY;
+
+                const scale = t < 0.16
+                    ? 0.35 + 0.65 * (t / 0.16)
+                    : 1 - 0.7 * ((t - 0.16) / (1 - 0.16));
+                const rotate = 360 * t; // one lazy spin over the whole flight
+                const opacity = t < 0.1
+                    ? t / 0.1
+                    : (t > 0.82 ? Math.max(0, (1 - t) / 0.18) : 1);
+
+                keyframes.push({
+                    transform: `translate3d(${x}px, ${y}px, 0) scale(${scale}) rotate(${rotate}deg)`,
+                    opacity
+                });
+            }
+
+            star.animate(keyframes, {
+                duration,
+                delay,
+                // Deliberately linear: the ease already lives in the sampled
+                // `t` values above, so a second curve on top of it would
+                // double it up and read as a stall-then-rush.
+                easing: "linear",
+                // fill:"both", not "forwards": with a stagger delay,
+                // "forwards" leaves each not-yet-started star showing its
+                // *base* style - no transform and no opacity rule, i.e. fully
+                // visible parked in the viewport's top-left corner until its
+                // turn comes. "both" applies the first keyframe (opacity 0,
+                // at the origin) through the delay too.
+                fill: "both"
+            });
         }
 
         window.setTimeout(() => layer.remove(), longest + 200);

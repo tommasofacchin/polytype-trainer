@@ -21,7 +21,10 @@ const VALID_WORD_SUFFIXES = new Set(CATEGORIES.flatMap(category => category.word
 // merge them into one map keyed by course.
 const LESSONS_BY_COURSE = {
   ...require("../decks/lessons-norwegian.js"),
-  ...require("../decks/lessons-swedish.js")
+  ...require("../decks/lessons-swedish.js"),
+  ...require("../decks/lessons-german.js"),
+  ...require("../decks/lessons-italian.js"),
+  ...require("../decks/lessons-chinese.js")
 };
 const LESSON_IDS_BY_COURSE = Object.fromEntries(
   Object.entries(LESSONS_BY_COURSE).map(([courseId, lessons]) => [courseId, lessons.map(lesson => lesson.id)])

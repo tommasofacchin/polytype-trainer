@@ -3,10 +3,10 @@
 // Same data shape and the same dual-export contract, so js/lessons.js,
 // js/router.js and api/_lib.js can treat every language's lessons uniformly.
 //
-// Currently ships the first two modules (Grammar Foundations + Numbers, 18
-// lessons). Later modules mirror the Norwegian curriculum's structure (Nouns,
-// Adjectives, Verbs, Syntax, Vocabulary, Communication) and can be appended
-// here without touching any wiring.
+// Ships the full 8-module curriculum (58 lessons): Grammar Foundations,
+// Numbers, Nouns, Adjectives, Verbs, Sentence Structure, Everyday Vocabulary,
+// and Real-Life Communication - mirroring the Norwegian curriculum's structure.
+// Further lessons can be appended here without touching any wiring.
 //
 // Swedish differs from Norwegian in ways the content reflects: two noun
 // genders (en / ett, no separate feminine), the infinitive marker "att"
@@ -430,6 +430,864 @@ const SWEDISH_LESSONS_DATA = {
                 { type: "trueFalse", claim: "'mycket' is used for uncountable amounts, like 'mycket vatten' (a lot of water).", answer: true },
                 { type: "type", prompt: "Type the Swedish word for 'a little'.", answer: "lite", accept: ["lite", "litet"] },
                 { type: "mc", prompt: "How do you say 'It costs 100 kronor'?", options: ["Det kostar hundra kronor.", "Det är hundra kronor kostar.", "Hundra kostar det kronor.", "Det kostar kronor hundra."], answer: 0 }
+            ]
+        },
+
+        // ── Module 3: Nouns & Articles ───────────────────────────────────
+        {
+            id: "swe-19",
+            moduleId: "nouns",
+            moduleTitle: "Nouns & Articles",
+            title: "Noun Gender (en, ett)",
+            explanation: [
+                { type: "p", text: "Every Swedish noun has one of two genders, shown by its indefinite article: 'en' (common gender) or 'ett' (neuter). Unlike German or Norwegian, there's no separate feminine." },
+                { type: "example", sv: "en bil", en: "a car (en-word)" },
+                { type: "example", sv: "en bok", en: "a book (en-word)" },
+                { type: "example", sv: "ett hus", en: "a house (ett-word)" },
+                { type: "p", text: "About three-quarters of Swedish nouns are en-words and about one quarter are ett-words. There's no reliable rule, so the gender is best learned together with each new word." }
+            ],
+            exercises: [
+                { type: "mc", prompt: "Which article goes with a neuter noun?", options: ["en", "ett", "den", "de"], answer: 1 },
+                { type: "trueFalse", claim: "Swedish has a separate feminine gender, like German.", answer: false },
+                { type: "mc", prompt: "Which of these is the odd one out?", options: ["en bil", "en bok", "ett hus", "en katt"], answer: 2 },
+                { type: "type", prompt: "Type the neuter indefinite article.", answer: "ett", accept: ["ett"] },
+                { type: "trueFalse", claim: "The gender of a Swedish noun is best memorized together with the word itself.", answer: true },
+                { type: "mc", prompt: "Roughly what share of Swedish nouns are ett-words?", options: ["10%", "25%", "50%", "75%"], answer: 1 }
+            ]
+        },
+        {
+            id: "swe-20",
+            moduleId: "nouns",
+            moduleTitle: "Nouns & Articles",
+            title: "Indefinite vs Definite Singular",
+            explanation: [
+                { type: "p", text: "Swedish has no separate word for 'the' - instead, a suffix attaches to the end of the noun." },
+                { type: "example", sv: "en bil → bilen", en: "a car → the car" },
+                { type: "example", sv: "ett hus → huset", en: "a house → the house" },
+                { type: "p", text: "The basic suffix is -en for en-words and -et for ett-words. If the noun already ends in a vowel, you just add -n or -t." },
+                { type: "example", sv: "en flicka → flickan", en: "a girl → the girl (add -n)" },
+                { type: "example", sv: "ett äpple → äpplet", en: "an apple → the apple (add -t)" }
+            ],
+            exercises: [
+                { type: "mc", prompt: "How do you say 'the car' from 'en bil'?", options: ["en bilen", "bilen", "bil en", "denbil"], answer: 1 },
+                { type: "type", prompt: "Type the definite form of 'ett hus' (house).", answer: "huset", accept: ["huset"] },
+                { type: "mc", prompt: "Which suffix marks the definite form of an ett-word?", options: ["-en", "-a", "-et", "-na"], answer: 2 },
+                { type: "trueFalse", claim: "Swedish uses a separate word for 'the', like English.", answer: false },
+                { type: "type", prompt: "Type the definite form of 'en flicka' (girl).", answer: "flickan", accept: ["flickan"] },
+                { type: "mc", prompt: "What does 'bilen' mean?", options: ["a car", "the car", "cars", "the cars"], answer: 1 }
+            ]
+        },
+        {
+            id: "swe-21",
+            moduleId: "nouns",
+            moduleTitle: "Nouns & Articles",
+            title: "Plural Indefinite and Definite",
+            explanation: [
+                { type: "p", text: "Swedish forms plurals in a few patterns. Many en-words add '-ar' or '-or', while many ett-words ending in a consonant stay unchanged." },
+                { type: "example", sv: "en bil → bilar", en: "a car → cars (+ar)" },
+                { type: "example", sv: "en flicka → flickor", en: "a girl → girls (-a becomes -or)" },
+                { type: "example", sv: "ett hus → hus", en: "a house → houses (no change)" },
+                { type: "p", text: "The definite plural ('the cars') adds '-na' to vowel-ending plurals, and '-en' to unchanged ett-words." },
+                { type: "example", sv: "bilar → bilarna", en: "cars → the cars" },
+                { type: "example", sv: "hus → husen", en: "houses → the houses" }
+            ],
+            exercises: [
+                { type: "mc", prompt: "What is the plural indefinite of 'en bil'?", options: ["bilen", "bilar", "bilarna", "bilor"], answer: 1 },
+                { type: "trueFalse", claim: "Many ett-words ending in a consonant stay the same in the indefinite plural, like 'hus' → 'hus'.", answer: true },
+                { type: "type", prompt: "Type the definite plural of 'hus' (houses).", answer: "husen", accept: ["husen"] },
+                { type: "mc", prompt: "What is the definite plural of 'bilar' (the cars)?", options: ["bilarna", "bilerne", "bilene", "bilarne"], answer: 0 },
+                { type: "type", prompt: "Type the indefinite plural of 'flicka' (girl).", answer: "flickor", accept: ["flickor"] },
+                { type: "mc", prompt: "What does 'bilarna' mean?", options: ["a car", "the car", "cars", "the cars"], answer: 3 }
+            ]
+        },
+        {
+            id: "swe-22",
+            moduleId: "nouns",
+            moduleTitle: "Nouns & Articles",
+            title: "Common Regular & Irregular Nouns",
+            explanation: [
+                { type: "p", text: "Most nouns follow the regular patterns, but a handful of very common ones are irregular - often with a vowel change - and worth memorizing separately." },
+                { type: "example", sv: "man → män", en: "man → men" },
+                { type: "example", sv: "bok → böcker", en: "book → books" },
+                { type: "example", sv: "barn → barn", en: "child → children (same word, like English 'sheep')" },
+                { type: "p", text: "'barn' stays the same in the plural, and its definite plural is 'barnen' (the children)." },
+                { type: "example", sv: "ett barn → barnet → barn → barnen", en: "a child → the child → children → the children" }
+            ],
+            exercises: [
+                { type: "mc", prompt: "What is the irregular plural of 'man' (man)?", options: ["manner", "männer", "män", "mans"], answer: 2 },
+                { type: "type", prompt: "Type the plural of 'bok' (book).", answer: "böcker", accept: ["böcker"] },
+                { type: "trueFalse", claim: "'barn' (child) stays the same in the indefinite plural.", answer: true },
+                { type: "mc", prompt: "What is the definite plural of 'barn' (the children)?", options: ["barnena", "barnen", "barnet", "barner"], answer: 1 },
+                { type: "type", prompt: "Type the Swedish word for 'the man' (definite singular).", answer: "mannen", accept: ["mannen"] },
+                { type: "mc", prompt: "Which of these shows an irregular vowel change in the plural?", options: ["bil → bilar", "hus → hus", "bok → böcker", "flicka → flickor"], answer: 2 }
+            ]
+        },
+        {
+            id: "swe-23",
+            moduleId: "nouns",
+            moduleTitle: "Nouns & Articles",
+            title: "Using det as a Neutral/Impersonal Subject",
+            explanation: [
+                { type: "p", text: "'det' does double duty: it's the subject pronoun for ett-words ('it'), and it's also used impersonally - the way English uses 'it' for weather or general statements, with no real thing being referred to." },
+                { type: "example", sv: "Det regnar.", en: "It's raining." },
+                { type: "example", sv: "Det är kallt.", en: "It's cold." },
+                { type: "example", sv: "Det är viktigt att öva.", en: "It's important to practice." },
+                { type: "p", text: "To say 'there is / there are', Swedish uses a special phrase: 'det finns'." },
+                { type: "example", sv: "Det finns en bil här.", en: "There is a car here." }
+            ],
+            exercises: [
+                { type: "mc", prompt: "What does 'Det regnar' mean?", options: ["It rains water", "It's raining", "The rain is here", "It's a rain"], answer: 1 },
+                { type: "trueFalse", claim: "'det' can be used impersonally, without referring to a specific thing.", answer: true },
+                { type: "type", prompt: "Complete: '___ är kallt.' (It's cold.)", answer: "Det", accept: ["Det", "det"] },
+                { type: "mc", prompt: "How do you say 'There is a car here'?", options: ["Där är en bil här.", "Det finns en bil här.", "Den finns en bil här.", "Han är en bil här."], answer: 1 },
+                { type: "mc", prompt: "Which phrase does Swedish use for 'there is / there are'?", options: ["det är", "det finns", "det har", "det blir"], answer: 1 },
+                { type: "type", prompt: "Type the Swedish word used for both 'it' (ett-words) and impersonal statements.", answer: "det", accept: ["det"] }
+            ]
+        },
+
+        // ── Module 4: Adjectives ─────────────────────────────────────────
+        {
+            id: "swe-24",
+            moduleId: "adjectives",
+            moduleTitle: "Adjectives",
+            title: "Basic Adjectives",
+            explanation: [
+                { type: "p", text: "Adjectives describe nouns. In their base (dictionary) form, they match an en-word." },
+                { type: "example", sv: "en stor bil", en: "a big car" },
+                { type: "example", sv: "en fin dag", en: "a nice day" },
+                { type: "example", sv: "en gammal bok", en: "an old book" },
+                { type: "p", text: "A few more essentials: 'god' (good), 'dålig' (bad), 'ny' (new), 'vacker' (beautiful/pretty), 'liten' (small)." }
+            ],
+            exercises: [
+                { type: "mc", prompt: "Which word means 'small'?", options: ["stor", "liten", "fin", "ny"], answer: 1 },
+                { type: "type", prompt: "Type the Swedish word for 'good'.", answer: "god", accept: ["god"] },
+                { type: "mc", prompt: "Which word means 'old'?", options: ["ny", "gammal", "vacker", "dålig"], answer: 1 },
+                { type: "trueFalse", claim: "'dålig' means 'bad'.", answer: true },
+                { type: "type", prompt: "Type the Swedish word for 'big'.", answer: "stor", accept: ["stor"] },
+                { type: "mc", prompt: "What does 'vacker' mean?", options: ["ugly", "beautiful/pretty", "tall", "short"], answer: 1 }
+            ]
+        },
+        {
+            id: "swe-25",
+            moduleId: "adjectives",
+            moduleTitle: "Adjectives",
+            title: "Adjective-Noun Agreement",
+            explanation: [
+                { type: "p", text: "Adjectives agree with the noun they describe: no change with en-words, add '-t' with ett-words, and add '-a' for any plural." },
+                { type: "example", sv: "en stor bil", en: "a big car (en-word, no change)" },
+                { type: "example", sv: "ett stort hus", en: "a big house (ett-word, +t)" },
+                { type: "example", sv: "stora bilar / stora hus", en: "big cars / big houses (plural, +a)" }
+            ],
+            exercises: [
+                { type: "mc", prompt: "How does 'stor' change with an ett-word like 'hus'?", options: ["stor hus", "stora hus", "stort hus", "storet hus"], answer: 2 },
+                { type: "type", prompt: "Type the plural form of 'stor' (used with any plural noun).", answer: "stora", accept: ["stora"] },
+                { type: "trueFalse", claim: "Adjectives stay unchanged with en-words.", answer: true },
+                { type: "mc", prompt: "Which is correct for 'big cars' (plural)?", options: ["stor bilar", "stora bilar", "stort bilar", "storet bilar"], answer: 1 },
+                { type: "type", prompt: "Complete: 'ett ___ hus' (a big house).", answer: "stort", accept: ["stort"] },
+                { type: "mc", prompt: "What ending do ett-words typically add to an adjective?", options: ["-a", "-t", "-en", "-et"], answer: 1 }
+            ]
+        },
+        {
+            id: "swe-26",
+            moduleId: "adjectives",
+            moduleTitle: "Adjectives",
+            title: "Comparatives and Superlatives",
+            explanation: [
+                { type: "p", text: "Regular adjectives add '-are' for the comparative ('more/-er') and '-ast' for the superlative ('most/-est')." },
+                { type: "example", sv: "fin → finare → finast", en: "nice → nicer → nicest" },
+                { type: "p", text: "Some very common adjectives are irregular, similar to English 'good → better → best'." },
+                { type: "example", sv: "god/bra → bättre → bäst", en: "good → better → best" },
+                { type: "example", sv: "stor → större → störst", en: "big → bigger → biggest" },
+                { type: "example", sv: "liten → mindre → minst", en: "small → smaller → smallest" }
+            ],
+            exercises: [
+                { type: "mc", prompt: "What is the comparative of 'fin' (nice)?", options: ["finast", "finare", "finest", "finnare"], answer: 1 },
+                { type: "type", prompt: "Type the superlative of 'fin'.", answer: "finast", accept: ["finast"] },
+                { type: "mc", prompt: "What is the comparative of 'god' (good)?", options: ["godare", "bättre", "bäst", "godast"], answer: 1 },
+                { type: "trueFalse", claim: "'stor' (big) has an irregular comparative: 'större'.", answer: true },
+                { type: "type", prompt: "Type the superlative of 'stor' (big).", answer: "störst", accept: ["störst"] },
+                { type: "mc", prompt: "What is the comparative of 'liten' (small)?", options: ["litnare", "mindre", "minst", "litenare"], answer: 1 }
+            ]
+        },
+        {
+            id: "swe-27",
+            moduleId: "adjectives",
+            moduleTitle: "Adjectives",
+            title: "Colors",
+            explanation: [
+                { type: "p", text: "Colors are adjectives too, so most follow the same agreement rules from a couple of lessons ago." },
+                { type: "example", sv: "röd, blå, gul", en: "red, blue, yellow" },
+                { type: "example", sv: "grön, vit, svart", en: "green, white, black" },
+                { type: "example", sv: "en röd bil, ett rött hus, röda bilar", en: "a red car, a red house, red cars" }
+            ],
+            exercises: [
+                { type: "mc", prompt: "Which word means 'blue'?", options: ["röd", "blå", "gul", "grön"], answer: 1 },
+                { type: "type", prompt: "Type the Swedish word for 'green'.", answer: "grön", accept: ["grön"] },
+                { type: "mc", prompt: "Which word means 'white'?", options: ["svart", "vit", "grå", "brun"], answer: 1 },
+                { type: "trueFalse", claim: "'svart' means 'black'.", answer: true },
+                { type: "type", prompt: "Type the Swedish word for 'red'.", answer: "röd", accept: ["röd"] },
+                { type: "mc", prompt: "How would you say 'a red house' (ett-word, agreement)?", options: ["en röd hus", "ett röd hus", "ett rött hus", "ett röda hus"], answer: 2 }
+            ]
+        },
+        {
+            id: "swe-28",
+            moduleId: "adjectives",
+            moduleTitle: "Adjectives",
+            title: "Describing People and Things",
+            explanation: [
+                { type: "p", text: "Here's a useful set of adjectives for describing people, moods, and things." },
+                { type: "example", sv: "lång, kort", en: "tall/long, short" },
+                { type: "example", sv: "smal, tjock", en: "thin/slim, thick/fat" },
+                { type: "example", sv: "snäll, arg", en: "kind, angry" },
+                { type: "example", sv: "glad, ledsen", en: "happy, sad" },
+                { type: "example", sv: "hungrig, trött", en: "hungry, tired" }
+            ],
+            exercises: [
+                { type: "mc", prompt: "Which word means 'tall'?", options: ["kort", "lång", "smal", "tjock"], answer: 1 },
+                { type: "type", prompt: "Type the Swedish word for 'happy'.", answer: "glad", accept: ["glad"] },
+                { type: "mc", prompt: "Which word means 'tired'?", options: ["hungrig", "trött", "arg", "ledsen"], answer: 1 },
+                { type: "trueFalse", claim: "'snäll' means 'kind'.", answer: true },
+                { type: "type", prompt: "Type the Swedish word for 'hungry'.", answer: "hungrig", accept: ["hungrig"] },
+                { type: "mc", prompt: "What does 'arg' mean?", options: ["sad", "angry", "kind", "tired"], answer: 1 }
+            ]
+        },
+
+        // ── Module 5: Verbs ──────────────────────────────────────────────
+        {
+            id: "swe-29",
+            moduleId: "verbs",
+            moduleTitle: "Verbs",
+            title: "Present Tense Verbs (-r form)",
+            explanation: [
+                { type: "p", text: "The present-tense rule you've already seen (the verb ends in '-r') applies to almost every Swedish verb - usually by adding '-ar' or '-er' to the stem. Here it is with a few more examples." },
+                { type: "example", sv: "att prata → pratar", en: "to talk → talk(s)" },
+                { type: "example", sv: "att läsa → läser", en: "to read → read(s)" },
+                { type: "example", sv: "att äta → äter", en: "to eat → eat(s)" },
+                { type: "example", sv: "att arbeta → arbetar", en: "to work → work(s)" },
+                { type: "p", text: "Short verbs whose infinitive doesn't end in '-a' (a small handful, like 'att bo') still just add '-r': 'bor'." }
+            ],
+            exercises: [
+                { type: "mc", prompt: "What is the present tense of 'att prata' (to talk)?", options: ["prata", "pratar", "pratade", "prat"], answer: 1 },
+                { type: "type", prompt: "Type the present tense of 'att äta' (to eat).", answer: "äter", accept: ["äter"] },
+                { type: "mc", prompt: "What is the present tense of 'att läsa' (to read)?", options: ["läsa", "läser", "läs", "läst"], answer: 1 },
+                { type: "trueFalse", claim: "Nearly every Swedish verb ends in '-r' in the present tense.", answer: true },
+                { type: "type", prompt: "Type the present tense of 'att arbeta' (to work).", answer: "arbetar", accept: ["arbetar"] },
+                { type: "mc", prompt: "Which is the correct present-tense sentence for 'She reads a book'?", options: ["Hon läsa en bok.", "Hon läser en bok.", "Hon att läsa en bok.", "Hon läs en bok."], answer: 1 }
+            ]
+        },
+        {
+            id: "swe-30",
+            moduleId: "verbs",
+            moduleTitle: "Verbs",
+            title: "Infinitive with att and Modal Verbs",
+            explanation: [
+                { type: "p", text: "Modal verbs express ability, desire, obligation, and so on, and are followed by another verb in the infinitive - but WITHOUT 'att'." },
+                { type: "example", sv: "Jag kan simma.", en: "I can swim." },
+                { type: "example", sv: "Jag vill resa.", en: "I want to travel." },
+                { type: "example", sv: "Jag måste gå.", en: "I must go." },
+                { type: "p", text: "The modal verbs and their present-tense forms:" },
+                { type: "example", sv: "att kunna → kan / att vilja → vill", en: "can/be able to / want to" },
+                { type: "example", sv: "att skola → ska / att böra → bör", en: "shall/will / should" }
+            ],
+            exercises: [
+                { type: "mc", prompt: "What is the present tense of 'att kunna' (can)?", options: ["kunna", "kan", "kanna", "kunnat"], answer: 1 },
+                { type: "trueFalse", claim: "A modal verb like 'kan' is followed by 'att' before the next verb.", answer: false },
+                { type: "type", prompt: "Complete: 'Jag ___ simma.' (I can swim.)", answer: "kan", accept: ["kan"] },
+                { type: "mc", prompt: "What is the present tense of 'att vilja' (to want to)?", options: ["vilja", "vill", "viller", "velat"], answer: 1 },
+                { type: "type", prompt: "Type the present tense of 'att skola' (shall/will).", answer: "ska", accept: ["ska", "skall"] },
+                { type: "mc", prompt: "How do you say 'I should go'?", options: ["Jag bör att gå.", "Jag bör gå.", "Jag borde att gå.", "Jag går bör."], answer: 1 }
+            ]
+        },
+        {
+            id: "swe-31",
+            moduleId: "verbs",
+            moduleTitle: "Verbs",
+            title: "Present Perfect (har + supine)",
+            explanation: [
+                { type: "p", text: "The present perfect ('have done something') is built with 'har' plus a special verb form called the SUPINE - Swedish's counterpart to the English past participle. The supine usually ends in '-t'." },
+                { type: "example", sv: "Jag har ätit.", en: "I have eaten." },
+                { type: "example", sv: "Hon har läst boken.", en: "She has read the book." },
+                { type: "example", sv: "att prata → har pratat", en: "to talk → have talked" },
+                { type: "p", text: "A couple of irregular supines worth knowing:" },
+                { type: "example", sv: "att göra → har gjort", en: "to do → have done" },
+                { type: "example", sv: "att komma → har kommit", en: "to come → have come" }
+            ],
+            exercises: [
+                { type: "mc", prompt: "How do you say 'I have eaten'?", options: ["Jag har äta.", "Jag har ätit.", "Jag har äter.", "Jag har att äta."], answer: 1 },
+                { type: "trueFalse", claim: "The Swedish present perfect is built with 'har' + the supine form.", answer: true },
+                { type: "type", prompt: "Complete: 'Hon har ___ boken.' (She has read the book.)", answer: "läst", accept: ["läst"] },
+                { type: "mc", prompt: "What is the supine of 'att göra' (to do)?", options: ["gjört", "gjort", "göret", "gjordt"], answer: 1 },
+                { type: "type", prompt: "Type the supine of 'att komma' (to come).", answer: "kommit", accept: ["kommit"] },
+                { type: "mc", prompt: "Which is correct for 'They have talked'?", options: ["De har prata.", "De har pratar.", "De har pratat.", "De har att prata."], answer: 2 }
+            ]
+        },
+        {
+            id: "swe-32",
+            moduleId: "verbs",
+            moduleTitle: "Verbs",
+            title: "Simple Past of Regular Verbs",
+            explanation: [
+                { type: "p", text: "The simple past tense ('talked', 'read') for regular verbs comes in two common patterns: '-ade' and '-te/-de'." },
+                { type: "example", sv: "att prata → pratade", en: "to talk → talked" },
+                { type: "example", sv: "att jobba → jobbade", en: "to work → worked" },
+                { type: "example", sv: "att läsa → läste", en: "to read → read (past)" },
+                { type: "example", sv: "att resa → reste", en: "to travel → travelled" },
+                { type: "p", text: "Note that Swedish keeps the simple past and the supine distinct: 'pratade' (talked) vs. 'pratat' (have talked)." }
+            ],
+            exercises: [
+                { type: "mc", prompt: "What is the simple past of 'att prata' (to talk)?", options: ["pratar", "pratade", "pratat", "prata"], answer: 1 },
+                { type: "type", prompt: "Type the simple past of 'att läsa' (to read).", answer: "läste", accept: ["läste"] },
+                { type: "mc", prompt: "What is the simple past of 'att resa' (to travel)?", options: ["reser", "res", "reste", "rest"], answer: 2 },
+                { type: "trueFalse", claim: "There are two common regular simple-past patterns in Swedish: '-ade' and '-te/-de'.", answer: true },
+                { type: "type", prompt: "Type the simple past of 'att jobba' (to work).", answer: "jobbade", accept: ["jobbade"] },
+                { type: "mc", prompt: "Which sentence means 'She read a book' (past)?", options: ["Hon läser en bok.", "Hon läste en bok.", "Hon har läst en bok.", "Hon att läsa en bok."], answer: 1 }
+            ]
+        },
+        {
+            id: "swe-33",
+            moduleId: "verbs",
+            moduleTitle: "Verbs",
+            title: "Future with ska and kommer att",
+            explanation: [
+                { type: "p", text: "Swedish has no separate future verb tense - instead, 'ska' or 'kommer att' plus the infinitive expresses future actions." },
+                { type: "example", sv: "Jag ska resa imorgon.", en: "I'm going to travel tomorrow. (planned)" },
+                { type: "example", sv: "Det kommer att regna.", en: "It will rain. (prediction)" },
+                { type: "p", text: "'ska' leans toward a plan, decision, or intention; 'kommer att' leans toward a prediction. Be careful: 'vill' means 'want', NOT 'will', so it isn't used for the future the way English 'will' is." },
+                { type: "example", sv: "Jag ska lära mig svenska.", en: "I'm going to learn Swedish." }
+            ],
+            exercises: [
+                { type: "mc", prompt: "Which word expresses a planned/decided future action?", options: ["ska", "kan", "måste", "bör"], answer: 0 },
+                { type: "type", prompt: "Complete: 'Jag ___ resa imorgon.' (I'm going to travel tomorrow.)", answer: "ska", accept: ["ska", "skall"] },
+                { type: "trueFalse", claim: "Swedish has a distinct future-tense verb form, separate from the present tense.", answer: false },
+                { type: "mc", prompt: "Which best fits a weather prediction, 'It will rain'?", options: ["Det vill regna.", "Det kommer att regna.", "Det måste regna.", "Det bör regna."], answer: 1 },
+                { type: "type", prompt: "Type the two-word phrase (before an infinitive) that signals a prediction about the future.", answer: "kommer att", accept: ["kommer att"] },
+                { type: "mc", prompt: "What follows 'ska'/'kommer att' when expressing the future?", options: ["a noun", "the bare infinitive", "the supine", "'att' + infinitive"], answer: 1 }
+            ]
+        },
+        {
+            id: "swe-34",
+            moduleId: "verbs",
+            moduleTitle: "Verbs",
+            title: "Reflexive Verbs",
+            explanation: [
+                { type: "p", text: "Some Swedish verbs are inherently reflexive - the action is done to oneself, and they always need a reflexive pronoun that matches the subject (see the Reflexive Pronouns lesson)." },
+                { type: "example", sv: "att sätta sig", en: "to sit down (lit. 'to set oneself')" },
+                { type: "example", sv: "att skynda sig", en: "to hurry (lit. 'to hasten oneself')" },
+                { type: "example", sv: "att gifta sig", en: "to get married (lit. 'to marry oneself')" },
+                { type: "example", sv: "Jag sätter mig. / Vi skyndar oss. / De gifter sig.", en: "I sit down. / We hurry. / They get married." }
+            ],
+            exercises: [
+                { type: "mc", prompt: "How do you say 'I sit down'?", options: ["Jag sätter sig.", "Jag sätter mig.", "Jag sätter dig.", "Jag sätter oss."], answer: 1 },
+                { type: "type", prompt: "Complete: 'Vi skyndar ___.' (We hurry.)", answer: "oss", accept: ["oss"] },
+                { type: "trueFalse", claim: "The reflexive pronoun with 'att gifta sig' must always match the subject.", answer: true },
+                { type: "mc", prompt: "How do you say 'They get married'?", options: ["De gifter mig.", "De gifter dem.", "De gifter sig.", "De gifter dig."], answer: 2 },
+                { type: "type", prompt: "Type the Swedish verb phrase for 'to hurry' (infinitive, with its reflexive pronoun).", answer: "att skynda sig", accept: ["att skynda sig", "skynda sig"] },
+                { type: "mc", prompt: "What does 'att sätta sig' literally mean?", options: ["to sit down", "to stand up", "to sleep", "to wake up"], answer: 0 }
+            ]
+        },
+
+        // ── Module 6: Sentence Structure ─────────────────────────────────
+        {
+            id: "swe-35",
+            moduleId: "syntax",
+            moduleTitle: "Sentence Structure",
+            title: "Basic Word Order (S-V-O)",
+            explanation: [
+                { type: "p", text: "The basic Swedish sentence order is Subject - Verb - Object, just like English." },
+                { type: "example", sv: "Jag läser boken.", en: "I read the book. (S-V-O)" },
+                { type: "example", sv: "Hon gillar kaffe.", en: "She likes coffee." },
+                { type: "p", text: "This basic order holds as long as the subject genuinely comes first - the next lesson covers what happens when something else leads the sentence." }
+            ],
+            exercises: [
+                { type: "mc", prompt: "What is the basic Swedish word order?", options: ["V-S-O", "S-O-V", "S-V-O", "O-V-S"], answer: 2 },
+                { type: "trueFalse", claim: "'Jag läser boken' follows Subject-Verb-Object order.", answer: true },
+                { type: "mc", prompt: "Which sentence correctly follows S-V-O?", options: ["Kaffe gillar hon.", "Gillar hon kaffe.", "Hon gillar kaffe.", "Hon kaffe gillar."], answer: 2 },
+                { type: "type", prompt: "Complete with the correct verb form: 'Hon ___ boken.' (She reads the book.)", answer: "läser", accept: ["läser"] },
+                { type: "mc", prompt: "In 'Hon gillar kaffe', what role does 'kaffe' play?", options: ["Subject", "Verb", "Object", "Adjective"], answer: 2 },
+                { type: "trueFalse", claim: "Swedish's basic word order is different from English.", answer: false }
+            ]
+        },
+        {
+            id: "swe-36",
+            moduleId: "syntax",
+            moduleTitle: "Sentence Structure",
+            title: "The Verb-Second Rule",
+            explanation: [
+                { type: "p", text: "Swedish's most important structural rule: the conjugated verb is always the SECOND element in a statement - no matter what comes first." },
+                { type: "example", sv: "Jag läser boken idag.", en: "I read the book today. (subject first, verb 2nd)" },
+                { type: "example", sv: "Idag läser jag boken.", en: "Today I read the book. (time expression first - verb still 2nd, subject moves after it!)" },
+                { type: "p", text: "This is why, whenever a sentence starts with something other than the subject (like a time or place word), the subject and verb swap places - to keep the verb in position two." }
+            ],
+            exercises: [
+                { type: "mc", prompt: "What is always the SECOND element in a Swedish main clause?", options: ["The subject", "The object", "The finite verb", "The adverb"], answer: 2 },
+                { type: "mc", prompt: "In 'Idag läser jag boken', where is the verb?", options: ["First", "Second", "Third", "Last"], answer: 1 },
+                { type: "trueFalse", claim: "When a sentence starts with a time expression, the subject and verb swap places to keep the verb in position two.", answer: true },
+                { type: "type", prompt: "Complete: 'Idag ___ jag boken.' (Today I read the book.)", answer: "läser", accept: ["läser"] },
+                { type: "mc", prompt: "Which sentence correctly follows the verb-second rule?", options: ["Idag jag läser boken.", "Idag läser jag boken.", "Jag idag läser boken.", "Läser jag idag boken."], answer: 1 },
+                { type: "trueFalse", claim: "The verb-second rule only applies to yes/no questions, not statements.", answer: false }
+            ]
+        },
+        {
+            id: "swe-37",
+            moduleId: "syntax",
+            moduleTitle: "Sentence Structure",
+            title: "Time/Place Adverbs and Inversion",
+            explanation: [
+                { type: "p", text: "Time and place adverbs commonly lead a Swedish sentence for emphasis - and per the verb-second rule, this always triggers subject-verb inversion." },
+                { type: "example", sv: "Nu äter vi.", en: "Now we eat. (nu first, verb 2nd, subject 3rd)" },
+                { type: "example", sv: "Här bor jag.", en: "I live here. (här first, verb 2nd, subject 3rd)" },
+                { type: "example", sv: "imorgon, senare, där", en: "tomorrow, later, there" }
+            ],
+            exercises: [
+                { type: "mc", prompt: "How do you say 'Now we eat' leading with 'nu'?", options: ["Nu vi äter.", "Nu äter vi.", "Vi nu äter.", "Äter nu vi."], answer: 1 },
+                { type: "type", prompt: "Complete: 'Här ___ jag.' (I live here.)", answer: "bor", accept: ["bor"] },
+                { type: "trueFalse", claim: "Leading a sentence with a place adverb like 'här' still triggers subject-verb inversion.", answer: true },
+                { type: "mc", prompt: "Which word means 'tomorrow'?", options: ["nu", "senare", "imorgon", "där"], answer: 2 },
+                { type: "mc", prompt: "Which sentence is correctly inverted?", options: ["Där de bor.", "Där bor de.", "De där bor.", "Bor där de."], answer: 1 },
+                { type: "type", prompt: "Type the Swedish word for 'later'.", answer: "senare", accept: ["senare"] }
+            ]
+        },
+        {
+            id: "swe-38",
+            moduleId: "syntax",
+            moduleTitle: "Sentence Structure",
+            title: "Placing inte and Other Adverbs",
+            explanation: [
+                { type: "p", text: "'inte' and adverbs like 'ofta' (often), 'alltid' (always), 'bara' (just/only), and 'kanske' (maybe) all sit in the same spot: right after the finite verb in a main clause." },
+                { type: "example", sv: "Jag äter ofta fisk.", en: "I often eat fish." },
+                { type: "example", sv: "Hon är alltid glad.", en: "She is always happy." },
+                { type: "example", sv: "Vi är kanske sena.", en: "We are maybe late." }
+            ],
+            exercises: [
+                { type: "mc", prompt: "Where does 'ofta' (often) go in a Swedish sentence?", options: ["Before the subject", "Right after the finite verb", "At the very start always", "It never appears mid-sentence"], answer: 1 },
+                { type: "type", prompt: "Complete: 'Hon är ___ glad.' (She is always happy.)", answer: "alltid", accept: ["alltid"] },
+                { type: "mc", prompt: "Which word means 'maybe'?", options: ["bara", "kanske", "ofta", "alltid"], answer: 1 },
+                { type: "trueFalse", claim: "'inte' sits in the same sentence position as 'ofta', 'alltid', 'bara', and 'kanske'.", answer: true },
+                { type: "type", prompt: "Type the Swedish word for 'just/only'.", answer: "bara", accept: ["bara"] },
+                { type: "mc", prompt: "How do you say 'I often eat fish'?", options: ["Jag ofta äter fisk.", "Jag äter ofta fisk.", "Ofta jag äter fisk.", "Jag äter fisk ofta alltid."], answer: 1 }
+            ]
+        },
+        {
+            id: "swe-39",
+            moduleId: "syntax",
+            moduleTitle: "Sentence Structure",
+            title: "Coordinating Sentences: och, men, eller, eftersom",
+            explanation: [
+                { type: "p", text: "These four words connect clauses into longer sentences." },
+                { type: "example", sv: "och, men", en: "and, but" },
+                { type: "example", sv: "eller, eftersom", en: "or, because" },
+                { type: "example", sv: "Jag gillar te, men hon gillar kaffe.", en: "I like tea, but she likes coffee." },
+                { type: "example", sv: "Jag är trött eftersom jag jobbade mycket.", en: "I am tired because I worked a lot." }
+            ],
+            exercises: [
+                { type: "mc", prompt: "Which word means 'but'?", options: ["och", "men", "eller", "eftersom"], answer: 1 },
+                { type: "type", prompt: "Type the Swedish word for 'because'.", answer: "eftersom", accept: ["eftersom"] },
+                { type: "mc", prompt: "Which word means 'or'?", options: ["och", "men", "eller", "eftersom"], answer: 2 },
+                { type: "trueFalse", claim: "'och' means 'and'.", answer: true },
+                { type: "type", prompt: "Complete: 'Jag är trött ___ jag jobbade mycket.' (...because I worked a lot.)", answer: "eftersom", accept: ["eftersom"] },
+                { type: "mc", prompt: "How do you say 'Do you want tea or coffee?'?", options: ["Vill du ha te men kaffe?", "Vill du ha te eller kaffe?", "Vill du ha te eftersom kaffe?", "Vill du ha te och kaffe?"], answer: 1 }
+            ]
+        },
+
+        // ── Module 7: Everyday Vocabulary ────────────────────────────────
+        {
+            id: "swe-40",
+            moduleId: "vocabulary",
+            moduleTitle: "Everyday Vocabulary",
+            title: "Greetings and Courtesy Phrases",
+            explanation: [
+                { type: "p", text: "A handful of everyday phrases will cover most polite exchanges." },
+                { type: "example", sv: "hej, hallå", en: "hi, hello" },
+                { type: "example", sv: "god morgon, god kväll, god natt", en: "good morning, good evening, good night" },
+                { type: "example", sv: "hej då, vi ses", en: "bye, see you" },
+                { type: "example", sv: "tack, snälla", en: "thanks, please" },
+                { type: "example", sv: "ursäkta, varsågod", en: "sorry/excuse me, here you go/you're welcome" }
+            ],
+            exercises: [
+                { type: "mc", prompt: "Which means 'good morning'?", options: ["god dag", "god morgon", "god kväll", "god natt"], answer: 1 },
+                { type: "type", prompt: "Type the Swedish phrase for 'bye'.", answer: "hej då", accept: ["hej då"] },
+                { type: "mc", prompt: "Which word means 'please'?", options: ["tack", "ursäkta", "snälla", "varsågod"], answer: 2 },
+                { type: "trueFalse", claim: "'ursäkta' means 'sorry/excuse me'.", answer: true },
+                { type: "type", prompt: "Type the Swedish phrase for 'good evening'.", answer: "god kväll", accept: ["god kväll"] },
+                { type: "mc", prompt: "What does 'varsågod' typically mean in context?", options: ["Please", "Sorry", "Here you go / you're welcome", "Good night"], answer: 2 }
+            ]
+        },
+        {
+            id: "swe-41",
+            moduleId: "vocabulary",
+            moduleTitle: "Everyday Vocabulary",
+            title: "Introducing Yourself",
+            explanation: [
+                { type: "p", text: "These phrases cover the basics of introducing yourself." },
+                { type: "example", sv: "Jag heter...", en: "My name is..." },
+                { type: "example", sv: "Jag kommer från... / Jag är från...", en: "I come from... / I am from..." },
+                { type: "example", sv: "Jag jobbar som... / Jag studerar...", en: "I work as... / I study..." },
+                { type: "example", sv: "Trevligt att träffas.", en: "Nice to meet you." }
+            ],
+            exercises: [
+                { type: "mc", prompt: "How do you say 'My name is...'?", options: ["Jag är...", "Jag heter...", "Jag kommer...", "Jag bor..."], answer: 1 },
+                { type: "type", prompt: "Type the Swedish phrase for 'I come from...'.", answer: "jag kommer från", accept: ["jag kommer från"] },
+                { type: "mc", prompt: "What does 'Trevligt att träffas' mean?", options: ["Nice to meet you", "Good morning", "See you later", "How are you"], answer: 0 },
+                { type: "trueFalse", claim: "'Jag studerar' means 'I study'.", answer: true },
+                { type: "type", prompt: "Complete: 'Jag jobbar ___ lärare.' (I work as a teacher.)", answer: "som", accept: ["som"] },
+                { type: "mc", prompt: "Which phrase tells where you're from?", options: ["Jag heter...", "Jag är från...", "Jag jobbar...", "Jag gillar..."], answer: 1 }
+            ]
+        },
+        {
+            id: "swe-42",
+            moduleId: "vocabulary",
+            moduleTitle: "Everyday Vocabulary",
+            title: "Family Vocabulary",
+            explanation: [
+                { type: "p", text: "Core family words. Swedish builds grandparents by compounding 'mor' (mother) and 'far' (father), so the word itself tells you which side of the family." },
+                { type: "example", sv: "mamma, pappa", en: "mother, father" },
+                { type: "example", sv: "syster, bror", en: "sister, brother" },
+                { type: "example", sv: "dotter, son", en: "daughter, son" },
+                { type: "example", sv: "mormor, morfar", en: "grandmother (mother's mother), grandfather (mother's father)" },
+                { type: "example", sv: "fru, man, barn, föräldrar", en: "wife, husband, child, parents" }
+            ],
+            exercises: [
+                { type: "mc", prompt: "Which word means 'mother'?", options: ["pappa", "mamma", "syster", "dotter"], answer: 1 },
+                { type: "type", prompt: "Type the Swedish word for 'brother'.", answer: "bror", accept: ["bror"] },
+                { type: "mc", prompt: "'mormor' is which grandmother?", options: ["father's mother", "mother's mother", "the oldest one", "a great-grandmother"], answer: 1 },
+                { type: "trueFalse", claim: "'föräldrar' means 'parents'.", answer: true },
+                { type: "type", prompt: "Type the Swedish word for 'daughter'.", answer: "dotter", accept: ["dotter"] },
+                { type: "mc", prompt: "What does 'fru' mean?", options: ["husband", "wife", "child", "sister"], answer: 1 }
+            ]
+        },
+        {
+            id: "swe-43",
+            moduleId: "vocabulary",
+            moduleTitle: "Everyday Vocabulary",
+            title: "Days, Seasons, and Time",
+            explanation: [
+                { type: "p", text: "The days of the week, in order:" },
+                { type: "example", sv: "måndag, tisdag, onsdag", en: "Monday, Tuesday, Wednesday" },
+                { type: "example", sv: "torsdag, fredag, lördag, söndag", en: "Thursday, Friday, Saturday, Sunday" },
+                { type: "p", text: "The four seasons, and asking the time:" },
+                { type: "example", sv: "vår, sommar, höst, vinter", en: "spring, summer, autumn, winter" },
+                { type: "example", sv: "Vad är klockan?", en: "What time is it?" }
+            ],
+            exercises: [
+                { type: "mc", prompt: "Which day is 'lördag'?", options: ["Friday", "Saturday", "Sunday", "Thursday"], answer: 1 },
+                { type: "type", prompt: "Type the Swedish word for 'Monday'.", answer: "måndag", accept: ["måndag"] },
+                { type: "mc", prompt: "Which word means 'summer'?", options: ["vår", "sommar", "höst", "vinter"], answer: 1 },
+                { type: "trueFalse", claim: "'Vad är klockan?' asks what time it is.", answer: true },
+                { type: "type", prompt: "Type the Swedish word for 'winter'.", answer: "vinter", accept: ["vinter"] },
+                { type: "mc", prompt: "Which season is 'höst'?", options: ["spring", "summer", "autumn", "winter"], answer: 2 }
+            ]
+        },
+        {
+            id: "swe-44",
+            moduleId: "vocabulary",
+            moduleTitle: "Everyday Vocabulary",
+            title: "Home and City",
+            explanation: [
+                { type: "p", text: "Vocabulary for talking about where you live." },
+                { type: "example", sv: "hem, lägenhet, hus", en: "home, apartment, house" },
+                { type: "example", sv: "rum, kök, badrum, sovrum", en: "room, kitchen, bathroom, bedroom" },
+                { type: "example", sv: "stad, gata, centrum", en: "city/town, street, city centre" }
+            ],
+            exercises: [
+                { type: "mc", prompt: "Which word means 'apartment'?", options: ["hus", "lägenhet", "rum", "stad"], answer: 1 },
+                { type: "type", prompt: "Type the Swedish word for 'kitchen'.", answer: "kök", accept: ["kök"] },
+                { type: "mc", prompt: "Which word means 'bedroom'?", options: ["badrum", "kök", "sovrum", "rum"], answer: 2 },
+                { type: "trueFalse", claim: "'centrum' means 'city centre'.", answer: true },
+                { type: "type", prompt: "Type the Swedish word for 'street'.", answer: "gata", accept: ["gata"] },
+                { type: "mc", prompt: "What does 'stad' mean?", options: ["house", "street", "city/town", "room"], answer: 2 }
+            ]
+        },
+        {
+            id: "swe-45",
+            moduleId: "vocabulary",
+            moduleTitle: "Everyday Vocabulary",
+            title: "Food and Drinks",
+            explanation: [
+                { type: "p", text: "Everyday food and mealtime vocabulary." },
+                { type: "example", sv: "mat, vatten, mjölk", en: "food, water, milk" },
+                { type: "example", sv: "bröd, ost, ägg", en: "bread, cheese, egg" },
+                { type: "example", sv: "kött, fisk", en: "meat, fish" },
+                { type: "example", sv: "frukost, lunch, middag", en: "breakfast, lunch, dinner" }
+            ],
+            exercises: [
+                { type: "mc", prompt: "Which word means 'bread'?", options: ["ost", "bröd", "ägg", "kött"], answer: 1 },
+                { type: "type", prompt: "Type the Swedish word for 'water'.", answer: "vatten", accept: ["vatten"] },
+                { type: "mc", prompt: "Which word means 'dinner'?", options: ["frukost", "lunch", "middag", "mat"], answer: 2 },
+                { type: "trueFalse", claim: "'ost' means 'cheese'.", answer: true },
+                { type: "type", prompt: "Type the Swedish word for 'fish'.", answer: "fisk", accept: ["fisk"] },
+                { type: "mc", prompt: "What does 'frukost' mean?", options: ["lunch", "dinner", "breakfast", "food"], answer: 2 }
+            ]
+        },
+        {
+            id: "swe-46",
+            moduleId: "vocabulary",
+            moduleTitle: "Everyday Vocabulary",
+            title: "Work and Studies",
+            explanation: [
+                { type: "p", text: "Vocabulary for talking about jobs and school." },
+                { type: "example", sv: "jobb, arbete, kontor", en: "job, work, office" },
+                { type: "example", sv: "lärare, student, skola, universitet", en: "teacher, student, school, university" },
+                { type: "example", sv: "möte, uppgift, att studera", en: "meeting, task/assignment, to study" }
+            ],
+            exercises: [
+                { type: "mc", prompt: "Which word means 'teacher'?", options: ["student", "lärare", "skola", "jobb"], answer: 1 },
+                { type: "type", prompt: "Type the Swedish word for 'school'.", answer: "skola", accept: ["skola"] },
+                { type: "mc", prompt: "Which word means 'meeting'?", options: ["uppgift", "kontor", "möte", "arbete"], answer: 2 },
+                { type: "trueFalse", claim: "'universitet' means 'university'.", answer: true },
+                { type: "type", prompt: "Type the Swedish word for 'office'.", answer: "kontor", accept: ["kontor"] },
+                { type: "mc", prompt: "What does 'uppgift' mean?", options: ["office", "meeting", "task/assignment", "job"], answer: 2 }
+            ]
+        },
+        {
+            id: "swe-47",
+            moduleId: "vocabulary",
+            moduleTitle: "Everyday Vocabulary",
+            title: "Free Time and Hobbies",
+            explanation: [
+                { type: "p", text: "Vocabulary for talking about hobbies and leisure time." },
+                { type: "example", sv: "fritid, hobby", en: "free time, hobby" },
+                { type: "example", sv: "att spela, att träna, att resa, att måla", en: "to play, to work out, to travel, to paint" },
+                { type: "example", sv: "musik, film, bok", en: "music, movie, book" }
+            ],
+            exercises: [
+                { type: "mc", prompt: "Which word means 'free time'?", options: ["hobby", "fritid", "musik", "film"], answer: 1 },
+                { type: "type", prompt: "Type the Swedish verb for 'to travel'.", answer: "att resa", accept: ["att resa", "resa"] },
+                { type: "mc", prompt: "Which word means 'to work out/exercise'?", options: ["att spela", "att träna", "att måla", "att läsa"], answer: 1 },
+                { type: "trueFalse", claim: "'att spela' can mean both 'to play a game' and 'to play an instrument'.", answer: true },
+                { type: "type", prompt: "Type the Swedish word for 'movie'.", answer: "film", accept: ["film"] },
+                { type: "mc", prompt: "What does 'att måla' mean?", options: ["to paint", "to play", "to read", "to travel"], answer: 0 }
+            ]
+        },
+        {
+            id: "swe-48",
+            moduleId: "vocabulary",
+            moduleTitle: "Everyday Vocabulary",
+            title: "Technology and the Internet",
+            explanation: [
+                { type: "p", text: "Vocabulary for talking about computers and getting online." },
+                { type: "example", sv: "dator, mobil, skärm", en: "computer, phone, screen" },
+                { type: "example", sv: "internet, hemsida, app", en: "internet, website, app" },
+                { type: "example", sv: "e-post, lösenord", en: "email, password" },
+                { type: "example", sv: "att ladda ner, att söka", en: "to download, to search" }
+            ],
+            exercises: [
+                { type: "mc", prompt: "Which word means 'computer'?", options: ["mobil", "dator", "skärm", "app"], answer: 1 },
+                { type: "type", prompt: "Type the Swedish word for 'email'.", answer: "e-post", accept: ["e-post", "epost", "mejl"] },
+                { type: "mc", prompt: "Which word means 'password'?", options: ["hemsida", "lösenord", "internet", "skärm"], answer: 1 },
+                { type: "trueFalse", claim: "'att söka' means 'to search'.", answer: true },
+                { type: "type", prompt: "Type the Swedish verb for 'to download'.", answer: "att ladda ner", accept: ["att ladda ner", "ladda ner"] },
+                { type: "mc", prompt: "What does 'skärm' mean?", options: ["screen", "phone", "app", "website"], answer: 0 }
+            ]
+        },
+        {
+            id: "swe-49",
+            moduleId: "vocabulary",
+            moduleTitle: "Everyday Vocabulary",
+            title: "Shopping and Money",
+            explanation: [
+                { type: "p", text: "Vocabulary for shopping and handling money." },
+                { type: "example", sv: "att köpa, att sälja, att betala", en: "to buy, to sell, to pay" },
+                { type: "example", sv: "affär, pengar, pris", en: "store/shop, money, price" },
+                { type: "example", sv: "billig, dyr", en: "cheap, expensive" },
+                { type: "example", sv: "kvitto, kort, kontanter", en: "receipt, card, cash" }
+            ],
+            exercises: [
+                { type: "mc", prompt: "Which word means 'to buy'?", options: ["att sälja", "att köpa", "att betala", "att söka"], answer: 1 },
+                { type: "type", prompt: "Type the Swedish word for 'money'.", answer: "pengar", accept: ["pengar"] },
+                { type: "mc", prompt: "Which word means 'expensive'?", options: ["billig", "dyr", "pengar", "kort"], answer: 1 },
+                { type: "trueFalse", claim: "'billig' means 'cheap'.", answer: true },
+                { type: "type", prompt: "Type the Swedish word for 'receipt'.", answer: "kvitto", accept: ["kvitto"] },
+                { type: "mc", prompt: "What does 'att betala' mean?", options: ["to buy", "to sell", "to pay", "to search"], answer: 2 }
+            ]
+        },
+
+        // ── Module 8: Real-Life Communication ────────────────────────────
+        {
+            id: "swe-50",
+            moduleId: "communication",
+            moduleTitle: "Real-Life Communication",
+            title: "Asking and Giving Personal Information",
+            explanation: [
+                { type: "p", text: "The most common get-to-know-you questions." },
+                { type: "example", sv: "Vad heter du?", en: "What's your name?" },
+                { type: "example", sv: "Hur gammal är du?", en: "How old are you?" },
+                { type: "example", sv: "Var bor du? / Vad jobbar du med?", en: "Where do you live? / What do you do for work?" },
+                { type: "example", sv: "Jag är tjugo år gammal.", en: "I am twenty years old." }
+            ],
+            exercises: [
+                { type: "mc", prompt: "What does 'Hur gammal är du?' ask?", options: ["What's your name?", "How old are you?", "Where do you live?", "What do you do?"], answer: 1 },
+                { type: "type", prompt: "Complete: 'Jag är tjugo år ___.' (I am twenty years old.)", answer: "gammal", accept: ["gammal"] },
+                { type: "mc", prompt: "Which question asks about someone's job?", options: ["Vad heter du?", "Var bor du?", "Vad jobbar du med?", "Hur gammal är du?"], answer: 2 },
+                { type: "trueFalse", claim: "'Var bor du?' asks where you live.", answer: true },
+                { type: "type", prompt: "Type the Swedish question for 'What's your name?'.", answer: "vad heter du", accept: ["vad heter du", "Vad heter du?"] },
+                { type: "mc", prompt: "How would you answer 'I am 30 years old'?", options: ["Jag har trettio år.", "Jag är trettio år gammal.", "Jag bor trettio år.", "Jag heter trettio år."], answer: 1 }
+            ]
+        },
+        {
+            id: "swe-51",
+            moduleId: "communication",
+            moduleTitle: "Real-Life Communication",
+            title: "Asking for Directions and Getting Around",
+            explanation: [
+                { type: "p", text: "Phrases for finding your way around." },
+                { type: "example", sv: "Var är...?", en: "Where is...?" },
+                { type: "example", sv: "till vänster, till höger, rakt fram", en: "to the left, to the right, straight ahead" },
+                { type: "example", sv: "Hur kommer jag till...?", en: "How do I get to...?" },
+                { type: "example", sv: "buss, tåg", en: "bus, train" }
+            ],
+            exercises: [
+                { type: "mc", prompt: "Which phrase means 'to the left'?", options: ["till höger", "till vänster", "rakt fram", "till stan"], answer: 1 },
+                { type: "type", prompt: "Type the Swedish phrase for 'straight ahead'.", answer: "rakt fram", accept: ["rakt fram"] },
+                { type: "mc", prompt: "Which word means 'train'?", options: ["buss", "tåg", "bil", "flyg"], answer: 1 },
+                { type: "trueFalse", claim: "'Hur kommer jag till...?' asks how to get somewhere.", answer: true },
+                { type: "type", prompt: "Type the Swedish phrase for 'Where is...?'.", answer: "var är", accept: ["var är"] },
+                { type: "mc", prompt: "Which word means 'to the right'?", options: ["till vänster", "till höger", "rakt fram", "där borta"], answer: 1 }
+            ]
+        },
+        {
+            id: "swe-52",
+            moduleId: "communication",
+            moduleTitle: "Real-Life Communication",
+            title: "Shopping at a Store or Supermarket",
+            explanation: [
+                { type: "p", text: "Phrases you'll hear and use while shopping." },
+                { type: "example", sv: "Kan jag hjälpa dig?", en: "Can I help you?" },
+                { type: "example", sv: "Jag tittar bara.", en: "I'm just looking." },
+                { type: "example", sv: "Var hittar jag...?", en: "Where do I find...?" },
+                { type: "example", sv: "varukorg, kassa", en: "shopping basket, checkout" }
+            ],
+            exercises: [
+                { type: "mc", prompt: "What does 'Kan jag hjälpa dig?' mean?", options: ["Can I help you?", "Can you help me?", "Where is it?", "How much is it?"], answer: 0 },
+                { type: "type", prompt: "Type the Swedish phrase for 'I'm just looking'.", answer: "jag tittar bara", accept: ["jag tittar bara"] },
+                { type: "mc", prompt: "Which word means 'checkout'?", options: ["varukorg", "kassa", "kvitto", "affär"], answer: 1 },
+                { type: "trueFalse", claim: "'Har du...?' means 'Do you have...?'", answer: true },
+                { type: "type", prompt: "Type the Swedish word for 'shopping basket'.", answer: "varukorg", accept: ["varukorg"] },
+                { type: "mc", prompt: "Which phrase asks where to find something?", options: ["Var hittar jag...?", "Var bor du?", "Hur mår du?", "Vad kostar det?"], answer: 0 }
+            ]
+        },
+        {
+            id: "swe-53",
+            moduleId: "communication",
+            moduleTitle: "Real-Life Communication",
+            title: "Ordering Food and Drinks",
+            explanation: [
+                { type: "p", text: "Phrases for restaurants and cafés." },
+                { type: "example", sv: "Jag skulle vilja ha...", en: "I would like..." },
+                { type: "example", sv: "Kan jag få...?", en: "Can I get/have...?" },
+                { type: "example", sv: "meny, notan, tack", en: "menu, the bill, please" },
+                { type: "example", sv: "Finns det plats för två?", en: "Is there room for two?" }
+            ],
+            exercises: [
+                { type: "mc", prompt: "How do you say 'I would like...'?", options: ["Jag skulle vilja ha...", "Jag heter...", "Jag kommer från...", "Jag bor..."], answer: 0 },
+                { type: "type", prompt: "Type the Swedish phrase for 'Can I get/have...?'.", answer: "kan jag få", accept: ["kan jag få"] },
+                { type: "mc", prompt: "Which word means 'menu'?", options: ["nota", "meny", "kvitto", "kassa"], answer: 1 },
+                { type: "trueFalse", claim: "'Notan, tack' means 'The bill, please'.", answer: true },
+                { type: "type", prompt: "Type the Swedish phrase asking if there's room for two.", answer: "finns det plats för två", accept: ["finns det plats för två"] },
+                { type: "mc", prompt: "What does 'Smakar det bra?' mean?", options: ["Is it expensive?", "Does it taste good?", "Is it ready?", "Do you like it?"], answer: 1 }
+            ]
+        },
+        {
+            id: "swe-54",
+            moduleId: "communication",
+            moduleTitle: "Real-Life Communication",
+            title: "Talking about the Weather",
+            explanation: [
+                { type: "p", text: "Small talk about the weather is as common in Sweden as anywhere." },
+                { type: "example", sv: "Hur är vädret?", en: "How's the weather?" },
+                { type: "example", sv: "Det är sol. / Det regnar. / Det snöar.", en: "It's sunny. / It's raining. / It's snowing." },
+                { type: "example", sv: "Det är kallt. / Det är varmt.", en: "It's cold. / It's warm." },
+                { type: "example", sv: "vind, moln", en: "wind, cloud" }
+            ],
+            exercises: [
+                { type: "mc", prompt: "What does 'Hur är vädret?' ask?", options: ["What time is it?", "How's the weather?", "Where are you?", "How are you?"], answer: 1 },
+                { type: "type", prompt: "Type the Swedish phrase for 'It's snowing'.", answer: "det snöar", accept: ["det snöar"] },
+                { type: "mc", prompt: "Which word means 'wind'?", options: ["moln", "vind", "sol", "regn"], answer: 1 },
+                { type: "trueFalse", claim: "'Det är sol' means 'It's sunny'.", answer: true },
+                { type: "type", prompt: "Type the Swedish phrase for 'It's cold'.", answer: "det är kallt", accept: ["det är kallt"] },
+                { type: "mc", prompt: "Which word means 'cloud'?", options: ["moln", "vind", "sol", "snö"], answer: 0 }
+            ]
+        },
+        {
+            id: "swe-55",
+            moduleId: "communication",
+            moduleTitle: "Real-Life Communication",
+            title: "Describing Your Daily Routine",
+            explanation: [
+                { type: "p", text: "Verbs for describing a typical day, roughly in order." },
+                { type: "example", sv: "att vakna, att gå upp, att duscha", en: "to wake up, to get up, to shower" },
+                { type: "example", sv: "att äta frukost, att åka till jobbet", en: "to eat breakfast, to head to work" },
+                { type: "example", sv: "att komma hem, att lägga sig", en: "to come home, to go to bed" }
+            ],
+            exercises: [
+                { type: "mc", prompt: "Which verb means 'to wake up'?", options: ["att gå upp", "att vakna", "att duscha", "att lägga sig"], answer: 1 },
+                { type: "type", prompt: "Type the Swedish verb phrase for 'to go to bed'.", answer: "att lägga sig", accept: ["att lägga sig", "lägga sig"] },
+                { type: "mc", prompt: "Which verb means 'to get up'?", options: ["att vakna", "att gå upp", "att åka", "att duscha"], answer: 1 },
+                { type: "trueFalse", claim: "'att lägga sig' is a reflexive verb phrase.", answer: true },
+                { type: "type", prompt: "Type the Swedish phrase for 'to head to work'.", answer: "att åka till jobbet", accept: ["att åka till jobbet", "åka till jobbet"] },
+                { type: "mc", prompt: "What does 'att komma hem' mean?", options: ["to leave home", "to come home", "to go to work", "to wake up"], answer: 1 }
+            ]
+        },
+        {
+            id: "swe-56",
+            moduleId: "communication",
+            moduleTitle: "Real-Life Communication",
+            title: "Expressing Preferences and Opinions",
+            explanation: [
+                { type: "p", text: "Phrases for saying what you like and think." },
+                { type: "example", sv: "Jag gillar... / Jag gillar inte...", en: "I like... / I don't like..." },
+                { type: "example", sv: "Jag föredrar...", en: "I prefer..." },
+                { type: "example", sv: "Jag tycker...", en: "I think/feel..." },
+                { type: "example", sv: "Jag håller med. / Jag håller inte med.", en: "I agree. / I disagree." }
+            ],
+            exercises: [
+                { type: "mc", prompt: "How do you say 'I prefer...'?", options: ["Jag gillar...", "Jag föredrar...", "Jag tycker...", "Jag håller med..."], answer: 1 },
+                { type: "type", prompt: "Type the Swedish phrase for 'I agree'.", answer: "jag håller med", accept: ["jag håller med"] },
+                { type: "mc", prompt: "Which phrase means 'I think/feel that...' (opinion)?", options: ["Jag gillar...", "Jag tycker...", "Jag föredrar...", "Jag håller inte med..."], answer: 1 },
+                { type: "trueFalse", claim: "'Jag håller inte med' means 'I disagree'.", answer: true },
+                { type: "type", prompt: "Type the Swedish phrase for 'I don't like...'.", answer: "jag gillar inte", accept: ["jag gillar inte"] },
+                { type: "mc", prompt: "What does 'Jag föredrar te' mean?", options: ["I like tea", "I don't like tea", "I prefer tea", "I think tea"], answer: 2 }
+            ]
+        },
+        {
+            id: "swe-57",
+            moduleId: "communication",
+            moduleTitle: "Real-Life Communication",
+            title: "Making Suggestions and Invitations",
+            explanation: [
+                { type: "p", text: "Phrases for proposing plans and inviting people along." },
+                { type: "example", sv: "Ska vi...?", en: "Shall we...?" },
+                { type: "example", sv: "Vill du följa med? / Har du lust att...?", en: "Do you want to come along? / Do you feel like...?" },
+                { type: "example", sv: "Vi kanske kan...?", en: "Maybe we could...?" },
+                { type: "example", sv: "Det låter bra. / Gärna!", en: "That sounds good. / Gladly!" }
+            ],
+            exercises: [
+                { type: "mc", prompt: "How do you say 'Shall we...?' when suggesting something?", options: ["Vill du följa med?", "Ska vi...?", "Har du lust att...?", "Gärna!"], answer: 1 },
+                { type: "type", prompt: "Type the Swedish phrase for 'That sounds good'.", answer: "det låter bra", accept: ["det låter bra"] },
+                { type: "mc", prompt: "Which phrase invites someone along?", options: ["Vill du följa med?", "Ska vi...?", "Jag tycker...", "Jag håller med"], answer: 0 },
+                { type: "trueFalse", claim: "'Gärna!' means 'Gladly!' or 'Sure!'", answer: true },
+                { type: "type", prompt: "Type the Swedish phrase for 'Do you feel like...?'.", answer: "har du lust att", accept: ["har du lust att"] },
+                { type: "mc", prompt: "What does 'Vi kanske kan...?' mean?", options: ["Shall we...?", "Maybe we could...?", "Do you want to...?", "That sounds good"], answer: 1 }
+            ]
+        },
+        {
+            id: "swe-58",
+            moduleId: "communication",
+            moduleTitle: "Real-Life Communication",
+            title: "Talking about Future Plans",
+            explanation: [
+                { type: "p", text: "Phrases for talking about what's coming up." },
+                { type: "example", sv: "Vad ska du göra imorgon?", en: "What are you going to do tomorrow?" },
+                { type: "example", sv: "Jag ska resa till...", en: "I'm going to travel to..." },
+                { type: "example", sv: "Jag har planer på att...", en: "I have plans to..." },
+                { type: "example", sv: "om en vecka, nästa år", en: "in a week, next year" }
+            ],
+            exercises: [
+                { type: "mc", prompt: "What does 'Vad ska du göra imorgon?' ask?", options: ["What did you do yesterday?", "What are you going to do tomorrow?", "What do you do for work?", "Where do you live?"], answer: 1 },
+                { type: "type", prompt: "Type the Swedish phrase for 'in a week'.", answer: "om en vecka", accept: ["om en vecka"] },
+                { type: "mc", prompt: "Which phrase means 'next year'?", options: ["imorgon", "om en vecka", "nästa år", "idag"], answer: 2 },
+                { type: "trueFalse", claim: "'Jag har planer på att...' means 'I have plans to...'", answer: true },
+                { type: "type", prompt: "Complete: 'Jag ___ resa till Sverige.' (I'm going to travel to Sweden.)", answer: "ska", accept: ["ska", "skall"] },
+                { type: "mc", prompt: "Which phrase expresses a tentative future intention, 'Maybe I'll travel...'?", options: ["Jag ska...", "Jag har planer på att...", "Kanske reser jag...", "Jag föredrar..."], answer: 2 }
             ]
         }
     ]
