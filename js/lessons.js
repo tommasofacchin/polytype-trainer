@@ -26,8 +26,17 @@
     const FEEDBACK_HOLD_WRONG_DELAY = 2000;
     const FADE_OUT_DELAY = 220;
 
-    const LOCK_SVG = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
-    const CHECK_SVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>';
+    const LOCK_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
+    const CHECK_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l5 5L19.5 6.8"/></svg>';
+    const STAR_SVG = '<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2.6l2.8 5.7 6.3.9-4.6 4.4 1.1 6.2-5.6-2.9-5.6 2.9 1.1-6.2L2.9 9.2l6.3-.9z"/></svg>';
+
+    // Duolingo-style serpentine: each node in a module slides sideways by
+    // shift * --path-amp (see .lesson-path-node in style.css). The pattern
+    // restarts per module so the first node always sits centred under its
+    // module banner.
+    const PATH_SHIFTS = [0, 1, 1.75, 1, 0, -1, -1.75, -1];
+    // How many --path-hue tones style.css defines (data-path-tone selectors).
+    const PATH_TONE_COUNT = 6;
 
     const state = {
         lessons: [],            // flat, in unlock order
@@ -132,61 +141,71 @@
         el.modulesRoot.replaceChildren(...state.modules.map(buildModuleSection));
     }
 
-    function buildModuleSection(module) {
+    function buildModuleSection(module, moduleIndex) {
         const completedInModule = module.lessons.filter(lesson => state.lessonsCompleted.includes(lesson.id)).length;
 
         const section = document.createElement("section");
-        section.className = "lessons-module";
+        section.className = "lessons-module lesson-path-module";
+        section.dataset.pathTone = String(moduleIndex % PATH_TONE_COUNT);
 
-        const head = document.createElement("div");
-        head.className = "lessons-module-head";
+        const banner = document.createElement("header");
+        banner.className = "lesson-path-banner";
+
+        const copy = document.createElement("div");
+        copy.className = "lesson-path-banner-copy";
+        const kicker = document.createElement("span");
+        kicker.className = "lesson-path-banner-kicker";
+        kicker.textContent = tr("lessons.moduleKicker", { n: moduleIndex + 1 });
         const title = document.createElement("strong");
+        title.className = "lesson-path-banner-title";
         title.textContent = module.title;
+        copy.append(kicker, title);
+
         const progress = document.createElement("span");
-        progress.className = "lessons-module-progress";
+        progress.className = "lesson-path-banner-progress";
         progress.textContent = tr("lessons.moduleProgress", { done: completedInModule, total: module.lessons.length });
-        head.append(title, progress);
+        banner.append(copy, progress);
 
-        const list = document.createElement("div");
-        list.className = "lessons-module-list";
-        list.append(...module.lessons.map(buildLessonNode));
+        const track = document.createElement("div");
+        track.className = "lesson-path-track";
+        track.append(...module.lessons.map(buildLessonNode));
 
-        section.append(head, list);
+        section.append(banner, track);
         return section;
     }
 
-    function buildLessonNode(lesson) {
+    function buildLessonNode(lesson, indexInModule) {
         const globalIndex = state.lessons.indexOf(lesson);
         const isComplete = state.lessonsCompleted.includes(lesson.id);
         const isUnlocked = isComplete || globalIndex <= state.lessonsCompleted.length;
+        // Exactly one node is "active" at a time: the first unlocked lesson
+        // that isn't complete yet (unlocking is strictly sequential).
+        const isActive = isUnlocked && !isComplete;
 
         const node = document.createElement("button");
         node.type = "button";
-        node.className = "category-card lesson-node";
-        node.classList.add(isComplete ? "is-complete" : (isUnlocked ? "is-active" : "is-locked"));
+        node.className = "lesson-path-node";
+        node.classList.add(isComplete ? "is-complete" : (isActive ? "is-active" : "is-locked"));
         node.disabled = !isUnlocked;
+        node.style.setProperty("--shift", String(PATH_SHIFTS[indexInModule % PATH_SHIFTS.length]));
 
-        const head = document.createElement("div");
-        head.className = "category-card-head";
-
-        const badge = document.createElement("span");
-        badge.className = "category-card-badge";
-        badge.innerHTML = isComplete ? CHECK_SVG : (isUnlocked ? String(globalIndex + 1) : LOCK_SVG);
-
-        const copy = document.createElement("span");
-        copy.className = "category-card-copy";
-        const titleEl = document.createElement("strong");
-        titleEl.textContent = lesson.title;
-        copy.appendChild(titleEl);
-        if (!isUnlocked) {
-            const hint = document.createElement("span");
-            hint.className = "category-card-meta";
-            hint.textContent = tr("lessons.lockedHint");
-            copy.appendChild(hint);
+        if (isActive) {
+            const bubble = document.createElement("span");
+            bubble.className = "lesson-path-start";
+            bubble.textContent = tr("lessons.startBubble");
+            node.appendChild(bubble);
         }
 
-        head.append(badge, copy);
-        node.appendChild(head);
+        const circle = document.createElement("span");
+        circle.className = "lesson-path-circle";
+        circle.innerHTML = isComplete ? CHECK_SVG : (isActive ? STAR_SVG : LOCK_SVG);
+
+        const label = document.createElement("span");
+        label.className = "lesson-path-label";
+        label.textContent = lesson.title;
+
+        node.append(circle, label);
+        if (!isUnlocked) node.title = tr("lessons.lockedHint");
         if (isUnlocked) node.addEventListener("click", () => openLesson(lesson));
         return node;
     }
