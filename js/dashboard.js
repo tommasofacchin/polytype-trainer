@@ -153,7 +153,7 @@ function renderGreeting(signedIn) {
     // a new language's lessons ship. No onLanguageChanged wiring needed, since
     // picking a different study language always does a full page reload
     // (js/app-shell.js's flag menu), so a one-time check reflects what's active.
-    const LANGS_WITH_LESSONS = new Set(["norwegian", "swedish"]);
+    const LANGS_WITH_LESSONS = new Set(["norwegian", "swedish", "german", "italian", "chinese", "japanese", "spanish"]);
     const lessonsBtn = document.getElementById("home-lessons-btn");
     if (lessonsBtn) lessonsBtn.hidden = !LANGS_WITH_LESSONS.has(localStorage.getItem("polytype-language"));
 }

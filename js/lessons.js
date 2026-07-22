@@ -218,9 +218,9 @@
             const term = document.createElement("strong");
             // Foreign-language term: keyed per course in the data files
             // (`no` for Norwegian, `sv` for Swedish, `de` for German, `it` for
-            // Italian, `zh` for Chinese); `term` is a generic fallback for any
-            // future language.
-            term.textContent = block.no ?? block.sv ?? block.de ?? block.it ?? block.zh ?? block.term ?? "";
+            // Italian, `zh` for Chinese, `ja` for Japanese, `es` for Spanish);
+            // `term` is a generic fallback for any future language.
+            term.textContent = block.no ?? block.sv ?? block.de ?? block.it ?? block.zh ?? block.ja ?? block.es ?? block.term ?? "";
             const en = document.createElement("span");
             en.textContent = block.en;
             row.append(term, en);

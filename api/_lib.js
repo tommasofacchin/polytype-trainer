@@ -24,7 +24,9 @@ const LESSONS_BY_COURSE = {
   ...require("../decks/lessons-swedish.js"),
   ...require("../decks/lessons-german.js"),
   ...require("../decks/lessons-italian.js"),
-  ...require("../decks/lessons-chinese.js")
+  ...require("../decks/lessons-chinese.js"),
+  ...require("../decks/lessons-japanese.js"),
+  ...require("../decks/lessons-spanish.js")
 };
 const LESSON_IDS_BY_COURSE = Object.fromEntries(
   Object.entries(LESSONS_BY_COURSE).map(([courseId, lessons]) => [courseId, lessons.map(lesson => lesson.id)])

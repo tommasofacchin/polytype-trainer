@@ -26,7 +26,7 @@
         "deck.html": ["decks/index.js", "decks/categories.js", "js/deck-cache.js", "js/deck.js"],
         "categories.html": ["decks/index.js", "decks/categories.js", "js/categories.js"],
         "shop.html": ["decks/index.js", "decks/categories.js", "js/shop.js"],
-        "lessons.html": ["decks/lessons-norwegian.js", "decks/lessons-swedish.js", "decks/lessons-german.js", "decks/lessons-italian.js", "decks/lessons-chinese.js", "js/mission-celebrate.js", "js/lessons.js"],
+        "lessons.html": ["decks/lessons-norwegian.js", "decks/lessons-swedish.js", "decks/lessons-german.js", "decks/lessons-italian.js", "decks/lessons-chinese.js", "decks/lessons-japanese.js", "decks/lessons-spanish.js", "js/mission-celebrate.js", "js/lessons.js"],
         "friends.html": ["js/friends.js"],
         "find-friends.html": ["js/find-friends.js"],
         "visit-profile.html": ["js/visit-profile.js"],
