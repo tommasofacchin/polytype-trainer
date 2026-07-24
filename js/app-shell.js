@@ -369,6 +369,33 @@
         return Math.min(max, Math.max(min, value));
     }
 
+    // The box every flying thing (XP stars, the purchased key) has to stay
+    // inside. `visualViewport` is the actual visible area - it shrinks for an
+    // on-screen keyboard or a mobile browser's collapsing URL bar, unlike
+    // `innerWidth/innerHeight` which can lag behind. Falling back to the
+    // latter only for browsers without it.
+    function getViewportBounds(margin = FLIGHT_EDGE_MARGIN) {
+        const viewport = window.visualViewport;
+        const left = viewport?.offsetLeft ?? 0;
+        const top = viewport?.offsetTop ?? 0;
+        return {
+            minX: left + margin,
+            maxX: left + (viewport?.width ?? window.innerWidth) - margin,
+            minY: top + margin,
+            maxY: top + (viewport?.height ?? window.innerHeight) - margin
+        };
+    }
+
+    // Reads an element or a pre-captured DOMRect (callers whose origin element
+    // is gone by flight time pass the latter) into a plain rect.
+    function toRect(origin) {
+        if (!origin) return null;
+        const rect = typeof origin.getBoundingClientRect === "function"
+            ? origin.getBoundingClientRect()
+            : origin;
+        return (rect.width || rect.height) ? rect : null;
+    }
+
     // Flies a handful of stars from `origin` into the level bar while the
     // bar itself climbs from the held value to `targetXp`. Always releases the
     // hold, including on an early return, so a failure here can never leave
@@ -419,8 +446,8 @@
     // ~800ms flight, since the browser interpolates linearly between them.
     const XP_STAR_PATH_STEPS = 10;
     // Kept clear of every viewport edge - see launchStars for why this is
-    // what actually guarantees a star can never fly off-screen.
-    const XP_STAR_EDGE_MARGIN = 16;
+    // what actually guarantees a flying element can never leave the screen.
+    const FLIGHT_EDGE_MARGIN = 16;
 
     function animateLevelBar(fromXp, toXp) {
         const fill = document.getElementById("app-shell-level-fill");
@@ -490,23 +517,11 @@
     // is too - no matter how the flight's start/end points end up measured.
     function launchStars(origin) {
         const target = document.querySelector(".app-shell-level-track");
-        if (!origin || !target) return;
+        const from = toRect(origin);
+        const to = toRect(target);
+        if (!from || !to) return;
 
-        const from = typeof origin.getBoundingClientRect === "function"
-            ? origin.getBoundingClientRect()
-            : origin;
-        const to = target.getBoundingClientRect();
-        if ((!from.width && !from.height) || (!to.width && !to.height)) return;
-
-        // `visualViewport` is the actual visible area - it shrinks for an
-        // on-screen keyboard or a mobile browser's collapsing URL bar, unlike
-        // `innerWidth/innerHeight` which can lag behind. Falling back to the
-        // latter only for browsers without it.
-        const viewport = window.visualViewport;
-        const minX = (viewport?.offsetLeft ?? 0) + XP_STAR_EDGE_MARGIN;
-        const maxX = (viewport?.offsetLeft ?? 0) + (viewport?.width ?? window.innerWidth) - XP_STAR_EDGE_MARGIN;
-        const minY = (viewport?.offsetTop ?? 0) + XP_STAR_EDGE_MARGIN;
-        const maxY = (viewport?.offsetTop ?? 0) + (viewport?.height ?? window.innerHeight) - XP_STAR_EDGE_MARGIN;
+        const { minX, maxX, minY, maxY } = getViewportBounds();
 
         const layer = document.createElement("div");
         layer.className = "xp-star-layer";
@@ -606,6 +621,138 @@
         window.setTimeout(() => layer.remove(), longest + 200);
     }
 
+    // ── Purchased-key flight ────────────────────────────────────────────
+    // Buying a key says nothing: the key itself flies out of the shop tile
+    // into the header's key counter, and the counter only ticks up once it
+    // lands. The flight *is* the confirmation - no status text involved.
+    //
+    // Same hold/play split as the XP burst above: the buy call updates the
+    // profile cache (and so the header) the moment the server answers, well
+    // before the animation gets to run, so the shop calls holdKeyDisplay()
+    // *before* buying to keep the old count on screen until the key arrives.
+
+    let keyDisplayHeld = false;
+
+    function holdKeyDisplay() {
+        keyDisplayHeld = true;
+    }
+
+    function releaseKeyDisplay() {
+        keyDisplayHeld = false;
+        paintHeaderKeys();
+    }
+
+    function paintHeaderKeys(cached) {
+        const keysEl = document.getElementById("app-shell-keys");
+        if (!keysEl) return;
+        const language = localStorage.getItem("polytype-language") || "chinese";
+        keysEl.innerHTML = `${ICONS.key}${getKeysHeldForLanguage(language, cached || readCachedProfile())}`;
+    }
+
+    const KEY_FLIGHT_DURATION = 1020;
+    const KEY_FLIGHT_STEPS = 18;
+    // Fraction of the timeline the key spends popping out of the tile before
+    // it sets off. Without it the whole flight is over the moment the eye
+    // finds it: easeOutCubic covers a third of the distance in its first
+    // eighth, so the key read as a glow that was already halfway up the
+    // screen rather than as *this* key, leaving *this* tile.
+    const KEY_LAUNCH_HOLD = 0.18;
+
+    // Flies one key from `origin` (element or DOMRect) into the header stat,
+    // then hands the counter its new value with a pop. Always releases the
+    // hold - including on every early return - so a missing target or a
+    // reduced-motion preference can never leave the header stuck on a stale
+    // count for the rest of the session.
+    async function playKeyGain(origin) {
+        const target = document.getElementById("app-shell-keys");
+        const from = toRect(origin);
+        const to = toRect(target);
+
+        if (!from || !to || prefersReducedMotion()) {
+            releaseKeyDisplay();
+            bumpKeyStat();
+            return;
+        }
+
+        const { minX, maxX, minY, maxY } = getViewportBounds();
+        const startX = clamp(from.left + from.width / 2, minX, maxX);
+        const startY = clamp(from.top + from.height / 2, minY, maxY);
+        const targetX = clamp(to.left + to.width / 2, minX, maxX);
+        const targetY = clamp(to.top + to.height / 2, minY, maxY);
+
+        const layer = document.createElement("div");
+        layer.className = "xp-star-layer";
+        layer.setAttribute("aria-hidden", "true");
+        const flyer = document.createElement("span");
+        flyer.className = "key-flight";
+        flyer.innerHTML = ICONS.key;
+        layer.appendChild(flyer);
+        document.body.appendChild(layer);
+
+        // Same sampled quadratic Bezier as launchStars - see the long comment
+        // there for why a hand-sampled curve, rather than an easing curve bent
+        // to look like one, is what keeps the flight inside the viewport.
+        const liftDistance = Math.min(140, Math.hypot(targetX - startX, targetY - startY) * 0.38);
+        const controlX = clamp((startX + targetX) / 2, minX, maxX);
+        const controlY = Math.max(minY, (startY + targetY) / 2 - liftDistance);
+
+        const keyframes = [];
+        for (let step = 0; step <= KEY_FLIGHT_STEPS; step += 1) {
+            const t = step / KEY_FLIGHT_STEPS;
+            // Travel only starts once the pop-out is done - before that the
+            // key sits on the tile, so `eased` stays 0 and every sampled
+            // point is the origin.
+            const travel = Math.max(0, (t - KEY_LAUNCH_HOLD) / (1 - KEY_LAUNCH_HOLD));
+            // easeInOutCubic, not the stars' easeOutCubic: a single carried
+            // object wants to gather speed and then set itself down. Front-
+            // loading it the way the stars do put the key within a few pixels
+            // of the counter halfway through, leaving the rest of the flight
+            // looking like a stall.
+            const eased = travel < 0.5
+                ? 4 * travel * travel * travel
+                : 1 - Math.pow(-2 * travel + 2, 3) / 2;
+            const inv = 1 - eased;
+            const x = inv * inv * startX + 2 * inv * eased * controlX + eased * eased * targetX;
+            const y = inv * inv * startY + 2 * inv * eased * controlY + eased * eased * targetY;
+
+            // Swells out of the tile first, then tucks itself down into the
+            // counter, ending at roughly the icon size that lives there - so
+            // the landing reads as the same object settling in.
+            const scale = t < KEY_LAUNCH_HOLD
+                ? 0.35 + 1.1 * (t / KEY_LAUNCH_HOLD)
+                : 1.45 - 0.95 * eased;
+            // One full turn over the flight, landing upright.
+            const rotate = 360 * eased;
+            const opacity = t < 0.06 ? t / 0.06 : (t > 0.92 ? (1 - t) / 0.08 : 1);
+
+            keyframes.push({
+                transform: `translate3d(${x}px, ${y}px, 0) scale(${scale}) rotate(${rotate}deg)`,
+                opacity
+            });
+        }
+
+        try {
+            // Deliberately linear: the ease already lives in the sampled `t`
+            // values above (same reasoning as the XP stars).
+            await flyer.animate(keyframes, { duration: KEY_FLIGHT_DURATION, easing: "linear", fill: "both" }).finished;
+        } catch {
+            // A page navigation mid-flight cancels the animation - land the
+            // count anyway rather than swallowing the purchase.
+        } finally {
+            layer.remove();
+            releaseKeyDisplay();
+            bumpKeyStat();
+        }
+    }
+
+    function bumpKeyStat() {
+        const keysEl = document.getElementById("app-shell-keys");
+        if (!keysEl) return;
+        keysEl.classList.remove("is-bumped");
+        void keysEl.offsetWidth; // restart the animation
+        keysEl.classList.add("is-bumped");
+    }
+
     // Coins and keys are both per-course, both sourced from the same cached
     // profile, and both change together whenever a purchase/session-save
     // fires polytype-profile-updated - so one function keeps them in sync
@@ -617,8 +764,8 @@
         const coinsEl = document.getElementById("app-shell-coins");
         if (coinsEl) coinsEl.innerHTML = `${ICONS.coin}${getCoinsForLanguage(language, cached)}`;
 
-        const keysEl = document.getElementById("app-shell-keys");
-        if (keysEl) keysEl.innerHTML = `${ICONS.key}${getKeysHeldForLanguage(language, cached)}`;
+        // Held while a purchased key is still in flight - see playKeyGain.
+        if (!keyDisplayHeld) paintHeaderKeys(cached);
 
         const streakEl = document.getElementById("app-shell-streak");
         if (streakEl) streakEl.innerHTML = `${ICONS.streak}${cached.dayStreak || 0}`;
@@ -664,7 +811,10 @@
         prefetchActiveDeck,
         holdXpDisplay,
         releaseXpDisplay,
-        playXpGain
+        playXpGain,
+        holdKeyDisplay,
+        releaseKeyDisplay,
+        playKeyGain
     };
 
     // Paint the header/nav immediately instead of waiting for

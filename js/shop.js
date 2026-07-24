@@ -36,6 +36,11 @@ let authResolved = false;
 let isBuying = false;
 let isBuyingChest = false;
 let isBuyingFreeze = false;
+// While a purchased key is still flying up to the header (see playKeyGain in
+// js/app-shell.js), this tile's own count waits with it - otherwise the number
+// would tick up down here a beat before the key visibly lands up there.
+// Display only: the buy gating in renderShop still reads the real count.
+let keysHeldDisplayOverride = null;
 
 const el = {};
 
@@ -193,14 +198,22 @@ function setupBuyButton() {
         showButtonSpinner(el.buyBtn);
         setStatus(el.keyStatus, "", "");
 
-        // Captured and applied *after* the finally block below, since
-        // renderShop() there unconditionally recomputes the status line
-        // from current state - setting it before would just get it
-        // overwritten before ever reaching the screen.
+        // Freezes both key counters at their current value before the buy
+        // call updates the profile cache, so they tick up when the flying key
+        // actually lands instead of the instant the server answers.
+        // playKeyGain (and the error path below) always releases them.
+        keysHeldDisplayOverride = getKeysHeld(courseProgress.purchasedKeys);
+        window.PolytypeAppShell?.holdKeyDisplay?.();
+
+        // Only ever set on failure now, and applied *after* the finally block
+        // below, since renderShop() there unconditionally recomputes the
+        // status line from current state - setting it before would just get
+        // it overwritten before ever reaching the screen. Success shows no
+        // message at all: the key flies from this tile into the header
+        // counter, which is the confirmation.
         let outcome = null;
         try {
             await window.PolytypeFirebase.buyKey(courseProgress.courseKey);
-            outcome = { text: tr("shop.purchaseSuccess"), tone: "success" };
         } catch (error) {
             outcome = { text: error?.message || tr("shop.purchaseFailed"), tone: "error" };
             // The server rejected this against state we don't have locally
@@ -211,8 +224,26 @@ function setupBuyButton() {
             isBuying = false;
             renderShop();
         }
-        setStatus(el.keyStatus, outcome.text, outcome.tone);
+
+        if (outcome) {
+            releaseKeyCounters();
+            setStatus(el.keyStatus, outcome.text, outcome.tone);
+            return;
+        }
+        // No status line on success - the key flying from this tile into the
+        // header counter is the confirmation.
+        await window.PolytypeAppShell?.playKeyGain?.(el.keyIcon);
+        releaseKeyCounters();
     });
+}
+
+// Hands both counters their new value once the flying key has landed.
+// renderShop() has to run *after* the override is cleared - and any status
+// text after that, same clobbering order as setupBuyButton's finally block.
+function releaseKeyCounters() {
+    keysHeldDisplayOverride = null;
+    window.PolytypeAppShell?.releaseKeyDisplay?.();
+    renderShop();
 }
 
 function setupBuyChestButton() {
@@ -436,7 +467,7 @@ function renderShop() {
     const missingWords = Math.max(0, getTotalWordCount() - courseProgress.unlockedCount);
 
     if (el.keysHeldText) {
-        el.keysHeldText.textContent = tr("shop.keysHeld", { count: keysHeld, max: maxKeys });
+        el.keysHeldText.textContent = tr("shop.keysHeld", { count: keysHeldDisplayOverride ?? keysHeld, max: maxKeys });
     }
     if (el.buyBtn) el.buyBtn.textContent = tr("shop.buyKey", { price: keyPriceCoins });
 
