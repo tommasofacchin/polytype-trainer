@@ -7,9 +7,6 @@ const wordChestPriceCoins = 100; // keep in sync with WORD_CHEST_PRICE_COINS in 
 const streakFreezePriceCoins = 500; // keep in sync with STREAK_FREEZE_PRICE_COINS in api/_lib.js
 const maxStreakFreezes = 2; // keep in sync with MAX_STREAK_FREEZES in api/_lib.js
 
-const COIN_SVG =
-    '<svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="10" fill="#ffc73a"/><circle cx="12" cy="12" r="6.5" fill="none" stroke="#d99a1c" stroke-width="2"/></svg>';
-
 // Classic fantasy key (ring + shaft + teeth) - same shape as the Deck page's
 // keys-held badge icon, for visual consistency between the two currencies.
 const KEY_SVG =
@@ -47,9 +44,6 @@ function tr(key, params = {}) {
 }
 
 function initShopPage() {
-    el.coinIcon = document.getElementById("shop-coin-icon");
-    el.coinLabel = document.getElementById("shop-coin-label");
-    el.coinBalance = document.getElementById("shop-coin-balance");
     el.keyIcon = document.getElementById("shop-key-icon");
     el.keysHeldText = document.getElementById("shop-item-keys-held");
     el.buyBtn = document.getElementById("shop-buy-btn");
@@ -63,7 +57,6 @@ function initShopPage() {
     el.buyFreezeBtn = document.getElementById("shop-buy-freeze-btn");
     el.freezeStatus = document.getElementById("shop-freeze-status");
 
-    if (el.coinIcon) el.coinIcon.innerHTML = COIN_SVG;
     if (el.keyIcon) el.keyIcon.innerHTML = KEY_SVG;
     if (el.chestIcon) el.chestIcon.innerHTML = CHEST_SVG;
     if (el.freezeIcon) el.freezeIcon.innerHTML = FREEZE_SVG;
@@ -103,10 +96,6 @@ function resolveActiveLanguage() {
     activeLanguage = languages.includes(savedLanguage) ? savedLanguage : (languages[0] || FALLBACK_LANGUAGE);
     activeDeckMeta = (window.DECK_INDEX || []).find(deck => deck.language === activeLanguage) || null;
     renderShop();
-}
-
-function getLanguageLabel(language) {
-    return window.PolytypeI18n?.languageLabel?.(language) || language;
 }
 
 function getStoredProfile() {
@@ -442,18 +431,12 @@ function renderShop() {
     // course, same as keysHeld below, not from gamestate.
     const courseProgress = getCourseProgress();
     const coins = courseProgress.coins;
-    if (el.coinLabel) el.coinLabel.textContent = tr("shop.yourCoinsForLanguage", { language: getLanguageLabel(activeLanguage) });
-    if (el.coinBalance) el.coinBalance.textContent = String(coins);
 
     const keysHeld = getKeysHeld(courseProgress.purchasedKeys);
     const missingWords = Math.max(0, getTotalWordCount() - courseProgress.unlockedCount);
 
     if (el.keysHeldText) {
-        el.keysHeldText.textContent = tr("shop.keysHeldForLanguage", {
-            count: keysHeld,
-            max: maxKeys,
-            language: getLanguageLabel(activeLanguage)
-        });
+        el.keysHeldText.textContent = tr("shop.keysHeld", { count: keysHeld, max: maxKeys });
     }
     if (el.buyBtn) el.buyBtn.textContent = tr("shop.buyKey", { price: keyPriceCoins });
 

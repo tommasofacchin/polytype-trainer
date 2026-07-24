@@ -1478,11 +1478,9 @@ input[type="password"]:focus {
     transition: width 320ms cubic-bezier(0.22, 0.61, 0.36, 1), background var(--transition);
 }
 
-/* The retry phase is a second, shorter run - a different colour keeps it from
-   reading as "you went backwards" when the bar drops back to empty. */
-.sprint-progress.is-retry .sprint-progress-fill {
-    background: linear-gradient(90deg, color-mix(in srgb, var(--color-streak) 72%, #fff), var(--color-streak));
-}
+/* The retry phase deliberately keeps the same accent-blue fill (it stays
+   pinned at 100%, see js/sprint.js) - a red bar read as "you did badly"
+   rather than "reviewing", so the phase is marked by its label alone. */
 
 @media (prefers-reduced-motion: reduce) {
     .sprint-progress-fill {
@@ -3017,6 +3015,27 @@ input[type="password"]:focus {
     font-size: var(--text-lg, 18px);
     font-weight: 800;
     letter-spacing: -0.02em;
+}
+
+/* Reward numbers arrive only once the save resolves; js/sprint.js adds
+   .is-revealed as it sets them so they spring in rather than snapping on as
+   static text a beat after the card has already settled. */
+.result-xp-text.is-revealed,
+.result-coins-text.is-revealed {
+    animation: result-reward-pop 340ms var(--ease-spring) both;
+}
+
+@keyframes result-reward-pop {
+    0%   { opacity: 0; transform: translateY(6px) scale(0.9); }
+    60%  { opacity: 1; }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .result-xp-text.is-revealed,
+    .result-coins-text.is-revealed {
+        animation: none;
+    }
 }
 
 /* ---- End-of-game XP burst ---------------------------------------------- */
@@ -5500,6 +5519,126 @@ body > main {
     font-size: var(--text-md);
     font-weight: 600;
     text-align: center;
+}
+
+/* ---- Shop (shop.html / js/shop.js) --------------------------------------
+   Clash-Royale-style item tiles: Key and Word chest share the top row, the
+   Streak freeze sits below as a full-width tile. Coins are read from the
+   shared header, so the page carries no balance card of its own. Each tile
+   is tinted by its own item hue (--shop-hue). */
+
+.shop-page {
+    max-width: 520px;
+}
+
+.shop-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+}
+
+.shop-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-5) var(--space-4) var(--space-4);
+    border: 1px solid color-mix(in srgb, var(--shop-hue, var(--accent)) 26%, var(--border));
+    border-radius: var(--radius-lg);
+    background:
+        radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--shop-hue, var(--accent)) 16%, transparent), transparent 62%),
+        var(--surface);
+    box-shadow: var(--shadow-md);
+    text-align: center;
+}
+
+.shop-tile.is-key    { --shop-hue: var(--color-gold); }
+.shop-tile.is-chest  { --shop-hue: var(--color-secondary); }
+.shop-tile.is-freeze { --shop-hue: #5bc8ff; }
+
+.shop-tile-icon {
+    display: grid;
+    place-items: center;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    color: var(--shop-hue);
+    background: color-mix(in srgb, var(--shop-hue) 18%, var(--surface-soft));
+    border: 1px solid color-mix(in srgb, var(--shop-hue) 40%, transparent);
+    box-shadow: inset 0 0 0 4px color-mix(in srgb, var(--shop-hue) 8%, transparent);
+}
+
+.shop-tile-icon svg {
+    width: 40px;
+    height: 40px;
+}
+
+.shop-tile-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--text-lg);
+    color: var(--text);
+}
+
+.shop-tile-sub {
+    margin: 0;
+    color: var(--text-soft);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    line-height: 1.35;
+    /* Reserve two lines so the buy buttons line up across the two top tiles
+       even when one subtitle wraps and the other doesn't. */
+    min-height: 2.4em;
+}
+
+.shop-buy-btn {
+    margin-top: var(--space-2);
+    width: 100%;
+    padding: 11px 14px;
+    font-weight: 800;
+    box-shadow: var(--shadow-cta);
+}
+
+.shop-tile-status {
+    margin: 0;
+    min-height: 1em;
+    font-size: 11px;
+}
+
+.shop-tile-status:empty {
+    min-height: 0;
+}
+
+/* Streak freeze: full-width horizontal tile below the top row. */
+.shop-tile-wide {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    text-align: left;
+    gap: var(--space-4);
+    padding: var(--space-4) var(--space-5);
+}
+
+.shop-tile-wide .shop-tile-main {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.shop-tile-wide .shop-tile-sub {
+    min-height: 0;
+}
+
+.shop-tile-wide .shop-buy-btn {
+    margin-top: 0;
+    width: auto;
+    white-space: nowrap;
+}
+
+.shop-tile-wide .shop-tile-status {
+    grid-column: 1 / -1;
+    text-align: left;
 }
 
 /* ---- First-course guided tutorial (js/tutorial.js) ---------------------
@@ -8068,6 +8207,124 @@ body > main {
     font-size: var(--text-xs);
     font-weight: 600;
     text-align: right;
+}
+
+/* ── Lesson intro sheet ──────────────────────────────────────────────────
+   Tapping a lesson node slides this up from the bottom of the screen; its
+   "Start lesson" button then opens the player (see js/lessons.js). Layered
+   at the same z-index footing as .deck-overlay, above the bottom nav (40). */
+body.lessons-sheet-open {
+    overflow: hidden;
+}
+
+.lessons-sheet {
+    position: fixed;
+    inset: 0;
+    z-index: 250;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.lessons-sheet[hidden] {
+    display: none;
+}
+
+.lessons-sheet-backdrop {
+    position: absolute;
+    inset: 0;
+    background: var(--scrim);
+    opacity: 0;
+    transition: opacity var(--dur-med) var(--ease-out);
+}
+
+.lessons-sheet.is-open .lessons-sheet-backdrop {
+    opacity: 1;
+}
+
+.lessons-sheet-panel {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+    width: min(100%, 560px);
+    max-height: min(82vh, 720px);
+    padding: clamp(26px, 5vw, 38px) clamp(20px, 4vw, 32px) calc(clamp(20px, 4vw, 30px) + env(safe-area-inset-bottom, 0px));
+    border: 1px solid var(--border);
+    border-bottom: 0;
+    border-radius: clamp(20px, 4vw, 28px) clamp(20px, 4vw, 28px) 0 0;
+    background:
+        radial-gradient(circle at top, color-mix(in srgb, var(--accent) 10%, transparent), transparent 46%),
+        var(--surface);
+    box-shadow: var(--shadow-lg);
+    text-align: center;
+    overflow-y: auto;
+    transform: translateY(100%);
+    transition: transform var(--dur-med) var(--ease-out);
+}
+
+.lessons-sheet.is-open .lessons-sheet-panel {
+    transform: translateY(0);
+}
+
+/* Grab-handle affordance, hinting the sheet is dismissable. */
+.lessons-sheet-panel::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    translate: -50% 0;
+    width: 40px;
+    height: 4px;
+    border-radius: var(--radius-pill);
+    background: var(--border-strong);
+}
+
+.lessons-sheet-kicker {
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.lessons-sheet-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: var(--surface-soft);
+    color: var(--text-soft);
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background var(--transition), color var(--transition), border-color var(--transition);
+}
+
+.lessons-sheet-close:hover,
+.lessons-sheet-close:focus-visible {
+    background: var(--surface);
+    border-color: var(--border-strong);
+    color: var(--text);
+    outline: 0;
+}
+
+.lessons-sheet .restart-btn {
+    width: 100%;
+    max-width: 460px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .lessons-sheet-backdrop,
+    .lessons-sheet-panel {
+        transition: none;
+    }
 }
 
 .lessons-review-banner {

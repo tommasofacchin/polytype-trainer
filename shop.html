@@ -14,61 +14,35 @@
 <body class="has-app-shell is-scroll-page" data-tab="shop">
     <div id="app-header"></div>
 
-    <main class="page-content" style="max-width:520px">
+    <main class="page-content shop-page">
         <h1 class="page-title" data-i18n="shop.title">Shop</h1>
 
-        <div class="settings-section">
-            <div class="settings-card">
-                <div class="settings-row">
-                    <div class="settings-row-icon is-gold" id="shop-coin-icon" aria-hidden="true"></div>
-                    <div class="settings-row-body">
-                        <span class="settings-row-label" id="shop-coin-label" data-i18n="shop.yourCoins">Your coins</span>
-                        <p class="settings-row-help" id="shop-coin-balance">0</p>
-                    </div>
-                </div>
+        <div class="shop-grid">
+            <div class="shop-tile is-key">
+                <div class="shop-tile-icon" id="shop-key-icon" aria-hidden="true"></div>
+                <span class="shop-tile-title" data-i18n="shop.keyItemTitle">Key</span>
+                <p class="shop-tile-sub" id="shop-item-keys-held"></p>
+                <button type="button" id="shop-buy-btn" class="btn-solid shop-buy-btn"></button>
+                <p id="shop-key-status" class="settings-status shop-tile-status" aria-live="polite"></p>
             </div>
-        </div>
 
-        <div class="settings-section">
-            <div class="settings-section-title" id="shop-language-heading" data-i18n="shop.forLanguage">For this language</div>
-            <div class="settings-card">
-                <div class="settings-row">
-                    <div class="settings-row-icon is-gold" id="shop-key-icon" aria-hidden="true"></div>
-                    <div class="settings-row-body">
-                        <span class="settings-row-label" data-i18n="shop.keyItemTitle">Key</span>
-                        <p class="settings-row-help" id="shop-item-keys-held"></p>
-                    </div>
-                    <button type="button" id="shop-buy-btn" class="btn-solid settings-save-btn"></button>
-                </div>
+            <div class="shop-tile is-chest">
+                <div class="shop-tile-icon" id="shop-chest-icon" aria-hidden="true"></div>
+                <span class="shop-tile-title" data-i18n="shop.chestItemTitle">Word chest</span>
+                <p class="shop-tile-sub" id="shop-item-chest-missing"></p>
+                <button type="button" id="shop-buy-chest-btn" class="btn-solid shop-buy-btn"></button>
+                <p id="shop-chest-status" class="settings-status shop-tile-status" aria-live="polite"></p>
             </div>
-            <p id="shop-key-status" class="settings-status" aria-live="polite"></p>
 
-            <div class="settings-card">
-                <div class="settings-row">
-                    <div class="settings-row-icon is-gold" id="shop-chest-icon" aria-hidden="true"></div>
-                    <div class="settings-row-body">
-                        <span class="settings-row-label" data-i18n="shop.chestItemTitle">Word chest</span>
-                        <p class="settings-row-help" id="shop-item-chest-missing"></p>
-                    </div>
-                    <button type="button" id="shop-buy-chest-btn" class="btn-solid settings-save-btn"></button>
+            <div class="shop-tile shop-tile-wide is-freeze">
+                <div class="shop-tile-icon" id="shop-freeze-icon" aria-hidden="true"></div>
+                <div class="shop-tile-main">
+                    <span class="shop-tile-title" data-i18n="shop.freezeItemTitle">Streak freeze</span>
+                    <p class="shop-tile-sub" id="shop-item-freezes-held"></p>
                 </div>
+                <button type="button" id="shop-buy-freeze-btn" class="btn-solid shop-buy-btn"></button>
+                <p id="shop-freeze-status" class="settings-status shop-tile-status" aria-live="polite"></p>
             </div>
-            <p id="shop-chest-status" class="settings-status" aria-live="polite"></p>
-        </div>
-
-        <div class="settings-section">
-            <div class="settings-section-title" data-i18n="shop.forStreak">For your streak</div>
-            <div class="settings-card">
-                <div class="settings-row">
-                    <div class="settings-row-icon is-gold" id="shop-freeze-icon" aria-hidden="true"></div>
-                    <div class="settings-row-body">
-                        <span class="settings-row-label" data-i18n="shop.freezeItemTitle">Streak freeze</span>
-                        <p class="settings-row-help" id="shop-item-freezes-held"></p>
-                    </div>
-                    <button type="button" id="shop-buy-freeze-btn" class="btn-solid settings-save-btn"></button>
-                </div>
-            </div>
-            <p id="shop-freeze-status" class="settings-status" aria-live="polite"></p>
         </div>
     </main>
     <div id="app-bottom-nav"></div>

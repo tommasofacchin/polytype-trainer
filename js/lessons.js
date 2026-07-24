@@ -64,11 +64,13 @@
         el.playerView = document.getElementById("lessons-player-view");
         el.backBtn = document.getElementById("lessons-back-btn");
 
-        el.explanationScreen = document.getElementById("lessons-explanation-screen");
-        el.explanationKicker = document.getElementById("lessons-explanation-kicker");
-        el.explanationTitle = document.getElementById("lessons-explanation-title");
-        el.explanationBody = document.getElementById("lessons-explanation-body");
-        el.startBtn = document.getElementById("lessons-start-btn");
+        el.sheet = document.getElementById("lessons-sheet");
+        el.sheetBackdrop = document.getElementById("lessons-sheet-backdrop");
+        el.sheetKicker = document.getElementById("lessons-sheet-kicker");
+        el.sheetTitle = document.getElementById("lessons-sheet-title");
+        el.sheetBody = document.getElementById("lessons-sheet-body");
+        el.sheetStartBtn = document.getElementById("lessons-sheet-start-btn");
+        el.sheetCloseBtn = document.getElementById("lessons-sheet-close");
 
         el.exerciseScreen = document.getElementById("lessons-exercise-screen");
         el.reviewBanner = document.getElementById("lessons-review-banner");
@@ -82,8 +84,18 @@
         el.continueBtn = document.getElementById("lessons-continue-btn");
 
         el.backBtn.addEventListener("click", showPathView);
-        el.startBtn.addEventListener("click", startExercises);
+        el.sheetStartBtn.addEventListener("click", beginLesson);
+        el.sheetCloseBtn.addEventListener("click", closeSheet);
+        el.sheetBackdrop.addEventListener("click", closeSheet);
         el.continueBtn.addEventListener("click", showPathView);
+        // Scoped to the sheet (not document) so it's torn down with the node
+        // on a soft navigation - js/router.js re-runs this script per visit and
+        // document-level listeners would otherwise pile up. Focus lives inside
+        // the sheet while it's open (openSheet focuses Start), so Escape here
+        // reaches this handler by bubbling.
+        el.sheet.addEventListener("keydown", event => {
+            if (event.key === "Escape") closeSheet();
+        });
 
         loadLessons();
     }
@@ -130,6 +142,7 @@
     // ── Path view ────────────────────────────────────────────────────────────
 
     function showPathView() {
+        closeSheet();
         state.lessonsCompleted = getLessonsCompleted();
         renderPath();
         el.playerView.hidden = true;
@@ -210,24 +223,51 @@
         return node;
     }
 
-    // ── Player: explanation screen ──────────────────────────────────────────
+    // ── Lesson intro sheet ──────────────────────────────────────────────────
+    //
+    // Tapping a node no longer jumps straight into the player; it slides a
+    // bottom sheet up over the path with the lesson's explanation and a
+    // "Start lesson" button. That button (beginLesson) is what actually opens
+    // the player and starts the exercises.
+
+    const SHEET_ANIM_MS = 280;
+    let sheetHideTimer = null;
 
     function openLesson(lesson) {
         state.activeLesson = lesson;
-        el.pathView.hidden = true;
-        el.playerView.hidden = false;
-        showExplanationScreen();
+        el.sheetKicker.textContent = lesson.moduleTitle;
+        el.sheetTitle.textContent = lesson.title;
+        el.sheetBody.replaceChildren(...lesson.explanation.map(buildExplanationBlock));
+        el.sheetBody.scrollTop = 0;
+        openSheet();
     }
 
-    function showExplanationScreen() {
-        const lesson = state.activeLesson;
-        el.explanationKicker.textContent = lesson.moduleTitle;
-        el.explanationTitle.textContent = lesson.title;
-        el.explanationBody.replaceChildren(...lesson.explanation.map(buildExplanationBlock));
+    function openSheet() {
+        if (sheetHideTimer) { clearTimeout(sheetHideTimer); sheetHideTimer = null; }
+        el.sheet.hidden = false;
+        document.body.classList.add("lessons-sheet-open");
+        // Force a reflow so the freshly-unhidden sheet transitions from its
+        // off-screen start rather than snapping straight to the open state.
+        void el.sheet.offsetWidth;
+        el.sheet.classList.add("is-open");
+        el.sheetStartBtn.focus();
+    }
 
-        el.completeScreen.hidden = true;
-        el.exerciseScreen.hidden = true;
-        el.explanationScreen.hidden = false;
+    function closeSheet() {
+        if (el.sheet.hidden) return;
+        el.sheet.classList.remove("is-open");
+        document.body.classList.remove("lessons-sheet-open");
+        sheetHideTimer = window.setTimeout(() => {
+            el.sheet.hidden = true;
+            sheetHideTimer = null;
+        }, SHEET_ANIM_MS);
+    }
+
+    function beginLesson() {
+        closeSheet();
+        el.pathView.hidden = true;
+        el.playerView.hidden = false;
+        startExercises();
     }
 
     function buildExplanationBlock(block) {
@@ -268,7 +308,7 @@
         state.wrongList = [];
         state.wrongAttempts = 0;
         state.sessionStartTime = Date.now();
-        el.explanationScreen.hidden = true;
+        el.completeScreen.hidden = true;
         el.reviewBanner.hidden = true;
         el.exerciseScreen.hidden = false;
         showNextMainExercise();

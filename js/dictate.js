@@ -857,7 +857,11 @@
 
         try {
             const audio = ensureWordAudio();
-            if (activeWordAudioUrl !== url) {
+            // Re-assign src (which re-fetches) when this is a different word OR
+            // the element is stuck in an error state from a failed load -
+            // otherwise a same-URL replay would seek the errored element and
+            // reject again, leaving that word's audio dead on every tap.
+            if (activeWordAudioUrl !== url || audio.error) {
                 audio.src = url;
                 activeWordAudioUrl = url;
             } else {

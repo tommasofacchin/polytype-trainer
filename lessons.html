@@ -28,13 +28,6 @@
         <div id="lessons-player-view" hidden>
             <button type="button" id="lessons-back-btn" class="back-link-mini lessons-player-back">&lsaquo; <span data-i18n="lessons.backBtn">Back</span></button>
 
-            <section id="lessons-explanation-screen" class="lessons-card lessons-explanation-screen">
-                <span id="lessons-explanation-kicker" class="profile-kicker"></span>
-                <h2 id="lessons-explanation-title" class="lessons-explanation-title"></h2>
-                <div id="lessons-explanation-body" class="lessons-explanation-body"></div>
-                <button type="button" id="lessons-start-btn" class="restart-btn" data-i18n="lessons.startBtn">Start lesson</button>
-            </section>
-
             <section id="lessons-exercise-screen" class="lessons-card lessons-exercise-screen" hidden>
                 <div id="lessons-review-banner" class="lessons-review-banner" hidden></div>
                 <span id="lessons-exercise-progress" class="lessons-exercise-progress"></span>
@@ -46,6 +39,20 @@
                 <span id="lessons-complete-coins" class="lessons-complete-coins"></span>
                 <span id="lessons-complete-status" class="lessons-complete-status"></span>
                 <button type="button" id="lessons-continue-btn" class="restart-btn" data-i18n="lessons.continueBtn">Continue</button>
+            </section>
+        </div>
+
+        <!-- Lesson intro sheet: slides up from the bottom when a lesson node
+             is tapped. Its "Start lesson" button drops the player straight
+             into the exercises (see js/lessons.js). -->
+        <div id="lessons-sheet" class="lessons-sheet" hidden>
+            <div id="lessons-sheet-backdrop" class="lessons-sheet-backdrop"></div>
+            <section class="lessons-sheet-panel" role="dialog" aria-modal="true" aria-labelledby="lessons-sheet-title">
+                <button type="button" id="lessons-sheet-close" class="lessons-sheet-close" aria-label="Close" data-i18n-aria-label="common.close">&times;</button>
+                <span id="lessons-sheet-kicker" class="lessons-sheet-kicker"></span>
+                <h2 id="lessons-sheet-title" class="lessons-explanation-title"></h2>
+                <div id="lessons-sheet-body" class="lessons-explanation-body"></div>
+                <button type="button" id="lessons-sheet-start-btn" class="restart-btn" data-i18n="lessons.startBtn">Start lesson</button>
             </section>
         </div>
     </main>

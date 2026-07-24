@@ -732,6 +732,13 @@
             globalLevel: progress.globalLevel || currentProfile?.globalLevel || 1,
             currentStreak: progress.streak?.currentStreak ?? currentProfile?.currentStreak ?? 0,
             longestStreak: progress.streak?.longestStreak ?? currentProfile?.longestStreak ?? 0,
+            // A completed session reports the day it counted for under `streak`
+            // (calculateStreakUpdate's todayKey); other actions (unlock, buy)
+            // carry no streak block, so the existing date is preserved. Without
+            // this the live profile kept a stale lastPracticeDate and Home's
+            // "streak at risk" banner only cleared on a hard reload, even though
+            // the player had just practised (see renderStreakRiskBanner).
+            lastPracticeDate: progress.streak?.lastPracticeDate ?? currentProfile?.lastPracticeDate ?? null,
             // Session saves report freezes nested under `streak` (that's where
             // calculateStreakUpdate puts them); buy-streak-freeze reports the
             // new count at the top level, since it isn't a streak update.

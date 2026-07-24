@@ -32,7 +32,7 @@
     // so already claim their layout space) well before they're actually
     // shown - only opacity/transform animate at reveal time, never a size
     // change, so the result card never visibly grows or jumps.
-    const RESULT_ROW_STAGGER_DELAY = 160;
+    const RESULT_ROW_STAGGER_DELAY = 110;
     // Must match .sprint-result-row's CSS transition-duration (style.css).
     const RESULT_ROW_REVEAL_DURATION = 260;
     // A match round lets you retry a mismatch in place, but not forever -
@@ -841,13 +841,13 @@
                         : (await firebaseClient.completePracticeSession(payload))?.data;
 
                     if (typeof progress?.xpEarned === "number" && progress.xpEarned > 0 && el.resultXp) {
-                        el.resultXp.textContent = tr("sprint.xpEarned", { xp: progress.xpEarned });
+                        revealResultReward(el.resultXp, tr("sprint.xpEarned", { xp: progress.xpEarned }));
                     }
                     if (typeof progress?.totalXp === "number") {
                         earnedTotalXp = progress.totalXp;
                     }
                     if (typeof progress?.sessionCoins === "number" && progress.sessionCoins > 0) {
-                        el.resultCoins.textContent = tr("trainer.coinsEarned", { count: progress.sessionCoins });
+                        revealResultReward(el.resultCoins, tr("trainer.coinsEarned", { count: progress.sessionCoins }));
                     }
                     prepareFriendsStatus(progress?.friendsStatus);
                     if (progress?.completedMissions?.length) {
@@ -876,6 +876,20 @@
 
         await minDelay;
         setResultButtonsBusy(false);
+    }
+
+    // The XP and coin awards only arrive once the save round trip resolves,
+    // so rather than snapping in as static text a beat after the card has
+    // settled, they pop in with a short spring - which reads as "here's your
+    // reward" instead of a late repaint. Remove/reflow/re-add restarts the CSS
+    // animation even though the element is reused across replays (same trick
+    // as js/lessons.js's revealText).
+    function revealResultReward(target, text) {
+        if (!target) return;
+        target.classList.remove("is-revealed");
+        target.textContent = text;
+        void target.offsetWidth;
+        target.classList.add("is-revealed");
     }
 
     function setResultButtonsBusy(busy) {
@@ -1177,7 +1191,12 @@
         try {
             const audio = ensureWordAudio();
             const playId = ++wordAudioPlayId;
-            if (activeAudioUrl !== url) {
+            // Re-assign src (which re-fetches) when this is a different word OR
+            // the element is stuck in an error state from a failed load. Without
+            // the audio.error check, a same-URL replay would take the seek-only
+            // branch on an errored element and reject again - the word's audio
+            // would stay dead no matter how many times the icon is tapped.
+            if (activeAudioUrl !== url || audio.error) {
                 audio.src = url;
                 activeAudioUrl = url;
             } else {
@@ -1189,8 +1208,11 @@
                 // that without the player needing to notice and hit replay
                 // themselves. Only if nothing newer (a fresh round, or the
                 // player already hitting replay again) has superseded this
-                // exact attempt in the meantime.
+                // exact attempt in the meantime. Clearing activeAudioUrl forces
+                // the retry through the re-fetch branch above - just seeking the
+                // already-failed element again would fail identically.
                 if (attempt < 1 && wordAudioPlayId === playId) {
+                    activeAudioUrl = null;
                     window.setTimeout(() => {
                         if (wordAudioPlayId === playId) playWordAudio(item, attempt + 1);
                     }, 400);
