@@ -7918,7 +7918,11 @@ body > main {
 .lesson-path-node.is-active .lesson-path-circle::before {
     content: "";
     position: absolute;
-    inset: -9px;
+    /* Nudged 3px lower than a symmetric inset so the ring centres on the
+       button's full visual shape (the 64px circle plus its 6px 3D bottom
+       edge, visual centre ~3px below the circle's), not the bare circle -
+       otherwise both the ring and its scale() pulse read as top-heavy. */
+    inset: -6px -9px -12px -9px;
     border-radius: 50%;
     border: 3px solid color-mix(in srgb, var(--path-hue) 55%, transparent);
     animation: lesson-path-pulse 1.6s var(--ease-in-out) infinite;
