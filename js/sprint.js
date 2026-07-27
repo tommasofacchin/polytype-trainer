@@ -734,6 +734,18 @@
         const feedback = document.getElementById("sprint-type-feedback");
         input.focus();
 
+        // Same pointerdown+preventDefault trick the on-screen keyboard's own
+        // keys use (see js/virtual-keyboard.js): a plain tap on this button
+        // would first blur the input, firing focusout - which hides the
+        // keyboard and reflows the page up, moving the button out from under
+        // the finger so the ensuing click lands on nothing. That's why it took
+        // two taps: the first only dismissed the keyboard. Keeping focus and
+        // submitting straight from pointerdown makes one tap check the answer.
+        form.querySelector(".sprint-type-submit").addEventListener("pointerdown", event => {
+            event.preventDefault();
+            form.requestSubmit();
+        });
+
         form.addEventListener("submit", event => {
             event.preventDefault();
             if (state.roundLocked) return;
