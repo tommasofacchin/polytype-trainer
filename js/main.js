@@ -40,7 +40,12 @@ const state = {
     savePromise: null,
     pendingSessionCoins: 0,
     pendingCompletedMissions: [],
-    pendingNewBadges: []
+    pendingNewBadges: [],
+    // Same accumulate-then-flush rule as the two above. Holds the server's
+    // `streak` block from whichever autosave first reported the flame going
+    // up; at most one autosave per day ever can, so this is a single value
+    // rather than a list.
+    pendingStreakAdvance: null
 };
 
 const defaultProfile = {
@@ -624,6 +629,7 @@ function resetState() {
     state.pendingSessionCoins = 0;
     state.pendingCompletedMissions = [];
     state.pendingNewBadges = [];
+    state.pendingStreakAdvance = null;
 }
 
 function clearRows() {
@@ -1341,6 +1347,16 @@ function celebrateLevelUp(level) {
     document.body.appendChild(overlay);
 }
 
+// Same accumulate-then-flush rule as the two below, and flushed ahead of both
+// - the flame going up is the day's headline, so it leads (matching the order
+// js/sprint.js's finishSession uses).
+function flushPendingStreakCelebration() {
+    const streak = state.pendingStreakAdvance;
+    if (!streak) return Promise.resolve();
+    state.pendingStreakAdvance = null;
+    return window.PolytypeStreakCelebrate?.show?.(streak) || Promise.resolve();
+}
+
 function flushPendingMissionCelebration() {
     if (!state.pendingCompletedMissions.length) return Promise.resolve();
     const missions = state.pendingCompletedMissions;
@@ -1451,6 +1467,7 @@ async function endSession() {
         timedResultCoins.textContent = tr("trainer.coinsEarned", { count: state.pendingSessionCoins });
     }
     state.pendingSessionCoins = 0;
+    await flushPendingStreakCelebration();
     await flushPendingMissionCelebration();
     await flushPendingBadgeCelebration();
 
@@ -1550,6 +1567,13 @@ async function saveCurrentSessionProgress() {
                 // Same accumulate-then-flush rule as missions below - shown
                 // once, when the session actually ends (see endSession).
                 state.pendingSessionCoins += progress.sessionCoins;
+            }
+
+            if (progress.streak?.streakAdvanced) {
+                // Same accumulate-then-flush rule: shown once, when the
+                // session actually ends (see endSession).
+                state.pendingStreakAdvance = progress.streak;
+                if (!isActivelyPlayingSession()) flushPendingStreakCelebration();
             }
 
             if (progress.completedMissions?.length) {

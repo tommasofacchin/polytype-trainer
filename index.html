@@ -56,6 +56,10 @@
                  this hidden unless the signed-in handle matches. -->
             <div id="home-demo-chest" hidden></div>
 
+            <!-- Debug-only replay of the first sprint of the day (streak +
+                 missions). Same handle gate as the chest above. -->
+            <div id="home-demo-sprint" hidden></div>
+
             <div class="home-cta-row">
                 <a href="sprint.html" class="home-play-again-btn">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
@@ -95,6 +99,11 @@
     <script src="js/deck-cache.js"></script>
     <script src="js/levelup.js"></script>
     <script src="js/chest.js"></script>
+    <!-- Home never completes a session itself, so these two are here purely
+         for the debug sprint replay below - see renderDemoSprint in
+         js/dashboard.js. -->
+    <script src="js/mission-celebrate.js"></script>
+    <script src="js/streak-celebrate.js"></script>
     <script src="js/dashboard.js"></script>
 </body>
 </html>

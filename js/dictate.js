@@ -62,6 +62,10 @@
         // screen overlay over active gameplay.
         pendingCompletedMissions: [],
         pendingNewBadges: [],
+        // Same rule again. Holds the server's `streak` block from whichever
+        // batch first reported the flame going up; at most one batch per day
+        // ever can, so this is a single value rather than a list.
+        pendingStreakAdvance: null,
         // Per-word correct/wrong tally, sent alongside each batch so the
         // server can track real mastery per word (api/_lib.js's
         // applyWordResults) instead of just a batch-level total.
@@ -446,6 +450,7 @@
         state.pendingSessionCoins = 0;
         state.pendingCompletedMissions = [];
         state.pendingNewBadges = [];
+        state.pendingStreakAdvance = null;
         stopTimer();
         state.timeLimitSeconds = 0;
         state.remainingSeconds = 0;
@@ -554,6 +559,7 @@
             el.resultCoins.textContent = tr("trainer.coinsEarned", { count: state.pendingSessionCoins });
         }
         state.pendingSessionCoins = 0;
+        await flushPendingStreakCelebration();
         await flushPendingMissionCelebration();
         await flushPendingBadgeCelebration();
 
@@ -563,6 +569,15 @@
 
     // Mirrors js/main.js's identically-named functions - see the
     // accumulate-then-flush comment on state.pendingCompletedMissions above.
+    // Flushed ahead of the other two - the flame going up is the day's
+    // headline, matching the order js/sprint.js's finishSession uses.
+    function flushPendingStreakCelebration() {
+        const streak = state.pendingStreakAdvance;
+        if (!streak) return Promise.resolve();
+        state.pendingStreakAdvance = null;
+        return window.PolytypeStreakCelebrate?.show?.(streak) || Promise.resolve();
+    }
+
     function flushPendingMissionCelebration() {
         if (!state.pendingCompletedMissions.length) return Promise.resolve();
         const missions = state.pendingCompletedMissions;
@@ -735,6 +750,9 @@
             // Same accumulate-then-flush rule: celebrating here (mid-batch,
             // mid-session) would pop a full-screen overlay over active
             // typing - queued instead, flushed once by endSession below.
+            if (progress?.streak?.streakAdvanced) {
+                state.pendingStreakAdvance = progress.streak;
+            }
             if (progress?.completedMissions?.length) {
                 state.pendingCompletedMissions.push(...progress.completedMissions);
             }

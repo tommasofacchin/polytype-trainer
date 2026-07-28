@@ -122,6 +122,7 @@ function setupGameStateSync() {
     gameState.onChange(state => {
         renderChest(state);
         renderDemoChest();
+        renderDemoSprint();
         renderMissions(state);
         renderFriendsPreview(state);
         renderDailyGoal(state);
@@ -190,26 +191,30 @@ function renderChest(state) {
     }
 }
 
-// Debug affordance: replays the chest opening as many times as you like,
-// against a canned reward. Nothing is claimed and no coins or XP are granted -
-// see the `demo` branch in js/chest.js.
-//
-// Gated on the signed-in handle, which is a *cosmetic* gate, not a security
-// one: anyone could claim this handle and see the card. That's acceptable
-// only because the demo grants nothing - keep it that way.
-const DEMO_CHEST_HANDLE = "tommaso";
+// Debug affordances (the chest replay below, and the first-sprint-of-the-day
+// replay after it) are gated on the signed-in handle, which is a *cosmetic*
+// gate, not a security one: anyone could claim this handle and see the cards.
+// That's acceptable only because every one of these demos grants nothing -
+// keep it that way.
+const DEBUG_HANDLE = "tommaso";
 
+function isDebugHandle() {
+    try {
+        const profile = JSON.parse(localStorage.getItem(profileStorageKey)) || {};
+        return String(profile.handle || profile.name || "").trim().toLowerCase() === DEBUG_HANDLE;
+    } catch {
+        return false;
+    }
+}
+
+// Replays the chest opening as many times as you like, against a canned
+// reward. Nothing is claimed and no coins or XP are granted - see the `demo`
+// branch in js/chest.js.
 function renderDemoChest() {
     const mount = document.getElementById("home-demo-chest");
     if (!mount) return;
 
-    let handle = "";
-    try {
-        const profile = JSON.parse(localStorage.getItem(profileStorageKey)) || {};
-        handle = String(profile.handle || profile.name || "").trim().toLowerCase();
-    } catch {}
-
-    if (handle !== DEMO_CHEST_HANDLE) {
+    if (!isDebugHandle()) {
         mount.hidden = true;
         mount.replaceChildren();
         return;
@@ -230,6 +235,57 @@ function renderDemoChest() {
     document.getElementById("home-demo-chest-btn").addEventListener("click", async event => {
         event.target.disabled = true;
         await window.PolytypeChest.open({ demo: true });
+        event.target.disabled = false;
+    });
+}
+
+// Canned stand-in for what the server hands back on the first session of a
+// day: the flame advancing, plus the two missions a Sprint round typically
+// trips. Shapes and ids match api/complete-practice-session.js's response
+// (its `streak` block and `completedMissions`) so the replay drives the exact
+// same code path the real thing does - see finishSession in js/sprint.js.
+const DEMO_SPRINT_MISSIONS = [
+    { id: "play_sprint", coinReward: 50, labelKey: "mission.playSprint" },
+    { id: "earn_30_xp", coinReward: 30, labelKey: "mission.earn30Xp" }
+];
+
+// Replays the first-sprint-of-the-day celebrations back to back: the streak
+// overlay, then the missions one. Nothing is saved, no coins or XP are
+// granted, and the header's flame is only borrowed for the length of the pop
+// (see pulseHeaderStreak in js/streak-celebrate.js) - the real streak is
+// untouched.
+function renderDemoSprint() {
+    const mount = document.getElementById("home-demo-sprint");
+    if (!mount) return;
+
+    if (!isDebugHandle()) {
+        mount.hidden = true;
+        mount.replaceChildren();
+        return;
+    }
+
+    if (mount.dataset.built === "true") return;
+    mount.dataset.built = "true";
+    mount.hidden = false;
+    mount.className = "chest-card is-demo";
+    mount.innerHTML = `
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="#f2452f"><path d="M12 1.6C13 5 15.4 6.6 17 8.6c1.5 1.9 2.3 3.8 2.3 5.9a7.3 7.3 0 0 1-14.6 0c0-2.3 1-4.4 2.8-6.2-.1 1.2.2 2.2.8 3C7.6 7.6 9.6 4.6 12 1.6z"/></svg>
+        <div class="chest-card-copy">
+            <strong>${tr("streak.demoTitle")}</strong>
+            <span>${tr("streak.demoDesc")}</span>
+        </div>
+        <button id="home-demo-sprint-btn" class="chest-open-btn" type="button">${tr("streak.demoRun")}</button>
+    `;
+    document.getElementById("home-demo-sprint-btn").addEventListener("click", async event => {
+        event.target.disabled = true;
+        // One past whatever the player is actually on, so the roll shows the
+        // number they'd really see tomorrow rather than a made-up one.
+        const currentStreak = (Number(profile.dayStreak) || 0) + 1;
+        await window.PolytypeStreakCelebrate?.show?.(
+            { currentStreak, streakAdvanced: true, streakReset: false },
+            { demo: true }
+        );
+        await window.PolytypeMissionCelebrate?.show?.(DEMO_SPRINT_MISSIONS);
         event.target.disabled = false;
     });
 }

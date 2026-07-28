@@ -539,6 +539,9 @@
                 el.completeTitle.textContent = tr("lessons.replayTitle");
             }
 
+            // Same order as js/sprint.js's finishSession - see the comment
+            // there. A no-op unless this was the day's first session.
+            await window.PolytypeStreakCelebrate?.show?.(progress?.streak);
             if (progress?.completedMissions?.length) {
                 await window.PolytypeMissionCelebrate?.show?.(progress.completedMissions);
             }

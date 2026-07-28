@@ -457,6 +457,17 @@
             "chest.itemCoins": "Coins",
             "chest.itemXp": "Experience",
 
+            "streak.celebrateTitle": "{count} day streak!",
+            "streak.celebrateFirstTitle": "Streak started!",
+            "streak.celebrateSubtitle": "Practise again tomorrow to keep the flame alive.",
+            "streak.celebrateContinue": "Continue",
+            // Monday-first, one letter per day, split on the comma - see
+            // buildWeek in js/streak-celebrate.js.
+            "streak.weekdays": "M,T,W,T,F,S,S",
+            "streak.demoTitle": "Test daily sprint",
+            "streak.demoDesc": "Streak + missions - grants nothing",
+            "streak.demoRun": "Run",
+
             "common.coins": "coins",
             "common.you": "You",
             "common.cancel": "Cancel",
@@ -1009,6 +1020,15 @@
             "chest.demoDesc": "Ripete l'apertura - non dà nulla",
             "chest.itemCoins": "Monete",
             "chest.itemXp": "Esperienza",
+
+            "streak.celebrateTitle": "{count} giorni di fila!",
+            "streak.celebrateFirstTitle": "Striscia iniziata!",
+            "streak.celebrateSubtitle": "Allenati anche domani per tenere acceso il fuoco.",
+            "streak.celebrateContinue": "Continua",
+            "streak.weekdays": "L,M,M,G,V,S,D",
+            "streak.demoTitle": "Sprint di prova",
+            "streak.demoDesc": "Fuoco + missioni - non dà nulla",
+            "streak.demoRun": "Avvia",
 
             "common.coins": "monete",
             "common.you": "Tu",

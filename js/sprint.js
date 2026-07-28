@@ -862,6 +862,12 @@
                         revealResultReward(el.resultCoins, tr("trainer.coinsEarned", { count: progress.sessionCoins }));
                     }
                     prepareFriendsStatus(progress?.friendsStatus);
+                    // Streak first, missions second: the flame going up is the
+                    // day's headline, and the missions it unblocked read as its
+                    // follow-up rather than the other way round. show() is a
+                    // no-op on every session after the day's first, so this
+                    // stays unconditional.
+                    await window.PolytypeStreakCelebrate?.show?.(progress?.streak);
                     if (progress?.completedMissions?.length) {
                         await window.PolytypeMissionCelebrate?.show?.(progress.completedMissions);
                     }
