@@ -183,9 +183,11 @@ function renderChest(state) {
         mount.className = "chest-card is-claimed";
         mount.innerHTML = `
             <svg width="40" height="40" viewBox="0 0 48 48" style="opacity:.5"><rect x="6" y="20" width="36" height="20" rx="4" fill="#17b8c9"/><path d="M6 22a18 12 0 0 1 36 0z" fill="#3ed0de"/><rect x="6" y="25" width="36" height="4" fill="#0e8fa0"/></svg>
+            <!-- Title only: "Chest opened" plus the tick already says the
+                 whole thing, and a "come back tomorrow" line under it just
+                 padded a row that has nothing left to do. -->
             <div class="chest-card-copy">
                 <strong>${tr("chest.claimed")}</strong>
-                <span>${tr("chest.claimedDesc")}</span>
             </div>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4d9fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
         `;

@@ -1851,40 +1851,6 @@ input[type="password"]:focus {
     color: var(--text);
 }
 
-.sprint-result-friends {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    width: 100%;
-    /* Same insert-then-reveal split as .sprint-result-row above: js/sprint.js
-       un-hides this (prepareFriendsStatus) as soon as the data is known, so
-       it's already occupying its layout space, then fades it in
-       (revealFriendsSection) only once the breakdown rows are done - so
-       there's never a moment where the card visibly grows. */
-    opacity: 0;
-    transform: translateY(6px);
-    transition: opacity 260ms var(--ease-out), transform 260ms var(--ease-out);
-}
-
-.sprint-result-friends[hidden] {
-    display: none;
-}
-
-.sprint-result-friends.is-visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.sprint-result-friends-title {
-    margin: 0;
-    font-size: var(--text-xs);
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--text-faint);
-    text-align: left;
-}
-
 .sprint-load-error {
     margin: auto;
     color: var(--text-faint);
@@ -6604,6 +6570,35 @@ body > main {
    other as full opaque screens rather than dialogs floating over the result
    card. They share this pair of transitions so each hand-off reads as
    turning to the next page, not as one modal closing and another opening. */
+
+/* Both transitions below fade to/from transparent, so on its own every
+   hand-off flashed the sprint (HUD, topline, header) back into view for the
+   length of the gap. js/sprint.js parks this opaque sheet under the entire
+   run - above the app shell (#app-header/#app-bottom-nav/.vkbd all sit at
+   z-index 500 or below), below both the celebration pages (700) and the
+   score page (600) - and only removes it once the score page has finished
+   fading in. Deliberately not click-through: a stray tap landing on the game
+   during a hand-off would be worse than a swallowed one. */
+.result-run-curtain {
+    position: fixed;
+    inset: 0;
+    z-index: 590;
+    background: var(--bg);
+}
+
+/* The curtain covers the header for the length of the run (the XP-burst rule
+   near .game-result-overlay only lifts it above the curtain once the score
+   page is up), so without this the header would snap back in at full opacity
+   the instant that page starts fading in. Fade only, no slide: it's the app
+   chrome returning, not another page arriving. */
+body:has(.game-result-overlay.is-entering:not([hidden])) #app-header {
+    animation: result-header-in 0.32s var(--ease-out) both;
+}
+
+@keyframes result-header-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
 
 @keyframes celebrate-page-in {
     from { opacity: 0; transform: translateX(24px); }

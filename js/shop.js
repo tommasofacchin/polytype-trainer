@@ -38,13 +38,13 @@ let activeLanguage = FALLBACK_LANGUAGE;
 let activeDeckMeta = null;
 let isSignedIn = false;
 let authResolved = false;
-let isBuying = false;
 let isBuyingChest = false;
 let isBuyingFreeze = false;
 // While a purchased key is still flying up to the header (see playKeyGain in
 // js/app-shell.js), this tile's own count waits with it - otherwise the number
 // would tick up down here a beat before the key visibly lands up there.
-// Display only: the buy gating in renderShop still reads the real count.
+// Display only: the buy gating in renderShop still reads the spent-and-all
+// count, so what you can afford never lags behind what you just bought.
 let keysHeldDisplayOverride = null;
 
 const el = {};
@@ -194,57 +194,148 @@ function setupAuthGate() {
     });
 }
 
-function setupBuyButton() {
-    el.buyBtn?.addEventListener("click", async () => {
-        if (isBuying || !isSignedIn) return;
+// ── Buying keys ──────────────────────────────────────────────────────────
+//
+// A key used to cost a whole round trip before anything moved: the button
+// went to a spinner and the coins, the counter and the flight all waited on
+// the server, which read as a slow single-shot action - and a second tap
+// during the wait was dropped on the floor.
+//
+// Now the click is spent against the cached profile immediately (coins down,
+// keys up, see spendKeysLocally) and the POST is queued behind whatever is
+// already in flight, so the tile, the header and the flying key all react on
+// the next frame and five taps in a row really do buy five keys. The server
+// stays authoritative throughout: each response replaces the cached course
+// wholesale, and a rejection drops the rest of the batch and re-syncs -
+// which is also what puts optimistically spent coins back.
+//
+// Clicks accepted but not yet confirmed by the server (including the one in
+// flight). Kept so a response landing mid-batch can re-stamp the spends still
+// waiting behind it - see runKeyBuyQueue.
+let queuedKeyBuys = 0;
+let isRunningKeyBuyQueue = false;
 
+function setupBuyButton() {
+    el.buyBtn?.addEventListener("click", () => {
+        if (!isSignedIn) return;
+
+        // Re-checked here rather than trusting the button's disabled state:
+        // the optimistic spends move both numbers between renders, and this
+        // is the guard that makes spamming stop at MAX_KEYS (or at the last
+        // coin) instead of queueing buys the server will refuse.
         const courseProgress = getCourseProgress();
-        isBuying = true;
-        showButtonSpinner(el.buyBtn);
+        const keysHeld = getKeysHeld(courseProgress.purchasedKeys);
+        if (keysHeld >= maxKeys || courseProgress.coins < keyPriceCoins) return;
+
         setStatus(el.keyStatus, "", "");
 
-        // Freezes both key counters at their current value before the buy
-        // call updates the profile cache, so they tick up when the flying key
-        // actually lands instead of the instant the server answers.
-        // playKeyGain (and the error path below) always releases them.
-        keysHeldDisplayOverride = getKeysHeld(courseProgress.purchasedKeys);
+        // Freezes both key counters at their pre-click value while the key is
+        // in flight, so they tick up as it lands rather than the instant it's
+        // spent - playKeyGain (and the failure path in runKeyBuyQueue) always
+        // releases them. Only the first tap of a batch sets the frozen value,
+        // and the first landing releases the hold for the whole batch: mid-
+        // flight taps don't nudge the count, and once one key has landed both
+        // counters show the real total rather than trailing the last flight.
+        if (keysHeldDisplayOverride === null) keysHeldDisplayOverride = keysHeld;
         window.PolytypeAppShell?.holdKeyDisplay?.();
 
-        // Only ever set on failure now, and applied *after* the finally block
-        // below, since renderShop() there unconditionally recomputes the
-        // status line from current state - setting it before would just get
-        // it overwritten before ever reaching the screen. Success shows no
-        // message at all: the key flies from this tile into the header
-        // counter, which is the confirmation.
-        let outcome = null;
-        try {
-            await window.PolytypeFirebase.buyKey(courseProgress.courseKey);
-        } catch (error) {
-            outcome = { text: error?.message || tr("shop.purchaseFailed"), tone: "error" };
-            // The server rejected this against state we don't have locally
-            // (e.g. stale cached coin balance or key count) - re-sync so
-            // the shop reflects reality right away.
-            await window.PolytypeFirebase.refreshProfile?.();
-        } finally {
-            isBuying = false;
-            renderShop();
-        }
+        spendKeysLocally(1);
+        queueKeyPurchase(courseProgress.courseKey);
 
-        if (outcome) {
-            releaseKeyCounters();
-            setStatus(el.keyStatus, outcome.text, outcome.tone);
-            return;
-        }
         // No status line on success - the key flying from this tile into the
-        // header counter is the confirmation.
-        await window.PolytypeAppShell?.playKeyGain?.(el.keyIcon);
-        releaseKeyCounters();
+        // header counter is the confirmation. Deliberately not awaited: the
+        // flight is feedback, not a step the next click has to wait for.
+        playKeyFlight();
     });
+}
+
+async function playKeyFlight() {
+    await window.PolytypeAppShell?.playKeyGain?.(el.keyIcon);
+    releaseKeyCounters();
+}
+
+function queueKeyPurchase(courseKey) {
+    queuedKeyBuys += 1;
+    if (isRunningKeyBuyQueue) return;
+    runKeyBuyQueue(courseKey);
+}
+
+// One request at a time, deliberately. buy-key is a transaction server-side
+// so parallel calls would be safe there, but their responses would arrive in
+// any order and each one replaces the cached course with the state as of
+// *that* purchase - a late-landing earlier response would walk the counters
+// backwards (applyProgressToProfile in js/firebase-client.js only guards
+// against that for xp and unlocked words, neither of which a key buy moves).
+async function runKeyBuyQueue(courseKey) {
+    isRunningKeyBuyQueue = true;
+
+    while (queuedKeyBuys > 0) {
+        try {
+            await window.PolytypeFirebase.buyKey(courseKey);
+            queuedKeyBuys -= 1;
+            // That response replaced the cached course with the state after
+            // this one purchase, so re-stamp whatever is still queued behind
+            // it - otherwise the header would bounce back up mid-batch.
+            if (queuedKeyBuys > 0) spendKeysLocally(queuedKeyBuys);
+        } catch (error) {
+            // Whatever the server refused (a stale coin count, keys already
+            // full, offline) holds for every click still queued behind this
+            // one, so the batch is dropped and the profile re-synced against
+            // the truth - which is what puts the spent coins back. Status
+            // text goes last: both calls before it re-render the tile, which
+            // recomputes the status line from current state and would
+            // otherwise clobber the message before it reached the screen.
+            queuedKeyBuys = 0;
+            await window.PolytypeFirebase.refreshProfile?.();
+            releaseKeyCounters();
+            setStatus(el.keyStatus, error?.message || tr("shop.purchaseFailed"), "error");
+            // Any click that arrived during that re-sync is still a real
+            // purchase against freshly confirmed state, so the loop picks it
+            // up on the next pass instead of dropping it on the floor.
+        }
+    }
+
+    isRunningKeyBuyQueue = false;
+}
+
+// Spends `count` keys' worth of coins against localStorage's cached profile
+// and hands the result to everything that paints from it (this tile via
+// renderShop, the header's coin/key pills, the Deck page's keys badge) the
+// same way js/firebase-client.js's syncProfileToLocalStorage would. Only the
+// two numbers this purchase actually moves are touched - notably not
+// `tutorial`, whose buy-5-keys step only ever advances on the server's word.
+function spendKeysLocally(count) {
+    const profile = getStoredProfile();
+    const courses = profile.courses || {};
+    // Write back to the key we read from: a legacy cache can be filed under
+    // the deck id rather than the language (see getCourseProgress).
+    const cacheKey = courses[activeLanguage]
+        ? activeLanguage
+        : (activeDeckMeta?.id && courses[activeDeckMeta.id] ? activeDeckMeta.id : null);
+    // Nothing cached for this course yet - there's nothing to spend against,
+    // so leave the display to catch up when the response lands.
+    if (!cacheKey) return;
+
+    const course = courses[cacheKey];
+    const nextProfile = {
+        ...profile,
+        courses: {
+            ...courses,
+            [cacheKey]: {
+                ...course,
+                coins: Math.max(0, (Number(course.coins) || 0) - count * keyPriceCoins),
+                purchasedKeys: Math.max(0, Number(course.purchasedKeys) || 0) + count
+            }
+        }
+    };
+
+    localStorage.setItem(PROFILE_KEY, JSON.stringify(nextProfile));
+    document.dispatchEvent(new CustomEvent("polytype-profile-updated", { detail: nextProfile }));
 }
 
 // Hands both counters their new value once the flying key has landed.
 // renderShop() has to run *after* the override is cleared - and any status
-// text after that, same clobbering order as setupBuyButton's finally block.
+// text after that, same clobbering order as runKeyBuyQueue's catch block.
 function releaseKeyCounters() {
     keysHeldDisplayOverride = null;
     window.PolytypeAppShell?.releaseKeyDisplay?.();
@@ -509,9 +600,11 @@ function renderShop() {
         return;
     }
 
-    if (isBuying) {
-        el.buyBtn.disabled = true;
-    } else if (keysHeld >= maxKeys) {
+    // No in-flight branch for the key row: a purchase is applied locally the
+    // moment it's clicked (see setupBuyButton), so the two checks below are
+    // already looking at post-purchase numbers - and keeping the button live
+    // is what lets someone buy their five keys in five quick taps.
+    if (keysHeld >= maxKeys) {
         if (el.buyBtn) el.buyBtn.disabled = true;
         setStatus(el.keyStatus, tr("shop.keysFull"), "");
     } else if (coins < keyPriceCoins) {

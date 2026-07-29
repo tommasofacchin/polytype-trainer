@@ -56,10 +56,9 @@
       <span id="sprint-result-xp" class="result-xp-text"></span>
       <span id="sprint-result-coins" class="result-coins-text"></span>
       <span id="sprint-result-save-status" class="result-save-status"></span>
-      <div id="sprint-result-friends" class="sprint-result-friends" hidden>
-        <h3 class="sprint-result-friends-title" data-i18n="sprint.friendsTitle">Friends</h3>
-        <div id="sprint-result-friends-list" class="friends-result-list"></div>
-      </div>
+      <!-- No friends list here: the run already gives the roster a full screen
+           of its own (showFriendsStep in js/sprint.js), so repeating it under
+           the score was the same information twice in a row. -->
       <div class="sprint-result-actions">
         <button id="sprint-play-again-btn" class="restart-btn" type="button" data-i18n="trainer.playAgain">Play again</button>
         <a id="sprint-home-btn" href="index.html" class="restart-btn is-secondary" data-i18n="common.home">Home</a>

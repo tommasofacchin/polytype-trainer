@@ -28,13 +28,17 @@
     const FADE_OUT_DELAY = 220;
     const MATCH_WRONG_FLASH_DELAY = 450;
     // Result screen: breakdown rows reveal one at a time rather than all at
-    // once. Both rows and the friends block are inserted into the DOM (and
-    // so already claim their layout space) well before they're actually
-    // shown - only opacity/transform animate at reveal time, never a size
-    // change, so the result card never visibly grows or jumps.
+    // once. Every row is inserted into the DOM (and so already claims its
+    // layout space) well before it's actually shown - only opacity/transform
+    // animate at reveal time, never a size change, so the result card never
+    // visibly grows or jumps.
     const RESULT_ROW_STAGGER_DELAY = 110;
     // Must match .sprint-result-row's CSS transition-duration (style.css).
     const RESULT_ROW_REVEAL_DURATION = 260;
+    // Must match .game-result-overlay.is-entering's animation duration
+    // (style.css). The end-of-run curtain stays up for this long after the
+    // score page is shown, since that page fades in from transparent.
+    const RESULT_PAGE_IN_DURATION = 340;
     // A match round lets you retry a mismatch in place, but not forever -
     // after this many wrong attempts the round is given up as wrong (see
     // failMatchRound in renderMatchRound) instead of allowing endless guesses.
@@ -111,8 +115,6 @@
         el.resultXp = document.getElementById("sprint-result-xp");
         el.resultCoins = document.getElementById("sprint-result-coins");
         el.resultSaveStatus = document.getElementById("sprint-result-save-status");
-        el.resultFriends = document.getElementById("sprint-result-friends");
-        el.resultFriendsList = document.getElementById("sprint-result-friends-list");
         el.playAgainBtn = document.getElementById("sprint-play-again-btn");
         el.homeBtn = document.getElementById("sprint-home-btn");
 
@@ -819,15 +821,13 @@
         if (el.resultXp) el.resultXp.textContent = "";
         el.resultCoins.textContent = "";
         el.resultSaveStatus.textContent = "";
-        resetFriendsSection();
-        // Deliberately NOT shown yet, and the breakdown deliberately not
-        // started: the score is the last page of the run, after the streak,
-        // friends and mission screens have had their turn. Revealing it here
-        // (as this used to) meant its rows animated away unseen behind them,
-        // and by the time the last overlay closed the card was just sitting
-        // there already finished.
-        let breakdownRevealDone = Promise.resolve();
-
+        // The card itself is deliberately NOT shown yet, and its breakdown
+        // deliberately not started: the score is the last page of the run,
+        // after the streak, friends and mission screens have had their turn.
+        // Revealing it here (as this used to) meant its rows animated away
+        // unseen behind them, and by the time the last overlay closed the card
+        // was just sitting there already finished.
+        //
         // Freeze the header's level bar at its pre-session value *before* the
         // save goes out: the save's profile update would otherwise snap it to
         // the new total while the result card is still animating in, and
@@ -882,12 +882,25 @@
 
         // Last page of the run. Everything above has finished having its say,
         // so the card comes in and only now starts dealing its rows out.
+        //
+        // The curtain is normally already up from the run above; this covers
+        // the paths that skip it entirely (signed out, nothing answered
+        // correctly), where the score page would otherwise fade in over the
+        // sprint. Same tick as the unhide below, so the game doesn't flash.
+        raiseResultCurtain();
         el.resultModal.hidden = false;
+        // Remove/reflow/re-add so the entrance actually replays on a second
+        // run - Play again reuses this same node (same trick as
+        // revealResultReward below).
+        el.resultModal.classList.remove("is-entering");
+        void el.resultModal.offsetWidth;
         el.resultModal.classList.add("is-entering");
-        breakdownRevealDone = renderResultBreakdown();
+        // Only now, once the score page is fully opaque: it fades in from
+        // transparent, so dropping the curtain any earlier would show the
+        // sprint through it for exactly the gap the curtain is there to close.
+        window.setTimeout(dropResultCurtain, RESULT_PAGE_IN_DURATION);
 
-        await breakdownRevealDone;
-        await revealFriendsSection();
+        await renderResultBreakdown();
 
         // playXpGain always releases the header hold, including when there's
         // nothing to animate (signed out, save failed, zero XP) - so the bar
@@ -913,12 +926,18 @@
         if (typeof progress?.sessionCoins === "number" && progress.sessionCoins > 0) {
             revealResultReward(el.resultCoins, tr("trainer.coinsEarned", { count: progress.sessionCoins }));
         }
-        prepareFriendsStatus(progress?.friendsStatus);
         // The run of full screens, in narrative order: your flame goes up,
         // then who else is on it today, then what that unlocked. Each show()
         // is a no-op when it has nothing to say (no streak advance, no
         // friends, no missions), so a mid-day session still goes straight to
         // the score with no empty pages in between.
+        //
+        // Curtain first, and deliberately not before the save above: it goes
+        // up as the run starts (so the pages hand off to each other over flat
+        // background rather than over the sprint) but never during the round
+        // trip, which would leave the player staring at an empty screen for
+        // however long the save takes.
+        raiseResultCurtain();
         await window.PolytypeStreakCelebrate?.show?.(progress?.streak, { demo });
         await showFriendsStep(progress?.friendsStatus);
         if (progress?.completedMissions?.length) {
@@ -930,12 +949,36 @@
         return typeof progress?.totalXp === "number" ? progress.totalXp : null;
     }
 
+    // ── End-of-run curtain ───────────────────────────────────────────────────
+    //
+    // Every page of the run fades itself in and fades itself out, and each
+    // hand-off used to leave a gap: for ~0.3s there was nothing above the
+    // sprint itself, so the HUD, the topline and the header flashed back into
+    // view between screens (and again under the score page while it faded in).
+    // This is a plain opaque sheet parked under the whole run - above the app
+    // shell, below both the celebration pages (z-index 700) and the score
+    // page (600) - so those fades reveal flat background and nothing else.
+    //
+    // Raised from two places (both idempotent) and dropped once the score page
+    // has finished arriving - see the call sites for which path each covers.
+    function raiseResultCurtain() {
+        if (document.querySelector(".result-run-curtain")) return;
+        const curtain = document.createElement("div");
+        curtain.className = "result-run-curtain";
+        curtain.setAttribute("aria-hidden", "true");
+        document.body.append(curtain);
+    }
+
+    function dropResultCurtain() {
+        document.querySelector(".result-run-curtain")?.remove();
+    }
+
     // ── Friends step ─────────────────────────────────────────────────────────
     //
     // Third full screen in the end-of-sprint run, between the streak and the
     // missions: who else is on this today. A red flame means they've already
-    // practised, grey means they still owe today's session - the same
-    // playedToday flag the in-card friends list reads, just louder.
+    // practised, grey means they still owe today's session (the same
+    // playedToday flag the Friends page reads).
     //
     // Skipped entirely when there's nobody to show; an empty roster screen
     // would be a page of nothing in the middle of the run.
@@ -1086,7 +1129,7 @@
     // Builds every row up front (so the card's height is already final - see
     // the RESULT_ROW_* comment above) then reveals them one at a time.
     // Returns a promise that resolves once the last row has finished
-    // revealing, so the caller can hold the friends block until this is done.
+    // revealing, so the caller can hold the XP burst until this is done.
     function renderResultBreakdown() {
         if (!el.resultBreakdown) return Promise.resolve();
 
@@ -1144,181 +1187,6 @@
             });
             window.setTimeout(resolve, (rowEls.length - 1) * RESULT_ROW_STAGGER_DELAY + RESULT_ROW_REVEAL_DURATION);
         });
-    }
-
-    // Last sprint's friendsStatus, verbatim. Friendship streaks move by at
-    // most one a day and the roster rarely changes, so replaying this is
-    // almost always exactly what the server is about to send back - which is
-    // what lets the block render complete and immediately instead of waiting
-    // out the save.
-    const SPRINT_FRIENDS_CACHE_KEY = "polytype-sprint-friends";
-
-    function readSprintFriendsCache() {
-        try {
-            const entries = JSON.parse(localStorage.getItem(SPRINT_FRIENDS_CACHE_KEY));
-            return Array.isArray(entries) ? entries : [];
-        } catch {
-            return [];
-        }
-    }
-
-    function writeSprintFriendsCache(entries) {
-        try {
-            localStorage.setItem(SPRINT_FRIENDS_CACHE_KEY, JSON.stringify(entries));
-        } catch {}
-    }
-
-    // Names and avatars only - no friendship streak, no played-today. Used
-    // when there's no previous sprint to replay (first session on a device),
-    // so at least the roster is right and only two small values arrive late.
-    function readFriendsOverviewCache() {
-        try {
-            const entry = JSON.parse(localStorage.getItem("polytype-friends-cache"));
-            const leaderboard = entry?.data?.leaderboard;
-            if (!Array.isArray(leaderboard)) return [];
-            return leaderboard
-                .filter(row => row && !row.isSelf)
-                .map(row => ({
-                    uid: row.uid,
-                    displayName: row.displayName,
-                    avatarUrl: row.avatarUrl || null,
-                    pending: true
-                }));
-        } catch {
-            return [];
-        }
-    }
-
-    // Paints the block from cache the moment the modal opens, so it takes its
-    // final height straight away and reveals on the breakdown's own timeline.
-    // prepareFriendsStatus later reconciles it against the real response.
-    function resetFriendsSection() {
-        if (!el.resultFriends || !el.resultFriendsList) return;
-
-        el.resultFriends.classList.remove("is-visible");
-
-        const cached = readSprintFriendsCache();
-        const entries = cached.length ? cached : readFriendsOverviewCache();
-
-        el.resultFriends.hidden = entries.length === 0;
-        el.resultFriendsList.replaceChildren(...entries.map(buildFriendRow));
-    }
-
-    // Friend list under the score: each entry's friendshipStreak only rises
-    // on a day both the player and that friend play a sprint (see
-    // commitFriendshipStreaksForSprint in api/complete-practice-session.js);
-    // playedToday reflects that same friend's sprint activity today.
-    //
-    // By the time this runs the block is usually already on screen with
-    // cached rows, so it reconciles in place - same nodes, updated values -
-    // rather than replacing the list. That keeps identical data (the common
-    // case) completely invisible instead of flickering a rebuild.
-    function prepareFriendsStatus(list) {
-        if (!el.resultFriends || !el.resultFriendsList) return;
-        const entries = Array.isArray(list) ? list : [];
-
-        if (!entries.length) {
-            el.resultFriends.hidden = true;
-            el.resultFriendsList.replaceChildren();
-            writeSprintFriendsCache([]);
-            return;
-        }
-
-        const rows = [...el.resultFriendsList.children];
-        const sameRoster =
-            rows.length === entries.length &&
-            entries.every((entry, index) => rows[index].dataset.uid === String(entry.uid ?? ""));
-
-        el.resultFriends.hidden = false;
-
-        if (sameRoster) {
-            entries.forEach((entry, index) => updateFriendRow(rows[index], entry));
-        } else {
-            el.resultFriendsList.replaceChildren(...entries.map(buildFriendRow));
-        }
-
-        writeSprintFriendsCache(entries);
-    }
-
-    function buildFriendRow(entry) {
-        const row = document.createElement("div");
-        row.className = "friends-row";
-        row.dataset.uid = String(entry.uid ?? "");
-
-        const avatar = document.createElement("span");
-        avatar.className = "profile-pill-avatar friends-row-avatar";
-        avatar.setAttribute("aria-hidden", "true");
-
-        const copy = document.createElement("span");
-        copy.className = "friends-row-copy";
-        copy.append(document.createElement("strong"));
-
-        const streak = document.createElement("span");
-        streak.className = "friends-row-streak";
-
-        const status = document.createElement("span");
-        status.className = "friends-status-badge";
-
-        row.append(avatar, copy, streak, status);
-        updateFriendRow(row, entry);
-        return row;
-    }
-
-    function updateFriendRow(row, entry) {
-        const avatar = row.querySelector(".friends-row-avatar");
-        const name = row.querySelector(".friends-row-copy strong");
-        const streak = row.querySelector(".friends-row-streak");
-        const status = row.querySelector(".friends-status-badge");
-
-        row.dataset.uid = String(entry.uid ?? "");
-
-        const displayName = entry.displayName || "Player";
-        if (name.textContent !== displayName) name.textContent = displayName;
-
-        const wantsImage = Boolean(entry.avatarUrl);
-        const currentImage = avatar.querySelector("img");
-        if (wantsImage && currentImage?.getAttribute("src") !== entry.avatarUrl) {
-            const image = document.createElement("img");
-            image.src = entry.avatarUrl;
-            image.alt = "";
-            avatar.classList.add("has-image");
-            avatar.replaceChildren(image);
-        } else if (!wantsImage) {
-            avatar.classList.remove("has-image");
-            const initial = displayName.trim().charAt(0).toUpperCase() || "?";
-            if (avatar.textContent !== initial) avatar.textContent = initial;
-        }
-
-        // `pending` marks a row built from the overview cache, which knows the
-        // roster but not the per-pair values. Those two stay blank (but still
-        // occupy their space) rather than showing a made-up zero that would
-        // visibly correct itself a moment later.
-        if (entry.pending) {
-            streak.textContent = "";
-            status.textContent = "";
-            status.className = "friends-status-badge is-pending";
-            return;
-        }
-
-        streak.textContent = `\u{1F525} ${entry.friendshipStreak || 0}`;
-        status.className = entry.playedToday ? "friends-status-badge is-played" : "friends-status-badge";
-        status.textContent = entry.playedToday
-            ? tr("sprint.friendPlayedToday")
-            : tr("sprint.friendNotPlayedToday");
-    }
-
-
-    // Fades in the block resetFriendsSection already painted from cache.
-    // Driven purely by the breakdown's reveal timing - never by the save - so
-    // the friends list lands as part of the same animation as everything else
-    // instead of appearing a round trip later.
-    function revealFriendsSection() {
-        if (!el.resultFriends || el.resultFriends.hidden) return;
-        if (!el.resultFriendsList?.firstChild) {
-            el.resultFriends.hidden = true;
-            return;
-        }
-        el.resultFriends.classList.add("is-visible");
     }
 
     // ── Audio playback (mirrors js/dictate.js's own copy) ──────────────────
