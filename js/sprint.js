@@ -165,6 +165,9 @@
         }
 
         startSession();
+        // After startSession so the first round is on screen before the
+        // background fetches begin competing with it for connections.
+        scheduleAudioPreload(state.unlocked);
     }
 
     function showLoadError() {
@@ -1171,6 +1174,82 @@
         return [audioBaseUrl, audioPrefix, encodeURIComponent(activeDeckMeta.id), `${encodeURIComponent(item.id)}.mp3`].join("/");
     }
 
+    // Warms every word's mp3 into the browser's HTTP cache in the background,
+    // the same way js/main.js does for the trainer.
+    //
+    // Without this, a round assigned src and called play() in the same tick,
+    // so the file was still being fetched from the CDN when it was needed. A
+    // slow fetch does NOT reject the play() promise - it just waits - so the
+    // retry below never fired; the round would then advance on its
+    // FEEDBACK_HOLD timer and the next word's src assignment aborted the load
+    // outright. That word was simply never heard, with nothing logged. This
+    // is what made sprint audio fail intermittently and only on slow links.
+    const audioPreloadConcurrency = 4;
+    const audioPreloadCache = new Map();
+
+    function scheduleAudioPreload(items) {
+        if (!audioBaseUrl || !items?.length) return;
+
+        const seen = new Set();
+        const urls = [];
+        items.forEach(item => {
+            const url = getWordAudioUrl(item);
+            if (!url || seen.has(url) || audioPreloadCache.has(url)) return;
+            seen.add(url);
+            urls.push(url);
+        });
+        if (!urls.length) return;
+
+        // Deferred a tick so the first round paints before the fetches start.
+        window.setTimeout(() => preloadAudioQueue(urls), 0);
+    }
+
+    async function preloadAudioQueue(urls) {
+        let nextIndex = 0;
+        const workerCount = Math.min(audioPreloadConcurrency, urls.length);
+        const workers = Array.from({ length: workerCount }, async () => {
+            while (nextIndex < urls.length) {
+                const url = urls[nextIndex];
+                nextIndex += 1;
+                await preloadAudioUrl(url);
+            }
+        });
+        await Promise.all(workers);
+    }
+
+    // Loads into a throwaway element, never played - it exists only to get the
+    // bytes into the HTTP cache so the one persistent playback element below
+    // can start instantly. Errors resolve like successes: a missing file must
+    // not stall the queue behind it.
+    function preloadAudioUrl(url) {
+        if (!url) return Promise.resolve();
+        const cached = audioPreloadCache.get(url);
+        if (cached) return cached.promise;
+
+        const audio = new Audio();
+        audio.preload = "auto";
+        audio.src = url;
+
+        const promise = new Promise(resolve => {
+            let done = false;
+            const finish = () => {
+                if (done) return;
+                done = true;
+                audio.removeEventListener("canplaythrough", finish);
+                audio.removeEventListener("canplay", finish);
+                audio.removeEventListener("error", finish);
+                resolve();
+            };
+            audio.addEventListener("canplaythrough", finish);
+            audio.addEventListener("canplay", finish);
+            audio.addEventListener("error", finish);
+            audio.load();
+        });
+
+        audioPreloadCache.set(url, { audio, promise });
+        return promise;
+    }
+
     // One persistent element for every word playback, primed inside the
     // session's first real tap. iOS Safari only lets sound start from
     // within a user gesture and remembers that permission *per element* -
@@ -1206,6 +1285,11 @@
         const url = getWordAudioUrl(item);
         if (!url) return;
 
+        // Covers the word the background queue hasn't reached yet: the fetch
+        // starts here on its own element, so even if this attempt is too early
+        // the 400ms retry lands on a warm cache instead of racing the CDN again.
+        preloadAudioUrl(url);
+
         try {
             const audio = ensureWordAudio();
             const playId = ++wordAudioPlayId;
@@ -1218,7 +1302,11 @@
                 audio.src = url;
                 activeAudioUrl = url;
             } else {
-                audio.currentTime = 0;
+                // Rewinding an element that hasn't loaded metadata yet throws
+                // InvalidStateError in some browsers. That used to escape to
+                // the outer catch *before* play() was ever called, so a replay
+                // tapped during the initial load did nothing at all, silently.
+                try { audio.currentTime = 0; } catch {}
             }
             audio.play().catch(() => {
                 // The CDN link this streams from occasionally has a slow or

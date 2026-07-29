@@ -109,6 +109,36 @@
         state.lessons = data;
         state.modules = groupByModule(data);
         showPathView();
+        scrollToActiveLesson();
+    }
+
+    // Opening the page travels down the path to the lesson you're actually on,
+    // rather than dropping you at module 1 to scroll for it yourself. Only on
+    // open - showPathView also runs when backing out of a lesson, and yanking
+    // the view around every time you hit Back would be motion sickness, not
+    // orientation.
+    function scrollToActiveLesson() {
+        const target = el.modulesRoot?.querySelector(".lesson-path-node.is-active");
+        if (!target) return;
+
+        const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches === true;
+        if (reduceMotion) {
+            target.scrollIntoView({ block: "center" });
+            return;
+        }
+
+        // Pin to the top first so the animation reads as a journey down the
+        // path from the start. Browsers restore the previous scroll offset on
+        // a back-navigation, which would otherwise make this drift sideways
+        // from wherever it happened to land.
+        window.scrollTo({ top: 0, behavior: "auto" });
+        document.body.scrollTop = 0;
+
+        // Two frames: one for the jump to top to commit, one for the freshly
+        // rendered nodes to have real layout boxes to scroll to.
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+            target.scrollIntoView({ behavior: "smooth", block: "center" });
+        }));
     }
 
     function groupByModule(lessons) {
