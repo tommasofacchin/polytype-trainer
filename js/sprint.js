@@ -816,12 +816,17 @@
         el.exerciseRoot.innerHTML = "";
         el.resultScore.textContent = `${state.score} ${tr("common.points")}`;
         el.resultDetail.textContent = `${tr("sprint.resultDetail", { correct: state.correctAnswers, total })} (${accuracy}%)`;
-        const breakdownRevealDone = renderResultBreakdown();
         if (el.resultXp) el.resultXp.textContent = "";
         el.resultCoins.textContent = "";
         el.resultSaveStatus.textContent = "";
         resetFriendsSection();
-        el.resultModal.hidden = false;
+        // Deliberately NOT shown yet, and the breakdown deliberately not
+        // started: the score is the last page of the run, after the streak,
+        // friends and mission screens have had their turn. Revealing it here
+        // (as this used to) meant its rows animated away unseen behind them,
+        // and by the time the last overlay closed the card was just sitting
+        // there already finished.
+        let breakdownRevealDone = Promise.resolve();
 
         // Freeze the header's level bar at its pre-session value *before* the
         // save goes out: the save's profile update would otherwise snap it to
@@ -829,14 +834,6 @@
         // there'd be no gain left to show. Every path below either plays the
         // burst or releases the hold.
         window.PolytypeAppShell?.holdXpDisplay?.();
-
-        // Kicked off here, *before* the save, and deliberately not awaited
-        // alongside it: the friends block is already painted from cache, so
-        // it can fade in on the breakdown's own schedule. Chaining it after
-        // the save (as this used to) meant a slow round trip held the whole
-        // reveal back, which is what made the list feel like it arrived late
-        // and then stretched the card.
-        const friendsRevealed = breakdownRevealDone.then(revealFriendsSection);
 
         // Play again/Home stay disabled for at least this long, instead of
         // a "Saving progress..." status line - the buttons turning
@@ -883,8 +880,14 @@
             }
         }
 
+        // Last page of the run. Everything above has finished having its say,
+        // so the card comes in and only now starts dealing its rows out.
+        el.resultModal.hidden = false;
+        el.resultModal.classList.add("is-entering");
+        breakdownRevealDone = renderResultBreakdown();
+
         await breakdownRevealDone;
-        await friendsRevealed;
+        await revealFriendsSection();
 
         // playXpGain always releases the header hold, including when there's
         // nothing to animate (signed out, save failed, zero XP) - so the bar
@@ -911,11 +914,13 @@
             revealResultReward(el.resultCoins, tr("trainer.coinsEarned", { count: progress.sessionCoins }));
         }
         prepareFriendsStatus(progress?.friendsStatus);
-        // Streak first, missions second: the flame going up is the day's
-        // headline, and the missions it unblocked read as its follow-up rather
-        // than the other way round. show() is a no-op on every session after
-        // the day's first, so this stays unconditional.
+        // The run of full screens, in narrative order: your flame goes up,
+        // then who else is on it today, then what that unlocked. Each show()
+        // is a no-op when it has nothing to say (no streak advance, no
+        // friends, no missions), so a mid-day session still goes straight to
+        // the score with no empty pages in between.
         await window.PolytypeStreakCelebrate?.show?.(progress?.streak, { demo });
+        await showFriendsStep(progress?.friendsStatus);
         if (progress?.completedMissions?.length) {
             await window.PolytypeMissionCelebrate?.show?.(progress.completedMissions);
         }
@@ -923,6 +928,69 @@
             await window.PolytypeBadgeCelebrate?.show?.(progress.newBadges);
         }
         return typeof progress?.totalXp === "number" ? progress.totalXp : null;
+    }
+
+    // ── Friends step ─────────────────────────────────────────────────────────
+    //
+    // Third full screen in the end-of-sprint run, between the streak and the
+    // missions: who else is on this today. A red flame means they've already
+    // practised, grey means they still owe today's session - the same
+    // playedToday flag the in-card friends list reads, just louder.
+    //
+    // Skipped entirely when there's nobody to show; an empty roster screen
+    // would be a page of nothing in the middle of the run.
+    const FLAME_SVG =
+        '<svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 1.6C13 5 15.4 6.6 17 8.6c1.5 1.9 2.3 3.8 2.3 5.9a7.3 7.3 0 0 1-14.6 0c0-2.3 1-4.4 2.8-6.2-.1 1.2.2 2.2.8 3C7.6 7.6 9.6 4.6 12 1.6z"/></svg>';
+
+    function showFriendsStep(entries) {
+        const roster = (Array.isArray(entries) ? entries : []).filter(entry => !entry?.pending);
+        if (!roster.length) return Promise.resolve();
+
+        const overlay = document.createElement("div");
+        overlay.className = "friends-overlay";
+        overlay.setAttribute("role", "dialog");
+        overlay.setAttribute("aria-modal", "true");
+        overlay.innerHTML = `
+            <div class="friends-overlay-title">${tr("sprint.friendsStepTitle")}</div>
+            <p class="friends-overlay-subtitle">${tr("sprint.friendsStepSubtitle")}</p>
+            <div class="friends-overlay-list"></div>
+            <button class="chest-collect-btn" type="button">${tr("mission.nice")}</button>
+        `;
+
+        const list = overlay.querySelector(".friends-overlay-list");
+        roster.forEach((entry, index) => {
+            const row = document.createElement("div");
+            row.className = "friends-overlay-row";
+            row.classList.toggle("is-played", Boolean(entry.playedToday));
+            row.style.setProperty("--delay", `${0.2 + index * 0.09}s`);
+
+            const name = document.createElement("span");
+            name.className = "friends-overlay-name";
+            name.textContent = entry.displayName || "Player";
+
+            const streak = document.createElement("span");
+            streak.className = "friends-overlay-streak";
+            streak.innerHTML = `${FLAME_SVG}<span>${Math.max(0, Number(entry.friendshipStreak) || 0)}</span>`;
+
+            row.append(name, streak);
+            list.appendChild(row);
+        });
+
+        document.body.append(overlay);
+
+        return new Promise(resolve => {
+            let closed = false;
+            overlay.querySelector(".chest-collect-btn").addEventListener("click", () => {
+                if (closed) return;
+                closed = true;
+                overlay.classList.add("is-leaving");
+                // Matches .friends-overlay.is-leaving's duration in style.css.
+                window.setTimeout(() => {
+                    overlay.remove();
+                    resolve();
+                }, 280);
+            });
+        });
     }
 
     // ── Demo replay (?demo=finish, from the Home debug card) ─────────────────
@@ -971,6 +1039,16 @@
             completedMissions: [
                 { id: "play_sprint", coinReward: 50, labelKey: "mission.playSprint" },
                 { id: "earn_30_xp", coinReward: 30, labelKey: "mission.earn30Xp" }
+            ],
+            // Four stand-in friends so the friends page has something to show
+            // in the replay, mixed played/not-played so both flame states are
+            // visible at once. Demo only - a real session shows real friends
+            // (or skips the page when there are none).
+            friendsStatus: [
+                { uid: "demo-1", displayName: "Giulia", friendshipStreak: 12, playedToday: true },
+                { uid: "demo-2", displayName: "Marco", friendshipStreak: 7, playedToday: false },
+                { uid: "demo-3", displayName: "Anna", friendshipStreak: 25, playedToday: true },
+                { uid: "demo-4", displayName: "Luca", friendshipStreak: 3, playedToday: false }
             ]
         };
     }

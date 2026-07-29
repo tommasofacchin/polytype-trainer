@@ -151,9 +151,19 @@
         document.body.append(overlay);
 
         return new Promise(resolve => {
+            let closed = false;
             overlay.querySelector(".mission-collect-btn").addEventListener("click", () => {
-                overlay.remove();
-                resolve();
+                if (closed) return;
+                closed = true;
+
+                // Slides out the way the streak screen before it does, so the
+                // hand-off to the next page is a turn rather than a hard cut.
+                // Matches .mission-overlay.is-leaving's duration in style.css.
+                overlay.classList.add("is-leaving");
+                window.setTimeout(() => {
+                    overlay.remove();
+                    resolve();
+                }, 280);
             });
         });
     }

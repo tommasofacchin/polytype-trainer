@@ -69,6 +69,15 @@ let pendingKeysHeld = 0;
 // that draws that card unlocked - which is the one the profile update
 // triggers - so the burst plays exactly once, on exactly the right card.
 let justUnlockedSuffix = null;
+// renderDeck() rebuilds every card from scratch (replaceChildren), so a render
+// that lands while the unlock burst is playing tears the animating card out
+// mid-flight and puts a finished-looking one in its place - the animation just
+// stops and snaps to the unlocked card. Any profile update at all does that,
+// and an unlock is exactly the moment profile updates are in flight. So while
+// a burst is running, renders are deferred rather than dropped: the flag below
+// records that one was wanted, and it runs the moment the burst is done.
+let unlockBurstEndsAt = 0;
+let deckRenderDeferred = false;
 
 const el = {};
 
@@ -253,6 +262,39 @@ function getDisabledWords(courseKey) {
     return new Set(getDisabledWordsMap()[courseKey] || []);
 }
 
+// Practice toggles are keyed by study language - which is what js/main.js,
+// js/sprint.js, js/dictate.js and js/memory.js all read this store by.
+//
+// This page used to key them by getCourseProgress().courseKey instead, and
+// that key is not stable: it falls back to the language while the profile
+// cache is still empty, then switches to the course's own courseId once the
+// profile lands. So a word disabled before that switch got written under one
+// key and read back under another - it appeared to turn itself back on a
+// moment later - and while the mismatch lasted the games never saw it at all,
+// since they were reading the language key the whole time.
+function getDisabledWordsKey() {
+    return activeLanguage;
+}
+
+// Folds anything written under the old unstable keys back into the language
+// one, so toggles made before this fix aren't silently lost. Idempotent: once
+// the aliases are gone there's nothing left to move.
+function migrateDisabledWordsKey() {
+    const map = getDisabledWordsMap();
+    const target = getDisabledWordsKey();
+    const aliases = [activeDeckMeta?.id, getCourseProgress().courseKey]
+        .filter(key => key && key !== target && Array.isArray(map[key]));
+    if (!aliases.length) return;
+
+    const merged = new Set(map[target] || []);
+    aliases.forEach(key => {
+        map[key].forEach(suffix => merged.add(suffix));
+        delete map[key];
+    });
+    map[target] = [...merged];
+    localStorage.setItem(DISABLED_WORDS_KEY, JSON.stringify(map));
+}
+
 function toggleWordDisabled(courseKey, suffix) {
     const map = getDisabledWordsMap();
     const current = new Set(map[courseKey] || []);
@@ -340,6 +382,12 @@ function languageHasHints() {
 
 function renderDeck() {
     if (!el.groups) return;
+
+    if (Date.now() < unlockBurstEndsAt) {
+        deckRenderDeferred = true;
+        return;
+    }
+
     el.groups.replaceChildren();
 
     if (!vocab.length) {
@@ -356,7 +404,8 @@ function renderDeck() {
 
     const courseProgress = getCourseProgress();
     const { unlockedWords } = courseProgress;
-    const disabledWords = getDisabledWords(courseProgress.courseKey);
+    migrateDisabledWordsKey();
+    const disabledWords = getDisabledWords(getDisabledWordsKey());
     const keysHeld = getKeysHeld(courseProgress.purchasedKeys);
     const unlockedCount = vocab.filter(word => unlockedWords.has(getWordSuffix(word.id))).length;
     const pct = Math.round((unlockedCount / vocab.length) * 100);
@@ -398,7 +447,9 @@ function renderDeck() {
             .filter(Boolean)
             .sort((a, b) => getWordSuffix(a.id) - getWordSuffix(b.id));
         if (!categoryWords.length) return;
-        el.groups.appendChild(buildDeckGroup(category, categoryWords, unlockedWords, disabledWords, keysHeld, courseProgress.courseKey));
+        // Not courseProgress.courseKey - the toggle must write under the same
+        // stable key everything else reads. See getDisabledWordsKey.
+        el.groups.appendChild(buildDeckGroup(category, categoryWords, unlockedWords, disabledWords, keysHeld, getDisabledWordsKey()));
     });
 }
 
@@ -537,9 +588,27 @@ function buildDeckCard(word, isUnlocked, isDisabled, keysHeld, courseKey) {
         justUnlockedSuffix = null;
         card.classList.add("is-just-unlocked");
         card.appendChild(buildUnlockBurst());
+        startUnlockBurstWindow();
     }
 
     return card;
+}
+
+// Holds off deck re-renders for as long as the burst needs the card to stay
+// put: 240ms of --dub-delay plus dub-half's 700ms, with a little slack. Any
+// render that arrives meanwhile is replayed here the moment the window closes,
+// so nothing is lost - a coin balance or key count that changed during the
+// animation still lands, just a beat later.
+const UNLOCK_BURST_WINDOW_MS = 1100;
+
+function startUnlockBurstWindow() {
+    unlockBurstEndsAt = Date.now() + UNLOCK_BURST_WINDOW_MS;
+    window.setTimeout(() => {
+        unlockBurstEndsAt = 0;
+        if (!deckRenderDeferred) return;
+        deckRenderDeferred = false;
+        renderDeck();
+    }, UNLOCK_BURST_WINDOW_MS);
 }
 
 // The door plate cracking open: the same DOOR_LOCK_SVG drawn twice, each copy
@@ -565,9 +634,24 @@ function buildUnlockBurst() {
         `<span class="dub-half is-right">${DOOR_LOCK_SVG}</span>` +
         shards;
 
-    // Outlasts the longest of the burst's animations: --dub-delay (240ms, the
-    // wait for the confirm dialog to clear) plus dub-half's 700ms.
-    window.setTimeout(() => burst.remove(), 1100);
+    // Removed when the longest piece (dub-half, 700ms after the 240ms wait)
+    // actually finishes, NOT on a wall clock started here. A fixed timer runs
+    // from the moment this node is built, while the animation only starts once
+    // it has been inserted and painted - so any hitch in between (a big deck
+    // rebuild, a slow frame, a backgrounded tab) came straight out of the
+    // animation's tail and chopped the ending off.
+    // Safety net for the cases where that event never comes at all: reduced
+    // motion (the burst is display:none, so nothing animates) or a tab
+    // backgrounded before the first frame. Deliberately far out - it must
+    // never be what ends a burst that is still legitimately playing.
+    const failsafe = window.setTimeout(() => burst.remove(), 5000);
+
+    const lastPiece = burst.querySelector(".dub-half.is-right");
+    lastPiece?.addEventListener("animationend", () => {
+        window.clearTimeout(failsafe);
+        burst.remove();
+    }, { once: true });
+
     return burst;
 }
 

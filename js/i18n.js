@@ -400,6 +400,8 @@
             "sprint.breakdownRetry": "Corrected on retry ({count} × 5)",
             "sprint.breakdownPerfect": "Perfect session - no mistakes!",
             "sprint.friendsTitle": "Friends",
+            "sprint.friendsStepTitle": "Your friends today",
+            "sprint.friendsStepSubtitle": "A red flame means they've already practised today.",
             "sprint.friendPlayedToday": "Played today",
             "sprint.friendNotPlayedToday": "Not yet today",
 
@@ -965,6 +967,8 @@
             "sprint.breakdownRetry": "Corrette al recupero ({count} × 5)",
             "sprint.breakdownPerfect": "Sessione perfetta - nessun errore!",
             "sprint.friendsTitle": "Amici",
+            "sprint.friendsStepTitle": "I tuoi amici oggi",
+            "sprint.friendsStepSubtitle": "Il fuoco rosso vuol dire che si sono già allenati oggi.",
             "sprint.friendPlayedToday": "Giocato oggi",
             "sprint.friendNotPlayedToday": "Non ancora oggi",
 

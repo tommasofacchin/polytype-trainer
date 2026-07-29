@@ -6222,9 +6222,109 @@ body > main {
     align-items: center;
     justify-content: center;
     gap: 18px;
-    background: var(--scrim);
+    background: var(--bg);
     padding: 24px;
-    animation: chest-fadein 0.25s ease forwards;
+    animation: celebrate-page-in 0.3s var(--ease-out) both;
+}
+
+/* Duration is mirrored by the removal timeout in js/mission-celebrate.js. */
+.mission-overlay.is-leaving {
+    animation: celebrate-page-out 0.28s var(--ease-out) forwards;
+}
+
+/* Friends step (js/sprint.js showFriendsStep) - same page family as the streak
+   and mission screens, with a roster instead of a single hero graphic. */
+.friends-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 700;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    background: var(--bg);
+    padding: 24px;
+    animation: celebrate-page-in 0.3s var(--ease-out) both;
+}
+
+.friends-overlay.is-leaving {
+    animation: celebrate-page-out 0.28s var(--ease-out) forwards;
+}
+
+.friends-overlay-title {
+    font-family: var(--font-display);
+    font-size: clamp(24px, 6vw, 30px);
+    font-weight: 700;
+    color: var(--text);
+    text-align: center;
+}
+
+.friends-overlay-subtitle {
+    margin: 0;
+    max-width: 320px;
+    color: var(--text-soft);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-align: center;
+}
+
+.friends-overlay-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: min(100%, 380px);
+}
+
+.friends-overlay-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    /* Staggered via --delay from js, so the roster deals itself in instead of
+       landing all at once. */
+    animation: friends-row-in 0.34s var(--ease-out) var(--delay, 0s) both;
+}
+
+@keyframes friends-row-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: none; }
+}
+
+.friends-overlay-name {
+    flex: 1;
+    min-width: 0;
+    color: var(--text);
+    font-weight: 700;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Red flame = already practised today; grey = still owes today's session. */
+.friends-overlay-streak {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--text-faint);
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+.friends-overlay-streak svg {
+    display: block;
+    fill: var(--text-faint);
+}
+
+.friends-overlay-row.is-played .friends-overlay-streak {
+    color: #f2452f;
+}
+
+.friends-overlay-row.is-played .friends-overlay-streak svg {
+    fill: #f2452f;
 }
 
 .mission-overlay-art {
@@ -6482,15 +6582,37 @@ body > main {
     align-items: center;
     justify-content: center;
     gap: 16px;
-    background: var(--scrim);
+    background: var(--bg);
     padding: 24px;
-    animation: chest-fadein 0.25s ease forwards;
+    animation: celebrate-page-in 0.3s var(--ease-out) both;
 }
 
 /* Duration is mirrored by the removal timeout in js/streak-celebrate.js -
    change one and change the other, or the overlay cuts out mid-fade. */
 .streak-overlay.is-leaving {
-    animation: streak-overlay-out 0.28s ease forwards;
+    animation: celebrate-page-out 0.28s var(--ease-out) forwards;
+}
+
+/* Final page of the run: arrives the same way the screens before it did, so
+   the score doesn't just blink into existence after the last one slides off. */
+.game-result-overlay.is-entering {
+    animation: celebrate-page-in 0.32s var(--ease-out) both;
+}
+
+/* ---- End-of-sprint page run -------------------------------------------
+   Streak, friends, missions and finally the score are shown one after the
+   other as full opaque screens rather than dialogs floating over the result
+   card. They share this pair of transitions so each hand-off reads as
+   turning to the next page, not as one modal closing and another opening. */
+
+@keyframes celebrate-page-in {
+    from { opacity: 0; transform: translateX(24px); }
+    to { opacity: 1; transform: none; }
+}
+
+@keyframes celebrate-page-out {
+    from { opacity: 1; transform: none; }
+    to { opacity: 0; transform: translateX(-24px); }
 }
 
 .streak-overlay-art {
