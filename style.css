@@ -3709,6 +3709,177 @@ body.deck-overlay-open {
     50% { box-shadow: 0 0 20px -4px color-mix(in srgb, var(--color-gold) 85%, transparent); }
 }
 
+/* ---- Deck: the door breaking open (js/deck.js buildUnlockBurst) ---------
+   Plays once, on the card that was just unlocked: its lock plate splits down
+   the middle and the two halves are thrown apart in a flash and a spray of
+   gold shards, then the word itself rises into the empty card. The burst node
+   removes itself ~900ms in, so nothing here has to be cleaned up by a
+   re-render. The card's own overflow: hidden keeps the debris inside its
+   frame instead of scattering it over the grid. */
+
+/* Everything waits out the confirm dialog's own close transition (see
+   closeUnlockConfirm in js/deck.js) - otherwise the crack and the flash, the
+   two frames worth watching, happen behind a scrim that's still fading. The
+   `both` fills below hold each piece at its first frame through the wait, so
+   nothing shows early. */
+.deck-card.is-just-unlocked {
+    --dub-delay: 240ms;
+}
+
+.deck-unlock-burst {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+    z-index: 3;
+}
+
+/* Everything stacks on the card's centre, where the lock used to sit. */
+.deck-unlock-burst > * {
+    grid-area: 1 / 1;
+}
+
+/* Deliberately short of full opacity: the plate cracking apart is the shot,
+   and a brighter core than this washes it out at exactly that frame. */
+.dub-flash {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--color-gold) 70%, transparent) 0%, transparent 62%);
+    animation: dub-flash 500ms var(--ease-out) var(--dub-delay) both;
+}
+
+@keyframes dub-flash {
+    0% { opacity: 0; transform: scale(0.3); }
+    22% { opacity: 0.62; }
+    100% { opacity: 0; transform: scale(1.7); }
+}
+
+.dub-ring {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 2px solid color-mix(in srgb, var(--color-gold) 80%, transparent);
+    animation: dub-ring 600ms var(--ease-out) var(--dub-delay) both;
+}
+
+@keyframes dub-ring {
+    0% { opacity: 0.9; transform: scale(0.5); }
+    100% { opacity: 0; transform: scale(3.2); }
+}
+
+/* Same plate, same size and stroke treatment as .deck-card-lock - so the
+   thing that shatters reads as the very lock that was sitting there. */
+.dub-half {
+    width: 34px;
+    height: 34px;
+    color: var(--color-gold);
+}
+
+.dub-half svg {
+    width: 34px;
+    height: 34px;
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.dub-half .dl-plate {
+    fill: color-mix(in srgb, var(--color-gold) 22%, transparent);
+    stroke: currentColor;
+}
+
+.dub-half .dl-rivet {
+    fill: currentColor;
+    stroke: none;
+}
+
+.dub-half .dl-hole,
+.dub-half .dl-slot {
+    fill: none;
+    stroke: currentColor;
+}
+
+/* The crack itself: each copy shows only its own side of the plate. */
+.dub-half.is-left svg { clip-path: inset(0 50% 0 0); }
+.dub-half.is-right svg { clip-path: inset(0 0 0 50%); }
+
+/* A beat of strain in the first frames, then the half tumbles away. */
+.dub-half.is-left { animation: dub-half-left 700ms var(--ease-out) var(--dub-delay) both; }
+.dub-half.is-right { animation: dub-half-right 700ms var(--ease-out) var(--dub-delay) both; }
+
+@keyframes dub-half-left {
+    0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+    16% { transform: translate(-3px, -2px) rotate(-7deg); opacity: 1; }
+    100% { transform: translate(-30px, 26px) rotate(-54deg); opacity: 0; }
+}
+
+@keyframes dub-half-right {
+    0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+    16% { transform: translate(3px, -2px) rotate(7deg); opacity: 1; }
+    100% { transform: translate(30px, 28px) rotate(56deg); opacity: 0; }
+}
+
+/* rotate-then-translate throws each shard along its own --a angle, so one
+   keyframe pair covers all seven directions. */
+.dub-shard {
+    --a: 0deg;
+    --d: 34px;
+    width: 6px;
+    height: 6px;
+    border-radius: 1px;
+    background: var(--color-gold);
+    animation: dub-shard 640ms var(--ease-out) var(--dub-delay) both;
+}
+
+@keyframes dub-shard {
+    0% { transform: rotate(var(--a)) translateY(0) scale(0.5); opacity: 0; }
+    18% { opacity: 1; }
+    100% { transform: rotate(var(--a)) translateY(calc(-1 * var(--d))) scale(0.2); opacity: 0; }
+}
+
+/* The card takes the hit, then settles. */
+.deck-card.is-just-unlocked {
+    animation: deck-unlock-pop 620ms var(--ease-out) var(--dub-delay) both;
+}
+
+@keyframes deck-unlock-pop {
+    0% {
+        transform: scale(0.92);
+        border-color: var(--color-gold);
+        box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-gold) 60%, transparent);
+    }
+    35% {
+        transform: scale(1.06);
+        border-color: var(--color-gold);
+        box-shadow: 0 0 26px -4px color-mix(in srgb, var(--color-gold) 85%, transparent);
+    }
+    100% { transform: scale(1); }
+}
+
+/* The word arrives after the lock is gone, not underneath it - hence the
+   delay, and `both` so it stays hidden through it. */
+.deck-card.is-just-unlocked .deck-card-script,
+.deck-card.is-just-unlocked .deck-card-roman,
+.deck-card.is-just-unlocked .deck-card-meaning,
+.deck-card.is-just-unlocked .deck-card-toggle {
+    animation: deck-unlock-reveal 440ms var(--ease-out) calc(var(--dub-delay) + 200ms) both;
+}
+
+@keyframes deck-unlock-reveal {
+    0% { opacity: 0; transform: translateY(6px) scale(0.94); }
+    100% { opacity: 1; transform: none; }
+}
+
+/* Decorative debris only - the global reduced-motion floor near the top of
+   this file already collapses the durations, this drops the shrapnel too. */
+@media (prefers-reduced-motion: reduce) {
+    .deck-unlock-burst {
+        display: none;
+    }
+}
+
 /* ---- Keys-held badge (Deck page header) --------------------------------- */
 
 @media (max-width: 640px) {
@@ -5632,11 +5803,35 @@ body > main {
 }
 
 .shop-buy-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
     margin-top: var(--space-2);
     width: 100%;
     padding: 11px 14px;
     font-weight: 800;
     box-shadow: var(--shadow-cta);
+    transition: background var(--transition), color var(--transition), box-shadow var(--transition);
+}
+
+.shop-buy-price {
+    font-variant-numeric: tabular-nums;
+}
+
+/* Not affordable yet: the price greys out rather than the tile printing a
+   "not enough coins" line under it. Reads as "this costs 100, come back with
+   100" instead of as an error about something the player did wrong. */
+.shop-buy-btn.is-unaffordable {
+    background: var(--surface-soft);
+    color: var(--text-faint);
+    box-shadow: none;
+    opacity: 1; /* wins over .btn-solid:disabled's dimming - the grey IS the state */
+}
+
+.shop-buy-btn.is-unaffordable svg {
+    opacity: 0.45;
+    filter: grayscale(1);
 }
 
 .shop-tile-status {

@@ -64,6 +64,11 @@ let isConfirmingUnlock = false;
 let pendingCourseKey = null;
 let pendingUnlockWord = null;
 let pendingKeysHeld = 0;
+// Word suffix whose card should break its lock open on the next render pass.
+// Set just before the unlock call, consumed (and cleared) by the first render
+// that draws that card unlocked - which is the one the profile update
+// triggers - so the burst plays exactly once, on exactly the right card.
+let justUnlockedSuffix = null;
 
 const el = {};
 
@@ -505,7 +510,44 @@ function buildDeckCard(word, isUnlocked, isDisabled, keysHeld, courseKey) {
     });
     card.appendChild(toggle);
 
+    // Appended last so the burst layers over the card's own content while it
+    // plays (it's pointer-events: none, so the card stays clickable through it).
+    if (justUnlockedSuffix === getWordSuffix(word.id)) {
+        justUnlockedSuffix = null;
+        card.classList.add("is-just-unlocked");
+        card.appendChild(buildUnlockBurst());
+    }
+
     return card;
+}
+
+// The door plate cracking open: the same DOOR_LOCK_SVG drawn twice, each copy
+// clipped by CSS to one half of the plate, thrown apart in a flash and a
+// spray of shards. Every shard is one keyframe pair aimed by its own --a
+// angle. Purely decorative and self-removing, so a re-render mid-flight
+// (profile refresh, language change) simply drops it on the floor.
+function buildUnlockBurst() {
+    const shardCount = 7;
+    const shards = Array.from({ length: shardCount }, (unused, i) => {
+        const angle = Math.round((360 / shardCount) * i + (i % 2 ? 14 : 0));
+        const distance = 30 + (i % 3) * 7;
+        return `<span class="dub-shard" style="--a: ${angle}deg; --d: ${distance}px"></span>`;
+    }).join("");
+
+    const burst = document.createElement("span");
+    burst.className = "deck-unlock-burst";
+    burst.setAttribute("aria-hidden", "true");
+    burst.innerHTML =
+        '<span class="dub-flash"></span>' +
+        '<span class="dub-ring"></span>' +
+        `<span class="dub-half is-left">${DOOR_LOCK_SVG}</span>` +
+        `<span class="dub-half is-right">${DOOR_LOCK_SVG}</span>` +
+        shards;
+
+    // Outlasts the longest of the burst's animations: --dub-delay (240ms, the
+    // wait for the confirm dialog to clear) plus dub-half's 700ms.
+    window.setTimeout(() => burst.remove(), 1100);
+    return burst;
 }
 
 function setupUnlockConfirm() {
@@ -576,6 +618,11 @@ async function confirmUnlock() {
     if (el.unlockConfirmBtn) el.unlockConfirmBtn.disabled = true;
     setUnlockError("");
 
+    // Armed before the call, not after: both paths below re-render from
+    // inside the await (the profile-updated event), so by the time we'd get
+    // to arm it afterwards the card has already been drawn.
+    justUnlockedSuffix = wordSuffix;
+
     try {
         if (window.PolytypeFirebase?.isSignedIn?.()) {
             await window.PolytypeFirebase.unlockWord(pendingCourseKey, wordSuffix);
@@ -584,6 +631,7 @@ async function confirmUnlock() {
         }
         closeUnlockConfirm(true);
     } catch (error) {
+        justUnlockedSuffix = null;
         setUnlockError(error?.message || tr("deck.unlockFailed"));
         // The server rejected this against state we don't have locally
         // (e.g. "already unlocked"/"no keys" while the cache still shows

@@ -22,6 +22,11 @@ const CHEST_SVG =
     '<rect x="21" y="23" width="6" height="9" rx="2" fill="#ffc73a"/>' +
     "</svg>";
 
+// Same coin as the header's balance pill (ICONS.coin in js/app-shell.js), so
+// the price on a buy button reads as the exact currency the header counts.
+const COIN_SVG =
+    '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#ffc73a"/><circle cx="12" cy="12" r="6.5" fill="none" stroke="#d99a1c" stroke-width="2"/></svg>';
+
 // Snowflake over the streak flame's colour - reads as "the fire, paused".
 const FREEZE_SVG =
     '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#5bc8ff" stroke-width="1.8" stroke-linecap="round">' +
@@ -469,19 +474,19 @@ function renderShop() {
     if (el.keysHeldText) {
         el.keysHeldText.textContent = tr("shop.keysHeld", { count: keysHeldDisplayOverride ?? keysHeld, max: maxKeys });
     }
-    if (el.buyBtn) el.buyBtn.textContent = tr("shop.buyKey", { price: keyPriceCoins });
+    setBuyButtonPrice(el.buyBtn, keyPriceCoins, "shop.buyKey", coins);
 
     if (el.chestMissingText) {
         el.chestMissingText.textContent = tr("shop.chestMissingWords", { count: missingWords });
     }
-    if (el.buyChestBtn) el.buyChestBtn.textContent = tr("shop.buyChest", { price: wordChestPriceCoins });
+    setBuyButtonPrice(el.buyChestBtn, wordChestPriceCoins, "shop.buyChest", coins);
 
     const freezesHeld = getStreakFreezesHeld();
     const freezeCap = getMaxStreakFreezes();
     if (el.freezesHeldText) {
         el.freezesHeldText.textContent = tr("shop.freezesHeld", { count: freezesHeld, max: freezeCap });
     }
-    if (el.buyFreezeBtn) el.buyFreezeBtn.textContent = tr("shop.buyFreeze", { price: streakFreezePriceCoins });
+    setBuyButtonPrice(el.buyFreezeBtn, streakFreezePriceCoins, "shop.buyFreeze", coins);
 
     // Keep both buttons disabled and say nothing definitive until Firebase
     // has actually resolved signed-in vs signed-out - showing "sign in
@@ -510,8 +515,11 @@ function renderShop() {
         if (el.buyBtn) el.buyBtn.disabled = true;
         setStatus(el.keyStatus, tr("shop.keysFull"), "");
     } else if (coins < keyPriceCoins) {
+        // No status line: the greyed-out price on the button (see
+        // setBuyButtonPrice) already says "you can't afford this yet", and
+        // saying it twice made the tile shout about a non-problem.
         if (el.buyBtn) el.buyBtn.disabled = true;
-        setStatus(el.keyStatus, tr("shop.insufficientCoins"), "");
+        setStatus(el.keyStatus, "", "");
     } else {
         if (el.buyBtn) el.buyBtn.disabled = false;
         setStatus(el.keyStatus, "", "");
@@ -524,7 +532,7 @@ function renderShop() {
         setStatus(el.chestStatus, tr("shop.chestNoWordsLeft"), "");
     } else if (coins < wordChestPriceCoins) {
         if (el.buyChestBtn) el.buyChestBtn.disabled = true;
-        setStatus(el.chestStatus, tr("shop.insufficientCoins"), "");
+        setStatus(el.chestStatus, "", "");
     } else {
         if (el.buyChestBtn) el.buyChestBtn.disabled = false;
         setStatus(el.chestStatus, "", "");
@@ -537,11 +545,26 @@ function renderShop() {
         setStatus(el.freezeStatus, tr("shop.freezesFull"), "");
     } else if (coins < streakFreezePriceCoins) {
         if (el.buyFreezeBtn) el.buyFreezeBtn.disabled = true;
-        setStatus(el.freezeStatus, tr("shop.insufficientCoins"), "");
+        setStatus(el.freezeStatus, "", "");
     } else {
         if (el.buyFreezeBtn) el.buyFreezeBtn.disabled = false;
         setStatus(el.freezeStatus, "", "");
     }
+}
+
+// Buy buttons carry the coin icon and the bare number - no "Buy -" wording,
+// which was just repeating the tile title in longer form. The full sentence
+// still becomes the accessible name so the control doesn't read as a naked
+// "100" to a screen reader.
+//
+// Can't afford it? The price goes grey instead of a "not enough coins"
+// status line - the button says the same thing without a message that reads
+// like an error for what is really just "keep playing".
+function setBuyButtonPrice(btn, price, labelKey, coins) {
+    if (!btn) return;
+    btn.innerHTML = `${COIN_SVG}<span class="shop-buy-price">${price}</span>`;
+    btn.setAttribute("aria-label", tr(labelKey, { price }));
+    btn.classList.toggle("is-unaffordable", coins < price);
 }
 
 function setStatus(statusEl, text, tone) {
