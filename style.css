@@ -5814,7 +5814,7 @@ body > main {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    gap: 9px;
     margin-top: var(--space-2);
     width: 100%;
     padding: 11px 14px;
@@ -5825,6 +5825,17 @@ body > main {
 
 .shop-buy-price {
     font-variant-numeric: tabular-nums;
+    /* Owns the line box so the coin beside it centres against the digits
+       rather than against the font's full ascender-to-descender box, which is
+       what left it sitting visibly high. */
+    line-height: 1;
+}
+
+.shop-buy-btn svg {
+    display: block;
+    flex: 0 0 auto;
+    width: 18px;
+    height: 18px;
 }
 
 /* Not affordable yet: the price greys out rather than the tile printing a

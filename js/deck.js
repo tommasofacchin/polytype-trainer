@@ -154,6 +154,27 @@ async function loadDeck() {
     }
 
     renderDeck();
+    playDemoUnlock();
+}
+
+// ?demo=unlock (from the Home debug card): replays the lock-breaking burst on
+// a word that is *already* unlocked, so the animation can be reviewed without
+// spending a key or moving progression. Nothing is written anywhere - this
+// just arms the same flag a real unlock sets and re-renders.
+function playDemoUnlock() {
+    if (new URLSearchParams(window.location.search).get("demo") !== "unlock") return;
+
+    const { unlockedWords } = getCourseProgress();
+    const word = vocab.find(item => unlockedWords.has(getWordSuffix(item.id)));
+    if (!word) return;
+
+    justUnlockedSuffix = getWordSuffix(word.id);
+    renderDeck();
+
+    // The starter words sit at the top of the first category, but the deck is
+    // taller than the viewport - without this the burst would play off-screen.
+    const card = el.groups?.querySelector(".deck-card.is-just-unlocked");
+    card?.scrollIntoView({ block: "center", behavior: "auto" });
 }
 
 function parseDeckCsv(csvText, columns) {

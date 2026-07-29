@@ -123,6 +123,7 @@ function setupGameStateSync() {
         renderChest(state);
         renderDemoChest();
         renderDemoSprint();
+        renderDemoUnlock();
         renderMissions(state);
         renderFriendsPreview(state);
         renderDailyGoal(state);
@@ -239,21 +240,12 @@ function renderDemoChest() {
     });
 }
 
-// Canned stand-in for what the server hands back on the first session of a
-// day: the flame advancing, plus the two missions a Sprint round typically
-// trips. Shapes and ids match api/complete-practice-session.js's response
-// (its `streak` block and `completedMissions`) so the replay drives the exact
-// same code path the real thing does - see finishSession in js/sprint.js.
-const DEMO_SPRINT_MISSIONS = [
-    { id: "play_sprint", coinReward: 50, labelKey: "mission.playSprint" },
-    { id: "earn_30_xp", coinReward: 30, labelKey: "mission.earn30Xp" }
-];
-
-// Replays the first-sprint-of-the-day celebrations back to back: the streak
-// overlay, then the missions one. Nothing is saved, no coins or XP are
-// granted, and the header's flame is only borrowed for the length of the pop
-// (see pulseHeaderStreak in js/streak-celebrate.js) - the real streak is
-// untouched.
+// Replays a whole finished sprint, on the Sprint page itself: the result card
+// with its score and staggered points breakdown, the XP and coin reveals, then
+// the streak and mission overlays - the real finishSession(), driven by canned
+// progress instead of a save (see runDemoFinish in js/sprint.js). Nothing is
+// saved and nothing is granted; the header's flame and XP bar are only
+// borrowed for the length of the animation.
 function renderDemoSprint() {
     const mount = document.getElementById("home-demo-sprint");
     if (!mount) return;
@@ -276,17 +268,45 @@ function renderDemoSprint() {
         </div>
         <button id="home-demo-sprint-btn" class="chest-open-btn" type="button">${tr("streak.demoRun")}</button>
     `;
-    document.getElementById("home-demo-sprint-btn").addEventListener("click", async event => {
-        event.target.disabled = true;
-        // One past whatever the player is actually on, so the roll shows the
-        // number they'd really see tomorrow rather than a made-up one.
-        const currentStreak = (Number(profile.dayStreak) || 0) + 1;
-        await window.PolytypeStreakCelebrate?.show?.(
-            { currentStreak, streakAdvanced: true, streakReset: false },
-            { demo: true }
-        );
-        await window.PolytypeMissionCelebrate?.show?.(DEMO_SPRINT_MISSIONS);
-        event.target.disabled = false;
+    // Goes to the real Sprint page rather than replaying the overlays here:
+    // the result card and its breakdown live in sprint.html, so this is the
+    // only way to see the actual end-of-session screen instead of a
+    // reconstruction of it.
+    document.getElementById("home-demo-sprint-btn").addEventListener("click", () => {
+        window.location.href = "sprint.html?demo=finish";
+    });
+}
+
+// Replays the deck's lock-breaking animation on a word that's already
+// unlocked - see playDemoUnlock in js/deck.js. Costs no key and moves no
+// progress.
+function renderDemoUnlock() {
+    const mount = document.getElementById("home-demo-unlock");
+    if (!mount) return;
+
+    if (!isDebugHandle()) {
+        mount.hidden = true;
+        mount.replaceChildren();
+        return;
+    }
+
+    if (mount.dataset.built === "true") return;
+    mount.dataset.built = "true";
+    mount.hidden = false;
+    mount.className = "chest-card is-demo";
+    mount.innerHTML = `
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#ffc73a" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2.4 20.5 6v6.4c0 5-3.6 8.4-8.5 9.6-4.9-1.2-8.5-4.6-8.5-9.6V6L12 2.4Z" fill="#ffc73a22"/>
+            <circle cx="12" cy="11.4" r="3.1"/><path d="M12 12.6v2.6"/>
+        </svg>
+        <div class="chest-card-copy">
+            <strong>${tr("deck.demoUnlockTitle")}</strong>
+            <span>${tr("deck.demoUnlockDesc")}</span>
+        </div>
+        <button id="home-demo-unlock-btn" class="chest-open-btn" type="button">${tr("streak.demoRun")}</button>
+    `;
+    document.getElementById("home-demo-unlock-btn").addEventListener("click", () => {
+        window.location.href = "deck.html?demo=unlock";
     });
 }
 

@@ -90,6 +90,8 @@
             "trainer.deckSummary": "{language} - {count} words",
             "trainer.deckProgress": "{unlocked} / {total} unlocked",
             "deck.wordsMastered": "{count} mastered",
+            "deck.demoUnlockTitle": "Test card unlock",
+            "deck.demoUnlockDesc": "Lock-breaking animation - costs no key",
             "trainer.categoryProgress": "{unlocked} / {total} unlocked",
             "trainer.wordCount": "{count} {word}",
             "trainer.lockedWord": "Locked door",
@@ -464,7 +466,7 @@
             // buildWeek in js/streak-celebrate.js.
             "streak.weekdays": "M,T,W,T,F,S,S",
             "streak.demoTitle": "Test daily sprint",
-            "streak.demoDesc": "Streak + missions - grants nothing",
+            "streak.demoDesc": "Full result screen - grants nothing",
             "streak.demoRun": "Run",
 
             "common.coins": "coins",
@@ -653,6 +655,8 @@
             "trainer.deckSummary": "{language} - {count} parole",
             "trainer.deckProgress": "{unlocked} / {total} sbloccate",
             "deck.wordsMastered": "{count} padroneggiate",
+            "deck.demoUnlockTitle": "Prova sblocco carta",
+            "deck.demoUnlockDesc": "Animazione della serratura - non costa chiavi",
             "trainer.categoryProgress": "{unlocked} / {total} sbloccate",
             "trainer.wordCount": "{count} {word}",
             "trainer.lockedWord": "Porta bloccata",
@@ -1025,7 +1029,7 @@
             "streak.celebrateContinue": "Continua",
             "streak.weekdays": "L,M,M,G,V,S,D",
             "streak.demoTitle": "Sprint di prova",
-            "streak.demoDesc": "Fuoco + missioni - non dà nulla",
+            "streak.demoDesc": "Schermata risultati completa - non dà nulla",
             "streak.demoRun": "Avvia",
 
             "common.coins": "monete",

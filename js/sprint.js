@@ -76,7 +76,10 @@
         retryRoundTotal: 0,
         retryBonus: 0,
         retryCorrectCount: 0,
-        perfectBonus: 0
+        perfectBonus: 0,
+        // Set only by the ?demo=finish replay (runDemoFinish), which skips
+        // playing entirely and jumps straight to a canned end-of-session.
+        demo: false
     };
 
     let activeDeckMeta = null;
@@ -125,6 +128,15 @@
         preloadSfx();
         activeDeckMeta = getActiveDeckMeta();
         activeLanguage = activeDeckMeta?.language || FALLBACK_LANGUAGE;
+
+        // Before every load and progression guard below: the replay shows a
+        // canned result card and needs neither vocab nor unlocked words, so it
+        // must not be blocked by a deck that failed to fetch or by a language
+        // the player hasn't spent any keys on yet.
+        if (isDemoFinish()) {
+            runDemoFinish();
+            return;
+        }
 
         if (!activeDeckMeta) {
             showLoadError();
@@ -237,6 +249,11 @@
         state.retryBonus = 0;
         state.retryCorrectCount = 0;
         state.perfectBonus = 0;
+        // Clears the ?demo=finish replay: hitting "Play again" on the demo
+        // result card starts a genuine session, and leaving this set would
+        // send it down the canned branch in finishSession and silently throw
+        // away the player's real XP and coins.
+        state.demo = false;
 
         // Computed once per session, not per round: a round type that can't
         // build a distractor/second pair with the current unlocked pool
@@ -834,7 +851,11 @@
         // has had a beat to notice, not on top of the card's own entrance.
         let earnedTotalXp = null;
 
-        if (state.correctAnswers > 0) {
+        if (state.demo) {
+            // No save at all - canned progress stands in for the round trip so
+            // the rest of this runs exactly as it does after a real session.
+            earnedTotalXp = await applySessionProgress(getDemoProgress(), { demo: true });
+        } else if (state.correctAnswers > 0) {
             const firebaseClient = window.PolytypeFirebase;
             if (!firebaseClient?.isSignedIn?.()) {
                 el.resultSaveStatus.textContent = tr("trainer.signInSave");
@@ -855,28 +876,7 @@
                         ? await window.PolytypeGameState.completePracticeSession(payload)
                         : (await firebaseClient.completePracticeSession(payload))?.data;
 
-                    if (typeof progress?.xpEarned === "number" && progress.xpEarned > 0 && el.resultXp) {
-                        revealResultReward(el.resultXp, tr("sprint.xpEarned", { xp: progress.xpEarned }));
-                    }
-                    if (typeof progress?.totalXp === "number") {
-                        earnedTotalXp = progress.totalXp;
-                    }
-                    if (typeof progress?.sessionCoins === "number" && progress.sessionCoins > 0) {
-                        revealResultReward(el.resultCoins, tr("trainer.coinsEarned", { count: progress.sessionCoins }));
-                    }
-                    prepareFriendsStatus(progress?.friendsStatus);
-                    // Streak first, missions second: the flame going up is the
-                    // day's headline, and the missions it unblocked read as its
-                    // follow-up rather than the other way round. show() is a
-                    // no-op on every session after the day's first, so this
-                    // stays unconditional.
-                    await window.PolytypeStreakCelebrate?.show?.(progress?.streak);
-                    if (progress?.completedMissions?.length) {
-                        await window.PolytypeMissionCelebrate?.show?.(progress.completedMissions);
-                    }
-                    if (progress?.newBadges?.length) {
-                        await window.PolytypeBadgeCelebrate?.show?.(progress.newBadges);
-                    }
+                    earnedTotalXp = await applySessionProgress(progress);
                 } catch (error) {
                     el.resultSaveStatus.textContent = error?.message || tr("trainer.signInSave");
                 }
@@ -897,6 +897,82 @@
 
         await minDelay;
         setResultButtonsBusy(false);
+    }
+
+    // Everything the end of a session does with the server's answer, shared by
+    // the real save and the demo replay (which hands it canned progress
+    // instead). Returns the new lifetime XP for the header burst, or null when
+    // there's nothing to fly up there.
+    async function applySessionProgress(progress, { demo = false } = {}) {
+        if (typeof progress?.xpEarned === "number" && progress.xpEarned > 0 && el.resultXp) {
+            revealResultReward(el.resultXp, tr("sprint.xpEarned", { xp: progress.xpEarned }));
+        }
+        if (typeof progress?.sessionCoins === "number" && progress.sessionCoins > 0) {
+            revealResultReward(el.resultCoins, tr("trainer.coinsEarned", { count: progress.sessionCoins }));
+        }
+        prepareFriendsStatus(progress?.friendsStatus);
+        // Streak first, missions second: the flame going up is the day's
+        // headline, and the missions it unblocked read as its follow-up rather
+        // than the other way round. show() is a no-op on every session after
+        // the day's first, so this stays unconditional.
+        await window.PolytypeStreakCelebrate?.show?.(progress?.streak, { demo });
+        if (progress?.completedMissions?.length) {
+            await window.PolytypeMissionCelebrate?.show?.(progress.completedMissions);
+        }
+        if (progress?.newBadges?.length) {
+            await window.PolytypeBadgeCelebrate?.show?.(progress.newBadges);
+        }
+        return typeof progress?.totalXp === "number" ? progress.totalXp : null;
+    }
+
+    // ── Demo replay (?demo=finish, from the Home debug card) ─────────────────
+
+    function isDemoFinish() {
+        return new URLSearchParams(window.location.search).get("demo") === "finish";
+    }
+
+    // A deliberately imperfect session: the wrong answers are what make the
+    // combo and retry rows appear at all, so the breakdown shows four rows
+    // instead of the single one a flawless run would produce. Numbers are
+    // consistent with each other - renderResultBreakdown derives the combo
+    // bonus by subtracting the others from the score, so score must equal
+    // base (14x10) + combo (60) + retry (20).
+    function runDemoFinish() {
+        state.demo = true;
+        state.sessionStartTime = Date.now() - 62_000;
+        state.correctAnswers = 14;
+        state.wrongAnswers = 2;
+        state.bestStreak = 9;
+        state.wordsUsed = 16;
+        state.retryCorrectCount = 2;
+        state.retryBonus = 20;
+        state.score = 220;
+        finishSession();
+    }
+
+    // Shaped like api/complete-practice-session.js's response so the code above
+    // can't tell the difference. The XP burst does animate the header bar to
+    // this made-up total; it's display only (playXpGain never writes) and the
+    // next real profile update puts the true number back.
+    function getDemoProgress() {
+        const profile = getStoredProfile();
+        const totalXp = Math.max(0, Number(profile.totalXp) || 0);
+        return {
+            xpEarned: 45,
+            totalXp: totalXp + 45,
+            sessionCoins: 25,
+            streak: {
+                // One past the real streak, so the roll shows the number the
+                // player would actually see tomorrow.
+                currentStreak: (Number(profile.dayStreak) || 0) + 1,
+                streakAdvanced: true,
+                streakReset: false
+            },
+            completedMissions: [
+                { id: "play_sprint", coinReward: 50, labelKey: "mission.playSprint" },
+                { id: "earn_30_xp", coinReward: 30, labelKey: "mission.earn30Xp" }
+            ]
+        };
     }
 
     // The XP and coin awards only arrive once the save round trip resolves,

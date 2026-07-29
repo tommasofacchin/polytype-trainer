@@ -562,7 +562,7 @@ function renderShop() {
 // like an error for what is really just "keep playing".
 function setBuyButtonPrice(btn, price, labelKey, coins) {
     if (!btn) return;
-    btn.innerHTML = `${COIN_SVG}<span class="shop-buy-price">${price}</span>`;
+    btn.innerHTML = `<span class="shop-buy-price">${price}</span>${COIN_SVG}`;
     btn.setAttribute("aria-label", tr(labelKey, { price }));
     btn.classList.toggle("is-unaffordable", coins < price);
 }
