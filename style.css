@@ -2734,6 +2734,19 @@ input[type="password"]:focus {
     animation: levelup-backdrop-out 360ms ease forwards;
 }
 
+/* One choreography, timed from the moment the overlay lands (all delays
+   below share that zero):
+     40ms   the badge springs in - the only bouncy movement on screen
+     80ms   a soft halo blooms behind it, then breathes
+     280ms  title and sub cascade up under it
+     360ms  the star pops onto the crown
+     500ms  impact: a ring shockwave + gold sparks, right as the spring settles
+     560ms  the button arrives
+     900ms  one shine sweep across the face, and everything is at rest
+   The card itself deliberately does NOT animate: it used to scale in while
+   the badge popped inside it, and the two springs stacked into the jittery
+   double-bounce this replaces. One thing bounces; everything else just
+   arrives. */
 .levelup-card {
     position: relative;
     display: grid;
@@ -2741,29 +2754,52 @@ input[type="password"]:focus {
     gap: 4px;
     padding: clamp(22px, 4vw, 34px) clamp(34px, 6vw, 60px);
     text-align: center;
-    animation: levelup-card-in 620ms var(--ease-spring) both;
 }
 
 .levelup-overlay.is-leaving .levelup-card {
     animation: levelup-card-out 320ms ease forwards;
 }
 
+/* Impact ring: expands out from under the badge as the spring lands. Lives on
+   the card (positioned over the badge's center) rather than on the badge
+   itself, so it can start beneath it - ::before paints under later siblings -
+   and grow past its rim without the badge needing overflow: visible tricks. */
+.levelup-card::before {
+    content: "";
+    position: absolute;
+    top: calc(clamp(22px, 4vw, 34px) + clamp(108px, 18vw, 148px) / 2);
+    left: 50%;
+    width: clamp(108px, 18vw, 148px);
+    aspect-ratio: 1;
+    translate: -50% -50%;
+    border-radius: 50%;
+    border: 3px solid color-mix(in srgb, var(--accent) 55%, #fff);
+    opacity: 0;
+    pointer-events: none;
+    animation: levelup-ring 650ms var(--ease-out) 500ms both;
+}
+
+/* Soft halo centred on the badge - the spinning spoke wheel this replaces
+   read as a pinwheel, not as light. A bloom that then breathes gives the
+   badge presence without anything visibly rotating. */
 .levelup-rays {
     position: absolute;
-    top: clamp(-14px, -1vw, -8px);
-    width: clamp(220px, 38vw, 360px);
+    top: calc(clamp(22px, 4vw, 34px) + clamp(108px, 18vw, 148px) / 2 - clamp(230px, 38vw, 360px) / 2);
+    left: 50%;
+    translate: -50% 0;
+    width: clamp(230px, 38vw, 360px);
     aspect-ratio: 1;
     border-radius: 50%;
-    background: conic-gradient(
-        from 0deg,
-        color-mix(in srgb, var(--accent) 32%, transparent) 0deg 12deg,
-        transparent 12deg 30deg
+    background: radial-gradient(
+        circle,
+        color-mix(in srgb, var(--accent) 30%, transparent),
+        color-mix(in srgb, var(--accent) 12%, transparent) 42%,
+        transparent 68%
     );
-    -webkit-mask: radial-gradient(circle, transparent 38%, #000 40%);
-    mask: radial-gradient(circle, transparent 38%, #000 40%);
-    opacity: 0.55;
     pointer-events: none;
-    animation: levelup-rays-spin 9s linear infinite, levelup-fade-in 400ms ease both;
+    animation:
+        levelup-glow-in 700ms var(--ease-out) 80ms both,
+        levelup-glow-breathe 3.4s var(--ease-in-out) 780ms infinite;
 }
 
 .levelup-badge {
@@ -2779,18 +2815,37 @@ input[type="password"]:focus {
         linear-gradient(150deg, var(--accent), var(--accent-hover));
     box-shadow:
         0 18px 40px color-mix(in srgb, var(--accent) 45%, transparent),
+        inset 0 0 0 2px rgba(255, 255, 255, 0.22),
         inset 0 2px 6px rgba(255, 255, 255, 0.35),
         inset 0 -8px 16px rgba(0, 0, 0, 0.18);
-    animation: levelup-badge-pop 720ms var(--ease-spring) both;
+    /* Scale only - the old pop rotated in from -30deg on top of the card's
+       own entrance, which is most of what made this feel chaotic. */
+    animation: levelup-badge-in 620ms var(--ease-spring) 40ms both;
 }
 
+/* One shine sweep across the face once everything has settled - the classic
+   "it's shiny" beat of a reward. A background-position sweep on a circular
+   pseudo, so the border-radius does the clipping and the star poking out of
+   the top of the badge never gets cut off the way overflow:hidden would. */
 .levelup-badge::after {
     content: "";
     position: absolute;
-    inset: 6px;
+    inset: 0;
+    /* Above the level number (z-index 1 below): the highlight passes over
+       the face and the digits alike, like light across glass - underneath
+       the number it read as a smudge behind it. */
+    z-index: 2;
     border-radius: 50%;
-    border: 2px dashed rgba(255, 255, 255, 0.5);
-    opacity: 0.6;
+    background: linear-gradient(
+        115deg,
+        transparent 38%,
+        rgba(255, 255, 255, 0.42) 49%,
+        rgba(255, 255, 255, 0.12) 56%,
+        transparent 66%
+    ) no-repeat;
+    background-size: 320% 320%;
+    pointer-events: none;
+    animation: levelup-shine 1100ms var(--ease-in-out) 900ms both;
 }
 
 .levelup-badge-star {
@@ -2799,7 +2854,7 @@ input[type="password"]:focus {
     font-size: clamp(22px, 3vw, 30px);
     color: var(--combo-2);
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-    animation: levelup-badge-pop 720ms var(--ease-spring) 80ms both;
+    animation: levelup-star-in 460ms var(--ease-spring) 360ms both;
 }
 
 .levelup-badge-level {
@@ -2819,31 +2874,43 @@ input[type="password"]:focus {
     font-weight: 800;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    animation: levelup-fade-up 520ms ease 120ms both;
+    /* Rides up while its tracking settles from loose to final - reads as the
+       title stamping itself down rather than just fading in. */
+    animation: levelup-title-in 560ms var(--ease-out) 280ms both;
 }
 
 .levelup-sub {
     color: var(--text-soft);
     font-size: var(--text-md);
     font-weight: 600;
-    animation: levelup-fade-up 520ms ease 220ms both;
+    animation: levelup-fade-up 480ms ease 400ms both;
 }
 
-.levelup-confetti {
+/* Gold sparks bursting from behind the badge at the ring's moment - replaces
+   the old confetti, which popped into existence mid-air at 40% of the screen
+   and rained over the text. Each spark is aimed by its own --a/--d (set
+   inline by js/levelup.js and js/main.js) and inserted *before* the badge in
+   the DOM, so the burst emerges from behind the rim instead of crossing the
+   number. */
+.levelup-burst {
     position: absolute;
-    inset: 0;
-    overflow: hidden;
+    top: calc(clamp(22px, 4vw, 34px) + clamp(108px, 18vw, 148px) / 2);
+    left: 50%;
+    width: 0;
+    height: 0;
     pointer-events: none;
 }
 
-.levelup-confetti-piece {
+.levelup-burst-spark {
     position: absolute;
-    top: 40%;
-    width: 9px;
-    height: 14px;
-    border-radius: 2px;
+    top: 0;
+    left: 0;
+    width: var(--s, 7px);
+    height: var(--s, 7px);
+    margin: calc(var(--s, 7px) / -2) 0 0 calc(var(--s, 7px) / -2);
+    border-radius: 50%;
     opacity: 0;
-    animation: levelup-confetti-fall var(--dur, 1.4s) cubic-bezier(0.2, 0.7, 0.3, 1) var(--delay, 0s) forwards;
+    animation: levelup-spark 900ms var(--ease-out) var(--delay, 500ms) both;
 }
 
 @keyframes levelup-backdrop-in {
@@ -2867,19 +2934,55 @@ input[type="password"]:focus {
     to   { opacity: 0; transform: scale(0.92) translateY(-8px); }
 }
 
-@keyframes levelup-badge-pop {
-    0%   { transform: scale(0) rotate(-30deg); }
-    70%  { transform: scale(1.12) rotate(6deg); }
-    100% { transform: scale(1) rotate(0); }
+@keyframes levelup-badge-in {
+    0%   { opacity: 0; transform: scale(0.35); }
+    35%  { opacity: 1; }
+    100% { opacity: 1; transform: scale(1); }
 }
 
-@keyframes levelup-rays-spin {
-    to { transform: rotate(360deg); }
+@keyframes levelup-glow-in {
+    from { opacity: 0; scale: 0.55; }
+    to   { opacity: 1; scale: 1; }
 }
 
+@keyframes levelup-glow-breathe {
+    0%, 100% { opacity: 1; scale: 1; }
+    50%      { opacity: 0.72; scale: 0.94; }
+}
+
+@keyframes levelup-star-in {
+    from { opacity: 0; transform: scale(0) translateY(6px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes levelup-ring {
+    0%   { opacity: 0; scale: 0.85; }
+    18%  { opacity: 0.9; }
+    100% { opacity: 0; scale: 1.7; }
+}
+
+@keyframes levelup-spark {
+    0%   { opacity: 0; transform: rotate(var(--a, 0deg)) translateY(-46px) scale(0.4); }
+    14%  { opacity: 1; }
+    100% { opacity: 0; transform: rotate(var(--a, 0deg)) translateY(calc(var(--d, 130px) * -1)) scale(1); }
+}
+
+@keyframes levelup-shine {
+    from { background-position: 120% 120%; }
+    to   { background-position: -20% -20%; }
+}
+
+@keyframes levelup-title-in {
+    from { opacity: 0; transform: translateY(12px); letter-spacing: 0.3em; }
+    to   { opacity: 1; transform: translateY(0); letter-spacing: 0.14em; }
+}
+
+/* Ends at full opacity now. It used to stop at 0.55 - the old spoke wheel's
+   resting opacity - which quietly dimmed everything else reusing it: the
+   auth dropdown, and the whole card under reduced motion. */
 @keyframes levelup-fade-in {
     from { opacity: 0; }
-    to   { opacity: 0.55; }
+    to   { opacity: 1; }
 }
 
 @keyframes levelup-fade-up {
@@ -2887,15 +2990,11 @@ input[type="password"]:focus {
     to   { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes levelup-confetti-fall {
-    0%   { opacity: 0; transform: translate(0, 0) rotate(0); }
-    8%   { opacity: 1; }
-    100% { opacity: 0; transform: translate(var(--x, 0), 70vh) rotate(var(--r, 360deg)); }
-}
-
 @media (prefers-reduced-motion: reduce) {
     .levelup-rays,
-    .levelup-confetti { display: none; }
+    .levelup-burst,
+    .levelup-card::before,
+    .levelup-badge::after { display: none; }
 
     .levelup-card,
     .levelup-badge,
@@ -2921,9 +3020,11 @@ input[type="password"]:focus {
 
 /* ---- Level-up: new flashcards + confirm button -------------------------- */
 
+/* Both slot into the entrance cascade in the .levelup-card comment above:
+   unlocks right after the sub, button last. */
 .levelup-unlocks {
     margin-top: var(--space-5);
-    animation: levelup-fade-up 520ms ease 320ms both;
+    animation: levelup-fade-up 480ms ease 470ms both;
 }
 
 .levelup-unlocks-title {
@@ -2957,7 +3058,7 @@ input[type="password"]:focus {
     margin-top: var(--space-5);
     padding: 10px 28px;
     font-weight: 700;
-    animation: levelup-fade-up 520ms ease 400ms both;
+    animation: levelup-fade-up 480ms ease 560ms both;
 }
 
 /* ---- Timer start / result modal ----------------------------------------- */

@@ -1328,25 +1328,31 @@ function celebrateLevelUp(level) {
     });
     card.appendChild(confirmBtn);
 
-    const confetti = document.createElement("div");
-    confetti.className = "levelup-confetti";
-    const colors = [
-        getComboColor(1), getComboColor(2), getComboColor(3), getComboColor(4),
-        "var(--accent)", "var(--success)"
+    // Same gold spark burst as js/levelup.js's shared copy (that file's
+    // buildSparkBurst comment explains the choreography); inserted before the
+    // badge so it emerges from behind the rim. Reduced motion is handled in
+    // CSS - .levelup-burst is display:none there.
+    const burst = document.createElement("div");
+    burst.className = "levelup-burst";
+    const sparkColors = [
+        "var(--color-gold-text, #ffd268)",
+        "#ffffff",
+        "var(--accent)",
+        "var(--color-gold, #ffc73a)"
     ];
-    for (let i = 0; i < 22; i += 1) {
-        const piece = document.createElement("span");
-        piece.className = "levelup-confetti-piece";
-        piece.style.setProperty("--x", `${(Math.random() * 2 - 1) * 42}vw`);
-        piece.style.setProperty("--r", `${Math.random() * 720 - 360}deg`);
-        piece.style.setProperty("--delay", `${Math.random() * 0.25}s`);
-        piece.style.setProperty("--dur", `${1.1 + Math.random() * 0.9}s`);
-        piece.style.left = `${48 + Math.random() * 4}%`;
-        piece.style.background = colors[i % colors.length];
-        confetti.appendChild(piece);
+    for (let i = 0; i < 14; i += 1) {
+        const spark = document.createElement("span");
+        spark.className = "levelup-burst-spark";
+        spark.style.setProperty("--a", `${Math.round((360 / 14) * i + (Math.random() * 20 - 10))}deg`);
+        spark.style.setProperty("--d", `${112 + Math.round(Math.random() * 68)}px`);
+        spark.style.setProperty("--s", `${5 + Math.round(Math.random() * 4)}px`);
+        spark.style.setProperty("--delay", `${500 + Math.round(Math.random() * 150)}ms`);
+        spark.style.background = sparkColors[i % sparkColors.length];
+        burst.appendChild(spark);
     }
+    card.insertBefore(burst, badge);
 
-    overlay.append(confetti, card);
+    overlay.appendChild(card);
     document.body.appendChild(overlay);
 }
 
