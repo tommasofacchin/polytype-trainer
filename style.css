@@ -382,9 +382,8 @@ body {
    pressing something rather than tinting a rectangle. Each family only has to
    name its slab colour; the shape, the press and the timing live here once.
 
-   Deliberately not applied to icon toggles, nav items, ghost/text buttons or
-   the in-exercise answer buttons: the slab is what marks the primary action
-   on a screen, and it stops meaning that as soon as everything has one. */
+   Deliberately not applied to icon toggles, nav items or ghost/text buttons:
+   those are chrome, and the slab is for things you actually press. */
 .btn-solid,
 .restart-btn,
 .levelup-confirm-btn,
@@ -395,7 +394,12 @@ body {
 .home-play-again-btn,
 .chest-open-btn,
 .settings-secondary-btn,
-.settings-logout-btn {
+.settings-logout-btn,
+.trainer-duration-btn,
+.mem-diff-btn,
+.sprint-mc-option,
+.sprint-match-item,
+.sprint-tf-btn {
     --btn-edge: var(--btn-edge-accent);
     box-shadow: 0 var(--btn-depth) 0 var(--btn-edge);
     transition: background var(--transition), box-shadow var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
@@ -414,7 +418,12 @@ body {
 .home-play-again-btn:active,
 .chest-open-btn:active,
 .settings-secondary-btn:active,
-.settings-logout-btn:active {
+.settings-logout-btn:active,
+.trainer-duration-btn:active,
+.mem-diff-btn:not(.is-locked):active,
+.sprint-mc-option:not(.is-disabled):active,
+.sprint-match-item:not(:disabled):active,
+.sprint-tf-btn:not(.is-disabled):active {
     transform: translateY(calc(var(--btn-depth) - 1px));
     box-shadow: 0 1px 0 var(--btn-edge);
 }
@@ -423,8 +432,26 @@ body {
 .chest-open-btn,
 .home-play-again-btn.is-secondary { --btn-edge: var(--btn-edge-teal); }
 .restart-btn.is-secondary,
-.settings-secondary-btn { --btn-edge: var(--btn-edge-surface); }
+.settings-secondary-btn,
+.trainer-duration-btn,
+.mem-diff-btn,
+.sprint-mc-option,
+.sprint-match-item,
+.sprint-tf-btn { --btn-edge: var(--btn-edge-surface); }
 .settings-logout-btn { --btn-edge: var(--btn-edge-danger); }
+
+/* Answers and pickers repaint their face to say right/wrong/picked, so the
+   slab has to follow - a green answer standing on a grey slab reads as two
+   different buttons stacked. Deep enough to stay distinct from the tinted
+   face above it, which is already only ~16% of the state colour. */
+.sprint-mc-option.is-correct,
+.sprint-match-item.is-correct,
+.sprint-tf-btn.is-correct { --btn-edge: color-mix(in srgb, var(--success) 45%, #05070c); }
+.sprint-mc-option.is-wrong,
+.sprint-match-item.is-wrong,
+.sprint-tf-btn.is-wrong { --btn-edge: color-mix(in srgb, var(--danger) 45%, #05070c); }
+.sprint-match-item.is-selected,
+.trainer-duration-btn.is-active { --btn-edge: var(--btn-edge-accent); }
 
 /* The big ones - Home's two CTAs and the celebration buttons - stand on a
    taller slab, so they read as chunky rather than as a pill with a line under
@@ -857,7 +884,7 @@ body.auth-page-body {
     font-weight: 700;
     padding: 10px 8px;
     cursor: pointer;
-    transition: background var(--transition), border-color var(--transition), color var(--transition);
+    transition: background var(--transition), border-color var(--transition), color var(--transition), box-shadow var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
 }
 
 .trainer-duration-btn:hover, .trainer-duration-btn:focus-visible {
@@ -2027,7 +2054,7 @@ input[type="password"]:focus {
     font-weight: 600;
     padding: 20px 14px;
     cursor: pointer;
-    transition: border-color var(--transition), background var(--transition), color var(--transition);
+    transition: border-color var(--transition), background var(--transition), color var(--transition), box-shadow var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
 }
 
 .sprint-mc-option:hover:not(.is-disabled) {
@@ -2101,7 +2128,7 @@ input[type="password"]:focus {
     font-weight: 600;
     padding: 16px 12px;
     cursor: pointer;
-    transition: border-color var(--transition), background var(--transition), color var(--transition), opacity var(--transition);
+    transition: border-color var(--transition), background var(--transition), color var(--transition), opacity var(--transition), box-shadow var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
 }
 
 .sprint-match-item:hover:not(:disabled) {
@@ -2163,7 +2190,7 @@ input[type="password"]:focus {
     font-weight: 700;
     padding: 22px 14px;
     cursor: pointer;
-    transition: border-color var(--transition), background var(--transition), color var(--transition);
+    transition: border-color var(--transition), background var(--transition), color var(--transition), box-shadow var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
 }
 
 .sprint-tf-btn:hover:not(.is-disabled) {
@@ -8496,7 +8523,7 @@ body:has(.game-result-overlay.is-entering:not([hidden])) #app-header {
     color: var(--text);
     cursor: pointer;
     font: inherit;
-    transition: border-color var(--transition), background var(--transition), transform var(--transition);
+    transition: border-color var(--transition), background var(--transition), box-shadow var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
 }
 
 .mem-diff-btn:not(.is-locked):hover,
@@ -8506,7 +8533,6 @@ body:has(.game-result-overlay.is-entering:not([hidden])) #app-header {
     outline: 0;
 }
 
-.mem-diff-btn:not(.is-locked):active { transform: translateY(1px); }
 
 .mem-diff-btn.is-locked {
     cursor: not-allowed;

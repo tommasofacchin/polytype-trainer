@@ -17,6 +17,37 @@
         return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches === true;
     }
 
+    // ── Fire ─────────────────────────────────────────────────────────────
+    // Starts with the flame's own entrance (streak-flame-in, style.css), so
+    // it's the sound of the flame arriving rather than a cue played over it.
+    // Loaded up front for that reason - a crackle that shows up after the
+    // flame has landed is just noise. Cloned per play and gated on the shared
+    // mute flag js/settings.js owns, same as every other sfx in the app.
+    const FIRE_SFX_URL = "assets/sfx/fire.mp3";
+    const FIRE_SFX_VOLUME = 0.35;
+    const fireSfx = new Audio(FIRE_SFX_URL);
+    fireSfx.preload = "auto";
+    fireSfx.volume = FIRE_SFX_VOLUME;
+
+    function isSfxMuted() {
+        try {
+            return localStorage.getItem("polytype-sfx-muted") === "true";
+        } catch {
+            return false;
+        }
+    }
+
+    function playFireSfx() {
+        if (isSfxMuted()) return;
+        try {
+            const audio = fireSfx.cloneNode();
+            audio.volume = FIRE_SFX_VOLUME;
+            audio.play().catch(() => {});
+        } catch {
+            // Browsers may block audio until the first user gesture.
+        }
+    }
+
     const EMBER_COUNT = 16;
     const EMBER_COLORS = ["#ffd268", "#ff9f1c", "#f2452f", "#ff6a52"];
 
@@ -189,6 +220,9 @@
                 }, 280);
             });
 
+            // Sound and first frame in the same tick: every animation on this
+            // overlay is timed from the moment it lands in the document.
+            playFireSfx();
             document.body.append(overlay);
             continueBtn.focus?.();
         });
