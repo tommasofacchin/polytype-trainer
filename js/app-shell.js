@@ -814,7 +814,12 @@
         playXpGain,
         holdKeyDisplay,
         releaseKeyDisplay,
-        playKeyGain
+        playKeyGain,
+        // The level curve, for callers that need to know where the next
+        // boundary is rather than just painting the bar - today the Home
+        // page's level-up replay (renderDemoLevelUp in js/dashboard.js),
+        // which has to aim playXpGain at an XP total that crosses one.
+        getLevelInfo
     };
 
     // Paint the header/nav immediately instead of waiting for

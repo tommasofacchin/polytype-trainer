@@ -53,8 +53,12 @@
       <strong id="sprint-result-score" class="result-score-text">0 pts</strong>
       <span id="sprint-result-detail" class="result-detail-text"></span>
       <div id="sprint-result-breakdown" class="sprint-result-breakdown"></div>
-      <span id="sprint-result-xp" class="result-xp-text"></span>
-      <span id="sprint-result-coins" class="result-coins-text"></span>
+      <!-- One line for both: they're awarded by the same save, so they land
+           together (js/sprint.js's applySessionProgress). -->
+      <div class="result-reward-row">
+        <span id="sprint-result-xp" class="result-xp-text"></span>
+        <span id="sprint-result-coins" class="result-coins-text"></span>
+      </div>
       <span id="sprint-result-save-status" class="result-save-status"></span>
       <!-- No friends list here: the run already gives the roster a full screen
            of its own (showFriendsStep in js/sprint.js), so repeating it under

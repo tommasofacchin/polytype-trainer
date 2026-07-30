@@ -60,14 +60,14 @@ let activeDeckMeta = null;
 let activeLanguage = FALLBACK_LANGUAGE;
 let vocab = [];
 let activeAudio = null;
-let isConfirmingUnlock = false;
 let pendingCourseKey = null;
 let pendingUnlockWord = null;
 let pendingKeysHeld = 0;
 // Word suffix whose card should break its lock open on the next render pass.
-// Set just before the unlock call, consumed (and cleared) by the first render
-// that draws that card unlocked - which is the one the profile update
-// triggers - so the burst plays exactly once, on exactly the right card.
+// Set just before the local unlock write, consumed (and cleared) by the first
+// render that draws that card unlocked - which is the one that write's own
+// profile update triggers - so the burst plays exactly once, on exactly the
+// right card, on the click rather than a round trip later.
 let justUnlockedSuffix = null;
 // renderDeck() rebuilds every card from scratch (replaceChildren), so a render
 // that lands while the unlock burst is playing tears the animating card out
@@ -98,6 +98,7 @@ function initDeckPage() {
 
     resolveActiveLanguage();
     setupUnlockConfirm();
+    preloadUnlockSfx();
     loadDeck();
 
     // Delegated through js/router.js's shared hook slot instead of a direct
@@ -602,6 +603,10 @@ function buildDeckCard(word, isUnlocked, isDisabled, keysHeld, courseKey) {
 const UNLOCK_BURST_WINDOW_MS = 1100;
 
 function startUnlockBurstWindow() {
+    // Fired here rather than at confirm time so it lands with the lock
+    // actually breaking, and so the ?demo=unlock replay gets it too - this
+    // runs exactly once per burst, from whichever path drew it.
+    playUnlockSfx();
     unlockBurstEndsAt = Date.now() + UNLOCK_BURST_WINDOW_MS;
     window.setTimeout(() => {
         unlockBurstEndsAt = 0;
@@ -683,6 +688,11 @@ function openUnlockConfirm(word, keysHeld) {
     setUnlockError("");
     setNoKeysState(pendingKeysHeld <= 0);
 
+    // Head start on the word's audio: the file downloads while the player
+    // reads the dialog, so it's there by the time the card exists to be
+    // tapped. Free when they cancel - the bytes just sit in the HTTP cache.
+    preloadWordAudio(word);
+
     el.unlockOverlay.hidden = false;
     requestAnimationFrame(() => el.unlockOverlay.classList.add("is-open"));
 }
@@ -698,12 +708,11 @@ function setNoKeysState(hasNoKeys) {
     if (el.unlockConfirmBtn) el.unlockConfirmBtn.hidden = hasNoKeys;
 }
 
-// `force` bypasses the in-flight guard for the programmatic close after a
-// successful unlock; without it, this also serves as the cancel/backdrop/
-// Escape handler, which should NOT close the dialog while a request is
-// still in flight.
-function closeUnlockConfirm(force) {
-    if (!el.unlockOverlay || (isConfirmingUnlock && !force)) return;
+// Serves both the cancel/backdrop/Escape handler and the programmatic close on
+// confirm. No in-flight guard any more: confirmUnlock applies the unlock
+// locally and only then posts it, so the dialog is never waiting on anything.
+function closeUnlockConfirm() {
+    if (!el.unlockOverlay) return;
 
     el.unlockOverlay.classList.remove("is-open");
     window.setTimeout(() => { el.unlockOverlay.hidden = true; }, 240);
@@ -715,66 +724,95 @@ function setUnlockError(message) {
     el.unlockError.hidden = !message;
 }
 
-async function confirmUnlock() {
-    if (isConfirmingUnlock || !pendingCourseKey || !pendingUnlockWord || pendingKeysHeld <= 0) return;
+// The unlock lands locally on the click and goes to the server behind it.
+// Waiting on the round trip meant the dialog sat there with a dead button and
+// the card only broke open once the server had agreed - a second or more of
+// nothing for an action the player had already committed to. Same trade as the
+// shop's key purchase (js/shop.js): the POST still has the final word, and a
+// rejection re-syncs and explains itself.
+function confirmUnlock() {
+    if (!pendingCourseKey || !pendingUnlockWord || pendingKeysHeld <= 0) return;
 
-    const wordSuffix = getWordSuffix(pendingUnlockWord.id);
-    isConfirmingUnlock = true;
-    if (el.unlockConfirmBtn) el.unlockConfirmBtn.disabled = true;
+    const courseKey = pendingCourseKey;
+    const word = pendingUnlockWord;
+    const wordSuffix = getWordSuffix(word.id);
+
+    // Consumed straight away so the second tap of a double-tap can't spend a
+    // second key on the same card while the dialog is still on its way out.
+    pendingUnlockWord = null;
     setUnlockError("");
 
-    // Armed before the call, not after: both paths below re-render from
-    // inside the await (the profile-updated event), so by the time we'd get
-    // to arm it afterwards the card has already been drawn.
+    // Armed before the local write below, which re-renders from inside its own
+    // profile-updated dispatch - arming it afterwards would be too late, the
+    // card would already have been drawn unlocked and burstless.
     justUnlockedSuffix = wordSuffix;
 
+    // The card's audio is already downloading - openUnlockConfirm started it
+    // when this dialog opened, so it's warm by the time the card exists.
+    unlockWordLocally(courseKey, wordSuffix);
+    closeUnlockConfirm();
+
+    // Guests have no server state to send this to - the local write above is
+    // the whole unlock for them.
+    if (!window.PolytypeFirebase?.isSignedIn?.()) return;
+
+    sendUnlock(courseKey, wordSuffix, word);
+}
+
+// Deliberately not awaited by confirmUnlock: nothing on screen is waiting for
+// it. Out-of-order replies are already handled upstream - applyProgressToProfile
+// (js/firebase-client.js) drops any course reply carrying fewer unlocked words
+// than the cache already has, which is exactly what a reply that lost the race
+// against a newer unlock looks like.
+async function sendUnlock(courseKey, wordSuffix, word) {
     try {
-        if (window.PolytypeFirebase?.isSignedIn?.()) {
-            await window.PolytypeFirebase.unlockWord(pendingCourseKey, wordSuffix);
-        } else {
-            confirmUnlockGuest(pendingCourseKey, wordSuffix);
-        }
-        closeUnlockConfirm(true);
+        await window.PolytypeFirebase.unlockWord(courseKey, wordSuffix);
     } catch (error) {
+        // Refused (already unlocked, no keys left, offline). The re-sync undoes
+        // the optimistic unlock - card back to locked, key back on the badge -
+        // and the dialog returns carrying the reason, so the player isn't left
+        // watching a card quietly re-lock itself with no explanation.
+        await window.PolytypeFirebase.refreshProfile?.();
         justUnlockedSuffix = null;
+        openUnlockConfirm(word, getKeysHeld(getCourseProgress().purchasedKeys));
         setUnlockError(error?.message || tr("deck.unlockFailed"));
-        // The server rejected this against state we don't have locally
-        // (e.g. "already unlocked"/"no keys" while the cache still shows
-        // the old numbers) - re-sync from the server so the deck reflects
-        // reality right away instead of staying stuck showing stale cards.
-        if (window.PolytypeFirebase?.isSignedIn?.()) {
-            await window.PolytypeFirebase.refreshProfile?.();
-        }
-    } finally {
-        isConfirmingUnlock = false;
-        if (el.unlockConfirmBtn) el.unlockConfirmBtn.disabled = false;
     }
 }
 
-// Guest (signed-out) confirm path - no server round trip available, so this
-// mutates localStorage["polytype-profile"] directly, matching the shape
-// js/firebase-client.js's syncProfileToLocalStorage normally writes. Reuses
+// Applies an unlock to localStorage["polytype-profile"] - word into
+// unlockedWords, one key off purchasedKeys - and hands the result to everything
+// that paints from it (this page, the header's key badge), matching the shape
+// js/firebase-client.js's syncProfileToLocalStorage writes.
+//
+// This is both the optimistic write for a signed-in unlock and the *entire*
+// unlock for a guest, who has no server state to sync with. Reuses
 // getCourseProgress()'s migration so a legacy prefix-based local course gets
-// converted to a real unlockedWords array at the same moment it's first
-// spent against, rather than needing a separate migration path.
-function confirmUnlockGuest(courseKey, wordSuffix) {
+// converted to a real unlockedWords array at the same moment it's first spent
+// against, rather than needing a separate migration path.
+function unlockWordLocally(courseKey, wordSuffix) {
     const { unlockedWords } = getCourseProgress();
     if (unlockedWords.has(wordSuffix)) return;
 
     const nextUnlockedWords = [...unlockedWords, wordSuffix];
     const profile = getStoredProfile();
     const courses = profile.courses || {};
-    const existing = courses[courseKey] || {};
+    // Write back to the entry getCourseProgress read from: a legacy cache can
+    // be filed under the deck id rather than the language.
+    const cacheKey = courses[activeLanguage]
+        ? activeLanguage
+        : (activeDeckMeta?.id && courses[activeDeckMeta.id] ? activeDeckMeta.id : courseKey);
+    const existing = courses[cacheKey] || {};
 
     const nextProfile = {
         ...profile,
         courses: {
             ...courses,
-            [courseKey]: {
+            [cacheKey]: {
                 ...existing,
                 courseId: courseKey,
                 unlockedWords: nextUnlockedWords,
-                wordsUnlocked: nextUnlockedWords.length
+                wordsUnlocked: nextUnlockedWords.length,
+                purchasedKeys: Math.max(0, (Number(existing.purchasedKeys) || 0) - 1)
             }
         }
     };
@@ -783,16 +821,91 @@ function confirmUnlockGuest(courseKey, wordSuffix) {
     document.dispatchEvent(new CustomEvent("polytype-profile-updated", { detail: nextProfile }));
 }
 
-function playWordAudio(word) {
+// ── Unlock sound ─────────────────────────────────────────────────────────
+// The lock breaking has a sound now. Preloaded when the page initialises (the
+// deck is where unlocks happen, so it's never a wasted fetch) and cloned per
+// play, gated on the same shared mute flag every game reads - js/settings.js
+// owns that toggle. Same shape as js/main.js's sfx helpers.
+const UNLOCK_SFX_URL = "assets/sfx/unlock-card.mp3";
+const UNLOCK_SFX_VOLUME = 0.35;
+let unlockSfx = null;
+
+function preloadUnlockSfx() {
+    if (unlockSfx) return;
+    unlockSfx = new Audio(UNLOCK_SFX_URL);
+    unlockSfx.preload = "auto";
+    unlockSfx.volume = UNLOCK_SFX_VOLUME;
+    unlockSfx.load();
+}
+
+function playUnlockSfx() {
+    if (!unlockSfx || isSfxMuted()) return;
+    try {
+        const audio = unlockSfx.cloneNode();
+        audio.volume = UNLOCK_SFX_VOLUME;
+        audio.play().catch(() => {});
+    } catch {
+        // Browsers may block audio until the first user gesture.
+    }
+}
+
+function isSfxMuted() {
+    try {
+        return localStorage.getItem("polytype-sfx-muted") === "true";
+    } catch {
+        return false;
+    }
+}
+
+function getWordAudioUrl(word) {
     const audioBaseUrl = (window.POLYTYPE_AUDIO_BASE_URL || "").replace(/\/+$/, "");
     const audioPrefix = (window.POLYTYPE_AUDIO_PREFIX || "audio/v1").replace(/^\/+|\/+$/g, "");
-    if (!audioBaseUrl || !activeDeckMeta || !word.id) return;
+    if (!audioBaseUrl || !activeDeckMeta || !word?.id) return null;
+    return [audioBaseUrl, audioPrefix, encodeURIComponent(activeDeckMeta.id), `${encodeURIComponent(word.id)}.mp3`].join("/");
+}
 
-    const url = [audioBaseUrl, audioPrefix, encodeURIComponent(activeDeckMeta.id), `${encodeURIComponent(word.id)}.mp3`].join("/");
+// Pulls a word's mp3 into the browser's HTTP cache without playing it, so the
+// first tap on that card starts on the spot. A cold CDN fetch does NOT reject
+// play() - it just waits (see the long comment above js/sprint.js's audio
+// preloader for the same trap), so an un-warmed card read as "this card has no
+// audio" rather than as slow audio. That's why the freshly unlocked card in
+// particular sounded broken: it's the one card nobody has ever tapped.
+//
+// The element is kept in the map on purpose: an unreferenced media element can
+// be collected mid-load and take its own fetch with it, and holding it lets
+// playWordAudio play the copy that's already loaded.
+const preloadedAudio = new Map();
+
+function preloadWordAudio(word) {
+    const url = getWordAudioUrl(word);
+    if (!url || preloadedAudio.has(url)) return;
+
+    const audio = new Audio();
+    audio.preload = "auto";
+    audio.src = url;
+    preloadedAudio.set(url, audio);
+}
+
+function playWordAudio(word) {
+    const url = getWordAudioUrl(word);
+    if (!url) return;
+
     try {
         if (activeAudio) { activeAudio.pause(); activeAudio = null; }
-        activeAudio = new Audio(url);
-        activeAudio.play().catch(() => {});
+
+        // Reuses the warmed element when there is one (and keeps whatever it
+        // creates otherwise), so the second tap on any card is instant too.
+        let audio = preloadedAudio.get(url);
+        if (!audio) {
+            audio = new Audio(url);
+            preloadedAudio.set(url, audio);
+        }
+        // Rewind only when there's something to rewind: assigning currentTime
+        // before an element has its metadata throws on some browsers, and a
+        // freshly created or still-loading one is sitting at 0 anyway.
+        if (audio.readyState > 0) audio.currentTime = 0;
+        activeAudio = audio;
+        audio.play().catch(() => {});
     } catch {}
 }
 

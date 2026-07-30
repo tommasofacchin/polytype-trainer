@@ -25,11 +25,43 @@
         return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches === true;
     }
 
+    // ── Fanfare ──────────────────────────────────────────────────────────
+    // Loaded up front rather than on the first level-up: this file is on every
+    // page that can level up, the clip is small, and a sound that arrives
+    // after its own animation isn't the sound of levelling up. Cloned per play
+    // and gated on the same shared mute flag every game reads (js/settings.js
+    // owns the toggle) - identical shape to js/main.js's sfx helpers.
+    const LEVEL_UP_SFX_URL = "assets/sfx/new-level.mp3";
+    const LEVEL_UP_SFX_VOLUME = 0.4;
+    const levelUpSfx = new Audio(LEVEL_UP_SFX_URL);
+    levelUpSfx.preload = "auto";
+    levelUpSfx.volume = LEVEL_UP_SFX_VOLUME;
+
+    function isSfxMuted() {
+        try {
+            return localStorage.getItem("polytype-sfx-muted") === "true";
+        } catch {
+            return false;
+        }
+    }
+
+    function playLevelUpSfx() {
+        if (isSfxMuted()) return;
+        try {
+            const audio = levelUpSfx.cloneNode();
+            audio.volume = LEVEL_UP_SFX_VOLUME;
+            audio.play().catch(() => {});
+        } catch {
+            // Browsers may block audio until the first user gesture.
+        }
+    }
+
     // Resolves once the overlay is gone, so a caller can sequence whatever
     // comes next behind it.
     function show(level) {
         return new Promise(resolve => {
             document.querySelector(".levelup-overlay")?.remove();
+            playLevelUpSfx();
 
             const overlay = document.createElement("div");
             // is-scrimmed, unlike js/main.js's copy: that one lands on the

@@ -98,7 +98,10 @@ const correctSfxUrl = "assets/sfx/correct3.mp3";
 const correctSfxVolume = 0.28;
 const errorSfxUrl = "assets/sfx/error1.mp3";
 const errorSfxVolume = 0.22;
-const levelUpSfxUrl = "assets/sfx/levelup2.mp3";
+// Same clip js/levelup.js plays for the global level-up: the two celebrations
+// are different levels (course vs global) but the same moment to the player,
+// and they used to sound like two unrelated events.
+const levelUpSfxUrl = "assets/sfx/new-level.mp3";
 const levelUpSfxVolume = 0.38;
 const sfxMutedKey = "polytype-sfx-muted";
 let correctSfxAudio = null;

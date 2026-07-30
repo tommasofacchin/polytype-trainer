@@ -924,7 +924,10 @@
             revealResultReward(el.resultXp, tr("sprint.xpEarned", { xp: progress.xpEarned }));
         }
         if (typeof progress?.sessionCoins === "number" && progress.sessionCoins > 0) {
-            revealResultReward(el.resultCoins, tr("trainer.coinsEarned", { count: progress.sessionCoins }));
+            // Icon instead of trainer.coinsEarned's "+N coins": on one line
+            // next to the XP the word was the longest thing in the row, and
+            // the coin says it in every language.
+            revealResultReward(el.resultCoins, `+${progress.sessionCoins}`, { icon: COIN_SVG });
         }
         // The run of full screens, in narrative order: your flame goes up,
         // then who else is on it today, then what that unlocked. Each show()
@@ -1096,16 +1099,27 @@
         };
     }
 
+    // Same coin as the header's balance pill (ICONS.coin in js/app-shell.js)
+    // and the shop's buy buttons, so the reward reads as the exact currency
+    // those two count.
+    const COIN_SVG =
+        '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#ffc73a"/><circle cx="12" cy="12" r="6.5" fill="none" stroke="#d99a1c" stroke-width="2"/></svg>';
+
     // The XP and coin awards only arrive once the save round trip resolves,
     // so rather than snapping in as static text a beat after the card has
     // settled, they pop in with a short spring - which reads as "here's your
     // reward" instead of a late repaint. Remove/reflow/re-add restarts the CSS
     // animation even though the element is reused across replays (same trick
     // as js/lessons.js's revealText).
-    function revealResultReward(target, text) {
+    //
+    // `icon` is markup on purpose (an inline SVG constant from this file, never
+    // anything that came from the server or the player); the label beside it
+    // stays a text node.
+    function revealResultReward(target, text, { icon = "" } = {}) {
         if (!target) return;
         target.classList.remove("is-revealed");
-        target.textContent = text;
+        target.innerHTML = icon;
+        target.append(text);
         void target.offsetWidth;
         target.classList.add("is-revealed");
     }
@@ -1137,21 +1151,24 @@
         const comboBonus = Math.max(0, state.score - basePoints - state.retryBonus - state.perfectBonus);
         const rows = [];
 
+        // Labels name what was earned, nothing else: the arithmetic behind
+        // each one (14 × 10, 9 in a row, ...) used to trail every label in
+        // brackets and turned a three-row list into three parentheses.
         if (state.correctAnswers > 0) {
             rows.push({
-                label: tr("sprint.breakdownCorrect", { count: state.correctAnswers }),
+                label: tr("sprint.breakdownCorrect"),
                 value: `${basePoints} ${tr("common.points")}`
             });
         }
         if (comboBonus > 0) {
             rows.push({
-                label: tr("sprint.breakdownCombo", { streak: state.bestStreak }),
+                label: tr("sprint.breakdownCombo"),
                 value: `+${comboBonus} ${tr("common.points")}`
             });
         }
         if (state.retryBonus > 0) {
             rows.push({
-                label: tr("sprint.breakdownRetry", { count: state.retryCorrectCount }),
+                label: tr("sprint.breakdownRetry"),
                 value: `+${state.retryBonus} ${tr("common.points")}`
             });
         }

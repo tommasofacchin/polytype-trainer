@@ -95,6 +95,21 @@
     --shadow-chest: 0 6px 20px -12px rgba(23, 184, 201, 0.55);
     --shadow-cta: 0 14px 34px -12px rgba(77, 159, 255, 0.7);
 
+    /* Primary actions sit on a solid slab of their own colour and sink into it
+       when pressed (see "3D press" below). --btn-depth is how tall that slab
+       is; the edge colours are mixed dark out of the face colour they sit
+       under, so a hover can repaint the face without the slab drifting with
+       it. Same recipe the lesson path's nodes already used - this just makes
+       it the whole app's idiom instead of one screen's. */
+    --btn-depth: 4px;
+    --btn-edge-accent: color-mix(in srgb, var(--accent) 55%, #05070c);
+    --btn-edge-surface: color-mix(in srgb, var(--surface-soft) 55%, #05070c);
+    /* Deeper than --color-secondary-deep on purpose: that's the teal buttons'
+       own hover colour, so a slab painted with it would vanish into the face
+       the moment the pointer landed. */
+    --btn-edge-teal: color-mix(in srgb, var(--color-secondary-deep) 70%, #05070c);
+    --btn-edge-danger: color-mix(in srgb, var(--danger) 45%, #05070c);
+
     --scrim: rgba(10, 8, 18, 0.92);
 
     --container: 920px;
@@ -361,11 +376,70 @@ body {
     background: var(--accent-hover);
 }
 
+/* ---- 3D press ------------------------------------------------------------
+   Every button below stands on a slab of its own colour and drives down into
+   it when pressed, which is what makes tapping around the app feel like
+   pressing something rather than tinting a rectangle. Each family only has to
+   name its slab colour; the shape, the press and the timing live here once.
+
+   Deliberately not applied to icon toggles, nav items, ghost/text buttons or
+   the in-exercise answer buttons: the slab is what marks the primary action
+   on a screen, and it stops meaning that as soon as everything has one. */
+.btn-solid,
+.restart-btn,
+.levelup-confirm-btn,
+.chest-collect-btn,
+.mission-collect-btn,
+.badge-collect-btn,
+.streak-continue-btn,
+.home-play-again-btn,
+.chest-open-btn,
+.settings-secondary-btn,
+.settings-logout-btn {
+    --btn-edge: var(--btn-edge-accent);
+    box-shadow: 0 var(--btn-depth) 0 var(--btn-edge);
+    transition: background var(--transition), box-shadow var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+}
+
+/* The face travels the full depth minus the 1px of slab left showing, so the
+   button's bottom edge stays exactly where it was and only the face moves -
+   a real button bottoming out, not the whole thing sliding down the page. */
 .btn-solid:active,
 .restart-btn:active,
-.levelup-confirm-btn:active {
-    transform: translateY(1px);
+.levelup-confirm-btn:active,
+.chest-collect-btn:active,
+.mission-collect-btn:active,
+.badge-collect-btn:active,
+.streak-continue-btn:active,
+.home-play-again-btn:active,
+.chest-open-btn:active,
+.settings-secondary-btn:active,
+.settings-logout-btn:active {
+    transform: translateY(calc(var(--btn-depth) - 1px));
+    box-shadow: 0 1px 0 var(--btn-edge);
 }
+
+/* Face colours that aren't the accent bring their own slab. */
+.chest-open-btn,
+.home-play-again-btn.is-secondary { --btn-edge: var(--btn-edge-teal); }
+.restart-btn.is-secondary,
+.settings-secondary-btn { --btn-edge: var(--btn-edge-surface); }
+.settings-logout-btn { --btn-edge: var(--btn-edge-danger); }
+
+/* The big ones - Home's two CTAs and the celebration buttons - stand on a
+   taller slab, so they read as chunky rather than as a pill with a line under
+   it. Depth scales with the button, the way it does on a real keypad. */
+.chest-collect-btn,
+.mission-collect-btn,
+.badge-collect-btn,
+.streak-continue-btn,
+.home-play-again-btn { --btn-depth: 5px; }
+
+/* Disabled buttons keep their slab and just dim (see .btn-solid:disabled and
+   .restart-btn:disabled below). Flattening them too would mean the Sprint
+   result's buttons visibly grow an edge the moment the save lands, a second
+   after the card has already settled - a shape change where the existing
+   dimming already says "not yet". */
 
 /* ---- Cards: shared surface primitive -------------------------------------- */
 
@@ -2966,18 +3040,15 @@ input[type="password"]:focus {
     font-size: var(--text-sm);
 }
 
+/* min-height holds the line whether or not there's a coin reward to announce.
+   It used to collapse (display:none) while empty and then appear once the save
+   responded, which shoved the rest of the result card around a beat after it
+   had already settled. */
 .result-coins-text {
+    min-height: 1lh;
     color: #d99a1c;
     font-size: var(--text-sm);
     font-weight: 700;
-}
-
-/* Holds its line whether or not there's a coin reward to announce. It used to
-   collapse (display:none) while empty and then appear once the save
-   responded, which shoved the rest of the result card around a beat after it
-   had already settled - same class of jump as the friends block below it. */
-.result-coins-text {
-    min-height: 1lh;
 }
 
 /* The XP award, and the launch point for the stars that fly up into the
@@ -2989,6 +3060,41 @@ input[type="password"]:focus {
     font-size: var(--text-lg, 18px);
     font-weight: 800;
     letter-spacing: -0.02em;
+}
+
+/* Sprint pairs the two rewards on one line - they arrive together from the
+   same save, so stacking them made the card list the same moment twice. The
+   row reserves the line height now, so the two spans inside don't each hold
+   one of their own. */
+.result-reward-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    min-height: 1lh;
+}
+
+.result-reward-row .result-xp-text,
+.result-reward-row .result-coins-text {
+    min-height: 0;
+}
+
+/* Coins read as the currency itself here rather than the word "coins": same
+   coin as the header's balance pill and the shop's buy buttons, with the
+   number beside it. */
+.result-reward-row .result-coins-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: var(--text-lg, 18px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+.result-reward-row .result-coins-text svg {
+    display: block;
+    width: 18px;
+    height: 18px;
 }
 
 /* Reward numbers arrive only once the save resolves; js/sprint.js adds
@@ -5500,16 +5606,13 @@ body > main {
     font-size: 14px;
     text-decoration: none;
     cursor: pointer;
-    transition: background var(--transition), transform var(--transition);
+    transition: background var(--transition), box-shadow var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
 }
 
 .home-play-again-btn:hover, .home-play-again-btn:focus-visible {
     background: var(--accent-hover);
 }
 
-.home-play-again-btn:active {
-    transform: translateY(1px);
-}
 
 .home-play-again-btn[hidden] {
     display: none;
@@ -5785,8 +5888,10 @@ body > main {
     width: 100%;
     padding: 11px 14px;
     font-weight: 800;
-    box-shadow: var(--shadow-cta);
-    transition: background var(--transition), color var(--transition), box-shadow var(--transition);
+    /* Its own slab (see "3D press") plus the accent glow underneath, which is
+       what picks the buy buttons out as the point of the whole page. */
+    box-shadow: 0 var(--btn-depth) 0 var(--btn-edge), var(--shadow-cta);
+    transition: background var(--transition), color var(--transition), box-shadow var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
 }
 
 .shop-buy-price {
@@ -5810,7 +5915,10 @@ body > main {
 .shop-buy-btn.is-unaffordable {
     background: var(--surface-soft);
     color: var(--text-faint);
-    box-shadow: none;
+    /* Keeps its shape, loses the accent glow and takes a grey slab: greyed
+       out rather than flattened, so the tiles stay the same height. */
+    --btn-edge: var(--btn-edge-surface);
+    box-shadow: 0 var(--btn-depth) 0 var(--btn-edge);
     opacity: 1; /* wins over .btn-solid:disabled's dimming - the grey IS the state */
 }
 
@@ -7356,15 +7464,11 @@ body:has(.game-result-overlay.is-entering:not([hidden])) #app-header {
     font-weight: 800;
     font-size: 14px;
     cursor: pointer;
-    transition: background var(--transition);
+    transition: background var(--transition), box-shadow var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
 }
 
 .settings-logout-btn:hover, .settings-logout-btn:focus-visible {
     background: color-mix(in srgb, var(--danger-soft) 70%, var(--danger) 12%);
-}
-
-.settings-logout-btn:active {
-    transform: translateY(1px);
 }
 
 .settings-secondary-btn {
@@ -7382,15 +7486,11 @@ body:has(.game-result-overlay.is-entering:not([hidden])) #app-header {
     font-weight: 800;
     font-size: 14px;
     cursor: pointer;
-    transition: background var(--transition);
+    transition: background var(--transition), box-shadow var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
 }
 
 .settings-secondary-btn:hover, .settings-secondary-btn:focus-visible {
     background: var(--surface-alt);
-}
-
-.settings-secondary-btn:active {
-    transform: translateY(1px);
 }
 
 /* Custom dropdown for Settings rows (App language, Daily XP goal) - same

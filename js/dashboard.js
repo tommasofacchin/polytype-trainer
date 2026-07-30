@@ -124,6 +124,7 @@ function setupGameStateSync() {
         renderDemoChest();
         renderDemoSprint();
         renderDemoUnlock();
+        renderDemoLevelUp();
         renderMissions(state);
         renderFriendsPreview(state);
         renderDailyGoal(state);
@@ -201,13 +202,21 @@ function renderChest(state) {
 // keep it that way.
 const DEBUG_HANDLE = "tommaso";
 
-function isDebugHandle() {
+// Read fresh from the cache rather than from this file's `profile` module
+// state: the debug cards below care about what the header is showing *now*
+// (the XP the level-up replay borrows, in particular), not what was there when
+// the page first initialised.
+function readProfile() {
     try {
-        const profile = JSON.parse(localStorage.getItem(profileStorageKey)) || {};
-        return String(profile.handle || profile.name || "").trim().toLowerCase() === DEBUG_HANDLE;
+        return JSON.parse(localStorage.getItem(profileStorageKey)) || {};
     } catch {
-        return false;
+        return {};
     }
+}
+
+function isDebugHandle() {
+    const cached = readProfile();
+    return String(cached.handle || cached.name || "").trim().toLowerCase() === DEBUG_HANDLE;
 }
 
 // Replays the chest opening as many times as you like, against a canned
@@ -309,6 +318,60 @@ function renderDemoUnlock() {
     `;
     document.getElementById("home-demo-unlock-btn").addEventListener("click", () => {
         window.location.href = "deck.html?demo=unlock";
+    });
+}
+
+// Replays the whole level-up moment in place, on Home: the header's XP bar
+// climbs from wherever it really is to the next level boundary, the stars fly
+// into it and the celebration lands on top - the real playXpGain path (see
+// js/app-shell.js), not a reconstruction. `keepHeld` keeps the bar showing the
+// borrowed value until the overlay is dismissed, since nothing was actually
+// granted; releasing at the end repaints it from the untouched cache.
+function renderDemoLevelUp() {
+    const mount = document.getElementById("home-demo-levelup");
+    if (!mount) return;
+
+    if (!isDebugHandle()) {
+        mount.hidden = true;
+        mount.replaceChildren();
+        return;
+    }
+
+    if (mount.dataset.built === "true") return;
+    mount.dataset.built = "true";
+    mount.hidden = false;
+    mount.className = "chest-card is-demo";
+    mount.innerHTML = `
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#ffc73a" stroke-width="1.6" stroke-linejoin="round">
+            <path d="m12 3 2.6 5.5 6 .9-4.3 4.3 1 6.1-5.3-2.9-5.3 2.9 1-6.1L3.4 9.4l6-.9z" fill="#ffc73a33"/>
+        </svg>
+        <div class="chest-card-copy">
+            <strong>${tr("levelup.demoTitle")}</strong>
+            <span>${tr("levelup.demoDesc")}</span>
+        </div>
+        <button id="home-demo-levelup-btn" class="chest-open-btn" type="button">${tr("streak.demoRun")}</button>
+    `;
+
+    document.getElementById("home-demo-levelup-btn").addEventListener("click", async event => {
+        const shell = window.PolytypeAppShell;
+        if (!shell?.playXpGain || !shell.getLevelInfo) return;
+
+        const button = event.currentTarget;
+        button.disabled = true;
+
+        const totalXp = Math.max(0, Number(readProfile().xp) || 0);
+        const { currentXp, nextXp } = shell.getLevelInfo(totalXp);
+        // Exactly enough to land on the boundary - the bar fills to the end
+        // and tips over, which is the part worth looking at.
+        const targetXp = totalXp + (nextXp - currentXp);
+
+        shell.holdXpDisplay();
+        try {
+            await shell.playXpGain(targetXp, button, { keepHeld: true });
+        } finally {
+            shell.releaseXpDisplay();
+            button.disabled = false;
+        }
     });
 }
 
