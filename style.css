@@ -2869,13 +2869,6 @@ input[type="password"]:focus {
     animation: levelup-title-in 560ms var(--ease-out) 280ms both;
 }
 
-.levelup-sub {
-    color: var(--text-soft);
-    font-size: var(--text-md);
-    font-weight: 600;
-    animation: levelup-fade-up 480ms ease 400ms both;
-}
-
 /* Gold sparks bursting from behind the badge at the ring's moment - replaces
    the old confetti, which popped into existence mid-air at 40% of the screen
    and rained over the text. Each spark is aimed by its own --a/--d (set
@@ -2983,8 +2976,7 @@ input[type="password"]:focus {
 
     .levelup-card,
     .levelup-badge,
-    .levelup-title,
-    .levelup-sub {
+    .levelup-title {
         animation: levelup-fade-in 200ms ease both;
     }
 
@@ -3038,8 +3030,12 @@ input[type="password"]:focus {
     cursor: default;
 }
 
+/* Celebration overlays sit their confirm button well clear of the copy above
+   it - tucked right under the last line it read as part of the text block
+   rather than as the thing you press to leave. Kept in step with the
+   chest/mission/badge/streak buttons, which carry the same separation. */
 .levelup-confirm-btn {
-    margin-top: var(--space-5);
+    margin-top: var(--space-10);
     padding: 10px 28px;
     font-weight: 700;
     animation: levelup-fade-up 480ms ease 560ms both;
@@ -6347,7 +6343,7 @@ body > main {
 }
 
 .chest-collect-btn {
-    margin-top: 6px;
+    margin-top: var(--space-6);
     background: var(--accent);
     color: var(--accent-on);
     border: 0;
@@ -6604,7 +6600,7 @@ body > main {
 }
 
 .mission-collect-btn {
-    margin-top: 6px;
+    margin-top: var(--space-6);
     background: var(--accent);
     color: var(--accent-on);
     border: 0;
@@ -6736,7 +6732,7 @@ body > main {
 }
 
 .badge-collect-btn {
-    margin-top: 6px;
+    margin-top: var(--space-6);
     background: var(--accent);
     color: var(--accent-on);
     border: 0;
@@ -7019,7 +7015,7 @@ body:has(.game-result-overlay.is-entering:not([hidden])) #app-header {
 }
 
 .streak-continue-btn {
-    margin-top: 2px;
+    margin-top: var(--space-6);
     background: var(--accent);
     color: var(--accent-on);
     border: 0;

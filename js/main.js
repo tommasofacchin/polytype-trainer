@@ -1309,11 +1309,7 @@ function celebrateLevelUp(level) {
     title.className = "levelup-title";
     title.textContent = tr("trainer.levelUp");
 
-    const sub = document.createElement("div");
-    sub.className = "levelup-sub";
-    sub.textContent = tr("trainer.levelReached", { level });
-
-    card.append(rays, badge, title, sub);
+    card.append(rays, badge, title);
 
     const confirmBtn = document.createElement("button");
     confirmBtn.type = "button";

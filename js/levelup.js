@@ -111,10 +111,6 @@
             title.className = "levelup-title";
             title.textContent = tr("trainer.levelUp");
 
-            const sub = document.createElement("div");
-            sub.className = "levelup-sub";
-            sub.textContent = tr("trainer.levelReached", { level });
-
             const confirmBtn = document.createElement("button");
             confirmBtn.type = "button";
             confirmBtn.className = "levelup-confirm-btn";
@@ -133,7 +129,7 @@
 
             confirmBtn.addEventListener("click", close);
 
-            card.append(rays, badge, title, sub, confirmBtn);
+            card.append(rays, badge, title, confirmBtn);
 
             // Before the badge in the DOM, so the sparks paint underneath it
             // and the burst emerges from behind the rim instead of flying

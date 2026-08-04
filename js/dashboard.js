@@ -123,8 +123,6 @@ function setupGameStateSync() {
         renderChest(state);
         renderDemoChest();
         renderDemoSprint();
-        renderDemoUnlock();
-        renderDemoLevelUp();
         renderMissions(state);
         renderFriendsPreview(state);
         renderDailyGoal(state);
@@ -285,93 +283,6 @@ function renderDemoSprint() {
     // reconstruction of it.
     document.getElementById("home-demo-sprint-btn").addEventListener("click", () => {
         window.location.href = "sprint.html?demo=finish";
-    });
-}
-
-// Replays the deck's lock-breaking animation on a word that's already
-// unlocked - see playDemoUnlock in js/deck.js. Costs no key and moves no
-// progress.
-function renderDemoUnlock() {
-    const mount = document.getElementById("home-demo-unlock");
-    if (!mount) return;
-
-    if (!isDebugHandle()) {
-        mount.hidden = true;
-        mount.replaceChildren();
-        return;
-    }
-
-    if (mount.dataset.built === "true") return;
-    mount.dataset.built = "true";
-    mount.hidden = false;
-    mount.className = "chest-card is-demo";
-    mount.innerHTML = `
-        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#ffc73a" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2.4 20.5 6v6.4c0 5-3.6 8.4-8.5 9.6-4.9-1.2-8.5-4.6-8.5-9.6V6L12 2.4Z" fill="#ffc73a22"/>
-            <circle cx="12" cy="11.4" r="3.1"/><path d="M12 12.6v2.6"/>
-        </svg>
-        <div class="chest-card-copy">
-            <strong>${tr("deck.demoUnlockTitle")}</strong>
-            <span>${tr("deck.demoUnlockDesc")}</span>
-        </div>
-        <button id="home-demo-unlock-btn" class="chest-open-btn" type="button">${tr("streak.demoRun")}</button>
-    `;
-    document.getElementById("home-demo-unlock-btn").addEventListener("click", () => {
-        window.location.href = "deck.html?demo=unlock";
-    });
-}
-
-// Replays the whole level-up moment in place, on Home: the header's XP bar
-// climbs from wherever it really is to the next level boundary, the stars fly
-// into it and the celebration lands on top - the real playXpGain path (see
-// js/app-shell.js), not a reconstruction. `keepHeld` keeps the bar showing the
-// borrowed value until the overlay is dismissed, since nothing was actually
-// granted; releasing at the end repaints it from the untouched cache.
-function renderDemoLevelUp() {
-    const mount = document.getElementById("home-demo-levelup");
-    if (!mount) return;
-
-    if (!isDebugHandle()) {
-        mount.hidden = true;
-        mount.replaceChildren();
-        return;
-    }
-
-    if (mount.dataset.built === "true") return;
-    mount.dataset.built = "true";
-    mount.hidden = false;
-    mount.className = "chest-card is-demo";
-    mount.innerHTML = `
-        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#ffc73a" stroke-width="1.6" stroke-linejoin="round">
-            <path d="m12 3 2.6 5.5 6 .9-4.3 4.3 1 6.1-5.3-2.9-5.3 2.9 1-6.1L3.4 9.4l6-.9z" fill="#ffc73a33"/>
-        </svg>
-        <div class="chest-card-copy">
-            <strong>${tr("levelup.demoTitle")}</strong>
-            <span>${tr("levelup.demoDesc")}</span>
-        </div>
-        <button id="home-demo-levelup-btn" class="chest-open-btn" type="button">${tr("streak.demoRun")}</button>
-    `;
-
-    document.getElementById("home-demo-levelup-btn").addEventListener("click", async event => {
-        const shell = window.PolytypeAppShell;
-        if (!shell?.playXpGain || !shell.getLevelInfo) return;
-
-        const button = event.currentTarget;
-        button.disabled = true;
-
-        const totalXp = Math.max(0, Number(readProfile().xp) || 0);
-        const { currentXp, nextXp } = shell.getLevelInfo(totalXp);
-        // Exactly enough to land on the boundary - the bar fills to the end
-        // and tips over, which is the part worth looking at.
-        const targetXp = totalXp + (nextXp - currentXp);
-
-        shell.holdXpDisplay();
-        try {
-            await shell.playXpGain(targetXp, button, { keepHeld: true });
-        } finally {
-            shell.releaseXpDisplay();
-            button.disabled = false;
-        }
     });
 }
 
