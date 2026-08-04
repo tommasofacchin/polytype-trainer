@@ -1300,13 +1300,10 @@ function celebrateLevelUp(level) {
 
     const badge = document.createElement("div");
     badge.className = "levelup-badge";
-    const badgeStar = document.createElement("span");
-    badgeStar.className = "levelup-badge-star";
-    badgeStar.textContent = "★";
     const badgeLevel = document.createElement("span");
     badgeLevel.className = "levelup-badge-level";
     badgeLevel.textContent = String(level);
-    badge.append(badgeStar, badgeLevel);
+    badge.append(badgeLevel);
 
     const title = document.createElement("div");
     title.className = "levelup-title";

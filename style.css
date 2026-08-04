@@ -2825,8 +2825,7 @@ input[type="password"]:focus {
 
 /* One shine sweep across the face once everything has settled - the classic
    "it's shiny" beat of a reward. A background-position sweep on a circular
-   pseudo, so the border-radius does the clipping and the star poking out of
-   the top of the badge never gets cut off the way overflow:hidden would. */
+   pseudo, so the border-radius does the clipping. */
 .levelup-badge::after {
     content: "";
     position: absolute;
@@ -2846,15 +2845,6 @@ input[type="password"]:focus {
     background-size: 320% 320%;
     pointer-events: none;
     animation: levelup-shine 1100ms var(--ease-in-out) 900ms both;
-}
-
-.levelup-badge-star {
-    position: absolute;
-    top: -14px;
-    font-size: clamp(22px, 3vw, 30px);
-    color: var(--combo-2);
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-    animation: levelup-star-in 460ms var(--ease-spring) 360ms both;
 }
 
 .levelup-badge-level {
@@ -2950,11 +2940,6 @@ input[type="password"]:focus {
     50%      { opacity: 0.72; scale: 0.94; }
 }
 
-@keyframes levelup-star-in {
-    from { opacity: 0; transform: scale(0) translateY(6px); }
-    to   { opacity: 1; transform: scale(1) translateY(0); }
-}
-
 @keyframes levelup-ring {
     0%   { opacity: 0; scale: 0.85; }
     18%  { opacity: 0.9; }
@@ -2998,7 +2983,6 @@ input[type="password"]:focus {
 
     .levelup-card,
     .levelup-badge,
-    .levelup-badge-star,
     .levelup-title,
     .levelup-sub {
         animation: levelup-fade-in 200ms ease both;
