@@ -590,7 +590,7 @@
     // the remove/reflow/add dance is needed because these same elements get
     // reused across multiple lesson plays, and re-adding a class that's
     // already present doesn't restart a CSS animation on its own (mirrors
-    // js/sprint.js's animateStreakPop).
+    // js/main.js's animateStreakPop).
     function revealText(target, text) {
         target.classList.remove("is-revealed");
         target.textContent = text;

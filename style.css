@@ -1882,9 +1882,16 @@ input[type="password"]:focus {
 
 /* ---- Sprint: mixed-round game ------------------------------------------- */
 
-.sprint-stage {
+/* .list-card qualifier only to raise specificity - see the grid-row note. */
+.list-card.sprint-stage {
     align-items: center;
     justify-content: center;
+    /* Row 2 is .game-hud's track on the pages that still have one; sprint
+       dropped its Score/Combo tiles, so the stage claims that row as well
+       rather than leaving an empty track's worth of gap under the progress
+       bar. Qualified with .list-card so it also beats the phone layout's
+       `.list-card { grid-row: 3 }` further down. */
+    grid-row: 2 / 4;
     /* The exercise components below are deliberately large, and sprint.html is
        a fixed-viewport page with the on-screen keyboard eating the bottom
        half - on a short phone a type round can genuinely run out of room.
@@ -5037,7 +5044,12 @@ body > main {
     width: 17px;
     height: 17px;
 }
-.app-shell-stat-streak { color: var(--color-streak-light); }
+.app-shell-stat-streak { color: var(--color-streak-light); transition: color var(--transition); }
+
+/* Streak kept, but not fed today: the flame goes out (grey) instead of a
+   "your streak is at risk" banner shouting on Home. Saving a session repaints
+   it lit - see paintStreak in js/app-shell.js. */
+.app-shell-stat-streak.is-at-risk { color: var(--text-faintest); }
 .app-shell-stat-coin { color: var(--color-gold-text); }
 .app-shell-stat-key { color: var(--color-secondary-lighter); }
 
@@ -5733,52 +5745,6 @@ body > main {
 
 .home-play-again-btn.is-secondary:hover, .home-play-again-btn.is-secondary:focus-visible {
     background: var(--color-secondary-deep);
-}
-
-.streak-risk-banner {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-    margin-bottom: 16px;
-    padding: 12px 14px;
-    border-radius: 16px;
-    background: color-mix(in srgb, #ff7a2d 14%, var(--surface));
-    border: 1px solid color-mix(in srgb, #ff7a2d 35%, var(--border));
-    text-decoration: none;
-    transition: background var(--transition), transform var(--transition);
-}
-
-.streak-risk-banner:hover, .streak-risk-banner:focus-visible {
-    background: color-mix(in srgb, #ff7a2d 22%, var(--surface));
-}
-
-.streak-risk-banner:active {
-    transform: translateY(1px);
-}
-
-.streak-risk-banner[hidden] {
-    display: none;
-}
-
-.streak-risk-banner-copy {
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-}
-
-.streak-risk-banner-copy strong {
-    font-size: 13px;
-    font-weight: 800;
-    color: var(--text);
-}
-
-.streak-risk-banner-copy span {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--text-faint);
 }
 
 .chest-overlay {

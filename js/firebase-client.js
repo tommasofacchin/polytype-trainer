@@ -28,6 +28,7 @@
         isSignedIn,
         refreshProfile,
         completePracticeSession,
+        previewSprintEnd,
         unlockWord,
         buyKey,
         buyWordChest,
@@ -198,6 +199,20 @@
         }
 
         return result;
+    }
+
+    // Read-only companion to the call above: what the end-of-sprint screens
+    // will say, asked while the run is still being played - see
+    // api/preview-sprint-end.js. Deliberately does NOT touch state.profile:
+    // nothing has been earned yet, and the sprint page only feeds the answer
+    // to its celebration screens.
+    async function previewSprintEnd() {
+        assertConfigured();
+        if (!state.user) throw new Error(tr("auth.signInRequired"));
+
+        return callApi("preview-sprint-end", {
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+        });
     }
 
     async function unlockWord(courseId, wordSuffix) {
@@ -706,6 +721,10 @@
             avatarUrl: remoteProfile.avatarUrl || null,
             xp: remoteProfile.totalXp || 0,
             dayStreak: remoteProfile.currentStreak || 0,
+            // Mirrored so the header can paint the flame lit/grey from cache
+            // on the very first frame, before auth resolves - see
+            // isStreakAtRisk in js/app-shell.js.
+            lastPracticeDate: remoteProfile.lastPracticeDate || null,
             streakFreezes: remoteProfile.streakFreezes || 0,
             maxStreakFreezes: remoteProfile.maxStreakFreezes || 2,
             dailyGoalXp: remoteProfile.dailyGoalXp || 50,
@@ -735,9 +754,9 @@
             // A completed session reports the day it counted for under `streak`
             // (calculateStreakUpdate's todayKey); other actions (unlock, buy)
             // carry no streak block, so the existing date is preserved. Without
-            // this the live profile kept a stale lastPracticeDate and Home's
-            // "streak at risk" banner only cleared on a hard reload, even though
-            // the player had just practised (see renderStreakRiskBanner).
+            // this the live profile kept a stale lastPracticeDate and the
+            // header flame stayed grey until a hard reload, even though the
+            // player had just practised (see paintStreak in js/app-shell.js).
             lastPracticeDate: progress.streak?.lastPracticeDate ?? currentProfile?.lastPracticeDate ?? null,
             // Session saves report freezes nested under `streak` (that's where
             // calculateStreakUpdate puts them); buy-streak-freeze reports the

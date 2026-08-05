@@ -9,6 +9,9 @@ const {
   LESSON_COIN_REWARD, LESSON_IDS_BY_COURSE,
   ApiError
 } = require("./_lib");
+const {
+  readFriendshipStateForSprint, commitFriendshipStreaksForSprint
+} = require("./_sprint-end");
 
 module.exports = withAuth(async (data, token) => {
   const session = normalizeSessionPayload(data);
@@ -41,8 +44,16 @@ module.exports = withAuth(async (data, token) => {
     const courseRef = userRef.collection("courses").doc(session.courseId);
     const publicRef = db.doc(`publicProfiles/${token.uid}`);
 
-    const userSnap = await transaction.get(userRef);
-    const courseSnap = await transaction.get(courseRef);
+    // One round trip for the two docs (getAll) and a second, concurrent one
+    // for the badge ids - they used to be three separate awaits in a row, and
+    // inside a transaction each of those is its own trip to Firestore while
+    // the player waits on the result screen. Only dailyStats has to follow,
+    // since its doc id is the timezone-resolved day key read out of the user
+    // doc below.
+    const [[userSnap, courseSnap], badgesSnap] = await Promise.all([
+      transaction.getAll(userRef, courseRef),
+      transaction.get(userRef.collection("badges"))
+    ]);
 
     const authProfile = getAuthProfile(token);
     const existingUser = userSnap.exists ? userSnap.data() : null;
@@ -55,7 +66,6 @@ module.exports = withAuth(async (data, token) => {
     const practiceHour = getHourForTimezone(requestTime, timezone);
 
     const dailyStatsRef = userRef.collection("dailyStats").doc(todayKey);
-    const badgesSnap = await transaction.get(userRef.collection("badges"));
     const dailyStatsSnap = await transaction.get(dailyStatsRef);
     const previousDailyStats = dailyStatsSnap.exists ? dailyStatsSnap.data() : {};
     const earnedBadgeIds = badgesSnap.docs.map(doc => doc.id);
@@ -300,95 +310,3 @@ module.exports = withAuth(async (data, token) => {
 
   return { ...result, friendsStatus };
 });
-
-// Pair-wise "friendship streak", shown on the sprint result screen: rises by
-// 1 for a pair only on a day both members play at least one sprint. Uses a
-// UTC day boundary (not each user's own timezone, unlike the personal streak
-// in calculateStreakUpdate) so both sides of a friendship agree on what
-// "today" means regardless of where each player lives. Updates lazily -
-// whichever friend plays sprint *second* on a given day is the one whose
-// call actually advances the shared streak.
-// Read half, safe to run concurrently with the session transaction: whether a
-// friend counts as having played today reads *their* lastSprintPlayedDate, and
-// the pair docs are only ever touched by this function - neither sees anything
-// the transaction writes, and neither depends on this player's own
-// lastSprintPlayedDate write (that one exists purely so the *friend's* next
-// sprint can see the day as mutual).
-async function readFriendshipStateForSprint(uid) {
-  // Captured once here and reused for the writes below rather than recomputed
-  // after the commit, so `playedToday` and `lastBothPlayedDate` can't end up
-  // disagreeing about "today" for a session that straddles UTC midnight.
-  const todayKey = getDateKeyForTimezone(new Date(), "UTC");
-
-  const friendsSnap = await db.collection(`users/${uid}/friends`).get();
-  const friendUids = friendsSnap.docs.map(doc => doc.id);
-
-  // db.getAll() rejects an empty argument list, hence the early out.
-  if (!friendUids.length) {
-    return { todayKey, friendUids: [], friendPublicSnaps: [], pairSnaps: [] };
-  }
-
-  const [friendPublicSnaps, pairSnaps] = await Promise.all([
-    db.getAll(...friendUids.map(friendUid => db.doc(`publicProfiles/${friendUid}`))),
-    db.getAll(...friendUids.map(friendUid => db.doc(`friendships/${getFriendPairId(uid, friendUid)}`)))
-  ]);
-
-  return { todayKey, friendUids, friendPublicSnaps, pairSnaps };
-}
-
-// Write half, deliberately after the session transaction has committed.
-async function commitFriendshipStreaksForSprint(uid, readState) {
-  if (!readState) return [];
-
-  const { todayKey, friendUids, friendPublicSnaps, pairSnaps } = readState;
-  const now = FieldValue.serverTimestamp();
-
-  const ownWrite = db.doc(`publicProfiles/${uid}`).set(
-    { lastSprintPlayedDate: todayKey },
-    { merge: true }
-  );
-
-  if (!friendUids.length) {
-    await ownWrite;
-    return [];
-  }
-
-  const statuses = await Promise.all(friendUids.map(async (friendUid, index) => {
-    const friendPublic = friendPublicSnaps[index].exists ? friendPublicSnaps[index].data() : null;
-    const playedToday = friendPublic?.lastSprintPlayedDate === todayKey;
-    const pairSnap = pairSnaps[index];
-    const pairData = pairSnap.exists ? pairSnap.data() : null;
-    let streak = pairData?.streak || 0;
-
-    if (playedToday && pairData?.lastBothPlayedDate !== todayKey) {
-      const elapsedDays = pairData?.lastBothPlayedDate
-        ? diffDateKeys(pairData.lastBothPlayedDate, todayKey)
-        : null;
-      streak = elapsedDays === 1 ? streak + 1 : 1;
-      await pairSnap.ref.set({
-        uids: [uid, friendUid].sort(),
-        streak,
-        lastBothPlayedDate: todayKey,
-        updatedAt: now
-      }, { merge: true });
-    }
-
-    return {
-      uid: friendUid,
-      displayName: friendPublic?.displayName || "Player",
-      avatarUrl: friendPublic?.avatarUrl || null,
-      handle: friendPublic?.handle || null,
-      playedToday,
-      friendshipStreak: streak
-    };
-  }));
-
-  await ownWrite;
-
-  statuses.sort((a, b) => {
-    if (a.playedToday !== b.playedToday) return a.playedToday ? -1 : 1;
-    return (b.friendshipStreak || 0) - (a.friendshipStreak || 0);
-  });
-
-  return statuses;
-}

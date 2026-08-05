@@ -135,6 +135,51 @@
         }
     }
 
+    // Same "you haven't practiced today yet" check the server does when a
+    // session completes (see calculateStreakUpdate in api/_lib.js), computed
+    // here purely to decide how the header flame is painted - never trust it
+    // for anything that actually touches XP/coins/streak, only the API is
+    // authoritative for that. Uses the browser's own timezone, matching what
+    // every completePracticeSession call already sends the server.
+    function getTodayKeyForBrowserTimezone() {
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        return new Intl.DateTimeFormat("en-CA", { timeZone: timezone }).format(new Date());
+    }
+
+    // A streak the player still has but hasn't fed today. Instead of a banner
+    // shouting about it, the header flame just goes grey - it lights back up
+    // the moment a session is saved.
+    function isStreakAtRisk(profile) {
+        const streak = Number(profile?.currentStreak ?? profile?.dayStreak) || 0;
+        if (streak <= 0) return false;
+        return profile?.lastPracticeDate !== getTodayKeyForBrowserTimezone();
+    }
+
+    function paintStreak(profile) {
+        const streakEl = document.getElementById("app-shell-streak");
+        if (!streakEl) return;
+
+        const streak = Number(profile?.currentStreak ?? profile?.dayStreak) || 0;
+        streakEl.innerHTML = `${ICONS.streak}${streak}`;
+        streakEl.classList.toggle("is-at-risk", isStreakAtRisk(profile));
+    }
+
+    // Lights the flame ahead of the save that will confirm it. The
+    // end-of-sprint flame page now opens off a preview rather than off the
+    // save's reply (see js/sprint.js), and it points straight at this pill as
+    // it closes (pulseHeaderStreak in js/streak-celebrate.js) - without this
+    // the pill could still be showing yesterday's grey number at that exact
+    // moment. Called from behind the celebration overlay, so the change itself
+    // is never seen happening; the next profile update repaints it
+    // authoritatively regardless.
+    function paintStreakAhead(count) {
+        const streakEl = document.getElementById("app-shell-streak");
+        if (!streakEl) return;
+
+        streakEl.innerHTML = `${ICONS.streak}${Math.max(0, Math.trunc(Number(count) || 0))}`;
+        streakEl.classList.remove("is-at-risk");
+    }
+
     // Keep in sync with MAX_KEYS in api/_lib.js.
     const MAX_KEYS = 5;
 
@@ -195,7 +240,7 @@
                     </span>
                 </a>
                 <div class="app-shell-stats">
-                    <span class="app-shell-stat app-shell-stat-streak" id="app-shell-streak">${ICONS.streak}${cached.dayStreak || 0}</span>
+                    <span class="app-shell-stat app-shell-stat-streak${isStreakAtRisk(cached) ? " is-at-risk" : ""}" id="app-shell-streak">${ICONS.streak}${cached.dayStreak || 0}</span>
                     <span class="app-shell-stat app-shell-stat-coin" id="app-shell-coins">${ICONS.coin}${coinsHeld}</span>
                     <span class="app-shell-stat app-shell-stat-key" id="app-shell-keys">${ICONS.key}${keysHeld}</span>
                 </div>
@@ -299,9 +344,8 @@
     }
 
     function renderHeaderAuth(authState) {
-        const streakEl = document.getElementById("app-shell-streak");
-        if (streakEl && typeof authState.profile?.currentStreak === "number") {
-            streakEl.innerHTML = `${ICONS.streak}${authState.profile.currentStreak}`;
+        if (typeof authState.profile?.currentStreak === "number") {
+            paintStreak(authState.profile);
         }
 
         if (typeof authState.profile?.totalXp === "number") {
@@ -767,8 +811,10 @@
         // Held while a purchased key is still in flight - see playKeyGain.
         if (!keyDisplayHeld) paintHeaderKeys(cached);
 
-        const streakEl = document.getElementById("app-shell-streak");
-        if (streakEl) streakEl.innerHTML = `${ICONS.streak}${cached.dayStreak || 0}`;
+        // The live Firebase profile is the only place carrying a fresh
+        // lastPracticeDate right after a session save, so prefer it over the
+        // localStorage mirror for deciding whether the flame is lit.
+        paintStreak(window.PolytypeFirebase?.state?.profile || cached);
 
         // The local mirror calls it `xp`; the remote profile calls the same
         // number `totalXp` (see syncProfileToLocalStorage in firebase-client.js).
@@ -815,6 +861,7 @@
         holdKeyDisplay,
         releaseKeyDisplay,
         playKeyGain,
+        paintStreakAhead,
         // The level curve, for callers that need to know where the next
         // boundary is rather than just painting the bar - e.g. aiming
         // playXpGain at an XP total that crosses one.

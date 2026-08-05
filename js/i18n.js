@@ -425,8 +425,6 @@
             "home.playAgain": "Play",
             "home.dailyGoal": "Daily goal",
             "home.lessonsCta": "Lessons",
-            "home.streakRiskTitle": "Your {count}-day streak is at risk!",
-            "home.streakRiskDetail": "Play today to keep it going.",
             "dashboard.welcomeBack": "Welcome back,",
 
             "mission.dailyMissions": "Daily missions",
@@ -445,7 +443,6 @@
 
             "chest.collect": "Collect",
             "chest.ready": "Daily chest ready!",
-            "chest.readyDesc": "Tap to reveal your reward",
             "chest.claimed": "Chest opened",
             "chest.open": "Open",
             "chest.demoTitle": "Test chest",
@@ -985,8 +982,6 @@
             "home.playAgain": "Gioca",
             "home.dailyGoal": "Obiettivo giornaliero",
             "home.lessonsCta": "Lezioni",
-            "home.streakRiskTitle": "Il tuo streak di {count} giorni è a rischio!",
-            "home.streakRiskDetail": "Gioca oggi per continuarlo.",
             "dashboard.welcomeBack": "Bentornato,",
 
             "mission.dailyMissions": "Missioni giornaliere",
@@ -1005,7 +1000,6 @@
 
             "chest.collect": "Ritira",
             "chest.ready": "Forziere pronto!",
-            "chest.readyDesc": "Tocca per scoprire la ricompensa",
             "chest.claimed": "Forziere aperto",
             "chest.open": "Apri",
             "chest.demoTitle": "Forziere di prova",

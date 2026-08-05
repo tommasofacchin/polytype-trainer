@@ -21,20 +21,9 @@
       </div>
     </div>
 
-    <section class="game-hud is-two-up" aria-label="Session score">
-      <div class="hud-item">
-        <span class="hud-label" data-i18n="trainer.score">Score</span>
-        <strong id="sprint-hud-score-text">0 pts</strong>
-      </div>
-      <div class="hud-item" id="sprint-streak-hud">
-        <span class="hud-label" data-i18n="trainer.combo">Combo</span>
-        <div class="streak-display">
-          <strong id="sprint-streak-text">0</strong>
-          <span id="sprint-streak-chip" class="streak-chip" hidden></span>
-        </div>
-      </div>
-    </section>
-
+    <!-- No Score/Combo HUD above the stage: the "+N" float on every correct
+         answer already shows the points and their combo tier as they're
+         earned, and the run's total lands on the result card. -->
     <section class="list-card sprint-stage" aria-label="Sprint exercise">
       <div id="sprint-exercise-root">
         <div class="game-loading-screen">

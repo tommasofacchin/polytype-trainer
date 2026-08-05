@@ -49,13 +49,6 @@ function setupProfileSync() {
     window.__polytypePageHooks = window.__polytypePageHooks || {};
     window.__polytypePageHooks.onProfileUpdated = event => {
         profile = { ...defaultProfile, ...profile, ...event.detail };
-        // event.detail is the trimmed localStorage mirror (js/firebase-
-        // client.js's syncProfileToLocalStorage) and has no
-        // lastPracticeDate - read the live Firebase state instead, which by
-        // this point already reflects whatever session/chest action just
-        // fired this event, so a session played just now immediately clears
-        // the banner instead of waiting for the next full page load.
-        renderStreakRiskBanner(window.PolytypeFirebase?.state?.profile);
     };
 
     // Optimistic initial paint: a cached profile means we were signed in
@@ -85,34 +78,7 @@ function setupProfileSync() {
         }
 
         renderGreeting(true);
-        renderStreakRiskBanner(authState.profile);
     });
-}
-
-// Same "you haven't practiced today yet" check the server does when a
-// session completes (see calculateStreakUpdate in api/_lib.js), computed
-// here purely to decide whether to show a reminder - never trust this for
-// anything that actually touches XP/coins/streak, only the API is
-// authoritative for that. Uses the browser's own timezone, matching what
-// every completePracticeSession call already sends the server.
-function getTodayKeyForBrowserTimezone() {
-    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    return new Intl.DateTimeFormat("en-CA", { timeZone: timezone }).format(new Date());
-}
-
-function renderStreakRiskBanner(profile) {
-    const banner = document.getElementById("home-streak-risk-banner");
-    if (!banner) return;
-
-    const streak = profile?.currentStreak || 0;
-    const alreadyPracticedToday = profile?.lastPracticeDate === getTodayKeyForBrowserTimezone();
-    const atRisk = streak > 0 && !alreadyPracticedToday;
-
-    banner.hidden = !atRisk;
-    if (!atRisk) return;
-
-    const titleEl = document.getElementById("home-streak-risk-title");
-    if (titleEl) titleEl.textContent = tr("home.streakRiskTitle", { count: streak });
 }
 
 function setupGameStateSync() {
@@ -167,9 +133,10 @@ function renderChest(state) {
         mount.className = "chest-card is-ready";
         mount.innerHTML = `
             <svg width="46" height="46" viewBox="0 0 48 48"><rect x="6" y="20" width="36" height="20" rx="4" fill="#17b8c9"/><path d="M6 22a18 12 0 0 1 36 0z" fill="#3ed0de"/><rect x="6" y="25" width="36" height="4" fill="#0e8fa0"/><rect x="21" y="23" width="6" height="9" rx="2" fill="#ffc73a"/></svg>
+            <!-- Title only, same reasoning as the claimed state below: the
+                 chest plus an Open button already say what tapping does. -->
             <div class="chest-card-copy">
                 <strong>${tr("chest.ready")}</strong>
-                <span>${tr("chest.readyDesc")}</span>
             </div>
             <button id="home-chest-open-btn" class="chest-open-btn" type="button">${tr("chest.open")}</button>
         `;

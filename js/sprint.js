@@ -81,6 +81,14 @@
         retryBonus: 0,
         retryCorrectCount: 0,
         perfectBonus: 0,
+        // The save round trip, started the moment the last answer lands
+        // rather than in finishSession - see startSessionSave.
+        savePromise: null,
+        // What the flame and friends pages will say at the end of this run,
+        // fetched while it's still being played - see prefetchEndPreview.
+        // Null when it hasn't landed (or the player is signed out), in which
+        // case those pages fall back to the save's own numbers.
+        endPreview: null,
         // Set only by the ?demo=finish replay (runDemoFinish), which skips
         // playing entirely and jumps straight to a canned end-of-session.
         demo: false
@@ -103,10 +111,6 @@
     function initSprintPage() {
         el.progress = document.getElementById("sprint-progress");
         el.progressFill = document.getElementById("sprint-progress-fill");
-        el.hudScoreText = document.getElementById("sprint-hud-score-text");
-        el.streakText = document.getElementById("sprint-streak-text");
-        el.streakChip = document.getElementById("sprint-streak-chip");
-        el.streakHud = document.getElementById("sprint-streak-hud");
         el.exerciseRoot = document.getElementById("sprint-exercise-root");
         el.resultModal = document.getElementById("sprint-result-modal");
         el.resultScore = document.getElementById("sprint-result-score");
@@ -251,11 +255,17 @@
         state.retryBonus = 0;
         state.retryCorrectCount = 0;
         state.perfectBonus = 0;
+        state.savePromise = null;
+        state.endPreview = null;
         // Clears the ?demo=finish replay: hitting "Play again" on the demo
         // result card starts a genuine session, and leaving this set would
         // send it down the canned branch in finishSession and silently throw
         // away the player's real XP and coins.
         state.demo = false;
+
+        // Sent now, answered long before it's needed: this is what the end of
+        // the run opens on instead of waiting for the save.
+        prefetchEndPreview();
 
         // Computed once per session, not per round: a round type that can't
         // build a distractor/second pair with the current unlocked pool
@@ -268,7 +278,6 @@
         });
         if (!state.availableRoundTypes.length) state.availableRoundTypes = ["type"];
 
-        updateHud();
         nextRound();
     }
 
@@ -312,6 +321,11 @@
     function advanceRound(featuredWordIds) {
         state.lastWordIds = featuredWordIds;
         if (!state.inRetryPhase) state.roundIndex += 1;
+        // Every answer is already recorded by the time we get here, so once
+        // this was the last round the payload can't change any more - send it
+        // now instead of after the hold + fade below, and let the round trip
+        // run under animation the player is watching anyway.
+        if (isSessionOver()) startSessionSave();
         window.setTimeout(() => {
             el.exerciseRoot.querySelector(".sprint-exercise")?.classList.add("is-leaving");
             window.setTimeout(() => {
@@ -319,6 +333,15 @@
                 else nextRound();
             }, FADE_OUT_DELAY);
         }, FEEDBACK_HOLD_DELAY);
+    }
+
+    // Mirrors the two "nothing left to play" guards below (nextRound's round
+    // count into startRetryPhaseOrFinish, and nextRetryRound's empty queue),
+    // read one answer earlier - from advanceRound, before the round it just
+    // finished has faded out.
+    function isSessionOver() {
+        if (state.inRetryPhase) return !state.retryQueue.length;
+        return state.roundIndex >= state.totalRounds && !state.wrongRetryable.length;
     }
 
     // ── Retry phase: one extra shot at whatever was answered wrong ─────────
@@ -376,7 +399,6 @@
         state.score += pts;
         state.retryBonus += pts;
         state.retryCorrectCount += 1;
-        updateHud();
         if (anchorEl) showPointsFloat(pts, 0, anchorEl);
     }
 
@@ -404,9 +426,6 @@
     // ── Scoring ──────────────────────────────────────────────────────────────
 
     function recordAnswer(isCorrect, anchorEl, wordId) {
-        const prevStreak = state.streak;
-        const prevTier = getComboTier(prevStreak);
-
         if (wordId != null) state.wordResults.push({ id: getWordSuffix(String(wordId)), correct: isCorrect });
 
         if (isCorrect) {
@@ -417,31 +436,14 @@
             state.bestStreak = Math.max(state.bestStreak, state.streak);
             state.correctAnswers += 1;
 
-            const tier = getComboTier(state.streak);
-            animateStreakPop(tier > prevTier);
-            if (anchorEl) showPointsFloat(pts, tier, anchorEl);
+            // The combo lives entirely in this float now - its tier is what
+            // colours the "+N" - since the HUD that used to count it is gone.
+            if (anchorEl) showPointsFloat(pts, getComboTier(state.streak), anchorEl);
         } else {
             playErrorSfx();
             state.wrongAnswers += 1;
             state.streak = 0;
-            if (prevStreak > 0) animateStreakBreak();
         }
-        updateHud();
-    }
-
-    function animateStreakPop(big) {
-        const cls = big ? "streak-pop-big" : "streak-pop";
-        el.streakText.classList.remove("streak-pop", "streak-pop-big", "streak-shake");
-        void el.streakText.offsetWidth;
-        el.streakText.classList.add(cls);
-        el.streakText.addEventListener("animationend", () => el.streakText.classList.remove(cls), { once: true });
-    }
-
-    function animateStreakBreak() {
-        el.streakText.classList.remove("streak-pop", "streak-pop-big", "streak-shake");
-        void el.streakText.offsetWidth;
-        el.streakText.classList.add("streak-shake");
-        el.streakText.addEventListener("animationend", () => el.streakText.classList.remove("streak-shake"), { once: true });
     }
 
     function showPointsFloat(pts, tier, anchorEl) {
@@ -454,25 +456,6 @@
         node.style.top = `${rect.top - 4}px`;
         document.body.appendChild(node);
         node.addEventListener("animationend", () => node.remove(), { once: true });
-    }
-
-    function updateHud() {
-        const multiplier = getComboMultiplier(state.streak);
-        const tier = getComboTier(state.streak);
-
-        el.hudScoreText.textContent = `${state.score} ${tr("common.points")}`;
-        el.streakText.textContent = String(state.streak);
-
-        if (state.streak >= 5) {
-            el.streakChip.hidden = false;
-            el.streakChip.textContent = `×${formatMultiplier(multiplier)}`;
-            el.streakChip.dataset.tier = String(tier);
-        } else {
-            el.streakChip.hidden = true;
-        }
-
-        if (tier > 0) el.streakHud.dataset.comboTier = String(tier);
-        else delete el.streakHud.dataset.comboTier;
     }
 
     // ── Round type 1: multiple choice translation ───────────────────────────
@@ -805,8 +788,64 @@
 
     // ── End of session ───────────────────────────────────────────────────────
 
+    // Asks the server, up front, what the flame and friends pages will say at
+    // the end of this run (api/preview-sprint-end.js). Neither page depends on
+    // anything the player is about to do - only on whether today has been
+    // practised yet and which friends have played their own sprint - so
+    // fetching it now is what lets the end of a run open immediately instead
+    // of behind the save.
+    //
+    // Deliberately silent on failure: a preview that never lands just means
+    // finishSession falls back to the save's own numbers, which is exactly
+    // what it used to do.
+    function prefetchEndPreview() {
+        const firebaseClient = window.PolytypeFirebase;
+        if (state.demo || !firebaseClient?.isSignedIn?.()) return;
+
+        // A late reply from the previous run (Play again starts a new session
+        // immediately) must not overwrite this one's preview.
+        const sessionAt = state.sessionStartTime;
+        firebaseClient.previewSprintEnd()
+            .then(result => {
+                if (state.sessionStartTime !== sessionAt) return;
+                state.endPreview = result?.data || null;
+            })
+            .catch(() => {});
+    }
+
+    // Starts the save (once) and parks the promise on state for finishSession
+    // to await. Called from advanceRound as the last answer lands, and again
+    // from finishSession itself as a safety net for any path that reached the
+    // end without going through a round (nothing to do if it's already gone).
+    function startSessionSave() {
+        if (state.savePromise || state.demo || state.correctAnswers <= 0) return;
+
+        const firebaseClient = window.PolytypeFirebase;
+        if (!firebaseClient?.isSignedIn?.()) return;
+
+        const payload = {
+            courseId: activeLanguage,
+            gameType: "sprint",
+            correctAnswers: state.correctAnswers,
+            wrongAnswers: state.wrongAnswers,
+            bestCombo: state.bestStreak,
+            wordsUsed: state.wordsUsed,
+            sessionSeconds: Math.round((Date.now() - state.sessionStartTime) / 1000),
+            wordResults: state.wordResults
+        };
+
+        state.savePromise = window.PolytypeGameState?.completePracticeSession
+            ? window.PolytypeGameState.completePracticeSession(payload)
+            : firebaseClient.completePracticeSession(payload).then(result => result?.data);
+
+        // Nothing awaits this until finishSession, which can be the better part
+        // of a second later - without a handler attached now, a failed save
+        // would log an unhandled rejection in the meantime. The original
+        // promise still rejects into finishSession's own try/catch.
+        state.savePromise.catch(() => {});
+    }
+
     async function finishSession() {
-        const sessionSeconds = Math.round((Date.now() - state.sessionStartTime) / 1000);
         const total = state.correctAnswers + state.wrongAnswers;
         const accuracy = total > 0 ? Math.round((state.correctAnswers / total) * 100) : 0;
 
@@ -853,27 +892,26 @@
             // the rest of this runs exactly as it does after a real session.
             earnedTotalXp = await applySessionProgress(getDemoProgress(), { demo: true });
         } else if (state.correctAnswers > 0) {
-            const firebaseClient = window.PolytypeFirebase;
-            if (!firebaseClient?.isSignedIn?.()) {
+            if (!window.PolytypeFirebase?.isSignedIn?.()) {
                 el.resultSaveStatus.textContent = tr("trainer.signInSave");
             } else {
-                const payload = {
-                    courseId: activeLanguage,
-                    gameType: "sprint",
-                    correctAnswers: state.correctAnswers,
-                    wrongAnswers: state.wrongAnswers,
-                    bestCombo: state.bestStreak,
-                    wordsUsed: state.wordsUsed,
-                    sessionSeconds,
-                    wordResults: state.wordResults
-                };
-
                 try {
-                    const progress = window.PolytypeGameState?.completePracticeSession
-                        ? await window.PolytypeGameState.completePracticeSession(payload)
-                        : (await firebaseClient.completePracticeSession(payload))?.data;
+                    // Already in flight since the last answer (advanceRound);
+                    // this call only covers the paths that skipped that.
+                    startSessionSave();
 
-                    earnedTotalXp = await applySessionProgress(progress);
+                    // The first two pages don't need the save: they run off
+                    // the preview fetched at the start of the run, so they
+                    // open the moment the last round ends and the round trip
+                    // finishes underneath them. Without a preview (signed in
+                    // mid-run, request failed) they wait for the save exactly
+                    // as they used to.
+                    const preview = state.endPreview;
+                    if (preview) await runStreakAndFriendsPages(preview, { ahead: true });
+
+                    earnedTotalXp = await applySessionProgress(await state.savePromise, {
+                        pagesShown: Boolean(preview)
+                    });
                 } catch (error) {
                     el.resultSaveStatus.textContent = error?.message || tr("trainer.signInSave");
                 }
@@ -915,11 +953,29 @@
         setResultButtonsBusy(false);
     }
 
+    // First two pages of the end-of-run sequence. `source` is either the
+    // preview fetched while the run was still being played (the usual case) or
+    // the save's own reply - both carry the same `streak` block and
+    // `friendsStatus` roster, computed by the same server code.
+    //
+    // Curtain first: it goes up as the run starts, so the pages hand off to
+    // each other over flat background rather than over the sprint.
+    async function runStreakAndFriendsPages(source, { demo = false, ahead = false } = {}) {
+        raiseResultCurtain();
+        // Running ahead of the save means the header hasn't been repainted from
+        // a new profile yet, and the flame page points at it as it closes.
+        if (ahead && source?.streak?.streakAdvanced) {
+            window.PolytypeAppShell?.paintStreakAhead?.(source.streak.currentStreak);
+        }
+        await window.PolytypeStreakCelebrate?.show?.(source?.streak, { demo });
+        await showFriendsStep(source?.friendsStatus);
+    }
+
     // Everything the end of a session does with the server's answer, shared by
     // the real save and the demo replay (which hands it canned progress
     // instead). Returns the new lifetime XP for the header burst, or null when
     // there's nothing to fly up there.
-    async function applySessionProgress(progress, { demo = false } = {}) {
+    async function applySessionProgress(progress, { demo = false, pagesShown = false } = {}) {
         if (typeof progress?.xpEarned === "number" && progress.xpEarned > 0 && el.resultXp) {
             revealResultReward(el.resultXp, tr("sprint.xpEarned", { xp: progress.xpEarned }));
         }
@@ -935,14 +991,11 @@
         // friends, no missions), so a mid-day session still goes straight to
         // the score with no empty pages in between.
         //
-        // Curtain first, and deliberately not before the save above: it goes
-        // up as the run starts (so the pages hand off to each other over flat
-        // background rather than over the sprint) but never during the round
-        // trip, which would leave the player staring at an empty screen for
-        // however long the save takes.
-        raiseResultCurtain();
-        await window.PolytypeStreakCelebrate?.show?.(progress?.streak, { demo });
-        await showFriendsStep(progress?.friendsStatus);
+        // The first two normally ran off the preview before this was called
+        // (see finishSession) - `pagesShown` is how it says so, since replaying
+        // them here off the save's own copy would show the same two screens
+        // twice.
+        if (!pagesShown) await runStreakAndFriendsPages(progress, { demo });
         if (progress?.completedMissions?.length) {
             await window.PolytypeMissionCelebrate?.show?.(progress.completedMissions);
         }
@@ -1607,10 +1660,6 @@
         if (streak >= 10) return 2;
         if (streak >= 5) return 1;
         return 0;
-    }
-
-    function formatMultiplier(multiplier) {
-        return Number.isInteger(multiplier) ? String(multiplier) : multiplier.toFixed(1);
     }
 
     function shuffle(array) {
