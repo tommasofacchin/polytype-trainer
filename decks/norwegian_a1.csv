@@ -195,7 +195,7 @@ nor_193,billett,billett,ticket,biglietto,39
 nor_194,kart,kart,map,mappa,39
 nor_195,hotell,hotell,hotel,hotel,39
 nor_196,venstre,venstre,left,sinistra,40
-nor_197,høyre,høyre,right,vero,40
+nor_197,høyre,høyre,right,destra,40
 nor_198,rett fram,rett fram,straight ahead,dritto,40
 nor_199,nær,nær,near,vicino,40
 nor_200,langt,langt,far,lontano,40
@@ -282,7 +282,7 @@ nor_280,velkommen,velkommen,welcome,benvenuto,56
 nor_281,vær så god,vær så god,here you are,ecco a te,57
 nor_282,tusen takk,tusen takk,many thanks,mille grazie,57
 nor_283,det går bra,det går bra,it is fine,va bene,57
-nor_284,ikke sant,ikke sant,right,vero,57
+nor_284,ikke sant,ikke sant,that's right,vero,57
 nor_285,selvfølgelig,selvfølgelig,of course,certo,57
 nor_286,apotek,apotek,pharmacy,farmacia,58
 nor_287,sykehus,sykehus,hospital,ospedale,58
@@ -292,10 +292,210 @@ nor_290,problem,problem,problem,problema,58
 nor_291,pris,pris,price,prezzo,59
 nor_292,penger,penger,money,soldi,59
 nor_293,kvittering,kvittering,receipt,ricevuta,59
-nor_294,pose,pose,bag,borsa,59
+nor_294,pose,pose,plastic bag,sacchetto,59
 nor_295,størrelse,størrelse,size,taglia,59
 nor_296,telefon,telefon,phone,telefono,60
 nor_297,datamaskin,datamaskin,computer,computer,60
 nor_298,nøkkel,nøkkel,key,chiave,60
 nor_299,klokke,klokke,clock,orologio,60
 nor_300,veske,veske,bag,borsa,60
+nor_301,å gi,å gi,to give,dare,61
+nor_302,å ta,å ta,to take,prendere,61
+nor_303,å legge,å legge,to put,mettere,61
+nor_304,å begynne,å begynne,to begin,cominciare,61
+nor_305,å avslutte,å avslutte,to finish,finire,61
+nor_306,å vite,å vite,to know,sapere,62
+nor_307,å tenke,å tenke,to think,pensare,62
+nor_308,å forstå,å forstå,to understand,capire,62
+nor_309,å huske,å huske,to remember,ricordare,62
+nor_310,å glemme,å glemme,to forget,dimenticare,62
+nor_311,å hjelpe,å hjelpe,to help,aiutare,63
+nor_312,å ringe,å ringe,to call,chiamare,63
+nor_313,å sende,å sende,to send,inviare,63
+nor_314,å miste,å miste,to lose,perdere,63
+nor_315,å vinne,å vinne,to win,vincere,63
+nor_316,å ankomme,å ankomme,to arrive,arrivare,64
+nor_317,å gå inn,å gå inn,to enter,entrare,64
+nor_318,å dra,å dra,to depart,partire,64
+nor_319,å bo,å bo,to live,abitare,64
+nor_320,å spasere,å spasere,to walk,camminare,64
+nor_321,å løpe,å løpe,to run,correre,65
+nor_322,å svømme,å svømme,to swim,nuotare,65
+nor_323,å hoppe,å hoppe,to jump,saltare,65
+nor_324,å danse,å danse,to dance,ballare,65
+nor_325,å synge,å synge,to sing,cantare,65
+nor_326,å leke,å leke,to play,giocare,66
+nor_327,å lage mat,å lage mat,to cook,cucinare,66
+nor_328,å rydde,å rydde,to clean,pulire,66
+nor_329,å bygge,å bygge,to build,costruire,66
+nor_330,å endre,å endre,to change,cambiare,66
+nor_331,ris,ris,rice,riso,67
+nor_332,pasta,pasta,pasta,pasta,67
+nor_333,kylling,kylling,chicken,pollo,67
+nor_334,storfekjøtt,storfekjøtt,beef,manzo,67
+nor_335,svinekjøtt,svinekjøtt,pork,carne di maiale,67
+nor_336,smør,smør,butter,burro,68
+nor_337,olje,olje,oil,olio,68
+nor_338,pepper,pepper,pepper,pepe,68
+nor_339,løk,løk,onion,cipolla,68
+nor_340,tomat,tomat,tomato,pomodoro,68
+nor_341,hvitløk,hvitløk,garlic,aglio,69
+nor_342,sitron,sitron,lemon,limone,69
+nor_343,jordbær,jordbær,strawberry,fragola,69
+nor_344,drue,drue,grape,uva,69
+nor_345,kake,kake,cake,torta,69
+nor_346,sjokolade,sjokolade,chocolate,cioccolato,70
+nor_347,iskrem,iskrem,ice cream,gelato,70
+nor_348,vin,vin,wine,vino,70
+nor_349,øl,øl,beer,birra,70
+nor_350,flaske,flaske,bottle,bottiglia,70
+nor_351,bord,bord,table,tavolo,71
+nor_352,stol,stol,chair,sedia,71
+nor_353,seng,seng,bed,letto,71
+nor_354,dør,dør,door,porta,71
+nor_355,vindu,vindu,window,finestra,71
+nor_356,vegg,vegg,wall,muro,72
+nor_357,gulv,gulv,floor,pavimento,72
+nor_358,tak,tak,roof,tetto,72
+nor_359,hage,hage,garden,giardino,72
+nor_360,garasje,garasje,garage,garage,72
+nor_361,lampe,lampe,lamp,lampada,73
+nor_362,speil,speil,mirror,specchio,73
+nor_363,håndkle,håndkle,towel,asciugamano,73
+nor_364,såpe,såpe,soap,sapone,73
+nor_365,kjøleskap,kjøleskap,fridge,frigorifero,73
+nor_366,ovn,ovn,oven,forno,74
+nor_367,sofa,sofa,sofa,divano,74
+nor_368,hylle,hylle,shelf,scaffale,74
+nor_369,trapp,trapp,stairs,scale,74
+nor_370,heis,heis,elevator,ascensore,74
+nor_371,hund,hund,dog,cane,75
+nor_372,katt,katt,cat,gatto,75
+nor_373,fugl,fugl,bird,uccello,75
+nor_374,hest,hest,horse,cavallo,75
+nor_375,ku,ku,cow,mucca,75
+nor_376,sau,sau,sheep,pecora,76
+nor_377,gris,gris,pig,maiale,76
+nor_378,høne,høne,hen,gallina,76
+nor_379,mus,mus,mouse,topo,76
+nor_380,kanin,kanin,rabbit,coniglio,76
+nor_381,et tre,et tre,tree,albero,77
+nor_382,blomst,blomst,flower,fiore,77
+nor_383,gress,gress,grass,erba,77
+nor_384,fjell,fjell,mountain,montagna,77
+nor_385,elv,elv,river,fiume,77
+nor_386,hav,hav,sea,mare,78
+nor_387,innsjø,innsjø,lake,lago,78
+nor_388,skog,skog,forest,foresta,78
+nor_389,strand,strand,beach,spiaggia,78
+nor_390,himmel,himmel,sky,cielo,78
+nor_391,tretti,tretti,thirty,trenta,79
+nor_392,førti,førti,forty,quaranta,79
+nor_393,femti,femti,fifty,cinquanta,79
+nor_394,hundre,hundre,hundred,cento,79
+nor_395,tusen,tusen,thousand,mille,79
+nor_396,grå,grå,grey,grigio,80
+nor_397,første,første,first,primo,80
+nor_398,siste,siste,last,ultimo,80
+nor_399,halv,halv,half,metà,80
+nor_400,nummer,nummer,number,numero,80
+nor_401,redd,redd,afraid,spaventato,81
+nor_402,overrasket,overrasket,surprised,sorpreso,81
+nor_403,lei,lei,bored,annoiato,81
+nor_404,rolig,rolig,calm,calmo,81
+nor_405,stolt,stolt,proud,fiero,81
+nor_406,sterk,sterk,strong,forte,82
+nor_407,svak,svak,weak,debole,82
+nor_408,vakker,vakker,beautiful,stupendo,82
+nor_409,stygg,stygg,ugly,brutto,82
+nor_410,ung,ung,young,giovane,82
+nor_411,rik,rik,rich,ricco,83
+nor_412,fattig,fattig,poor,povero,83
+nor_413,ren,ren,clean,pulito,83
+nor_414,skitten,skitten,dirty,sporco,83
+nor_415,morsom,morsom,funny,divertente,83
+nor_416,vei,vei,road,via,84
+nor_417,bro,bro,bridge,ponte,84
+nor_418,taxi,taxi,taxi,taxi,84
+nor_419,bagasje,bagasje,luggage,bagaglio,84
+nor_420,pass,pass,passport,passaporto,84
+nor_421,flyreise,flyreise,flight,volo,85
+nor_422,sete,sete,seat,posto,85
+nor_423,sjåfør,sjåfør,driver,autista,85
+nor_424,trafikk,trafikk,traffic,traffico,85
+nor_425,reise,reise,journey,viaggio,85
+nor_426,penn,penn,pen,penna,86
+nor_427,blyant,blyant,pencil,matita,86
+nor_428,papir,papir,paper,carta,86
+nor_429,notatbok,notatbok,notebook,quaderno,86
+nor_430,skrivebord,skrivebord,desk,scrivania,86
+nor_431,møte,møte,meeting,riunione,87
+nor_432,e-post,e-post,email,email,87
+nor_433,sjef,sjef,boss,capo,87
+nor_434,lønn,lønn,salary,stipendio,87
+nor_435,firma,firma,company,azienda,87
+nor_436,arm,arm,arm,braccio,88
+nor_437,bein,bein,leg,gamba,88
+nor_438,finger,finger,finger,dito,88
+nor_439,rygg,rygg,back,schiena,88
+nor_440,hjerte,hjerte,heart,cuore,88
+nor_441,frakk,frakk,coat,cappotto,89
+nor_442,skjørt,skjørt,skirt,gonna,89
+nor_443,sokk,sokk,sock,calzino,89
+nor_444,hanske,hanske,glove,guanto,89
+nor_445,skjerf,skjerf,scarf,sciarpa,89
+nor_446,medisin,medisin,medicine,medicina,90
+nor_447,feber,feber,fever,febbre,90
+nor_448,smerte,smerte,pain,dolore,90
+nor_449,hoste,hoste,cough,tosse,90
+nor_450,blod,blod,blood,sangue,90
+nor_451,kontanter,kontanter,cash,contanti,91
+nor_452,kredittkort,kredittkort,credit card,carta di credito,91
+nor_453,rabatt,rabatt,discount,sconto,91
+nor_454,kunde,kunde,customer,cliente,91
+nor_455,gave,gave,gift,regalo,91
+nor_456,musikk,musikk,music,musica,92
+nor_457,sang,sang,song,canzone,92
+nor_458,film,film,film,film,92
+nor_459,spill,spill,game,gioco,92
+nor_460,fest,fest,party,festa,92
+nor_461,fotball,fotball,football,calcio,93
+nor_462,tennis,tennis,tennis,tennis,93
+nor_463,sport,sport,sport,sport,93
+nor_464,lag,lag,team,squadra,93
+nor_465,ball,ball,ball,palla,93
+nor_466,gitar,gitar,guitar,chitarra,94
+nor_467,piano,piano,piano,pianoforte,94
+nor_468,bilde,bilde,photo,foto,94
+nor_469,hobby,hobby,hobby,hobby,94
+nor_470,ferie,ferie,holiday,vacanza,94
+nor_471,internett,internett,internet,internet,95
+nor_472,nettside,nettside,website,sito,95
+nor_473,passord,passord,password,password,95
+nor_474,skjerm,skjerm,screen,schermo,95
+nor_475,tastatur,tastatur,keyboard,tastiera,95
+nor_476,melding,melding,message,messaggio,96
+nor_477,nyheter,nyheter,news,notizie,96
+nor_478,tv,tv,television,televisione,96
+nor_479,radio,radio,radio,radio,96
+nor_480,kamera,kamera,camera,macchina fotografica,96
+nor_481,også,også,also,anche,97
+nor_482,bare,bare,only,solo,97
+nor_483,veldig,veldig,very,molto,97
+nor_484,kanskje,kanskje,maybe,forse,97
+nor_485,allerede,allerede,already,già,97
+nor_486,januar,januar,January,gennaio,98
+nor_487,februar,februar,February,febbraio,98
+nor_488,mars,mars,March,marzo,98
+nor_489,april,april,April,aprile,98
+nor_490,mai,mai,May,maggio,98
+nor_491,juni,juni,June,giugno,99
+nor_492,juli,juli,July,luglio,99
+nor_493,august,august,August,agosto,99
+nor_494,september,september,September,settembre,99
+nor_495,oktober,oktober,October,ottobre,99
+nor_496,november,november,November,novembre,100
+nor_497,desember,desember,December,dicembre,100
+nor_498,dato,dato,date,data,100
+nor_499,kalender,kalender,calendar,calendario,100
+nor_500,bursdag,bursdag,birthday,compleanno,100

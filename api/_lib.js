@@ -57,14 +57,16 @@ const WORD_CHEST_PRICE_COINS = 100;
 // way to buy back consistency. Charged against the *active course's* coin
 // balance even though the freeze itself is user-level.
 const STREAK_FREEZE_PRICE_COINS = 500;
+// One level per 5 words of the deck, so this tracks the deck size: 500 words
+// = 100 levels (see scripts/generate-categories.cjs).
 const COURSE_LEVEL_CAPS = {
-  chinese: 60,
-  german: 60,
-  italian: 60,
-  japanese: 60,
-  norwegian: 60,
-  spanish: 60,
-  swedish: 60
+  chinese: 100,
+  german: 100,
+  italian: 100,
+  japanese: 100,
+  norwegian: 100,
+  spanish: 100,
+  swedish: 100
 };
 
 const GAME_TYPES = ["trainer", "memory", "dictate", "sprint", "lesson"];
@@ -356,9 +358,9 @@ function sanitizeUnlockedWords(value) {
 // streak-based scheme).
 const WORD_MASTERY_THRESHOLD = 3;
 // Bounds how many per-word results a single session can report - well above
-// what any real session could produce (a course tops out at
-// TOTAL_CATEGORY_WORDS=300 words), just here so a malformed/hostile payload
-// can't force an unbounded write.
+// what any real session could produce (the longest sprint is ~20 rounds, and
+// a course tops out at TOTAL_CATEGORY_WORDS=500 words), just here so a
+// malformed/hostile payload can't force an unbounded write.
 const MAX_WORD_RESULTS_PER_SESSION = 400;
 
 function sanitizeWordResults(value) {

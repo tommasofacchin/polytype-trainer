@@ -195,7 +195,7 @@ ja_193,切符,kippu,ticket,biglietto,39
 ja_194,地図,chizu,map,mappa,39
 ja_195,ホテル,hoteru,hotel,hotel,39
 ja_196,左,hidari,left,sinistra,40
-ja_197,右,migi,right,vero,40
+ja_197,右,migi,right,destra,40
 ja_198,まっすぐ,massugu,straight ahead,dritto,40
 ja_199,近い,chikai,near,vicino,40
 ja_200,遠い,tooi,far,lontano,40
@@ -282,7 +282,7 @@ ja_280,ようこそ,youkoso,welcome,benvenuto,56
 ja_281,どうぞ,douzo,here you are,ecco a te,57
 ja_282,本当にありがとう,hontou ni arigatou,many thanks,mille grazie,57
 ja_283,大丈夫,daijoubu,it is fine,va bene,57
-ja_284,そうですね,sou desu ne,right,vero,57
+ja_284,そうですね,sou desu ne,that's right,vero,57
 ja_285,もちろん,mochiron,of course,certo,57
 ja_286,薬局,yakkyoku,pharmacy,farmacia,58
 ja_287,病院,byouin,hospital,ospedale,58
@@ -292,10 +292,210 @@ ja_290,問題,mondai,problem,problema,58
 ja_291,値段,nedan,price,prezzo,59
 ja_292,お金,okane,money,soldi,59
 ja_293,レシート,reshiito,receipt,ricevuta,59
-ja_294,袋,fukuro,bag,borsa,59
+ja_294,袋,fukuro,plastic bag,sacchetto,59
 ja_295,サイズ,saizu,size,taglia,59
 ja_296,電話,denwa,phone,telefono,60
 ja_297,コンピューター,konpyuutaa,computer,computer,60
 ja_298,鍵,kagi,key,chiave,60
 ja_299,時計,tokei,clock,orologio,60
 ja_300,かばん,kaban,bag,borsa,60
+ja_301,あげる,ageru,to give,dare,61
+ja_302,取る,toru,to take,prendere,61
+ja_303,置く,oku,to put,mettere,61
+ja_304,始める,hajimeru,to begin,cominciare,61
+ja_305,終わる,owaru,to finish,finire,61
+ja_306,知る,shiru,to know,sapere,62
+ja_307,考える,kangaeru,to think,pensare,62
+ja_308,分かる,wakaru,to understand,capire,62
+ja_309,覚える,oboeru,to remember,ricordare,62
+ja_310,忘れる,wasureru,to forget,dimenticare,62
+ja_311,助ける,tasukeru,to help,aiutare,63
+ja_312,電話する,denwa suru,to call,chiamare,63
+ja_313,送る,okuru,to send,inviare,63
+ja_314,失う,ushinau,to lose,perdere,63
+ja_315,勝つ,katsu,to win,vincere,63
+ja_316,着く,tsuku,to arrive,arrivare,64
+ja_317,入る,hairu,to enter,entrare,64
+ja_318,出発する,shuppatsu suru,to depart,partire,64
+ja_319,住む,sumu,to live,abitare,64
+ja_320,歩く,aruku,to walk,camminare,64
+ja_321,走る,hashiru,to run,correre,65
+ja_322,泳ぐ,oyogu,to swim,nuotare,65
+ja_323,跳ぶ,tobu,to jump,saltare,65
+ja_324,踊る,odoru,to dance,ballare,65
+ja_325,歌う,utau,to sing,cantare,65
+ja_326,遊ぶ,asobu,to play,giocare,66
+ja_327,料理する,ryouri suru,to cook,cucinare,66
+ja_328,掃除する,souji suru,to clean,pulire,66
+ja_329,建てる,tateru,to build,costruire,66
+ja_330,変える,kaeru,to change,cambiare,66
+ja_331,ご飯,gohan,rice,riso,67
+ja_332,パスタ,pasuta,pasta,pasta,67
+ja_333,鶏肉,toriniku,chicken,pollo,67
+ja_334,牛肉,gyuuniku,beef,manzo,67
+ja_335,豚肉,butaniku,pork,carne di maiale,67
+ja_336,バター,bataa,butter,burro,68
+ja_337,油,abura,oil,olio,68
+ja_338,こしょう,koshou,pepper,pepe,68
+ja_339,たまねぎ,tamanegi,onion,cipolla,68
+ja_340,トマト,tomato,tomato,pomodoro,68
+ja_341,にんにく,ninniku,garlic,aglio,69
+ja_342,レモン,remon,lemon,limone,69
+ja_343,いちご,ichigo,strawberry,fragola,69
+ja_344,ぶどう,budou,grape,uva,69
+ja_345,ケーキ,keeki,cake,torta,69
+ja_346,チョコレート,chokoreeto,chocolate,cioccolato,70
+ja_347,アイスクリーム,aisukuriimu,ice cream,gelato,70
+ja_348,ワイン,wain,wine,vino,70
+ja_349,ビール,biiru,beer,birra,70
+ja_350,ビン,bin,bottle,bottiglia,70
+ja_351,テーブル,teeburu,table,tavolo,71
+ja_352,いす,isu,chair,sedia,71
+ja_353,ベッド,beddo,bed,letto,71
+ja_354,ドア,doa,door,porta,71
+ja_355,窓,mado,window,finestra,71
+ja_356,壁,kabe,wall,muro,72
+ja_357,床,yuka,floor,pavimento,72
+ja_358,屋根,yane,roof,tetto,72
+ja_359,庭,niwa,garden,giardino,72
+ja_360,ガレージ,gareeji,garage,garage,72
+ja_361,ランプ,ranpu,lamp,lampada,73
+ja_362,鏡,kagami,mirror,specchio,73
+ja_363,タオル,taoru,towel,asciugamano,73
+ja_364,せっけん,sekken,soap,sapone,73
+ja_365,冷蔵庫,reizouko,fridge,frigorifero,73
+ja_366,オーブン,oobun,oven,forno,74
+ja_367,ソファ,sofa,sofa,divano,74
+ja_368,棚,tana,shelf,scaffale,74
+ja_369,階段,kaidan,stairs,scale,74
+ja_370,エレベーター,erebeetaa,elevator,ascensore,74
+ja_371,犬,inu,dog,cane,75
+ja_372,猫,neko,cat,gatto,75
+ja_373,鳥,tori,bird,uccello,75
+ja_374,馬,uma,horse,cavallo,75
+ja_375,牛,ushi,cow,mucca,75
+ja_376,羊,hitsuji,sheep,pecora,76
+ja_377,豚,buta,pig,maiale,76
+ja_378,めんどり,mendori,hen,gallina,76
+ja_379,ねずみ,nezumi,mouse,topo,76
+ja_380,うさぎ,usagi,rabbit,coniglio,76
+ja_381,木,ki,tree,albero,77
+ja_382,花,hana,flower,fiore,77
+ja_383,草,kusa,grass,erba,77
+ja_384,山,yama,mountain,montagna,77
+ja_385,川,kawa,river,fiume,77
+ja_386,海,umi,sea,mare,78
+ja_387,湖,mizuumi,lake,lago,78
+ja_388,森,mori,forest,foresta,78
+ja_389,浜,hama,beach,spiaggia,78
+ja_390,空,sora,sky,cielo,78
+ja_391,三十,sanjuu,thirty,trenta,79
+ja_392,四十,yonjuu,forty,quaranta,79
+ja_393,五十,gojuu,fifty,cinquanta,79
+ja_394,百,hyaku,hundred,cento,79
+ja_395,千,sen,thousand,mille,79
+ja_396,灰色,haiiro,grey,grigio,80
+ja_397,一番目,ichibanme,first,primo,80
+ja_398,最後,saigo,last,ultimo,80
+ja_399,半分,hanbun,half,metà,80
+ja_400,番号,bangou,number,numero,80
+ja_401,こわい,kowai,afraid,spaventato,81
+ja_402,びっくり,bikkuri,surprised,sorpreso,81
+ja_403,たいくつ,taikutsu,bored,annoiato,81
+ja_404,静か,shizuka,calm,calmo,81
+ja_405,誇らしい,hokorashii,proud,fiero,81
+ja_406,強い,tsuyoi,strong,forte,82
+ja_407,弱い,yowai,weak,debole,82
+ja_408,きれい,kirei,beautiful,stupendo,82
+ja_409,醜い,minikui,ugly,brutto,82
+ja_410,若い,wakai,young,giovane,82
+ja_411,金持ち,kanemochi,rich,ricco,83
+ja_412,貧しい,mazushii,poor,povero,83
+ja_413,清潔,seiketsu,clean,pulito,83
+ja_414,汚い,kitanai,dirty,sporco,83
+ja_415,おもしろい,omoshiroi,funny,divertente,83
+ja_416,道,michi,road,via,84
+ja_417,橋,hashi,bridge,ponte,84
+ja_418,タクシー,takushii,taxi,taxi,84
+ja_419,荷物,nimotsu,luggage,bagaglio,84
+ja_420,パスポート,pasupooto,passport,passaporto,84
+ja_421,フライト,furaito,flight,volo,85
+ja_422,席,seki,seat,posto,85
+ja_423,運転手,untenshu,driver,autista,85
+ja_424,交通,koutsuu,traffic,traffico,85
+ja_425,旅行,ryokou,journey,viaggio,85
+ja_426,ペン,pen,pen,penna,86
+ja_427,鉛筆,enpitsu,pencil,matita,86
+ja_428,紙,kami,paper,carta,86
+ja_429,ノート,nooto,notebook,quaderno,86
+ja_430,机,tsukue,desk,scrivania,86
+ja_431,会議,kaigi,meeting,riunione,87
+ja_432,メール,meeru,email,email,87
+ja_433,上司,joushi,boss,capo,87
+ja_434,給料,kyuuryou,salary,stipendio,87
+ja_435,会社,kaisha,company,azienda,87
+ja_436,腕,ude,arm,braccio,88
+ja_437,脚,ashi,leg,gamba,88
+ja_438,指,yubi,finger,dito,88
+ja_439,背中,senaka,back,schiena,88
+ja_440,心臓,shinzou,heart,cuore,88
+ja_441,コート,kooto,coat,cappotto,89
+ja_442,スカート,sukaato,skirt,gonna,89
+ja_443,くつした,kutsushita,sock,calzino,89
+ja_444,手袋,tebukuro,glove,guanto,89
+ja_445,マフラー,mafuraa,scarf,sciarpa,89
+ja_446,薬,kusuri,medicine,medicina,90
+ja_447,熱,netsu,fever,febbre,90
+ja_448,痛み,itami,pain,dolore,90
+ja_449,せき,seki,cough,tosse,90
+ja_450,血,chi,blood,sangue,90
+ja_451,現金,genkin,cash,contanti,91
+ja_452,クレジットカード,kurejittokaado,credit card,carta di credito,91
+ja_453,割引,waribiki,discount,sconto,91
+ja_454,客,kyaku,customer,cliente,91
+ja_455,プレゼント,purezento,gift,regalo,91
+ja_456,音楽,ongaku,music,musica,92
+ja_457,歌,uta,song,canzone,92
+ja_458,映画,eiga,film,film,92
+ja_459,ゲーム,geemu,game,gioco,92
+ja_460,パーティー,paatii,party,festa,92
+ja_461,サッカー,sakkaa,football,calcio,93
+ja_462,テニス,tenisu,tennis,tennis,93
+ja_463,スポーツ,supootsu,sport,sport,93
+ja_464,チーム,chiimu,team,squadra,93
+ja_465,ボール,booru,ball,palla,93
+ja_466,ギター,gitaa,guitar,chitarra,94
+ja_467,ピアノ,piano,piano,pianoforte,94
+ja_468,写真,shashin,photo,foto,94
+ja_469,趣味,shumi,hobby,hobby,94
+ja_470,休暇,kyuuka,holiday,vacanza,94
+ja_471,インターネット,intaanetto,internet,internet,95
+ja_472,ウェブサイト,webusaito,website,sito,95
+ja_473,パスワード,pasuwaado,password,password,95
+ja_474,画面,gamen,screen,schermo,95
+ja_475,キーボード,kiiboodo,keyboard,tastiera,95
+ja_476,メッセージ,messeeji,message,messaggio,96
+ja_477,ニュース,nyuusu,news,notizie,96
+ja_478,テレビ,terebi,television,televisione,96
+ja_479,ラジオ,rajio,radio,radio,96
+ja_480,カメラ,kamera,camera,macchina fotografica,96
+ja_481,も,mo,also,anche,97
+ja_482,だけ,dake,only,solo,97
+ja_483,とても,totemo,very,molto,97
+ja_484,たぶん,tabun,maybe,forse,97
+ja_485,もう,mou,already,già,97
+ja_486,一月,ichigatsu,January,gennaio,98
+ja_487,二月,nigatsu,February,febbraio,98
+ja_488,三月,sangatsu,March,marzo,98
+ja_489,四月,shigatsu,April,aprile,98
+ja_490,五月,gogatsu,May,maggio,98
+ja_491,六月,rokugatsu,June,giugno,99
+ja_492,七月,shichigatsu,July,luglio,99
+ja_493,八月,hachigatsu,August,agosto,99
+ja_494,九月,kugatsu,September,settembre,99
+ja_495,十月,juugatsu,October,ottobre,99
+ja_496,十一月,juuichigatsu,November,novembre,100
+ja_497,十二月,juunigatsu,December,dicembre,100
+ja_498,日付,hidzuke,date,data,100
+ja_499,カレンダー,karendaa,calendar,calendario,100
+ja_500,誕生日,tanjoubi,birthday,compleanno,100

@@ -195,7 +195,7 @@ zh_193,票,piào,ticket,biglietto,39
 zh_194,地图,dì tú,map,mappa,39
 zh_195,酒店,jiǔ diàn,hotel,hotel,39
 zh_196,左,zuǒ,left,sinistra,40
-zh_197,右,yòu,right,vero,40
+zh_197,右,yòu,right,destra,40
 zh_198,一直走,yì zhí zǒu,straight ahead,dritto,40
 zh_199,近,jìn,near,vicino,40
 zh_200,远,yuǎn,far,lontano,40
@@ -282,7 +282,7 @@ zh_280,欢迎,huān yíng,welcome,benvenuto,56
 zh_281,给你,gěi nǐ,here you are,ecco a te,57
 zh_282,非常感谢,fēi cháng gǎn xiè,many thanks,mille grazie,57
 zh_283,没关系,méi guān xi,it is fine,va bene,57
-zh_284,对吧,duì ba,right,vero,57
+zh_284,对吧,duì ba,that's right,vero,57
 zh_285,当然,dāng rán,of course,certo,57
 zh_286,药店,yào diàn,pharmacy,farmacia,58
 zh_287,医院,yī yuàn,hospital,ospedale,58
@@ -292,10 +292,210 @@ zh_290,问题,wèn tí,problem,problema,58
 zh_291,价格,jià gé,price,prezzo,59
 zh_292,钱,qián,money,soldi,59
 zh_293,收据,shōu jù,receipt,ricevuta,59
-zh_294,袋子,dài zi,bag,borsa,59
+zh_294,袋子,dài zi,plastic bag,sacchetto,59
 zh_295,尺码,chǐ mǎ,size,taglia,59
 zh_296,电话,diàn huà,phone,telefono,60
 zh_297,电脑,diàn nǎo,computer,computer,60
 zh_298,钥匙,yào shi,key,chiave,60
 zh_299,钟,zhōng,clock,orologio,60
 zh_300,包,bāo,bag,borsa,60
+zh_301,给,gěi,to give,dare,61
+zh_302,拿,ná,to take,prendere,61
+zh_303,放,fàng,to put,mettere,61
+zh_304,开始,kāi shǐ,to begin,cominciare,61
+zh_305,结束,jié shù,to finish,finire,61
+zh_306,知道,zhī dào,to know,sapere,62
+zh_307,想,xiǎng,to think,pensare,62
+zh_308,懂,dǒng,to understand,capire,62
+zh_309,记得,jì de,to remember,ricordare,62
+zh_310,忘记,wàng jì,to forget,dimenticare,62
+zh_311,帮,bāng,to help,aiutare,63
+zh_312,打电话,dǎ diàn huà,to call,chiamare,63
+zh_313,寄,jì,to send,inviare,63
+zh_314,丢,diū,to lose,perdere,63
+zh_315,赢,yíng,to win,vincere,63
+zh_316,到达,dào dá,to arrive,arrivare,64
+zh_317,进,jìn,to enter,entrare,64
+zh_318,离开,lí kāi,to depart,partire,64
+zh_319,住,zhù,to live,abitare,64
+zh_320,走,zǒu,to walk,camminare,64
+zh_321,跑,pǎo,to run,correre,65
+zh_322,游泳,yóu yǒng,to swim,nuotare,65
+zh_323,跳,tiào,to jump,saltare,65
+zh_324,跳舞,tiào wǔ,to dance,ballare,65
+zh_325,唱歌,chàng gē,to sing,cantare,65
+zh_326,玩,wán,to play,giocare,66
+zh_327,做饭,zuò fàn,to cook,cucinare,66
+zh_328,打扫,dǎ sǎo,to clean,pulire,66
+zh_329,建,jiàn,to build,costruire,66
+zh_330,改变,gǎi biàn,to change,cambiare,66
+zh_331,米饭,mǐ fàn,rice,riso,67
+zh_332,面条,miàn tiáo,pasta,pasta,67
+zh_333,鸡肉,jī ròu,chicken,pollo,67
+zh_334,牛肉,niú ròu,beef,manzo,67
+zh_335,猪肉,zhū ròu,pork,carne di maiale,67
+zh_336,黄油,huáng yóu,butter,burro,68
+zh_337,油,yóu,oil,olio,68
+zh_338,胡椒,hú jiāo,pepper,pepe,68
+zh_339,洋葱,yáng cōng,onion,cipolla,68
+zh_340,西红柿,xī hóng shì,tomato,pomodoro,68
+zh_341,大蒜,dà suàn,garlic,aglio,69
+zh_342,柠檬,níng méng,lemon,limone,69
+zh_343,草莓,cǎo méi,strawberry,fragola,69
+zh_344,葡萄,pú tao,grape,uva,69
+zh_345,蛋糕,dàn gāo,cake,torta,69
+zh_346,巧克力,qiǎo kè lì,chocolate,cioccolato,70
+zh_347,冰淇淋,bīng qí lín,ice cream,gelato,70
+zh_348,葡萄酒,pú tao jiǔ,wine,vino,70
+zh_349,啤酒,pí jiǔ,beer,birra,70
+zh_350,瓶子,píng zi,bottle,bottiglia,70
+zh_351,桌子,zhuō zi,table,tavolo,71
+zh_352,椅子,yǐ zi,chair,sedia,71
+zh_353,床,chuáng,bed,letto,71
+zh_354,门,mén,door,porta,71
+zh_355,窗户,chuāng hu,window,finestra,71
+zh_356,墙,qiáng,wall,muro,72
+zh_357,地板,dì bǎn,floor,pavimento,72
+zh_358,屋顶,wū dǐng,roof,tetto,72
+zh_359,花园,huā yuán,garden,giardino,72
+zh_360,车库,chē kù,garage,garage,72
+zh_361,灯,dēng,lamp,lampada,73
+zh_362,镜子,jìng zi,mirror,specchio,73
+zh_363,毛巾,máo jīn,towel,asciugamano,73
+zh_364,肥皂,féi zào,soap,sapone,73
+zh_365,冰箱,bīng xiāng,fridge,frigorifero,73
+zh_366,烤箱,kǎo xiāng,oven,forno,74
+zh_367,沙发,shā fā,sofa,divano,74
+zh_368,架子,jià zi,shelf,scaffale,74
+zh_369,楼梯,lóu tī,stairs,scale,74
+zh_370,电梯,diàn tī,elevator,ascensore,74
+zh_371,狗,gǒu,dog,cane,75
+zh_372,猫,māo,cat,gatto,75
+zh_373,鸟,niǎo,bird,uccello,75
+zh_374,马,mǎ,horse,cavallo,75
+zh_375,牛,niú,cow,mucca,75
+zh_376,羊,yáng,sheep,pecora,76
+zh_377,猪,zhū,pig,maiale,76
+zh_378,母鸡,mǔ jī,hen,gallina,76
+zh_379,老鼠,lǎo shǔ,mouse,topo,76
+zh_380,兔子,tù zi,rabbit,coniglio,76
+zh_381,树,shù,tree,albero,77
+zh_382,花,huā,flower,fiore,77
+zh_383,草,cǎo,grass,erba,77
+zh_384,山,shān,mountain,montagna,77
+zh_385,河,hé,river,fiume,77
+zh_386,海,hǎi,sea,mare,78
+zh_387,湖,hú,lake,lago,78
+zh_388,森林,sēn lín,forest,foresta,78
+zh_389,海滩,hǎi tān,beach,spiaggia,78
+zh_390,天空,tiān kōng,sky,cielo,78
+zh_391,三十,sān shí,thirty,trenta,79
+zh_392,四十,sì shí,forty,quaranta,79
+zh_393,五十,wǔ shí,fifty,cinquanta,79
+zh_394,一百,yī bǎi,hundred,cento,79
+zh_395,一千,yī qiān,thousand,mille,79
+zh_396,灰色,huī sè,grey,grigio,80
+zh_397,第一,dì yī,first,primo,80
+zh_398,最后,zuì hòu,last,ultimo,80
+zh_399,一半,yī bàn,half,metà,80
+zh_400,号码,hào mǎ,number,numero,80
+zh_401,害怕,hài pà,afraid,spaventato,81
+zh_402,惊讶,jīng yà,surprised,sorpreso,81
+zh_403,无聊,wú liáo,bored,annoiato,81
+zh_404,安静,ān jìng,calm,calmo,81
+zh_405,骄傲,jiāo ào,proud,fiero,81
+zh_406,强,qiáng,strong,forte,82
+zh_407,弱,ruò,weak,debole,82
+zh_408,美丽,měi lì,beautiful,stupendo,82
+zh_409,丑,chǒu,ugly,brutto,82
+zh_410,年轻,nián qīng,young,giovane,82
+zh_411,富有,fù yǒu,rich,ricco,83
+zh_412,穷,qióng,poor,povero,83
+zh_413,干净,gān jìng,clean,pulito,83
+zh_414,脏,zāng,dirty,sporco,83
+zh_415,有趣,yǒu qù,funny,divertente,83
+zh_416,路,lù,road,via,84
+zh_417,桥,qiáo,bridge,ponte,84
+zh_418,出租车,chū zū chē,taxi,taxi,84
+zh_419,行李,xíng li,luggage,bagaglio,84
+zh_420,护照,hù zhào,passport,passaporto,84
+zh_421,航班,háng bān,flight,volo,85
+zh_422,座位,zuò wèi,seat,posto,85
+zh_423,司机,sī jī,driver,autista,85
+zh_424,交通,jiāo tōng,traffic,traffico,85
+zh_425,旅程,lǚ chéng,journey,viaggio,85
+zh_426,笔,bǐ,pen,penna,86
+zh_427,铅笔,qiān bǐ,pencil,matita,86
+zh_428,纸,zhǐ,paper,carta,86
+zh_429,笔记本,bǐ jì běn,notebook,quaderno,86
+zh_430,书桌,shū zhuō,desk,scrivania,86
+zh_431,会议,huì yì,meeting,riunione,87
+zh_432,电子邮件,diàn zǐ yóu jiàn,email,email,87
+zh_433,老板,lǎo bǎn,boss,capo,87
+zh_434,工资,gōng zī,salary,stipendio,87
+zh_435,公司,gōng sī,company,azienda,87
+zh_436,手臂,shǒu bì,arm,braccio,88
+zh_437,腿,tuǐ,leg,gamba,88
+zh_438,手指,shǒu zhǐ,finger,dito,88
+zh_439,背,bèi,back,schiena,88
+zh_440,心,xīn,heart,cuore,88
+zh_441,大衣,dà yī,coat,cappotto,89
+zh_442,裙子,qún zi,skirt,gonna,89
+zh_443,袜子,wà zi,sock,calzino,89
+zh_444,手套,shǒu tào,glove,guanto,89
+zh_445,围巾,wéi jīn,scarf,sciarpa,89
+zh_446,药,yào,medicine,medicina,90
+zh_447,发烧,fā shāo,fever,febbre,90
+zh_448,疼,téng,pain,dolore,90
+zh_449,咳嗽,ké sou,cough,tosse,90
+zh_450,血,xuè,blood,sangue,90
+zh_451,现金,xiàn jīn,cash,contanti,91
+zh_452,信用卡,xìn yòng kǎ,credit card,carta di credito,91
+zh_453,折扣,zhé kòu,discount,sconto,91
+zh_454,顾客,gù kè,customer,cliente,91
+zh_455,礼物,lǐ wù,gift,regalo,91
+zh_456,音乐,yīn yuè,music,musica,92
+zh_457,歌,gē,song,canzone,92
+zh_458,电影,diàn yǐng,film,film,92
+zh_459,游戏,yóu xì,game,gioco,92
+zh_460,派对,pài duì,party,festa,92
+zh_461,足球,zú qiú,football,calcio,93
+zh_462,网球,wǎng qiú,tennis,tennis,93
+zh_463,运动,yùn dòng,sport,sport,93
+zh_464,队,duì,team,squadra,93
+zh_465,球,qiú,ball,palla,93
+zh_466,吉他,jí tā,guitar,chitarra,94
+zh_467,钢琴,gāng qín,piano,pianoforte,94
+zh_468,照片,zhào piàn,photo,foto,94
+zh_469,爱好,ài hào,hobby,hobby,94
+zh_470,假期,jià qī,holiday,vacanza,94
+zh_471,网络,wǎng luò,internet,internet,95
+zh_472,网站,wǎng zhàn,website,sito,95
+zh_473,密码,mì mǎ,password,password,95
+zh_474,屏幕,píng mù,screen,schermo,95
+zh_475,键盘,jiàn pán,keyboard,tastiera,95
+zh_476,消息,xiāo xi,message,messaggio,96
+zh_477,新闻,xīn wén,news,notizie,96
+zh_478,电视,diàn shì,television,televisione,96
+zh_479,收音机,shōu yīn jī,radio,radio,96
+zh_480,相机,xiàng jī,camera,macchina fotografica,96
+zh_481,也,yě,also,anche,97
+zh_482,只,zhǐ,only,solo,97
+zh_483,很,hěn,very,molto,97
+zh_484,也许,yě xǔ,maybe,forse,97
+zh_485,已经,yǐ jīng,already,già,97
+zh_486,一月,yī yuè,January,gennaio,98
+zh_487,二月,èr yuè,February,febbraio,98
+zh_488,三月,sān yuè,March,marzo,98
+zh_489,四月,sì yuè,April,aprile,98
+zh_490,五月,wǔ yuè,May,maggio,98
+zh_491,六月,liù yuè,June,giugno,99
+zh_492,七月,qī yuè,July,luglio,99
+zh_493,八月,bā yuè,August,agosto,99
+zh_494,九月,jiǔ yuè,September,settembre,99
+zh_495,十月,shí yuè,October,ottobre,99
+zh_496,十一月,shí yī yuè,November,novembre,100
+zh_497,十二月,shí èr yuè,December,dicembre,100
+zh_498,日期,rì qī,date,data,100
+zh_499,日历,rì lì,calendar,calendario,100
+zh_500,生日,shēng rì,birthday,compleanno,100

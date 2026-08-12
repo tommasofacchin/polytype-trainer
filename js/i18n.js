@@ -299,6 +299,9 @@
             "categories.workSchool": "Work & School",
             "categories.feelingsQualities": "Feelings & Qualities",
             "categories.shoppingHealth": "Shopping & Health",
+            "categories.natureAnimals": "Nature & Animals",
+            "categories.hobbiesSports": "Hobbies & Sport",
+            "categories.technologyMedia": "Technology & Media",
 
             "nav.home": "Home",
             "nav.games": "Games",
@@ -856,6 +859,9 @@
             "categories.workSchool": "Lavoro e scuola",
             "categories.feelingsQualities": "Emozioni e qualità",
             "categories.shoppingHealth": "Shopping e salute",
+            "categories.natureAnimals": "Natura e animali",
+            "categories.hobbiesSports": "Hobby e sport",
+            "categories.technologyMedia": "Tecnologia e media",
 
             "nav.home": "Home",
             "nav.games": "Giochi",

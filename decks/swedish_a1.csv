@@ -195,7 +195,7 @@ sv_193,biljett,,ticket,biglietto,39
 sv_194,karta,,map,mappa,39
 sv_195,hotell,,hotel,hotel,39
 sv_196,vänster,,left,sinistra,40
-sv_197,höger,,right,vero,40
+sv_197,höger,,right,destra,40
 sv_198,rakt fram,,straight ahead,dritto,40
 sv_199,nära,,near,vicino,40
 sv_200,långt,,far,lontano,40
@@ -282,7 +282,7 @@ sv_280,välkommen,,welcome,benvenuto,56
 sv_281,varsågod,,here you are,ecco a te,57
 sv_282,tusen tack,,many thanks,mille grazie,57
 sv_283,det är bra,,it is fine,va bene,57
-sv_284,eller hur,,right,vero,57
+sv_284,eller hur,,that's right,vero,57
 sv_285,självklart,,of course,certo,57
 sv_286,apotek,,pharmacy,farmacia,58
 sv_287,sjukhus,,hospital,ospedale,58
@@ -292,10 +292,210 @@ sv_290,problem,,problem,problema,58
 sv_291,pris,,price,prezzo,59
 sv_292,pengar,,money,soldi,59
 sv_293,kvitto,,receipt,ricevuta,59
-sv_294,påse,,bag,borsa,59
+sv_294,påse,,plastic bag,sacchetto,59
 sv_295,storlek,,size,taglia,59
 sv_296,telefon,,phone,telefono,60
 sv_297,dator,,computer,computer,60
 sv_298,nyckel,,key,chiave,60
 sv_299,klocka,,clock,orologio,60
 sv_300,väska,,bag,borsa,60
+sv_301,att ge,,to give,dare,61
+sv_302,att ta,,to take,prendere,61
+sv_303,att lägga,,to put,mettere,61
+sv_304,att börja,,to begin,cominciare,61
+sv_305,att sluta,,to finish,finire,61
+sv_306,att veta,,to know,sapere,62
+sv_307,att tänka,,to think,pensare,62
+sv_308,att förstå,,to understand,capire,62
+sv_309,att minnas,,to remember,ricordare,62
+sv_310,att glömma,,to forget,dimenticare,62
+sv_311,att hjälpa,,to help,aiutare,63
+sv_312,att ringa,,to call,chiamare,63
+sv_313,att skicka,,to send,inviare,63
+sv_314,att förlora,,to lose,perdere,63
+sv_315,att vinna,,to win,vincere,63
+sv_316,att anlända,,to arrive,arrivare,64
+sv_317,att gå in,,to enter,entrare,64
+sv_318,att åka,,to depart,partire,64
+sv_319,att bo,,to live,abitare,64
+sv_320,att promenera,,to walk,camminare,64
+sv_321,att springa,,to run,correre,65
+sv_322,att simma,,to swim,nuotare,65
+sv_323,att hoppa,,to jump,saltare,65
+sv_324,att dansa,,to dance,ballare,65
+sv_325,att sjunga,,to sing,cantare,65
+sv_326,att leka,,to play,giocare,66
+sv_327,att laga mat,,to cook,cucinare,66
+sv_328,att städa,,to clean,pulire,66
+sv_329,att bygga,,to build,costruire,66
+sv_330,att ändra,,to change,cambiare,66
+sv_331,ris,,rice,riso,67
+sv_332,pasta,,pasta,pasta,67
+sv_333,kyckling,,chicken,pollo,67
+sv_334,nötkött,,beef,manzo,67
+sv_335,fläskkött,,pork,carne di maiale,67
+sv_336,smör,,butter,burro,68
+sv_337,olja,,oil,olio,68
+sv_338,peppar,,pepper,pepe,68
+sv_339,lök,,onion,cipolla,68
+sv_340,tomat,,tomato,pomodoro,68
+sv_341,vitlök,,garlic,aglio,69
+sv_342,citron,,lemon,limone,69
+sv_343,jordgubbe,,strawberry,fragola,69
+sv_344,vindruva,,grape,uva,69
+sv_345,tårta,,cake,torta,69
+sv_346,choklad,,chocolate,cioccolato,70
+sv_347,glass,,ice cream,gelato,70
+sv_348,vin,,wine,vino,70
+sv_349,öl,,beer,birra,70
+sv_350,flaska,,bottle,bottiglia,70
+sv_351,bord,,table,tavolo,71
+sv_352,stol,,chair,sedia,71
+sv_353,säng,,bed,letto,71
+sv_354,dörr,,door,porta,71
+sv_355,fönster,,window,finestra,71
+sv_356,vägg,,wall,muro,72
+sv_357,golv,,floor,pavimento,72
+sv_358,tak,,roof,tetto,72
+sv_359,trädgård,,garden,giardino,72
+sv_360,garage,,garage,garage,72
+sv_361,lampa,,lamp,lampada,73
+sv_362,spegel,,mirror,specchio,73
+sv_363,handduk,,towel,asciugamano,73
+sv_364,tvål,,soap,sapone,73
+sv_365,kylskåp,,fridge,frigorifero,73
+sv_366,ugn,,oven,forno,74
+sv_367,soffa,,sofa,divano,74
+sv_368,hylla,,shelf,scaffale,74
+sv_369,trappa,,stairs,scale,74
+sv_370,hiss,,elevator,ascensore,74
+sv_371,hund,,dog,cane,75
+sv_372,katt,,cat,gatto,75
+sv_373,fågel,,bird,uccello,75
+sv_374,häst,,horse,cavallo,75
+sv_375,ko,,cow,mucca,75
+sv_376,får,,sheep,pecora,76
+sv_377,gris,,pig,maiale,76
+sv_378,höna,,hen,gallina,76
+sv_379,mus,,mouse,topo,76
+sv_380,kanin,,rabbit,coniglio,76
+sv_381,träd,,tree,albero,77
+sv_382,blomma,,flower,fiore,77
+sv_383,gräs,,grass,erba,77
+sv_384,berg,,mountain,montagna,77
+sv_385,flod,,river,fiume,77
+sv_386,hav,,sea,mare,78
+sv_387,sjö,,lake,lago,78
+sv_388,skog,,forest,foresta,78
+sv_389,strand,,beach,spiaggia,78
+sv_390,himmel,,sky,cielo,78
+sv_391,trettio,,thirty,trenta,79
+sv_392,fyrtio,,forty,quaranta,79
+sv_393,femtio,,fifty,cinquanta,79
+sv_394,hundra,,hundred,cento,79
+sv_395,tusen,,thousand,mille,79
+sv_396,grå,,grey,grigio,80
+sv_397,första,,first,primo,80
+sv_398,sista,,last,ultimo,80
+sv_399,hälft,,half,metà,80
+sv_400,nummer,,number,numero,80
+sv_401,rädd,,afraid,spaventato,81
+sv_402,förvånad,,surprised,sorpreso,81
+sv_403,uttråkad,,bored,annoiato,81
+sv_404,lugn,,calm,calmo,81
+sv_405,stolt,,proud,fiero,81
+sv_406,stark,,strong,forte,82
+sv_407,svag,,weak,debole,82
+sv_408,vacker,,beautiful,stupendo,82
+sv_409,ful,,ugly,brutto,82
+sv_410,ung,,young,giovane,82
+sv_411,rik,,rich,ricco,83
+sv_412,fattig,,poor,povero,83
+sv_413,ren,,clean,pulito,83
+sv_414,smutsig,,dirty,sporco,83
+sv_415,rolig,,funny,divertente,83
+sv_416,väg,,road,via,84
+sv_417,bro,,bridge,ponte,84
+sv_418,taxi,,taxi,taxi,84
+sv_419,bagage,,luggage,bagaglio,84
+sv_420,pass,,passport,passaporto,84
+sv_421,flyg,,flight,volo,85
+sv_422,plats,,seat,posto,85
+sv_423,förare,,driver,autista,85
+sv_424,trafik,,traffic,traffico,85
+sv_425,resa,,journey,viaggio,85
+sv_426,penna,,pen,penna,86
+sv_427,blyertspenna,,pencil,matita,86
+sv_428,papper,,paper,carta,86
+sv_429,anteckningsbok,,notebook,quaderno,86
+sv_430,skrivbord,,desk,scrivania,86
+sv_431,möte,,meeting,riunione,87
+sv_432,mejl,,email,email,87
+sv_433,chef,,boss,capo,87
+sv_434,lön,,salary,stipendio,87
+sv_435,företag,,company,azienda,87
+sv_436,arm,,arm,braccio,88
+sv_437,ben,,leg,gamba,88
+sv_438,finger,,finger,dito,88
+sv_439,rygg,,back,schiena,88
+sv_440,hjärta,,heart,cuore,88
+sv_441,kappa,,coat,cappotto,89
+sv_442,kjol,,skirt,gonna,89
+sv_443,strumpa,,sock,calzino,89
+sv_444,handske,,glove,guanto,89
+sv_445,halsduk,,scarf,sciarpa,89
+sv_446,medicin,,medicine,medicina,90
+sv_447,feber,,fever,febbre,90
+sv_448,smärta,,pain,dolore,90
+sv_449,hosta,,cough,tosse,90
+sv_450,blod,,blood,sangue,90
+sv_451,kontanter,,cash,contanti,91
+sv_452,kreditkort,,credit card,carta di credito,91
+sv_453,rabatt,,discount,sconto,91
+sv_454,kund,,customer,cliente,91
+sv_455,present,,gift,regalo,91
+sv_456,musik,,music,musica,92
+sv_457,sång,,song,canzone,92
+sv_458,film,,film,film,92
+sv_459,spel,,game,gioco,92
+sv_460,fest,,party,festa,92
+sv_461,fotboll,,football,calcio,93
+sv_462,tennis,,tennis,tennis,93
+sv_463,sport,,sport,sport,93
+sv_464,lag,,team,squadra,93
+sv_465,boll,,ball,palla,93
+sv_466,gitarr,,guitar,chitarra,94
+sv_467,piano,,piano,pianoforte,94
+sv_468,foto,,photo,foto,94
+sv_469,hobby,,hobby,hobby,94
+sv_470,semester,,holiday,vacanza,94
+sv_471,internet,,internet,internet,95
+sv_472,webbplats,,website,sito,95
+sv_473,lösenord,,password,password,95
+sv_474,skärm,,screen,schermo,95
+sv_475,tangentbord,,keyboard,tastiera,95
+sv_476,meddelande,,message,messaggio,96
+sv_477,nyheter,,news,notizie,96
+sv_478,tv,,television,televisione,96
+sv_479,radio,,radio,radio,96
+sv_480,kamera,,camera,macchina fotografica,96
+sv_481,också,,also,anche,97
+sv_482,bara,,only,solo,97
+sv_483,mycket,,very,molto,97
+sv_484,kanske,,maybe,forse,97
+sv_485,redan,,already,già,97
+sv_486,januari,,January,gennaio,98
+sv_487,februari,,February,febbraio,98
+sv_488,mars,,March,marzo,98
+sv_489,april,,April,aprile,98
+sv_490,maj,,May,maggio,98
+sv_491,juni,,June,giugno,99
+sv_492,juli,,July,luglio,99
+sv_493,augusti,,August,agosto,99
+sv_494,september,,September,settembre,99
+sv_495,oktober,,October,ottobre,99
+sv_496,november,,November,novembre,100
+sv_497,december,,December,dicembre,100
+sv_498,datum,,date,data,100
+sv_499,kalender,,calendar,calendario,100
+sv_500,födelsedag,,birthday,compleanno,100

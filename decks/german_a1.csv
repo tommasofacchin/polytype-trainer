@@ -195,7 +195,7 @@ de_193,Fahrkarte,,ticket,biglietto,39
 de_194,Karte,,map,mappa,39
 de_195,Hotel,,hotel,hotel,39
 de_196,links,,left,sinistra,40
-de_197,rechts,,right,vero,40
+de_197,rechts,,right,destra,40
 de_198,geradeaus,,straight ahead,dritto,40
 de_199,nah,,near,vicino,40
 de_200,weit,,far,lontano,40
@@ -282,7 +282,7 @@ de_280,willkommen,,welcome,benvenuto,56
 de_281,bitte sehr,,here you are,ecco a te,57
 de_282,vielen Dank,,many thanks,mille grazie,57
 de_283,es ist in Ordnung,,it is fine,va bene,57
-de_284,stimmt,,right,vero,57
+de_284,stimmt,,that's right,vero,57
 de_285,natürlich,,of course,certo,57
 de_286,Apotheke,,pharmacy,farmacia,58
 de_287,Krankenhaus,,hospital,ospedale,58
@@ -292,10 +292,210 @@ de_290,Problem,,problem,problema,58
 de_291,Preis,,price,prezzo,59
 de_292,Geld,,money,soldi,59
 de_293,Quittung,,receipt,ricevuta,59
-de_294,Tüte,,bag,borsa,59
+de_294,Tüte,,plastic bag,sacchetto,59
 de_295,Größe,,size,taglia,59
 de_296,Telefon,,phone,telefono,60
 de_297,Computer,,computer,computer,60
 de_298,Schlüssel,,key,chiave,60
 de_299,Uhr,,clock,orologio,60
 de_300,Tasche,,bag,borsa,60
+de_301,geben,,to give,dare,61
+de_302,nehmen,,to take,prendere,61
+de_303,legen,,to put,mettere,61
+de_304,anfangen,,to begin,cominciare,61
+de_305,beenden,,to finish,finire,61
+de_306,wissen,,to know,sapere,62
+de_307,denken,,to think,pensare,62
+de_308,verstehen,,to understand,capire,62
+de_309,erinnern,,to remember,ricordare,62
+de_310,vergessen,,to forget,dimenticare,62
+de_311,helfen,,to help,aiutare,63
+de_312,anrufen,,to call,chiamare,63
+de_313,senden,,to send,inviare,63
+de_314,verlieren,,to lose,perdere,63
+de_315,gewinnen,,to win,vincere,63
+de_316,ankommen,,to arrive,arrivare,64
+de_317,eintreten,,to enter,entrare,64
+de_318,abfahren,,to depart,partire,64
+de_319,wohnen,,to live,abitare,64
+de_320,laufen,,to walk,camminare,64
+de_321,rennen,,to run,correre,65
+de_322,schwimmen,,to swim,nuotare,65
+de_323,springen,,to jump,saltare,65
+de_324,tanzen,,to dance,ballare,65
+de_325,singen,,to sing,cantare,65
+de_326,spielen,,to play,giocare,66
+de_327,kochen,,to cook,cucinare,66
+de_328,putzen,,to clean,pulire,66
+de_329,bauen,,to build,costruire,66
+de_330,ändern,,to change,cambiare,66
+de_331,Reis,,rice,riso,67
+de_332,Nudeln,,pasta,pasta,67
+de_333,Hähnchen,,chicken,pollo,67
+de_334,Rindfleisch,,beef,manzo,67
+de_335,Schweinefleisch,,pork,carne di maiale,67
+de_336,Butter,,butter,burro,68
+de_337,Öl,,oil,olio,68
+de_338,Pfeffer,,pepper,pepe,68
+de_339,Zwiebel,,onion,cipolla,68
+de_340,Tomate,,tomato,pomodoro,68
+de_341,Knoblauch,,garlic,aglio,69
+de_342,Zitrone,,lemon,limone,69
+de_343,Erdbeere,,strawberry,fragola,69
+de_344,Traube,,grape,uva,69
+de_345,Kuchen,,cake,torta,69
+de_346,Schokolade,,chocolate,cioccolato,70
+de_347,Eis,,ice cream,gelato,70
+de_348,Wein,,wine,vino,70
+de_349,Bier,,beer,birra,70
+de_350,Flasche,,bottle,bottiglia,70
+de_351,Tisch,,table,tavolo,71
+de_352,Stuhl,,chair,sedia,71
+de_353,Bett,,bed,letto,71
+de_354,Tür,,door,porta,71
+de_355,Fenster,,window,finestra,71
+de_356,Wand,,wall,muro,72
+de_357,Boden,,floor,pavimento,72
+de_358,Dach,,roof,tetto,72
+de_359,Garten,,garden,giardino,72
+de_360,Garage,,garage,garage,72
+de_361,Lampe,,lamp,lampada,73
+de_362,Spiegel,,mirror,specchio,73
+de_363,Handtuch,,towel,asciugamano,73
+de_364,Seife,,soap,sapone,73
+de_365,Kühlschrank,,fridge,frigorifero,73
+de_366,Ofen,,oven,forno,74
+de_367,Sofa,,sofa,divano,74
+de_368,Regal,,shelf,scaffale,74
+de_369,Treppe,,stairs,scale,74
+de_370,Aufzug,,elevator,ascensore,74
+de_371,Hund,,dog,cane,75
+de_372,Katze,,cat,gatto,75
+de_373,Vogel,,bird,uccello,75
+de_374,Pferd,,horse,cavallo,75
+de_375,Kuh,,cow,mucca,75
+de_376,Schaf,,sheep,pecora,76
+de_377,Schwein,,pig,maiale,76
+de_378,Huhn,,hen,gallina,76
+de_379,Maus,,mouse,topo,76
+de_380,Kaninchen,,rabbit,coniglio,76
+de_381,Baum,,tree,albero,77
+de_382,Blume,,flower,fiore,77
+de_383,Gras,,grass,erba,77
+de_384,Berg,,mountain,montagna,77
+de_385,Fluss,,river,fiume,77
+de_386,Meer,,sea,mare,78
+de_387,See,,lake,lago,78
+de_388,Wald,,forest,foresta,78
+de_389,Strand,,beach,spiaggia,78
+de_390,Himmel,,sky,cielo,78
+de_391,dreißig,,thirty,trenta,79
+de_392,vierzig,,forty,quaranta,79
+de_393,fünfzig,,fifty,cinquanta,79
+de_394,hundert,,hundred,cento,79
+de_395,tausend,,thousand,mille,79
+de_396,grau,,grey,grigio,80
+de_397,erste,,first,primo,80
+de_398,letzte,,last,ultimo,80
+de_399,Hälfte,,half,metà,80
+de_400,Nummer,,number,numero,80
+de_401,ängstlich,,afraid,spaventato,81
+de_402,überrascht,,surprised,sorpreso,81
+de_403,gelangweilt,,bored,annoiato,81
+de_404,ruhig,,calm,calmo,81
+de_405,stolz,,proud,fiero,81
+de_406,stark,,strong,forte,82
+de_407,schwach,,weak,debole,82
+de_408,hübsch,,beautiful,stupendo,82
+de_409,hässlich,,ugly,brutto,82
+de_410,jung,,young,giovane,82
+de_411,reich,,rich,ricco,83
+de_412,arm,,poor,povero,83
+de_413,sauber,,clean,pulito,83
+de_414,schmutzig,,dirty,sporco,83
+de_415,lustig,,funny,divertente,83
+de_416,Weg,,road,via,84
+de_417,Brücke,,bridge,ponte,84
+de_418,Taxi,,taxi,taxi,84
+de_419,Gepäck,,luggage,bagaglio,84
+de_420,Reisepass,,passport,passaporto,84
+de_421,Flug,,flight,volo,85
+de_422,Sitz,,seat,posto,85
+de_423,Fahrer,,driver,autista,85
+de_424,Verkehr,,traffic,traffico,85
+de_425,Reise,,journey,viaggio,85
+de_426,Kugelschreiber,,pen,penna,86
+de_427,Bleistift,,pencil,matita,86
+de_428,Papier,,paper,carta,86
+de_429,Heft,,notebook,quaderno,86
+de_430,Schreibtisch,,desk,scrivania,86
+de_431,Besprechung,,meeting,riunione,87
+de_432,E-Mail,,email,email,87
+de_433,Chef,,boss,capo,87
+de_434,Gehalt,,salary,stipendio,87
+de_435,Firma,,company,azienda,87
+de_436,Arm,,arm,braccio,88
+de_437,Bein,,leg,gamba,88
+de_438,Finger,,finger,dito,88
+de_439,Rücken,,back,schiena,88
+de_440,Herz,,heart,cuore,88
+de_441,Mantel,,coat,cappotto,89
+de_442,Rock,,skirt,gonna,89
+de_443,Socke,,sock,calzino,89
+de_444,Handschuh,,glove,guanto,89
+de_445,Schal,,scarf,sciarpa,89
+de_446,Medizin,,medicine,medicina,90
+de_447,Fieber,,fever,febbre,90
+de_448,Schmerz,,pain,dolore,90
+de_449,Husten,,cough,tosse,90
+de_450,Blut,,blood,sangue,90
+de_451,Bargeld,,cash,contanti,91
+de_452,Kreditkarte,,credit card,carta di credito,91
+de_453,Rabatt,,discount,sconto,91
+de_454,Kunde,,customer,cliente,91
+de_455,Geschenk,,gift,regalo,91
+de_456,Musik,,music,musica,92
+de_457,Lied,,song,canzone,92
+de_458,Film,,film,film,92
+de_459,Spiel,,game,gioco,92
+de_460,Party,,party,festa,92
+de_461,Fußball,,football,calcio,93
+de_462,Tennis,,tennis,tennis,93
+de_463,Sport,,sport,sport,93
+de_464,Mannschaft,,team,squadra,93
+de_465,Ball,,ball,palla,93
+de_466,Gitarre,,guitar,chitarra,94
+de_467,Klavier,,piano,pianoforte,94
+de_468,Foto,,photo,foto,94
+de_469,Hobby,,hobby,hobby,94
+de_470,Urlaub,,holiday,vacanza,94
+de_471,Internet,,internet,internet,95
+de_472,Webseite,,website,sito,95
+de_473,Passwort,,password,password,95
+de_474,Bildschirm,,screen,schermo,95
+de_475,Tastatur,,keyboard,tastiera,95
+de_476,Nachricht,,message,messaggio,96
+de_477,Neuigkeiten,,news,notizie,96
+de_478,Fernseher,,television,televisione,96
+de_479,Radio,,radio,radio,96
+de_480,Kamera,,camera,macchina fotografica,96
+de_481,auch,,also,anche,97
+de_482,nur,,only,solo,97
+de_483,sehr,,very,molto,97
+de_484,vielleicht,,maybe,forse,97
+de_485,schon,,already,già,97
+de_486,Januar,,January,gennaio,98
+de_487,Februar,,February,febbraio,98
+de_488,März,,March,marzo,98
+de_489,April,,April,aprile,98
+de_490,Mai,,May,maggio,98
+de_491,Juni,,June,giugno,99
+de_492,Juli,,July,luglio,99
+de_493,August,,August,agosto,99
+de_494,September,,September,settembre,99
+de_495,Oktober,,October,ottobre,99
+de_496,November,,November,novembre,100
+de_497,Dezember,,December,dicembre,100
+de_498,Datum,,date,data,100
+de_499,Kalender,,calendar,calendario,100
+de_500,Geburtstag,,birthday,compleanno,100

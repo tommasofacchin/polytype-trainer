@@ -282,7 +282,7 @@ it_280,benvenuto,,welcome,56
 it_281,ecco a te,,here you are,57
 it_282,mille grazie,,many thanks,57
 it_283,va bene,,it is fine,57
-it_284,vero,,right,57
+it_284,vero,,that's right,57
 it_285,certo,,of course,57
 it_286,farmacia,,pharmacy,58
 it_287,ospedale,,hospital,58
@@ -292,10 +292,210 @@ it_290,problema,,problem,58
 it_291,prezzo,,price,59
 it_292,soldi,,money,59
 it_293,ricevuta,,receipt,59
-it_294,borsa,,bag,59
+it_294,sacchetto,,plastic bag,59
 it_295,taglia,,size,59
 it_296,telefono,,phone,60
 it_297,computer,,computer,60
 it_298,chiave,,key,60
 it_299,orologio,,clock,60
 it_300,borsa,,bag,60
+it_301,dare,,to give,61
+it_302,prendere,,to take,61
+it_303,mettere,,to put,61
+it_304,cominciare,,to begin,61
+it_305,finire,,to finish,61
+it_306,sapere,,to know,62
+it_307,pensare,,to think,62
+it_308,capire,,to understand,62
+it_309,ricordare,,to remember,62
+it_310,dimenticare,,to forget,62
+it_311,aiutare,,to help,63
+it_312,chiamare,,to call,63
+it_313,inviare,,to send,63
+it_314,perdere,,to lose,63
+it_315,vincere,,to win,63
+it_316,arrivare,,to arrive,64
+it_317,entrare,,to enter,64
+it_318,partire,,to depart,64
+it_319,abitare,,to live,64
+it_320,camminare,,to walk,64
+it_321,correre,,to run,65
+it_322,nuotare,,to swim,65
+it_323,saltare,,to jump,65
+it_324,ballare,,to dance,65
+it_325,cantare,,to sing,65
+it_326,giocare,,to play,66
+it_327,cucinare,,to cook,66
+it_328,pulire,,to clean,66
+it_329,costruire,,to build,66
+it_330,cambiare,,to change,66
+it_331,riso,,rice,67
+it_332,pasta,,pasta,67
+it_333,pollo,,chicken,67
+it_334,manzo,,beef,67
+it_335,carne di maiale,,pork,67
+it_336,burro,,butter,68
+it_337,olio,,oil,68
+it_338,pepe,,pepper,68
+it_339,cipolla,,onion,68
+it_340,pomodoro,,tomato,68
+it_341,aglio,,garlic,69
+it_342,limone,,lemon,69
+it_343,fragola,,strawberry,69
+it_344,uva,,grape,69
+it_345,torta,,cake,69
+it_346,cioccolato,,chocolate,70
+it_347,gelato,,ice cream,70
+it_348,vino,,wine,70
+it_349,birra,,beer,70
+it_350,bottiglia,,bottle,70
+it_351,tavolo,,table,71
+it_352,sedia,,chair,71
+it_353,letto,,bed,71
+it_354,porta,,door,71
+it_355,finestra,,window,71
+it_356,muro,,wall,72
+it_357,pavimento,,floor,72
+it_358,tetto,,roof,72
+it_359,giardino,,garden,72
+it_360,garage,,garage,72
+it_361,lampada,,lamp,73
+it_362,specchio,,mirror,73
+it_363,asciugamano,,towel,73
+it_364,sapone,,soap,73
+it_365,frigorifero,,fridge,73
+it_366,forno,,oven,74
+it_367,divano,,sofa,74
+it_368,scaffale,,shelf,74
+it_369,scale,,stairs,74
+it_370,ascensore,,elevator,74
+it_371,cane,,dog,75
+it_372,gatto,,cat,75
+it_373,uccello,,bird,75
+it_374,cavallo,,horse,75
+it_375,mucca,,cow,75
+it_376,pecora,,sheep,76
+it_377,maiale,,pig,76
+it_378,gallina,,hen,76
+it_379,topo,,mouse,76
+it_380,coniglio,,rabbit,76
+it_381,albero,,tree,77
+it_382,fiore,,flower,77
+it_383,erba,,grass,77
+it_384,montagna,,mountain,77
+it_385,fiume,,river,77
+it_386,mare,,sea,78
+it_387,lago,,lake,78
+it_388,foresta,,forest,78
+it_389,spiaggia,,beach,78
+it_390,cielo,,sky,78
+it_391,trenta,,thirty,79
+it_392,quaranta,,forty,79
+it_393,cinquanta,,fifty,79
+it_394,cento,,hundred,79
+it_395,mille,,thousand,79
+it_396,grigio,,grey,80
+it_397,primo,,first,80
+it_398,ultimo,,last,80
+it_399,metà,,half,80
+it_400,numero,,number,80
+it_401,spaventato,,afraid,81
+it_402,sorpreso,,surprised,81
+it_403,annoiato,,bored,81
+it_404,calmo,,calm,81
+it_405,fiero,,proud,81
+it_406,forte,,strong,82
+it_407,debole,,weak,82
+it_408,stupendo,,beautiful,82
+it_409,brutto,,ugly,82
+it_410,giovane,,young,82
+it_411,ricco,,rich,83
+it_412,povero,,poor,83
+it_413,pulito,,clean,83
+it_414,sporco,,dirty,83
+it_415,divertente,,funny,83
+it_416,via,,road,84
+it_417,ponte,,bridge,84
+it_418,taxi,,taxi,84
+it_419,bagaglio,,luggage,84
+it_420,passaporto,,passport,84
+it_421,volo,,flight,85
+it_422,posto,,seat,85
+it_423,autista,,driver,85
+it_424,traffico,,traffic,85
+it_425,viaggio,,journey,85
+it_426,penna,,pen,86
+it_427,matita,,pencil,86
+it_428,carta,,paper,86
+it_429,quaderno,,notebook,86
+it_430,scrivania,,desk,86
+it_431,riunione,,meeting,87
+it_432,email,,email,87
+it_433,capo,,boss,87
+it_434,stipendio,,salary,87
+it_435,azienda,,company,87
+it_436,braccio,,arm,88
+it_437,gamba,,leg,88
+it_438,dito,,finger,88
+it_439,schiena,,back,88
+it_440,cuore,,heart,88
+it_441,cappotto,,coat,89
+it_442,gonna,,skirt,89
+it_443,calzino,,sock,89
+it_444,guanto,,glove,89
+it_445,sciarpa,,scarf,89
+it_446,medicina,,medicine,90
+it_447,febbre,,fever,90
+it_448,dolore,,pain,90
+it_449,tosse,,cough,90
+it_450,sangue,,blood,90
+it_451,contanti,,cash,91
+it_452,carta di credito,,credit card,91
+it_453,sconto,,discount,91
+it_454,cliente,,customer,91
+it_455,regalo,,gift,91
+it_456,musica,,music,92
+it_457,canzone,,song,92
+it_458,film,,film,92
+it_459,gioco,,game,92
+it_460,festa,,party,92
+it_461,calcio,,football,93
+it_462,tennis,,tennis,93
+it_463,sport,,sport,93
+it_464,squadra,,team,93
+it_465,palla,,ball,93
+it_466,chitarra,,guitar,94
+it_467,pianoforte,,piano,94
+it_468,foto,,photo,94
+it_469,hobby,,hobby,94
+it_470,vacanza,,holiday,94
+it_471,internet,,internet,95
+it_472,sito,,website,95
+it_473,password,,password,95
+it_474,schermo,,screen,95
+it_475,tastiera,,keyboard,95
+it_476,messaggio,,message,96
+it_477,notizie,,news,96
+it_478,televisione,,television,96
+it_479,radio,,radio,96
+it_480,macchina fotografica,,camera,96
+it_481,anche,,also,97
+it_482,solo,,only,97
+it_483,molto,,very,97
+it_484,forse,,maybe,97
+it_485,già,,already,97
+it_486,gennaio,,January,98
+it_487,febbraio,,February,98
+it_488,marzo,,March,98
+it_489,aprile,,April,98
+it_490,maggio,,May,98
+it_491,giugno,,June,99
+it_492,luglio,,July,99
+it_493,agosto,,August,99
+it_494,settembre,,September,99
+it_495,ottobre,,October,99
+it_496,novembre,,November,100
+it_497,dicembre,,December,100
+it_498,data,,date,100
+it_499,calendario,,calendar,100
+it_500,compleanno,,birthday,100

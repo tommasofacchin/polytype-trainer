@@ -1,9 +1,9 @@
 // One-off generator for decks/categories.js.
 //
 // Word decks are aligned across every language: the same numeric word_id
-// suffix (1-300) always maps to the same concept and the same unlock_level
-// (level = ceil(suffix / 5), 5 words per level). This script groups the 60
-// levels into 15 themed categories, shuffles the drop order within each
+// suffix (1-500) always maps to the same concept and the same unlock_level
+// (level = ceil(suffix / 5), 5 words per level). This script groups the 100
+// levels into 18 themed categories, shuffles the drop order within each
 // category with a fixed seed (so it only needs to be generated once, and
 // every client/session sees the same order), and writes the result as a
 // plain browser global so it can be loaded like decks/index.js.
@@ -14,25 +14,32 @@ const fs = require("fs");
 const path = require("path");
 
 const WORDS_PER_LEVEL = 5;
-const TOTAL_LEVELS = 60;
+const TOTAL_LEVELS = 100;
 const TOTAL_WORDS = TOTAL_LEVELS * WORDS_PER_LEVEL;
 
+// Levels 61-100 are the second half of the deck (word suffixes 301-500). They
+// mostly extend the themes that were already here rather than inventing new
+// ones - a category the player is midway through simply keeps dropping new
+// words - plus three subjects the first 300 had no room for at all.
 const CATEGORIES = [
   { id: "greetings", labelKey: "categories.greetings", levels: [1, 2, 56, 57] },
   { id: "peopleFamily", labelKey: "categories.peopleFamily", levels: [5, 6, 43] },
   { id: "describingYourself", labelKey: "categories.describingYourself", levels: [7, 8, 9, 10] },
-  { id: "verbs", labelKey: "categories.verbs", levels: [11, 12, 46, 47, 48, 49, 50] },
-  { id: "timeCalendar", labelKey: "categories.timeCalendar", levels: [14, 15, 33, 34, 35] },
-  { id: "numbersColors", labelKey: "categories.numbersColors", levels: [16, 17, 18, 19, 41, 42] },
-  { id: "questionsConnectors", labelKey: "categories.questionsConnectors", levels: [13, 20, 21, 22, 23] },
-  { id: "cityHome", labelKey: "categories.cityHome", levels: [4, 24, 25, 60] },
-  { id: "foodMeals", labelKey: "categories.foodMeals", levels: [3, 26, 27, 28, 29] },
-  { id: "bodyClothes", labelKey: "categories.bodyClothes", levels: [30, 31, 32] },
+  { id: "verbs", labelKey: "categories.verbs", levels: [11, 12, 46, 47, 48, 49, 50, 61, 62, 63, 64, 65, 66] },
+  { id: "timeCalendar", labelKey: "categories.timeCalendar", levels: [14, 15, 33, 34, 35, 98, 99, 100] },
+  { id: "numbersColors", labelKey: "categories.numbersColors", levels: [16, 17, 18, 19, 41, 42, 79, 80] },
+  { id: "questionsConnectors", labelKey: "categories.questionsConnectors", levels: [13, 20, 21, 22, 23, 97] },
+  { id: "cityHome", labelKey: "categories.cityHome", levels: [4, 24, 25, 60, 71, 72, 73, 74] },
+  { id: "foodMeals", labelKey: "categories.foodMeals", levels: [3, 26, 27, 28, 29, 67, 68, 69, 70] },
+  { id: "bodyClothes", labelKey: "categories.bodyClothes", levels: [30, 31, 32, 88, 89] },
   { id: "seasonsWeather", labelKey: "categories.seasonsWeather", levels: [36, 37] },
-  { id: "travel", labelKey: "categories.travel", levels: [38, 39, 40] },
-  { id: "workSchool", labelKey: "categories.workSchool", levels: [44, 45] },
-  { id: "feelingsQualities", labelKey: "categories.feelingsQualities", levels: [51, 52, 53, 54, 55] },
-  { id: "shoppingHealth", labelKey: "categories.shoppingHealth", levels: [58, 59] }
+  { id: "travel", labelKey: "categories.travel", levels: [38, 39, 40, 84, 85] },
+  { id: "workSchool", labelKey: "categories.workSchool", levels: [44, 45, 86, 87] },
+  { id: "feelingsQualities", labelKey: "categories.feelingsQualities", levels: [51, 52, 53, 54, 55, 81, 82, 83] },
+  { id: "shoppingHealth", labelKey: "categories.shoppingHealth", levels: [58, 59, 90, 91] },
+  { id: "natureAnimals", labelKey: "categories.natureAnimals", levels: [75, 76, 77, 78] },
+  { id: "hobbiesSports", labelKey: "categories.hobbiesSports", levels: [92, 93, 94] },
+  { id: "technologyMedia", labelKey: "categories.technologyMedia", levels: [95, 96] }
 ];
 
 function mulberry32(seed) {

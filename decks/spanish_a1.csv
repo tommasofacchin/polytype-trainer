@@ -195,7 +195,7 @@ es_193,billete,,ticket,biglietto,39
 es_194,mapa,,map,mappa,39
 es_195,hotel,,hotel,hotel,39
 es_196,izquierda,,left,sinistra,40
-es_197,derecha,,right,vero,40
+es_197,derecha,,right,destra,40
 es_198,todo recto,,straight ahead,dritto,40
 es_199,cerca,,near,vicino,40
 es_200,lejos,,far,lontano,40
@@ -282,7 +282,7 @@ es_280,bienvenido,,welcome,benvenuto,56
 es_281,aquí tienes,,here you are,ecco a te,57
 es_282,muchas gracias,,many thanks,mille grazie,57
 es_283,está bien,,it is fine,va bene,57
-es_284,verdad,,right,vero,57
+es_284,verdad,,that's right,vero,57
 es_285,por supuesto,,of course,certo,57
 es_286,farmacia,,pharmacy,farmacia,58
 es_287,hospital,,hospital,ospedale,58
@@ -292,10 +292,210 @@ es_290,problema,,problem,problema,58
 es_291,precio,,price,prezzo,59
 es_292,dinero,,money,soldi,59
 es_293,recibo,,receipt,ricevuta,59
-es_294,bolsa,,bag,borsa,59
+es_294,bolsa,,plastic bag,sacchetto,59
 es_295,talla,,size,taglia,59
 es_296,teléfono,,phone,telefono,60
 es_297,ordenador,,computer,computer,60
 es_298,llave,,key,chiave,60
 es_299,reloj,,clock,orologio,60
 es_300,bolso,,bag,borsa,60
+es_301,dar,,to give,dare,61
+es_302,tomar,,to take,prendere,61
+es_303,poner,,to put,mettere,61
+es_304,empezar,,to begin,cominciare,61
+es_305,terminar,,to finish,finire,61
+es_306,saber,,to know,sapere,62
+es_307,pensar,,to think,pensare,62
+es_308,entender,,to understand,capire,62
+es_309,recordar,,to remember,ricordare,62
+es_310,olvidar,,to forget,dimenticare,62
+es_311,ayudar,,to help,aiutare,63
+es_312,llamar,,to call,chiamare,63
+es_313,enviar,,to send,inviare,63
+es_314,perder,,to lose,perdere,63
+es_315,ganar,,to win,vincere,63
+es_316,llegar,,to arrive,arrivare,64
+es_317,entrar,,to enter,entrare,64
+es_318,partir,,to depart,partire,64
+es_319,vivir,,to live,abitare,64
+es_320,caminar,,to walk,camminare,64
+es_321,correr,,to run,correre,65
+es_322,nadar,,to swim,nuotare,65
+es_323,saltar,,to jump,saltare,65
+es_324,bailar,,to dance,ballare,65
+es_325,cantar,,to sing,cantare,65
+es_326,jugar,,to play,giocare,66
+es_327,cocinar,,to cook,cucinare,66
+es_328,limpiar,,to clean,pulire,66
+es_329,construir,,to build,costruire,66
+es_330,cambiar,,to change,cambiare,66
+es_331,arroz,,rice,riso,67
+es_332,pasta,,pasta,pasta,67
+es_333,pollo,,chicken,pollo,67
+es_334,carne de res,,beef,manzo,67
+es_335,carne de cerdo,,pork,carne di maiale,67
+es_336,mantequilla,,butter,burro,68
+es_337,aceite,,oil,olio,68
+es_338,pimienta,,pepper,pepe,68
+es_339,cebolla,,onion,cipolla,68
+es_340,tomate,,tomato,pomodoro,68
+es_341,ajo,,garlic,aglio,69
+es_342,limón,,lemon,limone,69
+es_343,fresa,,strawberry,fragola,69
+es_344,uva,,grape,uva,69
+es_345,pastel,,cake,torta,69
+es_346,chocolate,,chocolate,cioccolato,70
+es_347,helado,,ice cream,gelato,70
+es_348,vino,,wine,vino,70
+es_349,cerveza,,beer,birra,70
+es_350,botella,,bottle,bottiglia,70
+es_351,mesa,,table,tavolo,71
+es_352,silla,,chair,sedia,71
+es_353,cama,,bed,letto,71
+es_354,puerta,,door,porta,71
+es_355,ventana,,window,finestra,71
+es_356,pared,,wall,muro,72
+es_357,suelo,,floor,pavimento,72
+es_358,techo,,roof,tetto,72
+es_359,jardín,,garden,giardino,72
+es_360,garaje,,garage,garage,72
+es_361,lámpara,,lamp,lampada,73
+es_362,espejo,,mirror,specchio,73
+es_363,toalla,,towel,asciugamano,73
+es_364,jabón,,soap,sapone,73
+es_365,nevera,,fridge,frigorifero,73
+es_366,horno,,oven,forno,74
+es_367,sofá,,sofa,divano,74
+es_368,estante,,shelf,scaffale,74
+es_369,escalera,,stairs,scale,74
+es_370,ascensor,,elevator,ascensore,74
+es_371,perro,,dog,cane,75
+es_372,gato,,cat,gatto,75
+es_373,pájaro,,bird,uccello,75
+es_374,caballo,,horse,cavallo,75
+es_375,vaca,,cow,mucca,75
+es_376,oveja,,sheep,pecora,76
+es_377,cerdo,,pig,maiale,76
+es_378,gallina,,hen,gallina,76
+es_379,ratón,,mouse,topo,76
+es_380,conejo,,rabbit,coniglio,76
+es_381,árbol,,tree,albero,77
+es_382,flor,,flower,fiore,77
+es_383,hierba,,grass,erba,77
+es_384,montaña,,mountain,montagna,77
+es_385,río,,river,fiume,77
+es_386,mar,,sea,mare,78
+es_387,lago,,lake,lago,78
+es_388,bosque,,forest,foresta,78
+es_389,playa,,beach,spiaggia,78
+es_390,cielo,,sky,cielo,78
+es_391,treinta,,thirty,trenta,79
+es_392,cuarenta,,forty,quaranta,79
+es_393,cincuenta,,fifty,cinquanta,79
+es_394,cien,,hundred,cento,79
+es_395,mil,,thousand,mille,79
+es_396,gris,,grey,grigio,80
+es_397,primero,,first,primo,80
+es_398,último,,last,ultimo,80
+es_399,mitad,,half,metà,80
+es_400,número,,number,numero,80
+es_401,asustado,,afraid,spaventato,81
+es_402,sorprendido,,surprised,sorpreso,81
+es_403,aburrido,,bored,annoiato,81
+es_404,tranquilo,,calm,calmo,81
+es_405,orgulloso,,proud,fiero,81
+es_406,fuerte,,strong,forte,82
+es_407,débil,,weak,debole,82
+es_408,hermoso,,beautiful,stupendo,82
+es_409,feo,,ugly,brutto,82
+es_410,joven,,young,giovane,82
+es_411,rico,,rich,ricco,83
+es_412,pobre,,poor,povero,83
+es_413,limpio,,clean,pulito,83
+es_414,sucio,,dirty,sporco,83
+es_415,divertido,,funny,divertente,83
+es_416,carretera,,road,via,84
+es_417,puente,,bridge,ponte,84
+es_418,taxi,,taxi,taxi,84
+es_419,equipaje,,luggage,bagaglio,84
+es_420,pasaporte,,passport,passaporto,84
+es_421,vuelo,,flight,volo,85
+es_422,asiento,,seat,posto,85
+es_423,conductor,,driver,autista,85
+es_424,tráfico,,traffic,traffico,85
+es_425,viaje,,journey,viaggio,85
+es_426,bolígrafo,,pen,penna,86
+es_427,lápiz,,pencil,matita,86
+es_428,papel,,paper,carta,86
+es_429,cuaderno,,notebook,quaderno,86
+es_430,escritorio,,desk,scrivania,86
+es_431,reunión,,meeting,riunione,87
+es_432,correo,,email,email,87
+es_433,jefe,,boss,capo,87
+es_434,salario,,salary,stipendio,87
+es_435,empresa,,company,azienda,87
+es_436,brazo,,arm,braccio,88
+es_437,pierna,,leg,gamba,88
+es_438,dedo,,finger,dito,88
+es_439,espalda,,back,schiena,88
+es_440,corazón,,heart,cuore,88
+es_441,abrigo,,coat,cappotto,89
+es_442,falda,,skirt,gonna,89
+es_443,calcetín,,sock,calzino,89
+es_444,guante,,glove,guanto,89
+es_445,bufanda,,scarf,sciarpa,89
+es_446,medicamento,,medicine,medicina,90
+es_447,fiebre,,fever,febbre,90
+es_448,dolor,,pain,dolore,90
+es_449,tos,,cough,tosse,90
+es_450,sangre,,blood,sangue,90
+es_451,efectivo,,cash,contanti,91
+es_452,tarjeta de crédito,,credit card,carta di credito,91
+es_453,descuento,,discount,sconto,91
+es_454,cliente,,customer,cliente,91
+es_455,regalo,,gift,regalo,91
+es_456,música,,music,musica,92
+es_457,canción,,song,canzone,92
+es_458,película,,film,film,92
+es_459,juego,,game,gioco,92
+es_460,fiesta,,party,festa,92
+es_461,fútbol,,football,calcio,93
+es_462,tenis,,tennis,tennis,93
+es_463,deporte,,sport,sport,93
+es_464,equipo,,team,squadra,93
+es_465,pelota,,ball,palla,93
+es_466,guitarra,,guitar,chitarra,94
+es_467,piano,,piano,pianoforte,94
+es_468,foto,,photo,foto,94
+es_469,afición,,hobby,hobby,94
+es_470,vacaciones,,holiday,vacanza,94
+es_471,internet,,internet,internet,95
+es_472,sitio web,,website,sito,95
+es_473,contraseña,,password,password,95
+es_474,pantalla,,screen,schermo,95
+es_475,teclado,,keyboard,tastiera,95
+es_476,mensaje,,message,messaggio,96
+es_477,noticias,,news,notizie,96
+es_478,televisión,,television,televisione,96
+es_479,radio,,radio,radio,96
+es_480,cámara,,camera,macchina fotografica,96
+es_481,también,,also,anche,97
+es_482,solamente,,only,solo,97
+es_483,muy,,very,molto,97
+es_484,quizás,,maybe,forse,97
+es_485,ya,,already,già,97
+es_486,enero,,January,gennaio,98
+es_487,febrero,,February,febbraio,98
+es_488,marzo,,March,marzo,98
+es_489,abril,,April,aprile,98
+es_490,mayo,,May,maggio,98
+es_491,junio,,June,giugno,99
+es_492,julio,,July,luglio,99
+es_493,agosto,,August,agosto,99
+es_494,septiembre,,September,settembre,99
+es_495,octubre,,October,ottobre,99
+es_496,noviembre,,November,novembre,100
+es_497,diciembre,,December,dicembre,100
+es_498,fecha,,date,data,100
+es_499,calendario,,calendar,calendario,100
+es_500,cumpleaños,,birthday,compleanno,100
