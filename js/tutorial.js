@@ -15,6 +15,20 @@
         "play-sprint": "sprint.html"
     };
 
+    // Keep in sync with KEY_PRICE_COINS / MAX_KEYS in api/_lib.js - same
+    // duplication js/shop.js already carries, for the same reason (these two
+    // numbers decide what the player can afford, and both sides have to agree
+    // on that to decide whether a step is still completable).
+    const KEY_PRICE_COINS = 100;
+    const MAX_KEYS = 5;
+
+    // Set by skipTutorial() and read before anything else, so a player who
+    // has bailed out is never re-trapped by a cached profile that still says
+    // the tutorial is running. Holds the courseId it was skipped for rather
+    // than a bare flag: a second account signing in on the same browser gets
+    // its own first-course tutorial instead of inheriting this one's exit.
+    const SKIP_KEY = "polytype-tutorial-skipped";
+
     let spotlightHandle = null;
 
     function tr(key, params) {
@@ -49,6 +63,61 @@
     // Set after the first evaluate() call completes - see the redirect
     // branch below for why this matters.
     let hasEvaluatedOnce = false;
+
+    function getTutorialCourseId(tutorial) {
+        return tutorial?.courseId || getActiveLanguage();
+    }
+
+    function isTutorialSkipped(tutorial) {
+        if (!tutorial?.active) return false;
+        return localStorage.getItem(SKIP_KEY) === getTutorialCourseId(tutorial);
+    }
+
+    // The buy-keys step is the one place the tutorial can paint itself into a
+    // corner. It wants 5 keys; the Shop's buy button disables itself the
+    // moment coins run short (see renderShop in js/shop.js), every other card
+    // on the page is behind the spotlight mask, and the nav rail is inert -
+    // so a player who reaches it with less than one key's worth of coins and
+    // fewer than 5 keys has nothing left to click and nowhere to go. The 500
+    // gifted coins cover exactly 5 keys, so this only happens when some of
+    // them went elsewhere first (a course that predates the gift, a chest
+    // bought before the tutorial shipped, a purchase the server refused after
+    // the coins were already spent locally) - rare, but a total dead end when
+    // it does happen, which is why it's detected here rather than left for
+    // the player to discover.
+    function isStuckOnBuyKeys(profile, tutorial) {
+        if (!tutorial?.active || tutorial.step !== "buy-keys") return false;
+
+        // No cached course record means the profile hasn't landed yet (or is
+        // filed under a legacy key) - that's "nothing known", not "no coins",
+        // and reading it as a dead end would drop the rail for a step that is
+        // very likely still perfectly completable.
+        const course = profile?.courses?.[getTutorialCourseId(tutorial)];
+        if (!course) return false;
+
+        const purchasedKeys = Math.max(0, Math.trunc(Number(course.purchasedKeys) || 0));
+        // One more purchase would finish the step, so this isn't a dead end
+        // however few coins are left - the buy that gets them to 5 is the one
+        // that advances the tutorial (see api/buy-key.js).
+        if (Math.min(MAX_KEYS, purchasedKeys) >= MAX_KEYS) return false;
+
+        return (Number(course.coins) || 0) < KEY_PRICE_COINS;
+    }
+
+    // Bails out of the tutorial for good. The local flag lands first so the
+    // rail and the masks release on this click rather than a round trip
+    // later, and so the exit survives a reload even if the request below
+    // never gets through - being unable to reach the server is not a reason
+    // to stay trapped. The server call is what makes it stick across devices.
+    function skipTutorial(courseId) {
+        localStorage.setItem(SKIP_KEY, courseId);
+        evaluate(readCachedProfile());
+        window.PolytypeFirebase?.skipTutorial?.().catch(() => {
+            // Best-effort: the local flag above already freed the player, and
+            // the next successful profile sync will report the tutorial as
+            // over anyway once this lands.
+        });
+    }
 
     // A signed-in player with zero courses has nothing to do anywhere else
     // in the app yet - languages.html is the only page that gets them one
@@ -92,8 +161,16 @@
     }
 
     function evaluate(profile) {
-        const tutorial = profile?.tutorial;
+        const tutorial = isTutorialSkipped(profile?.tutorial) ? null : profile?.tutorial;
         clearStepUi();
+
+        const currentPage = getCurrentPage();
+        // A step this script has no page for (a newer server-side step, a
+        // half-written one) can't be drawn or redirected to, so it isn't
+        // treated as a running step at all below - locking the rail for one
+        // would leave it dead with nothing on screen to explain why.
+        const expectedPage = tutorial?.active ? STEP_PAGES[tutorial.step] : null;
+        const isStuck = isStuckOnBuyKeys(profile, tutorial);
 
         // Clicking a nav tab/logo mid-tutorial used to navigate away and
         // then immediately get bounced back by the redirect below - a
@@ -104,8 +181,12 @@
         // persistent shell element the router never replaces, so this
         // stays correctly set across every soft navigation without needing
         // to be re-applied per page.
+        //
+        // A step that can no longer be completed hands the rail straight
+        // back (see isStuckOnBuyKeys): holding someone on a page whose only
+        // control is disabled would brick the app outright.
         const navEl = document.getElementById("app-bottom-nav");
-        if (navEl) navEl.inert = Boolean(tutorial?.active);
+        if (navEl) navEl.inert = Boolean(expectedPage) && !isStuck;
 
         // Onboarding comes before the language picker (and before any
         // tutorial step). onboarding.html isn't a router page - it has its
@@ -124,13 +205,6 @@
             return;
         }
 
-        if (!tutorial?.active) {
-            hasEvaluatedOnce = true;
-            return;
-        }
-
-        const currentPage = getCurrentPage();
-        const expectedPage = STEP_PAGES[tutorial.step];
         if (!expectedPage) {
             hasEvaluatedOnce = true;
             return;
@@ -148,7 +222,16 @@
         // init - either the hard load completed normally, or the router
         // itself is calling us after loadPageScripts already ran), that
         // race is gone and the instant router redirect is safe to use.
+        //
+        // Skipped while the step is stuck, for the same reason the rail is
+        // handed back up there: sending someone back to a step they can no
+        // longer finish is the trap itself. They keep the run of the app,
+        // and the step's own page still offers them the way out.
         if (expectedPage !== currentPage) {
+            if (isStuck) {
+                hasEvaluatedOnce = true;
+                return;
+            }
             if (hasEvaluatedOnce && window.PolytypeRouter?.navigate) window.PolytypeRouter.navigate(expectedPage);
             else window.location.href = expectedPage;
             return;
@@ -156,10 +239,10 @@
 
         hasEvaluatedOnce = true;
 
-        const courseId = tutorial.courseId || getActiveLanguage();
+        const courseId = getTutorialCourseId(tutorial);
 
         if (tutorial.step === "deck-intro") showDeckIntro();
-        else if (tutorial.step === "buy-keys") showBuyKeysCoach(profile, courseId);
+        else if (tutorial.step === "buy-keys") showBuyKeysCoach(profile, courseId, isStuck);
         else if (tutorial.step === "choose-words") showChooseWordsBanner(profile, courseId);
         else if (tutorial.step === "play-sprint") showPlaySprintBanner();
     }
@@ -198,14 +281,22 @@
     // cover exactly 5 keys (100 each); accidentally buying a word chest
     // instead (also 100 coins) would strand the player short, so everything
     // except the Key card is genuinely unclickable here, not just dimmed.
-    function showBuyKeysCoach(profile, courseId) {
+    function showBuyKeysCoach(profile, courseId, isStuck) {
         const target = document.getElementById("shop-buy-btn")?.closest(".settings-card");
         if (!target) return;
 
         const purchasedKeys = Math.max(0, Math.trunc(Number(profile?.courses?.[courseId]?.purchasedKeys) || 0));
         spotlightHandle = spotlightElement(target, {
             title: tr("tutorial.buyKeysTitle"),
-            body: tr("tutorial.buyKeysBody", { count: purchasedKeys })
+            // Out of coins short of 5 keys: the card being spotlighted is a
+            // disabled button, so the tooltip says why and offers the exit
+            // instead of repeating an instruction that can't be followed.
+            body: isStuck
+                ? tr("tutorial.buyKeysStuckBody", { count: purchasedKeys })
+                : tr("tutorial.buyKeysBody", { count: purchasedKeys }),
+            action: isStuck
+                ? { label: tr("tutorial.skipCta"), onClick: () => skipTutorial(courseId) }
+                : null
         });
     }
 
@@ -251,7 +342,7 @@
     // actually covers it (not a visual-only cutout). position:fixed
     // throughout, so coordinates are viewport-relative and get recomputed
     // on resize/scroll rather than needing scroll-offset math.
-    function spotlightElement(target, { title, body }) {
+    function spotlightElement(target, { title, body, action = null }) {
         target.scrollIntoView({ behavior: "smooth", block: "center" });
 
         const nodes = {
@@ -263,6 +354,17 @@
             tooltip: makeNode("tutorial-tooltip")
         };
         nodes.tooltip.innerHTML = `<strong>${title}</strong><p>${body}</p>`;
+        // The tooltip outranks the masks (z-index 9002 vs 9000, see
+        // style.css) so a button placed in it is genuinely clickable even
+        // though everything around it is covered.
+        if (action) {
+            const actionBtn = document.createElement("button");
+            actionBtn.type = "button";
+            actionBtn.className = "tutorial-tooltip-btn";
+            actionBtn.textContent = action.label;
+            actionBtn.addEventListener("click", action.onClick);
+            nodes.tooltip.appendChild(actionBtn);
+        }
         Object.values(nodes).forEach(node => document.body.appendChild(node));
 
         function makeNode(className) {
@@ -288,7 +390,12 @@
             nodes.ring.style.cssText = `left:${rect.left - 4}px;top:${rect.top - 4}px;width:${rect.width + 8}px;height:${rect.height + 8}px;`;
 
             const tooltipLeft = Math.max(12, Math.min(rect.left, vw - 300));
-            const tooltipTop = Math.min(rect.bottom + 12, vh - 140);
+            // Measured rather than a fixed reserve: the tooltip is taller
+            // when it carries an action button, and guessing low is what
+            // would push that button off the bottom of the screen - the one
+            // control the player needs when this branch is showing at all.
+            const tooltipHeight = nodes.tooltip.offsetHeight || 140;
+            const tooltipTop = Math.max(12, Math.min(rect.bottom + 12, vh - tooltipHeight - 12));
             nodes.tooltip.style.cssText = `left:${tooltipLeft}px;top:${tooltipTop}px;`;
         }
 

@@ -22,6 +22,7 @@ module.exports = withAuth(async (data, token) => {
     case "name": return setDisplayName(data, token);
     case "avatar": return uploadAvatar(data, token);
     case "advanceTutorial": return advanceTutorial(data, token);
+    case "skipTutorial": return skipTutorial(data, token);
     case "dailyGoal": return setDailyGoal(data, token);
     case "delete": return deleteAccount(data, token);
     default: throw new ApiError(400, "Unknown profile action.");
@@ -141,6 +142,34 @@ async function advanceTutorial(data, token) {
     }
 
     const nextTutorial = { ...tutorial, step: "buy-keys" };
+    transaction.set(userRef, { tutorial: nextTutorial, updatedAt: FieldValue.serverTimestamp() }, { merge: true });
+
+    return { tutorial: nextTutorial };
+  });
+}
+
+// Ends the tutorial without finishing it. The buy-keys step can become
+// uncompletable - it asks for 5 keys, and a player whose coins ran short of
+// that has no purchase left to make (see isStuckOnBuyKeys in js/tutorial.js,
+// which is what surfaces the exit) - so there has to be a way out that isn't
+// "finish a step you can't finish". Deliberately not restricted to that one
+// step: whatever else strands a run, the client asking to end it is enough.
+// Already-inactive is a no-op rather than an error, since a duplicate click
+// or a retry shouldn't fail.
+async function skipTutorial(data, token) {
+  const userRef = db.doc(`users/${token.uid}`);
+
+  return db.runTransaction(async transaction => {
+    const userSnap = await transaction.get(userRef);
+    if (!userSnap.exists) throw new ApiError(404, "Profile not found.");
+
+    const tutorial = userSnap.data().tutorial;
+    if (!tutorial?.active) return { tutorial: tutorial || null };
+
+    // Same shape complete-practice-session.js writes when the tutorial is
+    // finished the intended way, so nothing downstream has to tell a skipped
+    // run apart from a completed one.
+    const nextTutorial = { ...tutorial, active: false, step: "done" };
     transaction.set(userRef, { tutorial: nextTutorial, updatedAt: FieldValue.serverTimestamp() }, { merge: true });
 
     return { tutorial: nextTutorial };

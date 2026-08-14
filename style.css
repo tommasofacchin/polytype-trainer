@@ -6090,6 +6090,30 @@ body > main {
     line-height: 1.4;
 }
 
+/* Only ever rendered when a step has become uncompletable (see
+   isStuckOnBuyKeys in js/tutorial.js) - the way out of a spotlight that
+   otherwise has nothing clickable left in it. Quiet on purpose: it's an
+   escape hatch, not the action the step is asking for. */
+.tutorial-tooltip-btn {
+    display: block;
+    width: 100%;
+    margin-top: 12px;
+    padding: 9px 12px;
+    background: transparent;
+    color: var(--text-soft);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-pill);
+    font: inherit;
+    font-size: var(--text-xs);
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.tutorial-tooltip-btn:hover {
+    color: var(--text);
+    border-color: var(--accent);
+}
+
 .tutorial-banner {
     position: fixed;
     left: 12px;

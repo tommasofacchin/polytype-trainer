@@ -384,22 +384,21 @@
 
     // Routes a single-shot round's answer to normal scoring, or - during the
     // retry phase - to the 50%-value bonus without touching streak/accuracy.
-    function finishSingleShotRound(type, word, isCorrect, anchorEl) {
+    function finishSingleShotRound(type, word, isCorrect) {
         if (state.inRetryPhase) {
-            if (isCorrect) awardRetryBonus(anchorEl);
+            if (isCorrect) awardRetryBonus();
         } else {
-            recordAnswer(isCorrect, anchorEl, word.id);
+            recordAnswer(isCorrect, word.id);
             if (!isCorrect) state.wrongRetryable.push({ type, word });
         }
         advanceRound([word.id]);
     }
 
-    function awardRetryBonus(anchorEl) {
+    function awardRetryBonus() {
         const pts = 5; // 50% of the flat 10-point base award
         state.score += pts;
         state.retryBonus += pts;
         state.retryCorrectCount += 1;
-        if (anchorEl) showPointsFloat(pts, 0, anchorEl);
     }
 
     // ── Word / distractor selection ─────────────────────────────────────────
@@ -425,7 +424,7 @@
 
     // ── Scoring ──────────────────────────────────────────────────────────────
 
-    function recordAnswer(isCorrect, anchorEl, wordId) {
+    function recordAnswer(isCorrect, wordId) {
         if (wordId != null) state.wordResults.push({ id: getWordSuffix(String(wordId)), correct: isCorrect });
 
         if (isCorrect) {
@@ -435,27 +434,11 @@
             state.streak += 1;
             state.bestStreak = Math.max(state.bestStreak, state.streak);
             state.correctAnswers += 1;
-
-            // The combo lives entirely in this float now - its tier is what
-            // colours the "+N" - since the HUD that used to count it is gone.
-            if (anchorEl) showPointsFloat(pts, getComboTier(state.streak), anchorEl);
         } else {
             playErrorSfx();
             state.wrongAnswers += 1;
             state.streak = 0;
         }
-    }
-
-    function showPointsFloat(pts, tier, anchorEl) {
-        const rect = anchorEl.getBoundingClientRect();
-        const node = document.createElement("span");
-        node.className = "xp-float";
-        node.textContent = `+${pts}`;
-        if (tier > 1) node.dataset.tier = String(tier);
-        node.style.left = `${rect.left + rect.width / 2 - 18}px`;
-        node.style.top = `${rect.top - 4}px`;
-        document.body.appendChild(node);
-        node.addEventListener("animationend", () => node.remove(), { once: true });
     }
 
     // ── Round type 1: multiple choice translation ───────────────────────────
@@ -497,7 +480,7 @@
                     if (node !== btn) node.classList.add("is-disabled");
                     if (!isCorrect && node.textContent === textOf(word)) node.classList.add("is-correct");
                 });
-                finishSingleShotRound("mc", word, isCorrect, btn);
+                finishSingleShotRound("mc", word, isCorrect);
             });
             grid.appendChild(btn);
         });
@@ -561,7 +544,7 @@
                 otherBtn.disabled = true;
                 btn.disabled = true;
                 lockedCount += 2;
-                recordAnswer(true, btn, btn.dataset.pair);
+                recordAnswer(true, btn.dataset.pair);
                 if (lockedCount === words.length * 2) {
                     state.wordsUsed += words.length;
                     advanceRound(words.map(w => w.id));
@@ -570,7 +553,7 @@
                 otherBtn.classList.remove("is-selected");
                 otherBtn.classList.add("is-wrong");
                 btn.classList.add("is-wrong");
-                recordAnswer(false, btn, btn.dataset.pair);
+                recordAnswer(false, btn.dataset.pair);
                 wrongRecordedIds.add(btn.dataset.pair);
                 wrongAttempts += 1;
 
@@ -603,7 +586,7 @@
                 leftBtn?.classList.add("is-correct");
                 rightBtn?.classList.add("is-correct");
 
-                if (!wrongRecordedIds.has(word.id)) recordAnswer(false, null, word.id);
+                if (!wrongRecordedIds.has(word.id)) recordAnswer(false, word.id);
             });
 
             state.wordsUsed += words.length;
@@ -667,7 +650,7 @@
                     if (node !== btn) node.classList.add("is-disabled");
                     if (!isCorrect && node.textContent === word.script) node.classList.add("is-correct");
                 });
-                finishSingleShotRound("audio", word, isCorrect, btn);
+                finishSingleShotRound("audio", word, isCorrect);
             });
             grid.appendChild(btn);
         });
@@ -706,7 +689,7 @@
                 el.exerciseRoot.querySelectorAll(".sprint-tf-btn").forEach(node => {
                     if (node !== btn) node.classList.add("is-disabled");
                 });
-                finishSingleShotRound("trueFalse", word, isCorrect, btn);
+                finishSingleShotRound("trueFalse", word, isCorrect);
             });
         });
     }
@@ -765,7 +748,7 @@
             if (!isCorrect) {
                 feedback.textContent = toTarget ? word.script : word.meaning;
             }
-            finishSingleShotRound("type", word, isCorrect, input);
+            finishSingleShotRound("type", word, isCorrect);
         });
     }
 
@@ -1652,14 +1635,6 @@
         if (streak >= 10) return 2;
         if (streak >= 5) return 1.5;
         return 1;
-    }
-
-    function getComboTier(streak) {
-        if (streak >= 20) return 4;
-        if (streak >= 15) return 3;
-        if (streak >= 10) return 2;
-        if (streak >= 5) return 1;
-        return 0;
     }
 
     function shuffle(array) {

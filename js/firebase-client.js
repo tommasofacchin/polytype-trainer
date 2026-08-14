@@ -35,6 +35,7 @@
         buyStreakFreeze,
         startCourse,
         advanceTutorial,
+        skipTutorial,
         setUserHandle,
         setDisplayName,
         setDailyGoal,
@@ -300,6 +301,25 @@
         if (!state.user) throw new Error(tr("auth.signInRequired"));
 
         const result = await callApi("update-profile", { action: "advanceTutorial" });
+
+        if (result.data?.tutorial) {
+            state.profile = { ...(state.profile || {}), tutorial: result.data.tutorial };
+            syncProfileToLocalStorage(state.profile);
+            notify();
+        }
+
+        return result;
+    }
+
+    // Abandons the tutorial for good (see the skip branch in js/tutorial.js).
+    // The sync below is what releases the nav rail and the spotlight
+    // everywhere - it fires polytype-profile-updated, which js/tutorial.js
+    // re-evaluates against a profile that no longer has an active run.
+    async function skipTutorial() {
+        assertConfigured();
+        if (!state.user) throw new Error(tr("auth.signInRequired"));
+
+        const result = await callApi("update-profile", { action: "skipTutorial" });
 
         if (result.data?.tutorial) {
             state.profile = { ...(state.profile || {}), tutorial: result.data.tutorial };

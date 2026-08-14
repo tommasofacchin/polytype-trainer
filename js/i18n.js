@@ -363,6 +363,8 @@
             "tutorial.deckIntroCta": "Go to the Shop",
             "tutorial.buyKeysTitle": "Buy 5 keys",
             "tutorial.buyKeysBody": "Spend your 500 coins here - each key costs 100 coins. {count} / 5 bought so far.",
+            "tutorial.buyKeysStuckBody": "You're out of coins with {count} / 5 keys bought, so this step can't be finished. Play a round to earn more, or skip the tutorial and explore on your own.",
+            "tutorial.skipCta": "Skip the tutorial",
             "tutorial.chooseWordsBanner": "Tap any locked card and spend a key to unlock it. {count} / 5 words chosen.",
             "tutorial.playSprintBanner": "Last step - finish one Sprint round to wrap up the tutorial!",
 
@@ -923,6 +925,8 @@
             "tutorial.deckIntroCta": "Vai al Negozio",
             "tutorial.buyKeysTitle": "Compra 5 chiavi",
             "tutorial.buyKeysBody": "Spendi qui le tue 500 monete - ogni chiave costa 100 monete. {count} / 5 comprate finora.",
+            "tutorial.buyKeysStuckBody": "Sei senza monete con {count} / 5 chiavi comprate, quindi questo passo non si può completare. Gioca una partita per guadagnarne altre, oppure salta il tutorial ed esplora per conto tuo.",
+            "tutorial.skipCta": "Salta il tutorial",
             "tutorial.chooseWordsBanner": "Tocca una carta bloccata e usa una chiave per sbloccarla. {count} / 5 parole scelte.",
             "tutorial.playSprintBanner": "Ultimo passo - completa una partita di Sprint per finire il tutorial!",
 
