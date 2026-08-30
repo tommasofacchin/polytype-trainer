@@ -8772,6 +8772,256 @@ window.DECK_EXAMPLES = {
       { text: "Puoi *rispondere* alla mia domanda?", translation: "Can you answer my question?" },
       { text: "Ha *risposto* velocemente all'email.", translation: "He answered the email quickly." },
       { text: "Non *risponde* mai al telefono.", translation: "She never answers the phone." }
+    ],
+    251: [
+      { text: "Oggi sono molto *felice*.", translation: "I'm very happy today." },
+      { text: "Era *felice* per il regalo.", translation: "She was happy about the gift." },
+      { text: "Siamo *felici* di vederti.", translation: "We're happy to see you." }
+    ],
+    252: [
+      { text: "È *triste* perché il suo cane è malato.", translation: "He's sad because his dog is sick." },
+      { text: "Il film mi ha reso *triste*.", translation: "The movie made me sad." },
+      { text: "Ci siamo sentiti *tristi* dopo la notizia.", translation: "We felt sad after the news." }
+    ],
+    253: [
+      { text: "Si è *arrabbiata* quando è arrivato in ritardo.", translation: "She got angry when he came late." },
+      { text: "Non essere *arrabbiato* con me.", translation: "Don't be angry with me." },
+      { text: "È stato *arrabbiato* tutto il giorno.", translation: "He was angry all day." }
+    ],
+    254: [
+      { text: "Sono molto *stanco* stasera.", translation: "I'm very tired tonight." },
+      { text: "Si è *stancata* dopo il lavoro.", translation: "She got tired after work." },
+      { text: "Eravamo *stanchi* dopo il lungo viaggio.", translation: "We were tired after the long trip." }
+    ],
+    255: [
+      { text: "Sono *malato* oggi e resto a casa.", translation: "I'm sick today and staying home." },
+      { text: "Il bambino è *malato* e ha la febbre.", translation: "The child is sick and has a fever." },
+      { text: "È stata *malata* tutta la settimana.", translation: "She was sick all week." }
+    ],
+    256: [
+      { text: "Il test era *facile*.", translation: "The test was easy." },
+      { text: "Questo è un compito *facile*.", translation: "This is an easy task." },
+      { text: "È stato *facile* trovare la strada.", translation: "It was easy to find the way." }
+    ],
+    257: [
+      { text: "Questo compito è *difficile*.", translation: "This task is difficult." },
+      { text: "È stato *difficile* capirlo.", translation: "It was difficult to understand him." },
+      { text: "L'italiano non è così *difficile* da imparare.", translation: "Italian isn't so difficult to learn." }
+    ],
+    258: [
+      { text: "Questa macchina è molto *costosa*.", translation: "This car is very expensive." },
+      { text: "L'hotel era *costoso*.", translation: "The hotel was expensive." },
+      { text: "Abbiamo trovato un ristorante *costoso* ma bello.", translation: "We found an expensive but nice restaurant." }
+    ],
+    259: [
+      { text: "Questo maglione era *economico*.", translation: "This sweater was cheap." },
+      { text: "Cercavamo un hotel *economico*.", translation: "We looked for a cheap hotel." },
+      { text: "Il biglietto aereo era sorprendentemente *economico*.", translation: "The plane ticket was surprisingly cheap." }
+    ],
+    260: [
+      { text: "L'ingresso è *gratis* oggi.", translation: "Entry is free today." },
+      { text: "Il caffè in ufficio è *gratis*.", translation: "The coffee at the office is free." },
+      { text: "Il museo è *gratis* per i bambini.", translation: "The museum is free for children." }
+    ],
+    261: [
+      { text: "Abbiamo *molti* amici qui.", translation: "We have many friends here." },
+      { text: "C'erano *molte* persone alla festa.", translation: "There were many people at the party." },
+      { text: "Ha letto *molti* libri.", translation: "She has read many books." }
+    ],
+    262: [
+      { text: "C'erano *pochi* visitatori al museo oggi.", translation: "There were few people at the museum today." },
+      { text: "Abbiamo *pochi* giorni di vacanza rimasti.", translation: "We have few days left of the holiday." },
+      { text: "Solo *pochi* studenti sono venuti a lezione.", translation: "Only a few students came to class." }
+    ],
+    263: [
+      { text: "Posso avere *più* caffè?", translation: "Can I have more coffee?" },
+      { text: "Ho bisogno di *più* tempo.", translation: "I need more time." },
+      { text: "Parla *più* di suo fratello.", translation: "She talks more than her brother." }
+    ],
+    264: [
+      { text: "Adesso mangio *meno* carne.", translation: "I eat less meat now." },
+      { text: "Abbiamo *meno* tempo di quanto pensassimo.", translation: "We have less time than we thought." },
+      { text: "Lavora *meno* di prima.", translation: "He works less than before." }
+    ],
+    265: [
+      { text: "Abbiamo cibo *abbastanza* per tutti?", translation: "Do we have enough food for everyone?" },
+      { text: "Non ho *abbastanza* soldi.", translation: "I don't have enough money." },
+      { text: "C'è *abbastanza* spazio in macchina.", translation: "There's enough room in the car." }
+    ],
+    266: [
+      { text: "Viaggio *spesso* in Italia.", translation: "I often travel to Italy." },
+      { text: "Chiama *spesso* i suoi genitori.", translation: "She often calls her parents." },
+      { text: "Mangiamo *spesso* pesce a cena.", translation: "We often eat fish for dinner." }
+    ],
+    267: [
+      { text: "Non bevo *mai* caffè la sera.", translation: "I never drink coffee in the evening." },
+      { text: "Non arriva *mai* in ritardo.", translation: "He never comes late." },
+      { text: "Non siamo *mai* stati in Giappone.", translation: "We have never been to Japan." }
+    ],
+    268: [
+      { text: "*A volte* faccio una passeggiata da solo.", translation: "I sometimes go for a walk alone." },
+      { text: "*A volte* fa colazione tardi.", translation: "She sometimes eats breakfast late." },
+      { text: "*A volte* andiamo al rifugio nel weekend.", translation: "We sometimes go to the cabin on weekends." }
+    ],
+    269: [
+      { text: "Mi sveglio *presto* ogni giorno.", translation: "I wake up early every day." },
+      { text: "Siamo arrivati *presto* all'aeroporto.", translation: "We arrived early at the airport." },
+      { text: "La riunione inizia *presto* domani.", translation: "The meeting starts early tomorrow." }
+    ],
+    270: [
+      { text: "Oggi è arrivato *tardi* al lavoro.", translation: "He came late to work today." },
+      { text: "Ieri abbiamo cenato *tardi*.", translation: "We ate dinner late yesterday." },
+      { text: "Il treno è partito *tardi* la sera.", translation: "The train left late in the evening." }
+    ],
+    271: [
+      { text: "*Questo* libro è molto bello.", translation: "This book is very good." },
+      { text: "Mi piace *questo* maglione.", translation: "I like this sweater." },
+      { text: "*Questa* settimana è stata frenetica.", translation: "This week has been busy." }
+    ],
+    272: [
+      { text: "*Questa* casa è grande.", translation: "This house is big." },
+      { text: "Non capisco *questa* parola.", translation: "I don't understand this word." },
+      { text: "*Questo* è mio fratello.", translation: "This is my brother." }
+    ],
+    273: [
+      { text: "*Queste* scarpe sono nuove.", translation: "These shoes are new." },
+      { text: "Mi piacciono *queste* foto.", translation: "I like these pictures." },
+      { text: "*Questi* libri sono della biblioteca.", translation: "These books are from the library." }
+    ],
+    274: [
+      { text: "Viviamo nella *stessa* città.", translation: "We live in the same city." },
+      { text: "Ha la *stessa* giacca mia.", translation: "He has the same jacket as me." },
+      { text: "Sono andati alla *stessa* scuola.", translation: "They went to the same school." }
+    ],
+    275: [
+      { text: "Preferisco l'*altro* libro.", translation: "I'd rather have the other book." },
+      { text: "Prendiamo l'*altra* strada.", translation: "We'll take the other way." },
+      { text: "Vive dall'*altra* parte della strada.", translation: "She lives on the other side of the street." }
+    ],
+    276: [
+      { text: "*Arrivederci*! Ci vediamo domani.", translation: "Bye! See you tomorrow." },
+      { text: "Ha salutato con la mano e ha detto *arrivederci*.", translation: "She waved and said bye." },
+      { text: "*Arrivederci*, ci sentiamo presto!", translation: "Bye, talk soon!" }
+    ],
+    277: [
+      { text: "*Buongiorno*! Hai dormito bene?", translation: "Good morning! Did you sleep well?" },
+      { text: "Ha detto *buongiorno* a tutti in ufficio.", translation: "He said good morning to everyone at the office." },
+      { text: "*Buongiorno*, oggi è una bella giornata.", translation: "Good morning, it's a nice day today." }
+    ],
+    278: [
+      { text: "*Buonasera*! Come stai?", translation: "Good evening! How are you?" },
+      { text: "Abbiamo detto *buonasera* e siamo entrati.", translation: "We said good evening and went in." },
+      { text: "*Buonasera*, benvenuti al ristorante.", translation: "Good evening, welcome to the restaurant." }
+    ],
+    279: [
+      { text: "*Buonanotte*, dormi bene!", translation: "Good night, sleep well!" },
+      { text: "Ha detto *buonanotte* ai bambini.", translation: "She said good night to the children." },
+      { text: "*Buonanotte*, ci vediamo presto domani.", translation: "Good night, see you early tomorrow." }
+    ],
+    280: [
+      { text: "*Benvenuto* in Italia!", translation: "Welcome to Italy!" },
+      { text: "Sei sempre il *benvenuto* a casa nostra.", translation: "You're always welcome at our home." },
+      { text: "*Benvenuto*, prego, entra!", translation: "Welcome, please come in!" }
+    ],
+    281: [
+      { text: "*Ecco a te*, ecco il tuo caffè.", translation: "Here you are, here's your coffee." },
+      { text: "*Ecco a te*, siediti.", translation: "Please, sit down." },
+      { text: "Mi ha dato il libro e ha detto *ecco a te*.", translation: "She gave me the book and said here you are." }
+    ],
+    282: [
+      { text: "*Mille grazie* per l'aiuto!", translation: "Many thanks for the help!" },
+      { text: "*Mille grazie*, sei stato molto gentile.", translation: "Thank you so much, that was very kind of you." },
+      { text: "Abbiamo detto *mille grazie* e siamo andati a casa.", translation: "We said thanks a lot and went home." }
+    ],
+    283: [
+      { text: "*Va bene*, non preoccuparti.", translation: "It's fine, don't worry." },
+      { text: "Come stai? *Va bene*, grazie.", translation: "How are you? I'm fine, thanks." },
+      { text: "*Va bene* con me adesso.", translation: "I'm doing fine now." }
+    ],
+    284: [
+      { text: "Era un bel film, *vero*?", translation: "That was a nice movie, right?" },
+      { text: "Ti piace il caffè, *vero*?", translation: "You like coffee, right?" },
+      { text: "Ci siamo incontrati l'anno scorso, *vero*?", translation: "We met last year, right?" }
+    ],
+    285: [
+      { text: "*Certo* che posso aiutarti.", translation: "Of course I can help you." },
+      { text: "Vieni stasera? *Certo*!", translation: "Are you coming tonight? Of course!" },
+      { text: "*Certo* che mi ricordo di te.", translation: "Of course I remember you." }
+    ],
+    286: [
+      { text: "Devo andare in *farmacia* a comprare medicine.", translation: "I need to go to the pharmacy and buy medicine." },
+      { text: "La *farmacia* è accanto al negozio.", translation: "The pharmacy is next to the shop." },
+      { text: "La *farmacia* apre alle otto.", translation: "The pharmacy opens at eight." }
+    ],
+    287: [
+      { text: "È stato portato in *ospedale* ieri.", translation: "He was taken to the hospital yesterday." },
+      { text: "L'*ospedale* si trova fuori città.", translation: "The hospital is outside the city." },
+      { text: "Lavora in *ospedale* come infermiera.", translation: "She works at the hospital as a nurse." }
+    ],
+    288: [
+      { text: "Ho un appuntamento dal *dentista* domani.", translation: "I have an appointment with the dentist tomorrow." },
+      { text: "Il *dentista* ha controllato i miei denti.", translation: "The dentist checked my teeth." },
+      { text: "I bambini dovrebbero andare dal *dentista* ogni anno.", translation: "Children should go to the dentist every year." }
+    ],
+    289: [
+      { text: "Posso avere un po' di *aiuto*?", translation: "Can I get some help?" },
+      { text: "Grazie mille per l'*aiuto*!", translation: "Thanks a lot for the help!" },
+      { text: "Aveva bisogno di *aiuto* con i compiti.", translation: "She needed help with the homework." }
+    ],
+    290: [
+      { text: "Abbiamo un piccolo *problema*.", translation: "We have a small problem." },
+      { text: "Il *problema* è stato risolto velocemente.", translation: "The problem was solved quickly." },
+      { text: "Nessun *problema*, posso aiutare.", translation: "No problem, I can help." }
+    ],
+    291: [
+      { text: "Qual è il *prezzo* di questo maglione?", translation: "What's the price of this sweater?" },
+      { text: "Il *prezzo* era più alto di quanto mi aspettassi.", translation: "The price was higher than I expected." },
+      { text: "Abbiamo confrontato i *prezzi* in diversi negozi.", translation: "We compared prices in several shops." }
+    ],
+    292: [
+      { text: "Oggi non ho abbastanza *soldi*.", translation: "I don't have enough money today." },
+      { text: "Sta risparmiando *soldi* per il viaggio.", translation: "She's saving money for the trip." },
+      { text: "Abbiamo bisogno di più *soldi* per il progetto.", translation: "We need more money for the project." }
+    ],
+    293: [
+      { text: "Posso avere una *ricevuta*, per favore?", translation: "Can I have a receipt, please?" },
+      { text: "Ho perso la mia *ricevuta*.", translation: "I lost my receipt." },
+      { text: "La *ricevuta* mostra quanto hai pagato.", translation: "The receipt shows what you paid." }
+    ],
+    294: [
+      { text: "Hai bisogno di un *sacchetto*?", translation: "Do you need a bag?" },
+      { text: "Il *sacchetto* era pieno di verdure.", translation: "The bag was full of vegetables." },
+      { text: "Ho dimenticato i miei *sacchetti* a casa.", translation: "I forgot my bags at home." }
+    ],
+    295: [
+      { text: "Che *taglia* porti?", translation: "What size do you wear?" },
+      { text: "Questo maglione è la *taglia* sbagliata.", translation: "This sweater is the wrong size." },
+      { text: "Hanno tutte le *taglie* in questo negozio.", translation: "They have all sizes in this shop." }
+    ],
+    296: [
+      { text: "Ho dimenticato il mio *telefono* a casa.", translation: "I forgot my phone at home." },
+      { text: "Il *telefono* ha squillato nel cuore della notte.", translation: "The phone rang in the middle of the night." },
+      { text: "Posso prendere in prestito il tuo *telefono*?", translation: "Can I borrow your phone?" }
+    ],
+    297: [
+      { text: "Il mio *computer* è molto vecchio.", translation: "My computer is very old." },
+      { text: "Il *computer* ha smesso di funzionare ieri.", translation: "The computer stopped working yesterday." },
+      { text: "Lavoro al *computer* tutto il giorno.", translation: "I work on the computer all day." }
+    ],
+    298: [
+      { text: "Ho perso la mia *chiave*.", translation: "I've lost my key." },
+      { text: "La *chiave* è sotto lo zerbino.", translation: "The key is under the mat." },
+      { text: "Puoi darmi le *chiavi*?", translation: "Can you give me the keys?" }
+    ],
+    299: [
+      { text: "L'*orologio* sul muro segna l'ora sbagliata.", translation: "The clock on the wall shows the wrong time." },
+      { text: "Ho comprato un *orologio* nuovo ieri.", translation: "I bought a new watch yesterday." },
+      { text: "L'*orologio* ha suonato alle sette.", translation: "The clock rang at seven." }
+    ],
+    300: [
+      { text: "Porta sempre una *borsa* grande.", translation: "She always carries a big bag." },
+      { text: "La mia *borsa* è piena di libri.", translation: "My bag is full of books." },
+      { text: "Ho comprato una *borsa* nuova per la scuola.", translation: "I bought a new bag for school." }
     ]
   },
 
