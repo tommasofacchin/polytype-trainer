@@ -1288,6 +1288,256 @@ window.DECK_EXAMPLES = {
       { text: "Jeg er *syk* i dag og blir hjemme.", translation: "I'm sick today and staying home." },
       { text: "Barnet er *sykt* og har feber.", translation: "The child is sick and has a fever." },
       { text: "Hun var *syk* hele uken.", translation: "She was sick all week." }
+    ],
+    256: [
+      { text: "Prøven var *lett*.", translation: "The test was easy." },
+      { text: "Dette er en *lett* oppgave.", translation: "This is an easy task." },
+      { text: "Det var *lett* å finne veien.", translation: "It was easy to find the way." }
+    ],
+    257: [
+      { text: "Denne oppgaven er *vanskelig*.", translation: "This task is difficult." },
+      { text: "Det var *vanskelig* å forstå ham.", translation: "It was difficult to understand him." },
+      { text: "Norsk er ikke så *vanskelig* å lære.", translation: "Norwegian isn't so difficult to learn." }
+    ],
+    258: [
+      { text: "Denne bilen er veldig *dyr*.", translation: "This car is very expensive." },
+      { text: "Hotellet var *dyrt*.", translation: "The hotel was expensive." },
+      { text: "Vi fant en *dyr* men fin restaurant.", translation: "We found an expensive but nice restaurant." }
+    ],
+    259: [
+      { text: "Denne genseren var *billig*.", translation: "This sweater was cheap." },
+      { text: "Vi lette etter et *billig* hotell.", translation: "We looked for a cheap hotel." },
+      { text: "Flybilletten var overraskende *billig*.", translation: "The plane ticket was surprisingly cheap." }
+    ],
+    260: [
+      { text: "Inngangen er *gratis* i dag.", translation: "Entry is free today." },
+      { text: "Kaffen på kontoret er *gratis*.", translation: "The coffee at the office is free." },
+      { text: "Museet er *gratis* for barn.", translation: "The museum is free for children." }
+    ],
+    261: [
+      { text: "Vi har *mange* venner her.", translation: "We have many friends here." },
+      { text: "Det var *mange* mennesker på festen.", translation: "There were many people at the party." },
+      { text: "Hun har lest *mange* bøker.", translation: "She has read many books." }
+    ],
+    262: [
+      { text: "Det var *få* folk på museet i dag.", translation: "There were few people at the museum today." },
+      { text: "Vi har *få* dager igjen av ferien.", translation: "We have few days left of the holiday." },
+      { text: "Bare *få* elever kom til timen.", translation: "Only a few students came to class." }
+    ],
+    263: [
+      { text: "Kan jeg få *mer* kaffe?", translation: "Can I have more coffee?" },
+      { text: "Jeg trenger *mer* tid.", translation: "I need more time." },
+      { text: "Hun snakker *mer* enn broren sin.", translation: "She talks more than her brother." }
+    ],
+    264: [
+      { text: "Jeg spiser *mindre* kjøtt nå.", translation: "I eat less meat now." },
+      { text: "Vi har *mindre* tid enn vi trodde.", translation: "We have less time than we thought." },
+      { text: "Han jobber *mindre* enn før.", translation: "He works less than before." }
+    ],
+    265: [
+      { text: "Har vi *nok* mat til alle?", translation: "Do we have enough food for everyone?" },
+      { text: "Jeg har ikke *nok* penger.", translation: "I don't have enough money." },
+      { text: "Det er *nok* plass i bilen.", translation: "There's enough room in the car." }
+    ],
+    266: [
+      { text: "Jeg reiser *ofte* til Norge.", translation: "I often travel to Norway." },
+      { text: "Hun ringer *ofte* til foreldrene sine.", translation: "She often calls her parents." },
+      { text: "Vi spiser *ofte* fisk til middag.", translation: "We often eat fish for dinner." }
+    ],
+    267: [
+      { text: "Jeg drikker *aldri* kaffe om kvelden.", translation: "I never drink coffee in the evening." },
+      { text: "Han kommer *aldri* for sent.", translation: "He never comes late." },
+      { text: "Vi har *aldri* vært i Japan.", translation: "We have never been to Japan." }
+    ],
+    268: [
+      { text: "Jeg går *noen ganger* tur alene.", translation: "I sometimes go for a walk alone." },
+      { text: "Hun spiser *noen ganger* frokost sent.", translation: "She sometimes eats breakfast late." },
+      { text: "Vi drar *noen ganger* til hytta i helgen.", translation: "We sometimes go to the cabin on weekends." }
+    ],
+    269: [
+      { text: "Jeg våkner *tidlig* hver dag.", translation: "I wake up early every day." },
+      { text: "Vi kom *tidlig* til flyplassen.", translation: "We arrived early at the airport." },
+      { text: "Møtet begynner *tidlig* i morgen.", translation: "The meeting starts early tomorrow." }
+    ],
+    270: [
+      { text: "Han kom *sent* til jobb i dag.", translation: "He came late to work today." },
+      { text: "Vi spiste middag *sent* i går.", translation: "We ate dinner late yesterday." },
+      { text: "Toget gikk *sent* om kvelden.", translation: "The train left late in the evening." }
+    ],
+    271: [
+      { text: "*Denne* boken er veldig god.", translation: "This book is very good." },
+      { text: "Jeg liker *denne* genseren.", translation: "I like this sweater." },
+      { text: "*Denne* uken har vært travel.", translation: "This week has been busy." }
+    ],
+    272: [
+      { text: "*Dette* huset er stort.", translation: "This house is big." },
+      { text: "Jeg forstår ikke *dette* ordet.", translation: "I don't understand this word." },
+      { text: "*Dette* er min bror.", translation: "This is my brother." }
+    ],
+    273: [
+      { text: "*Disse* skoene er nye.", translation: "These shoes are new." },
+      { text: "Jeg liker *disse* bildene.", translation: "I like these pictures." },
+      { text: "*Disse* bøkene er fra biblioteket.", translation: "These books are from the library." }
+    ],
+    274: [
+      { text: "Vi bor i *samme* by.", translation: "We live in the same city." },
+      { text: "Han har *samme* jakke som meg.", translation: "He has the same jacket as me." },
+      { text: "De gikk på *samme* skole.", translation: "They went to the same school." }
+    ],
+    275: [
+      { text: "Jeg vil heller ha den *andre* boken.", translation: "I'd rather have the other book." },
+      { text: "Vi tar den *andre* veien.", translation: "We'll take the other way." },
+      { text: "Hun bor på den *andre* siden av gaten.", translation: "She lives on the other side of the street." }
+    ],
+    276: [
+      { text: "*Ha det*! Vi ses i morgen.", translation: "Bye! See you tomorrow." },
+      { text: "Hun vinket og sa *ha det*.", translation: "She waved and said bye." },
+      { text: "*Ha det* bra, snakkes snart!", translation: "Bye, talk soon!" }
+    ],
+    277: [
+      { text: "*God morgen*! Sov du godt?", translation: "Good morning! Did you sleep well?" },
+      { text: "Han sa *god morgen* til alle på kontoret.", translation: "He said good morning to everyone at the office." },
+      { text: "*God morgen*, det er en fin dag i dag.", translation: "Good morning, it's a nice day today." }
+    ],
+    278: [
+      { text: "*God kveld*! Hvordan går det?", translation: "Good evening! How's it going?" },
+      { text: "Vi sa *god kveld* og gikk inn.", translation: "We said good evening and went in." },
+      { text: "*God kveld*, velkommen til restauranten.", translation: "Good evening, welcome to the restaurant." }
+    ],
+    279: [
+      { text: "*God natt*, sov godt!", translation: "Good night, sleep well!" },
+      { text: "Hun sa *god natt* til barna.", translation: "She said good night to the children." },
+      { text: "*God natt*, vi ses i morgen tidlig.", translation: "Good night, see you early tomorrow." }
+    ],
+    280: [
+      { text: "*Velkommen* til Norge!", translation: "Welcome to Norway!" },
+      { text: "Du er alltid *velkommen* hjem til oss.", translation: "You're always welcome at our home." },
+      { text: "*Velkommen* inn, vær så god!", translation: "Welcome in, please!" }
+    ],
+    281: [
+      { text: "*Vær så god*, her er kaffen din.", translation: "Here you are, here's your coffee." },
+      { text: "*Vær så god*, sitt ned.", translation: "Please, sit down." },
+      { text: "Hun ga meg boken og sa *vær så god*.", translation: "She gave me the book and said here you are." }
+    ],
+    282: [
+      { text: "*Tusen takk* for hjelpen!", translation: "Many thanks for the help!" },
+      { text: "*Tusen takk*, det var veldig snilt av deg.", translation: "Thank you so much, that was very kind of you." },
+      { text: "Vi sa *tusen takk* og gikk hjem.", translation: "We said thanks a lot and went home." }
+    ],
+    283: [
+      { text: "*Det går bra*, ikke bekymre deg.", translation: "It's fine, don't worry." },
+      { text: "Hvordan går det? *Det går bra*, takk.", translation: "How's it going? It's fine, thanks." },
+      { text: "*Det går bra* med meg nå.", translation: "I'm doing fine now." }
+    ],
+    284: [
+      { text: "Det var en fin film, *ikke sant*?", translation: "That was a nice movie, right?" },
+      { text: "Du liker kaffe, *ikke sant*?", translation: "You like coffee, right?" },
+      { text: "Vi møttes i fjor, *ikke sant*?", translation: "We met last year, right?" }
+    ],
+    285: [
+      { text: "*Selvfølgelig* kan jeg hjelpe deg.", translation: "Of course I can help you." },
+      { text: "Kommer du i kveld? *Selvfølgelig*!", translation: "Are you coming tonight? Of course!" },
+      { text: "*Selvfølgelig* husker jeg deg.", translation: "Of course I remember you." }
+    ],
+    286: [
+      { text: "Jeg må til *apoteket* og kjøpe medisin.", translation: "I need to go to the pharmacy and buy medicine." },
+      { text: "*Apoteket* ligger ved siden av butikken.", translation: "The pharmacy is next to the shop." },
+      { text: "*Apoteket* åpner klokka åtte.", translation: "The pharmacy opens at eight." }
+    ],
+    287: [
+      { text: "Han ble kjørt til *sykehuset* i går.", translation: "He was taken to the hospital yesterday." },
+      { text: "*Sykehuset* ligger utenfor byen.", translation: "The hospital is outside the city." },
+      { text: "Hun jobber på *sykehuset* som sykepleier.", translation: "She works at the hospital as a nurse." }
+    ],
+    288: [
+      { text: "Jeg har time hos *tannlegen* i morgen.", translation: "I have an appointment with the dentist tomorrow." },
+      { text: "*Tannlegen* sjekket tennene mine.", translation: "The dentist checked my teeth." },
+      { text: "Barn bør gå til *tannlegen* hvert år.", translation: "Children should go to the dentist every year." }
+    ],
+    289: [
+      { text: "Kan jeg få litt *hjelp*?", translation: "Can I get some help?" },
+      { text: "Tusen takk for *hjelpen*!", translation: "Thanks a lot for the help!" },
+      { text: "Hun trengte *hjelp* med leksene.", translation: "She needed help with the homework." }
+    ],
+    290: [
+      { text: "Vi har et lite *problem*.", translation: "We have a small problem." },
+      { text: "*Problemet* ble løst raskt.", translation: "The problem was solved quickly." },
+      { text: "Ikke noe *problem*, jeg kan hjelpe.", translation: "No problem, I can help." }
+    ],
+    291: [
+      { text: "Hva er *prisen* på denne genseren?", translation: "What's the price of this sweater?" },
+      { text: "*Prisen* var høyere enn jeg forventet.", translation: "The price was higher than I expected." },
+      { text: "Vi sammenlignet *priser* i flere butikker.", translation: "We compared prices in several shops." }
+    ],
+    292: [
+      { text: "Jeg har ikke nok *penger* i dag.", translation: "I don't have enough money today." },
+      { text: "Hun sparer *penger* til reisen.", translation: "She's saving money for the trip." },
+      { text: "Vi trenger mer *penger* til prosjektet.", translation: "We need more money for the project." }
+    ],
+    293: [
+      { text: "Kan jeg få en *kvittering*, vær så snill?", translation: "Can I have a receipt, please?" },
+      { text: "Jeg mistet *kvitteringen* min.", translation: "I lost my receipt." },
+      { text: "*Kvitteringen* viser hva du betalte.", translation: "The receipt shows what you paid." }
+    ],
+    294: [
+      { text: "Trenger du en *pose*?", translation: "Do you need a bag?" },
+      { text: "*Posen* var full av grønnsaker.", translation: "The bag was full of vegetables." },
+      { text: "Jeg glemte *posene* mine hjemme.", translation: "I forgot my bags at home." }
+    ],
+    295: [
+      { text: "Hvilken *størrelse* bruker du?", translation: "What size do you wear?" },
+      { text: "Denne genseren er feil *størrelse*.", translation: "This sweater is the wrong size." },
+      { text: "De har alle *størrelser* i denne butikken.", translation: "They have all sizes in this shop." }
+    ],
+    296: [
+      { text: "Jeg glemte *telefonen* min hjemme.", translation: "I forgot my phone at home." },
+      { text: "*Telefonen* ringte midt på natten.", translation: "The phone rang in the middle of the night." },
+      { text: "Kan jeg låne *telefonen* din?", translation: "Can I borrow your phone?" }
+    ],
+    297: [
+      { text: "Min *datamaskin* er veldig gammel.", translation: "My computer is very old." },
+      { text: "*Datamaskinen* sluttet å virke i går.", translation: "The computer stopped working yesterday." },
+      { text: "Jeg jobber på *datamaskinen* hele dagen.", translation: "I work on the computer all day." }
+    ],
+    298: [
+      { text: "Jeg har mistet *nøkkelen* min.", translation: "I've lost my key." },
+      { text: "*Nøkkelen* ligger under matten.", translation: "The key is under the mat." },
+      { text: "Kan du gi meg *nøklene*?", translation: "Can you give me the keys?" }
+    ],
+    299: [
+      { text: "*Klokka* på veggen viser feil tid.", translation: "The clock on the wall shows the wrong time." },
+      { text: "Jeg kjøpte en ny *klokke* i går.", translation: "I bought a new watch yesterday." },
+      { text: "*Klokken* ringte klokka sju.", translation: "The clock rang at seven." }
+    ],
+    300: [
+      { text: "Hun bærer alltid en stor *veske*.", translation: "She always carries a big bag." },
+      { text: "*Vesken* min er full av bøker.", translation: "My bag is full of books." },
+      { text: "Jeg kjøpte en ny *veske* til skolen.", translation: "I bought a new bag for school." }
+    ],
+    301: [
+      { text: "Kan du *gi* meg boken?", translation: "Can you give me the book?" },
+      { text: "Han *ga* henne en gave.", translation: "He gave her a gift." },
+      { text: "Vi vil *gi* penger til veldedighet.", translation: "We want to give money to charity." }
+    ],
+    302: [
+      { text: "Kan du *ta* denne posen for meg?", translation: "Can you take this bag for me?" },
+      { text: "Hun *tok* bussen til jobb.", translation: "She took the bus to work." },
+      { text: "Jeg må *ta* en pause nå.", translation: "I need to take a break now." }
+    ],
+    303: [
+      { text: "Kan du *legge* boken på bordet?", translation: "Can you put the book on the table?" },
+      { text: "Hun *la* nøklene i vesken.", translation: "She put the keys in the bag." },
+      { text: "Jeg skal *legge* meg tidlig i kveld.", translation: "I'm going to bed early tonight." }
+    ],
+    304: [
+      { text: "Filmen *begynner* klokka åtte.", translation: "The movie begins at eight." },
+      { text: "Vi må *begynne* å jobbe nå.", translation: "We need to begin working now." },
+      { text: "Skolen *begynte* i august.", translation: "School began in August." }
+    ],
+    305: [
+      { text: "Jeg må *avslutte* dette prosjektet i dag.", translation: "I need to finish this project today." },
+      { text: "Møtet *avsluttet* tidlig.", translation: "The meeting finished early." },
+      { text: "Vi skal *avslutte* kurset neste uke.", translation: "We're going to finish the course next week." }
     ]
   },
 
