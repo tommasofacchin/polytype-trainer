@@ -2038,6 +2038,256 @@ window.DECK_EXAMPLES = {
       { text: "Jeg er veldig *stolt* av deg.", translation: "I'm very proud of you." },
       { text: "Han var *stolt* over prestasjonen sin.", translation: "He was proud of his achievement." },
       { text: "Foreldrene var *stolte* av barna sine.", translation: "The parents were proud of their children." }
+    ],
+    406: [
+      { text: "Han er veldig *sterk*.", translation: "He's very strong." },
+      { text: "Kaffen var for *sterk* for meg.", translation: "The coffee was too strong for me." },
+      { text: "Hun har *sterke* armer.", translation: "She has strong arms." }
+    ],
+    407: [
+      { text: "Han følte seg *svak* etter sykdommen.", translation: "He felt weak after the illness." },
+      { text: "Signalet er *svakt* her.", translation: "The signal is weak here." },
+      { text: "Teen var litt *svak*.", translation: "The tea was a bit weak." }
+    ],
+    408: [
+      { text: "Utsikten var *vakker*.", translation: "The view was beautiful." },
+      { text: "Hun har et *vakkert* smil.", translation: "She has a beautiful smile." },
+      { text: "Blomstene i hagen er *vakre*.", translation: "The flowers in the garden are beautiful." }
+    ],
+    409: [
+      { text: "Den bygningen er ganske *stygg*.", translation: "That building is quite ugly." },
+      { text: "Han hadde et *stygt* sår på armen.", translation: "He had an ugly wound on his arm." },
+      { text: "Været var *stygt* i går.", translation: "The weather was ugly yesterday." }
+    ],
+    410: [
+      { text: "Hun er fortsatt veldig *ung*.", translation: "She's still very young." },
+      { text: "Han var *ung* da han flyttet hjemmefra.", translation: "He was young when he moved out." },
+      { text: "De *unge* liker å reise mye.", translation: "Young people like to travel a lot." }
+    ],
+    411: [
+      { text: "Familien hans er veldig *rik*.", translation: "His family is very rich." },
+      { text: "Han ble *rik* av å selge huset.", translation: "He became rich from selling the house." },
+      { text: "Landet er *rikt* på naturressurser.", translation: "The country is rich in natural resources." }
+    ],
+    412: [
+      { text: "Mange mennesker der er *fattige*.", translation: "Many people there are poor." },
+      { text: "Familien var *fattig* men lykkelig.", translation: "The family was poor but happy." },
+      { text: "Han vokste opp i et *fattig* strøk.", translation: "He grew up in a poor neighborhood." }
+    ],
+    413: [
+      { text: "Kjøkkenet er helt *rent* nå.", translation: "The kitchen is completely clean now." },
+      { text: "Vannet i innsjøen er *rent*.", translation: "The water in the lake is clean." },
+      { text: "Hun liker et *rent* hjem.", translation: "She likes a clean home." }
+    ],
+    414: [
+      { text: "Skoene mine er veldig *skitne*.", translation: "My shoes are very dirty." },
+      { text: "Gulvet var *skittent* etter festen.", translation: "The floor was dirty after the party." },
+      { text: "Han hadde *skitne* hender fra hagearbeidet.", translation: "He had dirty hands from gardening." }
+    ],
+    415: [
+      { text: "Filmen var veldig *morsom*.", translation: "The movie was very funny." },
+      { text: "Han forteller alltid *morsomme* historier.", translation: "He always tells funny stories." },
+      { text: "Det var et *morsomt* spill.", translation: "It was a funny game." }
+    ],
+    416: [
+      { text: "*Veien* var full av biler.", translation: "The road was full of cars." },
+      { text: "Vi kjørte på en smal *vei*.", translation: "We drove on a narrow road." },
+      { text: "Hvilken *vei* skal vi ta?", translation: "Which road should we take?" }
+    ],
+    417: [
+      { text: "Vi kjørte over *broen* til byen.", translation: "We drove over the bridge to the city." },
+      { text: "*Broen* er veldig gammel.", translation: "The bridge is very old." },
+      { text: "Det er en fin utsikt fra *broen*.", translation: "There's a nice view from the bridge." }
+    ],
+    418: [
+      { text: "Vi tok en *taxi* til flyplassen.", translation: "We took a taxi to the airport." },
+      { text: "*Taxien* kom raskt.", translation: "The taxi arrived quickly." },
+      { text: "Kan du ringe etter en *taxi*?", translation: "Can you call for a taxi?" }
+    ],
+    419: [
+      { text: "Min *bagasje* ble borte på flyplassen.", translation: "My luggage got lost at the airport." },
+      { text: "Vi pakket *bagasjen* kvelden før.", translation: "We packed the luggage the evening before." },
+      { text: "*Bagasjen* var for tung.", translation: "The luggage was too heavy." }
+    ],
+    420: [
+      { text: "Husk å ta med *passet* ditt.", translation: "Remember to bring your passport." },
+      { text: "Jeg mistet *passet* mitt i fjor.", translation: "I lost my passport last year." },
+      { text: "*Passet* mitt går ut neste år.", translation: "My passport expires next year." }
+    ],
+    421: [
+      { text: "*Flyreisen* var lang og trøtt.", translation: "The flight was long and tiring." },
+      { text: "Vi booket en *flyreise* til Roma.", translation: "We booked a flight to Rome." },
+      { text: "*Flyreisen* ble forsinket på grunn av været.", translation: "The flight was delayed because of the weather." }
+    ],
+    422: [
+      { text: "Er dette *setet* ledig?", translation: "Is this seat free?" },
+      { text: "Jeg satt i et *sete* ved vinduet.", translation: "I sat in a seat by the window." },
+      { text: "*Setene* på flyet var trange.", translation: "The seats on the plane were cramped." }
+    ],
+    423: [
+      { text: "*Sjåføren* kjørte veldig forsiktig.", translation: "The driver drove very carefully." },
+      { text: "Han jobber som *sjåfør* for et firma.", translation: "He works as a driver for a company." },
+      { text: "Vi takket *sjåføren* da vi gikk av.", translation: "We thanked the driver when we got off." }
+    ],
+    424: [
+      { text: "Det var mye *trafikk* i morges.", translation: "There was a lot of traffic this morning." },
+      { text: "*Trafikken* sto helt stille.", translation: "The traffic was completely still." },
+      { text: "Vi kom for sent på grunn av *trafikken*.", translation: "We were late because of the traffic." }
+    ],
+    425: [
+      { text: "*Reisen* til Norge tok ti timer.", translation: "The journey to Norway took ten hours." },
+      { text: "Vi planlegger en lang *reise* neste år.", translation: "We're planning a long journey next year." },
+      { text: "*Reisen* var full av eventyr.", translation: "The journey was full of adventures." }
+    ],
+    426: [
+      { text: "Kan jeg låne *pennen* din?", translation: "Can I borrow your pen?" },
+      { text: "*Pennen* min sluttet å skrive.", translation: "My pen stopped writing." },
+      { text: "Hun skrev brevet med en blå *penn*.", translation: "She wrote the letter with a blue pen." }
+    ],
+    427: [
+      { text: "Jeg tegner alltid med *blyant*.", translation: "I always draw with a pencil." },
+      { text: "*Blyanten* min trenger spissing.", translation: "My pencil needs sharpening." },
+      { text: "Kan jeg få låne en *blyant*?", translation: "Can I borrow a pencil?" }
+    ],
+    428: [
+      { text: "Kan du gi meg et ark *papir*?", translation: "Can you give me a piece of paper?" },
+      { text: "*Papiret* var fullt av notater.", translation: "The paper was full of notes." },
+      { text: "Vi trenger mer *papir* til skriveren.", translation: "We need more paper for the printer." }
+    ],
+    429: [
+      { text: "Jeg skriver alltid i *notatboken* min.", translation: "I always write in my notebook." },
+      { text: "*Notatboken* var full av tegninger.", translation: "The notebook was full of drawings." },
+      { text: "Hun kjøpte en ny *notatbok* til skolen.", translation: "She bought a new notebook for school." }
+    ],
+    430: [
+      { text: "Boken ligger på *skrivebordet*.", translation: "The book is on the desk." },
+      { text: "*Skrivebordet* mitt er alltid rotete.", translation: "My desk is always messy." },
+      { text: "Vi kjøpte et nytt *skrivebord* til kontoret.", translation: "We bought a new desk for the office." }
+    ],
+    431: [
+      { text: "Vi har et *møte* klokka ti.", translation: "We have a meeting at ten." },
+      { text: "*Møtet* varte i to timer.", translation: "The meeting lasted two hours." },
+      { text: "Hun forberedte seg til *møtet* i går kveld.", translation: "She prepared for the meeting last night." }
+    ],
+    432: [
+      { text: "Jeg sendte deg en *e-post* i går.", translation: "I sent you an email yesterday." },
+      { text: "Har du sjekket *e-posten* din i dag?", translation: "Have you checked your email today?" },
+      { text: "Vi kommuniserer mest via *e-post*.", translation: "We communicate mostly via email." }
+    ],
+    433: [
+      { text: "Min *sjef* er veldig hyggelig.", translation: "My boss is very nice." },
+      { text: "*Sjefen* ga oss fri i dag.", translation: "The boss gave us the day off." },
+      { text: "Hun ble *sjef* for avdelingen i fjor.", translation: "She became boss of the department last year." }
+    ],
+    434: [
+      { text: "Jeg får *lønn* hver måned.", translation: "I get paid a salary every month." },
+      { text: "*Lønnen* hans økte i år.", translation: "His salary increased this year." },
+      { text: "Vi diskuterte *lønnen* min med sjefen.", translation: "We discussed my salary with the boss." }
+    ],
+    435: [
+      { text: "Han jobber i et stort *firma*.", translation: "He works at a big company." },
+      { text: "*Firmaet* ansatte ti nye folk.", translation: "The company hired ten new people." },
+      { text: "Vi startet et eget *firma* i fjor.", translation: "We started our own company last year." }
+    ],
+    436: [
+      { text: "Hun brakk *armen* i går.", translation: "She broke her arm yesterday." },
+      { text: "Han holdt barnet i *armene*.", translation: "He held the child in his arms." },
+      { text: "Jeg har vondt i *armen*.", translation: "My arm hurts." }
+    ],
+    437: [
+      { text: "Han skadet *beinet* sitt i fotball.", translation: "He injured his leg in football." },
+      { text: "Hunden har fire *bein*.", translation: "The dog has four legs." },
+      { text: "Jeg har vondt i *beinet* etter løpeturen.", translation: "My leg hurts after the run." }
+    ],
+    438: [
+      { text: "Hun kuttet seg i *fingeren*.", translation: "She cut her finger." },
+      { text: "Han pekte med *fingeren* mot huset.", translation: "He pointed with his finger at the house." },
+      { text: "Ringen passer på denne *fingeren*.", translation: "The ring fits on this finger." }
+    ],
+    439: [
+      { text: "Jeg har vondt i *ryggen* i dag.", translation: "My back hurts today." },
+      { text: "Han bar sekken på *ryggen*.", translation: "He carried the backpack on his back." },
+      { text: "Hun ligger på *ryggen* og hviler.", translation: "She's lying on her back resting." }
+    ],
+    440: [
+      { text: "*Hjertet* hennes banket fort.", translation: "Her heart beat fast." },
+      { text: "Han har et godt *hjerte*.", translation: "He has a good heart." },
+      { text: "Legen lyttet til *hjertet* mitt.", translation: "The doctor listened to my heart." }
+    ],
+    441: [
+      { text: "Ta på deg *frakken*, det er kaldt ute.", translation: "Put on your coat, it's cold outside." },
+      { text: "*Frakken* hennes var lang og svart.", translation: "Her coat was long and black." },
+      { text: "Jeg kjøpte en ny *frakk* til vinteren.", translation: "I bought a new coat for winter." }
+    ],
+    442: [
+      { text: "Hun har på seg et fint *skjørt*.", translation: "She's wearing a nice skirt." },
+      { text: "*Skjørtet* var rødt og kort.", translation: "The skirt was red and short." },
+      { text: "Jeg kjøpte et nytt *skjørt* i går.", translation: "I bought a new skirt yesterday." }
+    ],
+    443: [
+      { text: "Jeg finner bare én *sokk*.", translation: "I can only find one sock." },
+      { text: "*Sokkene* mine er alle forskjellige.", translation: "My socks are all different." },
+      { text: "Han mistet en *sokk* i vaskemaskinen.", translation: "He lost a sock in the washing machine." }
+    ],
+    444: [
+      { text: "Ta på deg *hanskene*, det er kaldt.", translation: "Put on your gloves, it's cold." },
+      { text: "Jeg mistet en *hanske* i går.", translation: "I lost a glove yesterday." },
+      { text: "*Hanskene* hennes var laget av ull.", translation: "Her gloves were made of wool." }
+    ],
+    445: [
+      { text: "Hun hadde på seg et varmt *skjerf*.", translation: "She wore a warm scarf." },
+      { text: "*Skjerfet* var blått og mykt.", translation: "The scarf was blue and soft." },
+      { text: "Jeg fikk et *skjerf* i gave til jul.", translation: "I got a scarf as a gift for Christmas." }
+    ],
+    446: [
+      { text: "Jeg må ta *medisinen* min hver dag.", translation: "I have to take my medicine every day." },
+      { text: "*Medisinen* hjalp mot hodepinen.", translation: "The medicine helped with the headache." },
+      { text: "Legen skrev ut *medisin* til meg.", translation: "The doctor prescribed medicine for me." }
+    ],
+    447: [
+      { text: "Barnet har høy *feber* i dag.", translation: "The child has a high fever today." },
+      { text: "*Feberen* gikk ned etter medisinen.", translation: "The fever went down after the medicine." },
+      { text: "Hun ble hjemme på grunn av *feber*.", translation: "She stayed home because of a fever." }
+    ],
+    448: [
+      { text: "Jeg kjenner *smerte* i ryggen.", translation: "I feel pain in my back." },
+      { text: "*Smerten* forsvant etter hvile.", translation: "The pain disappeared after rest." },
+      { text: "Hun hadde sterke *smerter* i magen.", translation: "She had strong pains in her stomach." }
+    ],
+    449: [
+      { text: "Han har hatt *hoste* i en uke.", translation: "He has had a cough for a week." },
+      { text: "*Hosten* hennes ble verre om natten.", translation: "Her cough got worse at night." },
+      { text: "Jeg tok medisin mot *hosten*.", translation: "I took medicine for the cough." }
+    ],
+    450: [
+      { text: "Legen tok en prøve av *blodet* mitt.", translation: "The doctor took a sample of my blood." },
+      { text: "*Blodet* rant fra kuttet.", translation: "The blood flowed from the cut." },
+      { text: "Han donerte *blod* i går.", translation: "He donated blood yesterday." }
+    ],
+    451: [
+      { text: "Jeg betaler alltid med *kontanter*.", translation: "I always pay with cash." },
+      { text: "Har du *kontanter* på deg?", translation: "Do you have cash on you?" },
+      { text: "Butikken tar ikke imot *kontanter* lenger.", translation: "The shop no longer accepts cash." }
+    ],
+    452: [
+      { text: "Jeg betalte med *kredittkort*.", translation: "I paid with credit card." },
+      { text: "*Kredittkortet* mitt ble avvist.", translation: "My credit card was declined." },
+      { text: "Kan jeg bruke *kredittkort* her?", translation: "Can I use a credit card here?" }
+    ],
+    453: [
+      { text: "Vi fikk *rabatt* på hotellet.", translation: "We got a discount on the hotel." },
+      { text: "*Rabatten* var tjue prosent.", translation: "The discount was twenty percent." },
+      { text: "Butikken ga *rabatt* til studenter.", translation: "The shop gave a discount to students." }
+    ],
+    454: [
+      { text: "Han er en trofast *kunde*.", translation: "He's a loyal customer." },
+      { text: "*Kunden* klagde på prisen.", translation: "The customer complained about the price." },
+      { text: "Vi har mange nye *kunder* i år.", translation: "We have many new customers this year." }
+    ],
+    455: [
+      { text: "Hun ga meg en fin *gave*.", translation: "She gave me a nice gift." },
+      { text: "*Gaven* var pakket inn i rødt papir.", translation: "The gift was wrapped in red paper." },
+      { text: "Vi kjøpte en *gave* til bursdagen hans.", translation: "We bought a gift for his birthday." }
     ]
   },
 
