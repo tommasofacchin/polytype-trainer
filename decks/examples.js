@@ -288,6 +288,256 @@ window.DECK_EXAMPLES = {
       { text: "Hva *gjør* du nå?", translation: "What are you doing now?" },
       { text: "Jeg *gjør* mitt beste.", translation: "I'm doing my best." },
       { text: "Vi må *gjøre* leksene våre.", translation: "We have to do our homework." }
+    ],
+    56: [
+      { text: "Jeg *spiser* frokost klokka åtte.", translation: "I eat breakfast at eight." },
+      { text: "Skal vi *spise* sammen i kveld?", translation: "Shall we eat together tonight?" },
+      { text: "Hun *spiser* aldri kjøtt.", translation: "She never eats meat." }
+    ],
+    57: [
+      { text: "Jeg *drikker* vann hver dag.", translation: "I drink water every day." },
+      { text: "Hva vil du *drikke*?", translation: "What would you like to drink?" },
+      { text: "Han *drikker* kaffe uten sukker.", translation: "He drinks coffee without sugar." }
+    ],
+    58: [
+      { text: "Jeg *leser* en spennende bok.", translation: "I'm reading an exciting book." },
+      { text: "Liker du å *lese*?", translation: "Do you like to read?" },
+      { text: "Hun *leser* avisen hver morgen.", translation: "She reads the newspaper every morning." }
+    ],
+    59: [
+      { text: "Jeg *skriver* et brev til bestemor.", translation: "I'm writing a letter to grandmother." },
+      { text: "Kan du *skrive* navnet ditt her?", translation: "Can you write your name here?" },
+      { text: "Han *skriver* bøker om historie.", translation: "He writes books about history." }
+    ],
+    60: [
+      { text: "Jeg *snakker* litt norsk.", translation: "I speak a little Norwegian." },
+      { text: "Kan du *snakke* saktere?", translation: "Can you speak more slowly?" },
+      { text: "Hun *snakker* tre språk.", translation: "She speaks three languages." }
+    ],
+    61: [
+      { text: "Jeg har *en* katt.", translation: "I have a cat." },
+      { text: "Kan jeg få *en* kopp te?", translation: "Can I have a cup of tea?" },
+      { text: "Det står *en* bil utenfor.", translation: "There's a car outside." }
+    ],
+    62: [
+      { text: "Hun kjøpte *ei* bok i går.", translation: "She bought a book yesterday." },
+      { text: "Jeg så *ei* jente på gaten.", translation: "I saw a girl on the street." },
+      { text: "Det bor *ei* geit på gården.", translation: "A goat lives on the farm." }
+    ],
+    63: [
+      { text: "Jeg har *et* hus på landet.", translation: "I have a house in the countryside." },
+      { text: "Kan jeg få *et* glass vann?", translation: "Can I have a glass of water?" },
+      { text: "Hun kjøpte *et* nytt kamera.", translation: "She bought a new camera." }
+    ],
+    64: [
+      { text: "Bilen er rød. *Den* er ny.", translation: "The car is red. It's new." },
+      { text: "Jeg liker denne boken. *Den* er spennende.", translation: "I like this book. It's exciting." },
+      { text: "Se på katten. *Den* sover.", translation: "Look at the cat. It's sleeping." }
+    ],
+    65: [
+      { text: "*Det* regner ute.", translation: "It's raining outside." },
+      { text: "Huset er stort. *Det* har fem rom.", translation: "The house is big. It has five rooms." },
+      { text: "*Det* er kaldt i dag.", translation: "It's cold today." }
+    ],
+    66: [
+      { text: "Kom *her*, vær så snill.", translation: "Come here, please." },
+      { text: "Jeg bor *her* nå.", translation: "I live here now." },
+      { text: "*Her* er nøklene dine.", translation: "Here are your keys." }
+    ],
+    67: [
+      { text: "Boken ligger *der* borte.", translation: "The book is over there." },
+      { text: "Hvem er *der*?", translation: "Who is there?" },
+      { text: "Vi møttes *der* i fjor.", translation: "We met there last year." }
+    ],
+    68: [
+      { text: "Jeg må gå *nå*.", translation: "I have to go now." },
+      { text: "Hva gjør du *nå*?", translation: "What are you doing now?" },
+      { text: "*Nå* er det på tide å spise.", translation: "Now it's time to eat." }
+    ],
+    69: [
+      { text: "Vi snakkes *senere*.", translation: "We'll talk later." },
+      { text: "Jeg kommer *senere* i kveld.", translation: "I'll come later tonight." },
+      { text: "Kan vi gjøre det *senere*?", translation: "Can we do it later?" }
+    ],
+    70: [
+      { text: "Hun er *alltid* glad.", translation: "She's always happy." },
+      { text: "Jeg drikker *alltid* kaffe om morgenen.", translation: "I always drink coffee in the morning." },
+      { text: "Han kommer *alltid* for sent.", translation: "He always comes late." }
+    ],
+    71: [
+      { text: "Hva skal vi gjøre *i dag*?", translation: "What shall we do today?" },
+      { text: "*I dag* er det fint vær.", translation: "Today the weather is nice." },
+      { text: "Jeg har mye å gjøre *i dag*.", translation: "I have a lot to do today." }
+    ],
+    72: [
+      { text: "Vi sees *i morgen*!", translation: "See you tomorrow!" },
+      { text: "*I morgen* skal jeg reise til Oslo.", translation: "Tomorrow I'll travel to Oslo." },
+      { text: "Hva skjer *i morgen*?", translation: "What's happening tomorrow?" }
+    ],
+    73: [
+      { text: "*I går* var jeg på jobb.", translation: "Yesterday I was at work." },
+      { text: "Vi så en film *i går*.", translation: "We watched a movie yesterday." },
+      { text: "Det regnet mye *i går*.", translation: "It rained a lot yesterday." }
+    ],
+    74: [
+      { text: "Jeg jobber fem dager i *uken*.", translation: "I work five days a week." },
+      { text: "Neste *uke* skal vi reise.", translation: "Next week we're going to travel." },
+      { text: "*Uken* har vært travel.", translation: "The week has been busy." }
+    ],
+    75: [
+      { text: "Vi flytter neste *måned*.", translation: "We're moving next month." },
+      { text: "Hver *måned* betaler jeg husleie.", translation: "Every month I pay rent." },
+      { text: "*Måneden* gikk fort.", translation: "The month went by quickly." }
+    ],
+    76: [
+      { text: "Han kjørte en *rød* bil.", translation: "He drove a red car." },
+      { text: "Blomsten er *rød* og vakker.", translation: "The flower is red and beautiful." },
+      { text: "Jeg liker den *røde* genseren.", translation: "I like the red sweater." }
+    ],
+    77: [
+      { text: "Himmelen er *blå* i dag.", translation: "The sky is blue today." },
+      { text: "Hun har *blå* øyne.", translation: "She has blue eyes." },
+      { text: "Jeg kjøpte en *blå* jakke.", translation: "I bought a blue jacket." }
+    ],
+    78: [
+      { text: "Gresset er *grønt* om sommeren.", translation: "The grass is green in summer." },
+      { text: "Han har en *grønn* bil.", translation: "He has a green car." },
+      { text: "Jeg liker den *grønne* skjorten.", translation: "I like the green shirt." }
+    ],
+    79: [
+      { text: "Solen er *gul*.", translation: "The sun is yellow." },
+      { text: "Hun har en *gul* kjole.", translation: "She has a yellow dress." },
+      { text: "Det *gule* huset er vårt.", translation: "The yellow house is ours." }
+    ],
+    80: [
+      { text: "Katten er helt *svart*.", translation: "The cat is completely black." },
+      { text: "Han har en *svart* bil.", translation: "He has a black car." },
+      { text: "Jeg kjøpte *svarte* sko.", translation: "I bought black shoes." }
+    ],
+    81: [
+      { text: "Snøen er *hvit* og kald.", translation: "The snow is white and cold." },
+      { text: "Hun har et *hvitt* hus.", translation: "She has a white house." },
+      { text: "Han bruker en *hvit* skjorte.", translation: "He wears a white shirt." }
+    ],
+    82: [
+      { text: "Hunden min er *brun*.", translation: "My dog is brown." },
+      { text: "Hun har *brune* øyne.", translation: "She has brown eyes." },
+      { text: "Jeg kjøpte et *brunt* bord.", translation: "I bought a brown table." }
+    ],
+    83: [
+      { text: "Jenta har en *rosa* kjole.", translation: "The girl has a pink dress." },
+      { text: "Blomstene er *rosa*.", translation: "The flowers are pink." },
+      { text: "Hun malte rommet *rosa*.", translation: "She painted the room pink." }
+    ],
+    84: [
+      { text: "Solnedgangen var *oransje*.", translation: "The sunset was orange." },
+      { text: "Han har en *oransje* jakke.", translation: "He has an orange jacket." },
+      { text: "Appelsinen er *oransje*.", translation: "The orange is orange." }
+    ],
+    85: [
+      { text: "Blomsten er *lilla*.", translation: "The flower is purple." },
+      { text: "Hun har en *lilla* veske.", translation: "She has a purple bag." },
+      { text: "Himmelen ble *lilla* om kvelden.", translation: "The sky turned purple in the evening." }
+    ],
+    86: [
+      { text: "Jeg har bare *én* bror.", translation: "I only have one brother." },
+      { text: "Kan jeg få *én* kaffe?", translation: "Can I have one coffee?" },
+      { text: "Bare *én* person kom.", translation: "Only one person came." }
+    ],
+    87: [
+      { text: "Jeg har *to* søsken.", translation: "I have two siblings." },
+      { text: "Klokka er *to*.", translation: "It's two o'clock." },
+      { text: "Huset har *to* etasjer.", translation: "The house has two floors." }
+    ],
+    88: [
+      { text: "Jeg har *tre* barn.", translation: "I have three children." },
+      { text: "Klokka er *tre*.", translation: "It's three o'clock." },
+      { text: "Vi ventet i *tre* timer.", translation: "We waited for three hours." }
+    ],
+    89: [
+      { text: "Bordet har *fire* stoler.", translation: "The table has four chairs." },
+      { text: "Klokka er *fire*.", translation: "It's four o'clock." },
+      { text: "Vi er *fire* i familien.", translation: "There are four of us in the family." }
+    ],
+    90: [
+      { text: "Jeg har *fem* venner her.", translation: "I have five friends here." },
+      { text: "Klokka er *fem*.", translation: "It's five o'clock." },
+      { text: "Huset har *fem* rom.", translation: "The house has five rooms." }
+    ],
+    91: [
+      { text: "Klokka er *seks*.", translation: "It's six o'clock." },
+      { text: "Vi er *seks* personer.", translation: "We are six people." },
+      { text: "Han sover *seks* timer hver natt.", translation: "He sleeps six hours every night." }
+    ],
+    92: [
+      { text: "Klokka er *sju*.", translation: "It's seven o'clock." },
+      { text: "Hun har *sju* bøker på bordet.", translation: "She has seven books on the table." },
+      { text: "Han spiste *sju* jordbær.", translation: "He ate seven strawberries." }
+    ],
+    93: [
+      { text: "Klokka er *åtte*.", translation: "It's eight o'clock." },
+      { text: "Jeg jobber *åtte* timer om dagen.", translation: "I work eight hours a day." },
+      { text: "Vi var *åtte* personer på festen.", translation: "There were eight of us at the party." }
+    ],
+    94: [
+      { text: "Klokka er *ni*.", translation: "It's nine o'clock." },
+      { text: "Hun er *ni* år gammel.", translation: "She's nine years old." },
+      { text: "Vi ventet i *ni* minutter.", translation: "We waited nine minutes." }
+    ],
+    95: [
+      { text: "Klokka er *ti*.", translation: "It's ten o'clock." },
+      { text: "Han har *ti* fingre.", translation: "He has ten fingers." },
+      { text: "Vi bodde der i *ti* år.", translation: "We lived there for ten years." }
+    ],
+    96: [
+      { text: "*Hvor* bor du?", translation: "Where do you live?" },
+      { text: "Vet du *hvor* boken er?", translation: "Do you know where the book is?" },
+      { text: "*Hvor* skal vi møtes?", translation: "Where shall we meet?" }
+    ],
+    97: [
+      { text: "*Hva* heter du?", translation: "What's your name?" },
+      { text: "*Hva* gjør du nå?", translation: "What are you doing now?" },
+      { text: "Jeg vet ikke *hva* jeg skal si.", translation: "I don't know what to say." }
+    ],
+    98: [
+      { text: "*Hvem* er det?", translation: "Who is that?" },
+      { text: "*Hvem* kommer i kveld?", translation: "Who's coming tonight?" },
+      { text: "Vet du *hvem* hun er?", translation: "Do you know who she is?" }
+    ],
+    99: [
+      { text: "*Når* kommer du?", translation: "When are you coming?" },
+      { text: "Jeg vet ikke *når* toget går.", translation: "I don't know when the train leaves." },
+      { text: "*Når* er bursdagen din?", translation: "When is your birthday?" }
+    ],
+    100: [
+      { text: "*Hvorfor* er du sen?", translation: "Why are you late?" },
+      { text: "*Hvorfor* liker du ikke fisk?", translation: "Why don't you like fish?" },
+      { text: "Jeg vet ikke *hvorfor* han dro.", translation: "I don't know why he left." }
+    ],
+    101: [
+      { text: "*Hvordan* går det?", translation: "How's it going?" },
+      { text: "*Hvordan* lager man denne retten?", translation: "How do you make this dish?" },
+      { text: "Jeg vet ikke *hvordan* jeg skal svare.", translation: "I don't know how to answer." }
+    ],
+    102: [
+      { text: "*Hvilken* bok leser du?", translation: "Which book are you reading?" },
+      { text: "*Hvilken* dag passer best?", translation: "Which day suits best?" },
+      { text: "Vet du *hvilken* vei vi skal gå?", translation: "Do you know which way we should go?" }
+    ],
+    103: [
+      { text: "*Hvor mye* koster dette?", translation: "How much does this cost?" },
+      { text: "*Hvor mye* tid har vi?", translation: "How much time do we have?" },
+      { text: "Jeg vet ikke *hvor mye* det veier.", translation: "I don't know how much it weighs." }
+    ],
+    104: [
+      { text: "Jeg er glad *fordi* det er fredag.", translation: "I'm happy because it's Friday." },
+      { text: "Hun kom sent *fordi* toget var forsinket.", translation: "She came late because the train was delayed." },
+      { text: "Vi ble hjemme *fordi* det regnet.", translation: "We stayed home because it rained." }
+    ],
+    105: [
+      { text: "Jeg vil gå, *men* jeg er sliten.", translation: "I want to go, but I'm tired." },
+      { text: "Det er dyrt, *men* verdt det.", translation: "It's expensive, but worth it." },
+      { text: "Hun ringte, *men* jeg svarte ikke.", translation: "She called, but I didn't answer." }
     ]
   },
 
