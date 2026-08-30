@@ -3266,6 +3266,256 @@ window.DECK_EXAMPLES = {
       { text: "Han viskade något i mitt *öra*.", translation: "He whispered something in my ear." },
       { text: "Musiken var hög, så jag täckte *öronen*.", translation: "The music was loud, so I covered my ears." },
       { text: "Hunden har stora *öron*.", translation: "The dog has big ears." }
+    ],
+    151: [
+      { text: "Barnet har en liten *näsa*.", translation: "The child has a small nose." },
+      { text: "Jag andas genom *näsan*.", translation: "I breathe through my nose." },
+      { text: "Han har en förkyld *näsa*.", translation: "He has a stuffy nose." }
+    ],
+    152: [
+      { text: "Stäng *munnen*, snälla.", translation: "Close your mouth, please." },
+      { text: "Hon log med hela *munnen*.", translation: "She smiled with her whole mouth." },
+      { text: "Prata inte med mat i *munnen*.", translation: "Don't talk with food in your mouth." }
+    ],
+    153: [
+      { text: "Hon har långt, mörkt *hår*.", translation: "She has long, dark hair." },
+      { text: "Han klipper sitt eget *hår*.", translation: "He cuts his own hair." },
+      { text: "*Håret* mitt blir blött i regnet.", translation: "My hair gets wet in the rain." }
+    ],
+    154: [
+      { text: "Ta på dig *jackan*, det är kallt ute.", translation: "Put on your jacket, it's cold outside." },
+      { text: "Jag köpte en ny *jacka* igår.", translation: "I bought a new jacket yesterday." },
+      { text: "*Jackan* hennes är blå och varm.", translation: "Her jacket is blue and warm." }
+    ],
+    155: [
+      { text: "Ta av dig *skorna* innan du går in.", translation: "Take off your shoes before you go in." },
+      { text: "De här *skorna* är väldigt bekväma.", translation: "These shoes are very comfortable." },
+      { text: "Jag behöver nya *skor* till vintern.", translation: "I need new shoes for winter." }
+    ],
+    156: [
+      { text: "Jag köpte nya *byxor* igår.", translation: "I bought new pants yesterday." },
+      { text: "*Byxorna* mina är för långa.", translation: "My pants are too long." },
+      { text: "Han går alltid i svarta *byxor*.", translation: "He always wears black pants." }
+    ],
+    157: [
+      { text: "Han har på sig en vit *skjorta*.", translation: "He's wearing a white shirt." },
+      { text: "*Skjortan* min behöver strykas.", translation: "My shirt needs ironing." },
+      { text: "Vi köpte en ny *skjorta* till hans födelsedag.", translation: "We bought a new shirt for his birthday." }
+    ],
+    158: [
+      { text: "Hon har en fin *klänning* på sig.", translation: "She's wearing a nice dress." },
+      { text: "*Klänningen* var röd och lång.", translation: "The dress was red and long." },
+      { text: "Jag ska köpa en ny *klänning* till festen.", translation: "I'm going to buy a new dress for the party." }
+    ],
+    159: [
+      { text: "Ta på dig *mössan*, det är kallt.", translation: "Put on your hat, it's cold." },
+      { text: "*Mössan* hans är blå och varm.", translation: "His hat is blue and warm." },
+      { text: "Jag tappade *mössan* i vinden.", translation: "I lost my hat in the wind." }
+    ],
+    160: [
+      { text: "Jag har på mig en varm *tröja*.", translation: "I'm wearing a warm sweater." },
+      { text: "*Tröjan* min är gjord av ull.", translation: "My sweater is made of wool." },
+      { text: "Hon stickade en *tröja* till mig.", translation: "She knitted a sweater for me." }
+    ],
+    161: [
+      { text: "Vänta bara en *sekund*.", translation: "Just wait a second." },
+      { text: "Det tog bara några *sekunder*.", translation: "It only took a few seconds." },
+      { text: "Varje *sekund* räknas.", translation: "Every second counts." }
+    ],
+    162: [
+      { text: "Mötet varade en *timme*.", translation: "The meeting lasted an hour." },
+      { text: "Jag väntar en *timme* till.", translation: "I'll wait one more hour." },
+      { text: "Resan tar tre *timmar*.", translation: "The trip takes three hours." }
+    ],
+    163: [
+      { text: "Vänta en *minut*, snälla.", translation: "Wait a minute, please." },
+      { text: "Tåget kommer om fem *minuter*.", translation: "The train arrives in five minutes." },
+      { text: "Det tar bara några *minuter*.", translation: "It only takes a few minutes." }
+    ],
+    164: [
+      { text: "Jag är tjugo *år* gammal.", translation: "I am twenty years old." },
+      { text: "Vi flyttade hit för två *år* sedan.", translation: "We moved here two years ago." },
+      { text: "Nästa *år* ska vi resa till Italien.", translation: "Next year we're going to travel to Italy." }
+    ],
+    165: [
+      { text: "Vad ska du göra i *helgen*?", translation: "What are you doing this weekend?" },
+      { text: "Vi åker till stugan varje *helg*.", translation: "We go to the cabin every weekend." },
+      { text: "*Helgen* var kort men fin.", translation: "The weekend was short but nice." }
+    ],
+    166: [
+      { text: "På *måndag* börjar jag ett nytt jobb.", translation: "On Monday I start a new job." },
+      { text: "Vi träffas varje *måndag*.", translation: "We meet every Monday." },
+      { text: "*Måndagen* var hektisk och lång.", translation: "Monday was busy and long." }
+    ],
+    167: [
+      { text: "På *tisdag* har jag träning.", translation: "On Tuesday I have training." },
+      { text: "Vi åker till stan på *tisdag*.", translation: "We're going to town on Tuesday." },
+      { text: "*Tisdagar* är alltid lugna.", translation: "Tuesdays are always calm." }
+    ],
+    168: [
+      { text: "Mötet är på *onsdag* klockan tio.", translation: "The meeting is Wednesday at ten." },
+      { text: "Hon jobbar inte på *onsdagar*.", translation: "She doesn't work on Wednesdays." },
+      { text: "Vi ses igen på *onsdag*.", translation: "We'll see each other again on Wednesday." }
+    ],
+    169: [
+      { text: "På *torsdag* ska vi äta middag tillsammans.", translation: "On Thursday we're having dinner together." },
+      { text: "Han reser hem på *torsdag*.", translation: "He travels home on Thursday." },
+      { text: "*Torsdagar* är min favoritdag.", translation: "Thursdays are my favorite day." }
+    ],
+    170: [
+      { text: "Äntligen är det *fredag*!", translation: "Finally it's Friday!" },
+      { text: "Vi firar alltid på *fredagar*.", translation: "We always celebrate on Fridays." },
+      { text: "*Fredag* kväll går vi ut.", translation: "Friday evening we go out." }
+    ],
+    171: [
+      { text: "Vi handlar på *lördagar*.", translation: "We shop on Saturdays." },
+      { text: "På *lördag* ska vi till stranden.", translation: "On Saturday we're going to the beach." },
+      { text: "Festen är på *lördag*.", translation: "The party is on Saturday." }
+    ],
+    172: [
+      { text: "Vi äter stor middag på *söndagar*.", translation: "We eat a big dinner on Sundays." },
+      { text: "*Söndag* är en lugn dag.", translation: "Sunday is a calm day." },
+      { text: "Familjen samlas varje *söndag*.", translation: "The family gathers every Sunday." }
+    ],
+    173: [
+      { text: "Blommorna blommar på *våren*.", translation: "The flowers bloom in spring." },
+      { text: "*Våren* är min favoritårstid.", translation: "Spring is my favorite season." },
+      { text: "Vi planterar grönsaker på *våren*.", translation: "We plant vegetables in spring." }
+    ],
+    174: [
+      { text: "Vi reser till Italien varje *sommar*.", translation: "We travel to Italy every summer." },
+      { text: "*Sommaren* var varm och solig.", translation: "The summer was warm and sunny." },
+      { text: "På *sommaren* badar vi varje dag.", translation: "In summer we swim every day." }
+    ],
+    175: [
+      { text: "Löven faller på *hösten*.", translation: "The leaves fall in autumn." },
+      { text: "*Hösten* är kall och våt här.", translation: "Autumn is cold and wet here." },
+      { text: "Skolan börjar på *hösten*.", translation: "School starts in autumn." }
+    ],
+    176: [
+      { text: "Det snöar mycket på *vintern*.", translation: "It snows a lot in winter." },
+      { text: "*Vintern* är lång och mörk i Sverige.", translation: "Winter is long and dark in Sweden." },
+      { text: "Vi åker skidor på *vintern*.", translation: "We go skiing in winter." }
+    ],
+    177: [
+      { text: "*Solen* skiner idag.", translation: "The sun is shining today." },
+      { text: "Vi solade oss i *solen* hela dagen.", translation: "We sunbathed in the sun all day." },
+      { text: "*Solen* går ner klockan åtta.", translation: "The sun sets at eight." }
+    ],
+    178: [
+      { text: "Det är mycket *regn* idag.", translation: "There's a lot of rain today." },
+      { text: "Vi blev blöta av *regnet*.", translation: "We got wet from the rain." },
+      { text: "*Regnet* slutade efter en timme.", translation: "The rain stopped after an hour." }
+    ],
+    179: [
+      { text: "Det ligger mycket *snö* på marken.", translation: "There's a lot of snow on the ground." },
+      { text: "Barnen leker i *snön*.", translation: "The children are playing in the snow." },
+      { text: "*Snön* smälte snabbt i solen.", translation: "The snow melted quickly in the sun." }
+    ],
+    180: [
+      { text: "Det blåser mycket *vind* idag.", translation: "There's a lot of wind today." },
+      { text: "*Vinden* rev av taket.", translation: "The wind ripped off the roof." },
+      { text: "Vi kände en kall *vind* från havet.", translation: "We felt a cold wind from the sea." }
+    ],
+    181: [
+      { text: "Det är *fint* väder idag.", translation: "The weather is nice today." },
+      { text: "Du ser *fin* ut i den klänningen.", translation: "You look nice in that dress." },
+      { text: "Det var *fint* att se dig igen.", translation: "It was nice to see you again." }
+    ],
+    182: [
+      { text: "Det är *molnigt* idag.", translation: "It's cloudy today." },
+      { text: "Himlen blev *molnig* på eftermiddagen.", translation: "The sky became cloudy in the afternoon." },
+      { text: "Vi hade *molnigt* väder hela veckan.", translation: "We had cloudy weather all week." }
+    ],
+    183: [
+      { text: "Himlen är *klar* ikväll.", translation: "The sky is clear tonight." },
+      { text: "Vattnet i sjön är helt *klart*.", translation: "The water in the lake is completely clear." },
+      { text: "Det blir *klart* väder imorgon.", translation: "It will be clear weather tomorrow." }
+    ],
+    184: [
+      { text: "Vädret har varit *torrt* hela sommaren.", translation: "The weather has been dry all summer." },
+      { text: "Marken är *torr* efter många dagar utan regn.", translation: "The ground is dry after many days without rain." },
+      { text: "Kläderna är *torra* nu.", translation: "The clothes are dry now." }
+    ],
+    185: [
+      { text: "Gräset är *vått* på morgonen.", translation: "The grass is wet in the morning." },
+      { text: "Skorna mina blev *våta* i regnet.", translation: "My shoes got wet in the rain." },
+      { text: "Håret hennes var *vått* efter duschen.", translation: "Her hair was wet after the shower." }
+    ],
+    186: [
+      { text: "Jag tar *tåget* till jobbet varje dag.", translation: "I take the train to work every day." },
+      { text: "*Tåget* var försenat idag.", translation: "The train was delayed today." },
+      { text: "Vi reste med *tåg* till Göteborg.", translation: "We travelled by train to Gothenburg." }
+    ],
+    187: [
+      { text: "*Bussen* kommer om tio minuter.", translation: "The bus arrives in ten minutes." },
+      { text: "Jag tar *buss* till skolan.", translation: "I take the bus to school." },
+      { text: "Vi väntade länge på *bussen*.", translation: "We waited a long time for the bus." }
+    ],
+    188: [
+      { text: "*Flygplanet* lyfter klockan tio.", translation: "The plane takes off at ten." },
+      { text: "Vi reste med *flygplan* till Spanien.", translation: "We travelled by plane to Spain." },
+      { text: "*Flygplanet* landade tryggt.", translation: "The plane landed safely." }
+    ],
+    189: [
+      { text: "Jag har en ny *cykel*.", translation: "I have a new bicycle." },
+      { text: "*Cykeln* min är trasig.", translation: "My bicycle is broken." },
+      { text: "Han kör *cykel* till skolan.", translation: "He rides his bicycle to school." }
+    ],
+    190: [
+      { text: "Vi tog en *båt* över sjön.", translation: "We took a boat across the lake." },
+      { text: "*Båten* var liten men snabb.", translation: "The boat was small but fast." },
+      { text: "Han fiskar från sin *båt*.", translation: "He fishes from his boat." }
+    ],
+    191: [
+      { text: "Tåget stannar vid den här *stationen*.", translation: "The train stops at this station." },
+      { text: "Vi träffades vid *stationen*.", translation: "We met at the station." },
+      { text: "*Stationen* ligger mitt i stan.", translation: "The station is in the middle of the city." }
+    ],
+    192: [
+      { text: "Vi körde till *flygplatsen* tidigt.", translation: "We drove to the airport early." },
+      { text: "*Flygplatsen* var full av folk.", translation: "The airport was full of people." },
+      { text: "Han jobbar på *flygplatsen*.", translation: "He works at the airport." }
+    ],
+    193: [
+      { text: "Jag köpte en *biljett* till konserten.", translation: "I bought a ticket to the concert." },
+      { text: "Kan jag se din *biljett*?", translation: "Can I see your ticket?" },
+      { text: "Vi behöver två *biljetter* till tåget.", translation: "We need two tickets for the train." }
+    ],
+    194: [
+      { text: "Kan du visa mig på *kartan*?", translation: "Can you show me on the map?" },
+      { text: "Vi använde en *karta* för att hitta vägen.", translation: "We used a map to find the way." },
+      { text: "*Kartan* visar hela staden.", translation: "The map shows the whole city." }
+    ],
+    195: [
+      { text: "Vi bor på ett fint *hotell*.", translation: "We're staying at a nice hotel." },
+      { text: "*Hotellet* ligger nära stranden.", translation: "The hotel is near the beach." },
+      { text: "Rummet på *hotellet* var stort.", translation: "The room at the hotel was big." }
+    ],
+    196: [
+      { text: "Sväng till *vänster* vid trafikljuset.", translation: "Turn left at the traffic light." },
+      { text: "Boken ligger på *vänster* sida av bordet.", translation: "The book is on the left side of the table." },
+      { text: "Han skriver med *vänster* hand.", translation: "He writes with his left hand." }
+    ],
+    197: [
+      { text: "Sväng till *höger* efter bron.", translation: "Turn right after the bridge." },
+      { text: "Affären ligger på *höger* sida av gatan.", translation: "The shop is on the right side of the street." },
+      { text: "Hon håller pennan i *höger* hand.", translation: "She holds the pen in her right hand." }
+    ],
+    198: [
+      { text: "Gå *rakt fram* tills du ser skolan.", translation: "Go straight ahead until you see the school." },
+      { text: "Kör *rakt fram* i två kilometer.", translation: "Drive straight ahead for two kilometers." },
+      { text: "Stationen är *rakt fram*, inte långt härifrån.", translation: "The station is straight ahead, not far from here." }
+    ],
+    199: [
+      { text: "Vi bor *nära* skolan.", translation: "We live near the school." },
+      { text: "Affären är *nära* vårt hus.", translation: "The shop is near our house." },
+      { text: "Han bor *nära* mig.", translation: "He lives near me." }
+    ],
+    200: [
+      { text: "Det är *långt* till flygplatsen härifrån.", translation: "It's far to the airport from here." },
+      { text: "Vi bor inte *långt* från centrum.", translation: "We don't live far from the center." },
+      { text: "Hon reste *långt* för att komma hit.", translation: "She travelled far to get here." }
     ]
   },
 
