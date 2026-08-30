@@ -6269,6 +6269,256 @@ window.DECK_EXAMPLES = {
       { text: "Kannst du auf meine Frage *antworten*?", translation: "Can you answer my question?" },
       { text: "Er *antwortete* schnell auf die E-Mail.", translation: "He answered the email quickly." },
       { text: "Sie *antwortet* nie am Telefon.", translation: "She never answers the phone." }
+    ],
+    251: [
+      { text: "Ich bin heute sehr *glücklich*.", translation: "I'm very happy today." },
+      { text: "Sie war *glücklich* über das Geschenk.", translation: "She was happy about the gift." },
+      { text: "Wir sind *glücklich*, dich zu sehen.", translation: "We're happy to see you." }
+    ],
+    252: [
+      { text: "Er ist *traurig*, weil sein Hund krank ist.", translation: "He's sad because his dog is sick." },
+      { text: "Der Film machte mich *traurig*.", translation: "The movie made me sad." },
+      { text: "Wir fühlten uns nach der Nachricht *traurig*.", translation: "We felt sad after the news." }
+    ],
+    253: [
+      { text: "Sie wurde *wütend*, als er zu spät kam.", translation: "She got angry when he came late." },
+      { text: "Sei nicht *wütend* auf mich.", translation: "Don't be angry with me." },
+      { text: "Er war den ganzen Tag *wütend*.", translation: "He was angry all day." }
+    ],
+    254: [
+      { text: "Ich bin heute Abend sehr *müde*.", translation: "I'm very tired tonight." },
+      { text: "Sie wurde nach der Arbeit *müde*.", translation: "She got tired after work." },
+      { text: "Wir waren nach der langen Reise *müde*.", translation: "We were tired after the long trip." }
+    ],
+    255: [
+      { text: "Ich bin heute *krank* und bleibe zu Hause.", translation: "I'm sick today and staying home." },
+      { text: "Das Kind ist *krank* und hat Fieber.", translation: "The child is sick and has a fever." },
+      { text: "Sie war die ganze Woche *krank*.", translation: "She was sick all week." }
+    ],
+    256: [
+      { text: "Die Prüfung war *einfach*.", translation: "The test was easy." },
+      { text: "Das ist eine *einfache* Aufgabe.", translation: "This is an easy task." },
+      { text: "Es war *einfach*, den Weg zu finden.", translation: "It was easy to find the way." }
+    ],
+    257: [
+      { text: "Diese Aufgabe ist *schwierig*.", translation: "This task is difficult." },
+      { text: "Es war *schwierig*, ihn zu verstehen.", translation: "It was difficult to understand him." },
+      { text: "Deutsch ist nicht so *schwierig* zu lernen.", translation: "German isn't so difficult to learn." }
+    ],
+    258: [
+      { text: "Dieses Auto ist sehr *teuer*.", translation: "This car is very expensive." },
+      { text: "Das Hotel war *teuer*.", translation: "The hotel was expensive." },
+      { text: "Wir fanden ein *teures*, aber schönes Restaurant.", translation: "We found an expensive but nice restaurant." }
+    ],
+    259: [
+      { text: "Dieser Pullover war *billig*.", translation: "This sweater was cheap." },
+      { text: "Wir suchten ein *billiges* Hotel.", translation: "We looked for a cheap hotel." },
+      { text: "Das Flugticket war überraschend *billig*.", translation: "The plane ticket was surprisingly cheap." }
+    ],
+    260: [
+      { text: "Der Eintritt ist heute *kostenlos*.", translation: "Entry is free today." },
+      { text: "Der Kaffee im Büro ist *kostenlos*.", translation: "The coffee at the office is free." },
+      { text: "Das Museum ist für Kinder *kostenlos*.", translation: "The museum is free for children." }
+    ],
+    261: [
+      { text: "Wir haben *viele* Freunde hier.", translation: "We have many friends here." },
+      { text: "Es waren *viele* Menschen auf der Party.", translation: "There were many people at the party." },
+      { text: "Sie hat *viele* Bücher gelesen.", translation: "She has read many books." }
+    ],
+    262: [
+      { text: "Es waren heute *wenige* Leute im Museum.", translation: "There were few people at the museum today." },
+      { text: "Wir haben nur noch *wenige* Tage Urlaub.", translation: "We have few days left of the holiday." },
+      { text: "Nur *wenige* Schüler kamen zum Unterricht.", translation: "Only a few students came to class." }
+    ],
+    263: [
+      { text: "Kann ich *mehr* Kaffee haben?", translation: "Can I have more coffee?" },
+      { text: "Ich brauche *mehr* Zeit.", translation: "I need more time." },
+      { text: "Sie redet *mehr* als ihr Bruder.", translation: "She talks more than her brother." }
+    ],
+    264: [
+      { text: "Ich esse jetzt *weniger* Fleisch.", translation: "I eat less meat now." },
+      { text: "Wir haben *weniger* Zeit, als wir dachten.", translation: "We have less time than we thought." },
+      { text: "Er arbeitet *weniger* als früher.", translation: "He works less than before." }
+    ],
+    265: [
+      { text: "Haben wir *genug* Essen für alle?", translation: "Do we have enough food for everyone?" },
+      { text: "Ich habe nicht *genug* Geld.", translation: "I don't have enough money." },
+      { text: "Es ist *genug* Platz im Auto.", translation: "There's enough room in the car." }
+    ],
+    266: [
+      { text: "Ich reise *oft* nach Deutschland.", translation: "I often travel to Germany." },
+      { text: "Sie ruft *oft* ihre Eltern an.", translation: "She often calls her parents." },
+      { text: "Wir essen *oft* Fisch zum Abendessen.", translation: "We often eat fish for dinner." }
+    ],
+    267: [
+      { text: "Ich trinke abends *nie* Kaffee.", translation: "I never drink coffee in the evening." },
+      { text: "Er kommt *nie* zu spät.", translation: "He never comes late." },
+      { text: "Wir waren *nie* in Japan.", translation: "We have never been to Japan." }
+    ],
+    268: [
+      { text: "Ich gehe *manchmal* allein spazieren.", translation: "I sometimes go for a walk alone." },
+      { text: "Sie frühstückt *manchmal* spät.", translation: "She sometimes eats breakfast late." },
+      { text: "Wir fahren *manchmal* am Wochenende zur Hütte.", translation: "We sometimes go to the cabin on weekends." }
+    ],
+    269: [
+      { text: "Ich wache jeden Tag *früh* auf.", translation: "I wake up early every day." },
+      { text: "Wir kamen *früh* am Flughafen an.", translation: "We arrived early at the airport." },
+      { text: "Das Treffen beginnt morgen *früh*.", translation: "The meeting starts early tomorrow." }
+    ],
+    270: [
+      { text: "Er kam heute *spät* zur Arbeit.", translation: "He came late to work today." },
+      { text: "Wir haben gestern *spät* zu Abend gegessen.", translation: "We ate dinner late yesterday." },
+      { text: "Der Zug fuhr *spät* am Abend.", translation: "The train left late in the evening." }
+    ],
+    271: [
+      { text: "*Dieses* Buch ist sehr gut.", translation: "This book is very good." },
+      { text: "Ich mag *diesen* Pullover.", translation: "I like this sweater." },
+      { text: "*Diese* Woche war hektisch.", translation: "This week has been busy." }
+    ],
+    272: [
+      { text: "*Dieses* Haus ist groß.", translation: "This house is big." },
+      { text: "Ich verstehe *dieses* Wort nicht.", translation: "I don't understand this word." },
+      { text: "*Dies* ist mein Bruder.", translation: "This is my brother." }
+    ],
+    273: [
+      { text: "*Diese* Schuhe sind neu.", translation: "These shoes are new." },
+      { text: "Ich mag *diese* Bilder.", translation: "I like these pictures." },
+      { text: "*Diese* Bücher sind aus der Bibliothek.", translation: "These books are from the library." }
+    ],
+    274: [
+      { text: "Wir wohnen in der *gleichen* Stadt.", translation: "We live in the same city." },
+      { text: "Er hat die *gleiche* Jacke wie ich.", translation: "He has the same jacket as me." },
+      { text: "Sie gingen auf die *gleiche* Schule.", translation: "They went to the same school." }
+    ],
+    275: [
+      { text: "Ich möchte lieber das *andere* Buch.", translation: "I'd rather have the other book." },
+      { text: "Wir nehmen den *anderen* Weg.", translation: "We'll take the other way." },
+      { text: "Sie wohnt auf der *anderen* Seite der Straße.", translation: "She lives on the other side of the street." }
+    ],
+    276: [
+      { text: "*Tschüss*! Wir sehen uns morgen.", translation: "Bye! See you tomorrow." },
+      { text: "Sie winkte und sagte *tschüss*.", translation: "She waved and said bye." },
+      { text: "*Tschüss*, wir hören uns bald!", translation: "Bye, talk soon!" }
+    ],
+    277: [
+      { text: "*Guten Morgen*! Hast du gut geschlafen?", translation: "Good morning! Did you sleep well?" },
+      { text: "Er sagte allen im Büro *guten Morgen*.", translation: "He said good morning to everyone at the office." },
+      { text: "*Guten Morgen*, heute ist ein schöner Tag.", translation: "Good morning, it's a nice day today." }
+    ],
+    278: [
+      { text: "*Guten Abend*! Wie geht es dir?", translation: "Good evening! How are you?" },
+      { text: "Wir sagten *guten Abend* und gingen hinein.", translation: "We said good evening and went in." },
+      { text: "*Guten Abend*, willkommen im Restaurant.", translation: "Good evening, welcome to the restaurant." }
+    ],
+    279: [
+      { text: "*Gute Nacht*, schlaf gut!", translation: "Good night, sleep well!" },
+      { text: "Sie sagte den Kindern *gute Nacht*.", translation: "She said good night to the children." },
+      { text: "*Gute Nacht*, wir sehen uns früh morgen.", translation: "Good night, see you early tomorrow." }
+    ],
+    280: [
+      { text: "*Willkommen* in Deutschland!", translation: "Welcome to Germany!" },
+      { text: "Du bist bei uns immer *willkommen*.", translation: "You're always welcome at our home." },
+      { text: "*Willkommen*, bitte komm herein!", translation: "Welcome, please come in!" }
+    ],
+    281: [
+      { text: "*Bitte sehr*, hier ist dein Kaffee.", translation: "Here you are, here's your coffee." },
+      { text: "*Bitte sehr*, setz dich.", translation: "Please, sit down." },
+      { text: "Sie gab mir das Buch und sagte *bitte sehr*.", translation: "She gave me the book and said here you are." }
+    ],
+    282: [
+      { text: "*Vielen Dank* für die Hilfe!", translation: "Many thanks for the help!" },
+      { text: "*Vielen Dank*, das war sehr nett von dir.", translation: "Thank you so much, that was very kind of you." },
+      { text: "Wir sagten *vielen Dank* und gingen nach Hause.", translation: "We said thanks a lot and went home." }
+    ],
+    283: [
+      { text: "*Es ist in Ordnung*, mach dir keine Sorgen.", translation: "It's fine, don't worry." },
+      { text: "Wie geht es dir? *Es ist in Ordnung*, danke.", translation: "How are you? I'm fine, thanks." },
+      { text: "*Es ist in Ordnung* mit mir jetzt.", translation: "I'm doing fine now." }
+    ],
+    284: [
+      { text: "Das war ein schöner Film, *stimmt*?", translation: "That was a nice movie, right?" },
+      { text: "Du magst Kaffee, *stimmt*?", translation: "You like coffee, right?" },
+      { text: "Wir haben uns letztes Jahr getroffen, *stimmt*?", translation: "We met last year, right?" }
+    ],
+    285: [
+      { text: "*Natürlich* kann ich dir helfen.", translation: "Of course I can help you." },
+      { text: "Kommst du heute Abend? *Natürlich*!", translation: "Are you coming tonight? Of course!" },
+      { text: "*Natürlich* erinnere ich mich an dich.", translation: "Of course I remember you." }
+    ],
+    286: [
+      { text: "Ich muss zur *Apotheke* und Medizin kaufen.", translation: "I need to go to the pharmacy and buy medicine." },
+      { text: "Die *Apotheke* liegt neben dem Laden.", translation: "The pharmacy is next to the shop." },
+      { text: "Die *Apotheke* öffnet um acht Uhr.", translation: "The pharmacy opens at eight." }
+    ],
+    287: [
+      { text: "Er wurde gestern ins *Krankenhaus* gebracht.", translation: "He was taken to the hospital yesterday." },
+      { text: "Das *Krankenhaus* liegt außerhalb der Stadt.", translation: "The hospital is outside the city." },
+      { text: "Sie arbeitet im *Krankenhaus* als Pflegekraft.", translation: "She works at the hospital as a nurse." }
+    ],
+    288: [
+      { text: "Ich habe morgen einen Termin beim *Zahnarzt*.", translation: "I have an appointment with the dentist tomorrow." },
+      { text: "Der *Zahnarzt* untersuchte meine Zähne.", translation: "The dentist checked my teeth." },
+      { text: "Kinder sollten jedes Jahr zum *Zahnarzt* gehen.", translation: "Children should go to the dentist every year." }
+    ],
+    289: [
+      { text: "Kann ich etwas *Hilfe* bekommen?", translation: "Can I get some help?" },
+      { text: "Vielen Dank für die *Hilfe*!", translation: "Thanks a lot for the help!" },
+      { text: "Sie brauchte *Hilfe* bei den Hausaufgaben.", translation: "She needed help with the homework." }
+    ],
+    290: [
+      { text: "Wir haben ein kleines *Problem*.", translation: "We have a small problem." },
+      { text: "Das *Problem* wurde schnell gelöst.", translation: "The problem was solved quickly." },
+      { text: "Kein *Problem*, ich kann helfen.", translation: "No problem, I can help." }
+    ],
+    291: [
+      { text: "Was ist der *Preis* für diesen Pullover?", translation: "What's the price of this sweater?" },
+      { text: "Der *Preis* war höher, als ich erwartet hatte.", translation: "The price was higher than I expected." },
+      { text: "Wir haben die *Preise* in mehreren Läden verglichen.", translation: "We compared prices in several shops." }
+    ],
+    292: [
+      { text: "Ich habe heute nicht genug *Geld*.", translation: "I don't have enough money today." },
+      { text: "Sie spart *Geld* für die Reise.", translation: "She's saving money for the trip." },
+      { text: "Wir brauchen mehr *Geld* für das Projekt.", translation: "We need more money for the project." }
+    ],
+    293: [
+      { text: "Kann ich eine *Quittung* bekommen, bitte?", translation: "Can I have a receipt, please?" },
+      { text: "Ich habe meine *Quittung* verloren.", translation: "I lost my receipt." },
+      { text: "Die *Quittung* zeigt, was du bezahlt hast.", translation: "The receipt shows what you paid." }
+    ],
+    294: [
+      { text: "Brauchst du eine *Tüte*?", translation: "Do you need a bag?" },
+      { text: "Die *Tüte* war voller Gemüse.", translation: "The bag was full of vegetables." },
+      { text: "Ich habe meine *Tüten* zu Hause vergessen.", translation: "I forgot my bags at home." }
+    ],
+    295: [
+      { text: "Welche *Größe* trägst du?", translation: "What size do you wear?" },
+      { text: "Dieser Pullover ist die falsche *Größe*.", translation: "This sweater is the wrong size." },
+      { text: "Sie haben alle *Größen* in diesem Laden.", translation: "They have all sizes in this shop." }
+    ],
+    296: [
+      { text: "Ich habe mein *Telefon* zu Hause vergessen.", translation: "I forgot my phone at home." },
+      { text: "Das *Telefon* klingelte mitten in der Nacht.", translation: "The phone rang in the middle of the night." },
+      { text: "Kann ich dein *Telefon* ausleihen?", translation: "Can I borrow your phone?" }
+    ],
+    297: [
+      { text: "Mein *Computer* ist sehr alt.", translation: "My computer is very old." },
+      { text: "Der *Computer* hörte gestern auf zu funktionieren.", translation: "The computer stopped working yesterday." },
+      { text: "Ich arbeite den ganzen Tag am *Computer*.", translation: "I work on the computer all day." }
+    ],
+    298: [
+      { text: "Ich habe meinen *Schlüssel* verloren.", translation: "I've lost my key." },
+      { text: "Der *Schlüssel* liegt unter der Matte.", translation: "The key is under the mat." },
+      { text: "Kannst du mir die *Schlüssel* geben?", translation: "Can you give me the keys?" }
+    ],
+    299: [
+      { text: "Die *Uhr* an der Wand zeigt die falsche Zeit.", translation: "The clock on the wall shows the wrong time." },
+      { text: "Ich habe gestern eine neue *Uhr* gekauft.", translation: "I bought a new watch yesterday." },
+      { text: "Die *Uhr* klingelte um sieben Uhr.", translation: "The clock rang at seven." }
+    ],
+    300: [
+      { text: "Sie trägt immer eine große *Tasche*.", translation: "She always carries a big bag." },
+      { text: "Meine *Tasche* ist voller Bücher.", translation: "My bag is full of books." },
+      { text: "Ich habe eine neue *Tasche* für die Schule gekauft.", translation: "I bought a new bag for school." }
     ]
   },
 
