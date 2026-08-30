@@ -16,9 +16,9 @@ const KEY_SVG =
 // to icon size for visual consistency between the two chest surfaces.
 const CHEST_SVG =
     '<svg viewBox="0 0 48 48" width="18" height="18">' +
-    '<rect x="6" y="20" width="36" height="20" rx="4" fill="#17b8c9"/>' +
-    '<path d="M6 22a18 12 0 0 1 36 0z" fill="#3ed0de"/>' +
-    '<rect x="6" y="25" width="36" height="4" fill="#0e8fa0"/>' +
+    '<rect x="6" y="20" width="36" height="20" rx="4" fill="var(--color-secondary)"/>' +
+    '<path d="M6 22a18 12 0 0 1 36 0z" fill="var(--color-secondary-light)"/>' +
+    '<rect x="6" y="25" width="36" height="4" fill="var(--color-secondary-deep)"/>' +
     '<rect x="21" y="23" width="6" height="9" rx="2" fill="#ffc73a"/>' +
     "</svg>";
 
@@ -29,7 +29,7 @@ const COIN_SVG =
 
 // Snowflake over the streak flame's colour - reads as "the fire, paused".
 const FREEZE_SVG =
-    '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#5bc8ff" stroke-width="1.8" stroke-linecap="round">' +
+    '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--color-secondary)" stroke-width="1.8" stroke-linecap="round">' +
     '<path d="M12 2v20"></path><path d="M4 7l16 10"></path><path d="M20 7L4 17"></path>' +
     '<path d="M12 6l2.4-2.4M12 6L9.6 3.6"></path><path d="M12 18l2.4 2.4M12 18l-2.4 2.4"></path>' +
     "</svg>";
@@ -525,9 +525,9 @@ function showWordChestReveal(word) {
             <div class="chest-overlay-rays"></div>
             <div class="chest-overlay-flash"></div>
             <svg class="chest-overlay-icon" width="130" height="130" viewBox="0 0 48 48">
-                <rect x="6" y="20" width="36" height="20" rx="4" fill="#17b8c9"/>
-                <path d="M6 22a18 12 0 0 1 36 0z" fill="#3ed0de"/>
-                <rect x="6" y="25" width="36" height="4" fill="#0e8fa0"/>
+                <rect x="6" y="20" width="36" height="20" rx="4" fill="var(--color-secondary)"/>
+                <path d="M6 22a18 12 0 0 1 36 0z" fill="var(--color-secondary-light)"/>
+                <rect x="6" y="25" width="36" height="4" fill="var(--color-secondary-deep)"/>
                 <rect x="21" y="23" width="6" height="9" rx="2" fill="#ffc73a"/>
             </svg>
         </div>

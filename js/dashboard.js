@@ -132,7 +132,7 @@ function renderChest(state) {
     if (state.chestReady) {
         mount.className = "chest-card is-ready";
         mount.innerHTML = `
-            <svg width="46" height="46" viewBox="0 0 48 48"><rect x="6" y="20" width="36" height="20" rx="4" fill="#17b8c9"/><path d="M6 22a18 12 0 0 1 36 0z" fill="#3ed0de"/><rect x="6" y="25" width="36" height="4" fill="#0e8fa0"/><rect x="21" y="23" width="6" height="9" rx="2" fill="#ffc73a"/></svg>
+            <svg width="46" height="46" viewBox="0 0 48 48"><rect x="6" y="20" width="36" height="20" rx="4" fill="var(--color-secondary)"/><path d="M6 22a18 12 0 0 1 36 0z" fill="var(--color-secondary-light)"/><rect x="6" y="25" width="36" height="4" fill="var(--color-secondary-deep)"/><rect x="21" y="23" width="6" height="9" rx="2" fill="#ffc73a"/></svg>
             <!-- Title only, same reasoning as the claimed state below: the
                  chest plus an Open button already say what tapping does. -->
             <div class="chest-card-copy">
@@ -148,14 +148,14 @@ function renderChest(state) {
     } else {
         mount.className = "chest-card is-claimed";
         mount.innerHTML = `
-            <svg width="40" height="40" viewBox="0 0 48 48" style="opacity:.5"><rect x="6" y="20" width="36" height="20" rx="4" fill="#17b8c9"/><path d="M6 22a18 12 0 0 1 36 0z" fill="#3ed0de"/><rect x="6" y="25" width="36" height="4" fill="#0e8fa0"/></svg>
+            <svg width="40" height="40" viewBox="0 0 48 48" style="opacity:.5"><rect x="6" y="20" width="36" height="20" rx="4" fill="var(--color-secondary)"/><path d="M6 22a18 12 0 0 1 36 0z" fill="var(--color-secondary-light)"/><rect x="6" y="25" width="36" height="4" fill="var(--color-secondary-deep)"/></svg>
             <!-- Title only: "Chest opened" plus the tick already says the
                  whole thing, and a "come back tomorrow" line under it just
                  padded a row that has nothing left to do. -->
             <div class="chest-card-copy">
                 <strong>${tr("chest.claimed")}</strong>
             </div>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4d9fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-ink)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
         `;
     }
 }
@@ -202,7 +202,7 @@ function renderDemoChest() {
     mount.hidden = false;
     mount.className = "chest-card is-demo";
     mount.innerHTML = `
-        <svg width="46" height="46" viewBox="0 0 48 48"><rect x="6" y="20" width="36" height="20" rx="4" fill="#17b8c9"/><path d="M6 22a18 12 0 0 1 36 0z" fill="#3ed0de"/><rect x="6" y="25" width="36" height="4" fill="#0e8fa0"/><rect x="21" y="23" width="6" height="9" rx="2" fill="#ffc73a"/></svg>
+        <svg width="46" height="46" viewBox="0 0 48 48"><rect x="6" y="20" width="36" height="20" rx="4" fill="var(--color-secondary)"/><path d="M6 22a18 12 0 0 1 36 0z" fill="var(--color-secondary-light)"/><rect x="6" y="25" width="36" height="4" fill="var(--color-secondary-deep)"/><rect x="21" y="23" width="6" height="9" rx="2" fill="#ffc73a"/></svg>
         <div class="chest-card-copy">
             <strong>${tr("chest.demoTitle")}</strong>
             <span>${tr("chest.demoDesc")}</span>
@@ -237,7 +237,7 @@ function renderDemoSprint() {
     mount.hidden = false;
     mount.className = "chest-card is-demo";
     mount.innerHTML = `
-        <svg width="42" height="42" viewBox="0 0 24 24" fill="#f2452f"><path d="M12 1.6C13 5 15.4 6.6 17 8.6c1.5 1.9 2.3 3.8 2.3 5.9a7.3 7.3 0 0 1-14.6 0c0-2.3 1-4.4 2.8-6.2-.1 1.2.2 2.2.8 3C7.6 7.6 9.6 4.6 12 1.6z"/></svg>
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="var(--color-streak)"><path d="M12 1.6C13 5 15.4 6.6 17 8.6c1.5 1.9 2.3 3.8 2.3 5.9a7.3 7.3 0 0 1-14.6 0c0-2.3 1-4.4 2.8-6.2-.1 1.2.2 2.2.8 3C7.6 7.6 9.6 4.6 12 1.6z"/></svg>
         <div class="chest-card-copy">
             <strong>${tr("streak.demoTitle")}</strong>
             <span>${tr("streak.demoDesc")}</span>
@@ -276,7 +276,10 @@ function renderMissions(state) {
     const completedCount = missions.filter(mission => mission.completed).length;
     if (countEl) countEl.textContent = `${completedCount} / ${missions.length}`;
 
-    const icons = ["#4d9fff", "#17b8c9", "#ffc73a"];
+    // Tokens rather than hexes so the three mission rows follow the theme.
+    // The alpha wash below is a color-mix for the same reason - the old
+    // `${color}26` string trick only works on a literal hex.
+    const icons = ["var(--accent-ink)", "var(--color-secondary)", "var(--color-gold-text)"];
     list.replaceChildren(
         ...missions.map((mission, index) => {
             const row = document.createElement("div");
@@ -284,7 +287,7 @@ function renderMissions(state) {
             const color = icons[index % icons.length];
             row.className = "mission-row";
             row.innerHTML = `
-                <div class="mission-icon" style="background:${color}26">
+                <div class="mission-icon" style="background:color-mix(in srgb, ${color} 15%, transparent)">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="${color}"><path d="M12 2l2.9 6.2 6.6.7-4.9 4.5 1.3 6.6L12 17.8 6.1 20.6l1.3-6.6L2.5 8.9l6.6-.7z"/></svg>
                 </div>
                 <div class="mission-copy">
@@ -312,9 +315,9 @@ function renderFriendsPreview(state) {
             const initial = (entry.handle || entry.displayName || "?").trim().charAt(0).toUpperCase();
             row.innerHTML = `
                 <span class="leaderboard-rank is-plain">${entry.rank}</span>
-                <span class="leaderboard-avatar" style="background:${entry.isSelf ? "#4d9fff" : "#17b8c9"};color:${entry.isSelf ? "#05203d" : "#fff"}">${initial}</span>
+                <span class="leaderboard-avatar" style="background:${entry.isSelf ? "var(--accent)" : "var(--surface-soft)"};color:${entry.isSelf ? "var(--accent-on)" : "var(--text)"}">${initial}</span>
                 <span class="leaderboard-name">${entry.isSelf ? tr("common.you") : (entry.displayName || entry.handle || "")}</span>
-                <span class="leaderboard-xp"><span class="leaderboard-xp-value">${(entry.weeklyXp || 0).toLocaleString()}</span><svg width="15" height="15" viewBox="0 0 24 24" fill="#4d9fff"><path d="M12 2l2.9 6.2 6.6.7-4.9 4.5 1.3 6.6L12 17.8 6.1 20.6l1.3-6.6L2.5 8.9l6.6-.7z"/></svg></span>
+                <span class="leaderboard-xp"><span class="leaderboard-xp-value">${(entry.weeklyXp || 0).toLocaleString()}</span><svg width="15" height="15" viewBox="0 0 24 24" fill="var(--accent-ink)"><path d="M12 2l2.9 6.2 6.6.7-4.9 4.5 1.3 6.6L12 17.8 6.1 20.6l1.3-6.6L2.5 8.9l6.6-.7z"/></svg></span>
             `;
             if (!entry.isSelf && entry.uid) {
                 row.addEventListener("click", () => {

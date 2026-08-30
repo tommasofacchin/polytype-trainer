@@ -11,9 +11,9 @@
 
     const CHEST_SVG = `
         <svg class="chest-overlay-icon" width="130" height="130" viewBox="0 0 48 48">
-            <rect x="6" y="20" width="36" height="20" rx="4" fill="#17b8c9"/>
-            <path d="M6 22a18 12 0 0 1 36 0z" fill="#3ed0de"/>
-            <rect x="6" y="25" width="36" height="4" fill="#0e8fa0"/>
+            <rect x="6" y="20" width="36" height="20" rx="4" fill="var(--color-secondary)"/>
+            <path d="M6 22a18 12 0 0 1 36 0z" fill="var(--color-secondary-light)"/>
+            <rect x="6" y="25" width="36" height="4" fill="var(--color-secondary-deep)"/>
             <rect x="21" y="23" width="6" height="9" rx="2" fill="#ffc73a"/>
         </svg>
     `;
@@ -22,7 +22,7 @@
         '<svg width="34" height="34" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#ffc73a"/><circle cx="12" cy="12" r="6.5" fill="none" stroke="#d99a1c" stroke-width="2"/></svg>';
 
     const XP_SVG =
-        '<svg width="32" height="32" viewBox="0 0 24 24" fill="#4d9fff"><path d="M12 2l2.9 6.2 6.6.7-4.9 4.5 1.3 6.6L12 17.8 6.1 20.6l1.3-6.6L2.5 8.9l6.6-.7z"/></svg>';
+        '<svg width="32" height="32" viewBox="0 0 24 24" fill="var(--accent-ink)"><path d="M12 2l2.9 6.2 6.6.7-4.9 4.5 1.3 6.6L12 17.8 6.1 20.6l1.3-6.6L2.5 8.9l6.6-.7z"/></svg>';
 
     function prefersReducedMotion() {
         return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches === true;

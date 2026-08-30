@@ -49,7 +49,10 @@
     }
 
     const EMBER_COUNT = 16;
-    const EMBER_COLORS = ["#ffd268", "#ff9f1c", "#f2452f", "#ff6a52"];
+    // Pulled up out of the old red-hot end of the ramp into the amber/yellow
+    // one, so the flame belongs to the palette's single warm family instead
+    // of reintroducing a red the rest of the app no longer uses.
+    const EMBER_COLORS = ["#ffe98a", "#ffd60a", "#ff8a1f", "#ffab54"];
 
     // The gradient id is document-global, so two overlays alive at once would
     // have the second one's <defs> shadow the first's. show() removes any
@@ -59,10 +62,10 @@
         <svg class="streak-overlay-flame" width="180" height="180" viewBox="0 0 24 24" aria-hidden="true">
             <defs>
                 <linearGradient id="streak-flame-grad" x1="0" y1="1" x2="0" y2="0">
-                    <stop offset="0" stop-color="#d92b17"/>
-                    <stop offset="0.42" stop-color="#f2452f"/>
-                    <stop offset="0.78" stop-color="#ff9f1c"/>
-                    <stop offset="1" stop-color="#ffd268"/>
+                    <stop offset="0" stop-color="#e06a00"/>
+                    <stop offset="0.42" stop-color="#ff8a1f"/>
+                    <stop offset="0.78" stop-color="#ffc73a"/>
+                    <stop offset="1" stop-color="#ffe98a"/>
                 </linearGradient>
             </defs>
             <path d="M12 1.6C13 5 15.4 6.6 17 8.6c1.5 1.9 2.3 3.8 2.3 5.9a7.3 7.3 0 0 1-14.6 0c0-2.3 1-4.4 2.8-6.2-.1 1.2.2 2.2.8 3C7.6 7.6 9.6 4.6 12 1.6z" fill="url(#streak-flame-grad)"/>
