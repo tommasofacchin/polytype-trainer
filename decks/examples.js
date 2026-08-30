@@ -7547,6 +7547,231 @@ window.DECK_EXAMPLES = {
       { text: "Un caffè, *per favore*.", translation: "A coffee, please." },
       { text: "*Per favore*, aspetta un attimo.", translation: "Please, wait a moment." },
       { text: "Puoi aiutarmi, *per favore*?", translation: "Can you help me, please?" }
+    ],
+    6: [
+      { text: "*Scusa*, sono in ritardo.", translation: "Sorry, I'm late." },
+      { text: "*Scusa*, non ho sentito.", translation: "Sorry, I didn't hear." },
+      { text: "Ha detto *scusa* per l'errore.", translation: "He said sorry for the mistake." }
+    ],
+    7: [
+      { text: "Ogni *mattina* bevo un caffè.", translation: "Every morning I drink coffee." },
+      { text: "La *mattina* era fredda e tranquilla.", translation: "The morning was cold and quiet." },
+      { text: "Ci vediamo domani *mattina*.", translation: "See you tomorrow morning." }
+    ],
+    8: [
+      { text: "Buona *sera*!", translation: "Good evening!" },
+      { text: "La *sera* leggo un libro.", translation: "In the evening I read a book." },
+      { text: "Ceniamo insieme la *sera*.", translation: "We eat dinner together in the evening." }
+    ],
+    9: [
+      { text: "Oggi è un bel *giorno*.", translation: "Today is a nice day." },
+      { text: "Ogni *giorno* faccio una passeggiata.", translation: "Every day I take a walk." },
+      { text: "Il *giorno* è stato lungo e faticoso.", translation: "The day was long and tiring." }
+    ],
+    10: [
+      { text: "Buona *notte*!", translation: "Good night!" },
+      { text: "Dormo bene di *notte*.", translation: "I sleep well at night." },
+      { text: "La *notte* era piena di stelle.", translation: "The night was full of stars." }
+    ],
+    11: [
+      { text: "Posso avere un bicchiere d'*acqua*?", translation: "Can I have a glass of water?" },
+      { text: "L'*acqua* è fredda e fresca.", translation: "The water is cold and fresh." },
+      { text: "Beve molta *acqua* ogni giorno.", translation: "He drinks a lot of water every day." }
+    ],
+    12: [
+      { text: "Il *cibo* era molto buono.", translation: "The food was very good." },
+      { text: "Il *cibo* è importante per la salute.", translation: "Food is important for health." },
+      { text: "Ha cucinato il *cibo* da sola.", translation: "She cooked the food herself." }
+    ],
+    13: [
+      { text: "Bevo *caffè* ogni mattina.", translation: "I drink coffee every morning." },
+      { text: "Un *caffè*, per favore.", translation: "A coffee, please." },
+      { text: "Il *caffè* è caldo e forte.", translation: "The coffee is hot and strong." }
+    ],
+    14: [
+      { text: "Compriamo il *pane* dal panettiere.", translation: "We buy bread at the bakery." },
+      { text: "Il *pane* è fresco e morbido.", translation: "The bread is fresh and soft." },
+      { text: "Mangia *pane* a colazione.", translation: "He eats bread for breakfast." }
+    ],
+    15: [
+      { text: "Vivono in una *casa* grande.", translation: "They live in a big house." },
+      { text: "La nostra *casa* ha tre piani.", translation: "Our house has three floors." },
+      { text: "La *casa* si trova vicino al mare.", translation: "The house is by the sea." }
+    ],
+    16: [
+      { text: "Guida una *macchina* rossa.", translation: "He drives a red car." },
+      { text: "La *macchina* è parcheggiata fuori.", translation: "The car is parked outside." },
+      { text: "Vogliamo comprare una *macchina* nuova.", translation: "We're going to buy a new car." }
+    ],
+    17: [
+      { text: "Sto leggendo un *libro* avvincente.", translation: "I'm reading an exciting book." },
+      { text: "Il *libro* è sul tavolo.", translation: "The book is on the table." },
+      { text: "Le piacciono i *libri* di avventura.", translation: "She likes books about adventures." }
+    ],
+    18: [
+      { text: "È il mio migliore *amico*.", translation: "He's my best friend." },
+      { text: "Incontriamo gli *amici* nel weekend.", translation: "We meet friends on the weekend." },
+      { text: "Il mio *amico* abita accanto.", translation: "My friend lives next door." }
+    ],
+    19: [
+      { text: "La mia *famiglia* è grande e simpatica.", translation: "My family is big and nice." },
+      { text: "Ci riuniamo come *famiglia* ogni Natale.", translation: "We gather as a family every Christmas." },
+      { text: "La *famiglia* cena insieme.", translation: "The family eats dinner together." }
+    ],
+    20: [
+      { text: "Vado a *scuola* ogni giorno.", translation: "I go to school every day." },
+      { text: "La *scuola* è vicina a casa mia.", translation: "The school is near my house." },
+      { text: "Lavora in una *scuola*.", translation: "She works at a school." }
+    ],
+    21: [
+      { text: "Un *uomo* ci è passato accanto.", translation: "A man walked past us." },
+      { text: "L'*uomo* alla finestra è gentile.", translation: "The man by the window is nice." },
+      { text: "Un *uomo* alto è entrato nel negozio.", translation: "A tall man entered the shop." }
+    ],
+    22: [
+      { text: "Una *donna* mi ha chiamato oggi.", translation: "A woman called me today." },
+      { text: "La *donna* era molto gentile.", translation: "The woman was very polite." },
+      { text: "La *donna* che dirige l'azienda è brava.", translation: "The woman who runs the company is skilled." }
+    ],
+    23: [
+      { text: "Quel *bambino* è molto gentile.", translation: "That child is very kind." },
+      { text: "Il *bambino* gioca in giardino.", translation: "The child is playing in the garden." },
+      { text: "Abbiamo tre *bambini* a casa.", translation: "We have three children at home." }
+    ],
+    24: [
+      { text: "La *bambina* ha i capelli rossi.", translation: "The girl has red hair." },
+      { text: "Una giovane *bambina* sedeva sulla panchina.", translation: "A young girl sat on the bench." },
+      { text: "La mia *bambina* ha otto anni.", translation: "My daughter is eight years old." }
+    ],
+    25: [
+      { text: "Il *ragazzo* gioca a calcio.", translation: "The boy plays football." },
+      { text: "Un *ragazzo* piccolo ha gridato forte.", translation: "A small boy shouted loudly." },
+      { text: "Al mio *ragazzo* piace la musica.", translation: "My boy likes music." }
+    ],
+    26: [
+      { text: "Mia *madre* è insegnante.", translation: "My mother is a teacher." },
+      { text: "La *madre* cucina ogni sera.", translation: "Mother cooks every evening." },
+      { text: "Chiamo spesso mia *madre*.", translation: "I call my mother often." }
+    ],
+    27: [
+      { text: "Mio *padre* lavora come ingegnere.", translation: "My father works as an engineer." },
+      { text: "Il *padre* ci porta a scuola.", translation: "Father drives us to school." },
+      { text: "Sono fiero di mio *padre*.", translation: "I'm proud of my father." }
+    ],
+    28: [
+      { text: "Mia *sorella* ha tre anni in meno.", translation: "My sister is three years younger." },
+      { text: "Mia *sorella* studia medicina.", translation: "My sister studies medicine." },
+      { text: "Io e mia *sorella* amiamo viaggiare.", translation: "My sister and I love to travel." }
+    ],
+    29: [
+      { text: "Mio *fratello* è più alto di me.", translation: "My brother is taller than me." },
+      { text: "Mio *fratello* suona la chitarra.", translation: "My brother plays guitar." },
+      { text: "Io e mio *fratello* siamo buoni amici.", translation: "My brother and I are good friends." }
+    ],
+    30: [
+      { text: "Mia *nonna* vive in campagna.", translation: "My grandmother lives in the countryside." },
+      { text: "Mia *nonna* fa i dolci ogni domenica.", translation: "My grandmother bakes cakes every Sunday." },
+      { text: "Vado spesso a trovare mia *nonna*.", translation: "I often visit my grandmother." }
+    ],
+    31: [
+      { text: "Una casa *grande* si trova sulla collina.", translation: "A big house sits on the hill." },
+      { text: "Ha un cane *grande*.", translation: "He has a big dog." },
+      { text: "La città è molto *grande*.", translation: "The city is very big." }
+    ],
+    32: [
+      { text: "Un bambino *piccolo* gioca nel parco.", translation: "A small child plays in the park." },
+      { text: "Ha un cane *piccolo*.", translation: "She has a small dog." },
+      { text: "La stanza è piuttosto *piccola*.", translation: "The room is quite small." }
+    ],
+    33: [
+      { text: "Questo è un *buon* libro.", translation: "This is a good book." },
+      { text: "Il cibo è molto *buono*.", translation: "The food is very good." },
+      { text: "Il tempo è *buono* oggi.", translation: "The weather is good today." }
+    ],
+    34: [
+      { text: "Il film era *cattivo* e noioso.", translation: "The movie was bad and boring." },
+      { text: "Ha una *cattiva* abitudine.", translation: "He has a bad habit." },
+      { text: "Il tempo sarà *cattivo* domani.", translation: "The weather will be bad tomorrow." }
+    ],
+    35: [
+      { text: "Ho comprato un telefono *nuovo*.", translation: "I bought a new phone." },
+      { text: "Questo è un libro *nuovo* della biblioteca.", translation: "This is a new book from the library." },
+      { text: "Ci trasferiamo in una città *nuova*.", translation: "We're moving to a new city." }
+    ],
+    36: [
+      { text: "Un uomo *vecchio* sedeva sulla panchina.", translation: "An old man sat on the bench." },
+      { text: "La casa è *vecchia* e bella.", translation: "The house is old and beautiful." },
+      { text: "Ha una macchina *vecchia*.", translation: "She has an old car." }
+    ],
+    37: [
+      { text: "Il caffè *caldo* è buono d'inverno.", translation: "Warm coffee tastes good in winter." },
+      { text: "Fa *caldo* nella stanza.", translation: "It's warm in the room." },
+      { text: "Abbiamo avuto un'estate *calda* l'anno scorso.", translation: "We had a warm summer last year." }
+    ],
+    38: [
+      { text: "Un vento *freddo* soffia oggi.", translation: "A cold wind is blowing today." },
+      { text: "Il latte *freddo* è rinfrescante.", translation: "Cold milk is refreshing." },
+      { text: "Fa *freddo* fuori stasera.", translation: "It's cold outside tonight." }
+    ],
+    39: [
+      { text: "Guida troppo *veloce*.", translation: "He drives too fast." },
+      { text: "È una corridora *veloce*.", translation: "She's a fast runner." },
+      { text: "Il treno era molto *veloce*.", translation: "The train was very fast." }
+    ],
+    40: [
+      { text: "*Lento* ma costante vince la gara.", translation: "Slow and steady wins the race." },
+      { text: "Camminava *lento* nel parco.", translation: "He walked slowly through the park." },
+      { text: "La musica suonava *lenta* e dolce.", translation: "The music played slow and soft." }
+    ],
+    41: [
+      { text: "*Io* mi chiamo Marco.", translation: "My name is Marco." },
+      { text: "*Io* amo leggere libri.", translation: "I like to read books." },
+      { text: "*Io* amo la musica.", translation: "I love music." }
+    ],
+    42: [
+      { text: "*Tu* sei un buon amico.", translation: "You are a good friend." },
+      { text: "Dove abiti *tu*?", translation: "Where do you live?" },
+      { text: "*Tu* vieni stasera?", translation: "Are you coming tonight?" }
+    ],
+    43: [
+      { text: "*Lui* è insegnante a scuola.", translation: "He is a teacher at the school." },
+      { text: "*Lui* gioca a calcio ogni settimana.", translation: "He plays football every week." },
+      { text: "*Lui* viene dalla Germania.", translation: "He comes from Germany." }
+    ],
+    44: [
+      { text: "*Lei* è una musicista di talento.", translation: "She is a talented musician." },
+      { text: "*Lei* lavora come medico.", translation: "She works as a doctor." },
+      { text: "*Lei* viene dalla Spagna.", translation: "She comes from Spain." }
+    ],
+    45: [
+      { text: "*Noi* andiamo al cinema stasera.", translation: "We're going to the movies tonight." },
+      { text: "*Noi* viviamo nella stessa città.", translation: "We live in the same city." },
+      { text: "*Noi* viaggeremo in Italia.", translation: "We're going to travel to Italy." }
+    ],
+    46: [
+      { text: "Dove andate *voi* stasera?", translation: "Where are you all going tonight?" },
+      { text: "*Voi* siete i benvenuti alla festa.", translation: "You're all welcome to the party." },
+      { text: "Venite insieme *voi*?", translation: "Are you all coming together?" }
+    ],
+    47: [
+      { text: "*Loro* sono persone molto gentili.", translation: "They are very kind people." },
+      { text: "*Loro* arrivano domani.", translation: "They're coming tomorrow." },
+      { text: "Mi piacciono molto *loro*.", translation: "I like them very much." }
+    ],
+    48: [
+      { text: "Questo è il *mio* libro.", translation: "This is my book." },
+      { text: "Il *mio* amico si chiama Luca.", translation: "My friend's name is Luca." },
+      { text: "La macchina è *mia*.", translation: "The car is mine." }
+    ],
+    49: [
+      { text: "È questo il *tuo* telefono?", translation: "Is this your phone?" },
+      { text: "La *tua* famiglia è simpatica.", translation: "Your family is nice." },
+      { text: "Mi piace la *tua* nuova giacca.", translation: "I like your new jacket." }
+    ],
+    50: [
+      { text: "Questa è la *nostra* casa.", translation: "This is our house." },
+      { text: "La *nostra* scuola è vicina al centro.", translation: "Our school is near the center." },
+      { text: "La *nostra* famiglia è grande.", translation: "Our family is big." }
     ]
   },
 
