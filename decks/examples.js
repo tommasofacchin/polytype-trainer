@@ -2288,6 +2288,231 @@ window.DECK_EXAMPLES = {
       { text: "Hun ga meg en fin *gave*.", translation: "She gave me a nice gift." },
       { text: "*Gaven* var pakket inn i rødt papir.", translation: "The gift was wrapped in red paper." },
       { text: "Vi kjøpte en *gave* til bursdagen hans.", translation: "We bought a gift for his birthday." }
+    ],
+    456: [
+      { text: "Jeg elsker å høre på *musikk*.", translation: "I love listening to music." },
+      { text: "*Musikken* på festen var fantastisk.", translation: "The music at the party was fantastic." },
+      { text: "Hun spiller klassisk *musikk*.", translation: "She plays classical music." }
+    ],
+    457: [
+      { text: "Denne *sangen* er min favoritt.", translation: "This song is my favorite." },
+      { text: "Vi sang en gammel *sang* sammen.", translation: "We sang an old song together." },
+      { text: "*Sangen* handler om kjærlighet.", translation: "The song is about love." }
+    ],
+    458: [
+      { text: "Vi så en spennende *film* i går.", translation: "We watched an exciting film yesterday." },
+      { text: "*Filmen* varte i to timer.", translation: "The film lasted two hours." },
+      { text: "Hvilken *film* vil du se i kveld?", translation: "Which film do you want to watch tonight?" }
+    ],
+    459: [
+      { text: "Barna spiller et morsomt *spill*.", translation: "The children are playing a fun game." },
+      { text: "*Spillet* varte hele kvelden.", translation: "The game lasted all evening." },
+      { text: "Vi kjøpte et nytt *spill* til bursdagen hans.", translation: "We bought a new game for his birthday." }
+    ],
+    460: [
+      { text: "Vi skal ha en *fest* på lørdag.", translation: "We're having a party on Saturday." },
+      { text: "*Festen* var veldig hyggelig.", translation: "The party was very nice." },
+      { text: "Hun inviterte alle vennene sine til *festen*.", translation: "She invited all her friends to the party." }
+    ],
+    461: [
+      { text: "Han spiller *fotball* hver helg.", translation: "He plays football every weekend." },
+      { text: "*Fotball* er den mest populære sporten her.", translation: "Football is the most popular sport here." },
+      { text: "Gutten drømmer om å bli proff i *fotball*.", translation: "The boy dreams of becoming a professional in football." }
+    ],
+    462: [
+      { text: "Vi spiller *tennis* hver tirsdag.", translation: "We play tennis every Tuesday." },
+      { text: "Hun er veldig flink i *tennis*.", translation: "She's very good at tennis." },
+      { text: "Han lærte *tennis* som barn.", translation: "He learned tennis as a child." }
+    ],
+    463: [
+      { text: "Han liker all slags *sport*.", translation: "He likes all kinds of sport." },
+      { text: "*Sport* er viktig for helsen.", translation: "Sport is important for health." },
+      { text: "Hvilken *sport* driver du med?", translation: "What sport do you do?" }
+    ],
+    464: [
+      { text: "Vårt *lag* vant kampen i går.", translation: "Our team won the match yesterday." },
+      { text: "Hun spiller for et lokalt *lag*.", translation: "She plays for a local team." },
+      { text: "*Laget* trente hver dag før mesterskapet.", translation: "The team trained every day before the championship." }
+    ],
+    465: [
+      { text: "Barnet kastet *ballen* over gjerdet.", translation: "The child threw the ball over the fence." },
+      { text: "Vi spilte med en rød *ball*.", translation: "We played with a red ball." },
+      { text: "*Ballen* traff vinduet.", translation: "The ball hit the window." }
+    ],
+    466: [
+      { text: "Han spiller *gitar* veldig godt.", translation: "He plays guitar very well." },
+      { text: "*Gitaren* min trenger nye strenger.", translation: "My guitar needs new strings." },
+      { text: "Hun lærte seg *gitar* i fjor.", translation: "She learned guitar last year." }
+    ],
+    467: [
+      { text: "Hun spiller *piano* hver dag.", translation: "She plays piano every day." },
+      { text: "*Pianoet* står i stuen.", translation: "The piano is in the living room." },
+      { text: "Han øver på *piano* etter skolen.", translation: "He practices piano after school." }
+    ],
+    468: [
+      { text: "Kan du ta et *bilde* av oss?", translation: "Can you take a photo of us?" },
+      { text: "*Bildet* var veldig fint.", translation: "The photo was very nice." },
+      { text: "Vi tok mange *bilder* på turen.", translation: "We took many photos on the trip." }
+    ],
+    469: [
+      { text: "Min *hobby* er å male.", translation: "My hobby is painting." },
+      { text: "Han har mange *hobbyer*.", translation: "He has many hobbies." },
+      { text: "Hva er *hobbyen* din?", translation: "What's your hobby?" }
+    ],
+    470: [
+      { text: "Vi drar på *ferie* i sommer.", translation: "We're going on holiday this summer." },
+      { text: "*Ferien* var altfor kort.", translation: "The holiday was far too short." },
+      { text: "Hvor skal du på *ferie* i år?", translation: "Where are you going on holiday this year?" }
+    ],
+    471: [
+      { text: "Jeg bruker *internett* hver dag.", translation: "I use the internet every day." },
+      { text: "*Internettet* var nede i går.", translation: "The internet was down yesterday." },
+      { text: "Vi sjekket prisen på *internett*.", translation: "We checked the price on the internet." }
+    ],
+    472: [
+      { text: "Denne *nettsiden* er veldig nyttig.", translation: "This website is very useful." },
+      { text: "Vi laget en ny *nettside* for firmaet.", translation: "We made a new website for the company." },
+      { text: "*Nettsiden* var lett å bruke.", translation: "The website was easy to use." }
+    ],
+    473: [
+      { text: "Jeg har glemt *passordet* mitt.", translation: "I've forgotten my password." },
+      { text: "*Passordet* må ha minst åtte tegn.", translation: "The password must have at least eight characters." },
+      { text: "Ikke del *passordet* ditt med andre.", translation: "Don't share your password with others." }
+    ],
+    474: [
+      { text: "*Skjermen* min er sprukket.", translation: "My screen is cracked." },
+      { text: "Vi kjøpte en ny *skjerm* til datamaskinen.", translation: "We bought a new screen for the computer." },
+      { text: "Teksten på *skjermen* var for liten.", translation: "The text on the screen was too small." }
+    ],
+    475: [
+      { text: "*Tastaturet* mitt slutter å virke.", translation: "My keyboard is stopping working." },
+      { text: "Han skrev raskt på *tastaturet*.", translation: "He typed quickly on the keyboard." },
+      { text: "Vi kjøpte et nytt *tastatur* i går.", translation: "We bought a new keyboard yesterday." }
+    ],
+    476: [
+      { text: "Jeg fikk en *melding* fra henne i dag.", translation: "I got a message from her today." },
+      { text: "Kan du sende meg en *melding*?", translation: "Can you send me a message?" },
+      { text: "*Meldingen* var kort men hyggelig.", translation: "The message was short but nice." }
+    ],
+    477: [
+      { text: "Jeg ser på *nyhetene* hver kveld.", translation: "I watch the news every evening." },
+      { text: "*Nyhetene* i dag var triste.", translation: "The news today was sad." },
+      { text: "Har du hørt *nyhetene*?", translation: "Have you heard the news?" }
+    ],
+    478: [
+      { text: "Vi ser på *tv* om kvelden.", translation: "We watch TV in the evening." },
+      { text: "*Tv-en* vår er ganske gammel.", translation: "Our TV is quite old." },
+      { text: "Kan du skru av *tv-en*?", translation: "Can you turn off the TV?" }
+    ],
+    479: [
+      { text: "Jeg hører på *radio* i bilen.", translation: "I listen to the radio in the car." },
+      { text: "*Radioen* spilte musikk hele dagen.", translation: "The radio played music all day." },
+      { text: "Han kjøpte en gammel *radio* på loppemarkedet.", translation: "He bought an old radio at the flea market." }
+    ],
+    480: [
+      { text: "Hun kjøpte et nytt *kamera* i fjor.", translation: "She bought a new camera last year." },
+      { text: "*Kameraet* mitt tar fine bilder.", translation: "My camera takes nice pictures." },
+      { text: "Han glemte *kameraet* hjemme.", translation: "He forgot the camera at home." }
+    ],
+    481: [
+      { text: "Jeg liker *også* kaffe.", translation: "I also like coffee." },
+      { text: "Hun kommer *også* i kveld.", translation: "She's also coming tonight." },
+      { text: "Vi må *også* huske å kjøpe brød.", translation: "We also need to remember to buy bread." }
+    ],
+    482: [
+      { text: "Jeg har *bare* fem minutter.", translation: "I only have five minutes." },
+      { text: "Det kostet *bare* hundre kroner.", translation: "It only cost a hundred kroner." },
+      { text: "Hun spiste *bare* litt av maten.", translation: "She only ate a little of the food." }
+    ],
+    483: [
+      { text: "Jeg er *veldig* glad i dag.", translation: "I'm very happy today." },
+      { text: "Det var *veldig* kaldt i går.", translation: "It was very cold yesterday." },
+      { text: "Hun er *veldig* flink i matte.", translation: "She's very good at math." }
+    ],
+    484: [
+      { text: "*Kanskje* vi kan møtes i morgen.", translation: "Maybe we can meet tomorrow." },
+      { text: "Hun kommer *kanskje* på festen.", translation: "She might come to the party." },
+      { text: "*Kanskje* det blir sol i morgen.", translation: "Maybe it'll be sunny tomorrow." }
+    ],
+    485: [
+      { text: "Jeg har *allerede* spist.", translation: "I've already eaten." },
+      { text: "Er du *allerede* ferdig?", translation: "Are you already done?" },
+      { text: "Hun har *allerede* dratt hjem.", translation: "She has already gone home." }
+    ],
+    486: [
+      { text: "Vi starter det nye året i *januar*.", translation: "We start the new year in January." },
+      { text: "Det er kaldt i *januar*.", translation: "It's cold in January." },
+      { text: "Bursdagen min er i *januar*.", translation: "My birthday is in January." }
+    ],
+    487: [
+      { text: "*Februar* er den korteste måneden.", translation: "February is the shortest month." },
+      { text: "Vi drar til fjells i *februar*.", translation: "We're going to the mountains in February." },
+      { text: "Skolen har vinterferie i *februar*.", translation: "School has winter break in February." }
+    ],
+    488: [
+      { text: "Våren begynner i *mars*.", translation: "Spring begins in March." },
+      { text: "Hun ble født i *mars*.", translation: "She was born in March." },
+      { text: "Vi planlegger en reise i *mars*.", translation: "We're planning a trip in March." }
+    ],
+    489: [
+      { text: "Det regner mye i *april*.", translation: "It rains a lot in April." },
+      { text: "Påsken er ofte i *april*.", translation: "Easter is often in April." },
+      { text: "Vi feirer bursdagen hans i *april*.", translation: "We celebrate his birthday in April." }
+    ],
+    490: [
+      { text: "*Mai* er en av de fineste månedene.", translation: "May is one of the nicest months." },
+      { text: "Nasjonaldagen er i *mai*.", translation: "National Day is in May." },
+      { text: "Blomstene blomstrer i *mai*.", translation: "The flowers bloom in May." }
+    ],
+    491: [
+      { text: "Skolen slutter i *juni*.", translation: "School ends in June." },
+      { text: "Sommeren begynner i *juni*.", translation: "Summer begins in June." },
+      { text: "Vi gifter oss i *juni*.", translation: "We're getting married in June." }
+    ],
+    492: [
+      { text: "*Juli* er den varmeste måneden.", translation: "July is the hottest month." },
+      { text: "Vi drar på ferie i *juli*.", translation: "We're going on holiday in July." },
+      { text: "Hun har fri hele *juli*.", translation: "She has time off all of July." }
+    ],
+    493: [
+      { text: "Skolen begynner igjen i *august*.", translation: "School starts again in August." },
+      { text: "Vi feirer festivalen i *august*.", translation: "We celebrate the festival in August." },
+      { text: "Det er fortsatt varmt i *august*.", translation: "It's still hot in August." }
+    ],
+    494: [
+      { text: "Høsten begynner i *september*.", translation: "Autumn begins in September." },
+      { text: "Vi flyttet hit i *september*.", translation: "We moved here in September." },
+      { text: "Bladene begynner å falle i *september*.", translation: "The leaves start to fall in September." }
+    ],
+    495: [
+      { text: "Det blir kaldere i *oktober*.", translation: "It gets colder in October." },
+      { text: "Vi feirer halloween i slutten av *oktober*.", translation: "We celebrate Halloween at the end of October." },
+      { text: "Hun ble født i *oktober*.", translation: "She was born in October." }
+    ],
+    496: [
+      { text: "*November* er ofte grå og våt.", translation: "November is often grey and wet." },
+      { text: "Vi tenner lys i *november*.", translation: "We light candles in November." },
+      { text: "Det snør noen ganger i *november*.", translation: "It sometimes snows in November." }
+    ],
+    497: [
+      { text: "Vi feirer jul i *desember*.", translation: "We celebrate Christmas in December." },
+      { text: "*Desember* er den mørkeste måneden.", translation: "December is the darkest month." },
+      { text: "Familien samles i *desember*.", translation: "The family gathers in December." }
+    ],
+    498: [
+      { text: "Hvilken *dato* er det i dag?", translation: "What's the date today?" },
+      { text: "Vi satte en *dato* for møtet.", translation: "We set a date for the meeting." },
+      { text: "*Datoen* på billetten var feil.", translation: "The date on the ticket was wrong." }
+    ],
+    499: [
+      { text: "Jeg skrev det i *kalenderen* min.", translation: "I wrote it in my calendar." },
+      { text: "*Kalenderen* henger på veggen.", translation: "The calendar hangs on the wall." },
+      { text: "Sjekk *kalenderen* for ledige dager.", translation: "Check the calendar for free days." }
+    ],
+    500: [
+      { text: "Gratulerer med *bursdagen*!", translation: "Happy birthday!" },
+      { text: "Min *bursdag* er i mai.", translation: "My birthday is in May." },
+      { text: "Vi feiret *bursdagen* hennes med kake.", translation: "We celebrated her birthday with cake." }
     ]
   },
 
