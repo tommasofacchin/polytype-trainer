@@ -5182,12 +5182,17 @@ body > main {
    it does, and all three are here:
      1. the bar is a *plank* - a solid slab with a lit top rim and its own
         drop shadow, not a translucent strip;
-     2. the selected tab sits on a chunky plate that physically rises out of
-        the plank and overhangs its top edge;
+     2. the selected tab sits on a chunky plate that rises out of the plank
+        and overhangs its top edge;
      3. that plate is a 3D button - a bright face over a darker slab edge -
         and it sinks into its own edge when pressed.
-   The plate is a pseudo-element on the tab, so raising it never moves the
-   icon/label baselines of the tabs either side of it. */
+
+   The plate is ONE element shared by every tab (.app-shell-nav-plate), parked
+   over whichever tab is active, rather than a plate per tab. That's what lets
+   a tab change animate: the plate travels from the old tab to the new one,
+   squashing as it goes, instead of blinking out of one and into another. It
+   is parked in pixels by parkPlate() in js/app-shell.js - see the note there
+   for why the nav has to survive a navigation for any of this to fire. */
 
 #app-bottom-nav {
     position: fixed;
@@ -5223,6 +5228,9 @@ body > main {
 }
 
 .app-shell-nav {
+    /* Containing block for the plate, which is positioned against this box's
+       padding edge - parkPlate() measures to match. */
+    position: relative;
     max-width: var(--container);
     margin: 0 auto;
     display: flex;
@@ -5233,44 +5241,39 @@ body > main {
 .app-shell-nav-item {
     position: relative;
     flex: 1;
+    /* Equal widths whatever the label says, which is what lets the plate be
+       measured off one tab and then simply translated to any other. */
+    min-width: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 3px;
-    min-width: 0;
     padding: 8px 0 6px;
     text-decoration: none;
     color: var(--text-faint);
-    /* The lift is on the *content*, so the icon and label ride up with the
-       plate while the tab's own hit area stays put. */
     transition: color var(--dur-base) var(--ease-out);
 }
 
-/* The plate. Sized with a negative top inset so it overhangs the plank's rim
-   by ~11px - that overhang is the whole Clash Royale tell. Transparent and
-   flat until the tab is selected. */
+/* Press feedback for the tabs that are *not* selected - the selected one has
+   the plate to sink instead (below), and this would double up with it. */
 .app-shell-nav-item::before {
     content: "";
     position: absolute;
-    inset: -17px 3px 2px;
-    border-radius: 16px;
+    inset: 2px 3px 2px;
+    border-radius: 14px;
     background: transparent;
-    box-shadow: none;
-    /* Collapsed onto the bar and invisible while inactive, so the only thing
-       the active rule has to do is let it stand up. */
-    transform: translateY(17px) scaleY(0.55);
-    transform-origin: bottom center;
-    opacity: 0;
-    transition:
-        transform var(--dur-med) var(--ease-spring),
-        opacity var(--dur-fast) var(--ease-out);
+    transition: background var(--dur-fast) var(--ease-out);
+}
+
+.app-shell-nav-item:not(.is-active):active::before {
+    background: rgba(127, 127, 127, 0.14);
 }
 
 .app-shell-nav-icon,
 .app-shell-nav-label {
     position: relative;
-    /* Above the plate, which is painted at the tab's own stacking level. */
+    /* Above the plate, which sits at z-index 0. */
     z-index: 1;
     transition: transform var(--dur-med) var(--ease-spring);
 }
@@ -5292,17 +5295,28 @@ body > main {
     white-space: nowrap;
 }
 
-/* ---- Selected tab ---- */
+/* ---- The travelling plate ---- */
 
-.app-shell-nav-item.is-active {
-    /* Black ink on the yellow plate - the same pairing every primary button
-       in the app uses. */
-    color: var(--accent-on);
-}
-
-.app-shell-nav-item.is-active::before {
-    opacity: 1;
-    transform: translateY(0) scaleY(1);
+.app-shell-nav-plate {
+    position: absolute;
+    /* Overhangs the plank's top rim by 9px: 17px above the tab's own top
+       edge, minus the bar's 8px of padding above it. */
+    top: -17px;
+    bottom: 2px;
+    left: 0;
+    z-index: 0;
+    /* Driven from the two custom properties parkPlate() measures onto this
+       element. The geometry has to live here rather than as an inline
+       `translate`/`width`, because an inline declaration outranks every
+       stylesheet rule - the pressed state below could then never sink the
+       plate, and would silently do nothing. */
+    translate: var(--nav-plate-x, 0px) 0;
+    width: var(--nav-plate-w, 0px);
+    border-radius: 16px;
+    pointer-events: none;
+    opacity: 0;
+    /* Squashes from its base, like something landing on the bar. */
+    transform-origin: 50% 100%;
     /* Bright face over a darker slab edge, with a gloss along the top - a
        physical button, the same recipe as --btn-depth elsewhere. */
     background: linear-gradient(180deg, var(--accent-hover) 0%, var(--accent) 58%);
@@ -5311,6 +5325,54 @@ body > main {
         0 12px 22px -10px color-mix(in srgb, var(--accent) 70%, transparent),
         inset 0 2px 0 rgba(255, 255, 255, 0.55),
         inset 0 -2px 0 color-mix(in srgb, var(--accent) 62%, #000000);
+}
+
+/* Added a frame after the first park, so the plate appears already sitting on
+   the active tab instead of flying in from the left edge on every page load. */
+.app-shell-nav-plate.is-ready {
+    transition:
+        translate var(--dur-med) var(--ease-spring),
+        width var(--dur-med) var(--ease-out),
+        opacity var(--dur-fast) var(--ease-out);
+}
+
+.app-shell-nav-plate.is-parked {
+    opacity: 1;
+}
+
+/* Restarted by parkPlate() on every move. `scale` rather than `transform` so
+   it composes with the `translate` the transition above is driving, instead
+   of the two fighting over one property. */
+.app-shell-nav-plate.is-travelling {
+    animation: nav-plate-travel var(--dur-med) var(--ease-out);
+}
+
+/* Stretches along the direction of travel while it flattens, then overshoots
+   the other way as it lands. */
+@keyframes nav-plate-travel {
+    0%   { scale: 1 1; }
+    38%  { scale: 1.12 0.84; }
+    72%  { scale: 0.95 1.07; }
+    100% { scale: 1 1; }
+}
+
+/* Press: the plate sinks into its own slab edge, exactly like the lesson
+   path's nodes and the primary buttons. :has() because the plate is a
+   sibling of the tab being pressed, not its child - and the x stays on the
+   custom property parkPlate() sets, so the sink cannot reset the travel. */
+.app-shell-nav:has(.app-shell-nav-item.is-active:active) .app-shell-nav-plate {
+    translate: var(--nav-plate-x, 0px) 4px;
+    box-shadow:
+        0 1px 0 color-mix(in srgb, var(--accent) 52%, #000000),
+        inset 0 2px 0 rgba(255, 255, 255, 0.4);
+}
+
+/* ---- Selected tab ---- */
+
+.app-shell-nav-item.is-active {
+    /* Black ink on the yellow plate - the same pairing every primary button
+       in the app uses. */
+    color: var(--accent-on);
 }
 
 /* Icon and label ride up onto the raised plate. */
@@ -5322,61 +5384,39 @@ body > main {
     transform: translateY(-9px);
 }
 
-/* Press: the plate sinks into its own slab edge, exactly like the lesson
-   path's nodes and the primary buttons. */
-.app-shell-nav-item.is-active:active::before {
-    transform: translateY(4px);
-    box-shadow:
-        0 1px 0 color-mix(in srgb, var(--accent) 52%, #000000),
-        inset 0 2px 0 rgba(255, 255, 255, 0.4);
-}
-
-.app-shell-nav-item.is-active:active .app-shell-nav-icon {
+.app-shell-nav:has(.app-shell-nav-item.is-active:active) .app-shell-nav-item.is-active .app-shell-nav-icon {
     transform: translateY(-7px) scale(1.08);
 }
 
-.app-shell-nav-item.is-active:active .app-shell-nav-label {
+.app-shell-nav:has(.app-shell-nav-item.is-active:active) .app-shell-nav-item.is-active .app-shell-nav-label {
     transform: translateY(-5px);
-}
-
-/* Unselected tabs get a recessed slot on press, so every tab answers a
-   touch rather than only the one already selected. */
-.app-shell-nav-item:not(.is-active):active::before {
-    opacity: 1;
-    transform: translateY(0) scaleY(1);
-    inset: 2px 3px 2px;
-    background: rgba(127, 127, 127, 0.14);
-    box-shadow: none;
-    transition-duration: var(--dur-fast);
 }
 
 @media (prefers-reduced-motion: reduce) {
     .app-shell-nav-item,
-    .app-shell-nav-item.is-active,
     .app-shell-nav-icon,
     .app-shell-nav-label,
-    .app-shell-nav-item.is-active .app-shell-nav-icon,
-    .app-shell-nav-item.is-active .app-shell-nav-label {
+    .app-shell-nav-plate,
+    .app-shell-nav-plate.is-ready {
         transition: none;
     }
 
-    /* The plate still stands up (that's the state, not decoration) - it just
-       stops springing into place, and the icon/label stop travelling. */
-    .app-shell-nav-item::before {
-        transition: none;
+    .app-shell-nav-plate.is-travelling {
+        animation: none;
+    }
+
+    /* Without the icon lift there is nothing sitting on a raised plate, so it
+       drops back to a plain filled slot behind the icon rather than standing
+       up above it. */
+    .app-shell-nav-plate {
+        top: 2px;
+        box-shadow: none;
     }
 
     .app-shell-nav-item.is-active .app-shell-nav-icon,
     .app-shell-nav-item.is-active .app-shell-nav-label,
-    .app-shell-nav-item.is-active:active .app-shell-nav-icon,
-    .app-shell-nav-item.is-active:active .app-shell-nav-label {
-        transform: none;
-    }
-
-    /* Without the lift the plate would sit behind the icon at full height and
-       swallow it, so it shrinks back to a plain filled slot. */
-    .app-shell-nav-item.is-active::before {
-        inset: 2px 3px 2px;
+    .app-shell-nav:has(.app-shell-nav-item.is-active:active) .app-shell-nav-item.is-active .app-shell-nav-icon,
+    .app-shell-nav:has(.app-shell-nav-item.is-active:active) .app-shell-nav-item.is-active .app-shell-nav-label {
         transform: none;
     }
 }
@@ -5470,8 +5510,14 @@ body > main {
         outline: 0;
     }
 
-    /* The raised plate is a mobile-bar affordance; the sidebar just tints the
-       row instead, so the pseudo-element and the lift are both dropped here. */
+    /* The raised plate and the press slot are both bottom-bar affordances;
+       the sidebar just tints the row instead. parkPlate() still measures on
+       this layout (the tabs are real, only the plate is gone), and the
+       ResizeObserver re-parks it on the way back down to mobile. */
+    .app-shell-nav-plate {
+        display: none;
+    }
+
     .app-shell-nav-item::before {
         content: none;
     }
@@ -5492,8 +5538,8 @@ body > main {
     /* No plate to ride up onto - the icon and label stay on the row. */
     .app-shell-nav-item.is-active .app-shell-nav-icon,
     .app-shell-nav-item.is-active .app-shell-nav-label,
-    .app-shell-nav-item.is-active:active .app-shell-nav-icon,
-    .app-shell-nav-item.is-active:active .app-shell-nav-label {
+    .app-shell-nav:has(.app-shell-nav-item.is-active:active) .app-shell-nav-item.is-active .app-shell-nav-icon,
+    .app-shell-nav:has(.app-shell-nav-item.is-active:active) .app-shell-nav-item.is-active .app-shell-nav-label {
         transform: none;
     }
 

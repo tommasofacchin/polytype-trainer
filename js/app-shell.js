@@ -821,11 +821,110 @@
         renderHeaderLevel(cached.xp);
     }
 
-    function renderBottomNav() {
+    // ---- Bottom nav ---------------------------------------------------------
+    // The selected tab's plate is a single shared element parked over whichever
+    // tab is active (see the "Mobile bottom bar" block in style.css), so a tab
+    // change can animate it from the old tab to the new one.
+    //
+    // That only works if the nav survives the navigation. This function used to
+    // rewrite mount.innerHTML on every call, including the one js/router.js
+    // makes after each soft nav - which built the new active tab already in its
+    // final state, and CSS transitions never fire on freshly-inserted nodes. So
+    // nothing animated, on soft navs or on full page loads. Now the markup is
+    // built once and a navigation only moves the .is-active class.
+    let navBuilt = false;
+
+    // How far the plate is inset inside its tab, per side.
+    const PLATE_INSET = 3;
+
+    function navParts() {
+        const mount = document.getElementById("app-bottom-nav");
+        const nav = mount?.querySelector(".app-shell-nav");
+        const plate = nav?.querySelector(".app-shell-nav-plate");
+        return nav && plate ? { mount, nav, plate } : null;
+    }
+
+    // Measured rather than computed from a tab index: the bar's padding, its
+    // 2px gaps and the six-vs-seven tab count (Settings is desktop-only) would
+    // all have to be mirrored here, and every one of them is a chance to drift
+    // out of sync with the stylesheet.
+    //
+    // getBoundingClientRect + the nav's own padding, rather than offsetLeft,
+    // because the plate is positioned against the nav's *padding* box while
+    // offsetLeft is measured from its border box - mixing the two would park
+    // every plate one padding-width to the right.
+    function parkPlate(animate) {
+        const parts = navParts();
+        if (!parts) return;
+
+        const { nav, plate } = parts;
+        const active = nav.querySelector(".app-shell-nav-item.is-active");
+
+        // No tab owns this page - Settings on mobile, or any page outside the
+        // tab set. Retract the plate rather than leaving it on a stale tab.
+        // offsetParent is null exactly when the tab is display:none, which is
+        // how the desktop-only tabs read on mobile.
+        if (!active || active.offsetParent === null) {
+            plate.classList.remove("is-parked");
+            return;
+        }
+
+        const navBox = nav.getBoundingClientRect();
+        const tabBox = active.getBoundingClientRect();
+        const padLeft = parseFloat(getComputedStyle(nav).paddingLeft) || 0;
+        const x = tabBox.left - navBox.left - padLeft + PLATE_INSET;
+
+        // Custom properties, not inline `translate`/`width`: an inline
+        // declaration outranks every stylesheet rule, so setting those two
+        // directly would make the pressed state's 4px sink a no-op. The
+        // stylesheet reads these and owns the geometry.
+        plate.style.setProperty("--nav-plate-x", `${x}px`);
+        plate.style.setProperty("--nav-plate-w", `${Math.max(0, tabBox.width - PLATE_INSET * 2)}px`);
+        plate.classList.add("is-parked");
+
+        if (!animate) return;
+
+        // Restart the squash. Removing the class, forcing a reflow and adding
+        // it back is what makes the animation replay on a second move - simply
+        // leaving it on would play it once and never again.
+        plate.classList.remove("is-travelling");
+        void plate.offsetWidth;
+        plate.classList.add("is-travelling");
+    }
+
+    function syncActiveTab(animate) {
+        const parts = navParts();
+        if (!parts) return;
+
+        const activeTab = document.body.dataset.tab || "";
+        parts.nav.querySelectorAll(".app-shell-nav-item").forEach(item => {
+            item.classList.toggle("is-active", item.dataset.tab === activeTab);
+        });
+        parkPlate(animate);
+    }
+
+    // The plate is parked in pixels, so it has to be re-parked whenever the
+    // bar's geometry changes: a resize or rotation, and above all the 860px
+    // breakpoint, where the bar becomes a vertical sidebar and back.
+    let navResizeObserver = null;
+
+    function observeNavResize(nav) {
+        if (typeof ResizeObserver !== "function") return;
+        navResizeObserver?.disconnect();
+        navResizeObserver = new ResizeObserver(() => parkPlate(false));
+        navResizeObserver.observe(nav);
+    }
+
+    // `rebuild` is for the language switch, where the labels themselves change.
+    // A navigation must never rebuild - that is the bug described above.
+    function renderBottomNav(options) {
         const mount = document.getElementById("app-bottom-nav");
         if (!mount) return;
 
-        const activeTab = document.body.dataset.tab || "";
+        if (navBuilt && !options?.rebuild && navParts()) {
+            syncActiveTab(true);
+            return;
+        }
 
         mount.innerHTML = `
             <a href="index.html" class="app-shell-logo" aria-label="${tr("app.name")}">
@@ -833,14 +932,27 @@
                 <span class="app-shell-logo-word">polytype</span>
             </a>
             <nav class="app-shell-nav">
+                <span class="app-shell-nav-plate" aria-hidden="true"></span>
                 ${TABS.map(tabItem => `
-                    <a class="app-shell-nav-item${tabItem.id === activeTab ? " is-active" : ""}${tabItem.desktopOnly ? " app-shell-nav-item-desktop-only" : ""}" href="${tabItem.href}">
+                    <a class="app-shell-nav-item${tabItem.desktopOnly ? " app-shell-nav-item-desktop-only" : ""}" data-tab="${tabItem.id}" href="${tabItem.href}">
                         <span class="app-shell-nav-icon">${tabItem.icon}</span>
                         <span class="app-shell-nav-label">${tr(tabItem.label)}</span>
                     </a>
                 `).join("")}
             </nav>
         `;
+
+        navBuilt = true;
+        syncActiveTab(false);
+
+        const parts = navParts();
+        if (parts) {
+            observeNavResize(parts.nav);
+            // A frame later, so the first park lands with transitions still
+            // off and the plate simply appears on the active tab instead of
+            // sliding in from the bar's left edge on every page load.
+            requestAnimationFrame(() => parts.plate.classList.add("is-ready"));
+        }
     }
 
     // Exposed so js/router.js can re-highlight the active tab after a soft
@@ -884,7 +996,10 @@
 
     document.addEventListener("polytype-app-language-changed", () => {
         renderHeader();
-        renderBottomNav();
+        // The one case that genuinely needs new markup: every tab label is
+        // re-translated. A navigation, by contrast, must not rebuild - see
+        // renderBottomNav.
+        renderBottomNav({ rebuild: true });
     });
     // Fires after any unlock/purchase/session-save syncs the local
     // profile cache - keep the header's coin/key counts live without
