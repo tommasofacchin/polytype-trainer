@@ -1788,6 +1788,256 @@ window.DECK_EXAMPLES = {
       { text: "Kan du åpne *vinduet*?", translation: "Can you open the window?" },
       { text: "*Vinduet* var skittent.", translation: "The window was dirty." },
       { text: "Solen skinte inn gjennom *vinduet*.", translation: "The sun shone in through the window." }
+    ],
+    356: [
+      { text: "Bildet henger på *veggen*.", translation: "The picture hangs on the wall." },
+      { text: "*Veggen* er malt hvit.", translation: "The wall is painted white." },
+      { text: "Vi festet en hylle på *veggen*.", translation: "We attached a shelf to the wall." }
+    ],
+    357: [
+      { text: "*Gulvet* er kaldt om vinteren.", translation: "The floor is cold in winter." },
+      { text: "Hun vasket *gulvet* i går.", translation: "She washed the floor yesterday." },
+      { text: "Barnet leker på *gulvet*.", translation: "The child is playing on the floor." }
+    ],
+    358: [
+      { text: "*Taket* lekker når det regner.", translation: "The roof leaks when it rains." },
+      { text: "Vi malte *taket* i sommer.", translation: "We painted the roof this summer." },
+      { text: "Snøen dekket hele *taket*.", translation: "The snow covered the whole roof." }
+    ],
+    359: [
+      { text: "Vi dyrker grønnsaker i *hagen*.", translation: "We grow vegetables in the garden." },
+      { text: "*Hagen* vår er full av blomster.", translation: "Our garden is full of flowers." },
+      { text: "Barna leker i *hagen* hver dag.", translation: "The children play in the garden every day." }
+    ],
+    360: [
+      { text: "Bilen står i *garasjen*.", translation: "The car is in the garage." },
+      { text: "Vi bygde en ny *garasje* i fjor.", translation: "We built a new garage last year." },
+      { text: "*Garasjen* er full av verktøy.", translation: "The garage is full of tools." }
+    ],
+    361: [
+      { text: "*Lampen* i stuen er veldig fin.", translation: "The lamp in the living room is very nice." },
+      { text: "Kan du skru på *lampen*?", translation: "Can you turn on the lamp?" },
+      { text: "Vi kjøpte en ny *lampe* til soverommet.", translation: "We bought a new lamp for the bedroom." }
+    ],
+    362: [
+      { text: "Hun ser seg i *speilet*.", translation: "She looks at herself in the mirror." },
+      { text: "*Speilet* på badet er stort.", translation: "The mirror in the bathroom is big." },
+      { text: "Vi hengte opp et nytt *speil* i gangen.", translation: "We hung up a new mirror in the hallway." }
+    ],
+    363: [
+      { text: "Kan du gi meg et *håndkle*?", translation: "Can you give me a towel?" },
+      { text: "*Håndkleet* var vått.", translation: "The towel was wet." },
+      { text: "Vi vasker *håndklærne* hver uke.", translation: "We wash the towels every week." }
+    ],
+    364: [
+      { text: "Vask hendene med *såpe*.", translation: "Wash your hands with soap." },
+      { text: "*Såpen* luktet lavendel.", translation: "The soap smelled like lavender." },
+      { text: "Vi trenger mer *såpe* på badet.", translation: "We need more soap in the bathroom." }
+    ],
+    365: [
+      { text: "Melken er i *kjøleskapet*.", translation: "The milk is in the fridge." },
+      { text: "*Kjøleskapet* vårt er nesten tomt.", translation: "Our fridge is almost empty." },
+      { text: "Vi kjøpte et nytt *kjøleskap* i går.", translation: "We bought a new fridge yesterday." }
+    ],
+    366: [
+      { text: "Brødet er i *ovnen*.", translation: "The bread is in the oven." },
+      { text: "*Ovnen* er veldig varm nå.", translation: "The oven is very hot now." },
+      { text: "Hun satte kaken inn i *ovnen*.", translation: "She put the cake in the oven." }
+    ],
+    367: [
+      { text: "Vi sitter på *sofaen* og ser på TV.", translation: "We're sitting on the sofa watching TV." },
+      { text: "*Sofaen* er myk og komfortabel.", translation: "The sofa is soft and comfortable." },
+      { text: "Katten sover alltid på *sofaen*.", translation: "The cat always sleeps on the sofa." }
+    ],
+    368: [
+      { text: "Boken står på *hyllen*.", translation: "The book is on the shelf." },
+      { text: "Vi trenger en ny *hylle* til kjøkkenet.", translation: "We need a new shelf for the kitchen." },
+      { text: "*Hyllen* er full av bøker.", translation: "The shelf is full of books." }
+    ],
+    369: [
+      { text: "Han løp opp *trappen*.", translation: "He ran up the stairs." },
+      { text: "*Trappen* er bratt og smal.", translation: "The stairs are steep and narrow." },
+      { text: "Vær forsiktig i *trappen*.", translation: "Be careful on the stairs." }
+    ],
+    370: [
+      { text: "Vi tok *heisen* opp til femte etasje.", translation: "We took the elevator up to the fifth floor." },
+      { text: "*Heisen* var ødelagt i dag.", translation: "The elevator was broken today." },
+      { text: "Han er redd for å ta *heisen*.", translation: "He's afraid of taking the elevator." }
+    ],
+    371: [
+      { text: "Vi har en *hund* som heter Rex.", translation: "We have a dog named Rex." },
+      { text: "*Hunden* løp etter ballen.", translation: "The dog ran after the ball." },
+      { text: "Han går tur med *hunden* hver morgen.", translation: "He walks the dog every morning." }
+    ],
+    372: [
+      { text: "*Katten* sover hele dagen.", translation: "The cat sleeps all day." },
+      { text: "Vi adopterte en *katt* i fjor.", translation: "We adopted a cat last year." },
+      { text: "*Katten* vår er svart og hvit.", translation: "Our cat is black and white." }
+    ],
+    373: [
+      { text: "Jeg hørte en *fugl* synge utenfor.", translation: "I heard a bird singing outside." },
+      { text: "*Fuglen* fløy bort raskt.", translation: "The bird flew away quickly." },
+      { text: "Vi så mange *fugler* i parken.", translation: "We saw many birds in the park." }
+    ],
+    374: [
+      { text: "Hun rir på en *hest* hver helg.", translation: "She rides a horse every weekend." },
+      { text: "*Hesten* løp fort over marken.", translation: "The horse ran fast across the field." },
+      { text: "Vi så *hester* på gården.", translation: "We saw horses at the farm." }
+    ],
+    375: [
+      { text: "Bonden har mange *kuer*.", translation: "The farmer has many cows." },
+      { text: "*Kua* beitet i marken.", translation: "The cow grazed in the field." },
+      { text: "Vi så *kuer* langs veien.", translation: "We saw cows along the road." }
+    ],
+    376: [
+      { text: "Det er mange *sauer* på fjellet.", translation: "There are many sheep in the mountains." },
+      { text: "*Sauen* hadde hvit ull.", translation: "The sheep had white wool." },
+      { text: "Bonden klipper *sauene* om våren.", translation: "The farmer shears the sheep in spring." }
+    ],
+    377: [
+      { text: "Bonden har fem *griser*.", translation: "The farmer has five pigs." },
+      { text: "*Grisen* var rosa og skitten.", translation: "The pig was pink and dirty." },
+      { text: "Vi så *griser* på gårdsbesøket.", translation: "We saw pigs on the farm visit." }
+    ],
+    378: [
+      { text: "*Hønen* la egg hver dag.", translation: "The hen laid eggs every day." },
+      { text: "Vi har fem *høner* i hagen.", translation: "We have five hens in the garden." },
+      { text: "*Hønene* løp rundt i gårdsplassen.", translation: "The hens ran around the farmyard." }
+    ],
+    379: [
+      { text: "Det er en *mus* i kjøkkenet.", translation: "There's a mouse in the kitchen." },
+      { text: "Katten jaget *musen*.", translation: "The cat chased the mouse." },
+      { text: "Vi så en liten *mus* løpe forbi.", translation: "We saw a small mouse run by." }
+    ],
+    380: [
+      { text: "Barna har en *kanin* som kjæledyr.", translation: "The children have a rabbit as a pet." },
+      { text: "*Kaninen* spiste gulrøtter.", translation: "The rabbit ate carrots." },
+      { text: "Vi så en vill *kanin* i hagen.", translation: "We saw a wild rabbit in the garden." }
+    ],
+    381: [
+      { text: "Vi plantet et *tre* i hagen.", translation: "We planted a tree in the garden." },
+      { text: "*Treet* er veldig høyt.", translation: "The tree is very tall." },
+      { text: "Fuglene bygget rede i *treet*.", translation: "The birds built a nest in the tree." }
+    ],
+    382: [
+      { text: "Hun ga meg en *blomst*.", translation: "She gave me a flower." },
+      { text: "*Blomstene* i hagen er vakre.", translation: "The flowers in the garden are beautiful." },
+      { text: "Vi plantet nye *blomster* i vår.", translation: "We planted new flowers in spring." }
+    ],
+    383: [
+      { text: "*Gresset* er grønt om sommeren.", translation: "The grass is green in summer." },
+      { text: "Barna leker på *gresset*.", translation: "The children are playing on the grass." },
+      { text: "Vi klipper *gresset* hver uke.", translation: "We mow the grass every week." }
+    ],
+    384: [
+      { text: "Vi klatret opp *fjellet* i går.", translation: "We climbed the mountain yesterday." },
+      { text: "*Fjellet* var dekket av snø.", translation: "The mountain was covered in snow." },
+      { text: "Utsikten fra *fjellet* var fantastisk.", translation: "The view from the mountain was fantastic." }
+    ],
+    385: [
+      { text: "*Elven* renner gjennom byen.", translation: "The river runs through the city." },
+      { text: "Vi fisket i *elven* i går.", translation: "We fished in the river yesterday." },
+      { text: "Barna svømte i *elven*.", translation: "The children swam in the river." }
+    ],
+    386: [
+      { text: "Vi bor nær *havet*.", translation: "We live near the sea." },
+      { text: "*Havet* var rolig i dag.", translation: "The sea was calm today." },
+      { text: "De seilte over *havet*.", translation: "They sailed across the sea." }
+    ],
+    387: [
+      { text: "Vi svømmer i *innsjøen* om sommeren.", translation: "We swim in the lake in summer." },
+      { text: "*Innsjøen* var stille og klar.", translation: "The lake was calm and clear." },
+      { text: "Hytta ligger ved en liten *innsjø*.", translation: "The cabin is by a small lake." }
+    ],
+    388: [
+      { text: "Vi gikk en tur i *skogen*.", translation: "We went for a walk in the forest." },
+      { text: "*Skogen* var full av trær og fugler.", translation: "The forest was full of trees and birds." },
+      { text: "Barna plukket sopp i *skogen*.", translation: "The children picked mushrooms in the forest." }
+    ],
+    389: [
+      { text: "Vi tilbrakte hele dagen på *stranden*.", translation: "We spent the whole day at the beach." },
+      { text: "*Stranden* var full av folk.", translation: "The beach was full of people." },
+      { text: "Barna bygde sandslott på *stranden*.", translation: "The children built sandcastles on the beach." }
+    ],
+    390: [
+      { text: "*Himmelen* er blå i dag.", translation: "The sky is blue today." },
+      { text: "Vi så stjernene på *himmelen*.", translation: "We saw the stars in the sky." },
+      { text: "*Himmelen* ble rød ved solnedgang.", translation: "The sky turned red at sunset." }
+    ],
+    391: [
+      { text: "Hun er *tretti* år gammel.", translation: "She's thirty years old." },
+      { text: "Vi ventet i *tretti* minutter.", translation: "We waited thirty minutes." },
+      { text: "Det er *tretti* dager i april.", translation: "There are thirty days in April." }
+    ],
+    392: [
+      { text: "Han er *førti* år gammel.", translation: "He's forty years old." },
+      { text: "Vi kjørte i *førti* minutter.", translation: "We drove for forty minutes." },
+      { text: "Billetten kostet *førti* kroner.", translation: "The ticket cost forty kroner." }
+    ],
+    393: [
+      { text: "Bestemor er *femti* år gammel.", translation: "Grandmother is fifty years old." },
+      { text: "Vi ventet i *femti* minutter på flyet.", translation: "We waited fifty minutes for the plane." },
+      { text: "Det var *femti* gjester i bryllupet.", translation: "There were fifty guests at the wedding." }
+    ],
+    394: [
+      { text: "Det er *hundre* år siden huset ble bygget.", translation: "It's a hundred years since the house was built." },
+      { text: "Vi betalte *hundre* kroner for billetten.", translation: "We paid a hundred kroner for the ticket." },
+      { text: "Det var *hundre* mennesker på konserten.", translation: "There were a hundred people at the concert." }
+    ],
+    395: [
+      { text: "Byen har over *tusen* innbyggere.", translation: "The town has over a thousand inhabitants." },
+      { text: "Vi betalte *tusen* kroner for reisen.", translation: "We paid a thousand kroner for the trip." },
+      { text: "Det var *tusen* stjerner på himmelen.", translation: "There were a thousand stars in the sky." }
+    ],
+    396: [
+      { text: "Himmelen er *grå* i dag.", translation: "The sky is grey today." },
+      { text: "Han har en *grå* bil.", translation: "He has a grey car." },
+      { text: "Katten hennes er *grå* og hvit.", translation: "Her cat is grey and white." }
+    ],
+    397: [
+      { text: "Dette er min *første* dag på jobben.", translation: "This is my first day at work." },
+      { text: "Vi bor i *første* etasje.", translation: "We live on the first floor." },
+      { text: "Hun kom *først* i løpet.", translation: "She came first in the race." }
+    ],
+    398: [
+      { text: "Dette er den *siste* dagen på ferien.", translation: "This is the last day of the holiday." },
+      { text: "Han var den *siste* som gikk.", translation: "He was the last one to leave." },
+      { text: "Det var det *siste* eplet i kurven.", translation: "It was the last apple in the basket." }
+    ],
+    399: [
+      { text: "Klokka er *halv* ni.", translation: "It's half past eight." },
+      { text: "Jeg spiste bare en *halv* eple.", translation: "I only ate half an apple." },
+      { text: "Vi delte kaken i to *halve* deler.", translation: "We divided the cake into two halves." }
+    ],
+    400: [
+      { text: "Hva er *nummeret* ditt?", translation: "What's your number?" },
+      { text: "Vi bor i *nummer* ti.", translation: "We live at number ten." },
+      { text: "Kan du gi meg *nummeret* hennes?", translation: "Can you give me her number?" }
+    ],
+    401: [
+      { text: "Jeg er *redd* for edderkopper.", translation: "I'm afraid of spiders." },
+      { text: "Hun ble *redd* av lynet.", translation: "She got scared by the lightning." },
+      { text: "Ikke vær *redd*, alt går bra.", translation: "Don't be afraid, everything's fine." }
+    ],
+    402: [
+      { text: "Jeg ble veldig *overrasket* over gaven.", translation: "I was very surprised by the gift." },
+      { text: "Hun så *overrasket* ut.", translation: "She looked surprised." },
+      { text: "Vi var *overrasket* over resultatet.", translation: "We were surprised by the result." }
+    ],
+    403: [
+      { text: "Jeg er *lei* av dette spillet.", translation: "I'm bored of this game." },
+      { text: "Barna ble *lei* etter en time.", translation: "The children got bored after an hour." },
+      { text: "Hun så *lei* ut i timen.", translation: "She looked bored in class." }
+    ],
+    404: [
+      { text: "Hun er alltid *rolig* i vanskelige situasjoner.", translation: "She's always calm in difficult situations." },
+      { text: "Havet var *rolig* i dag.", translation: "The sea was calm today." },
+      { text: "Vi hadde en *rolig* kveld hjemme.", translation: "We had a calm evening at home." }
+    ],
+    405: [
+      { text: "Jeg er veldig *stolt* av deg.", translation: "I'm very proud of you." },
+      { text: "Han var *stolt* over prestasjonen sin.", translation: "He was proud of his achievement." },
+      { text: "Foreldrene var *stolte* av barna sine.", translation: "The parents were proud of their children." }
     ]
   },
 
