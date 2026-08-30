@@ -1,10 +1,20 @@
-const { db } = require("./_firebase");
+const { db, FieldPath } = require("./_firebase");
 const {
   withAuth, pickFriendProfile, buildLeaderboard, evaluateMissions,
-  getDateKeyForTimezone, normalizeTimezone, normalizeDailyGoalXp, DEBUG_ALWAYS_CLAIM_CHEST
+  getDateKeyForTimezone, normalizeTimezone, normalizeDailyGoalXp, shiftDateKey,
+  DEBUG_ALWAYS_CLAIM_CHEST
 } = require("./_lib");
 
+// Dispatches on data.action for exactly the reason api/friends.js does: the
+// Hobby plan caps a deployment at 12 serverless functions, and this file is
+// already the "read-only per-user page data, keyed by timezone" endpoint - so
+// the Profile heatmap's history shares it rather than adding a 13th function.
 module.exports = withAuth(async (data, token) => {
+  if (data.action === "activity") return getActivityHistory(data, token);
+  return getHomeOverview(data, token);
+});
+
+async function getHomeOverview(data, token) {
   const userRef = db.doc(`users/${token.uid}`);
   const [userSnap, friendsSnap, selfPublicSnap] = await Promise.all([
     userRef.get(),
@@ -42,4 +52,38 @@ module.exports = withAuth(async (data, token) => {
     todayXp: dailyStats.xp || 0,
     dailyGoalXp: normalizeDailyGoalXp(user.dailyGoalXp)
   };
-});
+}
+
+// 13 weeks x 7 rows - the grid the Profile page draws (.activity-grid). Kept
+// here rather than on the client so the query and the drawing can never
+// disagree about how far back the window reaches.
+const HISTORY_DAYS = 91;
+
+async function getActivityHistory(data, token) {
+  const timezone = normalizeTimezone(data.timezone);
+  const todayKey = getDateKeyForTimezone(new Date(), timezone);
+  const startKey = shiftDateKey(todayKey, -(HISTORY_DAYS - 1));
+
+  // dailyStats doc ids *are* the date keys (see complete-practice-session.js),
+  // so a documentId() range is the whole query - no extra field, no composite
+  // index, and days the player never practised simply aren't there. Those come
+  // back as gaps and the client fills them in as empty cells.
+  const snapshot = await db.collection(`users/${token.uid}/dailyStats`)
+    .orderBy(FieldPath.documentId())
+    .startAt(startKey)
+    .endAt(todayKey)
+    .get();
+
+  const days = snapshot.docs.map(doc => {
+    const stats = doc.data();
+    return {
+      date: doc.id,
+      xp: stats.xp || 0,
+      sessions: stats.sessions || 0,
+      correctAnswers: stats.correctAnswers || 0,
+      wrongAnswers: stats.wrongAnswers || 0
+    };
+  });
+
+  return { todayKey, windowDays: HISTORY_DAYS, days };
+}

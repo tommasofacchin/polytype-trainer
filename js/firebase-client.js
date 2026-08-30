@@ -545,7 +545,10 @@
         assertConfigured();
         if (!state.user) throw new Error(tr("auth.signInRequired"));
 
-        return callApi("get-activity-history", {
+        // Shares get-home-overview rather than owning an endpoint: the Hobby
+        // plan caps the deployment at 12 serverless functions.
+        return callApi("get-home-overview", {
+            action: "activity",
             timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
         });
     }
