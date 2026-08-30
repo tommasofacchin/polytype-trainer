@@ -9772,6 +9772,256 @@ window.DECK_EXAMPLES = {
       { text: "Il medico ha preso un campione del mio *sangue*.", translation: "The doctor took a sample of my blood." },
       { text: "Il *sangue* usciva dalla ferita.", translation: "The blood flowed from the cut." },
       { text: "Ha donato il *sangue* ieri.", translation: "He donated blood yesterday." }
+    ],
+    451: [
+      { text: "Pago sempre in *contanti*.", translation: "I always pay with cash." },
+      { text: "Hai dei *contanti* con te?", translation: "Do you have cash on you?" },
+      { text: "Il negozio non accetta più *contanti*.", translation: "The shop no longer accepts cash." }
+    ],
+    452: [
+      { text: "Ho pagato con la *carta di credito*.", translation: "I paid with credit card." },
+      { text: "La mia *carta di credito* è stata rifiutata.", translation: "My credit card was declined." },
+      { text: "Posso usare la *carta di credito* qui?", translation: "Can I use a credit card here?" }
+    ],
+    453: [
+      { text: "Abbiamo avuto uno *sconto* sull'hotel.", translation: "We got a discount on the hotel." },
+      { text: "Lo *sconto* era del venti per cento.", translation: "The discount was twenty percent." },
+      { text: "Il negozio dava uno *sconto* agli studenti.", translation: "The shop gave a discount to students." }
+    ],
+    454: [
+      { text: "È un *cliente* fedele.", translation: "He's a loyal customer." },
+      { text: "Il *cliente* si è lamentato del prezzo.", translation: "The customer complained about the price." },
+      { text: "Abbiamo molti nuovi *clienti* quest'anno.", translation: "We have many new customers this year." }
+    ],
+    455: [
+      { text: "Mi ha fatto un bel *regalo*.", translation: "She gave me a nice gift." },
+      { text: "Il *regalo* era avvolto in carta rossa.", translation: "The gift was wrapped in red paper." },
+      { text: "Abbiamo comprato un *regalo* per il suo compleanno.", translation: "We bought a gift for his birthday." }
+    ],
+    456: [
+      { text: "Amo ascoltare la *musica*.", translation: "I love listening to music." },
+      { text: "La *musica* alla festa era fantastica.", translation: "The music at the party was fantastic." },
+      { text: "Suona *musica* classica.", translation: "She plays classical music." }
+    ],
+    457: [
+      { text: "Questa *canzone* è la mia preferita.", translation: "This song is my favorite." },
+      { text: "Abbiamo cantato insieme una vecchia *canzone*.", translation: "We sang an old song together." },
+      { text: "La *canzone* parla d'amore.", translation: "The song is about love." }
+    ],
+    458: [
+      { text: "Ieri abbiamo visto un *film* emozionante.", translation: "We watched an exciting film yesterday." },
+      { text: "Il *film* è durato due ore.", translation: "The film lasted two hours." },
+      { text: "Quale *film* vuoi vedere stasera?", translation: "Which film do you want to watch tonight?" }
+    ],
+    459: [
+      { text: "I bambini fanno un *gioco* divertente.", translation: "The children are playing a fun game." },
+      { text: "Il *gioco* è durato tutta la sera.", translation: "The game lasted all evening." },
+      { text: "Abbiamo comprato un *gioco* nuovo per il suo compleanno.", translation: "We bought a new game for his birthday." }
+    ],
+    460: [
+      { text: "Facciamo una *festa* sabato.", translation: "We're having a party on Saturday." },
+      { text: "La *festa* è stata molto bella.", translation: "The party was very nice." },
+      { text: "Ha invitato tutti i suoi amici alla *festa*.", translation: "She invited all her friends to the party." }
+    ],
+    461: [
+      { text: "Gioca a *calcio* ogni weekend.", translation: "He plays football every weekend." },
+      { text: "Il *calcio* è lo sport più popolare qui.", translation: "Football is the most popular sport here." },
+      { text: "Il ragazzo sogna di diventare un professionista nel *calcio*.", translation: "The boy dreams of becoming a professional in football." }
+    ],
+    462: [
+      { text: "Giochiamo a *tennis* ogni martedì.", translation: "We play tennis every Tuesday." },
+      { text: "È molto brava a *tennis*.", translation: "She's very good at tennis." },
+      { text: "Ha imparato a giocare a *tennis* da bambino.", translation: "He learned tennis as a child." }
+    ],
+    463: [
+      { text: "Gli piacciono tutti gli *sport*.", translation: "He likes all kinds of sport." },
+      { text: "Lo *sport* è importante per la salute.", translation: "Sport is important for health." },
+      { text: "Quale *sport* pratichi?", translation: "What sport do you do?" }
+    ],
+    464: [
+      { text: "La nostra *squadra* ha vinto la partita ieri.", translation: "Our team won the match yesterday." },
+      { text: "Gioca per una *squadra* locale.", translation: "She plays for a local team." },
+      { text: "La *squadra* si allenava ogni giorno prima del campionato.", translation: "The team trained every day before the championship." }
+    ],
+    465: [
+      { text: "Il bambino ha lanciato la *palla* oltre lo steccato.", translation: "The child threw the ball over the fence." },
+      { text: "Giocavamo con una *palla* rossa.", translation: "We played with a red ball." },
+      { text: "La *palla* ha colpito la finestra.", translation: "The ball hit the window." }
+    ],
+    466: [
+      { text: "Suona molto bene la *chitarra*.", translation: "He plays guitar very well." },
+      { text: "La mia *chitarra* ha bisogno di corde nuove.", translation: "My guitar needs new strings." },
+      { text: "Ha imparato a suonare la *chitarra* l'anno scorso.", translation: "She learned guitar last year." }
+    ],
+    467: [
+      { text: "Suona il *pianoforte* ogni giorno.", translation: "She plays piano every day." },
+      { text: "Il *pianoforte* è in soggiorno.", translation: "The piano is in the living room." },
+      { text: "Si esercita al *pianoforte* dopo la scuola.", translation: "He practices piano after school." }
+    ],
+    468: [
+      { text: "Puoi farci una *foto*?", translation: "Can you take a photo of us?" },
+      { text: "La *foto* era molto bella.", translation: "The photo was very nice." },
+      { text: "Abbiamo scattato molte *foto* durante il viaggio.", translation: "We took many photos on the trip." }
+    ],
+    469: [
+      { text: "Il mio *hobby* è dipingere.", translation: "My hobby is painting." },
+      { text: "Ha molti *hobby*.", translation: "He has many hobbies." },
+      { text: "Qual è il tuo *hobby*?", translation: "What's your hobby?" }
+    ],
+    470: [
+      { text: "Andiamo in *vacanza* quest'estate.", translation: "We're going on holiday this summer." },
+      { text: "La *vacanza* è stata troppo breve.", translation: "The holiday was far too short." },
+      { text: "Dove vai in *vacanza* quest'anno?", translation: "Where are you going on holiday this year?" }
+    ],
+    471: [
+      { text: "Uso *internet* ogni giorno.", translation: "I use the internet every day." },
+      { text: "*Internet* non funzionava ieri.", translation: "The internet was down yesterday." },
+      { text: "Abbiamo controllato il prezzo su *internet*.", translation: "We checked the price on the internet." }
+    ],
+    472: [
+      { text: "Questo *sito* è molto utile.", translation: "This website is very useful." },
+      { text: "Abbiamo creato un nuovo *sito* per l'azienda.", translation: "We made a new website for the company." },
+      { text: "Il *sito* era facile da usare.", translation: "The website was easy to use." }
+    ],
+    473: [
+      { text: "Ho dimenticato la mia *password*.", translation: "I've forgotten my password." },
+      { text: "La *password* deve avere almeno otto caratteri.", translation: "The password must have at least eight characters." },
+      { text: "Non condividere la tua *password* con altri.", translation: "Don't share your password with others." }
+    ],
+    474: [
+      { text: "Il mio *schermo* è incrinato.", translation: "My screen is cracked." },
+      { text: "Abbiamo comprato uno *schermo* nuovo per il computer.", translation: "We bought a new screen for the computer." },
+      { text: "Il testo sullo *schermo* era troppo piccolo.", translation: "The text on the screen was too small." }
+    ],
+    475: [
+      { text: "La mia *tastiera* non funziona più bene.", translation: "My keyboard is stopping working." },
+      { text: "Scriveva velocemente sulla *tastiera*.", translation: "He typed quickly on the keyboard." },
+      { text: "Abbiamo comprato una *tastiera* nuova ieri.", translation: "We bought a new keyboard yesterday." }
+    ],
+    476: [
+      { text: "Ho ricevuto un *messaggio* da lei oggi.", translation: "I got a message from her today." },
+      { text: "Puoi mandarmi un *messaggio*?", translation: "Can you send me a message?" },
+      { text: "Il *messaggio* era breve ma gentile.", translation: "The message was short but nice." }
+    ],
+    477: [
+      { text: "Guardo le *notizie* ogni sera.", translation: "I watch the news every evening." },
+      { text: "Le *notizie* di oggi erano tristi.", translation: "The news today was sad." },
+      { text: "Hai sentito le *notizie*?", translation: "Have you heard the news?" }
+    ],
+    478: [
+      { text: "La *televisione* è in soggiorno.", translation: "The television is in the living room." },
+      { text: "La nostra *televisione* è piuttosto vecchia.", translation: "Our TV is quite old." },
+      { text: "Puoi spegnere la *televisione*?", translation: "Can you turn off the TV?" }
+    ],
+    479: [
+      { text: "Ascolto la *radio* in macchina.", translation: "I listen to the radio in the car." },
+      { text: "La *radio* suonava musica tutto il giorno.", translation: "The radio played music all day." },
+      { text: "Ha comprato una vecchia *radio* al mercatino.", translation: "He bought an old radio at the flea market." }
+    ],
+    480: [
+      { text: "Ha comprato una *macchina fotografica* nuova l'anno scorso.", translation: "She bought a new camera last year." },
+      { text: "La mia *macchina fotografica* fa belle foto.", translation: "My camera takes nice pictures." },
+      { text: "Ha dimenticato la *macchina fotografica* a casa.", translation: "He forgot the camera at home." }
+    ],
+    481: [
+      { text: "Mi piace *anche* il caffè.", translation: "I also like coffee." },
+      { text: "Viene *anche* lei stasera.", translation: "She's also coming tonight." },
+      { text: "Dobbiamo *anche* ricordarci di comprare il pane.", translation: "We also need to remember to buy bread." }
+    ],
+    482: [
+      { text: "Ho *solo* cinque minuti.", translation: "I only have five minutes." },
+      { text: "Costava *solo* cento euro.", translation: "It only cost a hundred euros." },
+      { text: "Ha mangiato *solo* un po' di cibo.", translation: "She only ate a little of the food." }
+    ],
+    483: [
+      { text: "Sono *molto* felice oggi.", translation: "I'm very happy today." },
+      { text: "Faceva *molto* freddo ieri.", translation: "It was very cold yesterday." },
+      { text: "È *molto* brava in matematica.", translation: "She's very good at math." }
+    ],
+    484: [
+      { text: "*Forse* possiamo vederci domani.", translation: "Maybe we can meet tomorrow." },
+      { text: "*Forse* viene alla festa.", translation: "She might come to the party." },
+      { text: "*Forse* domani ci sarà il sole.", translation: "Maybe it'll be sunny tomorrow." }
+    ],
+    485: [
+      { text: "Ho *già* mangiato.", translation: "I've already eaten." },
+      { text: "Sei *già* pronto?", translation: "Are you already done?" },
+      { text: "È *già* andata a casa.", translation: "She has already gone home." }
+    ],
+    486: [
+      { text: "Iniziamo l'anno nuovo a *gennaio*.", translation: "We start the new year in January." },
+      { text: "Fa freddo a *gennaio*.", translation: "It's cold in January." },
+      { text: "Il mio compleanno è a *gennaio*.", translation: "My birthday is in January." }
+    ],
+    487: [
+      { text: "*Febbraio* è il mese più corto.", translation: "February is the shortest month." },
+      { text: "Andiamo in montagna a *febbraio*.", translation: "We're going to the mountains in February." },
+      { text: "La scuola ha le vacanze invernali a *febbraio*.", translation: "School has winter break in February." }
+    ],
+    488: [
+      { text: "La primavera inizia a *marzo*.", translation: "Spring begins in March." },
+      { text: "È nata a *marzo*.", translation: "She was born in March." },
+      { text: "Pianifichiamo un viaggio a *marzo*.", translation: "We're planning a trip in March." }
+    ],
+    489: [
+      { text: "Piove molto ad *aprile*.", translation: "It rains a lot in April." },
+      { text: "Pasqua è spesso ad *aprile*.", translation: "Easter is often in April." },
+      { text: "Festeggiamo il suo compleanno ad *aprile*.", translation: "We celebrate his birthday in April." }
+    ],
+    490: [
+      { text: "*Maggio* è uno dei mesi più belli.", translation: "May is one of the nicest months." },
+      { text: "I fiori sbocciano a *maggio*.", translation: "The flowers bloom in May." },
+      { text: "Ci sposiamo a *maggio*.", translation: "We're getting married in May." }
+    ],
+    491: [
+      { text: "La scuola finisce a *giugno*.", translation: "School ends in June." },
+      { text: "L'estate inizia a *giugno*.", translation: "Summer begins in June." },
+      { text: "Festeggiamo la festa a *giugno*.", translation: "We celebrate the festival in June." }
+    ],
+    492: [
+      { text: "*Luglio* è il mese più caldo.", translation: "July is the hottest month." },
+      { text: "Andiamo in vacanza a *luglio*.", translation: "We're going on holiday in July." },
+      { text: "Ha tutto *luglio* libero.", translation: "She has time off all of July." }
+    ],
+    493: [
+      { text: "La scuola ricomincia ad *agosto*.", translation: "School starts again in August." },
+      { text: "Fa ancora caldo ad *agosto*.", translation: "It's still hot in August." },
+      { text: "Festeggiamo il festival ad *agosto*.", translation: "We celebrate the festival in August." }
+    ],
+    494: [
+      { text: "L'autunno inizia a *settembre*.", translation: "Autumn begins in September." },
+      { text: "Ci siamo trasferiti qui a *settembre*.", translation: "We moved here in September." },
+      { text: "Le foglie iniziano a cadere a *settembre*.", translation: "The leaves start to fall in September." }
+    ],
+    495: [
+      { text: "Fa più freddo ad *ottobre*.", translation: "It gets colder in October." },
+      { text: "Festeggiamo Halloween alla fine di *ottobre*.", translation: "We celebrate Halloween at the end of October." },
+      { text: "È nata ad *ottobre*.", translation: "She was born in October." }
+    ],
+    496: [
+      { text: "*Novembre* è spesso grigio e umido.", translation: "November is often grey and wet." },
+      { text: "Accendiamo le candele a *novembre*.", translation: "We light candles in November." },
+      { text: "A volte nevica a *novembre*.", translation: "It sometimes snows in November." }
+    ],
+    497: [
+      { text: "Festeggiamo il Natale a *dicembre*.", translation: "We celebrate Christmas in December." },
+      { text: "*Dicembre* è il mese più buio.", translation: "December is the darkest month." },
+      { text: "La famiglia si riunisce a *dicembre*.", translation: "The family gathers in December." }
+    ],
+    498: [
+      { text: "Che *data* è oggi?", translation: "What's the date today?" },
+      { text: "Abbiamo fissato una *data* per la riunione.", translation: "We set a date for the meeting." },
+      { text: "La *data* sul biglietto era sbagliata.", translation: "The date on the ticket was wrong." }
+    ],
+    499: [
+      { text: "L'ho segnato sul mio *calendario*.", translation: "I wrote it in my calendar." },
+      { text: "Il *calendario* è appeso al muro.", translation: "The calendar hangs on the wall." },
+      { text: "Controlla il *calendario* per i giorni liberi.", translation: "Check the calendar for free days." }
+    ],
+    500: [
+      { text: "Buon *compleanno*!", translation: "Happy birthday!" },
+      { text: "Il mio *compleanno* è a maggio.", translation: "My birthday is in May." },
+      { text: "Abbiamo festeggiato il suo *compleanno* con la torta.", translation: "We celebrated her birthday with cake." }
     ]
   },
 
