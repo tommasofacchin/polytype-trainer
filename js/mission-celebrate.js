@@ -141,9 +141,19 @@
             const row = document.createElement("div");
             row.className = "mission-reward-row";
             row.style.setProperty("--delay", `${0.35 + index * 0.15}s`);
+            // The bar under the label runs empty-to-full here rather than
+            // arriving already finished, and the coin only lands once it gets
+            // there - so the reward reads as paid out by the mission
+            // completing. Both are pure CSS off --delay (see
+            // mission-bar-complete / mission-coin-land in style.css), which
+            // keeps the whole stagger in one place instead of split between a
+            // timer here and a transition there.
             row.innerHTML = `
-                <strong>${tr(mission.labelKey)}</strong>
-                <span><svg width="14" height="14" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#ffc73a"/><circle cx="12" cy="12" r="6.5" fill="none" stroke="#d99a1c" stroke-width="2"/></svg>+${mission.coinReward}</span>
+                <div class="mission-reward-head">
+                    <strong>${tr(mission.labelKey)}</strong>
+                    <span class="mission-reward-coin"><svg width="14" height="14" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#ffc73a"/><circle cx="12" cy="12" r="6.5" fill="none" stroke="#d99a1c" stroke-width="2"/></svg>+${mission.coinReward}</span>
+                </div>
+                <div class="mission-bar"><div class="mission-bar-fill"></div></div>
             `;
             list.appendChild(row);
         });
