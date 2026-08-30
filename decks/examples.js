@@ -7772,6 +7772,256 @@ window.DECK_EXAMPLES = {
       { text: "Questa è la *nostra* casa.", translation: "This is our house." },
       { text: "La *nostra* scuola è vicina al centro.", translation: "Our school is near the center." },
       { text: "La *nostra* famiglia è grande.", translation: "Our family is big." }
+    ],
+    51: [
+      { text: "Voglio *essere* felice.", translation: "I want to be happy." },
+      { text: "È bello *essere* a casa.", translation: "It's nice to be home." },
+      { text: "Vuole *essere* medico un giorno.", translation: "He wants to be a doctor someday." }
+    ],
+    52: [
+      { text: "Vorrei *avere* una tazza di tè.", translation: "I want to have a cup of tea." },
+      { text: "Non *abbiamo* molto tempo.", translation: "We don't have much time." },
+      { text: "Desidera *avere* un cane.", translation: "She wishes to have a dog." }
+    ],
+    53: [
+      { text: "*Vado* a scuola ogni giorno.", translation: "I go to school every day." },
+      { text: "*Andiamo* a fare una passeggiata?", translation: "Shall we go for a walk?" },
+      { text: "*Va* a casa velocemente.", translation: "She walks home quickly." }
+    ],
+    54: [
+      { text: "*Vengo* presto.", translation: "I'll come soon." },
+      { text: "Puoi *venire* qui?", translation: "Can you come here?" },
+      { text: "*Viene* dalla Germania.", translation: "He comes from Germany." }
+    ],
+    55: [
+      { text: "Cosa *fai* adesso?", translation: "What are you doing now?" },
+      { text: "*Faccio* del mio meglio.", translation: "I'm doing my best." },
+      { text: "Dobbiamo *fare* i compiti.", translation: "We have to do our homework." }
+    ],
+    56: [
+      { text: "*Mangio* la colazione alle otto.", translation: "I eat breakfast at eight." },
+      { text: "*Mangiamo* insieme stasera?", translation: "Shall we eat together tonight?" },
+      { text: "Non *mangia* mai carne.", translation: "She never eats meat." }
+    ],
+    57: [
+      { text: "*Bevo* acqua ogni giorno.", translation: "I drink water every day." },
+      { text: "Cosa vuoi *bere*?", translation: "What would you like to drink?" },
+      { text: "*Beve* il caffè senza zucchero.", translation: "He drinks coffee without sugar." }
+    ],
+    58: [
+      { text: "Sto *leggendo* un libro avvincente.", translation: "I'm reading an exciting book." },
+      { text: "Ti piace *leggere*?", translation: "Do you like to read?" },
+      { text: "*Legge* il giornale ogni mattina.", translation: "She reads the newspaper every morning." }
+    ],
+    59: [
+      { text: "Sto *scrivendo* una lettera a mia nonna.", translation: "I'm writing a letter to my grandmother." },
+      { text: "Puoi *scrivere* il tuo nome qui?", translation: "Can you write your name here?" },
+      { text: "*Scrive* libri di storia.", translation: "He writes books about history." }
+    ],
+    60: [
+      { text: "*Parlo* un po' d'italiano.", translation: "I speak a little Italian." },
+      { text: "Puoi *parlare* più lentamente?", translation: "Can you speak more slowly?" },
+      { text: "*Parla* tre lingue.", translation: "She speaks three languages." }
+    ],
+    61: [
+      { text: "Ho *un* gatto.", translation: "I have a cat." },
+      { text: "Posso avere *un* caffè?", translation: "Can I have a coffee?" },
+      { text: "C'è *un* uomo là fuori.", translation: "There's a man outside." }
+    ],
+    62: [
+      { text: "Ha comprato *una* borsa.", translation: "She bought a bag." },
+      { text: "Ho visto *una* gatta per strada.", translation: "I saw a cat on the street." },
+      { text: "Nella fattoria vive *una* capra.", translation: "A goat lives on the farm." }
+    ],
+    63: [
+      { text: "Ho *un* libro nuovo.", translation: "I have a new book." },
+      { text: "Posso avere *un* bicchiere d'acqua?", translation: "Can I have a glass of water?" },
+      { text: "Ha comprato *un* computer nuovo.", translation: "She bought a new computer." }
+    ],
+    64: [
+      { text: "Il libro è interessante. *Esso* parla di storia.", translation: "The book is interesting. It talks about history." },
+      { text: "Il quaderno è sul tavolo. *Esso* è blu.", translation: "The notebook is on the table. It is blue." },
+      { text: "Guarda il gatto. *Esso* dorme.", translation: "Look at the cat. It's sleeping." }
+    ],
+    65: [
+      { text: "Il computer è vecchio. *Esso* funziona ancora bene.", translation: "The computer is old. It still works well." },
+      { text: "Ho un nuovo telefono. *Esso* è molto veloce.", translation: "I have a new phone. It is very fast." },
+      { text: "Il treno è arrivato. *Esso* era in orario.", translation: "The train arrived. It was on time." }
+    ],
+    66: [
+      { text: "Vivo *qui* adesso.", translation: "I live here now." },
+      { text: "*Qui* ci sono le tue chiavi.", translation: "Here are your keys." },
+      { text: "Aspetta *qui*, per favore.", translation: "Wait here, please." }
+    ],
+    67: [
+      { text: "Il libro è *lì*.", translation: "The book is over there." },
+      { text: "Chi è *lì*?", translation: "Who is there?" },
+      { text: "Ci siamo incontrati *lì* l'anno scorso.", translation: "We met there last year." }
+    ],
+    68: [
+      { text: "Devo andare *ora*.", translation: "I have to go now." },
+      { text: "Cosa fai *ora*?", translation: "What are you doing now?" },
+      { text: "*Ora* è ora di mangiare.", translation: "Now it's time to eat." }
+    ],
+    69: [
+      { text: "Ci sentiamo *più tardi*.", translation: "We'll talk later." },
+      { text: "Arrivo *più tardi* stasera.", translation: "I'll come later tonight." },
+      { text: "Possiamo farlo *più tardi*?", translation: "Can we do it later?" }
+    ],
+    70: [
+      { text: "È *sempre* allegra.", translation: "She's always happy." },
+      { text: "Bevo *sempre* caffè al mattino.", translation: "I always drink coffee in the morning." },
+      { text: "Arriva *sempre* in ritardo.", translation: "He always comes late." }
+    ],
+    71: [
+      { text: "Cosa facciamo *oggi*?", translation: "What shall we do today?" },
+      { text: "*Oggi* fa bel tempo.", translation: "Today the weather is nice." },
+      { text: "Ho molto da fare *oggi*.", translation: "I have a lot to do today." }
+    ],
+    72: [
+      { text: "Ci vediamo *domani*!", translation: "See you tomorrow!" },
+      { text: "*Domani* parto per Roma.", translation: "Tomorrow I'll travel to Rome." },
+      { text: "Cosa succede *domani*?", translation: "What's happening tomorrow?" }
+    ],
+    73: [
+      { text: "*Ieri* ero al lavoro.", translation: "Yesterday I was at work." },
+      { text: "Abbiamo visto un film *ieri*.", translation: "We watched a movie yesterday." },
+      { text: "Ha piovuto molto *ieri*.", translation: "It rained a lot yesterday." }
+    ],
+    74: [
+      { text: "Lavoro cinque giorni alla *settimana*.", translation: "I work five days a week." },
+      { text: "La prossima *settimana* viaggiamo.", translation: "Next week we're going to travel." },
+      { text: "La *settimana* è stata frenetica.", translation: "The week has been busy." }
+    ],
+    75: [
+      { text: "Ci trasferiamo il prossimo *mese*.", translation: "We're moving next month." },
+      { text: "Ogni *mese* pago l'affitto.", translation: "Every month I pay rent." },
+      { text: "Il *mese* è passato in fretta.", translation: "The month went by quickly." }
+    ],
+    76: [
+      { text: "Guidava una macchina *rossa*.", translation: "He drove a red car." },
+      { text: "Il fiore è *rosso* e bello.", translation: "The flower is red and beautiful." },
+      { text: "Mi piace il maglione *rosso*.", translation: "I like the red sweater." }
+    ],
+    77: [
+      { text: "Il cielo è *blu* oggi.", translation: "The sky is blue today." },
+      { text: "Ha gli occhi *blu*.", translation: "She has blue eyes." },
+      { text: "Ho comprato una giacca *blu*.", translation: "I bought a blue jacket." }
+    ],
+    78: [
+      { text: "L'erba è *verde* d'estate.", translation: "The grass is green in summer." },
+      { text: "Ha una macchina *verde*.", translation: "He has a green car." },
+      { text: "Mi piace la camicia *verde*.", translation: "I like the green shirt." }
+    ],
+    79: [
+      { text: "Il sole è *giallo*.", translation: "The sun is yellow." },
+      { text: "Ha un vestito *giallo*.", translation: "She has a yellow dress." },
+      { text: "La casa *gialla* è nostra.", translation: "The yellow house is ours." }
+    ],
+    80: [
+      { text: "Il gatto è completamente *nero*.", translation: "The cat is completely black." },
+      { text: "Ha una macchina *nera*.", translation: "He has a black car." },
+      { text: "Ho comprato scarpe *nere*.", translation: "I bought black shoes." }
+    ],
+    81: [
+      { text: "La neve è *bianca* e fredda.", translation: "The snow is white and cold." },
+      { text: "Ha una casa *bianca*.", translation: "She has a white house." },
+      { text: "Indossa una camicia *bianca*.", translation: "He wears a white shirt." }
+    ],
+    82: [
+      { text: "Il mio cane è *marrone*.", translation: "My dog is brown." },
+      { text: "Ha gli occhi *marroni*.", translation: "She has brown eyes." },
+      { text: "Ho comprato un tavolo *marrone*.", translation: "I bought a brown table." }
+    ],
+    83: [
+      { text: "La bambina ha un vestito *rosa*.", translation: "The girl has a pink dress." },
+      { text: "I fiori sono *rosa*.", translation: "The flowers are pink." },
+      { text: "Ha dipinto la stanza di *rosa*.", translation: "She painted the room pink." }
+    ],
+    84: [
+      { text: "Il tramonto era *arancione*.", translation: "The sunset was orange." },
+      { text: "Ha una giacca *arancione*.", translation: "He has an orange jacket." },
+      { text: "L'arancia è *arancione*.", translation: "The orange is orange." }
+    ],
+    85: [
+      { text: "Il fiore è *viola*.", translation: "The flower is purple." },
+      { text: "Ha una borsa *viola*.", translation: "She has a purple bag." },
+      { text: "Il cielo è diventato *viola* la sera.", translation: "The sky turned purple in the evening." }
+    ],
+    86: [
+      { text: "Ho solo *un* fratello.", translation: "I only have one brother." },
+      { text: "Posso avere *uno*?", translation: "Can I have one?" },
+      { text: "È venuto solo *uno* dei bambini.", translation: "Only one of the children came." }
+    ],
+    87: [
+      { text: "Ho *due* fratelli.", translation: "I have two siblings." },
+      { text: "Sono le *due*.", translation: "It's two o'clock." },
+      { text: "La casa ha *due* piani.", translation: "The house has two floors." }
+    ],
+    88: [
+      { text: "Ho *tre* figli.", translation: "I have three children." },
+      { text: "Sono le *tre*.", translation: "It's three o'clock." },
+      { text: "Abbiamo aspettato *tre* ore.", translation: "We waited for three hours." }
+    ],
+    89: [
+      { text: "Il tavolo ha *quattro* sedie.", translation: "The table has four chairs." },
+      { text: "Sono le *quattro*.", translation: "It's four o'clock." },
+      { text: "Siamo in *quattro* in famiglia.", translation: "There are four of us in the family." }
+    ],
+    90: [
+      { text: "Ho *cinque* amici qui.", translation: "I have five friends here." },
+      { text: "Sono le *cinque*.", translation: "It's five o'clock." },
+      { text: "La casa ha *cinque* stanze.", translation: "The house has five rooms." }
+    ],
+    91: [
+      { text: "Sono le *sei*.", translation: "It's six o'clock." },
+      { text: "Siamo in *sei* persone.", translation: "We are six people." },
+      { text: "Dorme *sei* ore ogni notte.", translation: "He sleeps six hours every night." }
+    ],
+    92: [
+      { text: "Sono le *sette*.", translation: "It's seven o'clock." },
+      { text: "Ha *sette* libri sul tavolo.", translation: "She has seven books on the table." },
+      { text: "Ha mangiato *sette* fragole.", translation: "He ate seven strawberries." }
+    ],
+    93: [
+      { text: "Sono le *otto*.", translation: "It's eight o'clock." },
+      { text: "Lavoro *otto* ore al giorno.", translation: "I work eight hours a day." },
+      { text: "Eravamo in *otto* alla festa.", translation: "There were eight of us at the party." }
+    ],
+    94: [
+      { text: "Sono le *nove*.", translation: "It's nine o'clock." },
+      { text: "Ha *nove* anni.", translation: "She's nine years old." },
+      { text: "Abbiamo aspettato *nove* minuti.", translation: "We waited nine minutes." }
+    ],
+    95: [
+      { text: "Sono le *dieci*.", translation: "It's ten o'clock." },
+      { text: "Ha *dieci* dita.", translation: "He has ten fingers." },
+      { text: "Abbiamo vissuto lì per *dieci* anni.", translation: "We lived there for ten years." }
+    ],
+    96: [
+      { text: "*Dove* abiti?", translation: "Where do you live?" },
+      { text: "Sai *dove* è il libro?", translation: "Do you know where the book is?" },
+      { text: "*Dove* ci vediamo?", translation: "Where shall we meet?" }
+    ],
+    97: [
+      { text: "*Cosa* c'è?", translation: "What is that?" },
+      { text: "*Cosa* stai facendo?", translation: "What are you doing now?" },
+      { text: "Non so *cosa* dire.", translation: "I don't know what to say." }
+    ],
+    98: [
+      { text: "*Chi* è?", translation: "Who is that?" },
+      { text: "*Chi* viene stasera?", translation: "Who's coming tonight?" },
+      { text: "Sai *chi* è lei?", translation: "Do you know who she is?" }
+    ],
+    99: [
+      { text: "*Quando* arrivi?", translation: "When are you coming?" },
+      { text: "Non so *quando* parte il treno.", translation: "I don't know when the train leaves." },
+      { text: "*Quando* è il tuo compleanno?", translation: "When is your birthday?" }
+    ],
+    100: [
+      { text: "*Perché* sei in ritardo?", translation: "Why are you late?" },
+      { text: "*Perché* non ti piace il pesce?", translation: "Why don't you like fish?" },
+      { text: "Non so *perché* se n'è andato.", translation: "I don't know why he left." }
     ]
   },
 
