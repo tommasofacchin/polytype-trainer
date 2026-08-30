@@ -6769,6 +6769,256 @@ window.DECK_EXAMPLES = {
       { text: "Kannst du diese *Flasche* öffnen?", translation: "Can you open this bottle?" },
       { text: "Die *Flasche* war voller Wasser.", translation: "The bottle was full of water." },
       { text: "Wir kauften eine *Flasche* Wein für die Party.", translation: "We bought a bottle of wine for the party." }
+    ],
+    351: [
+      { text: "Das Essen steht auf dem *Tisch*.", translation: "The food is on the table." },
+      { text: "Wir haben einen neuen *Tisch* fürs Wohnzimmer gekauft.", translation: "We bought a new table for the living room." },
+      { text: "Setz dich an den *Tisch*.", translation: "Sit down at the table." }
+    ],
+    352: [
+      { text: "Dieser *Stuhl* ist sehr bequem.", translation: "This chair is very comfortable." },
+      { text: "Kannst du mir einen *Stuhl* holen?", translation: "Can you get me a chair?" },
+      { text: "Wir brauchen mehr *Stühle* fürs Abendessen.", translation: "We need more chairs for the dinner." }
+    ],
+    353: [
+      { text: "Ich gehe um zehn Uhr ins *Bett*.", translation: "I get into bed at ten." },
+      { text: "Mein *Bett* ist sehr weich.", translation: "My bed is very soft." },
+      { text: "Das Kind schläft in einem kleinen *Bett*.", translation: "The child sleeps in a small bed." }
+    ],
+    354: [
+      { text: "Kannst du die *Tür* schließen?", translation: "Can you close the door?" },
+      { text: "Die *Tür* war abgeschlossen.", translation: "The door was locked." },
+      { text: "Er klopfte an die *Tür*.", translation: "He knocked on the door." }
+    ],
+    355: [
+      { text: "Kannst du das *Fenster* öffnen?", translation: "Can you open the window?" },
+      { text: "Das *Fenster* war schmutzig.", translation: "The window was dirty." },
+      { text: "Die Sonne schien durch das *Fenster* herein.", translation: "The sun shone in through the window." }
+    ],
+    356: [
+      { text: "Das Bild hängt an der *Wand*.", translation: "The picture hangs on the wall." },
+      { text: "Die *Wand* ist weiß gestrichen.", translation: "The wall is painted white." },
+      { text: "Wir haben ein Regal an der *Wand* angebracht.", translation: "We attached a shelf to the wall." }
+    ],
+    357: [
+      { text: "Der *Boden* ist im Winter kalt.", translation: "The floor is cold in winter." },
+      { text: "Sie hat gestern den *Boden* gewischt.", translation: "She washed the floor yesterday." },
+      { text: "Das Kind spielt auf dem *Boden*.", translation: "The child is playing on the floor." }
+    ],
+    358: [
+      { text: "Das *Dach* tropft, wenn es regnet.", translation: "The roof leaks when it rains." },
+      { text: "Wir haben das *Dach* im Sommer gestrichen.", translation: "We painted the roof this summer." },
+      { text: "Der Schnee bedeckte das ganze *Dach*.", translation: "The snow covered the whole roof." }
+    ],
+    359: [
+      { text: "Wir bauen Gemüse im *Garten* an.", translation: "We grow vegetables in the garden." },
+      { text: "Unser *Garten* ist voller Blumen.", translation: "Our garden is full of flowers." },
+      { text: "Die Kinder spielen jeden Tag im *Garten*.", translation: "The children play in the garden every day." }
+    ],
+    360: [
+      { text: "Das Auto steht in der *Garage*.", translation: "The car is in the garage." },
+      { text: "Wir haben letztes Jahr eine neue *Garage* gebaut.", translation: "We built a new garage last year." },
+      { text: "Die *Garage* ist voller Werkzeug.", translation: "The garage is full of tools." }
+    ],
+    361: [
+      { text: "Die *Lampe* im Wohnzimmer ist sehr schön.", translation: "The lamp in the living room is very nice." },
+      { text: "Kannst du die *Lampe* anmachen?", translation: "Can you turn on the lamp?" },
+      { text: "Wir haben eine neue *Lampe* fürs Schlafzimmer gekauft.", translation: "We bought a new lamp for the bedroom." }
+    ],
+    362: [
+      { text: "Sie schaut sich im *Spiegel* an.", translation: "She looks at herself in the mirror." },
+      { text: "Der *Spiegel* im Badezimmer ist groß.", translation: "The mirror in the bathroom is big." },
+      { text: "Wir haben einen neuen *Spiegel* im Flur aufgehängt.", translation: "We hung up a new mirror in the hallway." }
+    ],
+    363: [
+      { text: "Kannst du mir ein *Handtuch* geben?", translation: "Can you give me a towel?" },
+      { text: "Das *Handtuch* war nass.", translation: "The towel was wet." },
+      { text: "Wir waschen die *Handtücher* jede Woche.", translation: "We wash the towels every week." }
+    ],
+    364: [
+      { text: "Wasch dir die Hände mit *Seife*.", translation: "Wash your hands with soap." },
+      { text: "Die *Seife* roch nach Lavendel.", translation: "The soap smelled like lavender." },
+      { text: "Wir brauchen mehr *Seife* im Badezimmer.", translation: "We need more soap in the bathroom." }
+    ],
+    365: [
+      { text: "Die Milch ist im *Kühlschrank*.", translation: "The milk is in the fridge." },
+      { text: "Unser *Kühlschrank* ist fast leer.", translation: "Our fridge is almost empty." },
+      { text: "Wir haben gestern einen neuen *Kühlschrank* gekauft.", translation: "We bought a new fridge yesterday." }
+    ],
+    366: [
+      { text: "Das Brot ist im *Ofen*.", translation: "The bread is in the oven." },
+      { text: "Der *Ofen* ist jetzt sehr heiß.", translation: "The oven is very hot now." },
+      { text: "Sie hat den Kuchen in den *Ofen* gestellt.", translation: "She put the cake in the oven." }
+    ],
+    367: [
+      { text: "Wir sitzen auf dem *Sofa* und schauen fern.", translation: "We're sitting on the sofa watching TV." },
+      { text: "Das *Sofa* ist weich und bequem.", translation: "The sofa is soft and comfortable." },
+      { text: "Die Katze schläft immer auf dem *Sofa*.", translation: "The cat always sleeps on the sofa." }
+    ],
+    368: [
+      { text: "Das Buch steht im *Regal*.", translation: "The book is on the shelf." },
+      { text: "Wir brauchen ein neues *Regal* für die Küche.", translation: "We need a new shelf for the kitchen." },
+      { text: "Das *Regal* ist voller Bücher.", translation: "The shelf is full of books." }
+    ],
+    369: [
+      { text: "Er rannte die *Treppe* hinauf.", translation: "He ran up the stairs." },
+      { text: "Die *Treppe* ist steil und schmal.", translation: "The stairs are steep and narrow." },
+      { text: "Sei vorsichtig auf der *Treppe*.", translation: "Be careful on the stairs." }
+    ],
+    370: [
+      { text: "Wir haben den *Aufzug* in den fünften Stock genommen.", translation: "We took the elevator up to the fifth floor." },
+      { text: "Der *Aufzug* war heute kaputt.", translation: "The elevator was broken today." },
+      { text: "Er hat Angst, den *Aufzug* zu nehmen.", translation: "He's afraid of taking the elevator." }
+    ],
+    371: [
+      { text: "Wir haben einen *Hund* namens Rex.", translation: "We have a dog named Rex." },
+      { text: "Der *Hund* rannte dem Ball hinterher.", translation: "The dog ran after the ball." },
+      { text: "Er geht jeden Morgen mit dem *Hund* raus.", translation: "He walks the dog every morning." }
+    ],
+    372: [
+      { text: "Die *Katze* schläft den ganzen Tag.", translation: "The cat sleeps all day." },
+      { text: "Wir haben letztes Jahr eine *Katze* adoptiert.", translation: "We adopted a cat last year." },
+      { text: "Unsere *Katze* ist schwarz und weiß.", translation: "Our cat is black and white." }
+    ],
+    373: [
+      { text: "Ich hörte draußen einen *Vogel* singen.", translation: "I heard a bird singing outside." },
+      { text: "Der *Vogel* flog schnell weg.", translation: "The bird flew away quickly." },
+      { text: "Wir sahen viele *Vögel* im Park.", translation: "We saw many birds in the park." }
+    ],
+    374: [
+      { text: "Sie reitet jedes Wochenende ein *Pferd*.", translation: "She rides a horse every weekend." },
+      { text: "Das *Pferd* rannte schnell über das Feld.", translation: "The horse ran fast across the field." },
+      { text: "Wir sahen *Pferde* auf dem Bauernhof.", translation: "We saw horses at the farm." }
+    ],
+    375: [
+      { text: "Der Bauer hat viele *Kühe*.", translation: "The farmer has many cows." },
+      { text: "Die *Kuh* graste auf dem Feld.", translation: "The cow grazed in the field." },
+      { text: "Wir sahen *Kühe* am Straßenrand.", translation: "We saw cows along the road." }
+    ],
+    376: [
+      { text: "Es gibt viele *Schafe* auf dem Berg.", translation: "There are many sheep in the mountains." },
+      { text: "Das *Schaf* hatte weiße Wolle.", translation: "The sheep had white wool." },
+      { text: "Der Bauer schert die *Schafe* im Frühling.", translation: "The farmer shears the sheep in spring." }
+    ],
+    377: [
+      { text: "Der Bauer hat fünf *Schweine*.", translation: "The farmer has five pigs." },
+      { text: "Das *Schwein* war rosa und schmutzig.", translation: "The pig was pink and dirty." },
+      { text: "Wir sahen *Schweine* beim Hofbesuch.", translation: "We saw pigs on the farm visit." }
+    ],
+    378: [
+      { text: "Das *Huhn* legte jeden Tag Eier.", translation: "The hen laid eggs every day." },
+      { text: "Wir haben fünf *Hühner* im Garten.", translation: "We have five hens in the garden." },
+      { text: "Die *Hühner* liefen auf dem Hof herum.", translation: "The hens ran around the farmyard." }
+    ],
+    379: [
+      { text: "In der Küche ist eine *Maus*.", translation: "There's a mouse in the kitchen." },
+      { text: "Die Katze jagte die *Maus*.", translation: "The cat chased the mouse." },
+      { text: "Wir sahen eine kleine *Maus* vorbeilaufen.", translation: "We saw a small mouse run by." }
+    ],
+    380: [
+      { text: "Die Kinder haben ein *Kaninchen* als Haustier.", translation: "The children have a rabbit as a pet." },
+      { text: "Das *Kaninchen* fraß Karotten.", translation: "The rabbit ate carrots." },
+      { text: "Wir sahen ein wildes *Kaninchen* im Garten.", translation: "We saw a wild rabbit in the garden." }
+    ],
+    381: [
+      { text: "Wir haben einen *Baum* im Garten gepflanzt.", translation: "We planted a tree in the garden." },
+      { text: "Der *Baum* ist sehr hoch.", translation: "The tree is very tall." },
+      { text: "Die Vögel bauten ein Nest im *Baum*.", translation: "The birds built a nest in the tree." }
+    ],
+    382: [
+      { text: "Sie gab mir eine *Blume*.", translation: "She gave me a flower." },
+      { text: "Die *Blumen* im Garten sind wunderschön.", translation: "The flowers in the garden are beautiful." },
+      { text: "Wir haben im Frühling neue *Blumen* gepflanzt.", translation: "We planted new flowers in spring." }
+    ],
+    383: [
+      { text: "Das *Gras* ist im Sommer grün.", translation: "The grass is green in summer." },
+      { text: "Die Kinder spielen auf dem *Gras*.", translation: "The children are playing on the grass." },
+      { text: "Wir mähen jede Woche das *Gras*.", translation: "We mow the grass every week." }
+    ],
+    384: [
+      { text: "Wir sind gestern auf den *Berg* geklettert.", translation: "We climbed the mountain yesterday." },
+      { text: "Der *Berg* war mit Schnee bedeckt.", translation: "The mountain was covered in snow." },
+      { text: "Die Aussicht vom *Berg* war fantastisch.", translation: "The view from the mountain was fantastic." }
+    ],
+    385: [
+      { text: "Der *Fluss* fließt durch die Stadt.", translation: "The river runs through the city." },
+      { text: "Wir haben gestern im *Fluss* geangelt.", translation: "We fished in the river yesterday." },
+      { text: "Die Kinder schwammen im *Fluss*.", translation: "The children swam in the river." }
+    ],
+    386: [
+      { text: "Wir wohnen in der Nähe vom *Meer*.", translation: "We live near the sea." },
+      { text: "Das *Meer* war heute ruhig.", translation: "The sea was calm today." },
+      { text: "Sie segelten über das *Meer*.", translation: "They sailed across the sea." }
+    ],
+    387: [
+      { text: "Wir schwimmen im Sommer im *See*.", translation: "We swim in the lake in summer." },
+      { text: "Der *See* war still und klar.", translation: "The lake was calm and clear." },
+      { text: "Die Hütte liegt an einem kleinen *See*.", translation: "The cabin is by a small lake." }
+    ],
+    388: [
+      { text: "Wir haben einen Spaziergang im *Wald* gemacht.", translation: "We went for a walk in the forest." },
+      { text: "Der *Wald* war voller Bäume und Vögel.", translation: "The forest was full of trees and birds." },
+      { text: "Die Kinder sammelten Pilze im *Wald*.", translation: "The children picked mushrooms in the forest." }
+    ],
+    389: [
+      { text: "Wir haben den ganzen Tag am *Strand* verbracht.", translation: "We spent the whole day at the beach." },
+      { text: "Der *Strand* war voller Leute.", translation: "The beach was full of people." },
+      { text: "Die Kinder bauten Sandburgen am *Strand*.", translation: "The children built sandcastles on the beach." }
+    ],
+    390: [
+      { text: "Der *Himmel* ist heute blau.", translation: "The sky is blue today." },
+      { text: "Wir sahen die Sterne am *Himmel*.", translation: "We saw the stars in the sky." },
+      { text: "Der *Himmel* wurde bei Sonnenuntergang rot.", translation: "The sky turned red at sunset." }
+    ],
+    391: [
+      { text: "Sie ist *dreißig* Jahre alt.", translation: "She's thirty years old." },
+      { text: "Wir haben *dreißig* Minuten gewartet.", translation: "We waited thirty minutes." },
+      { text: "Der April hat *dreißig* Tage.", translation: "April has thirty days." }
+    ],
+    392: [
+      { text: "Er ist *vierzig* Jahre alt.", translation: "He's forty years old." },
+      { text: "Wir sind *vierzig* Minuten gefahren.", translation: "We drove for forty minutes." },
+      { text: "Das Ticket kostete *vierzig* Euro.", translation: "The ticket cost forty euros." }
+    ],
+    393: [
+      { text: "Oma ist *fünfzig* Jahre alt.", translation: "Grandma is fifty years old." },
+      { text: "Wir haben *fünfzig* Minuten auf das Flugzeug gewartet.", translation: "We waited fifty minutes for the plane." },
+      { text: "Es gab *fünfzig* Gäste bei der Hochzeit.", translation: "There were fifty guests at the wedding." }
+    ],
+    394: [
+      { text: "Es ist *hundert* Jahre her, dass das Haus gebaut wurde.", translation: "It's a hundred years since the house was built." },
+      { text: "Wir haben *hundert* Euro für das Ticket bezahlt.", translation: "We paid a hundred euros for the ticket." },
+      { text: "Es waren *hundert* Menschen beim Konzert.", translation: "There were a hundred people at the concert." }
+    ],
+    395: [
+      { text: "Die Stadt hat über *tausend* Einwohner.", translation: "The town has over a thousand inhabitants." },
+      { text: "Wir haben *tausend* Euro für die Reise bezahlt.", translation: "We paid a thousand euros for the trip." },
+      { text: "Es waren *tausend* Sterne am Himmel.", translation: "There were a thousand stars in the sky." }
+    ],
+    396: [
+      { text: "Der Himmel ist heute *grau*.", translation: "The sky is grey today." },
+      { text: "Er hat ein *graues* Auto.", translation: "He has a grey car." },
+      { text: "Ihre Katze ist *grau* und weiß.", translation: "Her cat is grey and white." }
+    ],
+    397: [
+      { text: "Das ist mein *erster* Tag bei der Arbeit.", translation: "This is my first day at work." },
+      { text: "Wir wohnen im *ersten* Stock.", translation: "We live on the first floor." },
+      { text: "Sie kam *als Erste* ins Ziel.", translation: "She came first in the race." }
+    ],
+    398: [
+      { text: "Das ist der *letzte* Tag des Urlaubs.", translation: "This is the last day of the holiday." },
+      { text: "Er war der *Letzte*, der ging.", translation: "He was the last one to leave." },
+      { text: "Es war der *letzte* Apfel im Korb.", translation: "It was the last apple in the basket." }
+    ],
+    399: [
+      { text: "Wir haben den Kuchen in zwei *Hälften* geteilt.", translation: "We divided the cake into two halves." },
+      { text: "Ich habe nur eine *Hälfte* des Apfels gegessen.", translation: "I only ate half of the apple." },
+      { text: "Die zweite *Hälfte* des Films war besser.", translation: "The second half of the movie was better." }
+    ],
+    400: [
+      { text: "Wie ist deine *Nummer*?", translation: "What's your number?" },
+      { text: "Wir wohnen in *Nummer* zehn.", translation: "We live at number ten." },
+      { text: "Kannst du mir ihre *Nummer* geben?", translation: "Can you give me her number?" }
     ]
   },
 
