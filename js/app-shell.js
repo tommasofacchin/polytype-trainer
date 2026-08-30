@@ -49,7 +49,7 @@
     function applyFavicon() {
         const language = localStorage.getItem("polytype-language") || "chinese";
         const icon = document.querySelector('link[rel="icon"]');
-        if (icon) icon.href = LANGUAGE_FLAGS[language] || LANGUAGE_FLAGS.chinese;
+        if (icon) icon.href = getLanguageFlag(language);
     }
 
     applyFavicon();
@@ -224,7 +224,7 @@
         if (!mount) return;
 
         const language = localStorage.getItem("polytype-language") || "chinese";
-        const flagSrc = LANGUAGE_FLAGS[language] || LANGUAGE_FLAGS.chinese;
+        const flagSrc = getLanguageFlag(language);
         const cached = readCachedProfile();
         const keysHeld = getKeysHeldForLanguage(language, cached);
         const coinsHeld = getCoinsForLanguage(language, cached);
@@ -253,6 +253,10 @@
 
         renderHeaderAuth(window.PolytypeFirebase?.state || {});
         setupFlagMenu();
+    }
+
+    function getLanguageFlag(language) {
+        return LANGUAGE_FLAGS[language] || LANGUAGE_FLAGS.chinese;
     }
 
     function getLanguageLabel(language) {
@@ -976,6 +980,9 @@
         releaseKeyDisplay,
         playKeyGain,
         paintStreakAhead,
+        // So pages that want to name the active course (Home's "Learning
+        // Norwegian" pill) don't have to keep their own copy of the flag map.
+        getLanguageFlag,
         // The level curve, for callers that need to know where the next
         // boundary is rather than just painting the bar - e.g. aiming
         // playXpGain at an XP total that crosses one.

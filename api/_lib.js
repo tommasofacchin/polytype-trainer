@@ -659,6 +659,14 @@ function diffDateKeys(fromKey, toKey) {
   return Math.round((dateKeyToUtc(toKey) - dateKeyToUtc(fromKey)) / 86400000);
 }
 
+// The inverse of diffDateKeys: walks a "YYYY-MM-DD" key forward or back by
+// whole days. Pure UTC arithmetic on the key itself, so it never drifts across
+// a DST boundary the way adding 86400000ms to a local Date would - the keys are
+// already resolved in the user's timezone by getDateKeyForTimezone.
+function shiftDateKey(dateKey, days) {
+  return new Date(dateKeyToUtc(dateKey) + days * 86400000).toISOString().slice(0, 10);
+}
+
 function dateKeyToUtc(dateKey) {
   const [year, month, day] = dateKey.split("-").map(Number);
   return Date.UTC(year, month - 1, day);
@@ -796,6 +804,7 @@ module.exports = {
   getWeekKey,
   calculateWeeklyXpUpdate,
   diffDateKeys,
+  shiftDateKey,
   getFriendPairId,
   pickFriendProfile,
   buildLeaderboard,

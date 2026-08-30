@@ -47,6 +47,44 @@
         </div>
       </div>
 
+      <!-- Practice heatmap: 13 weeks x 7 days of dailyStats, oldest cell top
+           left, today bottom right (js/profile.js fills it column by column
+           to match .activity-grid's grid-auto-flow). -->
+      <article class="profile-detail-card">
+        <div class="profile-card-head">
+          <div>
+            <span class="profile-card-label" data-i18n="profile.activity">Activity</span>
+            <strong data-i18n="profile.activityWindow">Last 13 weeks</strong>
+          </div>
+          <div class="activity-legend" aria-hidden="true">
+            <span data-i18n="profile.activityLess">Less</span>
+            <i class="activity-cell" data-level="0"></i>
+            <i class="activity-cell" data-level="1"></i>
+            <i class="activity-cell" data-level="2"></i>
+            <i class="activity-cell" data-level="3"></i>
+            <i class="activity-cell" data-level="4"></i>
+            <span data-i18n="profile.activityMore">More</span>
+          </div>
+        </div>
+
+        <div id="profile-activity-grid" class="activity-grid"></div>
+
+        <div class="activity-footer">
+          <div class="activity-stat">
+            <strong id="profile-activity-streak">0</strong>
+            <span data-i18n="profile.dayStreak">Day streak</span>
+          </div>
+          <div class="activity-stat">
+            <strong id="profile-activity-week">0</strong>
+            <span data-i18n="profile.thisWeek">this week</span>
+          </div>
+          <div class="activity-stat">
+            <strong id="profile-activity-retention">-</strong>
+            <span data-i18n="profile.retention">retention</span>
+          </div>
+        </div>
+      </article>
+
       <article class="profile-detail-card">
         <div class="profile-card-head">
           <div>

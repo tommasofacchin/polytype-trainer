@@ -1,5 +1,5 @@
 const admin = require("firebase-admin");
-const { getFirestore, FieldValue, Timestamp } = require("firebase-admin/firestore");
+const { getFirestore, FieldPath, FieldValue, Timestamp } = require("firebase-admin/firestore");
 const { getAuth } = require("firebase-admin/auth");
 
 if (!admin.apps.length) {
@@ -15,6 +15,7 @@ if (!admin.apps.length) {
 module.exports = {
   db: getFirestore(),
   auth: getAuth(),
+  FieldPath,
   FieldValue,
   Timestamp
 };

@@ -53,7 +53,15 @@ const BADGE_ICONS = {
     locked: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>'
 };
 
+// 13 columns x 7 rows, the same window api/get-activity-history.js queries.
+const ACTIVITY_DAYS = 91;
+
 let currentProfile = { ...defaultProfile };
+// null until the history request lands. The grid draws either way - with no
+// history every day is simply a rest day, which is also the right picture for
+// a signed-out visitor.
+let activityHistory = null;
+let activityRequested = false;
 
 function tr(key, params = {}) {
     return window.PolytypeI18n?.t?.(key, params) || key;
@@ -101,7 +109,29 @@ function setupFirebaseSync() {
             courses: authState.profile.courses
         });
         renderProfilePage(currentProfile);
+        loadActivityHistory();
     });
+}
+
+// Its own request rather than a field on the profile: the heatmap needs 91
+// dailyStats docs, which nothing else on any page wants, and the card is far
+// enough down the profile that it can fill in a moment after the hero paints.
+function loadActivityHistory() {
+    const firebaseClient = window.PolytypeFirebase;
+    if (activityRequested || !firebaseClient?.getActivityHistory) return;
+    activityRequested = true;
+
+    firebaseClient.getActivityHistory()
+        .then(result => {
+            activityHistory = result.data || null;
+            renderActivity(sanitizeProfile(currentProfile));
+        })
+        .catch(() => {
+            // Leaves the all-rest-days frame on screen and allows a retry on
+            // the next auth tick - an empty grid says "nothing yet" far
+            // better than an error message in the middle of the profile.
+            activityRequested = false;
+        });
 }
 
 function setupLocalProfileSync() {
@@ -128,7 +158,81 @@ function renderProfilePage(profile) {
     if (xpFill) xpFill.style.width = `${levelInfo.progress}%`;
 
     renderAvatar(document.getElementById("profile-page-avatar"), safeProfile);
+    renderActivity(safeProfile);
     renderBadges(safeProfile.badges);
+}
+
+// Draws the last ACTIVITY_DAYS days as a fixed 13x7 block, oldest at the top
+// left and today at the bottom right. .activity-grid flows column by column,
+// so appending the days oldest-first is all the ordering this needs.
+function renderActivity(profile) {
+    const grid = document.getElementById("profile-activity-grid");
+    if (!grid) return;
+
+    const todayKey = activityHistory?.todayKey || getTodayKey();
+    const statsByDate = new Map((activityHistory?.days || []).map(day => [day.date, day]));
+
+    const days = [];
+    for (let offset = ACTIVITY_DAYS - 1; offset >= 0; offset -= 1) {
+        const date = shiftDateKey(todayKey, -offset);
+        days.push({ date, ...(statsByDate.get(date) || { xp: 0, correctAnswers: 0, wrongAnswers: 0 }) });
+    }
+
+    // Levels are scaled against the player's own busiest day rather than a
+    // fixed XP ladder, so the grid always spans its full range whether
+    // somebody scores 40 XP a day or 4000.
+    const busiestXp = days.reduce((max, day) => Math.max(max, day.xp), 0);
+
+    grid.replaceChildren(
+        ...days.map(day => {
+            const cell = document.createElement("i");
+            cell.className = "activity-cell";
+            cell.dataset.level = String(getActivityLevel(day.xp, busiestXp));
+            if (day.date === todayKey) cell.dataset.today = "true";
+            cell.title = day.xp
+                ? tr("profile.activityDay", { date: formatActivityDate(day.date), xp: day.xp.toLocaleString() })
+                : tr("profile.activityRestDay", { date: formatActivityDate(day.date) });
+            return cell;
+        })
+    );
+
+    const weekXp = days.slice(-7).reduce((sum, day) => sum + day.xp, 0);
+    const correct = days.reduce((sum, day) => sum + (day.correctAnswers || 0), 0);
+    const answered = correct + days.reduce((sum, day) => sum + (day.wrongAnswers || 0), 0);
+
+    setText("profile-activity-streak", String(profile.dayStreak));
+    setText("profile-activity-week", weekXp.toLocaleString());
+    // A dash, not "0%": nobody who has answered nothing has 0% retention.
+    setText("profile-activity-retention", answered ? `${Math.round((correct / answered) * 100)}%` : "-");
+}
+
+function getActivityLevel(xp, busiestXp) {
+    if (xp <= 0 || busiestXp <= 0) return 0;
+    const share = xp / busiestXp;
+    if (share <= 0.25) return 1;
+    if (share <= 0.5) return 2;
+    if (share <= 0.75) return 3;
+    return 4;
+}
+
+// Matches getDateKeyForTimezone in api/_lib.js - en-CA is the shortest way to
+// an ISO date key in the browser's own timezone, which is the timezone the
+// server keyed those dailyStats docs by in the first place.
+function getTodayKey() {
+    return new Intl.DateTimeFormat("en-CA", { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone }).format(new Date());
+}
+
+// UTC arithmetic on the key itself so a DST change can't shift a day - same
+// reasoning as shiftDateKey in api/_lib.js.
+function shiftDateKey(dateKey, days) {
+    const [year, month, day] = dateKey.split("-").map(Number);
+    return new Date(Date.UTC(year, month - 1, day) + days * 86400000).toISOString().slice(0, 10);
+}
+
+function formatActivityDate(dateKey) {
+    const [year, month, day] = dateKey.split("-").map(Number);
+    return new Date(Date.UTC(year, month - 1, day))
+        .toLocaleDateString(undefined, { timeZone: "UTC", month: "short", day: "numeric" });
 }
 
 function renderAvatar(element, profile) {

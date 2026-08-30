@@ -18,56 +18,68 @@
         <div style="margin-bottom:16px">
             <div style="font-size:13px;font-weight:700;color:var(--text-soft)" data-i18n="dashboard.welcomeBack">Welcome back,</div>
             <div id="home-greeting-name" style="font-family:var(--font-display);font-weight:600;font-size:24px;line-height:1.05;color:#fff">Learner</div>
+            <!-- Which course this session is actually about. The header's flag
+                 is the switcher; this just says it in words, since a flag on
+                 its own doesn't name the language. Filled by js/dashboard.js. -->
+            <span id="home-language-pill" class="home-language-pill" hidden></span>
         </div>
 
         <p id="home-signed-out" class="page-subtitle" data-i18n="dashboard.welcomeGuest">Sign in to save your progress, earn coins, and open your daily chest.</p>
 
         <div id="home-signed-in" hidden>
-            <div id="home-daily-goal-card" class="card" style="background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:14px 16px;margin-bottom:16px">
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-                    <span style="font-weight:800;font-size:14px" data-i18n="home.dailyGoal">Daily goal</span>
-                    <span id="home-daily-goal-text" style="font-size:12px;font-weight:800;color:var(--text-faint)">0 / 50 XP</span>
-                </div>
-                <div class="mission-bar"><div id="home-daily-goal-fill" class="mission-bar-fill" style="width:0%"></div></div>
-            </div>
-
-            <div class="home-chest-missions-row">
-                <div id="home-chest-card" class="chest-card is-claimed"></div>
-
-                <div class="home-missions-col">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-                        <span style="font-weight:800;font-size:15px" data-i18n="mission.dailyMissions">Daily missions</span>
-                        <span id="home-missions-count" style="font-size:11px;font-weight:800;color:var(--text-faint)">0 / 3</span>
+            <!-- On a desktop width these two become side-by-side columns with
+                 the leaderboard on the right (see .home-side-col in style.css);
+                 on a phone they are just two stacked wrappers. -->
+            <div class="home-main-col">
+                <div id="home-daily-goal-card" class="card" style="background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:14px 16px;margin-bottom:16px">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                        <span style="font-weight:800;font-size:14px" data-i18n="home.dailyGoal">Daily goal</span>
+                        <span id="home-daily-goal-text" style="font-size:12px;font-weight:800;color:var(--text-faint)">0 / 50 XP</span>
                     </div>
-                    <div id="home-missions-list" style="display:flex;flex-direction:column;gap:10px"></div>
+                    <div class="mission-bar"><div id="home-daily-goal-fill" class="mission-bar-fill" style="width:0%"></div></div>
                 </div>
+
+                <div class="home-chest-missions-row">
+                    <div id="home-chest-card" class="chest-card is-claimed"></div>
+
+                    <div class="home-missions-col">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+                            <span style="font-weight:800;font-size:15px" data-i18n="mission.dailyMissions">Daily missions</span>
+                            <span id="home-missions-count" style="font-size:11px;font-weight:800;color:var(--text-faint)">0 / 3</span>
+                        </div>
+                        <div id="home-missions-list" style="display:flex;flex-direction:column;gap:10px"></div>
+                    </div>
+                </div>
+
+                <!-- Debug-only replay of the chest opening. js/dashboard.js keeps
+                     this hidden unless the signed-in handle matches. -->
+                <div id="home-demo-chest" hidden></div>
+
+                <!-- Debug-only replay of a finished sprint - jumps to sprint.html
+                     ?demo=finish for the real result card. Same handle gate. -->
+                <div id="home-demo-sprint" hidden></div>
+
+                <div class="home-cta-row">
+                    <a href="sprint.html" class="home-play-again-btn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        <span data-i18n="home.playAgain">Play</span>
+                    </a>
+
+                    <a href="lessons.html" id="home-lessons-btn" class="home-play-again-btn is-secondary" hidden>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>
+                        <span data-i18n="home.lessonsCta">Lessons</span>
+                    </a>
+                </div>
+
             </div>
 
-            <!-- Debug-only replay of the chest opening. js/dashboard.js keeps
-                 this hidden unless the signed-in handle matches. -->
-            <div id="home-demo-chest" hidden></div>
-
-            <!-- Debug-only replay of a finished sprint - jumps to sprint.html
-                 ?demo=finish for the real result card. Same handle gate. -->
-            <div id="home-demo-sprint" hidden></div>
-
-            <div class="home-cta-row">
-                <a href="sprint.html" class="home-play-again-btn">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                    <span data-i18n="home.playAgain">Play</span>
-                </a>
-
-                <a href="lessons.html" id="home-lessons-btn" class="home-play-again-btn is-secondary" hidden>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>
-                    <span data-i18n="home.lessonsCta">Lessons</span>
-                </a>
-            </div>
-
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-                <span style="font-weight:800;font-size:15px" data-i18n="dashboard.friendsCard">Friends</span>
-                <a href="friends.html" style="font-size:11px;font-weight:800;color:var(--accent);text-decoration:none" data-i18n="home.thisWeek">This week &rsaquo;</a>
-            </div>
-            <div id="home-friends-preview" class="card" style="background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:6px;display:flex;flex-direction:column;gap:2px"></div>
+            <aside class="home-side-col" aria-label="Leaderboard" data-i18n-aria-label="home.leaderboard">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+                    <span style="font-weight:800;font-size:15px" data-i18n="dashboard.friendsCard">Friends</span>
+                    <a href="friends.html" style="font-size:11px;font-weight:800;color:var(--accent);text-decoration:none" data-i18n="home.thisWeek">This week &rsaquo;</a>
+                </div>
+                <div id="home-friends-preview" class="card" style="background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:6px;display:flex;flex-direction:column;gap:2px"></div>
+            </aside>
         </div>
     </main>
 

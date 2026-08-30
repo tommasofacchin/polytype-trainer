@@ -95,9 +95,17 @@ function initDeckPage() {
     el.unlockError = document.getElementById("unlock-confirm-error");
     el.unlockNoKeys = document.getElementById("unlock-confirm-no-keys");
     el.unlockConfirmBtn = document.getElementById("unlock-confirm-btn");
+    el.detailOverlay = document.getElementById("word-detail-overlay");
+    el.detailScript = document.getElementById("word-detail-script");
+    el.detailRoman = document.getElementById("word-detail-roman");
+    el.detailMeaning = document.getElementById("word-detail-meaning");
+    el.detailAudioBtn = document.getElementById("word-detail-audio");
+    el.detailExamples = document.getElementById("word-detail-example-list");
+    el.detailNoExamples = document.getElementById("word-detail-no-examples");
 
     resolveActiveLanguage();
     setupUnlockConfirm();
+    setupWordDetail();
     preloadUnlockSfx();
     loadDeck();
 
@@ -541,12 +549,12 @@ function buildDeckCard(word, isUnlocked, isDisabled, keysHeld, courseKey) {
     card.classList.toggle("is-disabled", isDisabled);
     card.setAttribute("role", "button");
     card.tabIndex = 0;
-    card.setAttribute("aria-label", tr("trainer.playAudioFor", { word: word.script || word.meaning }));
-    card.addEventListener("click", () => playWordAudio(word));
+    card.setAttribute("aria-label", tr("deck.openWord", { word: word.script || word.meaning }));
+    card.addEventListener("click", () => openWordDetail(word));
     card.addEventListener("keydown", event => {
         if (event.key !== "Enter" && event.key !== " ") return;
         event.preventDefault();
-        playWordAudio(word);
+        openWordDetail(word);
     });
 
     const script = document.createElement("span");
@@ -658,6 +666,105 @@ function buildUnlockBurst() {
     }, { once: true });
 
     return burst;
+}
+
+// ---- Word detail: the flashcard, opened big -----------------------------
+// Tapping an unlocked card used to only fire its audio, which left the deck
+// with nowhere to show a word in context. The audio still plays on open (that
+// affordance is what people already expect from a tap), with the button in the
+// card there to replay it.
+
+function setupWordDetail() {
+    if (!el.detailOverlay) return;
+
+    el.detailOverlay.querySelectorAll("[data-word-detail-close]").forEach(node => {
+        node.addEventListener("click", () => closeWordDetail());
+    });
+
+    document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && !el.detailOverlay.hidden) closeWordDetail();
+    });
+}
+
+function openWordDetail(word) {
+    if (!el.detailOverlay || !word) return;
+
+    if (el.detailScript) el.detailScript.textContent = word.script || "";
+    if (el.detailMeaning) el.detailMeaning.textContent = word.meaning || "";
+    if (el.detailRoman) {
+        const romanization = languageHasHints() ? word.romanization : "";
+        el.detailRoman.textContent = romanization || "";
+        el.detailRoman.hidden = !romanization;
+    }
+
+    // Rebound every open rather than once at setup: the handler closes over
+    // whichever word this is, and there is only ever one card on screen.
+    if (el.detailAudioBtn) {
+        el.detailAudioBtn.onclick = () => playWordAudio(word);
+        el.detailAudioBtn.hidden = !getWordAudioUrl(word);
+    }
+
+    renderWordExamples(word);
+
+    el.detailOverlay.hidden = false;
+    requestAnimationFrame(() => el.detailOverlay.classList.add("is-open"));
+    playWordAudio(word);
+}
+
+function closeWordDetail() {
+    if (!el.detailOverlay) return;
+
+    el.detailOverlay.classList.remove("is-open");
+    window.setTimeout(() => { el.detailOverlay.hidden = true; }, 240);
+}
+
+function renderWordExamples(word) {
+    if (!el.detailExamples) return;
+
+    const examples = window.DECK_EXAMPLES?.[activeLanguage]?.[getWordSuffix(word.id)] || [];
+    if (el.detailNoExamples) el.detailNoExamples.hidden = examples.length > 0;
+
+    el.detailExamples.replaceChildren(
+        ...examples.map(example => {
+            const item = document.createElement("li");
+            item.className = "word-detail-example";
+
+            const text = document.createElement("span");
+            text.className = "word-detail-example-text";
+            text.replaceChildren(...renderExampleText(example.text));
+            item.appendChild(text);
+
+            // Chinese/Japanese only, and only when the entry carries one -
+            // a sentence in a script with no spaces is unreadable at this
+            // level without it.
+            if (example.romanization && languageHasHints()) {
+                const roman = document.createElement("span");
+                roman.className = "word-detail-example-roman";
+                roman.replaceChildren(...renderExampleText(example.romanization));
+                item.appendChild(roman);
+            }
+
+            const translation = document.createElement("span");
+            translation.className = "word-detail-example-translation";
+            translation.textContent = example.translation || "";
+            item.appendChild(translation);
+
+            return item;
+        })
+    );
+}
+
+// Splits an asterisk-marked sentence into nodes: every odd-numbered piece was
+// between a pair of asterisks, so that is the run to highlight. Built as real
+// nodes rather than an innerHTML string - the sentences are data, and a word
+// with a "<" in it should never become markup.
+function renderExampleText(text) {
+    return String(text || "").split("*").map((piece, index) => {
+        if (index % 2 === 0) return document.createTextNode(piece);
+        const mark = document.createElement("mark");
+        mark.textContent = piece;
+        return mark;
+    });
 }
 
 function setupUnlockConfirm() {

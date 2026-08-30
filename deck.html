@@ -42,6 +42,33 @@
         </div>
     </div>
 
+    <!-- Tap an unlocked flashcard and it opens here, big, with example
+         sentences underneath (decks/examples.js). Reuses .confirm-overlay for
+         the backdrop and the open/close transition; only the card differs. -->
+    <div id="word-detail-overlay" class="confirm-overlay word-detail-overlay" role="dialog" aria-modal="true" aria-labelledby="word-detail-script" hidden>
+        <div class="confirm-overlay-backdrop" data-word-detail-close></div>
+        <div class="word-detail-card" role="document">
+            <button type="button" class="word-detail-close" data-word-detail-close aria-label="Close" data-i18n-aria-label="common.close">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+            </button>
+
+            <div class="word-detail-head">
+                <span id="word-detail-script" class="word-detail-script"></span>
+                <span id="word-detail-roman" class="word-detail-roman" hidden></span>
+                <span id="word-detail-meaning" class="word-detail-meaning"></span>
+                <button type="button" id="word-detail-audio" class="word-detail-audio" aria-label="Play audio" data-i18n-aria-label="deck.playAudio">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M19 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                </button>
+            </div>
+
+            <div class="word-detail-examples">
+                <span class="word-detail-examples-label" data-i18n="deck.examples">Examples</span>
+                <ul id="word-detail-example-list" class="word-detail-example-list"></ul>
+                <p id="word-detail-no-examples" class="word-detail-empty" data-i18n="deck.examplesComing" hidden>Example sentences for this word are on the way.</p>
+            </div>
+        </div>
+    </div>
+
     <div id="app-bottom-nav"></div>
 
     <script src="js/firebase-config.js"></script>
@@ -56,6 +83,7 @@
     <script src="js/gamestate.js"></script>
     <script src="decks/index.js"></script>
     <script src="decks/categories.js"></script>
+    <script src="decks/examples.js"></script>
     <script src="js/deck-cache.js"></script>
     <script src="js/deck.js"></script>
 </body>

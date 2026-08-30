@@ -54,6 +54,7 @@
         getActivityFeed,
         getFriendProfile,
         getHomeOverview,
+        getActivityHistory,
         claimDailyChest
     };
 
@@ -536,6 +537,15 @@
         if (!state.user) throw new Error(tr("auth.signInRequired"));
 
         return callApi("get-home-overview", {
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+        });
+    }
+
+    async function getActivityHistory() {
+        assertConfigured();
+        if (!state.user) throw new Error(tr("auth.signInRequired"));
+
+        return callApi("get-activity-history", {
             timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
         });
     }
