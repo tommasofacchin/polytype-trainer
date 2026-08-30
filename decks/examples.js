@@ -3516,6 +3516,256 @@ window.DECK_EXAMPLES = {
       { text: "Det är *långt* till flygplatsen härifrån.", translation: "It's far to the airport from here." },
       { text: "Vi bor inte *långt* från centrum.", translation: "We don't live far from the center." },
       { text: "Hon reste *långt* för att komma hit.", translation: "She travelled far to get here." }
+    ],
+    201: [
+      { text: "Klockan är *elva*.", translation: "It's eleven o'clock." },
+      { text: "Hon är *elva* år gammal.", translation: "She's eleven years old." },
+      { text: "Vi träffas klockan *elva*.", translation: "We meet at eleven." }
+    ],
+    202: [
+      { text: "Klockan är *tolv*.", translation: "It's twelve o'clock." },
+      { text: "Året har *tolv* månader.", translation: "The year has twelve months." },
+      { text: "Vi var *tolv* personer på middagen.", translation: "There were twelve of us at dinner." }
+    ],
+    203: [
+      { text: "Han är *tretton* år gammal.", translation: "He's thirteen years old." },
+      { text: "Vi väntade i *tretton* minuter.", translation: "We waited thirteen minutes." },
+      { text: "Det är *tretton* elever i klassen.", translation: "There are thirteen students in the class." }
+    ],
+    204: [
+      { text: "Hon fyller *fjorton* år i mars.", translation: "She turns fourteen in March." },
+      { text: "Vi var på semester i *fjorton* dagar.", translation: "We were on vacation for fourteen days." },
+      { text: "Det är *fjorton* dagar till jul.", translation: "There are fourteen days until Christmas." }
+    ],
+    205: [
+      { text: "Han är *femton* år gammal.", translation: "He is fifteen years old." },
+      { text: "Vi väntade i *femton* minuter.", translation: "We waited fifteen minutes." },
+      { text: "Affären stänger om *femton* minuter.", translation: "The shop closes in fifteen minutes." }
+    ],
+    206: [
+      { text: "Hon är *sexton* år gammal.", translation: "She's sixteen years old." },
+      { text: "Vi väntade i *sexton* minuter.", translation: "We waited sixteen minutes." },
+      { text: "Det är *sexton* elever i klassen.", translation: "There are sixteen students in the class." }
+    ],
+    207: [
+      { text: "Han fyller *sjutton* år i juni.", translation: "He turns seventeen in June." },
+      { text: "Vi bodde där i *sjutton* år.", translation: "We lived there for seventeen years." },
+      { text: "Det är *sjutton* dagar till semestern.", translation: "There are seventeen days until the holiday." }
+    ],
+    208: [
+      { text: "Hon blir *arton* år nästa månad.", translation: "She turns eighteen next month." },
+      { text: "Vi köpte *arton* biljetter till konserten.", translation: "We bought eighteen tickets for the concert." },
+      { text: "Det är *arton* bord på restaurangen.", translation: "There are eighteen tables at the restaurant." }
+    ],
+    209: [
+      { text: "Han är *nitton* år gammal.", translation: "He's nineteen years old." },
+      { text: "Vi väntade i *nitton* minuter på bussen.", translation: "We waited nineteen minutes for the bus." },
+      { text: "Det är *nitton* studenter i klassen.", translation: "There are nineteen students in the class." }
+    ],
+    210: [
+      { text: "Jag är *tjugo* år gammal.", translation: "I am twenty years old." },
+      { text: "Vi väntade i *tjugo* minuter.", translation: "We waited twenty minutes." },
+      { text: "Det är *tjugo* elever i vår klass.", translation: "There are twenty students in our class." }
+    ],
+    211: [
+      { text: "Min *morfar* bor på landet.", translation: "My grandfather lives in the countryside." },
+      { text: "*Morfar* berättar bra historier.", translation: "Grandfather tells good stories." },
+      { text: "Jag besöker *morfar* varje sommar.", translation: "I visit grandfather every summer." }
+    ],
+    212: [
+      { text: "Mina *föräldrar* bor i Göteborg.", translation: "My parents live in Gothenburg." },
+      { text: "*Föräldrarna* mina är lärare.", translation: "My parents are teachers." },
+      { text: "Vi besöker *föräldrarna* våra varje jul.", translation: "We visit our parents every Christmas." }
+    ],
+    213: [
+      { text: "Min *son* går i skolan.", translation: "My son goes to school." },
+      { text: "*Sonen* deras är väldigt trevlig.", translation: "Their son is very nice." },
+      { text: "Jag är stolt över min *son*.", translation: "I'm proud of my son." }
+    ],
+    214: [
+      { text: "Min *dotter* gillar att rita.", translation: "My daughter likes to draw." },
+      { text: "*Dottern* deras studerar medicin.", translation: "Their daughter studies medicine." },
+      { text: "Jag ringer min *dotter* varje dag.", translation: "I call my daughter every day." }
+    ],
+    215: [
+      { text: "Min *make* jobbar som ingenjör.", translation: "My husband works as an engineer." },
+      { text: "*Maken* hennes är fransk.", translation: "Her husband is French." },
+      { text: "Vi träffade *maken* hennes på festen.", translation: "We met her husband at the party." }
+    ],
+    216: [
+      { text: "Min *lärare* är väldigt trevlig.", translation: "My teacher is very nice." },
+      { text: "Hon jobbar som *lärare* på skolan.", translation: "She works as a teacher at the school." },
+      { text: "*Läraren* gav oss mycket läxor.", translation: "The teacher gave us a lot of homework." }
+    ],
+    217: [
+      { text: "Han är *student* vid universitetet.", translation: "He's a student at the university." },
+      { text: "*Studenten* pluggade hela natten.", translation: "The student studied all night." },
+      { text: "Jag var *student* i fem år.", translation: "I was a student for five years." }
+    ],
+    218: [
+      { text: "Min mamma är *läkare*.", translation: "My mother is a doctor." },
+      { text: "Jag måste till *läkaren* imorgon.", translation: "I have to go to the doctor tomorrow." },
+      { text: "*Läkaren* undersökte patienten.", translation: "The doctor examined the patient." }
+    ],
+    219: [
+      { text: "Min syster är *sjuksköterska*.", translation: "My sister is a nurse." },
+      { text: "*Sjuksköterskan* var väldigt omtänksam.", translation: "The nurse was very caring." },
+      { text: "Han jobbar som *sjuksköterska* på sjukhuset.", translation: "He works as a nurse at the hospital." }
+    ],
+    220: [
+      { text: "Vi ringde *polisen* efter olyckan.", translation: "We called the police after the accident." },
+      { text: "*Polisen* kom snabbt till platsen.", translation: "The police arrived quickly at the scene." },
+      { text: "Han jobbar inom *polisen*.", translation: "He works in the police force." }
+    ],
+    221: [
+      { text: "Jag älskar mitt *jobb*.", translation: "I love my job." },
+      { text: "Hon fick ett nytt *jobb* igår.", translation: "She got a new job yesterday." },
+      { text: "*Jobbet* hans är väldigt krävande.", translation: "His job is very demanding." }
+    ],
+    222: [
+      { text: "Jag jobbar på ett *kontor* i centrum.", translation: "I work at an office downtown." },
+      { text: "*Kontoret* mitt är på tredje våningen.", translation: "My office is on the third floor." },
+      { text: "Vi träffades på *kontoret* klockan nio.", translation: "We met at the office at nine." }
+    ],
+    223: [
+      { text: "Vi är tjugo elever i *klassen*.", translation: "There are twenty students in the class." },
+      { text: "*Klassen* vår är väldigt trevlig.", translation: "Our class is very nice." },
+      { text: "Han är bäst i *klassen*.", translation: "He's the best in the class." }
+    ],
+    224: [
+      { text: "Jag måste göra mina *läxor*.", translation: "I have to do my homework." },
+      { text: "*Läxan* var svår idag.", translation: "The homework was difficult today." },
+      { text: "Läraren gav oss mycket *läxa*.", translation: "The teacher gave us a lot of homework." }
+    ],
+    225: [
+      { text: "Vi har ett *prov* imorgon.", translation: "We have a test tomorrow." },
+      { text: "*Provet* var lättare än jag trodde.", translation: "The test was easier than I thought." },
+      { text: "Jag måste plugga till *provet*.", translation: "I need to study for the test." }
+    ],
+    226: [
+      { text: "Jag *sover* åtta timmar varje natt.", translation: "I sleep eight hours every night." },
+      { text: "Barnet *sover* redan.", translation: "The child is already asleep." },
+      { text: "Jag kan inte *sova* ikväll.", translation: "I can't manage to sleep tonight." }
+    ],
+    227: [
+      { text: "Jag *vaknar* klockan sju varje morgon.", translation: "I wake up at seven every morning." },
+      { text: "Hon *vaknade* av ljudet från gatan.", translation: "She woke up from the noise on the street." },
+      { text: "Han brukar *vakna* tidigt.", translation: "He usually wakes up early." }
+    ],
+    228: [
+      { text: "Jag *jobbar* i en affär.", translation: "I work in a shop." },
+      { text: "Hon *jobbar* hårt varje dag.", translation: "She works hard every day." },
+      { text: "Vill du *jobba* med mig imorgon?", translation: "Do you want to work with me tomorrow?" }
+    ],
+    229: [
+      { text: "Jag *studerar* medicin vid universitetet.", translation: "I study medicine at the university." },
+      { text: "Hon *studerar* till provet ikväll.", translation: "She's studying for the test tonight." },
+      { text: "Vi måste *studera* mer den här veckan.", translation: "We need to study more this week." }
+    ],
+    230: [
+      { text: "Jag *lär* mig svenska nu.", translation: "I'm learning Swedish now." },
+      { text: "Barn *lär* sig snabbt.", translation: "Children learn fast." },
+      { text: "Det är roligt att *lära* sig nya saker.", translation: "It's fun to learn new things." }
+    ],
+    231: [
+      { text: "Jag *kör* till jobbet varje dag.", translation: "I drive to work every day." },
+      { text: "Kan du *köra* mig till flygplatsen?", translation: "Can you drive me to the airport?" },
+      { text: "Hon *kör* alltid försiktigt.", translation: "She always drives carefully." }
+    ],
+    232: [
+      { text: "Vi *reser* till Sverige i sommar.", translation: "We're travelling to Sweden this summer." },
+      { text: "Jag älskar att *resa*.", translation: "I love to travel." },
+      { text: "De *reser* mycket för jobbet.", translation: "They travel a lot for work." }
+    ],
+    233: [
+      { text: "Jag *väntar* på bussen.", translation: "I'm waiting for the bus." },
+      { text: "Kan du *vänta* lite?", translation: "Can you wait a bit?" },
+      { text: "Vi *väntade* i en timme.", translation: "We waited for an hour." }
+    ],
+    234: [
+      { text: "Jag kan inte *hitta* mina nycklar.", translation: "I can't find my keys." },
+      { text: "Han *hittade* boken under sängen.", translation: "He found the book under the bed." },
+      { text: "Kan du hjälpa mig att *hitta* vägen?", translation: "Can you help me find the way?" }
+    ],
+    235: [
+      { text: "Jag ska *träffa* vänner ikväll.", translation: "I'm going to meet friends tonight." },
+      { text: "Vi *träffades* på caféet.", translation: "We met at the café." },
+      { text: "Roligt att *träffa* dig!", translation: "Nice to meet you!" }
+    ],
+    236: [
+      { text: "Jag *gillar* den här boken.", translation: "I like this book." },
+      { text: "Hon *gillar* att läsa på kvällen.", translation: "She likes to read in the evening." },
+      { text: "*Gillar* du att resa?", translation: "Do you like to travel?" }
+    ],
+    237: [
+      { text: "Jag *älskar* dig.", translation: "I love you." },
+      { text: "Hon *älskar* musik.", translation: "She loves music." },
+      { text: "Vi *älskar* att resa tillsammans.", translation: "We love to travel together." }
+    ],
+    238: [
+      { text: "Jag *vill* ha en kaffe.", translation: "I want a coffee." },
+      { text: "Vad *vill* du göra ikväll?", translation: "What do you want to do tonight?" },
+      { text: "Hon *ville* inte gå hem ännu.", translation: "She didn't want to go home yet." }
+    ],
+    239: [
+      { text: "Jag *behöver* hjälp med det här.", translation: "I need help with this." },
+      { text: "Vi *behöver* mer tid.", translation: "We need more time." },
+      { text: "Hon *behöver* nya skor.", translation: "She needs new shoes." }
+    ],
+    240: [
+      { text: "Jag ska *köpa* mjölk i affären.", translation: "I'm going to buy milk at the shop." },
+      { text: "Vill du *köpa* den här boken?", translation: "Do you want to buy this book?" },
+      { text: "Hon *köpte* en ny bil igår.", translation: "She bought a new car yesterday." }
+    ],
+    241: [
+      { text: "Vi *säljer* vårt hus.", translation: "We're selling our house." },
+      { text: "Han *sålde* sin bil förra året.", translation: "He sold his car last year." },
+      { text: "De vill *sälja* lägenheten snart.", translation: "They want to sell the apartment soon." }
+    ],
+    242: [
+      { text: "Kan jag *betala* med kort?", translation: "Can I pay with card?" },
+      { text: "Jag *betalade* för middagen.", translation: "I paid for dinner." },
+      { text: "Vi måste *betala* hyran idag.", translation: "We have to pay the rent today." }
+    ],
+    243: [
+      { text: "Kan du *öppna* fönstret?", translation: "Can you open the window?" },
+      { text: "Affären *öppnar* klockan tio.", translation: "The shop opens at ten." },
+      { text: "Hon *öppnade* dörren försiktigt.", translation: "She opened the door carefully." }
+    ],
+    244: [
+      { text: "Kan du *stänga* dörren?", translation: "Can you close the door?" },
+      { text: "Affären *stänger* klockan sex.", translation: "The shop closes at six." },
+      { text: "Han *stängde* fönstret för att det var kallt.", translation: "He closed the window because it was cold." }
+    ],
+    245: [
+      { text: "Jag måste *tvätta* mina kläder.", translation: "I need to wash my clothes." },
+      { text: "Hon *tvättar* händerna innan hon äter.", translation: "She washes her hands before she eats." },
+      { text: "Vi *tvättade* bilen i helgen.", translation: "We washed the car over the weekend." }
+    ],
+    246: [
+      { text: "Jag kan *se* berget härifrån.", translation: "I can see the mountain from here." },
+      { text: "Vill du *se* en film ikväll?", translation: "Do you want to see a movie tonight?" },
+      { text: "Hon *såg* en fågel i trädet.", translation: "She saw a bird in the tree." }
+    ],
+    247: [
+      { text: "Jag kan *höra* musik från grannen.", translation: "I can hear music from the neighbor." },
+      { text: "Kan du *höra* mig?", translation: "Can you hear me?" },
+      { text: "Hon *hörde* ett konstigt ljud.", translation: "She heard a strange sound." }
+    ],
+    248: [
+      { text: "Vad vill du *säga* till henne?", translation: "What do you want to say to her?" },
+      { text: "Han *sa* ingenting.", translation: "He said nothing." },
+      { text: "Kan du *säga* det igen?", translation: "Can you say that again?" }
+    ],
+    249: [
+      { text: "Kan jag *fråga* dig något?", translation: "Can I ask you something?" },
+      { text: "Hon *frågade* om vägen till stationen.", translation: "She asked for directions to the station." },
+      { text: "Vi måste *fråga* läraren om det här.", translation: "We need to ask the teacher about this." }
+    ],
+    250: [
+      { text: "Kan du *svara* på min fråga?", translation: "Can you answer my question?" },
+      { text: "Han *svarade* snabbt på e-posten.", translation: "He answered the email quickly." },
+      { text: "Hon *svarar* aldrig i telefon.", translation: "She never answers the phone." }
     ]
   },
 
