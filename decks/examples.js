@@ -2541,6 +2541,231 @@ window.DECK_EXAMPLES = {
       { text: "*Snälla*, vänta lite.", translation: "Please, wait a moment." },
       { text: "Kan du hjälpa mig, *snälla*?", translation: "Can you help me, please?" },
       { text: "*Snälla*, ge mig saltet.", translation: "Please, pass me the salt." }
+    ],
+    6: [
+      { text: "*Förlåt*, jag kom för sent.", translation: "Sorry, I'm late." },
+      { text: "*Förlåt*, jag hörde inte.", translation: "Sorry, I didn't hear." },
+      { text: "Han sa *förlåt* för misstaget.", translation: "He said sorry for the mistake." }
+    ],
+    7: [
+      { text: "God *morgon*!", translation: "Good morning!" },
+      { text: "Varje *morgon* dricker jag kaffe.", translation: "Every morning I drink coffee." },
+      { text: "*Morgonen* var kall och tyst.", translation: "The morning was cold and quiet." }
+    ],
+    8: [
+      { text: "God *kväll*!", translation: "Good evening!" },
+      { text: "På *kvällen* läser jag en bok.", translation: "In the evening I read a book." },
+      { text: "Vi äter middag på *kvällen*.", translation: "We eat dinner in the evening." }
+    ],
+    9: [
+      { text: "Det är en fin *dag* idag.", translation: "It's a nice day today." },
+      { text: "Varje *dag* går jag en promenad.", translation: "Every day I go for a walk." },
+      { text: "*Dagen* var lång och tröttsam.", translation: "The day was long and tiring." }
+    ],
+    10: [
+      { text: "God *natt*!", translation: "Good night!" },
+      { text: "Jag sover gott på *natten*.", translation: "I sleep well at night." },
+      { text: "*Natten* var full av stjärnor.", translation: "The night was full of stars." }
+    ],
+    11: [
+      { text: "Kan jag få ett glas *vatten*?", translation: "Can I have a glass of water?" },
+      { text: "*Vattnet* är kallt och friskt.", translation: "The water is cold and fresh." },
+      { text: "Han dricker mycket *vatten* varje dag.", translation: "He drinks a lot of water every day." }
+    ],
+    12: [
+      { text: "*Maten* var väldigt god.", translation: "The food was very good." },
+      { text: "Vi äter *mat* klockan sju.", translation: "We eat food at seven." },
+      { text: "*Mat* är viktigt för hälsan.", translation: "Food is important for health." }
+    ],
+    13: [
+      { text: "Jag dricker *kaffe* varje morgon.", translation: "I drink coffee every morning." },
+      { text: "En kopp *kaffe*, tack.", translation: "A cup of coffee, please." },
+      { text: "*Kaffet* är varmt och starkt.", translation: "The coffee is hot and strong." }
+    ],
+    14: [
+      { text: "Vi köper *bröd* på bageriet.", translation: "We buy bread at the bakery." },
+      { text: "*Brödet* är färskt och mjukt.", translation: "The bread is fresh and soft." },
+      { text: "Han äter *bröd* till frukost.", translation: "He eats bread for breakfast." }
+    ],
+    15: [
+      { text: "De bor i ett stort *hus*.", translation: "They live in a big house." },
+      { text: "Vårt *hus* har tre våningar.", translation: "Our house has three floors." },
+      { text: "*Huset* ligger vid havet.", translation: "The house is by the sea." }
+    ],
+    16: [
+      { text: "Han kör en röd *bil*.", translation: "He drives a red car." },
+      { text: "*Bilen* är parkerad utanför.", translation: "The car is parked outside." },
+      { text: "Vi ska köpa en ny *bil*.", translation: "We're going to buy a new car." }
+    ],
+    17: [
+      { text: "Jag läser en spännande *bok*.", translation: "I'm reading an exciting book." },
+      { text: "*Boken* ligger på bordet.", translation: "The book is on the table." },
+      { text: "Hon gillar *böcker* om äventyr.", translation: "She likes books about adventures." }
+    ],
+    18: [
+      { text: "Han är min bästa *vän*.", translation: "He's my best friend." },
+      { text: "Vi träffar *vänner* på helgen.", translation: "We meet friends on the weekend." },
+      { text: "*Vännen* min bor bredvid.", translation: "My friend lives next door." }
+    ],
+    19: [
+      { text: "Min *familj* är stor och trevlig.", translation: "My family is big and nice." },
+      { text: "Vi samlas som en *familj* varje jul.", translation: "We gather as a family every Christmas." },
+      { text: "*Familjen* äter middag tillsammans.", translation: "The family eats dinner together." }
+    ],
+    20: [
+      { text: "Jag går till *skolan* varje dag.", translation: "I go to school every day." },
+      { text: "*Skolan* ligger nära mitt hus.", translation: "The school is near my house." },
+      { text: "Hon jobbar på en *skola*.", translation: "She works at a school." }
+    ],
+    21: [
+      { text: "En *man* gick förbi oss.", translation: "A man walked past us." },
+      { text: "*Mannen* vid fönstret är trevlig.", translation: "The man by the window is nice." },
+      { text: "Min *man* heter Johan.", translation: "My husband's name is Johan." }
+    ],
+    22: [
+      { text: "En *kvinna* ringde mig idag.", translation: "A woman called me today." },
+      { text: "*Kvinnan* var väldigt artig.", translation: "The woman was very polite." },
+      { text: "*Kvinnan* som leder företaget är duktig.", translation: "The woman who runs the company is skilled." }
+    ],
+    23: [
+      { text: "Det *barnet* är väldigt snällt.", translation: "That child is very kind." },
+      { text: "*Barnet* leker i trädgården.", translation: "The child is playing in the garden." },
+      { text: "Vi har tre *barn* hemma.", translation: "We have three children at home." }
+    ],
+    24: [
+      { text: "*Flickan* har rött hår.", translation: "The girl has red hair." },
+      { text: "En ung *flicka* satt på bänken.", translation: "A young girl sat on the bench." },
+      { text: "Min *flicka* är åtta år gammal.", translation: "My daughter is eight years old." }
+    ],
+    25: [
+      { text: "*Pojken* spelar fotboll.", translation: "The boy plays football." },
+      { text: "En liten *pojke* ropade högt.", translation: "A small boy shouted loudly." },
+      { text: "Min *pojke* gillar musik.", translation: "My son likes music." }
+    ],
+    26: [
+      { text: "Min *mamma* är lärare.", translation: "My mother is a teacher." },
+      { text: "*Mamma* lagar mat varje kväll.", translation: "Mom cooks every evening." },
+      { text: "Jag ringer *mamma* ofta.", translation: "I call mom often." }
+    ],
+    27: [
+      { text: "Min *pappa* jobbar som ingenjör.", translation: "My father works as an engineer." },
+      { text: "*Pappa* kör oss till skolan.", translation: "Dad drives us to school." },
+      { text: "Jag är stolt över *pappa*.", translation: "I'm proud of dad." }
+    ],
+    28: [
+      { text: "Min *syster* är tre år yngre.", translation: "My sister is three years younger." },
+      { text: "*Systern* min studerar medicin.", translation: "My sister studies medicine." },
+      { text: "Jag och *systern* min gillar att resa.", translation: "My sister and I like to travel." }
+    ],
+    29: [
+      { text: "Min *bror* är längre än mig.", translation: "My brother is taller than me." },
+      { text: "*Brodern* min spelar gitarr.", translation: "My brother plays guitar." },
+      { text: "Jag och *brodern* min är bra vänner.", translation: "My brother and I are good friends." }
+    ],
+    30: [
+      { text: "Min *mormor* bor på landet.", translation: "My grandmother lives in the countryside." },
+      { text: "*Mormor* bakar kakor varje söndag.", translation: "Grandmother bakes cakes every Sunday." },
+      { text: "Jag besöker *mormor* ofta.", translation: "I visit grandmother often." }
+    ],
+    31: [
+      { text: "Ett *stort* hus ligger på toppen.", translation: "A big house sits on top." },
+      { text: "Han har en *stor* hund.", translation: "He has a big dog." },
+      { text: "Staden är väldigt *stor*.", translation: "The city is very big." }
+    ],
+    32: [
+      { text: "Ett *litet* barn leker i parken.", translation: "A small child plays in the park." },
+      { text: "Hon har en *liten* hund.", translation: "She has a small dog." },
+      { text: "Rummet är ganska *litet*.", translation: "The room is quite small." }
+    ],
+    33: [
+      { text: "Det här är en *bra* bok.", translation: "This is a good book." },
+      { text: "Maten smakar väldigt *bra*.", translation: "The food tastes very good." },
+      { text: "Vädret är *bra* idag.", translation: "The weather is good today." }
+    ],
+    34: [
+      { text: "Filmen var *dålig* och tråkig.", translation: "The movie was bad and boring." },
+      { text: "Han har en *dålig* vana.", translation: "He has a bad habit." },
+      { text: "Vädret blir *dåligt* imorgon.", translation: "The weather will be bad tomorrow." }
+    ],
+    35: [
+      { text: "Jag köpte en *ny* telefon.", translation: "I bought a new phone." },
+      { text: "Det här är en *ny* bok från biblioteket.", translation: "This is a new book from the library." },
+      { text: "Vi flyttar till en *ny* stad.", translation: "We're moving to a new city." }
+    ],
+    36: [
+      { text: "En *gammal* man satt på bänken.", translation: "An old man sat on the bench." },
+      { text: "Huset är *gammalt* och vackert.", translation: "The house is old and beautiful." },
+      { text: "Hon har en *gammal* bil.", translation: "She has an old car." }
+    ],
+    37: [
+      { text: "*Varmt* kaffe smakar gott på vintern.", translation: "Hot coffee tastes good in winter." },
+      { text: "Det är *varmt* i rummet.", translation: "It's warm in the room." },
+      { text: "Vi hade en *varm* sommar förra året.", translation: "We had a warm summer last year." }
+    ],
+    38: [
+      { text: "En *kall* vind blåser idag.", translation: "A cold wind is blowing today." },
+      { text: "*Kall* mjölk är uppfriskande.", translation: "Cold milk is refreshing." },
+      { text: "Det är *kallt* ute ikväll.", translation: "It's cold outside tonight." }
+    ],
+    39: [
+      { text: "Han kör alldeles för *snabbt*.", translation: "He drives way too fast." },
+      { text: "Hon är en *snabb* löpare.", translation: "She's a fast runner." },
+      { text: "Tåget var väldigt *snabbt*.", translation: "The train was very fast." }
+    ],
+    40: [
+      { text: "*Långsamt* och stadigt vinner loppet.", translation: "Slow and steady wins the race." },
+      { text: "Han gick *långsamt* genom parken.", translation: "He walked slowly through the park." },
+      { text: "Musiken spelade *långsamt* och mjukt.", translation: "The music played slow and soft." }
+    ],
+    41: [
+      { text: "*Jag* heter Erik.", translation: "My name is Erik." },
+      { text: "*Jag* gillar att läsa böcker.", translation: "I like to read books." },
+      { text: "*Jag* älskar musik.", translation: "I love music." }
+    ],
+    42: [
+      { text: "*Du* är en bra vän.", translation: "You are a good friend." },
+      { text: "Var bor *du*?", translation: "Where do you live?" },
+      { text: "Kommer *du* ikväll?", translation: "Are you coming tonight?" }
+    ],
+    43: [
+      { text: "*Han* är lärare på skolan.", translation: "He is a teacher at the school." },
+      { text: "*Han* spelar fotboll varje vecka.", translation: "He plays football every week." },
+      { text: "Jag såg *han* igår.", translation: "I saw him yesterday." }
+    ],
+    44: [
+      { text: "*Hon* är en duktig musiker.", translation: "She is a skilled musician." },
+      { text: "*Hon* jobbar som läkare.", translation: "She works as a doctor." },
+      { text: "Jag träffade *hon* i affären.", translation: "I met her at the shop." }
+    ],
+    45: [
+      { text: "*Vi* går på bio ikväll.", translation: "We're going to the movies tonight." },
+      { text: "*Vi* bor i samma stad.", translation: "We live in the same city." },
+      { text: "*Vi* ska resa till Sverige.", translation: "We're going to travel to Sweden." }
+    ],
+    46: [
+      { text: "Vart ska *ni* ikväll?", translation: "Where are you all going tonight?" },
+      { text: "*Ni* är välkomna till festen.", translation: "You're all welcome to the party." },
+      { text: "Kommer *ni* tillsammans?", translation: "Are you all coming together?" }
+    ],
+    47: [
+      { text: "*De* är väldigt snälla människor.", translation: "They are very kind people." },
+      { text: "*De* kommer imorgon.", translation: "They're coming tomorrow." },
+      { text: "Jag gillar *de* väldigt mycket.", translation: "I like them very much." }
+    ],
+    48: [
+      { text: "Det här är *min* bok.", translation: "This is my book." },
+      { text: "*Min* vän heter Lars.", translation: "My friend's name is Lars." },
+      { text: "Bilen är *min*.", translation: "The car is mine." }
+    ],
+    49: [
+      { text: "Är det här *din* telefon?", translation: "Is this your phone?" },
+      { text: "*Din* familj är trevlig.", translation: "Your family is nice." },
+      { text: "Jag gillar *din* nya jacka.", translation: "I like your new jacket." }
+    ],
+    50: [
+      { text: "Det här är *vårt* hus.", translation: "This is our house." },
+      { text: "*Vår* skola ligger nära centrum.", translation: "Our school is near the center." },
+      { text: "Familjen *vår* är stor.", translation: "Our family is big." }
     ]
   },
 
