@@ -175,19 +175,14 @@ function renderActivity(profile) {
     const days = [];
     for (let offset = ACTIVITY_DAYS - 1; offset >= 0; offset -= 1) {
         const date = shiftDateKey(todayKey, -offset);
-        days.push({ date, ...(statsByDate.get(date) || { xp: 0, correctAnswers: 0, wrongAnswers: 0 }) });
+        days.push({ date, ...(statsByDate.get(date) || { xp: 0, sessions: 0, correctAnswers: 0, wrongAnswers: 0 }) });
     }
-
-    // Levels are scaled against the player's own busiest day rather than a
-    // fixed XP ladder, so the grid always spans its full range whether
-    // somebody scores 40 XP a day or 4000.
-    const busiestXp = days.reduce((max, day) => Math.max(max, day.xp), 0);
 
     grid.replaceChildren(
         ...days.map(day => {
             const cell = document.createElement("i");
             cell.className = "activity-cell";
-            cell.dataset.level = String(getActivityLevel(day.xp, busiestXp));
+            cell.dataset.level = String(getActivityLevel(day.sessions));
             if (day.date === todayKey) cell.dataset.today = "true";
             cell.title = day.xp
                 ? tr("profile.activityDay", { date: formatActivityDate(day.date), xp: day.xp.toLocaleString() })
@@ -197,21 +192,19 @@ function renderActivity(profile) {
     );
 
     const weekXp = days.slice(-7).reduce((sum, day) => sum + day.xp, 0);
-    const correct = days.reduce((sum, day) => sum + (day.correctAnswers || 0), 0);
-    const answered = correct + days.reduce((sum, day) => sum + (day.wrongAnswers || 0), 0);
 
     setText("profile-activity-streak", String(profile.dayStreak));
     setText("profile-activity-week", weekXp.toLocaleString());
-    // A dash, not "0%": nobody who has answered nothing has 0% retention.
-    setText("profile-activity-retention", answered ? `${Math.round((correct / answered) * 100)}%` : "-");
 }
 
-function getActivityLevel(xp, busiestXp) {
-    if (xp <= 0 || busiestXp <= 0) return 0;
-    const share = xp / busiestXp;
-    if (share <= 0.25) return 1;
-    if (share <= 0.5) return 2;
-    if (share <= 0.75) return 3;
+// An absolute scale (1 session -> the lowest fill, 5+ -> the highest),
+// not one relative to any other day - so a single practice session always
+// looks the same regardless of how busy the rest of the window was.
+function getActivityLevel(sessions) {
+    if (sessions <= 0) return 0;
+    if (sessions === 1) return 1;
+    if (sessions === 2) return 2;
+    if (sessions <= 4) return 3;
     return 4;
 }
 

@@ -1530,6 +1530,13 @@ input[type="password"]:focus {
 
 .activity-grid {
     display: grid;
+    /* 1fr columns fill whatever width they're given, which is fine on a
+       phone-width card but balloons into huge squares on the ~980px-wide
+       profile card on desktop. Capped here rather than switching to a fixed
+       cell size, so it stays exactly as fluid as before below the cap - only
+       wide screens are affected, and the grid just leaves whitespace to its
+       right there instead of stretching into it. */
+    max-width: 380px;
     /* auto, not 1fr: the cells get their height from aspect-ratio, and a
        height that feeds back into an fr track is the circular case some
        engines collapse. Identical result here - every cell is the same
@@ -1561,6 +1568,17 @@ input[type="password"]:focus {
    unpractised today reads as "still open" instead of as a missed day. */
 .activity-cell[data-today="true"] {
     border: 1px dashed var(--text-faintest);
+}
+
+/* Sits right next to the "Activity" label instead of pinned to the card's far
+   edge - .profile-card-head's own space-between is a no-op here since this
+   row is now its only child, wrapping both into one flush-left line. */
+.activity-head-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    row-gap: 4px;
 }
 
 .activity-legend {
@@ -3849,12 +3867,10 @@ body.deck-overlay-open {
 }
 
 /* The flashcard's own word inside the sentence - the whole point of showing a
-   sentence at all. A wash of the brand rather than the browser's default
-   yellow <mark>, which is a colour this app doesn't own anywhere else. */
+   sentence at all. Colour only, no pill behind it: <mark> ships a background
+   by default, so that's explicitly cleared rather than just left unset. */
 .word-detail-example mark {
-    padding: 0 3px;
-    border-radius: 5px;
-    background: var(--accent-soft);
+    background: none;
     color: var(--accent-ink);
     font-weight: 800;
 }
