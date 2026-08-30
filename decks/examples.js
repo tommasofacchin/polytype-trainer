@@ -538,6 +538,256 @@ window.DECK_EXAMPLES = {
       { text: "Jeg vil gå, *men* jeg er sliten.", translation: "I want to go, but I'm tired." },
       { text: "Det er dyrt, *men* verdt det.", translation: "It's expensive, but worth it." },
       { text: "Hun ringte, *men* jeg svarte ikke.", translation: "She called, but I didn't answer." }
+    ],
+    106: [
+      { text: "Jeg liker te *og* kaffe.", translation: "I like tea and coffee." },
+      { text: "Han er hyggelig *og* smart.", translation: "He's nice and smart." },
+      { text: "Vi kjøpte brød, melk *og* egg.", translation: "We bought bread, milk and eggs." }
+    ],
+    107: [
+      { text: "Vil du ha te *eller* kaffe?", translation: "Would you like tea or coffee?" },
+      { text: "Skal vi gå *eller* kjøre?", translation: "Shall we walk or drive?" },
+      { text: "Kommer du i dag *eller* i morgen?", translation: "Are you coming today or tomorrow?" }
+    ],
+    108: [
+      { text: "Jeg drikker kaffe *med* melk.", translation: "I drink coffee with milk." },
+      { text: "Hun bor *med* familien sin.", translation: "She lives with her family." },
+      { text: "Han snakket *med* læreren.", translation: "He spoke with the teacher." }
+    ],
+    109: [
+      { text: "Jeg drikker te *uten* sukker.", translation: "I drink tea without sugar." },
+      { text: "Han dro *uten* å si noe.", translation: "He left without saying anything." },
+      { text: "Vi klarte det *uten* hjelp.", translation: "We managed it without help." }
+    ],
+    110: [
+      { text: "Jeg kommer *fra* Norge.", translation: "I come from Norway." },
+      { text: "Brevet er *fra* min søster.", translation: "The letter is from my sister." },
+      { text: "Vi reiste *fra* Oslo til Bergen.", translation: "We travelled from Oslo to Bergen." }
+    ],
+    111: [
+      { text: "Jeg skal *til* skolen.", translation: "I'm going to school." },
+      { text: "Hun ga en gave *til* meg.", translation: "She gave a gift to me." },
+      { text: "Vi reiste *til* Spania i sommer.", translation: "We travelled to Spain this summer." }
+    ],
+    112: [
+      { text: "Boken ligger *i* skuffen.", translation: "The book is in the drawer." },
+      { text: "Jeg bor *i* Oslo.", translation: "I live in Oslo." },
+      { text: "Han er *i* hagen.", translation: "He is in the garden." }
+    ],
+    113: [
+      { text: "Boken ligger *på* bordet.", translation: "The book is on the table." },
+      { text: "Bildet henger *på* veggen.", translation: "The picture hangs on the wall." },
+      { text: "Vi møtes *på* kafeen.", translation: "We're meeting at the café." }
+    ],
+    114: [
+      { text: "Katten sover *under* bordet.", translation: "The cat is sleeping under the table." },
+      { text: "Nøklene ligger *under* matten.", translation: "The keys are under the mat." },
+      { text: "Vi satt *under* et tre.", translation: "We sat under a tree." }
+    ],
+    115: [
+      { text: "Lampen henger *over* bordet.", translation: "The lamp hangs above the table." },
+      { text: "Flyet fløy *over* fjellet.", translation: "The plane flew over the mountain." },
+      { text: "Hun bor *over* butikken.", translation: "She lives above the shop." }
+    ],
+    116: [
+      { text: "Oslo er en fin *by*.", translation: "Oslo is a nice city." },
+      { text: "Vi bor i en liten *by*.", translation: "We live in a small city." },
+      { text: "*Byen* har mange gamle bygninger.", translation: "The city has many old buildings." }
+    ],
+    117: [
+      { text: "Vi bor i samme *gate*.", translation: "We live on the same street." },
+      { text: "*Gaten* var full av folk.", translation: "The street was full of people." },
+      { text: "Butikken ligger på denne *gaten*.", translation: "The shop is on this street." }
+    ],
+    118: [
+      { text: "Jeg skal til *butikken* etter melk.", translation: "I'm going to the shop for milk." },
+      { text: "*Butikken* åpner klokka ni.", translation: "The shop opens at nine." },
+      { text: "Det er en ny *butikk* i sentrum.", translation: "There's a new shop in the center." }
+    ],
+    119: [
+      { text: "Vi kjøper grønnsaker på *markedet*.", translation: "We buy vegetables at the market." },
+      { text: "*Markedet* er åpent på lørdager.", translation: "The market is open on Saturdays." },
+      { text: "Det var mye folk på *markedet*.", translation: "There were a lot of people at the market." }
+    ],
+    120: [
+      { text: "Vi går en tur i *parken*.", translation: "We're taking a walk in the park." },
+      { text: "Barna leker i *parken*.", translation: "The children are playing in the park." },
+      { text: "Det er en stor *park* nær huset.", translation: "There's a big park near the house." }
+    ],
+    121: [
+      { text: "Dette *rommet* er veldig lyst.", translation: "This room is very bright." },
+      { text: "Huset har fem *rom*.", translation: "The house has five rooms." },
+      { text: "Jeg rydder *rommet* mitt.", translation: "I'm cleaning my room." }
+    ],
+    122: [
+      { text: "Vi lager mat på *kjøkkenet*.", translation: "We cook in the kitchen." },
+      { text: "*Kjøkkenet* er stort og lyst.", translation: "The kitchen is big and bright." },
+      { text: "Hun sitter på *kjøkkenet* og drikker kaffe.", translation: "She's sitting in the kitchen drinking coffee." }
+    ],
+    123: [
+      { text: "*Badet* er ved siden av soverommet.", translation: "The bathroom is next to the bedroom." },
+      { text: "Jeg dusjer på *badet* hver morgen.", translation: "I shower in the bathroom every morning." },
+      { text: "Huset har to *bad*.", translation: "The house has two bathrooms." }
+    ],
+    124: [
+      { text: "*Soverommet* mitt er lite men koselig.", translation: "My bedroom is small but cozy." },
+      { text: "Barna sover i det samme *soverommet*.", translation: "The children sleep in the same bedroom." },
+      { text: "Vi malte *soverommet* blått.", translation: "We painted the bedroom blue." }
+    ],
+    125: [
+      { text: "Vi ser på TV i *stuen*.", translation: "We watch TV in the living room." },
+      { text: "*Stuen* har en stor sofa.", translation: "The living room has a big sofa." },
+      { text: "Familien samles i *stuen* om kvelden.", translation: "The family gathers in the living room in the evening." }
+    ],
+    126: [
+      { text: "Jeg liker *ost* på brødet.", translation: "I like cheese on bread." },
+      { text: "Vi kjøpte norsk *ost* på markedet.", translation: "We bought Norwegian cheese at the market." },
+      { text: "*Osten* smaker veldig godt.", translation: "The cheese tastes very good." }
+    ],
+    127: [
+      { text: "Jeg spiser *egg* til frokost.", translation: "I eat eggs for breakfast." },
+      { text: "Kan du kjøpe *egg* på butikken?", translation: "Can you buy eggs at the shop?" },
+      { text: "*Egget* var kokt akkurat riktig.", translation: "The egg was cooked just right." }
+    ],
+    128: [
+      { text: "Vi spiser *fisk* hver fredag.", translation: "We eat fish every Friday." },
+      { text: "*Fisken* var veldig fersk.", translation: "The fish was very fresh." },
+      { text: "Han fanget en stor *fisk* i sjøen.", translation: "He caught a big fish in the sea." }
+    ],
+    129: [
+      { text: "Hun spiser ikke *kjøtt*.", translation: "She doesn't eat meat." },
+      { text: "Vi grillet *kjøtt* i hagen.", translation: "We grilled meat in the garden." },
+      { text: "*Kjøttet* var mørt og godt.", translation: "The meat was tender and good." }
+    ],
+    130: [
+      { text: "Vi spiser *suppe* når det er kaldt.", translation: "We eat soup when it's cold." },
+      { text: "*Suppen* var varm og god.", translation: "The soup was warm and good." },
+      { text: "Mamma lagde *suppe* til middag.", translation: "Mom made soup for dinner." }
+    ],
+    131: [
+      { text: "Jeg spiser et *eple* hver dag.", translation: "I eat an apple every day." },
+      { text: "*Eplet* var rødt og søtt.", translation: "The apple was red and sweet." },
+      { text: "Vi plukket *epler* i hagen.", translation: "We picked apples in the garden." }
+    ],
+    132: [
+      { text: "Jeg tar en *banan* til lunsj.", translation: "I'll have a banana for lunch." },
+      { text: "*Bananen* var moden og søt.", translation: "The banana was ripe and sweet." },
+      { text: "Barna liker *bananer* godt.", translation: "The children like bananas a lot." }
+    ],
+    133: [
+      { text: "Jeg drikker juice av *appelsin*.", translation: "I drink juice made from oranges." },
+      { text: "*Appelsinen* var saftig og søt.", translation: "The orange was juicy and sweet." },
+      { text: "Vi kjøpte en pose *appelsiner*.", translation: "We bought a bag of oranges." }
+    ],
+    134: [
+      { text: "Vi spiser *poteter* til middag.", translation: "We eat potatoes for dinner." },
+      { text: "*Poteten* var kokt og myk.", translation: "The potato was boiled and soft." },
+      { text: "Han dyrker *poteter* i hagen.", translation: "He grows potatoes in the garden." }
+    ],
+    135: [
+      { text: "Kaninen spiser en *gulrot*.", translation: "The rabbit is eating a carrot." },
+      { text: "*Gulroten* var søt og sprø.", translation: "The carrot was sweet and crisp." },
+      { text: "Vi kutter *gulrøtter* til suppen.", translation: "We cut carrots for the soup." }
+    ],
+    136: [
+      { text: "Jeg drikker *te* om morgenen.", translation: "I drink tea in the morning." },
+      { text: "Kan jeg få en kopp *te*?", translation: "Can I have a cup of tea?" },
+      { text: "*Teen* var for varm å drikke.", translation: "The tea was too hot to drink." }
+    ],
+    137: [
+      { text: "Barnet drikker *melk* til frokost.", translation: "The child drinks milk for breakfast." },
+      { text: "Kan du kjøpe *melk* på butikken?", translation: "Can you buy milk at the shop?" },
+      { text: "*Melken* var kald og frisk.", translation: "The milk was cold and fresh." }
+    ],
+    138: [
+      { text: "Jeg drikker *juice* hver morgen.", translation: "I drink juice every morning." },
+      { text: "*Juicen* smaker søtt og friskt.", translation: "The juice tastes sweet and fresh." },
+      { text: "Vi laget *juice* av epler.", translation: "We made juice from apples." }
+    ],
+    139: [
+      { text: "Jeg spiser *frokost* klokka sju.", translation: "I eat breakfast at seven." },
+      { text: "*Frokosten* var deilig i morges.", translation: "Breakfast was delicious this morning." },
+      { text: "Vi spiser *frokost* sammen hver dag.", translation: "We eat breakfast together every day." }
+    ],
+    140: [
+      { text: "Vi spiser *lunsj* klokka tolv.", translation: "We eat lunch at twelve." },
+      { text: "*Lunsjen* var rask men god.", translation: "Lunch was quick but good." },
+      { text: "Han tar med seg *lunsj* på jobb.", translation: "He brings lunch to work." }
+    ],
+    141: [
+      { text: "Vi spiser *middag* klokka seks.", translation: "We eat dinner at six." },
+      { text: "*Middagen* var veldig god i kveld.", translation: "Dinner was very good tonight." },
+      { text: "Familien samles til *middag* hver søndag.", translation: "The family gathers for dinner every Sunday." }
+    ],
+    142: [
+      { text: "Kan du sende meg *saltet*?", translation: "Can you pass me the salt?" },
+      { text: "Suppen trenger litt mer *salt*.", translation: "The soup needs a bit more salt." },
+      { text: "Han bruker for mye *salt* i maten.", translation: "He uses too much salt in the food." }
+    ],
+    143: [
+      { text: "Jeg drikker kaffe uten *sukker*.", translation: "I drink coffee without sugar." },
+      { text: "Kan du sende meg *sukkeret*?", translation: "Can you pass me the sugar?" },
+      { text: "Kaken trenger mye *sukker*.", translation: "The cake needs a lot of sugar." }
+    ],
+    144: [
+      { text: "Maten ligger på *tallerkenen*.", translation: "The food is on the plate." },
+      { text: "Kan du vaske *tallerkenen*?", translation: "Can you wash the plate?" },
+      { text: "Vi dekker bordet med *tallerkener*.", translation: "We're setting the table with plates." }
+    ],
+    145: [
+      { text: "Kan jeg få et *glass* vann?", translation: "Can I have a glass of water?" },
+      { text: "*Glasset* falt og knuste.", translation: "The glass fell and broke." },
+      { text: "Hun fylte *glasset* med juice.", translation: "She filled the glass with juice." }
+    ],
+    146: [
+      { text: "Jeg har vondt i *hodet*.", translation: "I have a headache." },
+      { text: "Han rista på *hodet*.", translation: "He shook his head." },
+      { text: "*Hodet* mitt gjør vondt.", translation: "My head hurts." }
+    ],
+    147: [
+      { text: "Hun holdt meg i *hånden*.", translation: "She held my hand." },
+      { text: "Vask *hendene* dine før du spiser.", translation: "Wash your hands before you eat." },
+      { text: "Han vinket med *hånden*.", translation: "He waved with his hand." }
+    ],
+    148: [
+      { text: "Jeg vred om på *foten*.", translation: "I twisted my foot." },
+      { text: "Barnet har små *føtter*.", translation: "The child has small feet." },
+      { text: "Han sparket ballen med *foten*.", translation: "He kicked the ball with his foot." }
+    ],
+    149: [
+      { text: "Hun har blå *øyne*.", translation: "She has blue eyes." },
+      { text: "Jeg fikk noe i *øyet*.", translation: "I got something in my eye." },
+      { text: "Barnet lukket *øynene* og sov.", translation: "The child closed its eyes and slept." }
+    ],
+    150: [
+      { text: "Han hvisket noe i *øret* mitt.", translation: "He whispered something in my ear." },
+      { text: "Musikken var høy, så jeg dekket *ørene*.", translation: "The music was loud, so I covered my ears." },
+      { text: "Hunden har store *ører*.", translation: "The dog has big ears." }
+    ],
+    151: [
+      { text: "Barnet har en liten *nese*.", translation: "The child has a small nose." },
+      { text: "Jeg puster gjennom *nesen*.", translation: "I breathe through my nose." },
+      { text: "Han har en forkjølet *nese*.", translation: "He has a stuffy nose." }
+    ],
+    152: [
+      { text: "Lukk *munnen* din, vær så snill.", translation: "Close your mouth, please." },
+      { text: "Hun smilte med hele *munnen*.", translation: "She smiled with her whole mouth." },
+      { text: "Ikke snakk med mat i *munnen*.", translation: "Don't talk with food in your mouth." }
+    ],
+    153: [
+      { text: "Hun har langt, mørkt *hår*.", translation: "She has long, dark hair." },
+      { text: "Han klipper *håret* sitt selv.", translation: "He cuts his own hair." },
+      { text: "*Håret* mitt blir vått i regnet.", translation: "My hair gets wet in the rain." }
+    ],
+    154: [
+      { text: "Ta på deg *jakken*, det er kaldt ute.", translation: "Put on your jacket, it's cold outside." },
+      { text: "Jeg kjøpte en ny *jakke* i går.", translation: "I bought a new jacket yesterday." },
+      { text: "*Jakken* hennes er blå og varm.", translation: "Her jacket is blue and warm." }
+    ],
+    155: [
+      { text: "Ta av deg *skoene* før du går inn.", translation: "Take off your shoes before you go in." },
+      { text: "Disse *skoene* er veldig komfortable.", translation: "These shoes are very comfortable." },
+      { text: "Jeg trenger nye *sko* til vinteren.", translation: "I need new shoes for winter." }
     ]
   },
 
