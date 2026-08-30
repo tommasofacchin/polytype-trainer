@@ -8522,6 +8522,256 @@ window.DECK_EXAMPLES = {
       { text: "L'aeroporto è *lontano* da qui.", translation: "It's far to the airport from here." },
       { text: "Non viviamo *lontano* dal centro.", translation: "We don't live far from the center." },
       { text: "Ha viaggiato *lontano* per venire qui.", translation: "She travelled far to get here." }
+    ],
+    201: [
+      { text: "Sono le *undici*.", translation: "It's eleven o'clock." },
+      { text: "Ha *undici* anni.", translation: "She's eleven years old." },
+      { text: "Ci vediamo alle *undici*.", translation: "We meet at eleven." }
+    ],
+    202: [
+      { text: "Sono le *dodici*.", translation: "It's twelve o'clock." },
+      { text: "L'anno ha *dodici* mesi.", translation: "The year has twelve months." },
+      { text: "Eravamo in *dodici* a cena.", translation: "There were twelve of us at dinner." }
+    ],
+    203: [
+      { text: "Ha *tredici* anni.", translation: "He's thirteen years old." },
+      { text: "Abbiamo aspettato *tredici* minuti.", translation: "We waited thirteen minutes." },
+      { text: "Ci sono *tredici* studenti in classe.", translation: "There are thirteen students in the class." }
+    ],
+    204: [
+      { text: "Compie *quattordici* anni a marzo.", translation: "She turns fourteen in March." },
+      { text: "Siamo stati in vacanza per *quattordici* giorni.", translation: "We were on vacation for fourteen days." },
+      { text: "Mancano *quattordici* giorni a Natale.", translation: "There are fourteen days until Christmas." }
+    ],
+    205: [
+      { text: "Ha *quindici* anni.", translation: "He is fifteen years old." },
+      { text: "Abbiamo aspettato *quindici* minuti.", translation: "We waited fifteen minutes." },
+      { text: "Il negozio chiude tra *quindici* minuti.", translation: "The shop closes in fifteen minutes." }
+    ],
+    206: [
+      { text: "Ha *sedici* anni.", translation: "She's sixteen years old." },
+      { text: "Abbiamo aspettato *sedici* minuti.", translation: "We waited sixteen minutes." },
+      { text: "Ci sono *sedici* studenti in classe.", translation: "There are sixteen students in the class." }
+    ],
+    207: [
+      { text: "Compie *diciassette* anni a giugno.", translation: "He turns seventeen in June." },
+      { text: "Abbiamo vissuto lì per *diciassette* anni.", translation: "We lived there for seventeen years." },
+      { text: "Mancano *diciassette* giorni alle vacanze.", translation: "There are seventeen days until the holiday." }
+    ],
+    208: [
+      { text: "Compie *diciotto* anni il mese prossimo.", translation: "She turns eighteen next month." },
+      { text: "Abbiamo comprato *diciotto* biglietti per il concerto.", translation: "We bought eighteen tickets for the concert." },
+      { text: "Ci sono *diciotto* tavoli nel ristorante.", translation: "There are eighteen tables at the restaurant." }
+    ],
+    209: [
+      { text: "Ha *diciannove* anni.", translation: "He's nineteen years old." },
+      { text: "Abbiamo aspettato *diciannove* minuti l'autobus.", translation: "We waited nineteen minutes for the bus." },
+      { text: "Ci sono *diciannove* studenti in classe.", translation: "There are nineteen students in the class." }
+    ],
+    210: [
+      { text: "Ho *venti* anni.", translation: "I am twenty years old." },
+      { text: "Abbiamo aspettato *venti* minuti.", translation: "We waited twenty minutes." },
+      { text: "Ci sono *venti* studenti nella nostra classe.", translation: "There are twenty students in our class." }
+    ],
+    211: [
+      { text: "Mio *nonno* vive in campagna.", translation: "My grandfather lives in the countryside." },
+      { text: "Mio *nonno* racconta belle storie.", translation: "My grandfather tells good stories." },
+      { text: "Vado spesso a trovare mio *nonno*.", translation: "I visit my grandfather often." }
+    ],
+    212: [
+      { text: "I miei *genitori* vivono ad Amburgo.", translation: "My parents live in Hamburg." },
+      { text: "I miei *genitori* sono insegnanti.", translation: "My parents are teachers." },
+      { text: "Andiamo a trovare i nostri *genitori* ogni Natale.", translation: "We visit our parents every Christmas." }
+    ],
+    213: [
+      { text: "Mio *figlio* va a scuola.", translation: "My son goes to school." },
+      { text: "Il loro *figlio* è molto simpatico.", translation: "Their son is very nice." },
+      { text: "Sono fiero di mio *figlio*.", translation: "I'm proud of my son." }
+    ],
+    214: [
+      { text: "A mia *figlia* piace disegnare.", translation: "My daughter likes to draw." },
+      { text: "La loro *figlia* studia medicina.", translation: "Their daughter studies medicine." },
+      { text: "Chiamo mia *figlia* ogni giorno.", translation: "I call my daughter every day." }
+    ],
+    215: [
+      { text: "Mio *marito* lavora come ingegnere.", translation: "My husband works as an engineer." },
+      { text: "Il suo *marito* è francese.", translation: "Her husband is French." },
+      { text: "Abbiamo conosciuto suo *marito* alla festa.", translation: "We met her husband at the party." }
+    ],
+    216: [
+      { text: "Il mio *insegnante* è molto gentile.", translation: "My teacher is very nice." },
+      { text: "Lavora come *insegnante* a scuola.", translation: "She works as a teacher at the school." },
+      { text: "L'*insegnante* ci ha dato molti compiti.", translation: "The teacher gave us a lot of homework." }
+    ],
+    217: [
+      { text: "È *studente* all'università.", translation: "He's a student at the university." },
+      { text: "Lo *studente* ha studiato tutta la notte.", translation: "The student studied all night." },
+      { text: "Sono stato *studente* per cinque anni.", translation: "I was a student for five years." }
+    ],
+    218: [
+      { text: "Mia madre è *medico*.", translation: "My mother is a doctor." },
+      { text: "Devo andare dal *medico* domani.", translation: "I have to go to the doctor tomorrow." },
+      { text: "Il *medico* ha visitato il paziente.", translation: "The doctor examined the patient." }
+    ],
+    219: [
+      { text: "Mia sorella è *infermiera*.", translation: "My sister is a nurse." },
+      { text: "L'*infermiera* era molto premurosa.", translation: "The nurse was very caring." },
+      { text: "Lavora come *infermiera* in ospedale.", translation: "He works as a nurse at the hospital." }
+    ],
+    220: [
+      { text: "Abbiamo chiamato la *polizia* dopo l'incidente.", translation: "We called the police after the accident." },
+      { text: "La *polizia* è arrivata subito sul posto.", translation: "The police arrived quickly at the scene." },
+      { text: "Lavora nella *polizia*.", translation: "He works in the police force." }
+    ],
+    221: [
+      { text: "Amo il mio *lavoro*.", translation: "I love my job." },
+      { text: "Ha trovato un nuovo *lavoro* ieri.", translation: "She got a new job yesterday." },
+      { text: "Il suo *lavoro* è molto impegnativo.", translation: "His job is very demanding." }
+    ],
+    222: [
+      { text: "Lavoro in un *ufficio* in centro.", translation: "I work at an office downtown." },
+      { text: "Il mio *ufficio* è al terzo piano.", translation: "My office is on the third floor." },
+      { text: "Ci siamo incontrati in *ufficio* alle nove.", translation: "We met at the office at nine." }
+    ],
+    223: [
+      { text: "Siamo venti studenti in *classe*.", translation: "There are twenty students in the class." },
+      { text: "La nostra *classe* è molto simpatica.", translation: "Our class is very nice." },
+      { text: "È il migliore della *classe*.", translation: "He's the best in the class." }
+    ],
+    224: [
+      { text: "Devo fare i miei *compiti*.", translation: "I have to do my homework." },
+      { text: "Il *compito* era difficile oggi.", translation: "The homework was difficult today." },
+      { text: "L'insegnante ci ha dato molti *compiti*.", translation: "The teacher gave us a lot of homework." }
+    ],
+    225: [
+      { text: "Domani abbiamo un *test*.", translation: "We have a test tomorrow." },
+      { text: "Il *test* era più facile di quanto pensassi.", translation: "The test was easier than I thought." },
+      { text: "Devo studiare per il *test*.", translation: "I need to study for the test." }
+    ],
+    226: [
+      { text: "*Dormo* otto ore ogni notte.", translation: "I sleep eight hours every night." },
+      { text: "Il bambino *dorme* già.", translation: "The child is already asleep." },
+      { text: "Non riesco a *dormire* stasera.", translation: "I can't manage to sleep tonight." }
+    ],
+    227: [
+      { text: "*Mi sveglio* alle sette ogni mattina.", translation: "I wake up at seven every morning." },
+      { text: "*Si è svegliata* per il rumore in strada.", translation: "She woke up from the noise on the street." },
+      { text: "Di solito *si sveglia* presto.", translation: "He usually wakes up early." }
+    ],
+    228: [
+      { text: "*Lavoro* in un negozio.", translation: "I work in a shop." },
+      { text: "*Lavora* sodo ogni giorno.", translation: "She works hard every day." },
+      { text: "Vuoi *lavorare* con me domani?", translation: "Do you want to work with me tomorrow?" }
+    ],
+    229: [
+      { text: "*Studio* medicina all'università.", translation: "I study medicine at the university." },
+      { text: "*Studia* per il test stasera.", translation: "She's studying for the test tonight." },
+      { text: "Dobbiamo *studiare* di più questa settimana.", translation: "We need to study more this week." }
+    ],
+    230: [
+      { text: "Sto *imparando* l'italiano adesso.", translation: "I'm learning Italian now." },
+      { text: "I bambini *imparano* velocemente.", translation: "Children learn fast." },
+      { text: "È divertente *imparare* cose nuove.", translation: "It's fun to learn new things." }
+    ],
+    231: [
+      { text: "*Guido* per andare al lavoro ogni giorno.", translation: "I drive to work every day." },
+      { text: "Puoi *guidare* fino all'aeroporto?", translation: "Can you drive me to the airport?" },
+      { text: "*Guida* sempre con prudenza.", translation: "She always drives carefully." }
+    ],
+    232: [
+      { text: "*Viaggiamo* in Germania quest'estate.", translation: "We're travelling to Germany this summer." },
+      { text: "Amo *viaggiare*.", translation: "I love to travel." },
+      { text: "*Viaggiano* molto per lavoro.", translation: "They travel a lot for work." }
+    ],
+    233: [
+      { text: "*Aspetto* l'autobus.", translation: "I'm waiting for the bus." },
+      { text: "Puoi *aspettare* un po'?", translation: "Can you wait a bit?" },
+      { text: "Abbiamo *aspettato* un'ora.", translation: "We waited for an hour." }
+    ],
+    234: [
+      { text: "Non riesco a *trovare* le mie chiavi.", translation: "I can't find my keys." },
+      { text: "Ha *trovato* il libro sotto il letto.", translation: "He found the book under the bed." },
+      { text: "Puoi aiutarmi a *trovare* la strada?", translation: "Can you help me find the way?" }
+    ],
+    235: [
+      { text: "Stasera *incontro* degli amici.", translation: "I'm going to meet friends tonight." },
+      { text: "Ci siamo *incontrati* al bar.", translation: "We met at the café." },
+      { text: "Piacere di *incontrarti*!", translation: "Nice to meet you!" }
+    ],
+    236: [
+      { text: "Mi *piace* questo libro.", translation: "I like this book." },
+      { text: "Le *piace* leggere la sera.", translation: "She likes to read in the evening." },
+      { text: "Ti *piace* viaggiare?", translation: "Do you like to travel?" }
+    ],
+    237: [
+      { text: "Ti *amo*.", translation: "I love you." },
+      { text: "Lei *ama* la musica.", translation: "She loves music." },
+      { text: "*Amiamo* viaggiare insieme.", translation: "We love to travel together." }
+    ],
+    238: [
+      { text: "*Voglio* un caffè.", translation: "I want a coffee." },
+      { text: "Cosa *vuoi* fare stasera?", translation: "What do you want to do tonight?" },
+      { text: "Non *voleva* ancora tornare a casa.", translation: "She didn't want to go home yet." }
+    ],
+    239: [
+      { text: "*Ho bisogno* di aiuto con questo.", translation: "I need help with this." },
+      { text: "*Abbiamo bisogno* di più tempo.", translation: "We need more time." },
+      { text: "*Ha bisogno* di scarpe nuove.", translation: "She needs new shoes." }
+    ],
+    240: [
+      { text: "Vado a *comprare* il latte al negozio.", translation: "I'm going to buy milk at the shop." },
+      { text: "Vuoi *comprare* questo libro?", translation: "Do you want to buy this book?" },
+      { text: "Ha *comprato* una macchina nuova ieri.", translation: "She bought a new car yesterday." }
+    ],
+    241: [
+      { text: "*Vendiamo* la nostra casa.", translation: "We're selling our house." },
+      { text: "Ha *venduto* la sua macchina l'anno scorso.", translation: "He sold his car last year." },
+      { text: "Vogliono *vendere* l'appartamento presto.", translation: "They want to sell the apartment soon." }
+    ],
+    242: [
+      { text: "Posso *pagare* con la carta?", translation: "Can I pay with card?" },
+      { text: "Ho *pagato* per la cena.", translation: "I paid for dinner." },
+      { text: "Dobbiamo *pagare* l'affitto oggi.", translation: "We have to pay the rent today." }
+    ],
+    243: [
+      { text: "Puoi *aprire* la finestra?", translation: "Can you open the window?" },
+      { text: "Il negozio *apre* alle dieci.", translation: "The shop opens at ten." },
+      { text: "Ha *aperto* la porta con cautela.", translation: "She opened the door carefully." }
+    ],
+    244: [
+      { text: "Puoi *chiudere* la porta?", translation: "Can you close the door?" },
+      { text: "Il negozio *chiude* alle sei.", translation: "The shop closes at six." },
+      { text: "Ha *chiuso* la finestra perché faceva freddo.", translation: "He closed the window because it was cold." }
+    ],
+    245: [
+      { text: "Devo *lavare* i miei vestiti.", translation: "I need to wash my clothes." },
+      { text: "Si *lava* le mani prima di mangiare.", translation: "She washes her hands before she eats." },
+      { text: "Abbiamo *lavato* la macchina nel weekend.", translation: "We washed the car over the weekend." }
+    ],
+    246: [
+      { text: "Posso *vedere* la montagna da qui.", translation: "I can see the mountain from here." },
+      { text: "Vuoi *vedere* un film stasera?", translation: "Do you want to see a movie tonight?" },
+      { text: "Ha *visto* un uccello sull'albero.", translation: "She saw a bird in the tree." }
+    ],
+    247: [
+      { text: "Riesco a *sentire* la musica del vicino.", translation: "I can hear music from the neighbor." },
+      { text: "Riesci a *sentirmi*?", translation: "Can you hear me?" },
+      { text: "Ha *sentito* uno strano rumore.", translation: "She heard a strange sound." }
+    ],
+    248: [
+      { text: "Cosa vuoi *dirle*?", translation: "What do you want to say to her?" },
+      { text: "Non ha *detto* niente.", translation: "He said nothing." },
+      { text: "Puoi *dirlo* di nuovo?", translation: "Can you say that again?" }
+    ],
+    249: [
+      { text: "Posso *chiederti* una cosa?", translation: "Can I ask you something?" },
+      { text: "Ha *chiesto* indicazioni per la stazione.", translation: "She asked for directions to the station." },
+      { text: "Dobbiamo *chiedere* all'insegnante di questo.", translation: "We need to ask the teacher about this." }
+    ],
+    250: [
+      { text: "Puoi *rispondere* alla mia domanda?", translation: "Can you answer my question?" },
+      { text: "Ha *risposto* velocemente all'email.", translation: "He answered the email quickly." },
+      { text: "Non *risponde* mai al telefono.", translation: "She never answers the phone." }
     ]
   },
 
