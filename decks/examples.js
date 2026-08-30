@@ -8022,6 +8022,256 @@ window.DECK_EXAMPLES = {
       { text: "*Perché* sei in ritardo?", translation: "Why are you late?" },
       { text: "*Perché* non ti piace il pesce?", translation: "Why don't you like fish?" },
       { text: "Non so *perché* se n'è andato.", translation: "I don't know why he left." }
+    ],
+    101: [
+      { text: "*Come* stai?", translation: "How are you?" },
+      { text: "*Come* si prepara questo piatto?", translation: "How do you make this dish?" },
+      { text: "Non so *come* rispondere.", translation: "I don't know how to answer." }
+    ],
+    102: [
+      { text: "*Quale* libro stai leggendo?", translation: "Which book are you reading?" },
+      { text: "*Quale* giorno va meglio?", translation: "Which day suits best?" },
+      { text: "Sai *quale* strada prendere?", translation: "Do you know which way we should go?" }
+    ],
+    103: [
+      { text: "*Quanto* costa questo?", translation: "How much does this cost?" },
+      { text: "*Quanto* tempo abbiamo?", translation: "How much time do we have?" },
+      { text: "Non so *quanto* pesa.", translation: "I don't know how much it weighs." }
+    ],
+    104: [
+      { text: "Sono felice *perché* è venerdì.", translation: "I'm happy because it's Friday." },
+      { text: "È arrivata tardi *perché* il treno era in ritardo.", translation: "She came late because the train was delayed." },
+      { text: "Siamo rimasti a casa *perché* pioveva.", translation: "We stayed home because it rained." }
+    ],
+    105: [
+      { text: "Voglio andare, *ma* sono stanco.", translation: "I want to go, but I'm tired." },
+      { text: "È costoso, *ma* ne vale la pena.", translation: "It's expensive, but worth it." },
+      { text: "Ha chiamato, *ma* non ho risposto.", translation: "She called, but I didn't answer." }
+    ],
+    106: [
+      { text: "Mi piace il tè *e* il caffè.", translation: "I like tea and coffee." },
+      { text: "È gentile *e* intelligente.", translation: "He's nice and smart." },
+      { text: "Abbiamo comprato pane, latte *e* uova.", translation: "We bought bread, milk and eggs." }
+    ],
+    107: [
+      { text: "Vuoi tè *o* caffè?", translation: "Would you like tea or coffee?" },
+      { text: "Andiamo a piedi *o* in macchina?", translation: "Shall we walk or drive?" },
+      { text: "Vieni oggi *o* domani?", translation: "Are you coming today or tomorrow?" }
+    ],
+    108: [
+      { text: "Bevo il caffè *con* il latte.", translation: "I drink coffee with milk." },
+      { text: "Vive *con* la sua famiglia.", translation: "She lives with her family." },
+      { text: "Ha parlato *con* l'insegnante.", translation: "He spoke with the teacher." }
+    ],
+    109: [
+      { text: "Bevo il tè *senza* zucchero.", translation: "I drink tea without sugar." },
+      { text: "Se n'è andato *senza* dire nulla.", translation: "He left without saying anything." },
+      { text: "Ce l'abbiamo fatta *senza* aiuto.", translation: "We managed it without help." }
+    ],
+    110: [
+      { text: "La lettera è *da* mia sorella.", translation: "The letter is from my sister." },
+      { text: "Abbiamo viaggiato *da* Roma a Milano.", translation: "We travelled from Rome to Milan." },
+      { text: "Il regalo è *da* parte del mio amico.", translation: "The gift is from my friend." }
+    ],
+    111: [
+      { text: "Vado *a* scuola.", translation: "I'm going to school." },
+      { text: "Ha dato un regalo *a* me.", translation: "She gave a gift to me." },
+      { text: "Abbiamo viaggiato *a* Barcellona quest'estate.", translation: "We travelled to Barcelona this summer." }
+    ],
+    112: [
+      { text: "Il libro è *nel* cassetto.", translation: "The book is in the drawer." },
+      { text: "Vivo *in* Italia.", translation: "I live in Italy." },
+      { text: "È *in* giardino.", translation: "He is in the garden." }
+    ],
+    113: [
+      { text: "Il libro è *sul* tavolo.", translation: "The book is on the table." },
+      { text: "Il gatto è seduto *sulla* sedia.", translation: "The cat is sitting on the chair." },
+      { text: "Il quadro è appeso *sul* muro.", translation: "The picture hangs on the wall." }
+    ],
+    114: [
+      { text: "Il gatto dorme *sotto* il tavolo.", translation: "The cat is sleeping under the table." },
+      { text: "Le chiavi sono *sotto* il tappeto.", translation: "The keys are under the mat." },
+      { text: "Ci siamo seduti *sotto* un albero.", translation: "We sat under a tree." }
+    ],
+    115: [
+      { text: "La lampada è appesa *sopra* il tavolo.", translation: "The lamp hangs above the table." },
+      { text: "L'aereo volava *sopra* la montagna.", translation: "The plane flew over the mountain." },
+      { text: "Vive *sopra* il negozio.", translation: "She lives above the shop." }
+    ],
+    116: [
+      { text: "Roma è una bella *città*.", translation: "Rome is a nice city." },
+      { text: "Viviamo in una piccola *città*.", translation: "We live in a small city." },
+      { text: "La *città* ha molti edifici antichi.", translation: "The city has many old buildings." }
+    ],
+    117: [
+      { text: "Viviamo nella stessa *strada*.", translation: "We live on the same street." },
+      { text: "La *strada* era piena di gente.", translation: "The street was full of people." },
+      { text: "Il negozio si trova in questa *strada*.", translation: "The shop is on this street." }
+    ],
+    118: [
+      { text: "Vado al *negozio* a comprare il latte.", translation: "I'm going to the shop for milk." },
+      { text: "Il *negozio* apre alle nove.", translation: "The shop opens at nine." },
+      { text: "C'è un nuovo *negozio* in centro.", translation: "There's a new shop in the center." }
+    ],
+    119: [
+      { text: "Compriamo le verdure al *mercato*.", translation: "We buy vegetables at the market." },
+      { text: "Il *mercato* è aperto il sabato.", translation: "The market is open on Saturdays." },
+      { text: "C'era molta gente al *mercato*.", translation: "There were a lot of people at the market." }
+    ],
+    120: [
+      { text: "Facciamo una passeggiata al *parco*.", translation: "We're taking a walk in the park." },
+      { text: "I bambini giocano al *parco*.", translation: "The children are playing in the park." },
+      { text: "C'è un grande *parco* vicino a casa.", translation: "There's a big park near the house." }
+    ],
+    121: [
+      { text: "Questa *stanza* è molto luminosa.", translation: "This room is very bright." },
+      { text: "La casa ha cinque *stanze*.", translation: "The house has five rooms." },
+      { text: "Sto riordinando la mia *stanza*.", translation: "I'm cleaning my room." }
+    ],
+    122: [
+      { text: "Cuciniamo in *cucina*.", translation: "We cook in the kitchen." },
+      { text: "La *cucina* è grande e luminosa.", translation: "The kitchen is big and bright." },
+      { text: "Sta seduta in *cucina* a bere il caffè.", translation: "She's sitting in the kitchen drinking coffee." }
+    ],
+    123: [
+      { text: "Il *bagno* è accanto alla camera da letto.", translation: "The bathroom is next to the bedroom." },
+      { text: "Faccio la doccia in *bagno* ogni mattina.", translation: "I shower in the bathroom every morning." },
+      { text: "La casa ha due *bagni*.", translation: "The house has two bathrooms." }
+    ],
+    124: [
+      { text: "La mia *camera* è piccola ma accogliente.", translation: "My bedroom is small but cozy." },
+      { text: "I bambini dormono nella stessa *camera*.", translation: "The children sleep in the same bedroom." },
+      { text: "Abbiamo dipinto la *camera* di blu.", translation: "We painted the bedroom blue." }
+    ],
+    125: [
+      { text: "Guardiamo la TV in *soggiorno*.", translation: "We watch TV in the living room." },
+      { text: "Il *soggiorno* ha un grande divano.", translation: "The living room has a big sofa." },
+      { text: "La famiglia si riunisce in *soggiorno* la sera.", translation: "The family gathers in the living room in the evening." }
+    ],
+    126: [
+      { text: "Mi piace il *formaggio* sul pane.", translation: "I like cheese on bread." },
+      { text: "Abbiamo comprato *formaggio* italiano al mercato.", translation: "We bought Italian cheese at the market." },
+      { text: "Il *formaggio* ha un ottimo sapore.", translation: "The cheese tastes very good." }
+    ],
+    127: [
+      { text: "Mangio le *uova* a colazione.", translation: "I eat eggs for breakfast." },
+      { text: "Puoi comprare le *uova* al negozio?", translation: "Can you buy eggs at the shop?" },
+      { text: "L'*uovo* era cotto alla perfezione.", translation: "The egg was cooked just right." }
+    ],
+    128: [
+      { text: "Mangiamo *pesce* ogni venerdì.", translation: "We eat fish every Friday." },
+      { text: "Il *pesce* era molto fresco.", translation: "The fish was very fresh." },
+      { text: "Ha pescato un grosso *pesce* in mare.", translation: "He caught a big fish in the sea." }
+    ],
+    129: [
+      { text: "Lei non mangia *carne*.", translation: "She doesn't eat meat." },
+      { text: "Abbiamo grigliato la *carne* in giardino.", translation: "We grilled meat in the garden." },
+      { text: "La *carne* era tenera e buona.", translation: "The meat was tender and good." }
+    ],
+    130: [
+      { text: "Mangiamo la *zuppa* quando fa freddo.", translation: "We eat soup when it's cold." },
+      { text: "La *zuppa* era calda e buona.", translation: "The soup was warm and good." },
+      { text: "Mamma ha preparato la *zuppa* per cena.", translation: "Mom made soup for dinner." }
+    ],
+    131: [
+      { text: "Mangio una *mela* ogni giorno.", translation: "I eat an apple every day." },
+      { text: "La *mela* era rossa e dolce.", translation: "The apple was red and sweet." },
+      { text: "Abbiamo raccolto le *mele* in giardino.", translation: "We picked apples in the garden." }
+    ],
+    132: [
+      { text: "Prendo una *banana* a pranzo.", translation: "I'll have a banana for lunch." },
+      { text: "La *banana* era matura e dolce.", translation: "The banana was ripe and sweet." },
+      { text: "Ai bambini piacciono molto le *banane*.", translation: "The children like bananas a lot." }
+    ],
+    133: [
+      { text: "Bevo succo d'*arancia*.", translation: "I drink orange juice." },
+      { text: "L'*arancia* era succosa e dolce.", translation: "The orange was juicy and sweet." },
+      { text: "Abbiamo comprato un sacchetto di *arance*.", translation: "We bought a bag of oranges." }
+    ],
+    134: [
+      { text: "Mangiamo le *patate* a cena.", translation: "We eat potatoes for dinner." },
+      { text: "La *patata* era cotta e morbida.", translation: "The potato was boiled and soft." },
+      { text: "Coltiva le *patate* in giardino.", translation: "He grows potatoes in the garden." }
+    ],
+    135: [
+      { text: "Il coniglio mangia una *carota*.", translation: "The rabbit is eating a carrot." },
+      { text: "La *carota* era dolce e croccante.", translation: "The carrot was sweet and crisp." },
+      { text: "Tagliamo le *carote* per la zuppa.", translation: "We cut carrots for the soup." }
+    ],
+    136: [
+      { text: "Bevo il *tè* al mattino.", translation: "I drink tea in the morning." },
+      { text: "Posso avere una tazza di *tè*?", translation: "Can I have a cup of tea?" },
+      { text: "Il *tè* era troppo caldo da bere.", translation: "The tea was too hot to drink." }
+    ],
+    137: [
+      { text: "Il bambino beve il *latte* a colazione.", translation: "The child drinks milk for breakfast." },
+      { text: "Puoi comprare il *latte* al negozio?", translation: "Can you buy milk at the shop?" },
+      { text: "Il *latte* era freddo e fresco.", translation: "The milk was cold and fresh." }
+    ],
+    138: [
+      { text: "Bevo il *succo* ogni mattina.", translation: "I drink juice every morning." },
+      { text: "Il *succo* ha un sapore dolce e fresco.", translation: "The juice tastes sweet and fresh." },
+      { text: "Abbiamo fatto il *succo* con le mele.", translation: "We made juice from apples." }
+    ],
+    139: [
+      { text: "Faccio *colazione* alle sette.", translation: "I eat breakfast at seven." },
+      { text: "La *colazione* era buona stamattina.", translation: "Breakfast was delicious this morning." },
+      { text: "Facciamo *colazione* insieme ogni giorno.", translation: "We eat breakfast together every day." }
+    ],
+    140: [
+      { text: "Facciamo *pranzo* alle dodici.", translation: "We eat lunch at twelve." },
+      { text: "Il *pranzo* era veloce ma buono.", translation: "Lunch was quick but good." },
+      { text: "Porta il *pranzo* al lavoro.", translation: "He brings lunch to work." }
+    ],
+    141: [
+      { text: "Facciamo *cena* alle sei.", translation: "We eat dinner at six." },
+      { text: "La *cena* era molto buona stasera.", translation: "Dinner was very good tonight." },
+      { text: "La famiglia si riunisce per la *cena* ogni domenica.", translation: "The family gathers for dinner every Sunday." }
+    ],
+    142: [
+      { text: "Puoi passarmi il *sale*?", translation: "Can you pass me the salt?" },
+      { text: "La zuppa ha bisogno di più *sale*.", translation: "The soup needs a bit more salt." },
+      { text: "Usa troppo *sale* nel cibo.", translation: "He uses too much salt in the food." }
+    ],
+    143: [
+      { text: "Bevo il caffè senza *zucchero*.", translation: "I drink coffee without sugar." },
+      { text: "Puoi passarmi lo *zucchero*?", translation: "Can you pass me the sugar?" },
+      { text: "La torta ha bisogno di molto *zucchero*.", translation: "The cake needs a lot of sugar." }
+    ],
+    144: [
+      { text: "Il cibo è sul *piatto*.", translation: "The food is on the plate." },
+      { text: "Puoi lavare il *piatto*?", translation: "Can you wash the plate?" },
+      { text: "Apparecchiamo la tavola con i *piatti*.", translation: "We're setting the table with plates." }
+    ],
+    145: [
+      { text: "Posso avere un *bicchiere* d'acqua?", translation: "Can I have a glass of water?" },
+      { text: "Il *bicchiere* è caduto e si è rotto.", translation: "The glass fell and broke." },
+      { text: "Ha riempito il *bicchiere* di succo.", translation: "She filled the glass with juice." }
+    ],
+    146: [
+      { text: "Mi fa male la *testa*.", translation: "My head hurts." },
+      { text: "Ha scosso la *testa*.", translation: "He shook his head." },
+      { text: "Ho dolore alla *testa*.", translation: "I have pain in my head." }
+    ],
+    147: [
+      { text: "Mi teneva per *mano*.", translation: "She held my hand." },
+      { text: "Lavati le *mani* prima di mangiare.", translation: "Wash your hands before you eat." },
+      { text: "Ha salutato con la *mano*.", translation: "He waved with his hand." }
+    ],
+    148: [
+      { text: "Mi sono storto il *piede*.", translation: "I twisted my foot." },
+      { text: "Il bambino ha i *piedi* piccoli.", translation: "The child has small feet." },
+      { text: "Ha calciato la palla con il *piede*.", translation: "He kicked the ball with his foot." }
+    ],
+    149: [
+      { text: "Ha gli *occhi* blu.", translation: "She has blue eyes." },
+      { text: "Mi è entrato qualcosa nell'*occhio*.", translation: "I got something in my eye." },
+      { text: "Il bambino ha chiuso gli *occhi* e si è addormentato.", translation: "The child closed its eyes and fell asleep." }
+    ],
+    150: [
+      { text: "Mi ha sussurrato qualcosa nell'*orecchio*.", translation: "He whispered something in my ear." },
+      { text: "La musica era forte, così mi sono coperto le *orecchie*.", translation: "The music was loud, so I covered my ears." },
+      { text: "Il cane ha le *orecchie* grandi.", translation: "The dog has big ears." }
     ]
   },
 
