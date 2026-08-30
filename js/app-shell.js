@@ -849,10 +849,15 @@
     // all have to be mirrored here, and every one of them is a chance to drift
     // out of sync with the stylesheet.
     //
-    // getBoundingClientRect + the nav's own padding, rather than offsetLeft,
-    // because the plate is positioned against the nav's *padding* box while
-    // offsetLeft is measured from its border box - mixing the two would park
-    // every plate one padding-width to the right.
+    // The measurement is a *difference between two offsetLefts*, deliberately.
+    // An earlier version computed the tab's position from getBoundingClientRect
+    // and then subtracted the nav's padding by hand, to convert into the box
+    // the plate's `left: 0` resolves against - and parked every plate one
+    // padding-width to the left. Reading the plate's own offsetLeft instead
+    // asks the browser where `left: 0` actually landed rather than deriving
+    // it, so the two values are in the same space by construction and there
+    // is no padding term to get the sign of. offsetLeft is layout-only, so
+    // the plate's current translate does not feed back into it.
     function parkPlate(animate) {
         const parts = navParts();
         if (!parts) return;
@@ -869,17 +874,14 @@
             return;
         }
 
-        const navBox = nav.getBoundingClientRect();
-        const tabBox = active.getBoundingClientRect();
-        const padLeft = parseFloat(getComputedStyle(nav).paddingLeft) || 0;
-        const x = tabBox.left - navBox.left - padLeft + PLATE_INSET;
+        const x = active.offsetLeft - plate.offsetLeft + PLATE_INSET;
 
         // Custom properties, not inline `translate`/`width`: an inline
         // declaration outranks every stylesheet rule, so setting those two
         // directly would make the pressed state's 4px sink a no-op. The
         // stylesheet reads these and owns the geometry.
         plate.style.setProperty("--nav-plate-x", `${x}px`);
-        plate.style.setProperty("--nav-plate-w", `${Math.max(0, tabBox.width - PLATE_INSET * 2)}px`);
+        plate.style.setProperty("--nav-plate-w", `${Math.max(0, active.offsetWidth - PLATE_INSET * 2)}px`);
         plate.classList.add("is-parked");
 
         if (!animate) return;

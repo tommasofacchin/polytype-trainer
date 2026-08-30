@@ -605,8 +605,11 @@ function renderShop() {
     // already looking at post-purchase numbers - and keeping the button live
     // is what lets someone buy their five keys in five quick taps.
     if (keysHeld >= maxKeys) {
+        // No status line, for the same reason as the can't-afford branch
+        // below: the disabled button already says the purchase isn't
+        // available, and spelling it out again made the tile nag.
         if (el.buyBtn) el.buyBtn.disabled = true;
-        setStatus(el.keyStatus, tr("shop.keysFull"), "");
+        setStatus(el.keyStatus, "", "");
     } else if (coins < keyPriceCoins) {
         // No status line: the greyed-out price on the button (see
         // setBuyButtonPrice) already says "you can't afford this yet", and

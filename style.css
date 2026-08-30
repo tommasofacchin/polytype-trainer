@@ -4938,11 +4938,11 @@ body {
    Chrome whenever its collapsing address bar is showing. Content that sits
    above the nav gets bottom padding (below) so nothing is hidden behind it. */
 .has-app-shell:has(#app-bottom-nav) {
-    /* Was 76px. The bar's selected tab now rides on a plate that overhangs
-       its top rim by ~9px, so the clearance has to cover the plate's reach,
-       not just the plank's height - otherwise the plate lands on top of the
-       last line of page content. */
-    padding-bottom: calc(88px + env(safe-area-inset-bottom, 0px));
+    /* Was 76px. The bar's selected tab rides on a plate that overhangs its
+       top rim by ~7px, so the clearance has to cover the plate's reach, not
+       just the plank's height - otherwise the plate lands on top of the last
+       line of page content. */
+    padding-bottom: calc(78px + env(safe-area-inset-bottom, 0px));
 }
 
 #app-header {
@@ -5235,7 +5235,7 @@ body > main {
     margin: 0 auto;
     display: flex;
     gap: 2px;
-    padding: 8px 8px calc(8px + env(safe-area-inset-bottom, 0px));
+    padding: 6px 6px calc(6px + env(safe-area-inset-bottom, 0px));
 }
 
 .app-shell-nav-item {
@@ -5249,7 +5249,7 @@ body > main {
     align-items: center;
     justify-content: center;
     gap: 3px;
-    padding: 8px 0 6px;
+    padding: 5px 0 4px;
     text-decoration: none;
     color: var(--text-faint);
     transition: color var(--dur-base) var(--ease-out);
@@ -5299,10 +5299,12 @@ body > main {
 
 .app-shell-nav-plate {
     position: absolute;
-    /* Overhangs the plank's top rim by 9px: 17px above the tab's own top
-       edge, minus the bar's 8px of padding above it. */
-    top: -17px;
-    bottom: 2px;
+    /* Overhangs the plank's top rim by 7px: 13px above the tab's own top
+       edge, minus the bar's 6px of padding above it. Kept anchored near the
+       tab's base (bottom: 3px) rather than trimmed from below - a plate that
+       floats clear of the plank stops reading as sitting on it. */
+    top: -13px;
+    bottom: 3px;
     left: 0;
     z-index: 0;
     /* Driven from the two custom properties parkPlate() measures onto this
@@ -5377,19 +5379,19 @@ body > main {
 
 /* Icon and label ride up onto the raised plate. */
 .app-shell-nav-item.is-active .app-shell-nav-icon {
-    transform: translateY(-11px) scale(1.12);
+    transform: translateY(-9px) scale(1.10);
 }
 
 .app-shell-nav-item.is-active .app-shell-nav-label {
-    transform: translateY(-9px);
+    transform: translateY(-7px);
 }
 
 .app-shell-nav:has(.app-shell-nav-item.is-active:active) .app-shell-nav-item.is-active .app-shell-nav-icon {
-    transform: translateY(-7px) scale(1.08);
+    transform: translateY(-6px) scale(1.06);
 }
 
 .app-shell-nav:has(.app-shell-nav-item.is-active:active) .app-shell-nav-item.is-active .app-shell-nav-label {
-    transform: translateY(-5px);
+    transform: translateY(-4px);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -5972,7 +5974,33 @@ body > main {
     align-items: center;
     justify-content: center;
     gap: 18px;
-    background: var(--scrim);
+    /* Opaque, not the translucent --scrim its sibling celebration overlays
+       use: a chest opening takes over the whole screen, and the page showing
+       through behind the burst read as a bug rather than as depth.
+       Deliberately dark in both themes - a reward reveal is theatre, and the
+       gold and yellow only pop against a dark ground.
+       That is why the tokens below are pinned: in the light theme they would
+       otherwise resolve to near-black type and near-white cards on this
+       near-black backdrop. Pinning them on the overlay rather than overriding
+       each descendant keeps it to one block, and anything added inside later
+       inherits the right palette for free. The values are the dark theme's
+       own, from :root. */
+    --surface: #101010;
+    --surface-soft: #1a1a1a;
+    --surface-alt: #151515;
+    --border: rgba(255, 255, 255, 0.10);
+    --border-strong: rgba(255, 255, 255, 0.20);
+    --text: #ededed;
+    --text-soft: #a1a1a1;
+    --text-faint: #7d7d7d;
+    --text-faintest: #525252;
+    --accent-ink: #ffd60a;
+    --color-gold-text: #ffd268;
+    --color-secondary: #d4d4d4;
+    --color-secondary-lighter: #fafafa;
+    --color-secondary-on: #0a0a0a;
+    background: #0a0a0a;
+    color: var(--text);
     padding: 24px;
     animation: chest-fadein 0.25s ease forwards;
 }
