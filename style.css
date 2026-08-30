@@ -1530,7 +1530,11 @@ input[type="password"]:focus {
 
 .activity-grid {
     display: grid;
-    grid-template-rows: repeat(7, 1fr);
+    /* auto, not 1fr: the cells get their height from aspect-ratio, and a
+       height that feeds back into an fr track is the circular case some
+       engines collapse. Identical result here - every cell is the same
+       square - without depending on how that circularity is resolved. */
+    grid-template-rows: repeat(7, auto);
     grid-auto-flow: column;
     grid-auto-columns: 1fr;
     gap: 4px;

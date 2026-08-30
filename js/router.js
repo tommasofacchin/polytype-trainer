@@ -18,15 +18,15 @@
     // gamestate, app-shell, tutorial, this file) already loaded once on the
     // very first hard page load and never touched again.
     const PAGE_SCRIPTS = {
-        "index.html": ["decks/index.js", "js/deck-cache.js", "js/levelup.js", "js/chest.js", "js/dashboard.js"],
-        "trainer.html": ["decks/index.js", "decks/categories.js", "js/mission-celebrate.js", "js/main.js"],
-        "dictate.html": ["decks/index.js", "decks/categories.js", "js/mission-celebrate.js", "js/dictate.js"],
-        "memory.html": ["decks/index.js", "decks/categories.js", "js/mission-celebrate.js", "js/memory.js"],
-        "sprint.html": ["decks/index.js", "decks/categories.js", "js/mission-celebrate.js", "js/levelup.js", "js/sprint.js"],
-        "deck.html": ["decks/index.js", "decks/categories.js", "js/deck-cache.js", "js/deck.js"],
+        "index.html": ["decks/index.js", "js/deck-cache.js", "js/levelup.js", "js/chest.js", "js/mission-celebrate.js", "js/streak-celebrate.js", "js/dashboard.js"],
+        "trainer.html": ["decks/index.js", "decks/categories.js", "js/mission-celebrate.js", "js/streak-celebrate.js", "js/main.js"],
+        "dictate.html": ["decks/index.js", "decks/categories.js", "js/mission-celebrate.js", "js/streak-celebrate.js", "js/dictate.js"],
+        "memory.html": ["decks/index.js", "decks/categories.js", "js/mission-celebrate.js", "js/streak-celebrate.js", "js/memory.js"],
+        "sprint.html": ["decks/index.js", "decks/categories.js", "js/mission-celebrate.js", "js/streak-celebrate.js", "js/levelup.js", "js/sprint.js"],
+        "deck.html": ["decks/index.js", "decks/categories.js", "decks/examples.js", "js/deck-cache.js", "js/deck.js"],
         "categories.html": ["decks/index.js", "decks/categories.js", "js/categories.js"],
         "shop.html": ["decks/index.js", "decks/categories.js", "js/shop.js"],
-        "lessons.html": ["decks/lessons-norwegian.js", "decks/lessons-swedish.js", "decks/lessons-german.js", "decks/lessons-italian.js", "decks/lessons-chinese.js", "decks/lessons-japanese.js", "decks/lessons-spanish.js", "js/mission-celebrate.js", "js/lessons.js"],
+        "lessons.html": ["decks/lessons-norwegian.js", "decks/lessons-swedish.js", "decks/lessons-german.js", "decks/lessons-italian.js", "decks/lessons-chinese.js", "decks/lessons-japanese.js", "decks/lessons-spanish.js", "js/mission-celebrate.js", "js/streak-celebrate.js", "js/lessons.js"],
         "friends.html": ["js/friends.js"],
         "find-friends.html": ["js/find-friends.js"],
         "visit-profile.html": ["js/visit-profile.js"],
