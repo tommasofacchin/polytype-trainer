@@ -1524,19 +1524,14 @@ input[type="password"]:focus {
 }
 
 /* ---- Profile: practice heatmap ---------------------------------------------
-   13 weeks of dailyStats as a fixed 13x7 block. Flowing by column (rather than
-   the usual row flow) is what puts the oldest day at the top left and today at
-   the bottom right while js/profile.js just appends the days oldest-first. */
+   dailyStats as a 7-row block, one column per week. Flowing by column (rather
+   than the usual row flow) is what puts the oldest day at the top left and
+   today at the bottom right while js/profile.js just appends the days
+   oldest-first. The column *count* is js/profile.js's job: it adds weeks until
+   they fill the card, which is why nothing here caps the width. */
 
 .activity-grid {
     display: grid;
-    /* 1fr columns fill whatever width they're given, which is fine on a
-       phone-width card but balloons into huge squares on the ~980px-wide
-       profile card on desktop. Capped here rather than switching to a fixed
-       cell size, so it stays exactly as fluid as before below the cap - only
-       wide screens are affected, and the grid just leaves whitespace to its
-       right there instead of stretching into it. */
-    max-width: 380px;
     /* auto, not 1fr: the cells get their height from aspect-ratio, and a
        height that feeds back into an fr track is the circular case some
        engines collapse. Identical result here - every cell is the same

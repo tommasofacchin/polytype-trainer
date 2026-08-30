@@ -54,10 +54,12 @@ async function getHomeOverview(data, token) {
   };
 }
 
-// 13 weeks x 7 rows - the grid the Profile page draws (.activity-grid). Kept
-// here rather than on the client so the query and the drawing can never
-// disagree about how far back the window reaches.
-const HISTORY_DAYS = 91;
+// 53 weeks x 7 rows - the widest grid the Profile page can draw. It picks how
+// many of those weeks to show from the card's width (activityWeeksThatFit in
+// js/profile.js) and always draws the trailing end, so this is the ceiling
+// rather than a fixed frame. Sent whole so widening the window - a desktop
+// card, or a rotation - never needs a second round trip.
+const HISTORY_DAYS = 371;
 
 async function getActivityHistory(data, token) {
   const timezone = normalizeTimezone(data.timezone);

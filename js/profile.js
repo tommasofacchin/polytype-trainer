@@ -53,8 +53,18 @@ const BADGE_ICONS = {
     locked: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>'
 };
 
-// 13 columns x 7 rows, the same window api/get-activity-history.js queries.
-const ACTIVITY_DAYS = 91;
+const ACTIVITY_ROWS = 7;
+// The whole window the API sends (53 x 7 - a year). The grid draws the
+// trailing slice of it that fits the card, so a wide desktop card reaches
+// further back rather than stretching 13 weeks across the width or leaving
+// the rest of it empty.
+const ACTIVITY_MAX_WEEKS = 53;
+const ACTIVITY_MIN_WEEKS = 13;
+// The column pitch the fitter aims for: a ~14px cell plus .activity-grid's
+// 4px gap. The cells are 1fr, so choosing the column count is what holds them
+// near this size - they end up a shade wider to take up the remainder.
+const ACTIVITY_CELL_PX = 14;
+const ACTIVITY_GAP_PX = 4;
 
 let currentProfile = { ...defaultProfile };
 // null until the history request lands. The grid draws either way - with no
@@ -62,6 +72,10 @@ let currentProfile = { ...defaultProfile };
 // a signed-out visitor.
 let activityHistory = null;
 let activityRequested = false;
+// How many columns are on screen right now, so the resize observer can tell a
+// width change that actually adds a week from one that doesn't.
+let activityWeeksDrawn = 0;
+let activityResizeObserver = null;
 
 function tr(key, params = {}) {
     return window.PolytypeI18n?.t?.(key, params) || key;
@@ -70,6 +84,7 @@ function tr(key, params = {}) {
 function initProfilePage() {
     currentProfile = loadProfile();
     renderProfilePage(currentProfile);
+    observeActivityResize();
     setupFirebaseSync();
     setupLocalProfileSync();
 
@@ -162,9 +177,40 @@ function renderProfilePage(profile) {
     renderBadges(safeProfile.badges);
 }
 
-// Draws the last ACTIVITY_DAYS days as a fixed 13x7 block, oldest at the top
-// left and today at the bottom right. .activity-grid flows column by column,
-// so appending the days oldest-first is all the ordering this needs.
+// How many weekly columns the card is wide enough for. Always whole weeks, so
+// every column is a full 7-cell run and today stays on the same row it would
+// have been on at any other width.
+function activityWeeksThatFit(grid) {
+    const width = grid.clientWidth;
+    // No layout yet (a display:none ancestor, or a soft nav that runs this
+    // before the page is painted): draw the narrow frame and let the resize
+    // observer widen it the moment a real width exists.
+    if (!width) return ACTIVITY_MIN_WEEKS;
+
+    const weeks = Math.floor((width + ACTIVITY_GAP_PX) / (ACTIVITY_CELL_PX + ACTIVITY_GAP_PX));
+    return Math.min(ACTIVITY_MAX_WEEKS, Math.max(ACTIVITY_MIN_WEEKS, weeks));
+}
+
+// Redraws only when the width crosses into a different column count - which is
+// also what stops the observer from looping, since a redraw changes the grid's
+// height (new cell size) and would otherwise notify itself forever.
+function observeActivityResize() {
+    const grid = document.getElementById("profile-activity-grid");
+    if (!grid || typeof ResizeObserver !== "function") return;
+
+    // Disconnect first: js/router.js re-runs this file on every soft nav to
+    // the profile, and a second observer on the same element would double
+    // every callback.
+    activityResizeObserver?.disconnect();
+    activityResizeObserver = new ResizeObserver(() => {
+        if (activityWeeksThatFit(grid) !== activityWeeksDrawn) renderActivity(currentProfile);
+    });
+    activityResizeObserver.observe(grid);
+}
+
+// Draws the trailing whole weeks that fit, oldest at the top left and today at
+// the bottom right. .activity-grid flows column by column, so appending the
+// days oldest-first is all the ordering this needs.
 function renderActivity(profile) {
     const grid = document.getElementById("profile-activity-grid");
     if (!grid) return;
@@ -172,8 +218,10 @@ function renderActivity(profile) {
     const todayKey = activityHistory?.todayKey || getTodayKey();
     const statsByDate = new Map((activityHistory?.days || []).map(day => [day.date, day]));
 
+    activityWeeksDrawn = activityWeeksThatFit(grid);
+
     const days = [];
-    for (let offset = ACTIVITY_DAYS - 1; offset >= 0; offset -= 1) {
+    for (let offset = activityWeeksDrawn * ACTIVITY_ROWS - 1; offset >= 0; offset -= 1) {
         const date = shiftDateKey(todayKey, -offset);
         days.push({ date, ...(statsByDate.get(date) || { xp: 0, sessions: 0, correctAnswers: 0, wrongAnswers: 0 }) });
     }
