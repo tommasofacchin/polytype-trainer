@@ -4016,6 +4016,256 @@ window.DECK_EXAMPLES = {
       { text: "Hon bär alltid en stor *väska*.", translation: "She always carries a big bag." },
       { text: "*Väskan* min är full av böcker.", translation: "My bag is full of books." },
       { text: "Jag köpte en ny *väska* till skolan.", translation: "I bought a new bag for school." }
+    ],
+    301: [
+      { text: "Kan du *ge* mig boken?", translation: "Can you give me the book?" },
+      { text: "Han *gav* henne en present.", translation: "He gave her a gift." },
+      { text: "Vi vill *ge* pengar till välgörenhet.", translation: "We want to give money to charity." }
+    ],
+    302: [
+      { text: "Kan du *ta* den här påsen åt mig?", translation: "Can you take this bag for me?" },
+      { text: "Hon *tog* bussen till jobbet.", translation: "She took the bus to work." },
+      { text: "Jag måste *ta* en paus nu.", translation: "I need to take a break now." }
+    ],
+    303: [
+      { text: "Kan du *lägga* boken på bordet?", translation: "Can you put the book on the table?" },
+      { text: "Hon *lade* nycklarna i väskan.", translation: "She put the keys in the bag." },
+      { text: "Jag ska *lägga* mig tidigt ikväll.", translation: "I'm going to bed early tonight." }
+    ],
+    304: [
+      { text: "Filmen *börjar* klockan åtta.", translation: "The movie begins at eight." },
+      { text: "Vi måste *börja* jobba nu.", translation: "We need to begin working now." },
+      { text: "Skolan *började* i augusti.", translation: "School began in August." }
+    ],
+    305: [
+      { text: "Jag måste *sluta* med det här projektet idag.", translation: "I need to finish this project today." },
+      { text: "Mötet *slutade* tidigt.", translation: "The meeting finished early." },
+      { text: "Vi ska *sluta* kursen nästa vecka.", translation: "We're going to finish the course next week." }
+    ],
+    306: [
+      { text: "Jag *vet* inte svaret.", translation: "I don't know the answer." },
+      { text: "*Vet* du var hon bor?", translation: "Do you know where she lives?" },
+      { text: "Hon *visste* inte vad hon skulle säga.", translation: "She didn't know what to say." }
+    ],
+    307: [
+      { text: "Jag *tänker* på dig.", translation: "I'm thinking of you." },
+      { text: "Vad *tänker* du om det här?", translation: "What do you think about this?" },
+      { text: "Han *tänkte* länge innan han svarade.", translation: "He thought for a long time before answering." }
+    ],
+    308: [
+      { text: "Jag *förstår* inte frågan.", translation: "I don't understand the question." },
+      { text: "Kan du *förstå* svenska?", translation: "Can you understand Swedish?" },
+      { text: "Hon *förstod* inte varför han var arg.", translation: "She didn't understand why he was angry." }
+    ],
+    309: [
+      { text: "Jag *minns* inte hans namn.", translation: "I don't remember his name." },
+      { text: "Kan du *minnas* vad jag sa?", translation: "Can you remember what I said?" },
+      { text: "Hon *mindes* min födelsedag.", translation: "She remembered my birthday." }
+    ],
+    310: [
+      { text: "Jag *glömmer* alltid mina nycklar.", translation: "I always forget my keys." },
+      { text: "*Glöm* inte att ringa mig.", translation: "Don't forget to call me." },
+      { text: "Han *glömde* boken hemma.", translation: "He forgot the book at home." }
+    ],
+    311: [
+      { text: "Kan du *hjälpa* mig med det här?", translation: "Can you help me with this?" },
+      { text: "Hon *hjälper* alltid andra.", translation: "She always helps others." },
+      { text: "Vi *hjälpte* grannen med trädgården.", translation: "We helped the neighbor with the garden." }
+    ],
+    312: [
+      { text: "Jag ska *ringa* dig ikväll.", translation: "I'll call you tonight." },
+      { text: "Kan du *ringa* läkaren åt mig?", translation: "Can you call the doctor for me?" },
+      { text: "Hon *ringde* sin mamma varje söndag.", translation: "She called her mother every Sunday." }
+    ],
+    313: [
+      { text: "Kan du *skicka* mig boken?", translation: "Can you send me the book?" },
+      { text: "Jag *skickade* ett mejl igår.", translation: "I sent an email yesterday." },
+      { text: "Vi ska *skicka* paketet imorgon.", translation: "We're going to send the package tomorrow." }
+    ],
+    314: [
+      { text: "Jag *förlorade* min nyckel.", translation: "I lost my key." },
+      { text: "Laget *förlorade* matchen igår.", translation: "The team lost the match yesterday." },
+      { text: "Hon är rädd för att *förlora* jobbet.", translation: "She's afraid of losing her job." }
+    ],
+    315: [
+      { text: "Vi hoppas *vinna* matchen idag.", translation: "We hope to win the match today." },
+      { text: "Hon *vann* tävlingen förra året.", translation: "She won the competition last year." },
+      { text: "Vårt lag *vinner* ofta.", translation: "Our team often wins." }
+    ],
+    316: [
+      { text: "Tåget *anländer* klockan tio.", translation: "The train arrives at ten." },
+      { text: "Vi *anlände* sent till festen.", translation: "We arrived late at the party." },
+      { text: "Planet ska *anlända* om en timme.", translation: "The plane is due to arrive in an hour." }
+    ],
+    317: [
+      { text: "Vi kan *gå in* nu.", translation: "We can enter now." },
+      { text: "Hon *gick in* i rummet tyst.", translation: "She entered the room quietly." },
+      { text: "Kan jag *gå in*?", translation: "Can I come in?" }
+    ],
+    318: [
+      { text: "Tåget *åker* klockan nio.", translation: "The train departs at nine." },
+      { text: "Vi måste *åka* nu för att hinna med planet.", translation: "We have to leave now to catch the plane." },
+      { text: "Han *åkte* utan att säga hejdå.", translation: "He left without saying goodbye." }
+    ],
+    319: [
+      { text: "Jag *bor* i Stockholm.", translation: "I live in Stockholm." },
+      { text: "Var *bor* du?", translation: "Where do you live?" },
+      { text: "De *bodde* där i många år.", translation: "They lived there for many years." }
+    ],
+    320: [
+      { text: "Vi gillar att *promenera* i parken.", translation: "We like to walk in the park." },
+      { text: "Hon *promenerar* till jobbet varje dag.", translation: "She walks to work every day." },
+      { text: "Ska vi *promenera* en sväng?", translation: "Shall we go for a walk?" }
+    ],
+    321: [
+      { text: "Jag *springer* varje morgon.", translation: "I run every morning." },
+      { text: "Barnen *sprang* runt i trädgården.", translation: "The children ran around in the garden." },
+      { text: "Han kan *springa* väldigt fort.", translation: "He can run very fast." }
+    ],
+    322: [
+      { text: "Vi älskar att *simma* på sommaren.", translation: "We love to swim in summer." },
+      { text: "Kan du *simma*?", translation: "Can you swim?" },
+      { text: "Hon *simmade* över hela sjön.", translation: "She swam across the whole lake." }
+    ],
+    323: [
+      { text: "Barnet lärde sig *hoppa* idag.", translation: "The child learned to jump today." },
+      { text: "Han *hoppade* över staketet.", translation: "He jumped over the fence." },
+      { text: "Kan du *hoppa* så högt?", translation: "Can you jump that high?" }
+    ],
+    324: [
+      { text: "Vi älskar att *dansa* på fester.", translation: "We love to dance at parties." },
+      { text: "Kan du *dansa* vals?", translation: "Can you dance the waltz?" },
+      { text: "De *dansade* hela natten.", translation: "They danced all night." }
+    ],
+    325: [
+      { text: "Hon kan *sjunga* väldigt bra.", translation: "She can sing very well." },
+      { text: "Vi *sjöng* tillsammans vid lägerelden.", translation: "We sang together by the campfire." },
+      { text: "Han *sjunger* i en kör.", translation: "He sings in a choir." }
+    ],
+    326: [
+      { text: "Barnen *leker* i trädgården.", translation: "The children are playing in the garden." },
+      { text: "Vill du *leka* med mig?", translation: "Do you want to play with me?" },
+      { text: "De *lekte* hela eftermiddagen.", translation: "They played all afternoon." }
+    ],
+    327: [
+      { text: "Jag gillar att *laga mat* på söndagar.", translation: "I like to cook on Sundays." },
+      { text: "Kan du *laga mat* till oss ikväll?", translation: "Can you cook for us tonight?" },
+      { text: "Hon *lagar mat* varje dag.", translation: "She cooks every day." }
+    ],
+    328: [
+      { text: "Jag måste *städa* mitt rum.", translation: "I need to tidy my room." },
+      { text: "Kan du *städa* köket?", translation: "Can you clean the kitchen?" },
+      { text: "Vi *städade* huset innan gästerna kom.", translation: "We tidied the house before the guests arrived." }
+    ],
+    329: [
+      { text: "De ska *bygga* ett nytt hus.", translation: "They're going to build a new house." },
+      { text: "Han *byggde* ett bord av trä.", translation: "He built a table out of wood." },
+      { text: "Vi *bygger* ett team tillsammans.", translation: "We're building a team together." }
+    ],
+    330: [
+      { text: "Jag vill *ändra* mina planer.", translation: "I want to change my plans." },
+      { text: "Kan vi *ändra* tiden?", translation: "Can we change the time?" },
+      { text: "Hennes liv *ändrades* fullständigt.", translation: "Her life changed completely." }
+    ],
+    331: [
+      { text: "Vi äter *ris* till middag.", translation: "We eat rice for dinner." },
+      { text: "*Riset* var perfekt kokt.", translation: "The rice was cooked perfectly." },
+      { text: "Han gillar *ris* med kyckling.", translation: "He likes rice with chicken." }
+    ],
+    332: [
+      { text: "Vi lagar *pasta* ikväll.", translation: "We're making pasta tonight." },
+      { text: "*Pastan* var jättegod.", translation: "The pasta was delicious." },
+      { text: "Hon äter *pasta* varje vecka.", translation: "She eats pasta every week." }
+    ],
+    333: [
+      { text: "Vi grillar *kyckling* i helgen.", translation: "We're grilling chicken this weekend." },
+      { text: "*Kycklingen* smakade väldigt gott.", translation: "The chicken tasted very good." },
+      { text: "Han äter aldrig *kyckling*.", translation: "He never eats chicken." }
+    ],
+    334: [
+      { text: "Vi äter *nötkött* till söndagsmiddag.", translation: "We eat beef for Sunday dinner." },
+      { text: "*Nötköttet* var mört och saftigt.", translation: "The beef was tender and juicy." },
+      { text: "Han föredrar *nötkött* framför kyckling.", translation: "He prefers beef to chicken." }
+    ],
+    335: [
+      { text: "Hon äter inte *fläskkött*.", translation: "She doesn't eat pork." },
+      { text: "Vi grillade *fläskkött* igår.", translation: "We grilled pork yesterday." },
+      { text: "*Fläskköttet* var lite för salt.", translation: "The pork was a bit too salty." }
+    ],
+    336: [
+      { text: "Kan du skicka *smöret*?", translation: "Can you pass me the butter?" },
+      { text: "Hon breder *smör* på brödet.", translation: "She spreads butter on the bread." },
+      { text: "Vi behöver mer *smör* till kakan.", translation: "We need more butter for the cake." }
+    ],
+    337: [
+      { text: "Vi steker fisken i *olja*.", translation: "We fry the fish in oil." },
+      { text: "*Oljan* var för varm.", translation: "The oil was too hot." },
+      { text: "Kan du skicka *oljan*?", translation: "Can you pass me the oil?" }
+    ],
+    338: [
+      { text: "Kan du skicka *pepparn*?", translation: "Can you pass me the pepper?" },
+      { text: "Soppan behöver lite mer *peppar*.", translation: "The soup needs a bit more pepper." },
+      { text: "Hon använder mycket *peppar* i maten.", translation: "She uses a lot of pepper in the food." }
+    ],
+    339: [
+      { text: "Vi skär *lök* till soppan.", translation: "We're cutting onion for the soup." },
+      { text: "*Löken* fick mig att gråta.", translation: "The onion made me cry." },
+      { text: "Han gillar inte rå *lök*.", translation: "He doesn't like raw onion." }
+    ],
+    340: [
+      { text: "Vi behöver fler *tomater* till salladen.", translation: "We need more tomatoes for the salad." },
+      { text: "*Tomaten* var mogen och röd.", translation: "The tomato was ripe and red." },
+      { text: "Hon odlar *tomater* i trädgården.", translation: "She grows tomatoes in the garden." }
+    ],
+    341: [
+      { text: "Vi steker *vitlök* i olja.", translation: "We fry garlic in oil." },
+      { text: "Rätten smakar starkt av *vitlök*.", translation: "The dish tastes strongly of garlic." },
+      { text: "Han älskar *vitlök* i allt han lagar.", translation: "He loves garlic in everything he cooks." }
+    ],
+    342: [
+      { text: "Jag dricker vatten med *citron*.", translation: "I drink water with lemon." },
+      { text: "*Citronen* var väldigt sur.", translation: "The lemon was very sour." },
+      { text: "Hon pressade en *citron* över fisken.", translation: "She squeezed a lemon over the fish." }
+    ],
+    343: [
+      { text: "Vi plockade *jordgubbar* i trädgården.", translation: "We picked strawberries in the garden." },
+      { text: "*Jordgubbarna* var söta och röda.", translation: "The strawberries were sweet and red." },
+      { text: "Hon gjorde sylt av *jordgubbar*.", translation: "She made jam from strawberries." }
+    ],
+    344: [
+      { text: "Barnen äter *vindruvor* som mellanmål.", translation: "The children eat grapes as snacks." },
+      { text: "*Vindruvorna* var gröna och söta.", translation: "The grapes were green and sweet." },
+      { text: "Vi köpte en påse *vindruvor* på marknaden.", translation: "We bought a bag of grapes at the market." }
+    ],
+    345: [
+      { text: "Hon bakade en *tårta* till min födelsedag.", translation: "She baked a cake for my birthday." },
+      { text: "*Tårtan* smakade fantastiskt.", translation: "The cake tasted amazing." },
+      { text: "Vi äter *tårta* på söndagar.", translation: "We eat cake on Sundays." }
+    ],
+    346: [
+      { text: "Jag älskar mörk *choklad*.", translation: "I love dark chocolate." },
+      { text: "*Chokladen* smälte i solen.", translation: "The chocolate melted in the sun." },
+      { text: "Hon gav mig en ask *choklad*.", translation: "She gave me a box of chocolate." }
+    ],
+    347: [
+      { text: "Vi äter *glass* på sommaren.", translation: "We eat ice cream in summer." },
+      { text: "*Glassen* smälte fort.", translation: "The ice cream melted fast." },
+      { text: "Barnen älskar *glass* med jordgubbssmak.", translation: "The children love strawberry-flavored ice cream." }
+    ],
+    348: [
+      { text: "Vi drack *vin* till middagen.", translation: "We drank wine with dinner." },
+      { text: "*Vinet* var rött och torrt.", translation: "The wine was red and dry." },
+      { text: "Han samlar på *vin*.", translation: "He collects wine." }
+    ],
+    349: [
+      { text: "Han dricker *öl* med sina vänner.", translation: "He drinks beer with his friends." },
+      { text: "*Ölet* var kallt och fräscht.", translation: "The beer was cold and refreshing." },
+      { text: "Vi beställde två *öl* på puben.", translation: "We ordered two beers at the pub." }
+    ],
+    350: [
+      { text: "Kan du öppna den här *flaskan*?", translation: "Can you open this bottle?" },
+      { text: "*Flaskan* var full av vatten.", translation: "The bottle was full of water." },
+      { text: "Vi köpte en *flaska* vin till festen.", translation: "We bought a bottle of wine for the party." }
     ]
   },
 
