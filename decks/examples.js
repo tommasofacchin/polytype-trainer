@@ -5769,6 +5769,256 @@ window.DECK_EXAMPLES = {
       { text: "Er flüsterte mir etwas ins *Ohr*.", translation: "He whispered something in my ear." },
       { text: "Die Musik war laut, also bedeckte ich meine *Ohren*.", translation: "The music was loud, so I covered my ears." },
       { text: "Der Hund hat große *Ohren*.", translation: "The dog has big ears." }
+    ],
+    151: [
+      { text: "Das Kind hat eine kleine *Nase*.", translation: "The child has a small nose." },
+      { text: "Ich atme durch die *Nase*.", translation: "I breathe through my nose." },
+      { text: "Er hat eine verstopfte *Nase*.", translation: "He has a stuffy nose." }
+    ],
+    152: [
+      { text: "Mach deinen *Mund* zu, bitte.", translation: "Close your mouth, please." },
+      { text: "Sie lächelte mit dem ganzen *Mund*.", translation: "She smiled with her whole mouth." },
+      { text: "Sprich nicht mit vollem *Mund*.", translation: "Don't talk with food in your mouth." }
+    ],
+    153: [
+      { text: "Sie hat lange, dunkle *Haare*.", translation: "She has long, dark hair." },
+      { text: "Er schneidet sich die *Haare* selbst.", translation: "He cuts his own hair." },
+      { text: "Meine *Haare* werden im Regen nass.", translation: "My hair gets wet in the rain." }
+    ],
+    154: [
+      { text: "Zieh deine *Jacke* an, es ist kalt draußen.", translation: "Put on your jacket, it's cold outside." },
+      { text: "Ich habe gestern eine neue *Jacke* gekauft.", translation: "I bought a new jacket yesterday." },
+      { text: "Ihre *Jacke* ist blau und warm.", translation: "Her jacket is blue and warm." }
+    ],
+    155: [
+      { text: "Zieh die *Schuhe* aus, bevor du reingehst.", translation: "Take off your shoes before you go in." },
+      { text: "Diese *Schuhe* sind sehr bequem.", translation: "These shoes are very comfortable." },
+      { text: "Ich brauche neue *Schuhe* für den Winter.", translation: "I need new shoes for winter." }
+    ],
+    156: [
+      { text: "Ich habe gestern eine neue *Hose* gekauft.", translation: "I bought new pants yesterday." },
+      { text: "Meine *Hose* ist zu lang.", translation: "My pants are too long." },
+      { text: "Er trägt immer eine schwarze *Hose*.", translation: "He always wears black pants." }
+    ],
+    157: [
+      { text: "Er trägt ein weißes *Hemd*.", translation: "He's wearing a white shirt." },
+      { text: "Mein *Hemd* muss gebügelt werden.", translation: "My shirt needs ironing." },
+      { text: "Wir kauften ihm ein neues *Hemd* zum Geburtstag.", translation: "We bought him a new shirt for his birthday." }
+    ],
+    158: [
+      { text: "Sie trägt ein schönes *Kleid*.", translation: "She's wearing a nice dress." },
+      { text: "Das *Kleid* war rot und lang.", translation: "The dress was red and long." },
+      { text: "Ich kaufe ein neues *Kleid* für die Party.", translation: "I'm going to buy a new dress for the party." }
+    ],
+    159: [
+      { text: "Zieh deinen *Hut* an, es ist kalt.", translation: "Put on your hat, it's cold." },
+      { text: "Sein *Hut* ist blau und warm.", translation: "His hat is blue and warm." },
+      { text: "Ich habe meinen *Hut* im Wind verloren.", translation: "I lost my hat in the wind." }
+    ],
+    160: [
+      { text: "Ich trage einen warmen *Pullover*.", translation: "I'm wearing a warm sweater." },
+      { text: "Mein *Pullover* ist aus Wolle.", translation: "My sweater is made of wool." },
+      { text: "Sie strickte mir einen *Pullover*.", translation: "She knitted a sweater for me." }
+    ],
+    161: [
+      { text: "Warte nur eine *Sekunde*.", translation: "Just wait a second." },
+      { text: "Es dauerte nur ein paar *Sekunden*.", translation: "It only took a few seconds." },
+      { text: "Jede *Sekunde* zählt.", translation: "Every second counts." }
+    ],
+    162: [
+      { text: "Das Treffen dauerte eine *Stunde*.", translation: "The meeting lasted an hour." },
+      { text: "Ich warte noch eine *Stunde*.", translation: "I'll wait one more hour." },
+      { text: "Die Reise dauert drei *Stunden*.", translation: "The trip takes three hours." }
+    ],
+    163: [
+      { text: "Warte eine *Minute*, bitte.", translation: "Wait a minute, please." },
+      { text: "Der Zug kommt in fünf *Minuten*.", translation: "The train arrives in five minutes." },
+      { text: "Es dauert nur ein paar *Minuten*.", translation: "It only takes a few minutes." }
+    ],
+    164: [
+      { text: "Ich bin zwanzig *Jahre* alt.", translation: "I am twenty years old." },
+      { text: "Wir sind vor zwei *Jahren* hierhergezogen.", translation: "We moved here two years ago." },
+      { text: "Nächstes *Jahr* reisen wir nach Italien.", translation: "Next year we're going to travel to Italy." }
+    ],
+    165: [
+      { text: "Was machst du am *Wochenende*?", translation: "What are you doing this weekend?" },
+      { text: "Wir fahren jedes *Wochenende* zur Hütte.", translation: "We go to the cabin every weekend." },
+      { text: "Das *Wochenende* war kurz, aber schön.", translation: "The weekend was short but nice." }
+    ],
+    166: [
+      { text: "Am *Montag* fange ich mit einem neuen Job an.", translation: "On Monday I start a new job." },
+      { text: "Wir treffen uns jeden *Montag*.", translation: "We meet every Monday." },
+      { text: "Der *Montag* war hektisch und lang.", translation: "Monday was busy and long." }
+    ],
+    167: [
+      { text: "Am *Dienstag* habe ich Training.", translation: "On Tuesday I have training." },
+      { text: "Wir fahren am *Dienstag* in die Stadt.", translation: "We're going to town on Tuesday." },
+      { text: "*Dienstage* sind immer ruhig.", translation: "Tuesdays are always calm." }
+    ],
+    168: [
+      { text: "Das Treffen ist am *Mittwoch* um zehn Uhr.", translation: "The meeting is Wednesday at ten." },
+      { text: "Sie arbeitet nicht am *Mittwoch*.", translation: "She doesn't work on Wednesdays." },
+      { text: "Wir sehen uns wieder am *Mittwoch*.", translation: "We'll see each other again on Wednesday." }
+    ],
+    169: [
+      { text: "Am *Donnerstag* essen wir zusammen zu Abend.", translation: "On Thursday we're having dinner together." },
+      { text: "Er reist am *Donnerstag* nach Hause.", translation: "He travels home on Thursday." },
+      { text: "*Donnerstage* sind mein Lieblingstag.", translation: "Thursdays are my favorite day." }
+    ],
+    170: [
+      { text: "Endlich ist *Freitag*!", translation: "Finally it's Friday!" },
+      { text: "Wir feiern immer am *Freitag*.", translation: "We always celebrate on Fridays." },
+      { text: "Am *Freitag* gehen wir abends aus.", translation: "On Friday we go out in the evenings." }
+    ],
+    171: [
+      { text: "Am *Samstag* gehen wir einkaufen.", translation: "On Saturday we go shopping." },
+      { text: "Am *Samstag* gehen wir an den Strand.", translation: "On Saturday we're going to the beach." },
+      { text: "Die Party ist am *Samstag*.", translation: "The party is on Saturday." }
+    ],
+    172: [
+      { text: "Am *Sonntag* essen wir groß zu Mittag.", translation: "On Sundays we eat a big lunch." },
+      { text: "*Sonntag* ist ein ruhiger Tag.", translation: "Sunday is a calm day." },
+      { text: "Die Familie versammelt sich jeden *Sonntag*.", translation: "The family gathers every Sunday." }
+    ],
+    173: [
+      { text: "Die Blumen blühen im *Frühling*.", translation: "The flowers bloom in spring." },
+      { text: "Der *Frühling* ist meine Lieblingsjahreszeit.", translation: "Spring is my favorite season." },
+      { text: "Wir pflanzen im *Frühling* Gemüse.", translation: "We plant vegetables in spring." }
+    ],
+    174: [
+      { text: "Wir reisen jeden *Sommer* nach Italien.", translation: "We travel to Italy every summer." },
+      { text: "Der *Sommer* war warm und sonnig.", translation: "The summer was warm and sunny." },
+      { text: "Im *Sommer* schwimmen wir jeden Tag.", translation: "In summer we swim every day." }
+    ],
+    175: [
+      { text: "Die Blätter fallen im *Herbst*.", translation: "The leaves fall in autumn." },
+      { text: "Der *Herbst* ist hier kalt und nass.", translation: "Autumn is cold and wet here." },
+      { text: "Die Schule beginnt im *Herbst*.", translation: "School starts in autumn." }
+    ],
+    176: [
+      { text: "Es schneit viel im *Winter*.", translation: "It snows a lot in winter." },
+      { text: "Der *Winter* ist in Deutschland lang und dunkel.", translation: "Winter is long and dark in Germany." },
+      { text: "Wir fahren im *Winter* Ski.", translation: "We go skiing in winter." }
+    ],
+    177: [
+      { text: "Die *Sonne* scheint heute.", translation: "The sun is shining today." },
+      { text: "Wir haben den ganzen Tag in der *Sonne* gelegen.", translation: "We sunbathed in the sun all day." },
+      { text: "Die *Sonne* geht um acht Uhr unter.", translation: "The sun sets at eight." }
+    ],
+    178: [
+      { text: "Heute gibt es viel *Regen*.", translation: "There's a lot of rain today." },
+      { text: "Wir wurden vom *Regen* nass.", translation: "We got wet from the rain." },
+      { text: "Der *Regen* hörte nach einer Stunde auf.", translation: "The rain stopped after an hour." }
+    ],
+    179: [
+      { text: "Es liegt viel *Schnee* auf dem Boden.", translation: "There's a lot of snow on the ground." },
+      { text: "Die Kinder spielen im *Schnee*.", translation: "The children are playing in the snow." },
+      { text: "Der *Schnee* schmolz schnell in der Sonne.", translation: "The snow melted quickly in the sun." }
+    ],
+    180: [
+      { text: "Heute weht viel *Wind*.", translation: "There's a lot of wind today." },
+      { text: "Der *Wind* riss das Dach ab.", translation: "The wind ripped off the roof." },
+      { text: "Wir spürten einen kalten *Wind* vom Meer.", translation: "We felt a cold wind from the sea." }
+    ],
+    181: [
+      { text: "Heute ist *schönes* Wetter.", translation: "The weather is nice today." },
+      { text: "Du siehst *schön* aus in dem Kleid.", translation: "You look nice in that dress." },
+      { text: "Es war *schön*, dich wiederzusehen.", translation: "It was nice to see you again." }
+    ],
+    182: [
+      { text: "Heute ist es *bewölkt*.", translation: "It's cloudy today." },
+      { text: "Der Himmel wurde am Nachmittag *bewölkt*.", translation: "The sky became cloudy in the afternoon." },
+      { text: "Wir hatten die ganze Woche *bewölktes* Wetter.", translation: "We had cloudy weather all week." }
+    ],
+    183: [
+      { text: "Der Himmel ist heute Abend *klar*.", translation: "The sky is clear tonight." },
+      { text: "Das Wasser im See ist ganz *klar*.", translation: "The water in the lake is completely clear." },
+      { text: "Morgen wird es *klares* Wetter geben.", translation: "There will be clear weather tomorrow." }
+    ],
+    184: [
+      { text: "Das Wetter war den ganzen Sommer *trocken*.", translation: "The weather has been dry all summer." },
+      { text: "Der Boden ist nach vielen Tagen ohne Regen *trocken*.", translation: "The ground is dry after many days without rain." },
+      { text: "Die Kleidung ist jetzt *trocken*.", translation: "The clothes are dry now." }
+    ],
+    185: [
+      { text: "Das Gras ist morgens *nass*.", translation: "The grass is wet in the morning." },
+      { text: "Meine Schuhe wurden im Regen *nass*.", translation: "My shoes got wet in the rain." },
+      { text: "Ihre Haare waren nach der Dusche *nass*.", translation: "Her hair was wet after the shower." }
+    ],
+    186: [
+      { text: "Ich nehme jeden Tag den *Zug* zur Arbeit.", translation: "I take the train to work every day." },
+      { text: "Der *Zug* hatte heute Verspätung.", translation: "The train was delayed today." },
+      { text: "Wir sind mit dem *Zug* nach Hamburg gereist.", translation: "We travelled by train to Hamburg." }
+    ],
+    187: [
+      { text: "Der *Bus* kommt in zehn Minuten.", translation: "The bus arrives in ten minutes." },
+      { text: "Ich nehme den *Bus* zur Schule.", translation: "I take the bus to school." },
+      { text: "Wir haben lange auf den *Bus* gewartet.", translation: "We waited a long time for the bus." }
+    ],
+    188: [
+      { text: "Das *Flugzeug* hebt um zehn Uhr ab.", translation: "The plane takes off at ten." },
+      { text: "Wir sind mit dem *Flugzeug* nach Spanien geflogen.", translation: "We travelled by plane to Spain." },
+      { text: "Das *Flugzeug* landete sicher.", translation: "The plane landed safely." }
+    ],
+    189: [
+      { text: "Ich habe ein neues *Fahrrad*.", translation: "I have a new bicycle." },
+      { text: "Mein *Fahrrad* ist kaputt.", translation: "My bicycle is broken." },
+      { text: "Er fährt mit dem *Fahrrad* zur Schule.", translation: "He rides his bicycle to school." }
+    ],
+    190: [
+      { text: "Wir nahmen ein *Boot* über den See.", translation: "We took a boat across the lake." },
+      { text: "Das *Boot* war klein, aber schnell.", translation: "The boat was small but fast." },
+      { text: "Er fischt von seinem *Boot* aus.", translation: "He fishes from his boat." }
+    ],
+    191: [
+      { text: "Der Zug hält an diesem *Bahnhof*.", translation: "The train stops at this station." },
+      { text: "Wir haben uns am *Bahnhof* getroffen.", translation: "We met at the station." },
+      { text: "Der *Bahnhof* liegt mitten in der Stadt.", translation: "The station is in the middle of the city." }
+    ],
+    192: [
+      { text: "Wir sind früh zum *Flughafen* gefahren.", translation: "We drove to the airport early." },
+      { text: "Der *Flughafen* war voller Menschen.", translation: "The airport was full of people." },
+      { text: "Er arbeitet am *Flughafen*.", translation: "He works at the airport." }
+    ],
+    193: [
+      { text: "Ich habe eine *Fahrkarte* für das Konzert gekauft.", translation: "I bought a ticket to the concert." },
+      { text: "Kann ich deine *Fahrkarte* sehen?", translation: "Can I see your ticket?" },
+      { text: "Wir brauchen zwei *Fahrkarten* für den Zug.", translation: "We need two tickets for the train." }
+    ],
+    194: [
+      { text: "Kannst du mir das auf der *Karte* zeigen?", translation: "Can you show me on the map?" },
+      { text: "Wir haben eine *Karte* benutzt, um den Weg zu finden.", translation: "We used a map to find the way." },
+      { text: "Die *Karte* zeigt die ganze Stadt.", translation: "The map shows the whole city." }
+    ],
+    195: [
+      { text: "Wir wohnen in einem schönen *Hotel*.", translation: "We're staying at a nice hotel." },
+      { text: "Das *Hotel* liegt in der Nähe des Strandes.", translation: "The hotel is near the beach." },
+      { text: "Das Zimmer im *Hotel* war groß.", translation: "The room at the hotel was big." }
+    ],
+    196: [
+      { text: "Biege an der Ampel *links* ab.", translation: "Turn left at the traffic light." },
+      { text: "Das Buch liegt auf der *linken* Seite des Tisches.", translation: "The book is on the left side of the table." },
+      { text: "Er schreibt mit der *linken* Hand.", translation: "He writes with his left hand." }
+    ],
+    197: [
+      { text: "Biege nach der Brücke *rechts* ab.", translation: "Turn right after the bridge." },
+      { text: "Der Laden liegt auf der *rechten* Seite der Straße.", translation: "The shop is on the right side of the street." },
+      { text: "Sie hält den Stift in der *rechten* Hand.", translation: "She holds the pen in her right hand." }
+    ],
+    198: [
+      { text: "Geh *geradeaus*, bis du die Schule siehst.", translation: "Go straight ahead until you see the school." },
+      { text: "Fahr zwei Kilometer *geradeaus*.", translation: "Drive straight ahead for two kilometers." },
+      { text: "Der Bahnhof ist *geradeaus*, nicht weit von hier.", translation: "The station is straight ahead, not far from here." }
+    ],
+    199: [
+      { text: "Wir wohnen *nah* an der Schule.", translation: "We live near the school." },
+      { text: "Der Laden ist *nah* an unserem Haus.", translation: "The shop is near our house." },
+      { text: "Er wohnt *nah* bei mir.", translation: "He lives near me." }
+    ],
+    200: [
+      { text: "Es ist *weit* zum Flughafen von hier.", translation: "It's far to the airport from here." },
+      { text: "Wir wohnen nicht *weit* vom Zentrum entfernt.", translation: "We don't live far from the center." },
+      { text: "Sie ist *weit* gereist, um hierher zu kommen.", translation: "She travelled far to get here." }
     ]
   },
 
