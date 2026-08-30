@@ -6519,6 +6519,256 @@ window.DECK_EXAMPLES = {
       { text: "Sie trägt immer eine große *Tasche*.", translation: "She always carries a big bag." },
       { text: "Meine *Tasche* ist voller Bücher.", translation: "My bag is full of books." },
       { text: "Ich habe eine neue *Tasche* für die Schule gekauft.", translation: "I bought a new bag for school." }
+    ],
+    301: [
+      { text: "Kannst du mir das Buch *geben*?", translation: "Can you give me the book?" },
+      { text: "Er *gab* ihr ein Geschenk.", translation: "He gave her a gift." },
+      { text: "Wir wollen Geld für wohltätige Zwecke *geben*.", translation: "We want to give money to charity." }
+    ],
+    302: [
+      { text: "Kannst du diese Tüte für mich *nehmen*?", translation: "Can you take this bag for me?" },
+      { text: "Sie *nahm* den Bus zur Arbeit.", translation: "She took the bus to work." },
+      { text: "Ich muss jetzt eine Pause *nehmen*.", translation: "I need to take a break now." }
+    ],
+    303: [
+      { text: "Kannst du das Buch auf den Tisch *legen*?", translation: "Can you put the book on the table?" },
+      { text: "Sie *legte* die Schlüssel in die Tasche.", translation: "She put the keys in the bag." },
+      { text: "Ich werde mich heute Abend früh *legen*.", translation: "I'm going to bed early tonight." }
+    ],
+    304: [
+      { text: "Der Film wird um acht Uhr *anfangen*.", translation: "The movie will begin at eight." },
+      { text: "Wir müssen jetzt *anfangen* zu arbeiten.", translation: "We need to begin working now." },
+      { text: "Die Schule hat im August *angefangen*.", translation: "School began in August." }
+    ],
+    305: [
+      { text: "Ich muss dieses Projekt heute *beenden*.", translation: "I need to finish this project today." },
+      { text: "Das Treffen wurde früh *beendet*.", translation: "The meeting finished early." },
+      { text: "Wir werden den Kurs nächste Woche *beenden*.", translation: "We're going to finish the course next week." }
+    ],
+    306: [
+      { text: "Ich *weiß* die Antwort nicht.", translation: "I don't know the answer." },
+      { text: "*Weißt* du, wo sie wohnt?", translation: "Do you know where she lives?" },
+      { text: "Sie *wusste* nicht, was sie sagen sollte.", translation: "She didn't know what to say." }
+    ],
+    307: [
+      { text: "Ich *denke* an dich.", translation: "I'm thinking of you." },
+      { text: "Was *denkst* du darüber?", translation: "What do you think about this?" },
+      { text: "Er *dachte* lange nach, bevor er antwortete.", translation: "He thought for a long time before answering." }
+    ],
+    308: [
+      { text: "Ich *verstehe* die Frage nicht.", translation: "I don't understand the question." },
+      { text: "Kannst du Deutsch *verstehen*?", translation: "Can you understand German?" },
+      { text: "Sie *verstand* nicht, warum er wütend war.", translation: "She didn't understand why he was angry." }
+    ],
+    309: [
+      { text: "Ich *erinnere* mich nicht an seinen Namen.", translation: "I don't remember his name." },
+      { text: "Kannst du dich *erinnern*, was ich gesagt habe?", translation: "Can you remember what I said?" },
+      { text: "Sie *erinnerte* sich an meinen Geburtstag.", translation: "She remembered my birthday." }
+    ],
+    310: [
+      { text: "Ich *vergesse* immer meine Schlüssel.", translation: "I always forget my keys." },
+      { text: "*Vergiss* nicht, mich anzurufen.", translation: "Don't forget to call me." },
+      { text: "Er *vergaß* das Buch zu Hause.", translation: "He forgot the book at home." }
+    ],
+    311: [
+      { text: "Kannst du mir damit *helfen*?", translation: "Can you help me with this?" },
+      { text: "Sie *hilft* immer anderen.", translation: "She always helps others." },
+      { text: "Wir haben dem Nachbarn im Garten *geholfen*.", translation: "We helped the neighbor with the garden." }
+    ],
+    312: [
+      { text: "Ich werde dich heute Abend *anrufen*.", translation: "I'll call you tonight." },
+      { text: "Kannst du für mich den Arzt *anrufen*?", translation: "Can you call the doctor for me?" },
+      { text: "Sie hat jeden Sonntag ihre Mutter *angerufen*.", translation: "She called her mother every Sunday." }
+    ],
+    313: [
+      { text: "Kannst du mir das Buch *senden*?", translation: "Can you send me the book?" },
+      { text: "Ich habe gestern eine E-Mail *gesendet*.", translation: "I sent an email yesterday." },
+      { text: "Wir werden das Paket morgen *senden*.", translation: "We're going to send the package tomorrow." }
+    ],
+    314: [
+      { text: "Ich habe meinen Schlüssel *verloren*.", translation: "I lost my key." },
+      { text: "*Verliere* nicht den Mut.", translation: "Don't lose heart." },
+      { text: "Sie hat Angst, ihren Job zu *verlieren*.", translation: "She's afraid of losing her job." }
+    ],
+    315: [
+      { text: "Wir hoffen, heute das Spiel zu *gewinnen*.", translation: "We hope to win the match today." },
+      { text: "Sie *gewann* letztes Jahr den Wettbewerb.", translation: "She won the competition last year." },
+      { text: "Unser Team *gewinnt* oft.", translation: "Our team often wins." }
+    ],
+    316: [
+      { text: "Der Zug wird um zehn Uhr *ankommen*.", translation: "The train will arrive at ten." },
+      { text: "Wir sind spät auf der Party *angekommen*.", translation: "We arrived late at the party." },
+      { text: "Das Flugzeug soll in einer Stunde *ankommen*.", translation: "The plane is due to arrive in an hour." }
+    ],
+    317: [
+      { text: "Wir können jetzt *eintreten*.", translation: "We can enter now." },
+      { text: "Sie ist leise ins Zimmer *eingetreten*.", translation: "She entered the room quietly." },
+      { text: "Darf ich *eintreten*?", translation: "Can I come in?" }
+    ],
+    318: [
+      { text: "Der Zug wird um neun Uhr *abfahren*.", translation: "The train will depart at nine." },
+      { text: "Wir müssen jetzt *abfahren*, um das Flugzeug zu erreichen.", translation: "We have to leave now to catch the plane." },
+      { text: "Er ist *abgefahren*, ohne sich zu verabschieden.", translation: "He left without saying goodbye." }
+    ],
+    319: [
+      { text: "Ich *wohne* in Berlin.", translation: "I live in Berlin." },
+      { text: "Wo *wohnst* du?", translation: "Where do you live?" },
+      { text: "Sie *wohnten* dort viele Jahre.", translation: "They lived there for many years." }
+    ],
+    320: [
+      { text: "Sie *läuft* jeden Tag zur Arbeit.", translation: "She walks to work every day." },
+      { text: "Sollen wir eine Runde *laufen*?", translation: "Shall we go for a walk?" },
+      { text: "Ich *laufe* gern im Park.", translation: "I like to walk in the park." }
+    ],
+    321: [
+      { text: "Ich *renne* jeden Morgen.", translation: "I run every morning." },
+      { text: "Die Kinder *rannten* im Garten herum.", translation: "The children ran around in the garden." },
+      { text: "Er kann sehr schnell *rennen*.", translation: "He can run very fast." }
+    ],
+    322: [
+      { text: "Wir *schwimmen* gerne im Sommer.", translation: "We love to swim in summer." },
+      { text: "Kannst du *schwimmen*?", translation: "Can you swim?" },
+      { text: "Sie *schwamm* über den ganzen See.", translation: "She swam across the whole lake." }
+    ],
+    323: [
+      { text: "Das Kind hat heute *springen* gelernt.", translation: "The child learned to jump today." },
+      { text: "Er *sprang* über den Zaun.", translation: "He jumped over the fence." },
+      { text: "Kannst du so hoch *springen*?", translation: "Can you jump that high?" }
+    ],
+    324: [
+      { text: "Wir *tanzen* gerne auf Partys.", translation: "We love to dance at parties." },
+      { text: "Kannst du Walzer *tanzen*?", translation: "Can you dance the waltz?" },
+      { text: "Sie *tanzten* die ganze Nacht.", translation: "They danced all night." }
+    ],
+    325: [
+      { text: "Sie kann sehr gut *singen*.", translation: "She can sing very well." },
+      { text: "Wir *sangen* zusammen am Lagerfeuer.", translation: "We sang together by the campfire." },
+      { text: "Er *singt* in einem Chor.", translation: "He sings in a choir." }
+    ],
+    326: [
+      { text: "Die Kinder *spielen* im Garten.", translation: "The children are playing in the garden." },
+      { text: "Willst du mit mir *spielen*?", translation: "Do you want to play with me?" },
+      { text: "Sie *spielten* den ganzen Nachmittag.", translation: "They played all afternoon." }
+    ],
+    327: [
+      { text: "Ich *koche* gerne sonntags.", translation: "I like to cook on Sundays." },
+      { text: "Kannst du heute Abend für uns *kochen*?", translation: "Can you cook for us tonight?" },
+      { text: "Sie *kocht* jeden Tag.", translation: "She cooks every day." }
+    ],
+    328: [
+      { text: "Ich muss mein Zimmer *putzen*.", translation: "I need to clean my room." },
+      { text: "Kannst du die Küche *putzen*?", translation: "Can you clean the kitchen?" },
+      { text: "Wir haben das Haus *geputzt*, bevor die Gäste kamen.", translation: "We cleaned the house before the guests arrived." }
+    ],
+    329: [
+      { text: "Sie wollen ein neues Haus *bauen*.", translation: "They're going to build a new house." },
+      { text: "Er *baute* einen Tisch aus Holz.", translation: "He built a table out of wood." },
+      { text: "Wir *bauen* zusammen ein Team auf.", translation: "We're building a team together." }
+    ],
+    330: [
+      { text: "Ich möchte meine Pläne *ändern*.", translation: "I want to change my plans." },
+      { text: "Können wir die Uhrzeit *ändern*?", translation: "Can we change the time?" },
+      { text: "Ihr Leben hat sich völlig *geändert*.", translation: "Her life changed completely." }
+    ],
+    331: [
+      { text: "Wir essen *Reis* zum Abendessen.", translation: "We eat rice for dinner." },
+      { text: "Der *Reis* war perfekt gekocht.", translation: "The rice was cooked perfectly." },
+      { text: "Er mag *Reis* mit Hähnchen.", translation: "He likes rice with chicken." }
+    ],
+    332: [
+      { text: "Wir kochen heute Abend *Nudeln*.", translation: "We're making pasta tonight." },
+      { text: "Die *Nudeln* waren köstlich.", translation: "The pasta was delicious." },
+      { text: "Sie isst jede Woche *Nudeln*.", translation: "She eats pasta every week." }
+    ],
+    333: [
+      { text: "Wir grillen am Wochenende *Hähnchen*.", translation: "We're grilling chicken this weekend." },
+      { text: "Das *Hähnchen* schmeckte sehr gut.", translation: "The chicken tasted very good." },
+      { text: "Er isst nie *Hähnchen*.", translation: "He never eats chicken." }
+    ],
+    334: [
+      { text: "Wir essen *Rindfleisch* zum Sonntagsessen.", translation: "We eat beef for Sunday dinner." },
+      { text: "Das *Rindfleisch* war zart und saftig.", translation: "The beef was tender and juicy." },
+      { text: "Er bevorzugt *Rindfleisch* gegenüber Hähnchen.", translation: "He prefers beef to chicken." }
+    ],
+    335: [
+      { text: "Sie isst kein *Schweinefleisch*.", translation: "She doesn't eat pork." },
+      { text: "Wir haben gestern *Schweinefleisch* gegrillt.", translation: "We grilled pork yesterday." },
+      { text: "Das *Schweinefleisch* war etwas zu salzig.", translation: "The pork was a bit too salty." }
+    ],
+    336: [
+      { text: "Kannst du mir die *Butter* geben?", translation: "Can you pass me the butter?" },
+      { text: "Sie streicht *Butter* auf das Brot.", translation: "She spreads butter on the bread." },
+      { text: "Wir brauchen mehr *Butter* für den Kuchen.", translation: "We need more butter for the cake." }
+    ],
+    337: [
+      { text: "Wir braten den Fisch in *Öl*.", translation: "We fry the fish in oil." },
+      { text: "Das *Öl* war zu heiß.", translation: "The oil was too hot." },
+      { text: "Kannst du mir das *Öl* geben?", translation: "Can you pass me the oil?" }
+    ],
+    338: [
+      { text: "Kannst du mir den *Pfeffer* geben?", translation: "Can you pass me the pepper?" },
+      { text: "Die Suppe braucht etwas mehr *Pfeffer*.", translation: "The soup needs a bit more pepper." },
+      { text: "Sie benutzt viel *Pfeffer* im Essen.", translation: "She uses a lot of pepper in the food." }
+    ],
+    339: [
+      { text: "Wir schneiden *Zwiebeln* für die Suppe.", translation: "We're cutting onion for the soup." },
+      { text: "Die *Zwiebel* brachte mich zum Weinen.", translation: "The onion made me cry." },
+      { text: "Er mag keine rohe *Zwiebel*.", translation: "He doesn't like raw onion." }
+    ],
+    340: [
+      { text: "Wir brauchen mehr *Tomaten* für den Salat.", translation: "We need more tomatoes for the salad." },
+      { text: "Die *Tomate* war reif und rot.", translation: "The tomato was ripe and red." },
+      { text: "Sie baut *Tomaten* im Garten an.", translation: "She grows tomatoes in the garden." }
+    ],
+    341: [
+      { text: "Wir braten *Knoblauch* in Öl.", translation: "We fry garlic in oil." },
+      { text: "Das Gericht schmeckt stark nach *Knoblauch*.", translation: "The dish tastes strongly of garlic." },
+      { text: "Er liebt *Knoblauch* in allem, was er kocht.", translation: "He loves garlic in everything he cooks." }
+    ],
+    342: [
+      { text: "Ich trinke Wasser mit *Zitrone*.", translation: "I drink water with lemon." },
+      { text: "Die *Zitrone* war sehr sauer.", translation: "The lemon was very sour." },
+      { text: "Sie presste eine *Zitrone* über den Fisch.", translation: "She squeezed a lemon over the fish." }
+    ],
+    343: [
+      { text: "Wir haben *Erdbeeren* im Garten gepflückt.", translation: "We picked strawberries in the garden." },
+      { text: "Die *Erdbeeren* waren süß und rot.", translation: "The strawberries were sweet and red." },
+      { text: "Sie machte Marmelade aus *Erdbeeren*.", translation: "She made jam from strawberries." }
+    ],
+    344: [
+      { text: "Die Kinder essen *Trauben* als Snack.", translation: "The children eat grapes as snacks." },
+      { text: "Die *Trauben* waren grün und süß.", translation: "The grapes were green and sweet." },
+      { text: "Wir haben einen Beutel *Trauben* auf dem Markt gekauft.", translation: "We bought a bag of grapes at the market." }
+    ],
+    345: [
+      { text: "Sie hat mir zum Geburtstag einen *Kuchen* gebacken.", translation: "She baked a cake for my birthday." },
+      { text: "Der *Kuchen* schmeckte fantastisch.", translation: "The cake tasted amazing." },
+      { text: "Wir essen sonntags *Kuchen*.", translation: "We eat cake on Sundays." }
+    ],
+    346: [
+      { text: "Ich liebe dunkle *Schokolade*.", translation: "I love dark chocolate." },
+      { text: "Die *Schokolade* schmolz in der Sonne.", translation: "The chocolate melted in the sun." },
+      { text: "Sie gab mir eine Schachtel *Schokolade*.", translation: "She gave me a box of chocolate." }
+    ],
+    347: [
+      { text: "Wir essen im Sommer *Eis*.", translation: "We eat ice cream in summer." },
+      { text: "Das *Eis* schmolz schnell.", translation: "The ice cream melted fast." },
+      { text: "Die Kinder lieben *Eis* mit Erdbeergeschmack.", translation: "The children love strawberry-flavored ice cream." }
+    ],
+    348: [
+      { text: "Wir haben *Wein* zum Abendessen getrunken.", translation: "We drank wine with dinner." },
+      { text: "Der *Wein* war rot und trocken.", translation: "The wine was red and dry." },
+      { text: "Er sammelt *Wein*.", translation: "He collects wine." }
+    ],
+    349: [
+      { text: "Er trinkt *Bier* mit seinen Freunden.", translation: "He drinks beer with his friends." },
+      { text: "Das *Bier* war kalt und erfrischend.", translation: "The beer was cold and refreshing." },
+      { text: "Wir bestellten zwei *Bier* in der Kneipe.", translation: "We ordered two beers at the pub." }
+    ],
+    350: [
+      { text: "Kannst du diese *Flasche* öffnen?", translation: "Can you open this bottle?" },
+      { text: "Die *Flasche* war voller Wasser.", translation: "The bottle was full of water." },
+      { text: "Wir kauften eine *Flasche* Wein für die Party.", translation: "We bought a bottle of wine for the party." }
     ]
   },
 
