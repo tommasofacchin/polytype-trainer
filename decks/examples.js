@@ -14278,6 +14278,256 @@ window.DECK_EXAMPLES = {
       { text: "*瓶子*里有水。", romanization: "*Píngzi* lǐ yǒu shuǐ.", translation: "There's water in the bottle." },
       { text: "请给我一个*瓶子*。", romanization: "Qǐng gěi wǒ yí ge *píngzi*.", translation: "Please give me a bottle." },
       { text: "这个*瓶子*是空的。", romanization: "Zhège *píngzi* shì kōng de.", translation: "This bottle is empty." }
+    ],
+    351: [
+      { text: "*桌子*上有一本书。", romanization: "*Zhuōzi* shàng yǒu yì běn shū.", translation: "There's a book on the table." },
+      { text: "请把*桌子*擦干净。", romanization: "Qǐng bǎ *zhuōzi* cā gānjìng.", translation: "Please wipe the table clean." },
+      { text: "这张*桌子*很大。", romanization: "Zhè zhāng *zhuōzi* hěn dà.", translation: "This table is big." }
+    ],
+    352: [
+      { text: "这把*椅子*很舒服。", romanization: "Zhè bǎ *yǐzi* hěn shūfu.", translation: "This chair is comfortable." },
+      { text: "请坐在这把*椅子*上。", romanization: "Qǐng zuò zài zhè bǎ *yǐzi* shàng.", translation: "Please sit on this chair." },
+      { text: "*椅子*坏了。", romanization: "*Yǐzi* huài le.", translation: "The chair is broken." }
+    ],
+    353: [
+      { text: "我的*床*很舒服。", romanization: "Wǒ de *chuáng* hěn shūfu.", translation: "My bed is comfortable." },
+      { text: "*床*上有一只猫。", romanization: "*Chuáng* shàng yǒu yì zhī māo.", translation: "There's a cat on the bed." },
+      { text: "他还在*床*上睡觉。", romanization: "Tā hái zài *chuáng* shàng shuìjiào.", translation: "He's still sleeping in bed." }
+    ],
+    354: [
+      { text: "请关上*门*。", romanization: "Qǐng guānshàng *mén*.", translation: "Please close the door." },
+      { text: "*门*开着。", romanization: "*Mén* kāizhe.", translation: "The door is open." },
+      { text: "有人在敲*门*。", romanization: "Yǒurén zài qiāo *mén*.", translation: "Someone is knocking on the door." }
+    ],
+    355: [
+      { text: "请打开*窗户*。", romanization: "Qǐng dǎkāi *chuānghu*.", translation: "Please open the window." },
+      { text: "*窗户*很脏。", romanization: "*Chuānghu* hěn zāng.", translation: "The window is dirty." },
+      { text: "猫坐在*窗户*旁边。", romanization: "Māo zuò zài *chuānghu* pángbiān.", translation: "The cat is sitting by the window." }
+    ],
+    356: [
+      { text: "*墙*上有一幅画。", romanization: "*Qiáng* shàng yǒu yì fú huà.", translation: "There's a painting on the wall." },
+      { text: "这面*墙*是白色的。", romanization: "Zhè miàn *qiáng* shì báisè de.", translation: "This wall is white." },
+      { text: "钟挂在*墙*上。", romanization: "Zhōng guà zài *qiáng* shàng.", translation: "The clock hangs on the wall." }
+    ],
+    357: [
+      { text: "*地板*很干净。", romanization: "*Dìbǎn* hěn gānjìng.", translation: "The floor is clean." },
+      { text: "请不要坐在*地板*上。", romanization: "Qǐng bú yào zuò zài *dìbǎn* shàng.", translation: "Please don't sit on the floor." },
+      { text: "*地板*是木头做的。", romanization: "*Dìbǎn* shì mùtou zuò de.", translation: "The floor is made of wood." }
+    ],
+    358: [
+      { text: "*屋顶*漏水了。", romanization: "*Wūdǐng* lòushuǐ le.", translation: "The roof is leaking." },
+      { text: "鸟停在*屋顶*上。", romanization: "Niǎo tíng zài *wūdǐng* shàng.", translation: "The bird landed on the roof." },
+      { text: "他们在修*屋顶*。", romanization: "Tāmen zài xiū *wūdǐng*.", translation: "They're repairing the roof." }
+    ],
+    359: [
+      { text: "我们的*花园*很漂亮。", romanization: "Wǒmen de *huāyuán* hěn piàoliang.", translation: "Our garden is beautiful." },
+      { text: "孩子们在*花园*里玩。", romanization: "Háizimen zài *huāyuán* lǐ wán.", translation: "The children are playing in the garden." },
+      { text: "她在*花园*里种花。", romanization: "Tā zài *huāyuán* lǐ zhòng huā.", translation: "She's planting flowers in the garden." }
+    ],
+    360: [
+      { text: "车在*车库*里。", romanization: "Chē zài *chēkù* lǐ.", translation: "The car is in the garage." },
+      { text: "*车库*很大。", romanization: "*Chēkù* hěn dà.", translation: "The garage is big." },
+      { text: "他在*车库*修车。", romanization: "Tā zài *chēkù* xiūchē.", translation: "He's fixing the car in the garage." }
+    ],
+    361: [
+      { text: "请打开*灯*。", romanization: "Qǐng dǎkāi *dēng*.", translation: "Please turn on the lamp." },
+      { text: "*灯*坏了。", romanization: "*Dēng* huài le.", translation: "The lamp is broken." },
+      { text: "桌子上有一盏*灯*。", romanization: "Zhuōzi shàng yǒu yì zhǎn *dēng*.", translation: "There's a lamp on the table." }
+    ],
+    362: [
+      { text: "她在*镜子*前梳头。", romanization: "Tā zài *jìngzi* qián shūtóu.", translation: "She's combing her hair in front of the mirror." },
+      { text: "*镜子*破了。", romanization: "*Jìngzi* pò le.", translation: "The mirror is broken." },
+      { text: "墙上挂着一面*镜子*。", romanization: "Qiáng shàng guàzhe yí miàn *jìngzi*.", translation: "There's a mirror hanging on the wall." }
+    ],
+    363: [
+      { text: "请给我一条*毛巾*。", romanization: "Qǐng gěi wǒ yì tiáo *máojīn*.", translation: "Please give me a towel." },
+      { text: "这条*毛巾*是湿的。", romanization: "Zhè tiáo *máojīn* shì shī de.", translation: "This towel is wet." },
+      { text: "*毛巾*在浴室里。", romanization: "*Máojīn* zài yùshì lǐ.", translation: "The towel is in the bathroom." }
+    ],
+    364: [
+      { text: "请用*肥皂*洗手。", romanization: "Qǐng yòng *féizào* xǐ shǒu.", translation: "Please wash your hands with soap." },
+      { text: "*肥皂*没有了。", romanization: "*Féizào* méiyǒu le.", translation: "There's no more soap." },
+      { text: "这个*肥皂*闻起来很香。", romanization: "Zhège *féizào* wén qǐlai hěn xiāng.", translation: "This soap smells nice." }
+    ],
+    365: [
+      { text: "牛奶在*冰箱*里。", romanization: "Niúnǎi zài *bīngxiāng* lǐ.", translation: "The milk is in the fridge." },
+      { text: "*冰箱*是空的。", romanization: "*Bīngxiāng* shì kōng de.", translation: "The fridge is empty." },
+      { text: "请把肉放进*冰箱*。", romanization: "Qǐng bǎ ròu fàng jìn *bīngxiāng*.", translation: "Please put the meat in the fridge." }
+    ],
+    366: [
+      { text: "*烤箱*很热。", romanization: "*Kǎoxiāng* hěn rè.", translation: "The oven is hot." },
+      { text: "蛋糕在*烤箱*里。", romanization: "Dàngāo zài *kǎoxiāng* lǐ.", translation: "The cake is in the oven." },
+      { text: "请打开*烤箱*。", romanization: "Qǐng dǎkāi *kǎoxiāng*.", translation: "Please turn on the oven." }
+    ],
+    367: [
+      { text: "他坐在*沙发*上看电视。", romanization: "Tā zuò zài *shāfā* shàng kàn diànshì.", translation: "He's sitting on the sofa watching TV." },
+      { text: "这个*沙发*很舒服。", romanization: "Zhège *shāfā* hěn shūfu.", translation: "This sofa is comfortable." },
+      { text: "猫在*沙发*上睡觉。", romanization: "Māo zài *shāfā* shàng shuìjiào.", translation: "The cat is sleeping on the sofa." }
+    ],
+    368: [
+      { text: "书在*架子*上。", romanization: "Shū zài *jiàzi* shàng.", translation: "The books are on the shelf." },
+      { text: "*架子*上有很多书。", romanization: "*Jiàzi* shàng yǒu hěn duō shū.", translation: "There are many books on the shelf." },
+      { text: "这个*架子*太高了。", romanization: "Zhège *jiàzi* tài gāo le.", translation: "This shelf is too high." }
+    ],
+    369: [
+      { text: "*楼梯*在哪里？", romanization: "*Lóutī* zài nǎlǐ?", translation: "Where are the stairs?" },
+      { text: "他走上*楼梯*。", romanization: "Tā zǒu shàng *lóutī*.", translation: "He walks up the stairs." },
+      { text: "小心*楼梯*。", romanization: "Xiǎoxīn *lóutī*.", translation: "Be careful on the stairs." }
+    ],
+    370: [
+      { text: "*电梯*坏了。", romanization: "*Diàntī* huài le.", translation: "The elevator is broken." },
+      { text: "我们坐*电梯*上楼。", romanization: "Wǒmen zuò *diàntī* shàng lóu.", translation: "We take the elevator upstairs." },
+      { text: "*电梯*在左边。", romanization: "*Diàntī* zài zuǒbian.", translation: "The elevator is on the left." }
+    ],
+    371: [
+      { text: "我有一只*狗*。", romanization: "Wǒ yǒu yì zhī *gǒu*.", translation: "I have a dog." },
+      { text: "*狗*在花园里跑。", romanization: "*Gǒu* zài huāyuán lǐ pǎo.", translation: "The dog is running in the garden." },
+      { text: "这只*狗*很友好。", romanization: "Zhè zhī *gǒu* hěn yǒuhǎo.", translation: "This dog is friendly." }
+    ],
+    372: [
+      { text: "我的*猫*喜欢睡觉。", romanization: "Wǒ de *māo* xǐhuan shuìjiào.", translation: "My cat likes to sleep." },
+      { text: "*猫*在窗户旁边。", romanization: "*Māo* zài chuānghu pángbiān.", translation: "The cat is by the window." },
+      { text: "这只*猫*是黑色的。", romanization: "Zhè zhī *māo* shì hēisè de.", translation: "This cat is black." }
+    ],
+    373: [
+      { text: "*鸟*在树上唱歌。", romanization: "*Niǎo* zài shù shàng chànggē.", translation: "The bird is singing in the tree." },
+      { text: "我看到一只*鸟*。", romanization: "Wǒ kàndào yì zhī *niǎo*.", translation: "I saw a bird." },
+      { text: "这只*鸟*会飞。", romanization: "Zhè zhī *niǎo* huì fēi.", translation: "This bird can fly." }
+    ],
+    374: [
+      { text: "*马*跑得很快。", romanization: "*Mǎ* pǎo de hěn kuài.", translation: "The horse runs fast." },
+      { text: "他喜欢骑*马*。", romanization: "Tā xǐhuan qí *mǎ*.", translation: "He likes riding horses." },
+      { text: "农场里有三匹*马*。", romanization: "Nóngchǎng lǐ yǒu sān pǐ *mǎ*.", translation: "There are three horses on the farm." }
+    ],
+    375: [
+      { text: "农场里有很多*牛*。", romanization: "Nóngchǎng lǐ yǒu hěn duō *niú*.", translation: "There are many cows on the farm." },
+      { text: "*牛*在吃草。", romanization: "*Niú* zài chī cǎo.", translation: "The cow is eating grass." },
+      { text: "这头*牛*很大。", romanization: "Zhè tóu *niú* hěn dà.", translation: "This cow is big." }
+    ],
+    376: [
+      { text: "*羊*在山上吃草。", romanization: "*Yáng* zài shān shàng chī cǎo.", translation: "The sheep are eating grass on the mountain." },
+      { text: "农场里有很多*羊*。", romanization: "Nóngchǎng lǐ yǒu hěn duō *yáng*.", translation: "There are many sheep on the farm." },
+      { text: "这只*羊*是白色的。", romanization: "Zhè zhī *yáng* shì báisè de.", translation: "This sheep is white." }
+    ],
+    377: [
+      { text: "*猪*在农场里。", romanization: "*Zhū* zài nóngchǎng lǐ.", translation: "The pig is on the farm." },
+      { text: "这只*猪*很胖。", romanization: "Zhè zhī *zhū* hěn pàng.", translation: "This pig is fat." },
+      { text: "孩子们喜欢看*猪*。", romanization: "Háizimen xǐhuan kàn *zhū*.", translation: "Children like watching pigs." }
+    ],
+    378: [
+      { text: "*母鸡*生了一个蛋。", romanization: "*Mǔjī* shēngle yí ge dàn.", translation: "The hen laid an egg." },
+      { text: "农场里有几只*母鸡*。", romanization: "Nóngchǎng lǐ yǒu jǐ zhī *mǔjī*.", translation: "There are a few hens on the farm." },
+      { text: "这只*母鸡*是棕色的。", romanization: "Zhè zhī *mǔjī* shì zōngsè de.", translation: "This hen is brown." }
+    ],
+    379: [
+      { text: "有一只*老鼠*在厨房里。", romanization: "Yǒu yì zhī *lǎoshǔ* zài chúfáng lǐ.", translation: "There's a mouse in the kitchen." },
+      { text: "猫在追*老鼠*。", romanization: "Māo zài zhuī *lǎoshǔ*.", translation: "The cat is chasing the mouse." },
+      { text: "这只*老鼠*很小。", romanization: "Zhè zhī *lǎoshǔ* hěn xiǎo.", translation: "This mouse is small." }
+    ],
+    380: [
+      { text: "*兔子*喜欢吃胡萝卜。", romanization: "*Tùzi* xǐhuan chī húluóbo.", translation: "Rabbits like eating carrots." },
+      { text: "花园里有一只*兔子*。", romanization: "Huāyuán lǐ yǒu yì zhī *tùzi*.", translation: "There's a rabbit in the garden." },
+      { text: "这只*兔子*是白色的。", romanization: "Zhè zhī *tùzi* shì báisè de.", translation: "This rabbit is white." }
+    ],
+    381: [
+      { text: "花园里有一棵*树*。", romanization: "Huāyuán lǐ yǒu yì kē *shù*.", translation: "There's a tree in the garden." },
+      { text: "*树*上有很多鸟。", romanization: "*Shù* shàng yǒu hěn duō niǎo.", translation: "There are many birds in the tree." },
+      { text: "这棵*树*很高。", romanization: "Zhè kē *shù* hěn gāo.", translation: "This tree is tall." }
+    ],
+    382: [
+      { text: "她买了一些*花*。", romanization: "Tā mǎile yìxiē *huā*.", translation: "She bought some flowers." },
+      { text: "*花*很漂亮。", romanization: "*Huā* hěn piàoliang.", translation: "The flowers are beautiful." },
+      { text: "花园里种满了*花*。", romanization: "Huāyuán lǐ zhòng mǎnle *huā*.", translation: "The garden is full of flowers." }
+    ],
+    383: [
+      { text: "*草*是绿色的。", romanization: "*Cǎo* shì lǜsè de.", translation: "The grass is green." },
+      { text: "孩子们在*草*地上玩。", romanization: "Háizimen zài *cǎo* dì shàng wán.", translation: "The children are playing on the grass." },
+      { text: "*草*很湿。", romanization: "*Cǎo* hěn shī.", translation: "The grass is wet." }
+    ],
+    384: [
+      { text: "我们周末去爬*山*。", romanization: "Wǒmen zhōumò qù pá *shān*.", translation: "We're going hiking in the mountains this weekend." },
+      { text: "*山*很高。", romanization: "*Shān* hěn gāo.", translation: "The mountain is tall." },
+      { text: "*山*上有雪。", romanization: "*Shān* shàng yǒu xuě.", translation: "There's snow on the mountain." }
+    ],
+    385: [
+      { text: "*河*水很清澈。", romanization: "*Hé* shuǐ hěn qīngchè.", translation: "The river water is clear." },
+      { text: "他们在*河*边散步。", romanization: "Tāmen zài *hé* biān sànbù.", translation: "They're walking by the river." },
+      { text: "这条*河*很长。", romanization: "Zhè tiáo *hé* hěn cháng.", translation: "This river is long." }
+    ],
+    386: [
+      { text: "*海*是蓝色的。", romanization: "*Hǎi* shì lánsè de.", translation: "The sea is blue." },
+      { text: "我们去*海*边度假。", romanization: "Wǒmen qù *hǎi* biān dùjià.", translation: "We're going on vacation by the sea." },
+      { text: "*海*很大。", romanization: "*Hǎi* hěn dà.", translation: "The sea is big." }
+    ],
+    387: [
+      { text: "*湖*很平静。", romanization: "*Hú* hěn píngjìng.", translation: "The lake is calm." },
+      { text: "我们在*湖*边野餐。", romanization: "Wǒmen zài *hú* biān yěcān.", translation: "We're having a picnic by the lake." },
+      { text: "这个*湖*很深。", romanization: "Zhège *hú* hěn shēn.", translation: "This lake is deep." }
+    ],
+    388: [
+      { text: "*森林*里有很多树。", romanization: "*Sēnlín* lǐ yǒu hěn duō shù.", translation: "There are many trees in the forest." },
+      { text: "我们在*森林*里散步。", romanization: "Wǒmen zài *sēnlín* lǐ sànbù.", translation: "We're walking in the forest." },
+      { text: "*森林*很安静。", romanization: "*Sēnlín* hěn ānjìng.", translation: "The forest is quiet." }
+    ],
+    389: [
+      { text: "我们在*海滩*上玩。", romanization: "Wǒmen zài *hǎitān* shàng wán.", translation: "We're playing on the beach." },
+      { text: "*海滩*上有很多人。", romanization: "*Hǎitān* shàng yǒu hěn duō rén.", translation: "There are many people on the beach." },
+      { text: "这个*海滩*很漂亮。", romanization: "Zhège *hǎitān* hěn piàoliang.", translation: "This beach is beautiful." }
+    ],
+    390: [
+      { text: "*天空*是蓝色的。", romanization: "*Tiānkōng* shì lánsè de.", translation: "The sky is blue." },
+      { text: "*天空*中有很多云。", romanization: "*Tiānkōng* zhōng yǒu hěn duō yún.", translation: "There are many clouds in the sky." },
+      { text: "鸟在*天空*中飞。", romanization: "Niǎo zài *tiānkōng* zhōng fēi.", translation: "Birds fly in the sky." }
+    ],
+    391: [
+      { text: "他*三十*岁了。", romanization: "Tā *sānshí* suì le.", translation: "He's thirty years old." },
+      { text: "教室里有*三十*个学生。", romanization: "Jiàoshì lǐ yǒu *sānshí* ge xuésheng.", translation: "There are thirty students in the classroom." },
+      { text: "我们等了*三十*分钟。", romanization: "Wǒmen děngle *sānshí* fēnzhōng.", translation: "We waited thirty minutes." }
+    ],
+    392: [
+      { text: "她*四十*岁了。", romanization: "Tā *sìshí* suì le.", translation: "She's forty years old." },
+      { text: "我们走了*四十*分钟。", romanization: "Wǒmen zǒule *sìshí* fēnzhōng.", translation: "We walked for forty minutes." },
+      { text: "这本书有*四十*页。", romanization: "Zhè běn shū yǒu *sìshí* yè.", translation: "This book has forty pages." }
+    ],
+    393: [
+      { text: "他*五十*岁了。", romanization: "Tā *wǔshí* suì le.", translation: "He's fifty years old." },
+      { text: "这个盒子里有*五十*个苹果。", romanization: "Zhège hézi lǐ yǒu *wǔshí* ge píngguǒ.", translation: "There are fifty apples in this box." },
+      { text: "我们走了*五十*公里。", romanization: "Wǒmen zǒule *wǔshí* gōnglǐ.", translation: "We walked fifty kilometers." }
+    ],
+    394: [
+      { text: "这本书有*一百*页。", romanization: "Zhè běn shū yǒu *yìbǎi* yè.", translation: "This book has a hundred pages." },
+      { text: "*一百*块钱够吗？", romanization: "*Yìbǎi* kuài qián gòu ma?", translation: "Is a hundred yuan enough?" },
+      { text: "他活了*一百*岁。", romanization: "Tā huóle *yìbǎi* suì.", translation: "He lived to be a hundred years old." }
+    ],
+    395: [
+      { text: "这辆车要*一千*美元。", romanization: "Zhè liàng chē yào *yìqiān* měiyuán.", translation: "This car costs a thousand dollars." },
+      { text: "这本书有*一千*个单词。", romanization: "Zhè běn shū yǒu *yìqiān* ge dāncí.", translation: "This book has a thousand words." },
+      { text: "*一千*个人来了。", romanization: "*Yìqiān* ge rén lái le.", translation: "A thousand people came." }
+    ],
+    396: [
+      { text: "他的车是*灰色*的。", romanization: "Tā de chē shì *huīsè* de.", translation: "His car is grey." },
+      { text: "天空是*灰色*的。", romanization: "Tiānkōng shì *huīsè* de.", translation: "The sky is grey." },
+      { text: "她穿着*灰色*的外套。", romanization: "Tā chuānzhe *huīsè* de wàitào.", translation: "She's wearing a grey coat." }
+    ],
+    397: [
+      { text: "这是我*第一*次来这里。", romanization: "Zhè shì wǒ *dìyī* cì lái zhèlǐ.", translation: "This is my first time here." },
+      { text: "他是*第一*名。", romanization: "Tā shì *dìyī* míng.", translation: "He's in first place." },
+      { text: "*第一*个问题很简单。", romanization: "*Dìyī* ge wèntí hěn jiǎndān.", translation: "The first question is simple." }
+    ],
+    398: [
+      { text: "这是*最后*一个问题。", romanization: "Zhè shì *zuìhòu* yí ge wèntí.", translation: "This is the last question." },
+      { text: "他*最后*一个到。", romanization: "Tā *zuìhòu* yí ge dào.", translation: "He arrived last." },
+      { text: "*最后*，谢谢大家。", romanization: "*Zuìhòu*, xièxie dàjiā.", translation: "Finally, thank you everyone." }
+    ],
+    399: [
+      { text: "我只吃了*一半*。", romanization: "Wǒ zhǐ chīle *yíbàn*.", translation: "I only ate half." },
+      { text: "*一半*的学生都来了。", romanization: "*Yíbàn* de xuésheng dōu lái le.", translation: "Half of the students came." },
+      { text: "给我*一半*就够了。", romanization: "Gěi wǒ *yíbàn* jiù gòu le.", translation: "Half is enough for me." }
+    ],
+    400: [
+      { text: "你的电话*号码*是多少？", romanization: "Nǐ de diànhuà *hàomǎ* shì duōshao?", translation: "What's your phone number?" },
+      { text: "请告诉我房间*号码*。", romanization: "Qǐng gàosu wǒ fángjiān *hàomǎ*.", translation: "Please tell me the room number." },
+      { text: "这个*号码*不对。", romanization: "Zhège *hàomǎ* bú duì.", translation: "This number is wrong." }
     ]
   },
 
