@@ -14028,6 +14028,256 @@ window.DECK_EXAMPLES = {
       { text: "这是我的*包*。", romanization: "Zhè shì wǒ de *bāo*.", translation: "This is my bag." },
       { text: "她买了一个新*包*。", romanization: "Tā mǎile yí ge xīn *bāo*.", translation: "She bought a new bag." },
       { text: "*包*里有什么？", romanization: "*Bāo* lǐ yǒu shénme?", translation: "What's in the bag?" }
+    ],
+    301: [
+      { text: "我*给*了他一本书。", romanization: "Wǒ *gěi* le tā yì běn shū.", translation: "I gave him a book." },
+      { text: "请*给*我一杯水。", romanization: "Qǐng *gěi* wǒ yì bēi shuǐ.", translation: "Please give me a glass of water." },
+      { text: "她*给*了我一个惊喜。", romanization: "Tā *gěi* le wǒ yí ge jīngxǐ.", translation: "She gave me a surprise." }
+    ],
+    302: [
+      { text: "请*拿*着这个。", romanization: "Qǐng *ná* zhe zhège.", translation: "Please hold this." },
+      { text: "他*拿*了我的书。", romanization: "Tā *ná* le wǒ de shū.", translation: "He took my book." },
+      { text: "你能*拿*给我那个杯子吗？", romanization: "Nǐ néng *ná* gěi wǒ nàge bēizi ma?", translation: "Can you hand me that cup?" }
+    ],
+    303: [
+      { text: "请把书*放*在桌子上。", romanization: "Qǐng bǎ shū *fàng* zài zhuōzi shàng.", translation: "Please put the book on the table." },
+      { text: "她把钥匙*放*进了包里。", romanization: "Tā bǎ yàoshi *fàng* jìnle bāo lǐ.", translation: "She put the keys in her bag." },
+      { text: "把盘子*放*好。", romanization: "Bǎ pánzi *fàng* hǎo.", translation: "Put the plate down properly." }
+    ],
+    304: [
+      { text: "电影*开始*了。", romanization: "Diànyǐng *kāishǐ* le.", translation: "The movie has started." },
+      { text: "我们*开始*上课吧。", romanization: "Wǒmen *kāishǐ* shàngkè ba.", translation: "Let's start class." },
+      { text: "她*开始*学习中文。", romanization: "Tā *kāishǐ* xuéxí Zhōngwén.", translation: "She started learning Chinese." }
+    ],
+    305: [
+      { text: "会议*结束*了。", romanization: "Huìyì *jiéshù* le.", translation: "The meeting has ended." },
+      { text: "电影几点*结束*？", romanization: "Diànyǐng jǐ diǎn *jiéshù*?", translation: "What time does the movie end?" },
+      { text: "考试*结束*了。", romanization: "Kǎoshì *jiéshù* le.", translation: "The exam is over." }
+    ],
+    306: [
+      { text: "我不*知道*。", romanization: "Wǒ bù *zhīdào*.", translation: "I don't know." },
+      { text: "你*知道*他住在哪里吗？", romanization: "Nǐ *zhīdào* tā zhù zài nǎlǐ ma?", translation: "Do you know where he lives?" },
+      { text: "她*知道*这个答案。", romanization: "Tā *zhīdào* zhège dá'àn.", translation: "She knows the answer." }
+    ],
+    307: [
+      { text: "我*想*你说得对。", romanization: "Wǒ *xiǎng* nǐ shuō de duì.", translation: "I think you're right." },
+      { text: "他在*想*一个问题。", romanization: "Tā zài *xiǎng* yí ge wèntí.", translation: "He's thinking about a problem." },
+      { text: "我*想*去公园。", romanization: "Wǒ *xiǎng* qù gōngyuán.", translation: "I want to go to the park." }
+    ],
+    308: [
+      { text: "我不*懂*。", romanization: "Wǒ bù *dǒng*.", translation: "I don't understand." },
+      { text: "你*懂*我的意思吗？", romanization: "Nǐ *dǒng* wǒ de yìsi ma?", translation: "Do you understand what I mean?" },
+      { text: "她*懂*三种语言。", romanization: "Tā *dǒng* sān zhǒng yǔyán.", translation: "She knows three languages." }
+    ],
+    309: [
+      { text: "我*记得*你的名字。", romanization: "Wǒ *jìde* nǐ de míngzi.", translation: "I remember your name." },
+      { text: "你*记得*我们第一次见面吗？", romanization: "Nǐ *jìde* wǒmen dì yī cì jiànmiàn ma?", translation: "Do you remember when we first met?" },
+      { text: "我不*记得*了。", romanization: "Wǒ bú *jìde* le.", translation: "I don't remember." }
+    ],
+    310: [
+      { text: "我*忘记*了他的名字。", romanization: "Wǒ *wàngjì* le tā de míngzi.", translation: "I forgot his name." },
+      { text: "别*忘记*带钥匙。", romanization: "Bié *wàngjì* dài yàoshi.", translation: "Don't forget to bring your keys." },
+      { text: "她*忘记*了我们的约会。", romanization: "Tā *wàngjì* le wǒmen de yuēhuì.", translation: "She forgot our appointment." }
+    ],
+    311: [
+      { text: "你能*帮*我一下吗？", romanization: "Nǐ néng *bāng* wǒ yíxià ma?", translation: "Can you help me?" },
+      { text: "他*帮*我搬了行李。", romanization: "Tā *bāng* wǒ bānle xíngli.", translation: "He helped me carry the luggage." },
+      { text: "我*帮*她做作业。", romanization: "Wǒ *bāng* tā zuò zuòyè.", translation: "I help her with homework." }
+    ],
+    312: [
+      { text: "我要*打电话*给妈妈。", romanization: "Wǒ yào *dǎ diànhuà* gěi māma.", translation: "I need to call my mom." },
+      { text: "请给我*打电话*。", romanization: "Qǐng gěi wǒ *dǎ diànhuà*.", translation: "Please call me." },
+      { text: "她在*打电话*。", romanization: "Tā zài *dǎ diànhuà*.", translation: "She's on the phone." }
+    ],
+    313: [
+      { text: "我要*寄*一封信。", romanization: "Wǒ yào *jì* yì fēng xìn.", translation: "I need to send a letter." },
+      { text: "她*寄*了一个包裹。", romanization: "Tā *jì* le yí ge bāoguǒ.", translation: "She sent a package." },
+      { text: "你能帮我*寄*这个吗？", romanization: "Nǐ néng bāng wǒ *jì* zhège ma?", translation: "Can you help me send this?" }
+    ],
+    314: [
+      { text: "我*丢*了我的钥匙。", romanization: "Wǒ *diū* le wǒ de yàoshi.", translation: "I lost my keys." },
+      { text: "他*丢*了工作。", romanization: "Tā *diū* le gōngzuò.", translation: "He lost his job." },
+      { text: "别*丢*了你的票。", romanization: "Bié *diū* le nǐ de piào.", translation: "Don't lose your ticket." }
+    ],
+    315: [
+      { text: "我们的队*赢*了。", romanization: "Wǒmen de duì *yíng* le.", translation: "Our team won." },
+      { text: "他总是*赢*。", romanization: "Tā zǒngshì *yíng*.", translation: "He always wins." },
+      { text: "谁*赢*了比赛？", romanization: "Shéi *yíng* le bǐsài?", translation: "Who won the match?" }
+    ],
+    316: [
+      { text: "我们晚上*到达*了。", romanization: "Wǒmen wǎnshang *dàodá* le.", translation: "We arrived in the evening." },
+      { text: "火车什么时候*到达*？", romanization: "Huǒchē shénme shíhou *dàodá*?", translation: "When does the train arrive?" },
+      { text: "他们*到达*了机场。", romanization: "Tāmen *dàodá* le jīchǎng.", translation: "They arrived at the airport." }
+    ],
+    317: [
+      { text: "请*进*。", romanization: "Qǐng *jìn*.", translation: "Please come in." },
+      { text: "她*进*了房间。", romanization: "Tā *jìn* le fángjiān.", translation: "She entered the room." },
+      { text: "他悄悄地*进*了房间。", romanization: "Tā qiāoqiāo de *jìn* le fángjiān.", translation: "He quietly entered the room." }
+    ],
+    318: [
+      { text: "他*离开*了公司。", romanization: "Tā *líkāi* le gōngsī.", translation: "He left the company." },
+      { text: "火车九点*离开*。", romanization: "Huǒchē jiǔ diǎn *líkāi*.", translation: "The train departs at nine." },
+      { text: "请不要*离开*。", romanization: "Qǐng bú yào *líkāi*.", translation: "Please don't leave." }
+    ],
+    319: [
+      { text: "我*住*在这个城市。", romanization: "Wǒ *zhù* zài zhège chéngshì.", translation: "I live in this city." },
+      { text: "你*住*在哪里？", romanization: "Nǐ *zhù* zài nǎlǐ?", translation: "Where do you live?" },
+      { text: "他们*住*在乡下。", romanization: "Tāmen *zhù* zài xiāngxià.", translation: "They live in the countryside." }
+    ],
+    320: [
+      { text: "我们*走*路去学校。", romanization: "Wǒmen *zǒu* lù qù xuéxiào.", translation: "We walk to school." },
+      { text: "她*走*得很快。", romanization: "Tā *zǒu* de hěn kuài.", translation: "She walks fast." },
+      { text: "请往前*走*。", romanization: "Qǐng wǎng qián *zǒu*.", translation: "Please walk forward." }
+    ],
+    321: [
+      { text: "他每天早上*跑*步。", romanization: "Tā měitiān zǎoshang *pǎo* bù.", translation: "He runs every morning." },
+      { text: "孩子们在公园里*跑*。", romanization: "Háizimen zài gōngyuán lǐ *pǎo*.", translation: "The children are running in the park." },
+      { text: "她*跑*得很快。", romanization: "Tā *pǎo* de hěn kuài.", translation: "She runs fast." }
+    ],
+    322: [
+      { text: "我喜欢*游泳*。", romanization: "Wǒ xǐhuan *yóuyǒng*.", translation: "I like to swim." },
+      { text: "他每天*游泳*一个小时。", romanization: "Tā měitiān *yóuyǒng* yí ge xiǎoshí.", translation: "He swims for an hour every day." },
+      { text: "她不会*游泳*。", romanization: "Tā bú huì *yóuyǒng*.", translation: "She can't swim." }
+    ],
+    323: [
+      { text: "小狗*跳*了起来。", romanization: "Xiǎogǒu *tiào* le qǐlai.", translation: "The puppy jumped up." },
+      { text: "他*跳*过了那条河。", romanization: "Tā *tiào* guòle nà tiáo hé.", translation: "He jumped over the river." },
+      { text: "孩子们喜欢*跳*。", romanization: "Háizimen xǐhuan *tiào*.", translation: "Children like to jump." }
+    ],
+    324: [
+      { text: "我们喜欢*跳舞*。", romanization: "Wǒmen xǐhuan *tiàowǔ*.", translation: "We like to dance." },
+      { text: "她*跳舞*跳得很好。", romanization: "Tā *tiàowǔ* tiào de hěn hǎo.", translation: "She dances very well." },
+      { text: "他们在派对上*跳舞*。", romanization: "Tāmen zài pàiduì shàng *tiàowǔ*.", translation: "They're dancing at the party." }
+    ],
+    325: [
+      { text: "她喜欢*唱歌*。", romanization: "Tā xǐhuan *chànggē*.", translation: "She likes to sing." },
+      { text: "他*唱歌*唱得很好。", romanization: "Tā *chànggē* chàng de hěn hǎo.", translation: "He sings very well." },
+      { text: "孩子们在*唱歌*。", romanization: "Háizimen zài *chànggē*.", translation: "The children are singing." }
+    ],
+    326: [
+      { text: "孩子们在*玩*。", romanization: "Háizimen zài *wán*.", translation: "The children are playing." },
+      { text: "我们去公园*玩*吧。", romanization: "Wǒmen qù gōngyuán *wán* ba.", translation: "Let's go play in the park." },
+      { text: "他喜欢和朋友*玩*。", romanization: "Tā xǐhuan hé péngyou *wán*.", translation: "He likes to play with friends." }
+    ],
+    327: [
+      { text: "妈妈在*做饭*。", romanization: "Māma zài *zuòfàn*.", translation: "Mom is cooking." },
+      { text: "我不太会*做饭*。", romanization: "Wǒ bú tài huì *zuòfàn*.", translation: "I'm not very good at cooking." },
+      { text: "我们一起*做饭*吧。", romanization: "Wǒmen yìqǐ *zuòfàn* ba.", translation: "Let's cook together." }
+    ],
+    328: [
+      { text: "我在*打扫*房间。", romanization: "Wǒ zài *dǎsǎo* fángjiān.", translation: "I'm cleaning the room." },
+      { text: "她每周*打扫*厨房。", romanization: "Tā měi zhōu *dǎsǎo* chúfáng.", translation: "She cleans the kitchen every week." },
+      { text: "我们一起*打扫*吧。", romanization: "Wǒmen yìqǐ *dǎsǎo* ba.", translation: "Let's clean together." }
+    ],
+    329: [
+      { text: "他们要*建*一座新桥。", romanization: "Tāmen yào *jiàn* yí zuò xīn qiáo.", translation: "They're going to build a new bridge." },
+      { text: "这座房子是去年*建*的。", romanization: "Zhè zuò fángzi shì qùnián *jiàn* de.", translation: "This house was built last year." },
+      { text: "公司要*建*一栋新楼。", romanization: "Gōngsī yào *jiàn* yí dòng xīn lóu.", translation: "The company is going to build a new building." }
+    ],
+    330: [
+      { text: "他*改变*了他的想法。", romanization: "Tā *gǎibiàn* le tā de xiǎngfǎ.", translation: "He changed his mind." },
+      { text: "生活*改变*了很多。", romanization: "Shēnghuó *gǎibiàn* le hěn duō.", translation: "Life has changed a lot." },
+      { text: "我们不能*改变*过去。", romanization: "Wǒmen bù néng *gǎibiàn* guòqù.", translation: "We can't change the past." }
+    ],
+    331: [
+      { text: "我们晚饭吃*米饭*。", romanization: "Wǒmen wǎnfàn chī *mǐfàn*.", translation: "We're eating rice for dinner." },
+      { text: "她做了*米饭*和鱼。", romanization: "Tā zuòle *mǐfàn* hé yú.", translation: "She made rice and fish." },
+      { text: "我喜欢吃*米饭*。", romanization: "Wǒ xǐhuan chī *mǐfàn*.", translation: "I like eating rice." }
+    ],
+    332: [
+      { text: "他喜欢吃*面条*。", romanization: "Tā xǐhuan chī *miàntiáo*.", translation: "He likes eating noodles." },
+      { text: "妈妈做了*面条*。", romanization: "Māma zuòle *miàntiáo*.", translation: "Mom made noodles." },
+      { text: "这碗*面条*很好吃。", romanization: "Zhè wǎn *miàntiáo* hěn hǎochī.", translation: "This bowl of noodles is delicious." }
+    ],
+    333: [
+      { text: "我们晚饭吃*鸡肉*。", romanization: "Wǒmen wǎnfàn chī *jīròu*.", translation: "We're eating chicken for dinner." },
+      { text: "这个汤里有*鸡肉*。", romanization: "Zhège tāng lǐ yǒu *jīròu*.", translation: "There's chicken in this soup." },
+      { text: "她不吃*鸡肉*。", romanization: "Tā bù chī *jīròu*.", translation: "She doesn't eat chicken." }
+    ],
+    334: [
+      { text: "他喜欢吃*牛肉*。", romanization: "Tā xǐhuan chī *niúròu*.", translation: "He likes eating beef." },
+      { text: "这道菜是*牛肉*做的。", romanization: "Zhè dào cài shì *niúròu* zuò de.", translation: "This dish is made with beef." },
+      { text: "我们买了一些*牛肉*。", romanization: "Wǒmen mǎile yìxiē *niúròu*.", translation: "We bought some beef." }
+    ],
+    335: [
+      { text: "她不吃*猪肉*。", romanization: "Tā bù chī *zhūròu*.", translation: "She doesn't eat pork." },
+      { text: "这个菜市场卖*猪肉*。", romanization: "Zhège càishìchǎng mài *zhūròu*.", translation: "This market sells pork." },
+      { text: "我们买了一点*猪肉*。", romanization: "Wǒmen mǎile yìdiǎn *zhūròu*.", translation: "We bought a bit of pork." }
+    ],
+    336: [
+      { text: "请把*黄油*递给我。", romanization: "Qǐng bǎ *huángyóu* dì gěi wǒ.", translation: "Please pass me the butter." },
+      { text: "面包上有*黄油*。", romanization: "Miànbāo shàng yǒu *huángyóu*.", translation: "There's butter on the bread." },
+      { text: "她用*黄油*做蛋糕。", romanization: "Tā yòng *huángyóu* zuò dàngāo.", translation: "She uses butter to make cakes." }
+    ],
+    337: [
+      { text: "请加一点*油*。", romanization: "Qǐng jiā yìdiǎn *yóu*.", translation: "Please add a little oil." },
+      { text: "这个菜*油*太多了。", romanization: "Zhège cài *yóu* tài duō le.", translation: "This dish has too much oil." },
+      { text: "厨房里没有*油*了。", romanization: "Chúfáng lǐ méiyǒu *yóu* le.", translation: "There's no more oil in the kitchen." }
+    ],
+    338: [
+      { text: "请给我*胡椒*。", romanization: "Qǐng gěi wǒ *hújiāo*.", translation: "Please give me the pepper." },
+      { text: "这个汤*胡椒*味很重。", romanization: "Zhège tāng *hújiāo* wèi hěn zhòng.", translation: "This soup has a strong pepper taste." },
+      { text: "我喜欢加一点*胡椒*。", romanization: "Wǒ xǐhuan jiā yìdiǎn *hújiāo*.", translation: "I like to add a little pepper." }
+    ],
+    339: [
+      { text: "我在切*洋葱*。", romanization: "Wǒ zài qiē *yángcōng*.", translation: "I'm cutting an onion." },
+      { text: "这个汤里有*洋葱*。", romanization: "Zhège tāng lǐ yǒu *yángcōng*.", translation: "There's onion in this soup." },
+      { text: "她不喜欢*洋葱*。", romanization: "Tā bù xǐhuan *yángcōng*.", translation: "She doesn't like onions." }
+    ],
+    340: [
+      { text: "沙拉里有*西红柿*。", romanization: "Shālā lǐ yǒu *xīhóngshì*.", translation: "There are tomatoes in the salad." },
+      { text: "我买了一些*西红柿*。", romanization: "Wǒ mǎile yìxiē *xīhóngshì*.", translation: "I bought some tomatoes." },
+      { text: "这个*西红柿*很新鲜。", romanization: "Zhège *xīhóngshì* hěn xīnxiān.", translation: "This tomato is fresh." }
+    ],
+    341: [
+      { text: "这道菜有很多*大蒜*。", romanization: "Zhè dào cài yǒu hěn duō *dàsuàn*.", translation: "This dish has a lot of garlic." },
+      { text: "我在切*大蒜*。", romanization: "Wǒ zài qiē *dàsuàn*.", translation: "I'm chopping garlic." },
+      { text: "汤里加一点*大蒜*。", romanization: "Tāng lǐ jiā yìdiǎn *dàsuàn*.", translation: "Add a little garlic to the soup." }
+    ],
+    342: [
+      { text: "我想要一杯*柠檬*水。", romanization: "Wǒ xiǎng yào yì bēi *níngméng* shuǐ.", translation: "I'd like a glass of lemon water." },
+      { text: "这个蛋糕有*柠檬*味。", romanization: "Zhège dàngāo yǒu *níngméng* wèi.", translation: "This cake has a lemon flavor." },
+      { text: "她买了两个*柠檬*。", romanization: "Tā mǎile liǎng ge *níngméng*.", translation: "She bought two lemons." }
+    ],
+    343: [
+      { text: "我喜欢吃*草莓*。", romanization: "Wǒ xǐhuan chī *cǎoméi*.", translation: "I like eating strawberries." },
+      { text: "这些*草莓*很甜。", romanization: "Zhèxiē *cǎoméi* hěn tián.", translation: "These strawberries are sweet." },
+      { text: "她买了一盒*草莓*。", romanization: "Tā mǎile yì hé *cǎoméi*.", translation: "She bought a box of strawberries." }
+    ],
+    344: [
+      { text: "他喜欢吃*葡萄*。", romanization: "Tā xǐhuan chī *pútao*.", translation: "He likes eating grapes." },
+      { text: "这些*葡萄*很新鲜。", romanization: "Zhèxiē *pútao* hěn xīnxiān.", translation: "These grapes are fresh." },
+      { text: "她买了一串*葡萄*。", romanization: "Tā mǎile yí chuàn *pútao*.", translation: "She bought a bunch of grapes." }
+    ],
+    345: [
+      { text: "今天是她的生日，我们做了*蛋糕*。", romanization: "Jīntiān shì tā de shēngrì, wǒmen zuòle *dàngāo*.", translation: "Today is her birthday, we made a cake." },
+      { text: "这个*蛋糕*很好吃。", romanization: "Zhège *dàngāo* hěn hǎochī.", translation: "This cake is delicious." },
+      { text: "我想吃一块*蛋糕*。", romanization: "Wǒ xiǎng chī yí kuài *dàngāo*.", translation: "I'd like a piece of cake." }
+    ],
+    346: [
+      { text: "我喜欢吃*巧克力*。", romanization: "Wǒ xǐhuan chī *qiǎokèlì*.", translation: "I like eating chocolate." },
+      { text: "她给了我一块*巧克力*。", romanization: "Tā gěile wǒ yí kuài *qiǎokèlì*.", translation: "She gave me a piece of chocolate." },
+      { text: "这个蛋糕是*巧克力*味的。", romanization: "Zhège dàngāo shì *qiǎokèlì* wèi de.", translation: "This cake is chocolate flavored." }
+    ],
+    347: [
+      { text: "孩子们喜欢吃*冰淇淋*。", romanization: "Háizimen xǐhuan chī *bīngqílín*.", translation: "Children love eating ice cream." },
+      { text: "我想要一个*冰淇淋*。", romanization: "Wǒ xiǎng yào yí ge *bīngqílín*.", translation: "I'd like an ice cream." },
+      { text: "这个*冰淇淋*是香草味的。", romanization: "Zhège *bīngqílín* shì xiāngcǎo wèi de.", translation: "This ice cream is vanilla flavored." }
+    ],
+    348: [
+      { text: "他喜欢喝*葡萄酒*。", romanization: "Tā xǐhuan hē *pútaojiǔ*.", translation: "He likes drinking wine." },
+      { text: "我们点了一瓶*葡萄酒*。", romanization: "Wǒmen diǎnle yì píng *pútaojiǔ*.", translation: "We ordered a bottle of wine." },
+      { text: "这个*葡萄酒*很好喝。", romanization: "Zhège *pútaojiǔ* hěn hǎohē.", translation: "This wine is delicious." }
+    ],
+    349: [
+      { text: "他喜欢喝*啤酒*。", romanization: "Tā xǐhuan hē *píjiǔ*.", translation: "He likes drinking beer." },
+      { text: "我们点了两杯*啤酒*。", romanization: "Wǒmen diǎnle liǎng bēi *píjiǔ*.", translation: "We ordered two beers." },
+      { text: "这个*啤酒*很冷。", romanization: "Zhège *píjiǔ* hěn lěng.", translation: "This beer is cold." }
+    ],
+    350: [
+      { text: "*瓶子*里有水。", romanization: "*Píngzi* lǐ yǒu shuǐ.", translation: "There's water in the bottle." },
+      { text: "请给我一个*瓶子*。", romanization: "Qǐng gěi wǒ yí ge *píngzi*.", translation: "Please give me a bottle." },
+      { text: "这个*瓶子*是空的。", romanization: "Zhège *píngzi* shì kōng de.", translation: "This bottle is empty." }
     ]
   },
 
