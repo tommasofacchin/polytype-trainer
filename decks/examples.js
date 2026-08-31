@@ -17031,6 +17031,256 @@ window.DECK_EXAMPLES = {
       { text: "あなたの電話*番号*は何ですか。", romanization: "Anata no denwa *bangou* wa nan desu ka.", translation: "What's your phone number?" },
       { text: "部屋*番号*を教えてください。", romanization: "Heya *bangou* o oshiete kudasai.", translation: "Please tell me the room number." },
       { text: "この*番号*は間違っています。", romanization: "Kono *bangou* wa machigatte imasu.", translation: "This number is wrong." }
+    ],
+    401: [
+      { text: "彼女はとても*こわい*です。", romanization: "Kanojo wa totemo *kowai* desu.", translation: "She's very afraid." },
+      { text: "私は暗闇が*こわい*です。", romanization: "Watashi wa kurayami ga *kowai* desu.", translation: "I'm afraid of the dark." },
+      { text: "*こわい*ことはありません、大丈夫です。", romanization: "*Kowai* koto wa arimasen, daijoubu desu.", translation: "There's nothing to be afraid of, it's okay." }
+    ],
+    402: [
+      { text: "彼は*びっくり*しました。", romanization: "Kare wa *bikkuri* shimashita.", translation: "He was surprised." },
+      { text: "このニュースにとても*びっくり*しました。", romanization: "Kono nyuusu ni totemo *bikkuri* shimashita.", translation: "This news surprised me a lot." },
+      { text: "彼女は*びっくり*したようです。", romanization: "Kanojo wa *bikkuri* shita you desu.", translation: "She looks surprised." }
+    ],
+    403: [
+      { text: "この映画は*たいくつ*です。", romanization: "Kono eiga wa *taikutsu* desu.", translation: "This movie is boring." },
+      { text: "今日は*たいくつ*です。", romanization: "Kyou wa *taikutsu* desu.", translation: "I'm bored today." },
+      { text: "彼はこの授業が*たいくつ*だと思っています。", romanization: "Kare wa kono jugyou ga *taikutsu* da to omotte imasu.", translation: "He thinks this class is boring." }
+    ],
+    404: [
+      { text: "もう少し*静か*にしてください。", romanization: "Mou sukoshi *shizuka* ni shite kudasai.", translation: "Please be a bit quieter." },
+      { text: "この図書館は*静か*です。", romanization: "Kono toshokan wa *shizuka* desu.", translation: "This library is quiet." },
+      { text: "子供たちは*静か*に座っていました。", romanization: "Kodomotachi wa *shizuka* ni suwatte imashita.", translation: "The children sat quietly." }
+    ],
+    405: [
+      { text: "あなたを*誇らしい*と思います。", romanization: "Anata o *hokorashii* to omoimasu.", translation: "I'm proud of you." },
+      { text: "彼は自分の仕事を*誇らしい*と感じています。", romanization: "Kare wa jibun no shigoto o *hokorashii* to kanjite imasu.", translation: "He's proud of his work." },
+      { text: "両親は子供を*誇らしい*と思っています。", romanization: "Ryoushin wa kodomo o *hokorashii* to omotte imasu.", translation: "Parents are proud of their children." }
+    ],
+    406: [
+      { text: "彼は*強い*です。", romanization: "Kare wa *tsuyoi* desu.", translation: "He's very strong." },
+      { text: "このチームは*強い*です。", romanization: "Kono chiimu wa *tsuyoi* desu.", translation: "This team is strong." },
+      { text: "風が*強い*です。", romanization: "Kaze ga *tsuyoi* desu.", translation: "The wind is strong." }
+    ],
+    407: [
+      { text: "彼は体が*弱い*です。", romanization: "Kare wa karada ga *yowai* desu.", translation: "He's physically weak." },
+      { text: "信号が*弱い*です。", romanization: "Shingou ga *yowai* desu.", translation: "The signal is weak." },
+      { text: "このチームは*弱い*です。", romanization: "Kono chiimu wa *yowai* desu.", translation: "This team is weak." }
+    ],
+    408: [
+      { text: "この庭は*きれい*です。", romanization: "Kono niwa wa *kirei* desu.", translation: "This garden is beautiful." },
+      { text: "彼女は*きれい*です。", romanization: "Kanojo wa *kirei* desu.", translation: "She's beautiful." },
+      { text: "この街はとても*きれい*です。", romanization: "Kono machi wa totemo *kirei* desu.", translation: "This city is very beautiful." }
+    ],
+    409: [
+      { text: "このビルは*醜い*です。", romanization: "Kono biru wa *minikui* desu.", translation: "This building is ugly." },
+      { text: "彼はこの絵が*醜い*と思っています。", romanization: "Kare wa kono e ga *minikui* to omotte imasu.", translation: "He thinks this painting is ugly." },
+      { text: "この服は少し*醜い*です。", romanization: "Kono fuku wa sukoshi *minikui* desu.", translation: "This piece of clothing is a bit ugly." }
+    ],
+    410: [
+      { text: "彼女は*若い*です。", romanization: "Kanojo wa *wakai* desu.", translation: "She's young." },
+      { text: "彼は*若い*ようです。", romanization: "Kare wa *wakai* you desu.", translation: "He looks young." },
+      { text: "この*若い*人たちは元気です。", romanization: "Kono *wakai* hitotachi wa genki desu.", translation: "These young people are full of energy." }
+    ],
+    411: [
+      { text: "彼は*金持ち*です。", romanization: "Kare wa *kanemochi* desu.", translation: "He's rich." },
+      { text: "この国は*金持ち*です。", romanization: "Kono kuni wa *kanemochi* desu.", translation: "This country is wealthy." },
+      { text: "彼女の家族は*金持ち*です。", romanization: "Kanojo no kazoku wa *kanemochi* desu.", translation: "Her family is wealthy." }
+    ],
+    412: [
+      { text: "彼らは*貧しい*です。", romanization: "Karera wa *mazushii* desu.", translation: "They're poor." },
+      { text: "以前、私たちは*貧しかった*です。", romanization: "Izen, watashitachi wa *mazushikatta* desu.", translation: "We used to be poor." },
+      { text: "この地域は*貧しい*です。", romanization: "Kono chiiki wa *mazushii* desu.", translation: "This area is poor." }
+    ],
+    413: [
+      { text: "この部屋は*清潔*です。", romanization: "Kono heya wa *seiketsu* desu.", translation: "This room is clean." },
+      { text: "手を*清潔*に洗ってください。", romanization: "Te o *seiketsu* ni aratte kudasai.", translation: "Please wash your hands clean." },
+      { text: "彼女は台所をとても*清潔*にしました。", romanization: "Kanojo wa daidokoro o totemo *seiketsu* ni shimashita.", translation: "She cleaned the kitchen very well." }
+    ],
+    414: [
+      { text: "私の靴は*汚い*です。", romanization: "Watashi no kutsu wa *kitanai* desu.", translation: "My shoes are dirty." },
+      { text: "この皿は*汚い*です。", romanization: "Kono sara wa *kitanai* desu.", translation: "This plate is dirty." },
+      { text: "床が*汚い*ので気をつけてください。", romanization: "Yuka ga *kitanai* node ki o tsukete kudasai.", translation: "The floor is dirty, so be careful." }
+    ],
+    415: [
+      { text: "この本は*おもしろい*です。", romanization: "Kono hon wa *omoshiroi* desu.", translation: "This book is interesting." },
+      { text: "彼はとても*おもしろい*人です。", romanization: "Kare wa totemo *omoshiroi* hito desu.", translation: "He's a very interesting person." },
+      { text: "この映画は*おもしろい*です。", romanization: "Kono eiga wa *omoshiroi* desu.", translation: "This movie is fun." }
+    ],
+    416: [
+      { text: "この*道*は長いです。", romanization: "Kono *michi* wa nagai desu.", translation: "This road is long." },
+      { text: "駅までの*道*を教えてください。", romanization: "Eki made no *michi* o oshiete kudasai.", translation: "Excuse me, how do I get to the station?" },
+      { text: "*道*にたくさんの車があります。", romanization: "*Michi* ni takusan no kuruma ga arimasu.", translation: "There are many cars on the road." }
+    ],
+    417: [
+      { text: "この*橋*は長いです。", romanization: "Kono *hashi* wa nagai desu.", translation: "This bridge is long." },
+      { text: "私たちはあの*橋*を渡りました。", romanization: "Watashitachi wa ano *hashi* o watarimashita.", translation: "We crossed that bridge." },
+      { text: "*橋*の下に川があります。", romanization: "*Hashi* no shita ni kawa ga arimasu.", translation: "There's a river under the bridge." }
+    ],
+    418: [
+      { text: "私たちは*タクシー*で空港へ行きます。", romanization: "Watashitachi wa *takushii* de kuukou e ikimasu.", translation: "We're taking a taxi to the airport." },
+      { text: "*タクシー*が来ました。", romanization: "*Takushii* ga kimashita.", translation: "The taxi is here." },
+      { text: "*タクシー*はバスより高いです。", romanization: "*Takushii* wa basu yori takai desu.", translation: "Taxis are more expensive than buses." }
+    ],
+    419: [
+      { text: "私の*荷物*は重いです。", romanization: "Watashi no *nimotsu* wa omoi desu.", translation: "My luggage is heavy." },
+      { text: "*荷物*を運ぶのを手伝ってください。", romanization: "*Nimotsu* o hakobu no o tetsudatte kudasai.", translation: "Please help me carry my luggage." },
+      { text: "*荷物*がなくなりました。", romanization: "*Nimotsu* ga nakunarimashita.", translation: "The luggage was lost." }
+    ],
+    420: [
+      { text: "*パスポート*を見せてください。", romanization: "*Pasupooto* o misete kudasai.", translation: "Please show your passport." },
+      { text: "*パスポート*を持ってくるのを忘れました。", romanization: "*Pasupooto* o motte kuru no o wasuremashita.", translation: "I forgot to bring my passport." },
+      { text: "*パスポート*はかばんの中にあります。", romanization: "*Pasupooto* wa kaban no naka ni arimasu.", translation: "The passport is in the bag." }
+    ],
+    421: [
+      { text: "*フライト*が遅れています。", romanization: "*Furaito* ga okurete imasu.", translation: "The flight is delayed." },
+      { text: "私たちの*フライト*は何時に出発しますか。", romanization: "Watashitachi no *furaito* wa nanji ni shuppatsu shimasu ka.", translation: "What time does our flight take off?" },
+      { text: "この*フライト*は北京に直行します。", romanization: "Kono *furaito* wa Pekin ni chokkou shimasu.", translation: "This flight goes directly to Beijing." }
+    ],
+    422: [
+      { text: "これは私の*席*です。", romanization: "Kore wa watashi no *seki* desu.", translation: "This is my seat." },
+      { text: "あなたの*席*に座ってください。", romanization: "Anata no *seki* ni suwatte kudasai.", translation: "Please sit in your seat." },
+      { text: "まだ*席*はありますか。", romanization: "Mada *seki* wa arimasu ka.", translation: "Are there any seats left?" }
+    ],
+    423: [
+      { text: "*運転手*は注意深く運転します。", romanization: "*Untenshu* wa chuuibukaku unten shimasu.", translation: "The driver drives very carefully." },
+      { text: "彼はバスの*運転手*です。", romanization: "Kare wa basu no *untenshu* desu.", translation: "He's a bus driver." },
+      { text: "*運転手*は車を止めました。", romanization: "*Untenshu* wa kuruma o tomemashita.", translation: "The driver stopped the car." }
+    ],
+    424: [
+      { text: "今日は*交通*が混んでいます。", romanization: "Kyou wa *koutsuu* ga konde imasu.", translation: "Traffic is bad today." },
+      { text: "*交通*信号は赤です。", romanization: "*Koutsuu* shingou wa aka desu.", translation: "The traffic light is red." },
+      { text: "*交通*事故はめったにありません。", romanization: "*Koutsuu* jiko wa metta ni arimasen.", translation: "Traffic accidents are rare." }
+    ],
+    425: [
+      { text: "これは長い*旅行*です。", romanization: "Kore wa nagai *ryokou* desu.", translation: "This is a long journey." },
+      { text: "楽しい*旅行*を！", romanization: "Tanoshii *ryokou* o!", translation: "Have a pleasant journey!" },
+      { text: "私たちの*旅行*はまだ始まったばかりです。", romanization: "Watashitachi no *ryokou* wa mada hajimatta bakari desu.", translation: "Our journey has just begun." }
+    ],
+    426: [
+      { text: "*ペン*をください。", romanization: "*Pen* o kudasai.", translation: "Please give me a pen." },
+      { text: "この*ペン*はインクが切れています。", romanization: "Kono *pen* wa inku ga kirete imasu.", translation: "This pen is out of ink." },
+      { text: "*ペン*は机の上にあります。", romanization: "*Pen* wa tsukue no ue ni arimasu.", translation: "The pen is on the table." }
+    ],
+    427: [
+      { text: "私は*鉛筆*で書きます。", romanization: "Watashi wa *enpitsu* de kakimasu.", translation: "I write with a pencil." },
+      { text: "この*鉛筆*は折れています。", romanization: "Kono *enpitsu* wa orete imasu.", translation: "This pencil is broken." },
+      { text: "*鉛筆*をください。", romanization: "*Enpitsu* o kudasai.", translation: "Please give me a pencil." }
+    ],
+    428: [
+      { text: "*紙*を一枚ください。", romanization: "*Kami* o ichimai kudasai.", translation: "Please give me a piece of paper." },
+      { text: "*紙*に彼女の名前が書いてあります。", romanization: "*Kami* ni kanojo no namae ga kaite arimasu.", translation: "Her name is written on the paper." },
+      { text: "この*紙*は白紙です。", romanization: "Kono *kami* wa hakushi desu.", translation: "This paper is blank." }
+    ],
+    429: [
+      { text: "考えを*ノート*に書きました。", romanization: "Kangae o *nooto* ni kakimashita.", translation: "I wrote my ideas in the notebook." },
+      { text: "この*ノート*は新しいです。", romanization: "Kono *nooto* wa atarashii desu.", translation: "This notebook is new." },
+      { text: "*ノート*はかばんの中にあります。", romanization: "*Nooto* wa kaban no naka ni arimasu.", translation: "The notebook is in the school bag." }
+    ],
+    430: [
+      { text: "*机*の上にたくさん本があります。", romanization: "*Tsukue* no ue ni takusan hon ga arimasu.", translation: "There are many books on the desk." },
+      { text: "彼は*机*の前に座って勉強します。", romanization: "Kare wa *tsukue* no mae ni suwatte benkyou shimasu.", translation: "He sits at the desk to study." },
+      { text: "この*机*は大きいです。", romanization: "Kono *tsukue* wa ookii desu.", translation: "This desk is big." }
+    ],
+    431: [
+      { text: "*会議*は十時に始まります。", romanization: "*Kaigi* wa juuji ni hajimarimasu.", translation: "The meeting starts at ten." },
+      { text: "この*会議*は重要です。", romanization: "Kono *kaigi* wa juuyou desu.", translation: "This meeting is important." },
+      { text: "私たちは*会議*を中止しました。", romanization: "Watashitachi wa *kaigi* o chuushi shimashita.", translation: "We cancelled the meeting." }
+    ],
+    432: [
+      { text: "あなたに*メール*を送りました。", romanization: "Anata ni *meeru* o okurimashita.", translation: "I sent you an email." },
+      { text: "*メール*を確認してください。", romanization: "*Meeru* o kakunin shite kudasai.", translation: "Please check your email." },
+      { text: "*メール*はまだ届いていません。", romanization: "*Meeru* wa mada todoite imasen.", translation: "The email hasn't arrived yet." }
+    ],
+    433: [
+      { text: "私の*上司*は厳しいです。", romanization: "Watashi no *joushi* wa kibishii desu.", translation: "My boss is strict." },
+      { text: "*上司*は今日いません。", romanization: "*Joushi* wa kyou imasen.", translation: "The boss isn't in today." },
+      { text: "彼女は私たちの*上司*です。", romanization: "Kanojo wa watashitachi no *joushi* desu.", translation: "She's our boss." }
+    ],
+    434: [
+      { text: "彼の*給料*は高いです。", romanization: "Kare no *kyuuryou* wa takai desu.", translation: "His salary is high." },
+      { text: "*給料*は毎月一回払われます。", romanization: "*Kyuuryou* wa maitsuki ikkai harawaremasu.", translation: "Salary is paid once a month." },
+      { text: "彼女はもっと高い*給料*が欲しいです。", romanization: "Kanojo wa motto takai *kyuuryou* ga hoshii desu.", translation: "She wants a higher salary." }
+    ],
+    435: [
+      { text: "彼は大きな*会社*で働いています。", romanization: "Kare wa ookina *kaisha* de hataraite imasu.", translation: "He works at a big company." },
+      { text: "この*会社*は有名です。", romanization: "Kono *kaisha* wa yuumei desu.", translation: "This company is famous." },
+      { text: "*会社*は明日休みです。", romanization: "*Kaisha* wa ashita yasumi desu.", translation: "The company is closed tomorrow." }
+    ],
+    436: [
+      { text: "彼の*腕*は強いです。", romanization: "Kare no *ude* wa tsuyoi desu.", translation: "His arm is strong." },
+      { text: "*腕*が痛いです。", romanization: "*Ude* ga itai desu.", translation: "My arm hurts." },
+      { text: "彼女は*腕*を上げました。", romanization: "Kanojo wa *ude* o agemashita.", translation: "She raised her arm." }
+    ],
+    437: [
+      { text: "*脚*が痛いです。", romanization: "*Ashi* ga itai desu.", translation: "My leg hurts." },
+      { text: "犬の*脚*は短いです。", romanization: "Inu no *ashi* wa mijikai desu.", translation: "The dog's legs are short." },
+      { text: "彼は*脚*を怪我しました。", romanization: "Kare wa *ashi* o kega shimashita.", translation: "He hurt his leg." }
+    ],
+    438: [
+      { text: "彼女の*指*は長いです。", romanization: "Kanojo no *yubi* wa nagai desu.", translation: "Her fingers are long." },
+      { text: "*指*を切ってしまいました。", romanization: "*Yubi* o kitte shimaimashita.", translation: "My finger got cut." },
+      { text: "彼は*指*で地図を指しました。", romanization: "Kare wa *yubi* de chizu o sashimashita.", translation: "He pointed at the map with his finger." }
+    ],
+    439: [
+      { text: "*背中*が痛いです。", romanization: "*Senaka* ga itai desu.", translation: "My back hurts." },
+      { text: "彼は*背中*にかばんを背負っています。", romanization: "Kare wa *senaka* ni kaban o seotte imasu.", translation: "He's carrying a bag on his back." },
+      { text: "医者は彼の*背中*を調べました。", romanization: "Isha wa kare no *senaka* o shirabemashita.", translation: "The doctor examined his back." }
+    ],
+    440: [
+      { text: "彼女の*心臓*は速く鼓動しています。", romanization: "Kanojo no *shinzou* wa hayaku kodou shite imasu.", translation: "Her heart is beating fast." },
+      { text: "*心臓*は胸の中で鼓動します。", romanization: "*Shinzou* wa mune no naka de kodou shimasu.", translation: "The heart beats in the chest." },
+      { text: "医者は彼の*心臓*を調べました。", romanization: "Isha wa kare no *shinzou* o shirabemashita.", translation: "The doctor examined his heart." }
+    ],
+    441: [
+      { text: "彼は*コート*を着ています。", romanization: "Kare wa *kooto* o kite imasu.", translation: "He's wearing a coat." },
+      { text: "この*コート*は暖かいです。", romanization: "Kono *kooto* wa atatakai desu.", translation: "This coat is warm." },
+      { text: "*コート*を掛けてください。", romanization: "*Kooto* o kakete kudasai.", translation: "Please hang up the coat." }
+    ],
+    442: [
+      { text: "彼女は青い*スカート*を履いています。", romanization: "Kanojo wa aoi *sukaato* o haite imasu.", translation: "She's wearing a blue skirt." },
+      { text: "この*スカート*はきれいです。", romanization: "Kono *sukaato* wa kirei desu.", translation: "This skirt is pretty." },
+      { text: "新しい*スカート*を買いたいです。", romanization: "Atarashii *sukaato* o kaitai desu.", translation: "I want to buy a new skirt." }
+    ],
+    443: [
+      { text: "*くつした*に穴があります。", romanization: "*Kutsushita* ni ana ga arimasu.", translation: "My sock has a hole." },
+      { text: "*くつした*を引き出しに入れてください。", romanization: "*Kutsushita* o hikidashi ni irete kudasai.", translation: "Please put the socks in the drawer." },
+      { text: "この*くつした*は赤いです。", romanization: "Kono *kutsushita* wa akai desu.", translation: "These socks are red." }
+    ],
+    444: [
+      { text: "外は寒いので*手袋*をしましょう。", romanization: "Soto wa samui node *tebukuro* o shimashou.", translation: "It's cold outside, put on gloves." },
+      { text: "*手袋*をなくしました。", romanization: "*Tebukuro* o nakushimashita.", translation: "I lost my gloves." },
+      { text: "この*手袋*は暖かいです。", romanization: "Kono *tebukuro* wa atatakai desu.", translation: "These gloves are warm." }
+    ],
+    445: [
+      { text: "彼女は赤い*マフラー*をしています。", romanization: "Kanojo wa akai *mafuraa* o shite imasu.", translation: "She's wearing a red scarf." },
+      { text: "この*マフラー*は柔らかいです。", romanization: "Kono *mafuraa* wa yawarakai desu.", translation: "This scarf is soft." },
+      { text: "冬は*マフラー*をするのが好きです。", romanization: "Fuyu wa *mafuraa* o suru no ga suki desu.", translation: "I like wearing a scarf in winter." }
+    ],
+    446: [
+      { text: "時間通りに*薬*を飲んでください。", romanization: "Jikandoori ni *kusuri* o nonde kudasai.", translation: "Please take your medicine on time." },
+      { text: "この*薬*は苦いです。", romanization: "Kono *kusuri* wa nigai desu.", translation: "This medicine is bitter." },
+      { text: "医者は私に*薬*をくれました。", romanization: "Isha wa watashi ni *kusuri* o kuremashita.", translation: "The doctor gave me some medicine." }
+    ],
+    447: [
+      { text: "彼は*熱*があります。", romanization: "Kare wa *netsu* ga arimasu.", translation: "He has a fever." },
+      { text: "*熱*があるときはたくさん水を飲んでください。", romanization: "*Netsu* ga aru toki wa takusan mizu o nonde kudasai.", translation: "You should drink more water when you have a fever." },
+      { text: "子供は夜*熱*が出ました。", romanization: "Kodomo wa yoru *netsu* ga demashita.", translation: "The child had a fever last night." }
+    ],
+    448: [
+      { text: "*痛み*はどこですか。", romanization: "*Itami* wa doko desu ka.", translation: "Where does it hurt?" },
+      { text: "胃に少し*痛み*があります。", romanization: "I ni sukoshi *itami* ga arimasu.", translation: "My stomach hurts a bit." },
+      { text: "頭にひどい*痛み*があります。", romanization: "Atama ni hidoi *itami* ga arimasu.", translation: "My head really hurts." }
+    ],
+    449: [
+      { text: "彼はずっと*せき*をしています。", romanization: "Kare wa zutto *seki* o shite imasu.", translation: "He keeps coughing." },
+      { text: "*せき*をするときは口を覆ってください。", romanization: "*Seki* o suru toki wa kuchi o ootte kudasai.", translation: "Cover your mouth when you cough." },
+      { text: "彼女は風邪をひいて、ずっと*せき*をしています。", romanization: "Kanojo wa kaze o hiite, zutto *seki* o shite imasu.", translation: "She has a cold and keeps coughing." }
+    ],
+    450: [
+      { text: "彼の手に*血*がついています。", romanization: "Kare no te ni *chi* ga tsuite imasu.", translation: "There's blood on his hand." },
+      { text: "医者は彼の*血*を調べました。", romanization: "Isha wa kare no *chi* o shirabemashita.", translation: "The doctor checked his blood." },
+      { text: "傷口から*血*が出ています。", romanization: "Kizuguchi kara *chi* ga dete imasu.", translation: "The wound is bleeding." }
     ]
   }
 };
