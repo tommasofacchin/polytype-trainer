@@ -15281,6 +15281,256 @@ window.DECK_EXAMPLES = {
       { text: "これは*私たちの*家です。", romanization: "Kore wa *watashitachi no* ie desu.", translation: "This is our house." },
       { text: "*私たちの*学校は大きいです。", romanization: "*Watashitachi no* gakkou wa ookii desu.", translation: "Our school is big." },
       { text: "これは*私たちの*車です。", romanization: "Kore wa *watashitachi no* kuruma desu.", translation: "This is our car." }
+    ],
+    51: [
+      { text: "これは本*です*。", romanization: "Kore wa hon *desu*.", translation: "This is a book." },
+      { text: "私は学生*です*。", romanization: "Watashi wa gakusei *desu*.", translation: "I am a student." },
+      { text: "今日は晴れ*です*。", romanization: "Kyou wa hare *desu*.", translation: "Today is sunny." }
+    ],
+    52: [
+      { text: "私は車を*持って*います。", romanization: "Watashi wa kuruma o *motte* imasu.", translation: "I have a car." },
+      { text: "彼は傘を*持って*います。", romanization: "Kare wa kasa o *motte* imasu.", translation: "He has an umbrella." },
+      { text: "荷物を*持ちましょう*か。", romanization: "Nimotsu o *mochimashou* ka.", translation: "Shall I carry your luggage?" }
+    ],
+    53: [
+      { text: "学校に*行きます*。", romanization: "Gakkou ni *ikimasu*.", translation: "I'm going to school." },
+      { text: "明日、公園に*行きます*。", romanization: "Ashita, kouen ni *ikimasu*.", translation: "Tomorrow I'll go to the park." },
+      { text: "*行きましょう*。", romanization: "*Ikimashou*.", translation: "Let's go." }
+    ],
+    54: [
+      { text: "友達が*来ます*。", romanization: "Tomodachi ga *kimasu*.", translation: "My friend is coming." },
+      { text: "明日、*来て*ください。", romanization: "Ashita, *kite* kudasai.", translation: "Please come tomorrow." },
+      { text: "彼はもうすぐ*来ます*。", romanization: "Kare wa mou sugu *kimasu*.", translation: "He'll come soon." }
+    ],
+    55: [
+      { text: "何を*しますか*。", romanization: "Nani o *shimasu ka*.", translation: "What are you doing?" },
+      { text: "宿題を*しました*。", romanization: "Shukudai o *shimashita*.", translation: "I did my homework." },
+      { text: "運動を*します*。", romanization: "Undou o *shimasu*.", translation: "I do exercise." }
+    ],
+    56: [
+      { text: "朝ごはんを*食べます*。", romanization: "Asagohan o *tabemasu*.", translation: "I eat breakfast." },
+      { text: "リンゴを*食べました*。", romanization: "Ringo o *tabemashita*.", translation: "I ate an apple." },
+      { text: "何を*食べたい*ですか。", romanization: "Nani o *tabetai* desu ka.", translation: "What do you want to eat?" }
+    ],
+    57: [
+      { text: "水を*飲みます*。", romanization: "Mizu o *nomimasu*.", translation: "I drink water." },
+      { text: "コーヒーを*飲みました*。", romanization: "Koohii o *nomimashita*.", translation: "I drank coffee." },
+      { text: "何を*飲みたい*ですか。", romanization: "Nani o *nomitai* desu ka.", translation: "What do you want to drink?" }
+    ],
+    58: [
+      { text: "本を*読みます*。", romanization: "Hon o *yomimasu*.", translation: "I read a book." },
+      { text: "新聞を*読みました*。", romanization: "Shinbun o *yomimashita*.", translation: "I read the newspaper." },
+      { text: "毎日*読みます*。", romanization: "Mainichi *yomimasu*.", translation: "I read every day." }
+    ],
+    59: [
+      { text: "手紙を*書きます*。", romanization: "Tegami o *kakimasu*.", translation: "I write a letter." },
+      { text: "名前を*書いて*ください。", romanization: "Namae o *kaite* kudasai.", translation: "Please write your name." },
+      { text: "彼女は本を*書きました*。", romanization: "Kanojo wa hon o *kakimashita*.", translation: "She wrote a book." }
+    ],
+    60: [
+      { text: "日本語を*話します*。", romanization: "Nihongo o *hanashimasu*.", translation: "I speak Japanese." },
+      { text: "ゆっくり*話して*ください。", romanization: "Yukkuri *hanashite* kudasai.", translation: "Please speak slowly." },
+      { text: "彼女は三つの言語を*話します*。", romanization: "Kanojo wa mittsu no gengo o *hanashimasu*.", translation: "She speaks three languages." }
+    ],
+    61: [
+      { text: "りんごを*一つ*ください。", romanization: "Ringo o *hitotsu* kudasai.", translation: "Please give me one apple." },
+      { text: "友達が*一つ*質問をしました。", romanization: "Tomodachi ga *hitotsu* shitsumon o shimashita.", translation: "My friend asked one question." },
+      { text: "*一つ*お願いがあります。", romanization: "*Hitotsu* onegai ga arimasu.", translation: "I have one favor to ask." }
+    ],
+    62: [
+      { text: "パンを*一つ*食べました。", romanization: "Pan o *hitotsu* tabemashita.", translation: "I ate one piece of bread." },
+      { text: "机の上にペンが*一つ*あります。", romanization: "Tsukue no ue ni pen ga *hitotsu* arimasu.", translation: "There's one pen on the desk." },
+      { text: "*一つ*だけ選んでください。", romanization: "*Hitotsu* dake erande kudasai.", translation: "Please choose just one." }
+    ],
+    63: [
+      { text: "箱の中に*一つ*ボールがあります。", romanization: "Hako no naka ni *hitotsu* booru ga arimasu.", translation: "There's one ball in the box." },
+      { text: "アイデアが*一つ*あります。", romanization: "Aidea ga *hitotsu* arimasu.", translation: "I have one idea." },
+      { text: "答えは*一つ*しかありません。", romanization: "Kotae wa *hitotsu* shika arimasen.", translation: "There's only one answer." }
+    ],
+    64: [
+      { text: "*それ*は本です。", romanization: "*Sore* wa hon desu.", translation: "That is a book." },
+      { text: "*それ*を見てください。", romanization: "*Sore* o mite kudasai.", translation: "Please look at that." },
+      { text: "*それ*が好きです。", romanization: "*Sore* ga suki desu.", translation: "I like that." }
+    ],
+    65: [
+      { text: "*それ*は新しいです。", romanization: "*Sore* wa atarashii desu.", translation: "That is new." },
+      { text: "*それ*は私のです。", romanization: "*Sore* wa watashi no desu.", translation: "That is mine." },
+      { text: "*それ*をください。", romanization: "*Sore* o kudasai.", translation: "Please give me that." }
+    ],
+    66: [
+      { text: "*ここ*に住んでいます。", romanization: "*Koko* ni sunde imasu.", translation: "I live here." },
+      { text: "*ここ*で待っていてください。", romanization: "*Koko* de matte ite kudasai.", translation: "Please wait here." },
+      { text: "*ここ*はきれいです。", romanization: "*Koko* wa kirei desu.", translation: "This place is beautiful." }
+    ],
+    67: [
+      { text: "本は*そこ*にあります。", romanization: "Hon wa *soko* ni arimasu.", translation: "The book is over there." },
+      { text: "*そこ*に誰がいますか。", romanization: "*Soko* ni dare ga imasu ka.", translation: "Who is there?" },
+      { text: "去年、*そこ*で会いました。", romanization: "Kyonen, *soko* de aimashita.", translation: "We met there last year." }
+    ],
+    68: [
+      { text: "*今*行かなければなりません。", romanization: "*Ima* ikanakereba narimasen.", translation: "I have to go now." },
+      { text: "*今*何をしていますか。", romanization: "*Ima* nani o shite imasu ka.", translation: "What are you doing now?" },
+      { text: "*今*が食事の時間です。", romanization: "*Ima* ga shokuji no jikan desu.", translation: "Now it's time to eat." }
+    ],
+    69: [
+      { text: "*後で*話しましょう。", romanization: "*Ato de* hanashimashou.", translation: "Let's talk later." },
+      { text: "*後で*行きます。", romanization: "*Ato de* ikimasu.", translation: "I'll go later." },
+      { text: "*後で*できますか。", romanization: "*Ato de* dekimasu ka.", translation: "Can we do it later?" }
+    ],
+    70: [
+      { text: "彼女は*いつも*元気です。", romanization: "Kanojo wa *itsumo* genki desu.", translation: "She's always energetic." },
+      { text: "私は朝*いつも*コーヒーを飲みます。", romanization: "Watashi wa asa *itsumo* koohii o nomimasu.", translation: "I always drink coffee in the morning." },
+      { text: "彼は*いつも*遅れます。", romanization: "Kare wa *itsumo* okuremasu.", translation: "He's always late." }
+    ],
+    71: [
+      { text: "*今日*は何をしますか。", romanization: "*Kyou* wa nani o shimasu ka.", translation: "What are we doing today?" },
+      { text: "*今日*は天気がいいです。", romanization: "*Kyou* wa tenki ga ii desu.", translation: "Today the weather is nice." },
+      { text: "*今日*はやることがたくさんあります。", romanization: "*Kyou* wa yaru koto ga takusan arimasu.", translation: "I have a lot to do today." }
+    ],
+    72: [
+      { text: "*明日*会いましょう！", romanization: "*Ashita* aimashou!", translation: "See you tomorrow!" },
+      { text: "*明日*、東京に行きます。", romanization: "*Ashita*, Toukyou ni ikimasu.", translation: "Tomorrow I'll go to Tokyo." },
+      { text: "*明日*何が起こりますか。", romanization: "*Ashita* nani ga okorimasu ka.", translation: "What's happening tomorrow?" }
+    ],
+    73: [
+      { text: "*昨日*は仕事でした。", romanization: "*Kinou* wa shigoto deshita.", translation: "Yesterday I was at work." },
+      { text: "*昨日*映画を見ました。", romanization: "*Kinou* eiga o mimashita.", translation: "We watched a movie yesterday." },
+      { text: "*昨日*はたくさん雨が降りました。", romanization: "*Kinou* wa takusan ame ga furimashita.", translation: "It rained a lot yesterday." }
+    ],
+    74: [
+      { text: "私は*週*に五日働きます。", romanization: "Watashi wa *shuu* ni itsuka hatarakimasu.", translation: "I work five days a week." },
+      { text: "この*週*はとても忙しいです。", romanization: "Kono *shuu* wa totemo isogashii desu.", translation: "This week is very busy." },
+      { text: "*週*に一度、公園に行きます。", romanization: "*Shuu* ni ichido, kouen ni ikimasu.", translation: "Once a week, I go to the park." }
+    ],
+    75: [
+      { text: "*月*に一度、旅行します。", romanization: "*Tsuki* ni ichido, ryokou shimasu.", translation: "I travel once a month." },
+      { text: "*月*の初めに給料をもらいます。", romanization: "*Tsuki* no hajime ni kyuuryou o moraimasu.", translation: "I get paid at the start of the month." },
+      { text: "*月*に二回、掃除をします。", romanization: "*Tsuki* ni nikai, souji o shimasu.", translation: "I clean twice a month." }
+    ],
+    76: [
+      { text: "私の車は*赤*です。", romanization: "Watashi no kuruma wa *aka* desu.", translation: "My car is red." },
+      { text: "*赤*が好きです。", romanization: "*Aka* ga suki desu.", translation: "I like red." },
+      { text: "花は*赤*です。", romanization: "Hana wa *aka* desu.", translation: "The flower is red." }
+    ],
+    77: [
+      { text: "空は*青*です。", romanization: "Sora wa *ao* desu.", translation: "The sky is blue." },
+      { text: "*青*が好きです。", romanization: "*Ao* ga suki desu.", translation: "I like blue." },
+      { text: "彼のシャツは*青*です。", romanization: "Kare no shatsu wa *ao* desu.", translation: "His shirt is blue." }
+    ],
+    78: [
+      { text: "草は*緑*です。", romanization: "Kusa wa *midori* desu.", translation: "The grass is green." },
+      { text: "*緑*が好きです。", romanization: "*Midori* ga suki desu.", translation: "I like green." },
+      { text: "彼女の目は*緑*です。", romanization: "Kanojo no me wa *midori* desu.", translation: "Her eyes are green." }
+    ],
+    79: [
+      { text: "太陽は*黄色*です。", romanization: "Taiyou wa *kiiro* desu.", translation: "The sun is yellow." },
+      { text: "*黄色*が好きです。", romanization: "*Kiiro* ga suki desu.", translation: "I like yellow." },
+      { text: "花は*黄色*です。", romanization: "Hana wa *kiiro* desu.", translation: "The flower is yellow." }
+    ],
+    80: [
+      { text: "猫は*黒*です。", romanization: "Neko wa *kuro* desu.", translation: "The cat is black." },
+      { text: "*黒*が好きです。", romanization: "*Kuro* ga suki desu.", translation: "I like black." },
+      { text: "彼の靴は*黒*です。", romanization: "Kare no kutsu wa *kuro* desu.", translation: "His shoes are black." }
+    ],
+    81: [
+      { text: "雪は*白*です。", romanization: "Yuki wa *shiro* desu.", translation: "Snow is white." },
+      { text: "*白*が好きです。", romanization: "*Shiro* ga suki desu.", translation: "I like white." },
+      { text: "彼女のドレスは*白*です。", romanization: "Kanojo no doresu wa *shiro* desu.", translation: "Her dress is white." }
+    ],
+    82: [
+      { text: "私の犬は*茶色*です。", romanization: "Watashi no inu wa *chairo* desu.", translation: "My dog is brown." },
+      { text: "*茶色*が好きです。", romanization: "*Chairo* ga suki desu.", translation: "I like brown." },
+      { text: "彼女の目は*茶色*です。", romanization: "Kanojo no me wa *chairo* desu.", translation: "Her eyes are brown." }
+    ],
+    83: [
+      { text: "彼女のドレスは*ピンク*です。", romanization: "Kanojo no doresu wa *pinku* desu.", translation: "Her dress is pink." },
+      { text: "*ピンク*が好きです。", romanization: "*Pinku* ga suki desu.", translation: "I like pink." },
+      { text: "花は*ピンク*です。", romanization: "Hana wa *pinku* desu.", translation: "The flower is pink." }
+    ],
+    84: [
+      { text: "夕焼けは*オレンジ*でした。", romanization: "Yuuyake wa *orenji* deshita.", translation: "The sunset was orange." },
+      { text: "*オレンジ*が好きです。", romanization: "*Orenji* ga suki desu.", translation: "I like orange." },
+      { text: "彼のジャケットは*オレンジ*です。", romanization: "Kare no jaketto wa *orenji* desu.", translation: "His jacket is orange." }
+    ],
+    85: [
+      { text: "花は*紫*です。", romanization: "Hana wa *murasaki* desu.", translation: "The flower is purple." },
+      { text: "*紫*が好きです。", romanization: "*Murasaki* ga suki desu.", translation: "I like purple." },
+      { text: "彼女のバッグは*紫*です。", romanization: "Kanojo no baggu wa *murasaki* desu.", translation: "Her bag is purple." }
+    ],
+    86: [
+      { text: "*一*時です。", romanization: "*Ichi* ji desu.", translation: "It's one o'clock." },
+      { text: "答えは*一*です。", romanization: "Kotae wa *ichi* desu.", translation: "The answer is one." },
+      { text: "*一*から数えてください。", romanization: "*Ichi* kara kazoete kudasai.", translation: "Please count starting from one." }
+    ],
+    87: [
+      { text: "*二*時です。", romanization: "*Ni* ji desu.", translation: "It's two o'clock." },
+      { text: "答えは*二*です。", romanization: "Kotae wa *ni* desu.", translation: "The answer is two." },
+      { text: "*二*から数えてください。", romanization: "*Ni* kara kazoete kudasai.", translation: "Please count starting from two." }
+    ],
+    88: [
+      { text: "*三*時です。", romanization: "*San* ji desu.", translation: "It's three o'clock." },
+      { text: "答えは*三*です。", romanization: "Kotae wa *san* desu.", translation: "The answer is three." },
+      { text: "*三*から数えてください。", romanization: "*San* kara kazoete kudasai.", translation: "Please count starting from three." }
+    ],
+    89: [
+      { text: "答えは*四*です。", romanization: "Kotae wa *yon* desu.", translation: "The answer is four." },
+      { text: "*四*から数えてください。", romanization: "*Yon* kara kazoete kudasai.", translation: "Please count starting from four." },
+      { text: "私は*四*が好きです。", romanization: "Watashi wa *yon* ga suki desu.", translation: "I like the number four." }
+    ],
+    90: [
+      { text: "*五*時です。", romanization: "*Go* ji desu.", translation: "It's five o'clock." },
+      { text: "答えは*五*です。", romanization: "Kotae wa *go* desu.", translation: "The answer is five." },
+      { text: "*五*から数えてください。", romanization: "*Go* kara kazoete kudasai.", translation: "Please count starting from five." }
+    ],
+    91: [
+      { text: "*六*時です。", romanization: "*Roku* ji desu.", translation: "It's six o'clock." },
+      { text: "答えは*六*です。", romanization: "Kotae wa *roku* desu.", translation: "The answer is six." },
+      { text: "*六*から数えてください。", romanization: "*Roku* kara kazoete kudasai.", translation: "Please count starting from six." }
+    ],
+    92: [
+      { text: "答えは*七*です。", romanization: "Kotae wa *nana* desu.", translation: "The answer is seven." },
+      { text: "*七*から数えてください。", romanization: "*Nana* kara kazoete kudasai.", translation: "Please count starting from seven." },
+      { text: "私は*七*が好きです。", romanization: "Watashi wa *nana* ga suki desu.", translation: "I like the number seven." }
+    ],
+    93: [
+      { text: "*八*時です。", romanization: "*Hachi* ji desu.", translation: "It's eight o'clock." },
+      { text: "答えは*八*です。", romanization: "Kotae wa *hachi* desu.", translation: "The answer is eight." },
+      { text: "*八*から数えてください。", romanization: "*Hachi* kara kazoete kudasai.", translation: "Please count starting from eight." }
+    ],
+    94: [
+      { text: "答えは*九*です。", romanization: "Kotae wa *kyuu* desu.", translation: "The answer is nine." },
+      { text: "*九*から数えてください。", romanization: "*Kyuu* kara kazoete kudasai.", translation: "Please count starting from nine." },
+      { text: "私は*九*が好きです。", romanization: "Watashi wa *kyuu* ga suki desu.", translation: "I like the number nine." }
+    ],
+    95: [
+      { text: "*十*時です。", romanization: "*Juu* ji desu.", translation: "It's ten o'clock." },
+      { text: "答えは*十*です。", romanization: "Kotae wa *juu* desu.", translation: "The answer is ten." },
+      { text: "*十*から数えてください。", romanization: "*Juu* kara kazoete kudasai.", translation: "Please count starting from ten." }
+    ],
+    96: [
+      { text: "*どこ*に住んでいますか。", romanization: "*Doko* ni sunde imasu ka.", translation: "Where do you live?" },
+      { text: "本は*どこ*ですか。", romanization: "Hon wa *doko* desu ka.", translation: "Where is the book?" },
+      { text: "*どこ*で会いましょうか。", romanization: "*Doko* de aimashou ka.", translation: "Where shall we meet?" }
+    ],
+    97: [
+      { text: "それは*何*ですか。", romanization: "Sore wa *nani* desu ka.", translation: "What is that?" },
+      { text: "*何*をしていますか。", romanization: "*Nani* o shite imasu ka.", translation: "What are you doing?" },
+      { text: "*何*と言えばいいかわかりません。", romanization: "*Nani* to ieba ii ka wakarimasen.", translation: "I don't know what to say." }
+    ],
+    98: [
+      { text: "あの人は*誰*ですか。", romanization: "Ano hito wa *dare* desu ka.", translation: "Who is that person?" },
+      { text: "今晩*誰*が来ますか。", romanization: "Konban *dare* ga kimasu ka.", translation: "Who's coming tonight?" },
+      { text: "彼女が*誰*か知っていますか。", romanization: "Kanojo ga *dare* ka shitte imasu ka.", translation: "Do you know who she is?" }
+    ],
+    99: [
+      { text: "*いつ*来ますか。", romanization: "*Itsu* kimasu ka.", translation: "When are you coming?" },
+      { text: "電車は*いつ*出発しますか。", romanization: "Densha wa *itsu* shuppatsu shimasu ka.", translation: "When does the train leave?" },
+      { text: "誕生日は*いつ*ですか。", romanization: "Tanjoubi wa *itsu* desu ka.", translation: "When is your birthday?" }
+    ],
+    100: [
+      { text: "*なぜ*遅れましたか。", romanization: "*Naze* okuremashita ka.", translation: "Why are you late?" },
+      { text: "*なぜ*魚が好きじゃないんですか。", romanization: "*Naze* sakana ga suki janai n desu ka.", translation: "Why don't you like fish?" },
+      { text: "彼が*なぜ*帰ったかわかりません。", romanization: "Kare ga *naze* kaetta ka wakarimasen.", translation: "I don't know why he left." }
     ]
   }
 };
