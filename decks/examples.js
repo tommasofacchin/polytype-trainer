@@ -16781,6 +16781,256 @@ window.DECK_EXAMPLES = {
       { text: "*ビン*の中に水があります。", romanization: "*Bin* no naka ni mizu ga arimasu.", translation: "There's water in the bottle." },
       { text: "*ビン*を一つください。", romanization: "*Bin* o hitotsu kudasai.", translation: "Please give me a bottle." },
       { text: "この*ビン*は空です。", romanization: "Kono *bin* wa kara desu.", translation: "This bottle is empty." }
+    ],
+    351: [
+      { text: "*テーブル*の上に本があります。", romanization: "*Teeburu* no ue ni hon ga arimasu.", translation: "There's a book on the table." },
+      { text: "*テーブル*をきれいに拭いてください。", romanization: "*Teeburu* o kirei ni fuite kudasai.", translation: "Please wipe the table clean." },
+      { text: "この*テーブル*は大きいです。", romanization: "Kono *teeburu* wa ookii desu.", translation: "This table is big." }
+    ],
+    352: [
+      { text: "この*いす*は座り心地がいいです。", romanization: "Kono *isu* wa suwarigokochi ga ii desu.", translation: "This chair is comfortable." },
+      { text: "この*いす*に座ってください。", romanization: "Kono *isu* ni suwatte kudasai.", translation: "Please sit on this chair." },
+      { text: "*いす*が壊れました。", romanization: "*Isu* ga kowaremashita.", translation: "The chair is broken." }
+    ],
+    353: [
+      { text: "私の*ベッド*は寝心地がいいです。", romanization: "Watashi no *beddo* wa negokochi ga ii desu.", translation: "My bed is comfortable." },
+      { text: "*ベッド*の上に猫がいます。", romanization: "*Beddo* no ue ni neko ga imasu.", translation: "There's a cat on the bed." },
+      { text: "彼はまだ*ベッド*で寝ています。", romanization: "Kare wa mada *beddo* de nete imasu.", translation: "He's still sleeping in bed." }
+    ],
+    354: [
+      { text: "*ドア*を閉めてください。", romanization: "*Doa* o shimete kudasai.", translation: "Please close the door." },
+      { text: "*ドア*が開いています。", romanization: "*Doa* ga hiraite imasu.", translation: "The door is open." },
+      { text: "誰かが*ドア*をノックしています。", romanization: "Dareka ga *doa* o nokku shite imasu.", translation: "Someone is knocking on the door." }
+    ],
+    355: [
+      { text: "*窓*を開けてください。", romanization: "*Mado* o akete kudasai.", translation: "Please open the window." },
+      { text: "*窓*が汚れています。", romanization: "*Mado* ga yogorete imasu.", translation: "The window is dirty." },
+      { text: "猫は*窓*のそばに座っています。", romanization: "Neko wa *mado* no soba ni suwatte imasu.", translation: "The cat is sitting by the window." }
+    ],
+    356: [
+      { text: "*壁*に絵があります。", romanization: "*Kabe* ni e ga arimasu.", translation: "There's a painting on the wall." },
+      { text: "この*壁*は白いです。", romanization: "Kono *kabe* wa shiroi desu.", translation: "This wall is white." },
+      { text: "時計は*壁*にかかっています。", romanization: "Tokei wa *kabe* ni kakatte imasu.", translation: "The clock hangs on the wall." }
+    ],
+    357: [
+      { text: "*床*はきれいです。", romanization: "*Yuka* wa kirei desu.", translation: "The floor is clean." },
+      { text: "*床*に座らないでください。", romanization: "*Yuka* ni suwaranaide kudasai.", translation: "Please don't sit on the floor." },
+      { text: "*床*は木でできています。", romanization: "*Yuka* wa ki de dekite imasu.", translation: "The floor is made of wood." }
+    ],
+    358: [
+      { text: "*屋根*から水が漏れています。", romanization: "*Yane* kara mizu ga morete imasu.", translation: "The roof is leaking." },
+      { text: "鳥が*屋根*に止まりました。", romanization: "Tori ga *yane* ni tomarimashita.", translation: "The bird landed on the roof." },
+      { text: "彼らは*屋根*を修理しています。", romanization: "Karera wa *yane* o shuuri shite imasu.", translation: "They're repairing the roof." }
+    ],
+    359: [
+      { text: "私たちの*庭*は美しいです。", romanization: "Watashitachi no *niwa* wa utsukushii desu.", translation: "Our garden is beautiful." },
+      { text: "子供たちは*庭*で遊んでいます。", romanization: "Kodomotachi wa *niwa* de asonde imasu.", translation: "The children are playing in the garden." },
+      { text: "彼女は*庭*で花を植えています。", romanization: "Kanojo wa *niwa* de hana o uete imasu.", translation: "She's planting flowers in the garden." }
+    ],
+    360: [
+      { text: "車は*ガレージ*にあります。", romanization: "Kuruma wa *gareeji* ni arimasu.", translation: "The car is in the garage." },
+      { text: "*ガレージ*は大きいです。", romanization: "*Gareeji* wa ookii desu.", translation: "The garage is big." },
+      { text: "彼は*ガレージ*で車を修理しています。", romanization: "Kare wa *gareeji* de kuruma o shuuri shite imasu.", translation: "He's fixing the car in the garage." }
+    ],
+    361: [
+      { text: "*ランプ*をつけてください。", romanization: "*Ranpu* o tsukete kudasai.", translation: "Please turn on the lamp." },
+      { text: "*ランプ*が壊れました。", romanization: "*Ranpu* ga kowaremashita.", translation: "The lamp is broken." },
+      { text: "テーブルの上に*ランプ*があります。", romanization: "Teeburu no ue ni *ranpu* ga arimasu.", translation: "There's a lamp on the table." }
+    ],
+    362: [
+      { text: "彼女は*鏡*の前で髪をとかしています。", romanization: "Kanojo wa *kagami* no mae de kami o tokashite imasu.", translation: "She's combing her hair in front of the mirror." },
+      { text: "*鏡*が割れました。", romanization: "*Kagami* ga waremashita.", translation: "The mirror is broken." },
+      { text: "壁に*鏡*がかかっています。", romanization: "Kabe ni *kagami* ga kakatte imasu.", translation: "There's a mirror hanging on the wall." }
+    ],
+    363: [
+      { text: "*タオル*をください。", romanization: "*Taoru* o kudasai.", translation: "Please give me a towel." },
+      { text: "この*タオル*は濡れています。", romanization: "Kono *taoru* wa nurete imasu.", translation: "This towel is wet." },
+      { text: "*タオル*は浴室にあります。", romanization: "*Taoru* wa yokushitsu ni arimasu.", translation: "The towel is in the bathroom." }
+    ],
+    364: [
+      { text: "*せっけん*で手を洗ってください。", romanization: "*Sekken* de te o aratte kudasai.", translation: "Please wash your hands with soap." },
+      { text: "*せっけん*がもうありません。", romanization: "*Sekken* ga mou arimasen.", translation: "There's no more soap." },
+      { text: "この*せっけん*はいい香りがします。", romanization: "Kono *sekken* wa ii kaori ga shimasu.", translation: "This soap smells nice." }
+    ],
+    365: [
+      { text: "牛乳は*冷蔵庫*にあります。", romanization: "Gyuunyuu wa *reizouko* ni arimasu.", translation: "The milk is in the fridge." },
+      { text: "*冷蔵庫*は空です。", romanization: "*Reizouko* wa kara desu.", translation: "The fridge is empty." },
+      { text: "肉を*冷蔵庫*に入れてください。", romanization: "Niku o *reizouko* ni irete kudasai.", translation: "Please put the meat in the fridge." }
+    ],
+    366: [
+      { text: "*オーブン*は熱いです。", romanization: "*Oobun* wa atsui desu.", translation: "The oven is hot." },
+      { text: "ケーキは*オーブン*の中にあります。", romanization: "Keeki wa *oobun* no naka ni arimasu.", translation: "The cake is in the oven." },
+      { text: "*オーブン*をつけてください。", romanization: "*Oobun* o tsukete kudasai.", translation: "Please turn on the oven." }
+    ],
+    367: [
+      { text: "彼は*ソファ*に座ってテレビを見ています。", romanization: "Kare wa *sofa* ni suwatte terebi o mite imasu.", translation: "He's sitting on the sofa watching TV." },
+      { text: "この*ソファ*は座り心地がいいです。", romanization: "Kono *sofa* wa suwarigokochi ga ii desu.", translation: "This sofa is comfortable." },
+      { text: "猫は*ソファ*で寝ています。", romanization: "Neko wa *sofa* de nete imasu.", translation: "The cat is sleeping on the sofa." }
+    ],
+    368: [
+      { text: "本は*棚*にあります。", romanization: "Hon wa *tana* ni arimasu.", translation: "The books are on the shelf." },
+      { text: "*棚*にたくさん本があります。", romanization: "*Tana* ni takusan hon ga arimasu.", translation: "There are many books on the shelf." },
+      { text: "この*棚*は高すぎます。", romanization: "Kono *tana* wa takasugimasu.", translation: "This shelf is too high." }
+    ],
+    369: [
+      { text: "*階段*はどこですか。", romanization: "*Kaidan* wa doko desu ka.", translation: "Where are the stairs?" },
+      { text: "彼は*階段*を上がります。", romanization: "Kare wa *kaidan* o agarimasu.", translation: "He walks up the stairs." },
+      { text: "*階段*に気をつけてください。", romanization: "*Kaidan* ni ki o tsukete kudasai.", translation: "Be careful on the stairs." }
+    ],
+    370: [
+      { text: "*エレベーター*が壊れました。", romanization: "*Erebeetaa* ga kowaremashita.", translation: "The elevator is broken." },
+      { text: "私たちは*エレベーター*で上に行きます。", romanization: "Watashitachi wa *erebeetaa* de ue ni ikimasu.", translation: "We take the elevator upstairs." },
+      { text: "*エレベーター*は左側にあります。", romanization: "*Erebeetaa* wa hidarigawa ni arimasu.", translation: "The elevator is on the left." }
+    ],
+    371: [
+      { text: "私は*犬*を飼っています。", romanization: "Watashi wa *inu* o katte imasu.", translation: "I have a dog." },
+      { text: "*犬*が庭で走っています。", romanization: "*Inu* ga niwa de hashitte imasu.", translation: "The dog is running in the garden." },
+      { text: "この*犬*は人懐っこいです。", romanization: "Kono *inu* wa hitonatsukkoi desu.", translation: "This dog is friendly." }
+    ],
+    372: [
+      { text: "私の*猫*は寝るのが好きです。", romanization: "Watashi no *neko* wa neru no ga suki desu.", translation: "My cat likes to sleep." },
+      { text: "*猫*は窓のそばにいます。", romanization: "*Neko* wa mado no soba ni imasu.", translation: "The cat is by the window." },
+      { text: "この*猫*は黒いです。", romanization: "Kono *neko* wa kuroi desu.", translation: "This cat is black." }
+    ],
+    373: [
+      { text: "*鳥*が木で歌っています。", romanization: "*Tori* ga ki de utatte imasu.", translation: "The bird is singing in the tree." },
+      { text: "*鳥*を一羽見ました。", romanization: "*Tori* o ichiwa mimashita.", translation: "I saw a bird." },
+      { text: "この*鳥*は飛べます。", romanization: "Kono *tori* wa tobemasu.", translation: "This bird can fly." }
+    ],
+    374: [
+      { text: "*馬*は速く走ります。", romanization: "*Uma* wa hayaku hashirimasu.", translation: "The horse runs fast." },
+      { text: "彼は*馬*に乗るのが好きです。", romanization: "Kare wa *uma* ni noru no ga suki desu.", translation: "He likes riding horses." },
+      { text: "農場に*馬*が三頭います。", romanization: "Noujou ni *uma* ga santou imasu.", translation: "There are three horses on the farm." }
+    ],
+    375: [
+      { text: "農場にたくさんの*牛*がいます。", romanization: "Noujou ni takusan no *ushi* ga imasu.", translation: "There are many cows on the farm." },
+      { text: "*牛*が草を食べています。", romanization: "*Ushi* ga kusa o tabete imasu.", translation: "The cow is eating grass." },
+      { text: "この*牛*は大きいです。", romanization: "Kono *ushi* wa ookii desu.", translation: "This cow is big." }
+    ],
+    376: [
+      { text: "*羊*が山で草を食べています。", romanization: "*Hitsuji* ga yama de kusa o tabete imasu.", translation: "The sheep are eating grass on the mountain." },
+      { text: "農場にたくさんの*羊*がいます。", romanization: "Noujou ni takusan no *hitsuji* ga imasu.", translation: "There are many sheep on the farm." },
+      { text: "この*羊*は白いです。", romanization: "Kono *hitsuji* wa shiroi desu.", translation: "This sheep is white." }
+    ],
+    377: [
+      { text: "*豚*は農場にいます。", romanization: "*Buta* wa noujou ni imasu.", translation: "The pig is on the farm." },
+      { text: "この*豚*は太っています。", romanization: "Kono *buta* wa futotte imasu.", translation: "This pig is fat." },
+      { text: "子供たちは*豚*を見るのが好きです。", romanization: "Kodomotachi wa *buta* o miru no ga suki desu.", translation: "Children like watching pigs." }
+    ],
+    378: [
+      { text: "*めんどり*が卵を産みました。", romanization: "*Mendori* ga tamago o umimashita.", translation: "The hen laid an egg." },
+      { text: "農場に*めんどり*が数羽います。", romanization: "Noujou ni *mendori* ga suuwa imasu.", translation: "There are a few hens on the farm." },
+      { text: "この*めんどり*は茶色です。", romanization: "Kono *mendori* wa chairo desu.", translation: "This hen is brown." }
+    ],
+    379: [
+      { text: "台所に*ねずみ*が一匹います。", romanization: "Daidokoro ni *nezumi* ga ippiki imasu.", translation: "There's a mouse in the kitchen." },
+      { text: "猫が*ねずみ*を追いかけています。", romanization: "Neko ga *nezumi* o oikakete imasu.", translation: "The cat is chasing the mouse." },
+      { text: "この*ねずみ*は小さいです。", romanization: "Kono *nezumi* wa chiisai desu.", translation: "This mouse is small." }
+    ],
+    380: [
+      { text: "*うさぎ*はにんじんを食べるのが好きです。", romanization: "*Usagi* wa ninjin o taberu no ga suki desu.", translation: "Rabbits like eating carrots." },
+      { text: "庭に*うさぎ*が一匹います。", romanization: "Niwa ni *usagi* ga ippiki imasu.", translation: "There's a rabbit in the garden." },
+      { text: "この*うさぎ*は白いです。", romanization: "Kono *usagi* wa shiroi desu.", translation: "This rabbit is white." }
+    ],
+    381: [
+      { text: "庭に*木*が一本あります。", romanization: "Niwa ni *ki* ga ippon arimasu.", translation: "There's a tree in the garden." },
+      { text: "*木*にたくさんの鳥がいます。", romanization: "*Ki* ni takusan no tori ga imasu.", translation: "There are many birds in the tree." },
+      { text: "この*木*は高いです。", romanization: "Kono *ki* wa takai desu.", translation: "This tree is tall." }
+    ],
+    382: [
+      { text: "彼女は*花*を買いました。", romanization: "Kanojo wa *hana* o kaimashita.", translation: "She bought some flowers." },
+      { text: "*花*は美しいです。", romanization: "*Hana* wa utsukushii desu.", translation: "The flowers are beautiful." },
+      { text: "庭は*花*でいっぱいです。", romanization: "Niwa wa *hana* de ippai desu.", translation: "The garden is full of flowers." }
+    ],
+    383: [
+      { text: "*草*は緑です。", romanization: "*Kusa* wa midori desu.", translation: "The grass is green." },
+      { text: "子供たちは*草*の上で遊んでいます。", romanization: "Kodomotachi wa *kusa* no ue de asonde imasu.", translation: "The children are playing on the grass." },
+      { text: "*草*が濡れています。", romanization: "*Kusa* ga nurete imasu.", translation: "The grass is wet." }
+    ],
+    384: [
+      { text: "私たちは週末に*山*に登ります。", romanization: "Watashitachi wa shuumatsu ni *yama* ni noborimasu.", translation: "We're going hiking in the mountains this weekend." },
+      { text: "*山*は高いです。", romanization: "*Yama* wa takai desu.", translation: "The mountain is tall." },
+      { text: "*山*に雪があります。", romanization: "*Yama* ni yuki ga arimasu.", translation: "There's snow on the mountain." }
+    ],
+    385: [
+      { text: "*川*の水は澄んでいます。", romanization: "*Kawa* no mizu wa sunde imasu.", translation: "The river water is clear." },
+      { text: "彼らは*川*のそばを散歩しています。", romanization: "Karera wa *kawa* no soba o sanpo shite imasu.", translation: "They're walking by the river." },
+      { text: "この*川*は長いです。", romanization: "Kono *kawa* wa nagai desu.", translation: "This river is long." }
+    ],
+    386: [
+      { text: "*海*は青いです。", romanization: "*Umi* wa aoi desu.", translation: "The sea is blue." },
+      { text: "私たちは*海*へ休暇に行きます。", romanization: "Watashitachi wa *umi* e kyuuka ni ikimasu.", translation: "We're going on vacation by the sea." },
+      { text: "*海*は大きいです。", romanization: "*Umi* wa ookii desu.", translation: "The sea is big." }
+    ],
+    387: [
+      { text: "*湖*は穏やかです。", romanization: "*Mizuumi* wa odayaka desu.", translation: "The lake is calm." },
+      { text: "私たちは*湖*のそばでピクニックをします。", romanization: "Watashitachi wa *mizuumi* no soba de pikunikku o shimasu.", translation: "We're having a picnic by the lake." },
+      { text: "この*湖*は深いです。", romanization: "Kono *mizuumi* wa fukai desu.", translation: "This lake is deep." }
+    ],
+    388: [
+      { text: "*森*にはたくさんの木があります。", romanization: "*Mori* ni wa takusan no ki ga arimasu.", translation: "There are many trees in the forest." },
+      { text: "私たちは*森*を散歩しています。", romanization: "Watashitachi wa *mori* o sanpo shite imasu.", translation: "We're walking in the forest." },
+      { text: "*森*は静かです。", romanization: "*Mori* wa shizuka desu.", translation: "The forest is quiet." }
+    ],
+    389: [
+      { text: "私たちは*浜*で遊んでいます。", romanization: "Watashitachi wa *hama* de asonde imasu.", translation: "We're playing on the beach." },
+      { text: "*浜*にはたくさんの人がいます。", romanization: "*Hama* ni wa takusan no hito ga imasu.", translation: "There are many people on the beach." },
+      { text: "この*浜*は美しいです。", romanization: "Kono *hama* wa utsukushii desu.", translation: "This beach is beautiful." }
+    ],
+    390: [
+      { text: "*空*は青いです。", romanization: "*Sora* wa aoi desu.", translation: "The sky is blue." },
+      { text: "*空*にたくさんの雲があります。", romanization: "*Sora* ni takusan no kumo ga arimasu.", translation: "There are many clouds in the sky." },
+      { text: "鳥が*空*を飛んでいます。", romanization: "Tori ga *sora* o tonde imasu.", translation: "Birds fly in the sky." }
+    ],
+    391: [
+      { text: "彼は*三十*歳です。", romanization: "Kare wa *sanjuu* sai desu.", translation: "He's thirty years old." },
+      { text: "教室に*三十*人の学生がいます。", romanization: "Kyoushitsu ni *sanjuu* nin no gakusei ga imasu.", translation: "There are thirty students in the classroom." },
+      { text: "私たちは*三十*分待ちました。", romanization: "Watashitachi wa *sanjuu* fun machimashita.", translation: "We waited thirty minutes." }
+    ],
+    392: [
+      { text: "彼女は*四十*歳です。", romanization: "Kanojo wa *yonjuu* sai desu.", translation: "She's forty years old." },
+      { text: "私たちは*四十*分歩きました。", romanization: "Watashitachi wa *yonjuu* fun arukimashita.", translation: "We walked for forty minutes." },
+      { text: "この本には*四十*ページあります。", romanization: "Kono hon ni wa *yonjuu* peeji arimasu.", translation: "This book has forty pages." }
+    ],
+    393: [
+      { text: "彼は*五十*歳です。", romanization: "Kare wa *gojuu* sai desu.", translation: "He's fifty years old." },
+      { text: "この箱の中に*五十*個のりんごがあります。", romanization: "Kono hako no naka ni *gojuu* ko no ringo ga arimasu.", translation: "There are fifty apples in this box." },
+      { text: "私たちは*五十*キロ歩きました。", romanization: "Watashitachi wa *gojuu* kiro arukimashita.", translation: "We walked fifty kilometers." }
+    ],
+    394: [
+      { text: "この本には*百*ページあります。", romanization: "Kono hon ni wa *hyaku* peeji arimasu.", translation: "This book has a hundred pages." },
+      { text: "*百*円で足りますか。", romanization: "*Hyaku* en de tarimasu ka.", translation: "Is a hundred yen enough?" },
+      { text: "彼は*百*歳まで生きました。", romanization: "Kare wa *hyaku* sai made ikimashita.", translation: "He lived to be a hundred years old." }
+    ],
+    395: [
+      { text: "この車は*千*ドルします。", romanization: "Kono kuruma wa *sen* doru shimasu.", translation: "This car costs a thousand dollars." },
+      { text: "この本には*千*の単語があります。", romanization: "Kono hon ni wa *sen* no tango ga arimasu.", translation: "This book has a thousand words." },
+      { text: "*千*人が来ました。", romanization: "*Sen* nin ga kimashita.", translation: "A thousand people came." }
+    ],
+    396: [
+      { text: "彼の車は*灰色*です。", romanization: "Kare no kuruma wa *haiiro* desu.", translation: "His car is grey." },
+      { text: "空は*灰色*です。", romanization: "Sora wa *haiiro* desu.", translation: "The sky is grey." },
+      { text: "彼女は*灰色*のコートを着ています。", romanization: "Kanojo wa *haiiro* no kooto o kite imasu.", translation: "She's wearing a grey coat." }
+    ],
+    397: [
+      { text: "これが*一番目*の質問です。", romanization: "Kore ga *ichibanme* no shitsumon desu.", translation: "This is the first question." },
+      { text: "彼は*一番目*です。", romanization: "Kare wa *ichibanme* desu.", translation: "He's in first place." },
+      { text: "*一番目*の問題は簡単です。", romanization: "*Ichibanme* no mondai wa kantan desu.", translation: "The first question is simple." }
+    ],
+    398: [
+      { text: "これが*最後*の質問です。", romanization: "Kore ga *saigo* no shitsumon desu.", translation: "This is the last question." },
+      { text: "彼は*最後*に着きました。", romanization: "Kare wa *saigo* ni tsukimashita.", translation: "He arrived last." },
+      { text: "*最後*に、皆さんありがとう。", romanization: "*Saigo* ni, minasan arigatou.", translation: "Finally, thank you everyone." }
+    ],
+    399: [
+      { text: "私は*半分*しか食べませんでした。", romanization: "Watashi wa *hanbun* shika tabemasen deshita.", translation: "I only ate half." },
+      { text: "*半分*の学生が来ました。", romanization: "*Hanbun* no gakusei ga kimashita.", translation: "Half of the students came." },
+      { text: "*半分*で十分です。", romanization: "*Hanbun* de juubun desu.", translation: "Half is enough for me." }
+    ],
+    400: [
+      { text: "あなたの電話*番号*は何ですか。", romanization: "Anata no denwa *bangou* wa nan desu ka.", translation: "What's your phone number?" },
+      { text: "部屋*番号*を教えてください。", romanization: "Heya *bangou* o oshiete kudasai.", translation: "Please tell me the room number." },
+      { text: "この*番号*は間違っています。", romanization: "Kono *bangou* wa machigatte imasu.", translation: "This number is wrong." }
     ]
   }
 };
