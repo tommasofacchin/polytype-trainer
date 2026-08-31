@@ -13278,6 +13278,256 @@ window.DECK_EXAMPLES = {
       { text: "他的*耳朵*很大。", romanization: "Tā de *ěrduo* hěn dà.", translation: "His ears are big." },
       { text: "我的*耳朵*疼。", romanization: "Wǒ de *ěrduo* téng.", translation: "My ear hurts." },
       { text: "兔子有长长的*耳朵*。", romanization: "Tùzi yǒu chángcháng de *ěrduo*.", translation: "Rabbits have long ears." }
+    ],
+    151: [
+      { text: "他的*鼻子*很大。", romanization: "Tā de *bízi* hěn dà.", translation: "His nose is big." },
+      { text: "我的*鼻子*痒。", romanization: "Wǒ de *bízi* yǎng.", translation: "My nose is itchy." },
+      { text: "小狗用*鼻子*闻东西。", romanization: "Xiǎogǒu yòng *bízi* wén dōngxi.", translation: "The puppy smells things with its nose." }
+    ],
+    152: [
+      { text: "闭上你的*嘴*。", romanization: "Bìshàng nǐ de *zuǐ*.", translation: "Close your mouth." },
+      { text: "她的*嘴*很小。", romanization: "Tā de *zuǐ* hěn xiǎo.", translation: "Her mouth is small." },
+      { text: "他张开*嘴*笑了。", romanization: "Tā zhāngkāi *zuǐ* xiào le.", translation: "He opened his mouth and laughed." }
+    ],
+    153: [
+      { text: "她的*头发*很长。", romanization: "Tā de *tóufa* hěn cháng.", translation: "Her hair is long." },
+      { text: "我今天洗了*头发*。", romanization: "Wǒ jīntiān xǐle *tóufa*.", translation: "I washed my hair today." },
+      { text: "他的*头发*是黑色的。", romanization: "Tā de *tóufa* shì hēisè de.", translation: "His hair is black." }
+    ],
+    154: [
+      { text: "他穿着一件*夹克*。", romanization: "Tā chuānzhe yí jiàn *jiākè*.", translation: "He's wearing a jacket." },
+      { text: "这件*夹克*很暖和。", romanization: "Zhè jiàn *jiākè* hěn nuǎnhuo.", translation: "This jacket is warm." },
+      { text: "我把*夹克*忘在家里了。", romanization: "Wǒ bǎ *jiākè* wàng zài jiā lǐ le.", translation: "I forgot my jacket at home." }
+    ],
+    155: [
+      { text: "我买了一双新*鞋子*。", romanization: "Wǒ mǎile yì shuāng xīn *xiézi*.", translation: "I bought a new pair of shoes." },
+      { text: "请把*鞋子*脱掉。", romanization: "Qǐng bǎ *xiézi* tuō diào.", translation: "Please take off your shoes." },
+      { text: "这双*鞋子*太小了。", romanization: "Zhè shuāng *xiézi* tài xiǎo le.", translation: "These shoes are too small." }
+    ],
+    156: [
+      { text: "他穿着蓝色*裤子*。", romanization: "Tā chuānzhe lánsè *kùzi*.", translation: "He's wearing blue pants." },
+      { text: "这条*裤子*太长了。", romanization: "Zhè tiáo *kùzi* tài cháng le.", translation: "These pants are too long." },
+      { text: "我需要买新*裤子*。", romanization: "Wǒ xūyào mǎi xīn *kùzi*.", translation: "I need to buy new pants." }
+    ],
+    157: [
+      { text: "他穿着白色*衬衫*。", romanization: "Tā chuānzhe báisè *chènshān*.", translation: "He's wearing a white shirt." },
+      { text: "这件*衬衫*很好看。", romanization: "Zhè jiàn *chènshān* hěn hǎokàn.", translation: "This shirt looks nice." },
+      { text: "我要熨这件*衬衫*。", romanization: "Wǒ yào yùn zhè jiàn *chènshān*.", translation: "I need to iron this shirt." }
+    ],
+    158: [
+      { text: "她穿着一条红色*连衣裙*。", romanization: "Tā chuānzhe yì tiáo hóngsè *liányīqún*.", translation: "She's wearing a red dress." },
+      { text: "这条*连衣裙*很漂亮。", romanization: "Zhè tiáo *liányīqún* hěn piàoliang.", translation: "This dress is beautiful." },
+      { text: "我想买一条新*连衣裙*。", romanization: "Wǒ xiǎng mǎi yì tiáo xīn *liányīqún*.", translation: "I want to buy a new dress." }
+    ],
+    159: [
+      { text: "他戴着一顶*帽子*。", romanization: "Tā dàizhe yì dǐng *màozi*.", translation: "He's wearing a hat." },
+      { text: "这顶*帽子*是我的。", romanization: "Zhè dǐng *màozi* shì wǒ de.", translation: "This hat is mine." },
+      { text: "外面很冷，戴上*帽子*吧。", romanization: "Wàimiàn hěn lěng, dài shàng *màozi* ba.", translation: "It's cold outside, put on a hat." }
+    ],
+    160: [
+      { text: "她穿着一件绿色*毛衣*。", romanization: "Tā chuānzhe yí jiàn lǜsè *máoyī*.", translation: "She's wearing a green sweater." },
+      { text: "这件*毛衣*很暖和。", romanization: "Zhè jiàn *máoyī* hěn nuǎnhuo.", translation: "This sweater is warm." },
+      { text: "奶奶给我织了一件*毛衣*。", romanization: "Nǎinai gěi wǒ zhīle yí jiàn *máoyī*.", translation: "Grandma knitted me a sweater." }
+    ],
+    161: [
+      { text: "请等三十*秒*。", romanization: "Qǐng děng sānshí *miǎo*.", translation: "Please wait thirty seconds." },
+      { text: "这只花了几*秒*。", romanization: "Zhè zhǐ huāle jǐ *miǎo*.", translation: "This only took a few seconds." },
+      { text: "他一*秒*都没等。", romanization: "Tā yì *miǎo* dōu méi děng.", translation: "He didn't wait a single second." }
+    ],
+    162: [
+      { text: "我们等了两个*小时*。", romanization: "Wǒmen děngle liǎng ge *xiǎoshí*.", translation: "We waited two hours." },
+      { text: "飞机再一个*小时*就到了。", romanization: "Fēijī zài yí ge *xiǎoshí* jiù dào le.", translation: "The plane will arrive in one more hour." },
+      { text: "会议持续了一个*小时*。", romanization: "Huìyì chíxùle yí ge *xiǎoshí*.", translation: "The meeting lasted an hour." }
+    ],
+    163: [
+      { text: "请等五*分钟*。", romanization: "Qǐng děng wǔ *fēnzhōng*.", translation: "Please wait five minutes." },
+      { text: "还有十*分钟*就开始了。", romanization: "Hái yǒu shí *fēnzhōng* jiù kāishǐ le.", translation: "It starts in ten minutes." },
+      { text: "我们迟到了几*分钟*。", romanization: "Wǒmen chídàole jǐ *fēnzhōng*.", translation: "We were a few minutes late." }
+    ],
+    164: [
+      { text: "我们在这里住了五*年*。", romanization: "Wǒmen zài zhèlǐ zhùle wǔ *nián*.", translation: "We've lived here for five years." },
+      { text: "明*年*我要去中国。", romanization: "Míng *nián* wǒ yào qù Zhōngguó.", translation: "Next year I'm going to China." },
+      { text: "去*年*冬天很冷。", romanization: "Qù *nián* dōngtiān hěn lěng.", translation: "Last winter was cold." }
+    ],
+    165: [
+      { text: "*周末*愉快！", romanization: "*Zhōumò* yúkuài!", translation: "Have a nice weekend!" },
+      { text: "我们这个*周末*去爬山。", romanization: "Wǒmen zhège *zhōumò* qù páshān.", translation: "We're going hiking this weekend." },
+      { text: "*周末*我喜欢睡懒觉。", romanization: "*Zhōumò* wǒ xǐhuan shuì lǎnjiào.", translation: "On weekends I like to sleep in." }
+    ],
+    166: [
+      { text: "*星期一*我要上班。", romanization: "*Xīngqīyī* wǒ yào shàngbān.", translation: "I have to work on Monday." },
+      { text: "会议在*星期一*。", romanization: "Huìyì zài *xīngqīyī*.", translation: "The meeting is on Monday." },
+      { text: "我不喜欢*星期一*。", romanization: "Wǒ bù xǐhuan *xīngqīyī*.", translation: "I don't like Mondays." }
+    ],
+    167: [
+      { text: "*星期二*我们有课。", romanization: "*Xīngqī'èr* wǒmen yǒu kè.", translation: "We have class on Tuesday." },
+      { text: "她*星期二*回来。", romanization: "Tā *xīngqī'èr* huílái.", translation: "She's coming back on Tuesday." },
+      { text: "*星期二*天气很好。", romanization: "*Xīngqī'èr* tiānqì hěn hǎo.", translation: "The weather was nice on Tuesday." }
+    ],
+    168: [
+      { text: "*星期三*我去医院。", romanization: "*Xīngqīsān* wǒ qù yīyuàn.", translation: "I'm going to the hospital on Wednesday." },
+      { text: "会议改到*星期三*了。", romanization: "Huìyì gǎidào *xīngqīsān* le.", translation: "The meeting was moved to Wednesday." },
+      { text: "我们*星期三*见面吧。", romanization: "Wǒmen *xīngqīsān* jiànmiàn ba.", translation: "Let's meet on Wednesday." }
+    ],
+    169: [
+      { text: "*星期四*我很忙。", romanization: "*Xīngqīsì* wǒ hěn máng.", translation: "I'm busy on Thursday." },
+      { text: "派对是*星期四*晚上。", romanization: "Pàiduì shì *xīngqīsì* wǎnshang.", translation: "The party is Thursday night." },
+      { text: "我们*星期四*出发。", romanization: "Wǒmen *xīngqīsì* chūfā.", translation: "We leave on Thursday." }
+    ],
+    170: [
+      { text: "*星期五*是我最喜欢的一天。", romanization: "*Xīngqīwǔ* shì wǒ zuì xǐhuan de yì tiān.", translation: "Friday is my favorite day." },
+      { text: "我们*星期五*晚上出去吧。", romanization: "Wǒmen *xīngqīwǔ* wǎnshang chūqù ba.", translation: "Let's go out Friday evening." },
+      { text: "报告*星期五*要交。", romanization: "Bàogào *xīngqīwǔ* yào jiāo.", translation: "The report is due Friday." }
+    ],
+    171: [
+      { text: "*星期六*我们去市场。", romanization: "*Xīngqīliù* wǒmen qù shìchǎng.", translation: "We go to the market on Saturday." },
+      { text: "婚礼在*星期六*。", romanization: "Hūnlǐ zài *xīngqīliù*.", translation: "The wedding is on Saturday." },
+      { text: "*星期六*我想睡懒觉。", romanization: "*Xīngqīliù* wǒ xiǎng shuì lǎnjiào.", translation: "On Saturday I want to sleep in." }
+    ],
+    172: [
+      { text: "*星期日*我们去教堂。", romanization: "*Xīngqīrì* wǒmen qù jiàotáng.", translation: "We go to church on Sunday." },
+      { text: "商店*星期日*不开门。", romanization: "Shāngdiàn *xīngqīrì* bù kāimén.", translation: "The shop doesn't open on Sunday." },
+      { text: "*星期日*是休息的一天。", romanization: "*Xīngqīrì* shì xiūxi de yì tiān.", translation: "Sunday is a day of rest." }
+    ],
+    173: [
+      { text: "*春天*花都开了。", romanization: "*Chūntiān* huā dōu kāi le.", translation: "In spring all the flowers bloom." },
+      { text: "我喜欢*春天*的天气。", romanization: "Wǒ xǐhuan *chūntiān* de tiānqì.", translation: "I like spring weather." },
+      { text: "*春天*很快就要到了。", romanization: "*Chūntiān* hěn kuài jiù yào dào le.", translation: "Spring is coming soon." }
+    ],
+    174: [
+      { text: "*夏天*非常热。", romanization: "*Xiàtiān* fēicháng rè.", translation: "Summer is very hot." },
+      { text: "我们*夏天*去海边。", romanization: "Wǒmen *xiàtiān* qù hǎibiān.", translation: "We go to the beach in summer." },
+      { text: "去年*夏天*很暖和。", romanization: "Qùnián *xiàtiān* hěn nuǎnhuo.", translation: "Last summer was warm." }
+    ],
+    175: [
+      { text: "*秋天*树叶变黄了。", romanization: "*Qiūtiān* shùyè biàn huáng le.", translation: "In autumn the leaves turn yellow." },
+      { text: "我喜欢*秋天*的颜色。", romanization: "Wǒ xǐhuan *qiūtiān* de yánsè.", translation: "I like the colors of autumn." },
+      { text: "*秋天*天气很凉爽。", romanization: "*Qiūtiān* tiānqì hěn liángshuǎng.", translation: "Autumn weather is cool." }
+    ],
+    176: [
+      { text: "*冬天*非常冷。", romanization: "*Dōngtiān* fēicháng lěng.", translation: "Winter is very cold." },
+      { text: "*冬天*会下雪。", romanization: "*Dōngtiān* huì xiàxuě.", translation: "It snows in winter." },
+      { text: "我不喜欢*冬天*。", romanization: "Wǒ bù xǐhuan *dōngtiān*.", translation: "I don't like winter." }
+    ],
+    177: [
+      { text: "今天*太阳*很大。", romanization: "Jīntiān *tàiyáng* hěn dà.", translation: "The sun is strong today." },
+      { text: "*太阳*从东边升起。", romanization: "*Tàiyáng* cóng dōngbian shēngqǐ.", translation: "The sun rises in the east." },
+      { text: "孩子们在*太阳*下玩耍。", romanization: "Háizimen zài *tàiyáng* xià wánshuǎ.", translation: "The children play in the sun." }
+    ],
+    178: [
+      { text: "外面在下*雨*。", romanization: "Wàimiàn zài xià *yǔ*.", translation: "It's raining outside." },
+      { text: "*雨*停了。", romanization: "*Yǔ* tíng le.", translation: "The rain has stopped." },
+      { text: "带上伞，可能会下*雨*。", romanization: "Dài shàng sǎn, kěnéng huì xià *yǔ*.", translation: "Bring an umbrella, it might rain." }
+    ],
+    179: [
+      { text: "外面下*雪*了。", romanization: "Wàimiàn xià *xuě* le.", translation: "It's snowing outside." },
+      { text: "*雪*是白色的。", romanization: "*Xuě* shì báisè de.", translation: "Snow is white." },
+      { text: "孩子们喜欢玩*雪*。", romanization: "Háizimen xǐhuan wán *xuě*.", translation: "Children love playing in the snow." }
+    ],
+    180: [
+      { text: "今天*风*很大。", romanization: "Jīntiān *fēng* hěn dà.", translation: "It's very windy today." },
+      { text: "*风*把树叶吹走了。", romanization: "*Fēng* bǎ shùyè chuī zǒu le.", translation: "The wind blew the leaves away." },
+      { text: "外面吹着冷*风*。", romanization: "Wàimiàn chuīzhe lěng *fēng*.", translation: "A cold wind is blowing outside." }
+    ],
+    181: [
+      { text: "这个主意*不错*。", romanization: "Zhège zhǔyì *búcuò*.", translation: "This is a nice idea." },
+      { text: "今天天气*不错*。", romanization: "Jīntiān tiānqì *búcuò*.", translation: "The weather is nice today." },
+      { text: "这家餐厅*不错*。", romanization: "Zhè jiā cāntīng *búcuò*.", translation: "This restaurant is nice." }
+    ],
+    182: [
+      { text: "今天*多云*。", romanization: "Jīntiān *duōyún*.", translation: "Today is cloudy." },
+      { text: "天空*多云*，可能会下雨。", romanization: "Tiānkōng *duōyún*, kěnéng huì xiàyǔ.", translation: "The sky is cloudy, it might rain." },
+      { text: "明天会*多云*。", romanization: "Míngtiān huì *duōyún*.", translation: "Tomorrow will be cloudy." }
+    ],
+    183: [
+      { text: "今天天空很*晴朗*。", romanization: "Jīntiān tiānkōng hěn *qínglǎng*.", translation: "The sky is clear today." },
+      { text: "*晴朗*的日子最适合散步。", romanization: "*Qínglǎng* de rìzi zuì shìhé sànbù.", translation: "Clear days are best for walking." },
+      { text: "明天会很*晴朗*。", romanization: "Míngtiān huì hěn *qínglǎng*.", translation: "Tomorrow will be clear." }
+    ],
+    184: [
+      { text: "这条毛巾是*干*的。", romanization: "Zhè tiáo máojīn shì *gān* de.", translation: "This towel is dry." },
+      { text: "衣服还没*干*。", romanization: "Yīfu hái méi *gān*.", translation: "The clothes aren't dry yet." },
+      { text: "空气很*干*。", romanization: "Kōngqì hěn *gān*.", translation: "The air is very dry." }
+    ],
+    185: [
+      { text: "我的鞋子是*湿*的。", romanization: "Wǒ de xiézi shì *shī* de.", translation: "My shoes are wet." },
+      { text: "地板很*湿*，小心。", romanization: "Dìbǎn hěn *shī*, xiǎoxīn.", translation: "The floor is wet, be careful." },
+      { text: "外面下雨，草很*湿*。", romanization: "Wàimiàn xiàyǔ, cǎo hěn *shī*.", translation: "It's raining outside, the grass is wet." }
+    ],
+    186: [
+      { text: "*火车*就要出发了。", romanization: "*Huǒchē* jiù yào chūfā le.", translation: "The train is about to depart." },
+      { text: "我们坐*火车*去北京。", romanization: "Wǒmen zuò *huǒchē* qù Běijīng.", translation: "We're taking the train to Beijing." },
+      { text: "*火车*晚点了。", romanization: "*Huǒchē* wǎndiǎn le.", translation: "The train is delayed." }
+    ],
+    187: [
+      { text: "我每天坐*公交车*上班。", romanization: "Wǒ měitiān zuò *gōngjiāochē* shàngbān.", translation: "I take the bus to work every day." },
+      { text: "*公交车*来了。", romanization: "*Gōngjiāochē* lái le.", translation: "The bus is here." },
+      { text: "这辆*公交车*去市中心吗？", romanization: "Zhè liàng *gōngjiāochē* qù shìzhōngxīn ma?", translation: "Does this bus go downtown?" }
+    ],
+    188: [
+      { text: "*飞机*几点起飞？", romanization: "*Fēijī* jǐ diǎn qǐfēi?", translation: "What time does the plane take off?" },
+      { text: "我们坐*飞机*去日本。", romanization: "Wǒmen zuò *fēijī* qù Rìběn.", translation: "We're flying to Japan." },
+      { text: "*飞机*已经降落了。", romanization: "*Fēijī* yǐjīng jiàngluò le.", translation: "The plane has already landed." }
+    ],
+    189: [
+      { text: "我骑*自行车*上班。", romanization: "Wǒ qí *zìxíngchē* shàngbān.", translation: "I ride my bike to work." },
+      { text: "这辆*自行车*是新的。", romanization: "Zhè liàng *zìxíngchē* shì xīn de.", translation: "This bicycle is new." },
+      { text: "他不会骑*自行车*。", romanization: "Tā bú huì qí *zìxíngchē*.", translation: "He doesn't know how to ride a bicycle." }
+    ],
+    190: [
+      { text: "我们坐*船*去岛上。", romanization: "Wǒmen zuò *chuán* qù dǎo shàng.", translation: "We took a boat to the island." },
+      { text: "*船*在海上行驶。", romanization: "*Chuán* zài hǎi shàng xíngshǐ.", translation: "The boat sails on the sea." },
+      { text: "这条*船*很大。", romanization: "Zhè tiáo *chuán* hěn dà.", translation: "This boat is big." }
+    ],
+    191: [
+      { text: "*车站*离这里很近。", romanization: "*Chēzhàn* lí zhèlǐ hěn jìn.", translation: "The station is close by." },
+      { text: "我们在*车站*等你。", romanization: "Wǒmen zài *chēzhàn* děng nǐ.", translation: "We'll wait for you at the station." },
+      { text: "去*车站*怎么走？", romanization: "Qù *chēzhàn* zěnme zǒu?", translation: "How do I get to the station?" }
+    ],
+    192: [
+      { text: "*机场*离市中心很远。", romanization: "*Jīchǎng* lí shìzhōngxīn hěn yuǎn.", translation: "The airport is far from downtown." },
+      { text: "我们去*机场*接他。", romanization: "Wǒmen qù *jīchǎng* jiē tā.", translation: "We're going to the airport to pick him up." },
+      { text: "*机场*有很多商店。", romanization: "*Jīchǎng* yǒu hěn duō shāngdiàn.", translation: "The airport has many shops." }
+    ],
+    193: [
+      { text: "我买了两张*票*。", romanization: "Wǒ mǎile liǎng zhāng *piào*.", translation: "I bought two tickets." },
+      { text: "*票*多少钱？", romanization: "*Piào* duōshao qián?", translation: "How much is a ticket?" },
+      { text: "请把*票*给我看一下。", romanization: "Qǐng bǎ *piào* gěi wǒ kàn yíxià.", translation: "Please show me your ticket." }
+    ],
+    194: [
+      { text: "你有*地图*吗？", romanization: "Nǐ yǒu *dìtú* ma?", translation: "Do you have a map?" },
+      { text: "我在看*地图*找路。", romanization: "Wǒ zài kàn *dìtú* zhǎo lù.", translation: "I'm looking at the map to find the way." },
+      { text: "这张*地图*很有用。", romanization: "Zhè zhāng *dìtú* hěn yǒuyòng.", translation: "This map is useful." }
+    ],
+    195: [
+      { text: "我们住在这家*酒店*。", romanization: "Wǒmen zhù zài zhè jiā *jiǔdiàn*.", translation: "We're staying at this hotel." },
+      { text: "*酒店*离机场很近。", romanization: "*Jiǔdiàn* lí jīchǎng hěn jìn.", translation: "The hotel is close to the airport." },
+      { text: "这家*酒店*很贵。", romanization: "Zhè jiā *jiǔdiàn* hěn guì.", translation: "This hotel is expensive." }
+    ],
+    196: [
+      { text: "往*左*转。", romanization: "Wǎng *zuǒ* zhuǎn.", translation: "Turn left." },
+      { text: "银行在*左*边。", romanization: "Yínháng zài *zuǒ* biān.", translation: "The bank is on the left." },
+      { text: "他坐在我*左*边。", romanization: "Tā zuò zài wǒ *zuǒ* biān.", translation: "He sits on my left." }
+    ],
+    197: [
+      { text: "往*右*转。", romanization: "Wǎng *yòu* zhuǎn.", translation: "Turn right." },
+      { text: "商店在*右*边。", romanization: "Shāngdiàn zài *yòu* biān.", translation: "The shop is on the right." },
+      { text: "她坐在我*右*边。", romanization: "Tā zuò zài wǒ *yòu* biān.", translation: "She sits on my right." }
+    ],
+    198: [
+      { text: "*一直走*，然后左转。", romanization: "*Yìzhízǒu*, ránhòu zuǒ zhuǎn.", translation: "Go straight, then turn left." },
+      { text: "请*一直走*到红绿灯。", romanization: "Qǐng *yìzhízǒu* dào hónglǜdēng.", translation: "Please go straight to the traffic light." },
+      { text: "*一直走*就能看到车站。", romanization: "*Yìzhízǒu* jiù néng kàndào chēzhàn.", translation: "Go straight and you'll see the station." }
+    ],
+    199: [
+      { text: "学校离我家很*近*。", romanization: "Xuéxiào lí wǒ jiā hěn *jìn*.", translation: "The school is close to my house." },
+      { text: "车站*近*吗？", romanization: "Chēzhàn *jìn* ma?", translation: "Is the station nearby?" },
+      { text: "商店就在*近*处。", romanization: "Shāngdiàn jiù zài *jìn* chù.", translation: "The shop is nearby." }
+    ],
+    200: [
+      { text: "机场离这里很*远*。", romanization: "Jīchǎng lí zhèlǐ hěn *yuǎn*.", translation: "The airport is far from here." },
+      { text: "学校*远*吗？", romanization: "Xuéxiào *yuǎn* ma?", translation: "Is the school far?" },
+      { text: "我们走了很*远*的路。", romanization: "Wǒmen zǒule hěn *yuǎn* de lù.", translation: "We walked a long way." }
     ]
   },
 
