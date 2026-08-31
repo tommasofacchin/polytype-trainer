@@ -12025,6 +12025,256 @@ window.DECK_EXAMPLES = {
       { text: "¿Cuál es tu *número*?", translation: "What's your number?" },
       { text: "Vivimos en el *número* diez.", translation: "We live at number ten." },
       { text: "¿Puedes darme su *número*?", translation: "Can you give me her number?" }
+    ],
+    401: [
+      { text: "Estoy *asustado* de las arañas.", translation: "I'm afraid of spiders." },
+      { text: "Se puso *asustada* por el rayo.", translation: "She got scared by the lightning." },
+      { text: "No estés *asustado*, todo saldrá bien.", translation: "Don't be afraid, everything's fine." }
+    ],
+    402: [
+      { text: "Estaba muy *sorprendido* por el regalo.", translation: "I was very surprised by the gift." },
+      { text: "Parecía *sorprendida*.", translation: "She looked surprised." },
+      { text: "Estábamos *sorprendidos* por el resultado.", translation: "We were surprised by the result." }
+    ],
+    403: [
+      { text: "Estoy *aburrido* de este juego.", translation: "I'm bored of this game." },
+      { text: "Los niños se pusieron *aburridos* después de una hora.", translation: "The children got bored after an hour." },
+      { text: "Parecía *aburrida* en clase.", translation: "She looked bored in class." }
+    ],
+    404: [
+      { text: "Siempre está *tranquila* en situaciones difíciles.", translation: "She's always calm in difficult situations." },
+      { text: "El mar estaba *tranquilo* hoy.", translation: "The sea was calm today." },
+      { text: "Pasamos una noche *tranquila* en casa.", translation: "We had a calm evening at home." }
+    ],
+    405: [
+      { text: "Estoy muy *orgulloso* de ti.", translation: "I'm very proud of you." },
+      { text: "Estaba *orgulloso* de su logro.", translation: "He was proud of his achievement." },
+      { text: "Los padres estaban *orgullosos* de sus hijos.", translation: "The parents were proud of their children." }
+    ],
+    406: [
+      { text: "Es muy *fuerte*.", translation: "He's very strong." },
+      { text: "El café estaba demasiado *fuerte* para mí.", translation: "The coffee was too strong for me." },
+      { text: "Tiene brazos *fuertes*.", translation: "She has strong arms." }
+    ],
+    407: [
+      { text: "Se sintió *débil* después de la enfermedad.", translation: "He felt weak after the illness." },
+      { text: "La señal es *débil* aquí.", translation: "The signal is weak here." },
+      { text: "El té estaba un poco *débil*.", translation: "The tea was a bit weak." }
+    ],
+    408: [
+      { text: "La vista era *hermosa*.", translation: "The view was beautiful." },
+      { text: "Tiene una sonrisa *hermosa*.", translation: "She has a beautiful smile." },
+      { text: "Las flores del jardín son *hermosas*.", translation: "The flowers in the garden are beautiful." }
+    ],
+    409: [
+      { text: "Ese edificio es bastante *feo*.", translation: "That building is quite ugly." },
+      { text: "Tenía una herida *fea* en el brazo.", translation: "He had an ugly wound on his arm." },
+      { text: "El tiempo estuvo *feo* ayer.", translation: "The weather was ugly yesterday." }
+    ],
+    410: [
+      { text: "Todavía es muy *joven*.", translation: "She's still very young." },
+      { text: "Era *joven* cuando se fue de casa.", translation: "He was young when he moved out." },
+      { text: "A los *jóvenes* les gusta viajar mucho.", translation: "Young people like to travel a lot." }
+    ],
+    411: [
+      { text: "Su familia es muy *rica*.", translation: "His family is very rich." },
+      { text: "Se hizo *rico* vendiendo la casa.", translation: "He became rich from selling the house." },
+      { text: "El país es *rico* en recursos naturales.", translation: "The country is rich in natural resources." }
+    ],
+    412: [
+      { text: "Muchas personas allí son *pobres*.", translation: "Many people there are poor." },
+      { text: "La familia era *pobre*, pero feliz.", translation: "The family was poor but happy." },
+      { text: "Creció en un barrio *pobre*.", translation: "He grew up in a poor neighborhood." }
+    ],
+    413: [
+      { text: "La cocina está totalmente *limpia* ahora.", translation: "The kitchen is completely clean now." },
+      { text: "El agua del lago está *limpia*.", translation: "The water in the lake is clean." },
+      { text: "Le gusta una casa *limpia*.", translation: "She likes a clean home." }
+    ],
+    414: [
+      { text: "Mis zapatos están muy *sucios*.", translation: "My shoes are very dirty." },
+      { text: "El suelo estaba *sucio* después de la fiesta.", translation: "The floor was dirty after the party." },
+      { text: "Tenía las manos *sucias* de la jardinería.", translation: "He had dirty hands from gardening." }
+    ],
+    415: [
+      { text: "La película fue muy *divertida*.", translation: "The movie was very funny." },
+      { text: "Siempre cuenta historias *divertidas*.", translation: "He always tells funny stories." },
+      { text: "Fue un juego *divertido*.", translation: "It was a funny game." }
+    ],
+    416: [
+      { text: "La *carretera* estaba llena de coches.", translation: "The road was full of cars." },
+      { text: "Condujimos por una *carretera* estrecha.", translation: "We drove on a narrow road." },
+      { text: "¿Qué *carretera* debemos tomar?", translation: "Which road should we take?" }
+    ],
+    417: [
+      { text: "Cruzamos el *puente* para ir a la ciudad.", translation: "We drove over the bridge to the city." },
+      { text: "El *puente* es muy antiguo.", translation: "The bridge is very old." },
+      { text: "Hay una vista bonita desde el *puente*.", translation: "There's a nice view from the bridge." }
+    ],
+    418: [
+      { text: "Tomamos un *taxi* al aeropuerto.", translation: "We took a taxi to the airport." },
+      { text: "El *taxi* llegó rápido.", translation: "The taxi arrived quickly." },
+      { text: "¿Puedes llamar a un *taxi*?", translation: "Can you call for a taxi?" }
+    ],
+    419: [
+      { text: "Mi *equipaje* se perdió en el aeropuerto.", translation: "My luggage got lost at the airport." },
+      { text: "Hicimos el *equipaje* la noche anterior.", translation: "We packed the luggage the evening before." },
+      { text: "El *equipaje* pesaba demasiado.", translation: "The luggage was too heavy." }
+    ],
+    420: [
+      { text: "Acuérdate de traer el *pasaporte*.", translation: "Remember to bring your passport." },
+      { text: "Perdí mi *pasaporte* el año pasado.", translation: "I lost my passport last year." },
+      { text: "Mi *pasaporte* caduca el año que viene.", translation: "My passport expires next year." }
+    ],
+    421: [
+      { text: "El *vuelo* fue largo y agotador.", translation: "The flight was long and tiring." },
+      { text: "Reservamos un *vuelo* a Roma.", translation: "We booked a flight to Rome." },
+      { text: "El *vuelo* se retrasó por el mal tiempo.", translation: "The flight was delayed because of the weather." }
+    ],
+    422: [
+      { text: "¿Está libre este *asiento*?", translation: "Is this seat free?" },
+      { text: "Me senté en un *asiento* junto a la ventana.", translation: "I sat in a seat by the window." },
+      { text: "Los *asientos* del avión eran estrechos.", translation: "The seats on the plane were cramped." }
+    ],
+    423: [
+      { text: "El *conductor* conducía con mucho cuidado.", translation: "The driver drove very carefully." },
+      { text: "Trabaja como *conductor* para una empresa.", translation: "He works as a driver for a company." },
+      { text: "Le dimos las gracias al *conductor* cuando bajamos.", translation: "We thanked the driver when we got off." }
+    ],
+    424: [
+      { text: "Esta mañana había mucho *tráfico*.", translation: "There was a lot of traffic this morning." },
+      { text: "El *tráfico* estaba completamente parado.", translation: "The traffic was completely still." },
+      { text: "Llegamos tarde por el *tráfico*.", translation: "We were late because of the traffic." }
+    ],
+    425: [
+      { text: "El *viaje* a Alemania duró diez horas.", translation: "The journey to Germany took ten hours." },
+      { text: "Estamos planeando un *viaje* largo el año que viene.", translation: "We're planning a long journey next year." },
+      { text: "El *viaje* estuvo lleno de aventuras.", translation: "The journey was full of adventures." }
+    ],
+    426: [
+      { text: "¿Puedo pedirte prestado tu *bolígrafo*?", translation: "Can I borrow your pen?" },
+      { text: "Mi *bolígrafo* dejó de escribir.", translation: "My pen stopped writing." },
+      { text: "Escribió la carta con un *bolígrafo* azul.", translation: "She wrote the letter with a blue pen." }
+    ],
+    427: [
+      { text: "Siempre dibujo con *lápiz*.", translation: "I always draw with a pencil." },
+      { text: "Mi *lápiz* necesita sacarle punta.", translation: "My pencil needs sharpening." },
+      { text: "¿Puedo pedirte prestado un *lápiz*?", translation: "Can I borrow a pencil?" }
+    ],
+    428: [
+      { text: "¿Puedes darme un *papel*?", translation: "Can you give me a piece of paper?" },
+      { text: "El *papel* estaba lleno de notas.", translation: "The paper was full of notes." },
+      { text: "Necesitamos más *papel* para la impresora.", translation: "We need more paper for the printer." }
+    ],
+    429: [
+      { text: "Siempre escribo en mi *cuaderno*.", translation: "I always write in my notebook." },
+      { text: "El *cuaderno* estaba lleno de dibujos.", translation: "The notebook was full of drawings." },
+      { text: "Compró un *cuaderno* nuevo para la escuela.", translation: "She bought a new notebook for school." }
+    ],
+    430: [
+      { text: "El libro está en el *escritorio*.", translation: "The book is on the desk." },
+      { text: "Mi *escritorio* siempre está desordenado.", translation: "My desk is always messy." },
+      { text: "Compramos un *escritorio* nuevo para la oficina.", translation: "We bought a new desk for the office." }
+    ],
+    431: [
+      { text: "Tenemos una *reunión* a las diez.", translation: "We have a meeting at ten." },
+      { text: "La *reunión* duró dos horas.", translation: "The meeting lasted two hours." },
+      { text: "Se preparó para la *reunión* anoche.", translation: "She prepared for the meeting last night." }
+    ],
+    432: [
+      { text: "Te envié un *correo* ayer.", translation: "I sent you an email yesterday." },
+      { text: "¿Has revisado tu *correo* hoy?", translation: "Have you checked your email today?" },
+      { text: "Nos comunicamos principalmente por *correo*.", translation: "We communicate mostly via email." }
+    ],
+    433: [
+      { text: "Mi *jefe* es muy amable.", translation: "My boss is very nice." },
+      { text: "El *jefe* nos dio el día libre hoy.", translation: "The boss gave us the day off." },
+      { text: "Se convirtió en *jefa* del departamento el año pasado.", translation: "She became boss of the department last year." }
+    ],
+    434: [
+      { text: "Recibo mi *salario* cada mes.", translation: "I get paid a salary every month." },
+      { text: "Su *salario* aumentó este año.", translation: "His salary increased this year." },
+      { text: "Hablamos de mi *salario* con el jefe.", translation: "We discussed my salary with the boss." }
+    ],
+    435: [
+      { text: "Trabaja en una *empresa* grande.", translation: "He works at a big company." },
+      { text: "La *empresa* contrató a diez personas nuevas.", translation: "The company hired ten new people." },
+      { text: "Fundamos nuestra propia *empresa* el año pasado.", translation: "We started our own company last year." }
+    ],
+    436: [
+      { text: "Se rompió el *brazo* ayer.", translation: "She broke her arm yesterday." },
+      { text: "Sostenía al niño en los *brazos*.", translation: "He held the child in his arms." },
+      { text: "Me duele el *brazo*.", translation: "My arm hurts." }
+    ],
+    437: [
+      { text: "Se lastimó la *pierna* jugando al fútbol.", translation: "He injured his leg in football." },
+      { text: "Se rompió la *pierna* esquiando.", translation: "She broke her leg skiing." },
+      { text: "Me duele la *pierna* después de correr.", translation: "My leg hurts after the run." }
+    ],
+    438: [
+      { text: "Se cortó el *dedo*.", translation: "She cut her finger." },
+      { text: "Señaló la casa con el *dedo*.", translation: "He pointed with his finger at the house." },
+      { text: "El anillo le queda bien en este *dedo*.", translation: "The ring fits on this finger." }
+    ],
+    439: [
+      { text: "Me duele la *espalda* hoy.", translation: "My back hurts today." },
+      { text: "Llevaba la mochila en la *espalda*.", translation: "He carried the backpack on his back." },
+      { text: "Está tumbada de *espaldas* descansando.", translation: "She's lying on her back resting." }
+    ],
+    440: [
+      { text: "Su *corazón* latía rápido.", translation: "Her heart beat fast." },
+      { text: "Tiene un buen *corazón*.", translation: "He has a good heart." },
+      { text: "El médico escuchó mi *corazón*.", translation: "The doctor listened to my heart." }
+    ],
+    441: [
+      { text: "Ponte el *abrigo*, hace frío afuera.", translation: "Put on your coat, it's cold outside." },
+      { text: "Su *abrigo* era largo y negro.", translation: "Her coat was long and black." },
+      { text: "Compré un *abrigo* nuevo para el invierno.", translation: "I bought a new coat for winter." }
+    ],
+    442: [
+      { text: "Lleva una *falda* bonita.", translation: "She's wearing a nice skirt." },
+      { text: "La *falda* era roja y corta.", translation: "The skirt was red and short." },
+      { text: "Compré una *falda* nueva ayer.", translation: "I bought a new skirt yesterday." }
+    ],
+    443: [
+      { text: "Solo encuentro un *calcetín*.", translation: "I can only find one sock." },
+      { text: "Mis *calcetines* son todos diferentes.", translation: "My socks are all different." },
+      { text: "Perdió un *calcetín* en la lavadora.", translation: "He lost a sock in the washing machine." }
+    ],
+    444: [
+      { text: "Ponte los *guantes*, hace frío.", translation: "Put on your gloves, it's cold." },
+      { text: "Perdí un *guante* ayer.", translation: "I lost a glove yesterday." },
+      { text: "Sus *guantes* eran de lana.", translation: "Her gloves were made of wool." }
+    ],
+    445: [
+      { text: "Llevaba una *bufanda* calentita.", translation: "She wore a warm scarf." },
+      { text: "La *bufanda* era azul y suave.", translation: "The scarf was blue and soft." },
+      { text: "Me regalaron una *bufanda* en Navidad.", translation: "I got a scarf as a gift for Christmas." }
+    ],
+    446: [
+      { text: "Tengo que tomar mi *medicamento* cada día.", translation: "I have to take my medicine every day." },
+      { text: "El *medicamento* ayudó con el dolor de cabeza.", translation: "The medicine helped with the headache." },
+      { text: "El médico me recetó *medicamento*.", translation: "The doctor prescribed medicine for me." }
+    ],
+    447: [
+      { text: "El niño tiene *fiebre* alta hoy.", translation: "The child has a high fever today." },
+      { text: "La *fiebre* bajó después del medicamento.", translation: "The fever went down after the medicine." },
+      { text: "Se quedó en casa por la *fiebre*.", translation: "She stayed home because of a fever." }
+    ],
+    448: [
+      { text: "Siento *dolor* en la espalda.", translation: "I feel pain in my back." },
+      { text: "El *dolor* desapareció después de descansar.", translation: "The pain disappeared after rest." },
+      { text: "Tenía fuertes *dolores* de estómago.", translation: "She had strong pain in her stomach." }
+    ],
+    449: [
+      { text: "Tiene *tos* desde hace una semana.", translation: "He has had a cough for a week." },
+      { text: "Su *tos* empeoró por la noche.", translation: "Her cough got worse at night." },
+      { text: "Tomé medicina para la *tos*.", translation: "I took medicine for the cough." }
+    ],
+    450: [
+      { text: "El médico tomó una muestra de mi *sangre*.", translation: "The doctor took a sample of my blood." },
+      { text: "La *sangre* salía de la herida.", translation: "The blood flowed from the cut." },
+      { text: "Donó *sangre* ayer.", translation: "He donated blood yesterday." }
     ]
   },
 
