@@ -10275,6 +10275,256 @@ window.DECK_EXAMPLES = {
       { text: "Esta es *nuestra* casa.", translation: "This is our house." },
       { text: "*Nuestra* escuela está cerca del centro.", translation: "Our school is near the center." },
       { text: "*Nuestra* familia es grande.", translation: "Our family is big." }
+    ],
+    51: [
+      { text: "Quiero *ser* feliz.", translation: "I want to be happy." },
+      { text: "Quiere *ser* médico algún día.", translation: "He wants to be a doctor someday." },
+      { text: "Es bueno *ser* amable con todos.", translation: "It's good to be kind to everyone." }
+    ],
+    52: [
+      { text: "Quisiera *tener* una taza de té.", translation: "I want to have a cup of tea." },
+      { text: "No *tenemos* mucho tiempo.", translation: "We don't have much time." },
+      { text: "Desea *tener* un perro.", translation: "She wishes to have a dog." }
+    ],
+    53: [
+      { text: "*Voy* a la escuela cada día.", translation: "I go to school every day." },
+      { text: "¿*Vamos* a dar un paseo?", translation: "Shall we go for a walk?" },
+      { text: "*Va* a casa rápidamente.", translation: "She walks home quickly." }
+    ],
+    54: [
+      { text: "*Vengo* pronto.", translation: "I'll come soon." },
+      { text: "¿Puedes *venir* aquí?", translation: "Can you come here?" },
+      { text: "*Viene* de Alemania.", translation: "He comes from Germany." }
+    ],
+    55: [
+      { text: "¿Qué *haces* ahora?", translation: "What are you doing now?" },
+      { text: "*Hago* lo mejor que puedo.", translation: "I'm doing my best." },
+      { text: "Tenemos que *hacer* la tarea.", translation: "We have to do our homework." }
+    ],
+    56: [
+      { text: "*Como* el desayuno a las ocho.", translation: "I eat breakfast at eight." },
+      { text: "¿*Comemos* juntos esta noche?", translation: "Shall we eat together tonight?" },
+      { text: "Nunca *come* carne.", translation: "She never eats meat." }
+    ],
+    57: [
+      { text: "*Bebo* agua cada día.", translation: "I drink water every day." },
+      { text: "¿Qué quieres *beber*?", translation: "What would you like to drink?" },
+      { text: "*Bebe* café sin azúcar.", translation: "He drinks coffee without sugar." }
+    ],
+    58: [
+      { text: "Estoy *leyendo* un libro emocionante.", translation: "I'm reading an exciting book." },
+      { text: "¿Te gusta *leer*?", translation: "Do you like to read?" },
+      { text: "*Lee* el periódico cada mañana.", translation: "She reads the newspaper every morning." }
+    ],
+    59: [
+      { text: "Estoy *escribiendo* una carta a mi abuela.", translation: "I'm writing a letter to my grandmother." },
+      { text: "¿Puedes *escribir* tu nombre aquí?", translation: "Can you write your name here?" },
+      { text: "*Escribe* libros de historia.", translation: "He writes books about history." }
+    ],
+    60: [
+      { text: "*Hablo* un poco de español.", translation: "I speak a little Spanish." },
+      { text: "¿Puedes *hablar* más despacio?", translation: "Can you speak more slowly?" },
+      { text: "*Habla* tres idiomas.", translation: "She speaks three languages." }
+    ],
+    61: [
+      { text: "Tengo *un* gato.", translation: "I have a cat." },
+      { text: "¿Puedo tener *un* café?", translation: "Can I have a coffee?" },
+      { text: "Hay *un* hombre afuera.", translation: "There's a man outside." }
+    ],
+    62: [
+      { text: "Compró *una* bolsa.", translation: "She bought a bag." },
+      { text: "Vi *una* gata en la calle.", translation: "I saw a cat on the street." },
+      { text: "En la granja vive *una* cabra.", translation: "A goat lives on the farm." }
+    ],
+    63: [
+      { text: "Tengo *un* libro nuevo.", translation: "I have a new book." },
+      { text: "¿Puedo tener *un* vaso de agua?", translation: "Can I have a glass of water?" },
+      { text: "Compró *un* ordenador nuevo.", translation: "She bought a new computer." }
+    ],
+    64: [
+      { text: "Llovió mucho ayer. *Eso* arruinó el picnic.", translation: "It rained a lot yesterday. That ruined the picnic." },
+      { text: "El libro es interesante. *Eso* me sorprendió.", translation: "The book is interesting. That surprised me." },
+      { text: "Perdió las llaves. *Eso* le preocupa.", translation: "He lost his keys. That worries him." }
+    ],
+    65: [
+      { text: "La reunión terminó tarde. *Eso* nos molestó.", translation: "The meeting ended late. That annoyed us." },
+      { text: "Ganó el partido. *Eso* la hizo feliz.", translation: "She won the game. That made her happy." },
+      { text: "El tren llegó a tiempo. *Eso* fue una sorpresa.", translation: "The train arrived on time. That was a surprise." }
+    ],
+    66: [
+      { text: "Vivo *aquí* ahora.", translation: "I live here now." },
+      { text: "*Aquí* están tus llaves.", translation: "Here are your keys." },
+      { text: "Espera *aquí*, por favor.", translation: "Wait here, please." }
+    ],
+    67: [
+      { text: "El libro está *allí*.", translation: "The book is over there." },
+      { text: "¿Quién está *allí*?", translation: "Who is there?" },
+      { text: "Nos conocimos *allí* el año pasado.", translation: "We met there last year." }
+    ],
+    68: [
+      { text: "Tengo que irme *ahora*.", translation: "I have to go now." },
+      { text: "¿Qué haces *ahora*?", translation: "What are you doing now?" },
+      { text: "*Ahora* es hora de comer.", translation: "Now it's time to eat." }
+    ],
+    69: [
+      { text: "Hablamos *más tarde*.", translation: "We'll talk later." },
+      { text: "Llego *más tarde* esta noche.", translation: "I'll come later tonight." },
+      { text: "¿Podemos hacerlo *más tarde*?", translation: "Can we do it later?" }
+    ],
+    70: [
+      { text: "Ella es *siempre* feliz.", translation: "She's always happy." },
+      { text: "*Siempre* bebo café por la mañana.", translation: "I always drink coffee in the morning." },
+      { text: "*Siempre* llega tarde.", translation: "He always comes late." }
+    ],
+    71: [
+      { text: "¿Qué hacemos *hoy*?", translation: "What shall we do today?" },
+      { text: "*Hoy* hace buen tiempo.", translation: "Today the weather is nice." },
+      { text: "Tengo mucho que hacer *hoy*.", translation: "I have a lot to do today." }
+    ],
+    72: [
+      { text: "¡Nos vemos *mañana*!", translation: "See you tomorrow!" },
+      { text: "*Mañana* viajo a Madrid.", translation: "Tomorrow I'll travel to Madrid." },
+      { text: "¿Qué pasa *mañana*?", translation: "What's happening tomorrow?" }
+    ],
+    73: [
+      { text: "*Ayer* estuve en el trabajo.", translation: "Yesterday I was at work." },
+      { text: "Vimos una película *ayer*.", translation: "We watched a movie yesterday." },
+      { text: "Llovió mucho *ayer*.", translation: "It rained a lot yesterday." }
+    ],
+    74: [
+      { text: "Trabajo cinco días a la *semana*.", translation: "I work five days a week." },
+      { text: "La próxima *semana* viajamos.", translation: "Next week we're going to travel." },
+      { text: "La *semana* ha sido agitada.", translation: "The week has been busy." }
+    ],
+    75: [
+      { text: "Nos mudamos el próximo *mes*.", translation: "We're moving next month." },
+      { text: "Cada *mes* pago el alquiler.", translation: "Every month I pay rent." },
+      { text: "El *mes* pasó rápido.", translation: "The month went by quickly." }
+    ],
+    76: [
+      { text: "Conducía un coche *rojo*.", translation: "He drove a red car." },
+      { text: "La flor es *roja* y hermosa.", translation: "The flower is red and beautiful." },
+      { text: "Me gusta el suéter *rojo*.", translation: "I like the red sweater." }
+    ],
+    77: [
+      { text: "El cielo está *azul* hoy.", translation: "The sky is blue today." },
+      { text: "Tiene ojos *azules*.", translation: "She has blue eyes." },
+      { text: "Compré una chaqueta *azul*.", translation: "I bought a blue jacket." }
+    ],
+    78: [
+      { text: "La hierba está *verde* en verano.", translation: "The grass is green in summer." },
+      { text: "Tiene un coche *verde*.", translation: "He has a green car." },
+      { text: "Me gusta la camisa *verde*.", translation: "I like the green shirt." }
+    ],
+    79: [
+      { text: "El sol es *amarillo*.", translation: "The sun is yellow." },
+      { text: "Tiene un vestido *amarillo*.", translation: "She has a yellow dress." },
+      { text: "La casa *amarilla* es nuestra.", translation: "The yellow house is ours." }
+    ],
+    80: [
+      { text: "El gato es completamente *negro*.", translation: "The cat is completely black." },
+      { text: "Tiene un coche *negro*.", translation: "He has a black car." },
+      { text: "Compré zapatos *negros*.", translation: "I bought black shoes." }
+    ],
+    81: [
+      { text: "La nieve es *blanca* y fría.", translation: "The snow is white and cold." },
+      { text: "Tiene una casa *blanca*.", translation: "She has a white house." },
+      { text: "Lleva una camisa *blanca*.", translation: "He wears a white shirt." }
+    ],
+    82: [
+      { text: "Mi perro es *marrón*.", translation: "My dog is brown." },
+      { text: "Tiene ojos *marrones*.", translation: "She has brown eyes." },
+      { text: "Compré una mesa *marrón*.", translation: "I bought a brown table." }
+    ],
+    83: [
+      { text: "La niña tiene un vestido *rosa*.", translation: "The girl has a pink dress." },
+      { text: "Las flores son *rosa*.", translation: "The flowers are pink." },
+      { text: "Pintó la habitación de *rosa*.", translation: "She painted the room pink." }
+    ],
+    84: [
+      { text: "La puesta de sol era *naranja*.", translation: "The sunset was orange." },
+      { text: "Tiene una chaqueta *naranja*.", translation: "He has an orange jacket." },
+      { text: "La naranja es *naranja*.", translation: "The orange is orange." }
+    ],
+    85: [
+      { text: "La flor es *morada*.", translation: "The flower is purple." },
+      { text: "Tiene un bolso *morado*.", translation: "She has a purple bag." },
+      { text: "El cielo se puso *morado* por la noche.", translation: "The sky turned purple in the evening." }
+    ],
+    86: [
+      { text: "Solo tengo *un* hermano.", translation: "I only have one brother." },
+      { text: "¿Puedo tener *uno*?", translation: "Can I have one?" },
+      { text: "Solo vino *uno* de los niños.", translation: "Only one of the children came." }
+    ],
+    87: [
+      { text: "Tengo *dos* hermanos.", translation: "I have two siblings." },
+      { text: "Son las *dos*.", translation: "It's two o'clock." },
+      { text: "La casa tiene *dos* pisos.", translation: "The house has two floors." }
+    ],
+    88: [
+      { text: "Tengo *tres* hijos.", translation: "I have three children." },
+      { text: "Son las *tres*.", translation: "It's three o'clock." },
+      { text: "Esperamos *tres* horas.", translation: "We waited for three hours." }
+    ],
+    89: [
+      { text: "La mesa tiene *cuatro* sillas.", translation: "The table has four chairs." },
+      { text: "Son las *cuatro*.", translation: "It's four o'clock." },
+      { text: "Somos *cuatro* en la familia.", translation: "There are four of us in the family." }
+    ],
+    90: [
+      { text: "Tengo *cinco* amigos aquí.", translation: "I have five friends here." },
+      { text: "Son las *cinco*.", translation: "It's five o'clock." },
+      { text: "La casa tiene *cinco* habitaciones.", translation: "The house has five rooms." }
+    ],
+    91: [
+      { text: "Son las *seis*.", translation: "It's six o'clock." },
+      { text: "Somos *seis* personas.", translation: "We are six people." },
+      { text: "Duerme *seis* horas cada noche.", translation: "He sleeps six hours every night." }
+    ],
+    92: [
+      { text: "Son las *siete*.", translation: "It's seven o'clock." },
+      { text: "Tiene *siete* libros sobre la mesa.", translation: "She has seven books on the table." },
+      { text: "Comió *siete* fresas.", translation: "He ate seven strawberries." }
+    ],
+    93: [
+      { text: "Son las *ocho*.", translation: "It's eight o'clock." },
+      { text: "Trabajo *ocho* horas al día.", translation: "I work eight hours a day." },
+      { text: "Éramos *ocho* en la fiesta.", translation: "There were eight of us at the party." }
+    ],
+    94: [
+      { text: "Son las *nueve*.", translation: "It's nine o'clock." },
+      { text: "Tiene *nueve* años.", translation: "She's nine years old." },
+      { text: "Esperamos *nueve* minutos.", translation: "We waited nine minutes." }
+    ],
+    95: [
+      { text: "Son las *diez*.", translation: "It's ten o'clock." },
+      { text: "Tiene *diez* dedos.", translation: "He has ten fingers." },
+      { text: "Vivimos allí *diez* años.", translation: "We lived there for ten years." }
+    ],
+    96: [
+      { text: "¿*Dónde* vives?", translation: "Where do you live?" },
+      { text: "¿Sabes *dónde* está el libro?", translation: "Do you know where the book is?" },
+      { text: "¿*Dónde* nos vemos?", translation: "Where shall we meet?" }
+    ],
+    97: [
+      { text: "¿*Qué* es eso?", translation: "What is that?" },
+      { text: "¿*Qué* estás haciendo?", translation: "What are you doing now?" },
+      { text: "No sé *qué* decir.", translation: "I don't know what to say." }
+    ],
+    98: [
+      { text: "¿*Quién* es?", translation: "Who is that?" },
+      { text: "¿*Quién* viene esta noche?", translation: "Who's coming tonight?" },
+      { text: "¿Sabes *quién* es ella?", translation: "Do you know who she is?" }
+    ],
+    99: [
+      { text: "¿*Cuándo* vienes?", translation: "When are you coming?" },
+      { text: "No sé *cuándo* sale el tren.", translation: "I don't know when the train leaves." },
+      { text: "¿*Cuándo* es tu cumpleaños?", translation: "When is your birthday?" }
+    ],
+    100: [
+      { text: "¿*Por qué* llegas tarde?", translation: "Why are you late?" },
+      { text: "¿*Por qué* no te gusta el pescado?", translation: "Why don't you like fish?" },
+      { text: "No sé *por qué* se fue.", translation: "I don't know why he left." }
     ]
   },
 
