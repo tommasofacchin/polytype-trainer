@@ -12553,6 +12553,231 @@ window.DECK_EXAMPLES = {
       { text: "*请*进。", romanization: "*Qǐng* jìn.", translation: "Please come in." },
       { text: "*请*等一下。", romanization: "*Qǐng* děng yíxià.", translation: "Please wait a moment." },
       { text: "*请*给我一杯水。", romanization: "*Qǐng* gěi wǒ yì bēi shuǐ.", translation: "Please give me a glass of water." }
+    ],
+    6: [
+      { text: "*对不起*，我迟到了。", romanization: "*Duì bu qǐ*, wǒ chídào le.", translation: "Sorry, I'm late." },
+      { text: "*对不起*，我没听到。", romanization: "*Duì bu qǐ*, wǒ méi tīngdào.", translation: "Sorry, I didn't hear." },
+      { text: "他为错误说了*对不起*。", romanization: "Tā wèi cuòwù shuōle *duì bu qǐ*.", translation: "He said sorry for the mistake." }
+    ],
+    7: [
+      { text: "每天*早上*我喝咖啡。", romanization: "Měitiān *zǎoshang* wǒ hē kāfēi.", translation: "Every morning I drink coffee." },
+      { text: "*早上*很冷很安静。", romanization: "*Zǎoshang* hěn lěng hěn ānjìng.", translation: "The morning was cold and quiet." },
+      { text: "*早上*好！", romanization: "*Zǎoshang* hǎo!", translation: "Good morning!" }
+    ],
+    8: [
+      { text: "*晚上*我看书。", romanization: "*Wǎnshang* wǒ kànshū.", translation: "In the evening I read a book." },
+      { text: "我们*晚上*一起吃饭。", romanization: "Wǒmen *wǎnshang* yìqǐ chīfàn.", translation: "We eat dinner together in the evening." },
+      { text: "*晚上*好！", romanization: "*Wǎnshang* hǎo!", translation: "Good evening!" }
+    ],
+    9: [
+      { text: "那*天*天气很好。", romanization: "Nà *tiān* tiānqì hěn hǎo.", translation: "That day, the weather was good." },
+      { text: "这一*天*很特别。", romanization: "Zhè yì *tiān* hěn tèbié.", translation: "This day was special." },
+      { text: "那一*天*很长很累。", romanization: "Nà yì *tiān* hěn cháng hěn lèi.", translation: "That day was long and tiring." }
+    ],
+    10: [
+      { text: "*夜晚*很安静。", romanization: "*Yèwǎn* hěn ānjìng.", translation: "The night is quiet." },
+      { text: "我*夜晚*睡得很好。", romanization: "Wǒ *yèwǎn* shuì de hěn hǎo.", translation: "I sleep well at night." },
+      { text: "*夜晚*满天星星。", romanization: "*Yèwǎn* mǎntiān xīngxing.", translation: "The night was full of stars." }
+    ],
+    11: [
+      { text: "我可以要一杯*水*吗？", romanization: "Wǒ kěyǐ yào yì bēi *shuǐ* ma?", translation: "Can I have a glass of water?" },
+      { text: "*水*很凉很新鲜。", romanization: "*Shuǐ* hěn liáng hěn xīnxiān.", translation: "The water is cold and fresh." },
+      { text: "他每天喝很多*水*。", romanization: "Tā měitiān hē hěn duō *shuǐ*.", translation: "He drinks a lot of water every day." }
+    ],
+    12: [
+      { text: "*食物*很好吃。", romanization: "*Shíwù* hěn hǎochī.", translation: "The food was very good." },
+      { text: "*食物*对健康很重要。", romanization: "*Shíwù* duì jiànkāng hěn zhòngyào.", translation: "Food is important for health." },
+      { text: "她自己做了*食物*。", romanization: "Tā zìjǐ zuòle *shíwù*.", translation: "She cooked the food herself." }
+    ],
+    13: [
+      { text: "我每天早上喝*咖啡*。", romanization: "Wǒ měitiān zǎoshang hē *kāfēi*.", translation: "I drink coffee every morning." },
+      { text: "一杯*咖啡*，谢谢。", romanization: "Yì bēi *kāfēi*, xièxie.", translation: "A coffee, please." },
+      { text: "*咖啡*很热很浓。", romanization: "*Kāfēi* hěn rè hěn nóng.", translation: "The coffee is hot and strong." }
+    ],
+    14: [
+      { text: "我们在面包店买*面包*。", romanization: "Wǒmen zài miànbāodiàn mǎi *miànbāo*.", translation: "We buy bread at the bakery." },
+      { text: "*面包*很新鲜很软。", romanization: "*Miànbāo* hěn xīnxiān hěn ruǎn.", translation: "The bread is fresh and soft." },
+      { text: "他早饭吃*面包*。", romanization: "Tā zǎofàn chī *miànbāo*.", translation: "He eats bread for breakfast." }
+    ],
+    15: [
+      { text: "他们住在一个大*房子*里。", romanization: "Tāmen zhù zài yí ge dà *fángzi* lǐ.", translation: "They live in a big house." },
+      { text: "我们的*房子*有三层。", romanization: "Wǒmen de *fángzi* yǒu sān céng.", translation: "Our house has three floors." },
+      { text: "*房子*在海边。", romanization: "*Fángzi* zài hǎibiān.", translation: "The house is by the sea." }
+    ],
+    16: [
+      { text: "他开一辆红色的*汽车*。", romanization: "Tā kāi yí liàng hóngsè de *qìchē*.", translation: "He drives a red car." },
+      { text: "*汽车*停在外面。", romanization: "*Qìchē* tíng zài wàimiàn.", translation: "The car is parked outside." },
+      { text: "我们想买一辆新*汽车*。", romanization: "Wǒmen xiǎng mǎi yí liàng xīn *qìchē*.", translation: "We're going to buy a new car." }
+    ],
+    17: [
+      { text: "我在看一本很有意思的*书*。", romanization: "Wǒ zài kàn yì běn hěn yǒu yìsi de *shū*.", translation: "I'm reading an exciting book." },
+      { text: "*书*在桌子上。", romanization: "*Shū* zài zhuōzi shàng.", translation: "The book is on the table." },
+      { text: "她喜欢关于冒险的*书*。", romanization: "Tā xǐhuan guānyú màoxiǎn de *shū*.", translation: "She likes books about adventures." }
+    ],
+    18: [
+      { text: "他是我最好的*朋友*。", romanization: "Tā shì wǒ zuì hǎo de *péngyou*.", translation: "He's my best friend." },
+      { text: "我们周末见*朋友*。", romanization: "Wǒmen zhōumò jiàn *péngyou*.", translation: "We meet friends on the weekend." },
+      { text: "我的*朋友*住在隔壁。", romanization: "Wǒ de *péngyou* zhù zài gébì.", translation: "My friend lives next door." }
+    ],
+    19: [
+      { text: "我的*家庭*很大很好。", romanization: "Wǒ de *jiātíng* hěn dà hěn hǎo.", translation: "My family is big and nice." },
+      { text: "我们每年圣诞节都作为*家庭*团聚。", romanization: "Wǒmen měinián shèngdànjié dōu zuòwéi *jiātíng* tuánjù.", translation: "We gather as a family every Christmas." },
+      { text: "*家庭*一起吃晚饭。", romanization: "*Jiātíng* yìqǐ chī wǎnfàn.", translation: "The family eats dinner together." }
+    ],
+    20: [
+      { text: "我每天去*学校*。", romanization: "Wǒ měitiān qù *xuéxiào*.", translation: "I go to school every day." },
+      { text: "*学校*离我家很近。", romanization: "*Xuéxiào* lí wǒ jiā hěn jìn.", translation: "The school is near my house." },
+      { text: "她在*学校*工作。", romanization: "Tā zài *xuéxiào* gōngzuò.", translation: "She works at a school." }
+    ],
+    21: [
+      { text: "一个*男人*从我们身边走过。", romanization: "Yí ge *nánrén* cóng wǒmen shēnbiān zǒuguò.", translation: "A man walked past us." },
+      { text: "窗边的*男人*很友好。", romanization: "Chuāngbiān de *nánrén* hěn yǒuhǎo.", translation: "The man by the window is nice." },
+      { text: "一个高*男人*走进商店。", romanization: "Yí ge gāo *nánrén* zǒujìn shāngdiàn.", translation: "A tall man entered the shop." }
+    ],
+    22: [
+      { text: "一个*女人*今天给我打电话了。", romanization: "Yí ge *nǚrén* jīntiān gěi wǒ dǎ diànhuà le.", translation: "A woman called me today." },
+      { text: "那个*女人*很有礼貌。", romanization: "Nà ge *nǚrén* hěn yǒu lǐmào.", translation: "The woman was very polite." },
+      { text: "管理公司的*女人*很能干。", romanization: "Guǎnlǐ gōngsī de *nǚrén* hěn nénggàn.", translation: "The woman who runs the company is skilled." }
+    ],
+    23: [
+      { text: "那个*孩子*很乖。", romanization: "Nà ge *háizi* hěn guāi.", translation: "That child is very kind." },
+      { text: "*孩子*在花园里玩。", romanization: "*Háizi* zài huāyuán lǐ wán.", translation: "The child is playing in the garden." },
+      { text: "我们家有三个*孩子*。", romanization: "Wǒmen jiā yǒu sān ge *háizi*.", translation: "We have three children at home." }
+    ],
+    24: [
+      { text: "*女孩*的头发是红色的。", romanization: "*Nǚhái* de tóufa shì hóngsè de.", translation: "The girl has red hair." },
+      { text: "一个年轻的*女孩*坐在长椅上。", romanization: "Yí ge niánqīng de *nǚhái* zuò zài chángyǐ shàng.", translation: "A young girl sat on the bench." },
+      { text: "我的*女孩*八岁了。", romanization: "Wǒ de *nǚhái* bā suì le.", translation: "My daughter is eight years old." }
+    ],
+    25: [
+      { text: "*男孩*在踢足球。", romanization: "*Nánhái* zài tī zúqiú.", translation: "The boy plays football." },
+      { text: "一个小*男孩*大声喊叫。", romanization: "Yí ge xiǎo *nánhái* dàshēng hǎnjiào.", translation: "A small boy shouted loudly." },
+      { text: "我的*男孩*喜欢音乐。", romanization: "Wǒ de *nánhái* xǐhuan yīnyuè.", translation: "My boy likes music." }
+    ],
+    26: [
+      { text: "我的*母亲*是老师。", romanization: "Wǒ de *mǔqīn* shì lǎoshī.", translation: "My mother is a teacher." },
+      { text: "*母亲*每天晚上做饭。", romanization: "*Mǔqīn* měitiān wǎnshang zuòfàn.", translation: "Mother cooks every evening." },
+      { text: "我经常给*母亲*打电话。", romanization: "Wǒ jīngcháng gěi *mǔqīn* dǎ diànhuà.", translation: "I call my mother often." }
+    ],
+    27: [
+      { text: "我的*父亲*是工程师。", romanization: "Wǒ de *fùqīn* shì gōngchéngshī.", translation: "My father works as an engineer." },
+      { text: "*父亲*送我们去学校。", romanization: "*Fùqīn* sòng wǒmen qù xuéxiào.", translation: "Father drives us to school." },
+      { text: "我为*父亲*感到骄傲。", romanization: "Wǒ wèi *fùqīn* gǎndào jiāo'ào.", translation: "I'm proud of my father." }
+    ],
+    28: [
+      { text: "我*姐妹*比我小三岁。", romanization: "Wǒ *jiěmèi* bǐ wǒ xiǎo sān suì.", translation: "My sister is three years younger." },
+      { text: "我*姐妹*学医。", romanization: "Wǒ *jiěmèi* xué yī.", translation: "My sister studies medicine." },
+      { text: "我和*姐妹*都喜欢旅行。", romanization: "Wǒ hé *jiěmèi* dōu xǐhuan lǚxíng.", translation: "My sister and I love to travel." }
+    ],
+    29: [
+      { text: "我*兄弟*比我高。", romanization: "Wǒ *xiōngdì* bǐ wǒ gāo.", translation: "My brother is taller than me." },
+      { text: "我*兄弟*弹吉他。", romanization: "Wǒ *xiōngdì* tán jítā.", translation: "My brother plays guitar." },
+      { text: "我和*兄弟*是好朋友。", romanization: "Wǒ hé *xiōngdì* shì hǎo péngyou.", translation: "My brother and I are good friends." }
+    ],
+    30: [
+      { text: "我*奶奶*住在农村。", romanization: "Wǒ *nǎinai* zhù zài nóngcūn.", translation: "My grandmother lives in the countryside." },
+      { text: "*奶奶*每个星期天做蛋糕。", romanization: "*Nǎinai* měige xīngqītiān zuò dàngāo.", translation: "My grandmother bakes cakes every Sunday." },
+      { text: "我经常去看*奶奶*。", romanization: "Wǒ jīngcháng qù kàn *nǎinai*.", translation: "I often visit my grandmother." }
+    ],
+    31: [
+      { text: "一座*大*房子在山上。", romanization: "Yí zuò *dà* fángzi zài shān shàng.", translation: "A big house sits on the hill." },
+      { text: "他有一只*大*狗。", romanization: "Tā yǒu yì zhī *dà* gǒu.", translation: "He has a big dog." },
+      { text: "这座城市很*大*。", romanization: "Zhè zuò chéngshì hěn *dà*.", translation: "The city is very big." }
+    ],
+    32: [
+      { text: "一个*小*孩子在公园里玩。", romanization: "Yí ge *xiǎo* háizi zài gōngyuán lǐ wán.", translation: "A small child plays in the park." },
+      { text: "她有一只*小*狗。", romanization: "Tā yǒu yì zhī *xiǎo* gǒu.", translation: "She has a small dog." },
+      { text: "这个房间很*小*。", romanization: "Zhège fángjiān hěn *xiǎo*.", translation: "The room is quite small." }
+    ],
+    33: [
+      { text: "这是一本*好*书。", romanization: "Zhè shì yì běn *hǎo* shū.", translation: "This is a good book." },
+      { text: "食物味道很*好*。", romanization: "Shíwù wèidào hěn *hǎo*.", translation: "The food tastes very good." },
+      { text: "今天天气很*好*。", romanization: "Jīntiān tiānqì hěn *hǎo*.", translation: "The weather is good today." }
+    ],
+    34: [
+      { text: "牛奶*坏*了。", romanization: "Niúnǎi *huài* le.", translation: "The milk has gone bad." },
+      { text: "他有一个*坏*习惯。", romanization: "Tā yǒu yí ge *huài* xíguàn.", translation: "He has a bad habit." },
+      { text: "那台电脑*坏*了。", romanization: "Nà tái diànnǎo *huài* le.", translation: "That computer is broken." }
+    ],
+    35: [
+      { text: "我买了一部*新*手机。", romanization: "Wǒ mǎile yí bù *xīn* shǒujī.", translation: "I bought a new phone." },
+      { text: "这是图书馆的*新*书。", romanization: "Zhè shì túshūguǎn de *xīn* shū.", translation: "This is a new book from the library." },
+      { text: "我们搬到一个*新*城市。", romanization: "Wǒmen bān dào yí ge *xīn* chéngshì.", translation: "We're moving to a new city." }
+    ],
+    36: [
+      { text: "房子很*旧*很漂亮。", romanization: "Fángzi hěn *jiù* hěn piàoliang.", translation: "The house is old and beautiful." },
+      { text: "她有一辆*旧*车。", romanization: "Tā yǒu yí liàng *jiù* chē.", translation: "She has an old car." },
+      { text: "这是一本*旧*书。", romanization: "Zhè shì yì běn *jiù* shū.", translation: "This is an old book." }
+    ],
+    37: [
+      { text: "冬天喝*暖和*的咖啡很好。", romanization: "Dōngtiān hē *nuǎnhuo* de kāfēi hěn hǎo.", translation: "Warm coffee tastes good in winter." },
+      { text: "房间里很*暖和*。", romanization: "Fángjiān lǐ hěn *nuǎnhuo*.", translation: "It's warm in the room." },
+      { text: "去年夏天很*暖和*。", romanization: "Qùnián xiàtiān hěn *nuǎnhuo*.", translation: "Last summer was warm." }
+    ],
+    38: [
+      { text: "今天刮*冷*风。", romanization: "Jīntiān guā *lěng* fēng.", translation: "A cold wind is blowing today." },
+      { text: "*冷*牛奶很爽口。", romanization: "*Lěng* niúnǎi hěn shuǎngkǒu.", translation: "Cold milk is refreshing." },
+      { text: "今晚外面很*冷*。", romanization: "Jīnwǎn wàimiàn hěn *lěng*.", translation: "It's cold outside tonight." }
+    ],
+    39: [
+      { text: "他开车太*快*了。", romanization: "Tā kāichē tài *kuài* le.", translation: "He drives too fast." },
+      { text: "她跑得很*快*。", romanization: "Tā pǎo de hěn *kuài*.", translation: "She's a fast runner." },
+      { text: "火车很*快*。", romanization: "Huǒchē hěn *kuài*.", translation: "The train was very fast." }
+    ],
+    40: [
+      { text: "*慢*而稳赢得比赛。", romanization: "*Màn* ér wěn yíngdé bǐsài.", translation: "Slow and steady wins the race." },
+      { text: "他*慢慢*地走过公园。", romanization: "Tā *mànmàn* de zǒuguò gōngyuán.", translation: "He walked slowly through the park." },
+      { text: "音乐播放得很*慢*很柔和。", romanization: "Yīnyuè bōfàng de hěn *màn* hěn róuhé.", translation: "The music played slow and soft." }
+    ],
+    41: [
+      { text: "*我*叫马克。", romanization: "*Wǒ* jiào Mǎkè.", translation: "My name is Mark." },
+      { text: "*我*喜欢看书。", romanization: "*Wǒ* xǐhuan kànshū.", translation: "I like to read books." },
+      { text: "*我*爱音乐。", romanization: "*Wǒ* ài yīnyuè.", translation: "I love music." }
+    ],
+    42: [
+      { text: "*你*是一个好朋友。", romanization: "*Nǐ* shì yí ge hǎo péngyou.", translation: "You are a good friend." },
+      { text: "*你*住在哪里？", romanization: "*Nǐ* zhù zài nǎlǐ?", translation: "Where do you live?" },
+      { text: "今晚*你*来吗？", romanization: "Jīnwǎn *nǐ* lái ma?", translation: "Are you coming tonight?" }
+    ],
+    43: [
+      { text: "*他*是学校的老师。", romanization: "*Tā* shì xuéxiào de lǎoshī.", translation: "He is a teacher at the school." },
+      { text: "*他*每周踢足球。", romanization: "*Tā* měizhōu tī zúqiú.", translation: "He plays football every week." },
+      { text: "*他*来自德国。", romanization: "*Tā* láizì Déguó.", translation: "He comes from Germany." }
+    ],
+    44: [
+      { text: "*她*是一个有才华的音乐家。", romanization: "*Tā* shì yí ge yǒu cáihuá de yīnyuèjiā.", translation: "She is a talented musician." },
+      { text: "*她*是医生。", romanization: "*Tā* shì yīshēng.", translation: "She works as a doctor." },
+      { text: "*她*来自西班牙。", romanization: "*Tā* láizì Xībānyá.", translation: "She comes from Spain." }
+    ],
+    45: [
+      { text: "*我们*今晚去看电影。", romanization: "*Wǒmen* jīnwǎn qù kàn diànyǐng.", translation: "We're going to the movies tonight." },
+      { text: "*我们*住在同一个城市。", romanization: "*Wǒmen* zhù zài tóng yí ge chéngshì.", translation: "We live in the same city." },
+      { text: "*我们*要去西班牙旅行。", romanization: "*Wǒmen* yào qù Xībānyá lǚxíng.", translation: "We're going to travel to Spain." }
+    ],
+    46: [
+      { text: "今晚*你们*去哪儿？", romanization: "Jīnwǎn *nǐmen* qù nǎr?", translation: "Where are you all going tonight?" },
+      { text: "*你们*都欢迎来参加派对。", romanization: "*Nǐmen* dōu huānyíng lái cānjiā pàiduì.", translation: "You're all welcome to the party." },
+      { text: "*你们*一起来吗？", romanization: "*Nǐmen* yìqǐ lái ma?", translation: "Are you all coming together?" }
+    ],
+    47: [
+      { text: "*他们*是很友好的人。", romanization: "*Tāmen* shì hěn yǒuhǎo de rén.", translation: "They are very kind people." },
+      { text: "*他们*明天来。", romanization: "*Tāmen* míngtiān lái.", translation: "They're coming tomorrow." },
+      { text: "我很喜欢*他们*。", romanization: "Wǒ hěn xǐhuan *tāmen*.", translation: "I like them very much." }
+    ],
+    48: [
+      { text: "这是*我的*书。", romanization: "Zhè shì *wǒ de* shū.", translation: "This is my book." },
+      { text: "*我的*朋友叫路易斯。", romanization: "*Wǒ de* péngyou jiào Lùyìsī.", translation: "My friend's name is Luis." },
+      { text: "这是*我的*房子。", romanization: "Zhè shì *wǒ de* fángzi.", translation: "This is my house." }
+    ],
+    49: [
+      { text: "这是*你的*手机吗？", romanization: "Zhè shì *nǐ de* shǒujī ma?", translation: "Is this your phone?" },
+      { text: "*你的*家庭很好。", romanization: "*Nǐ de* jiātíng hěn hǎo.", translation: "Your family is nice." },
+      { text: "我喜欢*你的*新外套。", romanization: "Wǒ xǐhuan *nǐ de* xīn wàitào.", translation: "I like your new jacket." }
+    ],
+    50: [
+      { text: "这是*我们的*房子。", romanization: "Zhè shì *wǒmen de* fángzi.", translation: "This is our house." },
+      { text: "*我们的*学校离市中心很近。", romanization: "*Wǒmen de* xuéxiào lí shìzhōngxīn hěn jìn.", translation: "Our school is near the center." },
+      { text: "*我们的*家庭很大。", romanization: "*Wǒmen de* jiātíng hěn dà.", translation: "Our family is big." }
     ]
   },
 
