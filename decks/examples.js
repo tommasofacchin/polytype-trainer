@@ -16031,6 +16031,256 @@ window.DECK_EXAMPLES = {
       { text: "空港はここから*遠い*です。", romanization: "Kuukou wa koko kara *tooi* desu.", translation: "The airport is far from here." },
       { text: "学校は*遠い*ですか。", romanization: "Gakkou wa *tooi* desu ka.", translation: "Is the school far?" },
       { text: "私たちは*遠い*道を歩きました。", romanization: "Watashitachi wa *tooi* michi o arukimashita.", translation: "We walked a long way." }
+    ],
+    201: [
+      { text: "*十一*時です。", romanization: "*Juuichi* ji desu.", translation: "It's eleven o'clock." },
+      { text: "彼は*十一*歳です。", romanization: "Kare wa *juuichi* sai desu.", translation: "He's eleven years old." },
+      { text: "教室に*十一*人の学生がいます。", romanization: "Kyoushitsu ni *juuichi* nin no gakusei ga imasu.", translation: "There are eleven students in the classroom." }
+    ],
+    202: [
+      { text: "*十二*時です。", romanization: "*Juuni* ji desu.", translation: "It's twelve o'clock." },
+      { text: "一年に*十二*ヶ月あります。", romanization: "Ichinen ni *juuni* kagetsu arimasu.", translation: "A year has twelve months." },
+      { text: "彼女は*十二*歳です。", romanization: "Kanojo wa *juuni* sai desu.", translation: "She's twelve years old." }
+    ],
+    203: [
+      { text: "彼は*十三*歳です。", romanization: "Kare wa *juusan* sai desu.", translation: "He's thirteen years old." },
+      { text: "机の上に*十三*冊の本があります。", romanization: "Tsukue no ue ni *juusan* satsu no hon ga arimasu.", translation: "There are thirteen books on the table." },
+      { text: "私たちは*十三*分待ちました。", romanization: "Watashitachi wa *juusan* fun machimashita.", translation: "We waited thirteen minutes." }
+    ],
+    204: [
+      { text: "彼女は*十四*歳です。", romanization: "Kanojo wa *juuyon* sai desu.", translation: "She's fourteen years old." },
+      { text: "私たちは*十四*日間歩きました。", romanization: "Watashitachi wa *juuyon* nichikan arukimashita.", translation: "We walked for fourteen days." },
+      { text: "部屋番号は*十四*です。", romanization: "Heya bangou wa *juuyon* desu.", translation: "The room number is fourteen." }
+    ],
+    205: [
+      { text: "彼は*十五*歳です。", romanization: "Kare wa *juugo* sai desu.", translation: "He's fifteen years old." },
+      { text: "あと*十五*分あります。", romanization: "Ato *juugo* fun arimasu.", translation: "There are fifteen minutes left." },
+      { text: "私たちのクラスには*十五*人の学生がいます。", romanization: "Watashitachi no kurasu ni wa *juugo* nin no gakusei ga imasu.", translation: "There are fifteen students in our class." }
+    ],
+    206: [
+      { text: "彼女は*十六*歳です。", romanization: "Kanojo wa *juuroku* sai desu.", translation: "She's sixteen years old." },
+      { text: "私たちは*十六*分待ちました。", romanization: "Watashitachi wa *juuroku* fun machimashita.", translation: "We waited sixteen minutes." },
+      { text: "彼は*十六*号室に住んでいます。", romanization: "Kare wa *juuroku* gou shitsu ni sunde imasu.", translation: "He lives in room sixteen." }
+    ],
+    207: [
+      { text: "彼は*十七*歳です。", romanization: "Kare wa *juunana* sai desu.", translation: "He's seventeen years old." },
+      { text: "本棚に*十七*冊の本があります。", romanization: "Hondana ni *juunana* satsu no hon ga arimasu.", translation: "There are seventeen books on the shelf." },
+      { text: "私たちは*十七*キロ歩きました。", romanization: "Watashitachi wa *juunana* kiro arukimashita.", translation: "We walked seventeen kilometers." }
+    ],
+    208: [
+      { text: "彼女は*十八*歳です。", romanization: "Kanojo wa *juuhachi* sai desu.", translation: "She's eighteen years old." },
+      { text: "このビルは*十八*階建てです。", romanization: "Kono biru wa *juuhachi* kaidate desu.", translation: "This building has eighteen floors." },
+      { text: "私たちは*十八*分待ちました。", romanization: "Watashitachi wa *juuhachi* fun machimashita.", translation: "We waited eighteen minutes." }
+    ],
+    209: [
+      { text: "彼は*十九*歳です。", romanization: "Kare wa *juukyuu* sai desu.", translation: "He's nineteen years old." },
+      { text: "クラスに*十九*人の学生がいます。", romanization: "Kurasu ni *juukyuu* nin no gakusei ga imasu.", translation: "There are nineteen students in the class." },
+      { text: "休みまであと*十九*日です。", romanization: "Yasumi made ato *juukyuu* nichi desu.", translation: "There are nineteen days left until the holiday." }
+    ],
+    210: [
+      { text: "彼女は*二十*歳です。", romanization: "Kanojo wa *nijuu* sai desu.", translation: "She's twenty years old." },
+      { text: "私たちは*二十*分待ちました。", romanization: "Watashitachi wa *nijuu* fun machimashita.", translation: "We waited twenty minutes." },
+      { text: "教室に*二十*人の学生がいます。", romanization: "Kyoushitsu ni *nijuu* nin no gakusei ga imasu.", translation: "There are twenty students in the classroom." }
+    ],
+    211: [
+      { text: "私の*祖父*は田舎に住んでいます。", romanization: "Watashi no *sofu* wa inaka ni sunde imasu.", translation: "My grandfather lives in the countryside." },
+      { text: "*祖父*は毎朝散歩します。", romanization: "*Sofu* wa maiasa sanpo shimasu.", translation: "Grandfather takes a walk every morning." },
+      { text: "私は*祖父*を愛しています。", romanization: "Watashi wa *sofu* o ai shite imasu.", translation: "I love my grandfather." }
+    ],
+    212: [
+      { text: "私の*両親*は東京に住んでいます。", romanization: "Watashi no *ryoushin* wa Toukyou ni sunde imasu.", translation: "My parents live in Tokyo." },
+      { text: "*両親*は子供をとても愛しています。", romanization: "*Ryoushin* wa kodomo o totemo ai shite imasu.", translation: "Parents love their children very much." },
+      { text: "週末に*両親*に会いに行きます。", romanization: "Shuumatsu ni *ryoushin* ni ai ni ikimasu.", translation: "I visit my parents on weekends." }
+    ],
+    213: [
+      { text: "彼らには*息子*が一人います。", romanization: "Karera ni wa *musuko* ga hitori imasu.", translation: "They have a son." },
+      { text: "私の*息子*は八歳です。", romanization: "Watashi no *musuko* wa hassai desu.", translation: "My son is eight years old." },
+      { text: "彼女の*息子*は大学生です。", romanization: "Kanojo no *musuko* wa daigakusei desu.", translation: "Her son is in university." }
+    ],
+    214: [
+      { text: "彼らには*娘*が一人います。", romanization: "Karera ni wa *musume* ga hitori imasu.", translation: "They have a daughter." },
+      { text: "私の*娘*はとても賢いです。", romanization: "Watashi no *musume* wa totemo kashikoi desu.", translation: "My daughter is very smart." },
+      { text: "彼女の*娘*は小学生です。", romanization: "Kanojo no *musume* wa shougakusei desu.", translation: "Her daughter is in elementary school." }
+    ],
+    215: [
+      { text: "彼女の*夫*は医者です。", romanization: "Kanojo no *otto* wa isha desu.", translation: "Her husband is a doctor." },
+      { text: "私の*夫*は料理をしています。", romanization: "Watashi no *otto* wa ryouri o shite imasu.", translation: "My husband is cooking." },
+      { text: "彼女は*夫*と一緒に旅行します。", romanization: "Kanojo wa *otto* to issho ni ryokou shimasu.", translation: "She travels with her husband." }
+    ],
+    216: [
+      { text: "*先生*はとても忍耐強いです。", romanization: "*Sensei* wa totemo nintaizuyoi desu.", translation: "The teacher is very patient." },
+      { text: "私たちの*先生*は英語を教えています。", romanization: "Watashitachi no *sensei* wa Eigo o oshiete imasu.", translation: "Our teacher teaches English." },
+      { text: "*先生*は静かにするように言いました。", romanization: "*Sensei* wa shizuka ni suru you ni iimashita.", translation: "The teacher told us to be quiet." }
+    ],
+    217: [
+      { text: "彼はいい*学生*です。", romanization: "Kare wa ii *gakusei* desu.", translation: "He's a good student." },
+      { text: "多くの*学生*が図書館で勉強しています。", romanization: "Ooku no *gakusei* ga toshokan de benkyou shite imasu.", translation: "Many students are studying in the library." },
+      { text: "このクラスには二十人の*学生*がいます。", romanization: "Kono kurasu ni wa nijuu nin no *gakusei* ga imasu.", translation: "This class has twenty students." }
+    ],
+    218: [
+      { text: "*医者*は私の耳を診察しました。", romanization: "*Isha* wa watashi no mimi o shinsatsu shimashita.", translation: "The doctor examined my ear." },
+      { text: "明日、*医者*に診てもらいます。", romanization: "Ashita, *isha* ni mite moraimasu.", translation: "I have to see the doctor tomorrow." },
+      { text: "彼女はいい*医者*です。", romanization: "Kanojo wa ii *isha* desu.", translation: "She's a good doctor." }
+    ],
+    219: [
+      { text: "*看護師*はとても親切です。", romanization: "*Kangoshi* wa totemo shinsetsu desu.", translation: "The nurse is very friendly." },
+      { text: "彼女は*看護師*になりたいです。", romanization: "Kanojo wa *kangoshi* ni naritai desu.", translation: "She wants to become a nurse." },
+      { text: "*看護師*が私の体温を測りました。", romanization: "*Kangoshi* ga watashi no taion o hakarimashita.", translation: "The nurse took my temperature." }
+    ],
+    220: [
+      { text: "*警察*が来ました。", romanization: "*Keisatsu* ga kimashita.", translation: "The police arrived." },
+      { text: "彼は*警察*です。", romanization: "Kare wa *keisatsu* desu.", translation: "He's a police officer." },
+      { text: "*警察*が道を見つけるのを手伝ってくれました。", romanization: "*Keisatsu* ga michi o mitsukeru no o tetsudatte kuremashita.", translation: "The police helped us find the way." }
+    ],
+    221: [
+      { text: "彼は新しい*仕事*を見つけました。", romanization: "Kare wa atarashii *shigoto* o mitsukemashita.", translation: "He found a new job." },
+      { text: "この*仕事*は面白いです。", romanization: "Kono *shigoto* wa omoshiroi desu.", translation: "This job is interesting." },
+      { text: "彼女の*仕事*は忙しいです。", romanization: "Kanojo no *shigoto* wa isogashii desu.", translation: "Her job is busy." }
+    ],
+    222: [
+      { text: "彼は*事務所*で働いています。", romanization: "Kare wa *jimusho* de hataraite imasu.", translation: "He works in the office." },
+      { text: "*事務所*は私の家から近いです。", romanization: "*Jimusho* wa watashi no ie kara chikai desu.", translation: "The office is close to my house." },
+      { text: "私たちの*事務所*は三階にあります。", romanization: "Watashitachi no *jimusho* wa sangai ni arimasu.", translation: "Our office is on the third floor." }
+    ],
+    223: [
+      { text: "私たちの*クラス*には二十人の学生がいます。", romanization: "Watashitachi no *kurasu* ni wa nijuu nin no gakusei ga imasu.", translation: "Our class has twenty students." },
+      { text: "この*クラス*は静かです。", romanization: "Kono *kurasu* wa shizuka desu.", translation: "This class is quiet." },
+      { text: "*クラス*の活動は金曜日です。", romanization: "*Kurasu* no katsudou wa kinyoubi desu.", translation: "The class activity is on Friday." }
+    ],
+    224: [
+      { text: "*宿題*をしています。", romanization: "*Shukudai* o shite imasu.", translation: "I'm doing homework." },
+      { text: "*宿題*が難しいです。", romanization: "*Shukudai* ga muzukashii desu.", translation: "The homework is difficult." },
+      { text: "彼は*宿題*を持ってくるのを忘れました。", romanization: "Kare wa *shukudai* o motte kuru no o wasuremashita.", translation: "He forgot to bring his homework." }
+    ],
+    225: [
+      { text: "明日*試験*があります。", romanization: "Ashita *shiken* ga arimasu.", translation: "There's a test tomorrow." },
+      { text: "この*試験*は難しいです。", romanization: "Kono *shiken* wa muzukashii desu.", translation: "This test is hard." },
+      { text: "彼女は*試験*でいい点を取りました。", romanization: "Kanojo wa *shiken* de ii ten o torimashita.", translation: "She did well on the test." }
+    ],
+    226: [
+      { text: "子供たちはもう*寝ました*。", romanization: "Kodomotachi wa mou *nemashita*.", translation: "The children are already asleep." },
+      { text: "私は十時に*寝ます*。", romanization: "Watashi wa juuji ni *nemasu*.", translation: "I go to sleep at ten." },
+      { text: "彼は*寝ている*とき静かです。", romanization: "Kare wa *nete iru* toki shizuka desu.", translation: "He's quiet when he sleeps." }
+    ],
+    227: [
+      { text: "私は七時に*起きます*。", romanization: "Watashi wa shichiji ni *okimasu*.", translation: "I wake up at seven." },
+      { text: "彼女は今日とても早く*起きました*。", romanization: "Kanojo wa kyou totemo hayaku *okimashita*.", translation: "She woke up very early today." },
+      { text: "目覚まし時計が鳴って、彼は*起きました*。", romanization: "Mezamashi dokei ga natte, kare wa *okimashita*.", translation: "The alarm rang, and he woke up." }
+    ],
+    228: [
+      { text: "彼は銀行で*働いています*。", romanization: "Kare wa ginkou de *hataraite imasu*.", translation: "He works at a bank." },
+      { text: "私は毎日八時間*働きます*。", romanization: "Watashi wa mainichi hachi jikan *hatarakimasu*.", translation: "I work eight hours a day." },
+      { text: "彼女は家で*働いています*。", romanization: "Kanojo wa ie de *hataraite imasu*.", translation: "She works from home." }
+    ],
+    229: [
+      { text: "私は毎晩*勉強します*。", romanization: "Watashi wa maiban *benkyou shimasu*.", translation: "I study every evening." },
+      { text: "新しい言語を*勉強する*のは面白いです。", romanization: "Atarashii gengo o *benkyou suru* no wa omoshiroi desu.", translation: "Studying a new language is interesting." },
+      { text: "彼は図書館で*勉強しています*。", romanization: "Kare wa toshokan de *benkyou shite imasu*.", translation: "He's studying in the library." }
+    ],
+    230: [
+      { text: "私は泳ぐことを*学びました*。", romanization: "Watashi wa oyogu koto o *manabimashita*.", translation: "I learned to swim." },
+      { text: "彼女は料理を*学びたい*です。", romanization: "Kanojo wa ryouri o *manabitai* desu.", translation: "She wants to learn to cook." },
+      { text: "彼はすぐにこの歌を*学びました*。", romanization: "Kare wa sugu ni kono uta o *manabimashita*.", translation: "He quickly learned this song." }
+    ],
+    231: [
+      { text: "彼は車を*運転します*。", romanization: "Kare wa kuruma o *unten shimasu*.", translation: "He drives a car." },
+      { text: "速く*運転しないで*ください。", romanization: "Hayaku *unten shinaide* kudasai.", translation: "Please don't drive too fast." },
+      { text: "私は*運転して*仕事に行きます。", romanization: "Watashi wa *unten shite* shigoto ni ikimasu.", translation: "I drive to work." }
+    ],
+    232: [
+      { text: "私たちは*旅行する*のが好きです。", romanization: "Watashitachi wa *ryokou suru* no ga suki desu.", translation: "We like to travel." },
+      { text: "彼女は一人で*旅行します*。", romanization: "Kanojo wa hitori de *ryokou shimasu*.", translation: "She travels alone." },
+      { text: "夏休みに*旅行します*。", romanization: "Natsuyasumi ni *ryokou shimasu*.", translation: "We're going to travel during summer vacation." }
+    ],
+    233: [
+      { text: "少し*待って*ください。", romanization: "Sukoshi *matte* kudasai.", translation: "Please wait for me a moment." },
+      { text: "私たちは長い間*待ちました*。", romanization: "Watashitachi wa nagai aida *machimashita*.", translation: "We waited a long time." },
+      { text: "彼女は駅で友達を*待っています*。", romanization: "Kanojo wa eki de tomodachi o *matte imasu*.", translation: "She's waiting for a friend at the station." }
+    ],
+    234: [
+      { text: "私は鍵を*見つけました*。", romanization: "Watashi wa kagi o *mitsukemashita*.", translation: "I found my keys." },
+      { text: "彼はついに仕事を*見つけました*。", romanization: "Kare wa tsui ni shigoto o *mitsukemashita*.", translation: "He finally found a job." },
+      { text: "駅を*見つけました*か。", romanization: "Eki o *mitsukemashita* ka.", translation: "Did you find the station?" }
+    ],
+    235: [
+      { text: "明日*会いましょう*。", romanization: "Ashita *aimashou*.", translation: "Let's meet tomorrow." },
+      { text: "久しぶりに*会いました*ね。", romanization: "Hisashiburi ni *aimashita* ne.", translation: "It's been a while since we met, hasn't it." },
+      { text: "*会えて*嬉しいです。", romanization: "*Aete* ureshii desu.", translation: "Nice to meet you." }
+    ],
+    236: [
+      { text: "この本が*好き*です。", romanization: "Kono hon ga *suki* desu.", translation: "I like this book." },
+      { text: "彼女は音楽が*好き*です。", romanization: "Kanojo wa ongaku ga *suki* desu.", translation: "She likes music." },
+      { text: "何色が*好き*ですか。", romanization: "Nani iro ga *suki* desu ka.", translation: "What color do you like?" }
+    ],
+    237: [
+      { text: "私は家族を*愛しています*。", romanization: "Watashi wa kazoku o *ai shite imasu*.", translation: "I love my family." },
+      { text: "彼は彼女を*愛しています*。", romanization: "Kare wa kanojo o *ai shite imasu*.", translation: "He loves her." },
+      { text: "私たちはみんなこの町を*愛しています*。", romanization: "Watashitachi wa minna kono machi o *ai shite imasu*.", translation: "We all love this city." }
+    ],
+    238: [
+      { text: "コーヒーが*欲しい*です。", romanization: "Koohii ga *hoshii* desu.", translation: "I want a cup of coffee." },
+      { text: "彼女は子犬が*欲しい*です。", romanization: "Kanojo wa koinu ga *hoshii* desu.", translation: "She wants a puppy." },
+      { text: "何が*欲しい*ですか。", romanization: "Nani ga *hoshii* desu ka.", translation: "What do you want?" }
+    ],
+    239: [
+      { text: "助けが*必要*です。", romanization: "Tasuke ga *hitsuyou* desu.", translation: "I need help." },
+      { text: "あなたは休みが*必要*です。", romanization: "Anata wa yasumi ga *hitsuyou* desu.", translation: "You need to rest." },
+      { text: "もっと時間が*必要*です。", romanization: "Motto jikan ga *hitsuyou* desu.", translation: "We need more time." }
+    ],
+    240: [
+      { text: "食料品を*買い*に行きます。", romanization: "Shokuryouhin o *kai* ni ikimasu.", translation: "I'm going to buy groceries." },
+      { text: "彼女は新しいコートを*買いました*。", romanization: "Kanojo wa atarashii kooto o *kaimashita*.", translation: "She bought a new coat." },
+      { text: "何を*買いたい*ですか。", romanization: "Nani o *kaitai* desu ka.", translation: "What do you want to buy?" }
+    ],
+    241: [
+      { text: "この店は果物を*売っています*。", romanization: "Kono mise wa kudamono o *utte imasu*.", translation: "This shop sells fruit." },
+      { text: "彼は車を*売りたい*です。", romanization: "Kare wa kuruma o *uritai* desu.", translation: "He wants to sell his car." },
+      { text: "市場は新鮮な魚を*売っています*。", romanization: "Ichiba wa shinsen na sakana o *utte imasu*.", translation: "The market sells fresh fish." }
+    ],
+    242: [
+      { text: "誰が*払います*か。", romanization: "Dare ga *haraimasu* ka.", translation: "Who's paying?" },
+      { text: "現金で*払います*。", romanization: "Genkin de *haraimasu*.", translation: "I'll pay in cash." },
+      { text: "ここで*払って*ください。", romanization: "Koko de *haratte* kudasai.", translation: "Please pay here." }
+    ],
+    243: [
+      { text: "窓を*開けて*ください。", romanization: "Mado o *akete* kudasai.", translation: "Please open the window." },
+      { text: "彼女はドアを*開けました*。", romanization: "Kanojo wa doa o *akemashita*.", translation: "She opened the door." },
+      { text: "この箱を*開けられません*。", romanization: "Kono hako o *akeraremasen*.", translation: "I can't open this box." }
+    ],
+    244: [
+      { text: "ドアを*閉めて*ください。", romanization: "Doa o *shimete* kudasai.", translation: "Please close the door." },
+      { text: "彼女は窓を*閉めました*。", romanization: "Kanojo wa mado o *shimemashita*.", translation: "She closed the window." },
+      { text: "窓を*閉める*のを忘れないでください。", romanization: "Mado o *shimeru* no o wasurenaide kudasai.", translation: "Please remember to close the window." }
+    ],
+    245: [
+      { text: "私は皿を*洗っています*。", romanization: "Watashi wa sara o *aratte imasu*.", translation: "I'm washing the dishes." },
+      { text: "手を*洗って*ください。", romanization: "Te o *aratte* kudasai.", translation: "Please wash your hands." },
+      { text: "彼女は毎日髪を*洗います*。", romanization: "Kanojo wa mainichi kami o *araimasu*.", translation: "She washes her hair every day." }
+    ],
+    246: [
+      { text: "猫を*見ました*。", romanization: "Neko o *mimashita*.", translation: "I saw a cat." },
+      { text: "私の鍵を*見ました*か。", romanization: "Watashi no kagi o *mimashita* ka.", translation: "Did you see my keys?" },
+      { text: "彼女は私を*見ませんでした*。", romanization: "Kanojo wa watashi o *mimasen deshita*.", translation: "She didn't see me." }
+    ],
+    247: [
+      { text: "変な音を*聞きました*。", romanization: "Hen na oto o *kikimashita*.", translation: "I heard a strange sound." },
+      { text: "*聞きました*か。", romanization: "*Kikimashita* ka.", translation: "Did you hear that?" },
+      { text: "彼女は電話が鳴るのを*聞きませんでした*。", romanization: "Kanojo wa denwa ga naru no o *kikimasen deshita*.", translation: "She didn't hear the phone ring." }
+    ],
+    248: [
+      { text: "彼は疲れていると*言いました*。", romanization: "Kare wa tsukarete iru to *iimashita*.", translation: "He said he was tired." },
+      { text: "彼女は来ると*言いました*。", romanization: "Kanojo wa kuru to *iimashita*.", translation: "She said she would come." },
+      { text: "先生は静かにするように*言いました*。", romanization: "Sensei wa shizuka ni suru you ni *iimashita*.", translation: "The teacher said to be quiet." }
+    ],
+    249: [
+      { text: "質問を*尋ねても*いいですか。", romanization: "Shitsumon o *tazunetemo* ii desu ka.", translation: "Can I ask you a question?" },
+      { text: "彼女は私の名前を*尋ねました*。", romanization: "Kanojo wa watashi no namae o *tazunemashita*.", translation: "She asked my name." },
+      { text: "彼は先生に質問を*尋ねます*。", romanization: "Kare wa sensei ni shitsumon o *tazunemasu*.", translation: "He asks the teacher questions." }
+    ],
+    250: [
+      { text: "この質問に*答えて*ください。", romanization: "Kono shitsumon ni *kotaete* kudasai.", translation: "Please answer this question." },
+      { text: "彼は私に*答えませんでした*。", romanization: "Kare wa watashi ni *kotaemasen deshita*.", translation: "He didn't answer me." },
+      { text: "彼女はすぐに*答えました*。", romanization: "Kanojo wa sugu ni *kotaemashita*.", translation: "She answered quickly." }
     ]
   }
 };
