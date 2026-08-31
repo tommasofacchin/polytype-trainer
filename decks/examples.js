@@ -14778,6 +14778,256 @@ window.DECK_EXAMPLES = {
       { text: "他手上有*血*。", romanization: "Tā shǒu shàng yǒu *xuè*.", translation: "There's blood on his hand." },
       { text: "医生检查了他的*血*。", romanization: "Yīshēng jiǎnchále tā de *xuè*.", translation: "The doctor checked his blood." },
       { text: "伤口在流*血*。", romanization: "Shāngkǒu zài liú *xuè*.", translation: "The wound is bleeding." }
+    ],
+    451: [
+      { text: "我想用*现金*付款。", romanization: "Wǒ xiǎng yòng *xiànjīn* fùkuǎn.", translation: "I'd like to pay in cash." },
+      { text: "他没有*现金*。", romanization: "Tā méiyǒu *xiànjīn*.", translation: "He doesn't have cash." },
+      { text: "请给我一些*现金*。", romanization: "Qǐng gěi wǒ yìxiē *xiànjīn*.", translation: "Please give me some cash." }
+    ],
+    452: [
+      { text: "我可以用*信用卡*吗？", romanization: "Wǒ kěyǐ yòng *xìnyòngkǎ* ma?", translation: "Can I use a credit card?" },
+      { text: "她刷了*信用卡*。", romanization: "Tā shuāle *xìnyòngkǎ*.", translation: "She swiped her credit card." },
+      { text: "这里不接受*信用卡*。", romanization: "Zhèlǐ bù jiēshòu *xìnyòngkǎ*.", translation: "Credit cards aren't accepted here." }
+    ],
+    453: [
+      { text: "这件外套有*折扣*。", romanization: "Zhè jiàn wàitào yǒu *zhékòu*.", translation: "This coat has a discount." },
+      { text: "*折扣*是多少？", romanization: "*Zhékòu* shì duōshao?", translation: "What's the discount?" },
+      { text: "今天所有商品都有*折扣*。", romanization: "Jīntiān suǒyǒu shāngpǐn dōu yǒu *zhékòu*.", translation: "All items have a discount today." }
+    ],
+    454: [
+      { text: "这家商店有很多*顾客*。", romanization: "Zhè jiā shāngdiàn yǒu hěn duō *gùkè*.", translation: "This shop has many customers." },
+      { text: "*顾客*总是对的。", romanization: "*Gùkè* zǒngshì duì de.", translation: "The customer is always right." },
+      { text: "服务员对*顾客*很友好。", romanization: "Fúwùyuán duì *gùkè* hěn yǒuhǎo.", translation: "The waiter is friendly to customers." }
+    ],
+    455: [
+      { text: "这是给你的*礼物*。", romanization: "Zhè shì gěi nǐ de *lǐwù*.", translation: "This is a gift for you." },
+      { text: "她收到了一份*礼物*。", romanization: "Tā shōudàole yí fèn *lǐwù*.", translation: "She received a gift." },
+      { text: "谢谢你的*礼物*。", romanization: "Xièxie nǐ de *lǐwù*.", translation: "Thanks for the gift." }
+    ],
+    456: [
+      { text: "我喜欢*音乐*。", romanization: "Wǒ xǐhuan *yīnyuè*.", translation: "I like music." },
+      { text: "她在听*音乐*。", romanization: "Tā zài tīng *yīnyuè*.", translation: "She's listening to music." },
+      { text: "这个*音乐*很好听。", romanization: "Zhège *yīnyuè* hěn hǎotīng.", translation: "This music sounds great." }
+    ],
+    457: [
+      { text: "她唱了一首*歌*。", romanization: "Tā chàngle yì shǒu *gē*.", translation: "She sang a song." },
+      { text: "这首*歌*很好听。", romanization: "Zhè shǒu *gē* hěn hǎotīng.", translation: "This song sounds great." },
+      { text: "我不知道这首*歌*的名字。", romanization: "Wǒ bù zhīdào zhè shǒu *gē* de míngzi.", translation: "I don't know the name of this song." }
+    ],
+    458: [
+      { text: "我们去看*电影*吧。", romanization: "Wǒmen qù kàn *diànyǐng* ba.", translation: "Let's go watch a movie." },
+      { text: "这部*电影*很有意思。", romanization: "Zhè bù *diànyǐng* hěn yǒu yìsi.", translation: "This movie is interesting." },
+      { text: "*电影*几点开始？", romanization: "*Diànyǐng* jǐ diǎn kāishǐ?", translation: "What time does the movie start?" }
+    ],
+    459: [
+      { text: "孩子们喜欢玩*游戏*。", romanization: "Háizimen xǐhuan wán *yóuxì*.", translation: "Children like playing games." },
+      { text: "这个*游戏*很有意思。", romanization: "Zhège *yóuxì* hěn yǒu yìsi.", translation: "This game is fun." },
+      { text: "我们一起玩*游戏*吧。", romanization: "Wǒmen yìqǐ wán *yóuxì* ba.", translation: "Let's play a game together." }
+    ],
+    460: [
+      { text: "我们要开一个*派对*。", romanization: "Wǒmen yào kāi yí ge *pàiduì*.", translation: "We're going to have a party." },
+      { text: "*派对*几点开始？", romanization: "*Pàiduì* jǐ diǎn kāishǐ?", translation: "What time does the party start?" },
+      { text: "她邀请我参加*派对*。", romanization: "Tā yāoqǐng wǒ cānjiā *pàiduì*.", translation: "She invited me to the party." }
+    ],
+    461: [
+      { text: "他喜欢踢*足球*。", romanization: "Tā xǐhuan tī *zúqiú*.", translation: "He likes playing football." },
+      { text: "我们在公园踢*足球*。", romanization: "Wǒmen zài gōngyuán tī *zúqiú*.", translation: "We're playing football in the park." },
+      { text: "*足球*比赛几点开始？", romanization: "*Zúqiú* bǐsài jǐ diǎn kāishǐ?", translation: "What time does the football match start?" }
+    ],
+    462: [
+      { text: "她喜欢打*网球*。", romanization: "Tā xǐhuan dǎ *wǎngqiú*.", translation: "She likes playing tennis." },
+      { text: "我们周末打*网球*。", romanization: "Wǒmen zhōumò dǎ *wǎngqiú*.", translation: "We play tennis on weekends." },
+      { text: "他*网球*打得很好。", romanization: "Tā *wǎngqiú* dǎ de hěn hǎo.", translation: "He plays tennis very well." }
+    ],
+    463: [
+      { text: "*运动*对身体有好处。", romanization: "*Yùndòng* duì shēntǐ yǒu hǎochù.", translation: "Exercise is good for your body." },
+      { text: "他喜欢做*运动*。", romanization: "Tā xǐhuan zuò *yùndòng*.", translation: "He likes doing exercise." },
+      { text: "你喜欢什么*运动*？", romanization: "Nǐ xǐhuan shénme *yùndòng*?", translation: "What sport do you like?" }
+    ],
+    464: [
+      { text: "我们的*队*赢了。", romanization: "Wǒmen de *duì* yíng le.", translation: "Our team won." },
+      { text: "他加入了篮球*队*。", romanization: "Tā jiārùle lánqiú *duì*.", translation: "He joined the basketball team." },
+      { text: "这支*队*很强。", romanization: "Zhè zhī *duì* hěn qiáng.", translation: "This team is strong." }
+    ],
+    465: [
+      { text: "孩子在踢*球*。", romanization: "Háizi zài tī *qiú*.", translation: "The child is kicking a ball." },
+      { text: "*球*滚到了街上。", romanization: "*Qiú* gǔn dàole jiē shàng.", translation: "The ball rolled onto the street." },
+      { text: "请把*球*给我。", romanization: "Qǐng bǎ *qiú* gěi wǒ.", translation: "Please give me the ball." }
+    ],
+    466: [
+      { text: "他会弹*吉他*。", romanization: "Tā huì tán *jítā*.", translation: "He knows how to play guitar." },
+      { text: "她买了一把新*吉他*。", romanization: "Tā mǎile yì bǎ xīn *jítā*.", translation: "She bought a new guitar." },
+      { text: "*吉他*的声音很好听。", romanization: "*Jítā* de shēngyīn hěn hǎotīng.", translation: "The guitar sounds great." }
+    ],
+    467: [
+      { text: "她在弹*钢琴*。", romanization: "Tā zài tán *gāngqín*.", translation: "She's playing the piano." },
+      { text: "我想学*钢琴*。", romanization: "Wǒ xiǎng xué *gāngqín*.", translation: "I want to learn piano." },
+      { text: "这架*钢琴*很旧了。", romanization: "Zhè jià *gāngqín* hěn jiù le.", translation: "This piano is old." }
+    ],
+    468: [
+      { text: "这张*照片*很漂亮。", romanization: "Zhè zhāng *zhàopiàn* hěn piàoliang.", translation: "This photo is beautiful." },
+      { text: "她给我看了一些*照片*。", romanization: "Tā gěi wǒ kànle yìxiē *zhàopiàn*.", translation: "She showed me some photos." },
+      { text: "我们拍一张*照片*吧。", romanization: "Wǒmen pāi yì zhāng *zhàopiàn* ba.", translation: "Let's take a photo." }
+    ],
+    469: [
+      { text: "我的*爱好*是画画。", romanization: "Wǒ de *àihào* shì huàhuà.", translation: "My hobby is painting." },
+      { text: "你有什么*爱好*？", romanization: "Nǐ yǒu shénme *àihào*?", translation: "What hobbies do you have?" },
+      { text: "阅读是她的*爱好*。", romanization: "Yuèdú shì tā de *àihào*.", translation: "Reading is her hobby." }
+    ],
+    470: [
+      { text: "*假期*快到了。", romanization: "*Jiàqī* kuài dào le.", translation: "The holidays are coming soon." },
+      { text: "*假期*我们要去旅行。", romanization: "*Jiàqī* wǒmen yào qù lǚxíng.", translation: "We're going to travel during the holidays." },
+      { text: "*假期*过得很快。", romanization: "*Jiàqī* guò de hěn kuài.", translation: "The holiday went by quickly." }
+    ],
+    471: [
+      { text: "这里的*网络*很快。", romanization: "Zhèlǐ de *wǎngluò* hěn kuài.", translation: "The internet here is fast." },
+      { text: "*网络*断了。", romanization: "*Wǎngluò* duàn le.", translation: "The internet is down." },
+      { text: "我在用*网络*查资料。", romanization: "Wǒ zài yòng *wǎngluò* chá zīliào.", translation: "I'm using the internet to look up information." }
+    ],
+    472: [
+      { text: "这个*网站*很有用。", romanization: "Zhège *wǎngzhàn* hěn yǒuyòng.", translation: "This website is useful." },
+      { text: "请打开这个*网站*。", romanization: "Qǐng dǎkāi zhège *wǎngzhàn*.", translation: "Please open this website." },
+      { text: "他建了一个新*网站*。", romanization: "Tā jiànle yí ge xīn *wǎngzhàn*.", translation: "He built a new website." }
+    ],
+    473: [
+      { text: "我忘记了*密码*。", romanization: "Wǒ wàngjìle *mìmǎ*.", translation: "I forgot my password." },
+      { text: "请输入你的*密码*。", romanization: "Qǐng shūrù nǐ de *mìmǎ*.", translation: "Please enter your password." },
+      { text: "*密码*太简单了。", romanization: "*Mìmǎ* tài jiǎndān le.", translation: "The password is too simple." }
+    ],
+    474: [
+      { text: "*屏幕*太小了。", romanization: "*Píngmù* tài xiǎo le.", translation: "The screen is too small." },
+      { text: "他的*屏幕*坏了。", romanization: "Tā de *píngmù* huài le.", translation: "His screen is broken." },
+      { text: "这个*屏幕*很清楚。", romanization: "Zhège *píngmù* hěn qīngchu.", translation: "This screen is clear." }
+    ],
+    475: [
+      { text: "*键盘*坏了。", romanization: "*Jiànpán* huài le.", translation: "The keyboard is broken." },
+      { text: "这个*键盘*很好用。", romanization: "Zhège *jiànpán* hěn hǎoyòng.", translation: "This keyboard is easy to use." },
+      { text: "请清洁一下*键盘*。", romanization: "Qǐng qīngjié yíxià *jiànpán*.", translation: "Please clean the keyboard." }
+    ],
+    476: [
+      { text: "我收到了她的*消息*。", romanization: "Wǒ shōudàole tā de *xiāoxi*.", translation: "I received her message." },
+      { text: "这是个好*消息*。", romanization: "Zhè shì ge hǎo *xiāoxi*.", translation: "This is good news." },
+      { text: "请给我发*消息*。", romanization: "Qǐng gěi wǒ fā *xiāoxi*.", translation: "Please send me a message." }
+    ],
+    477: [
+      { text: "他每天看*新闻*。", romanization: "Tā měitiān kàn *xīnwén*.", translation: "He watches the news every day." },
+      { text: "这是今天的*新闻*。", romanization: "Zhè shì jīntiān de *xīnwén*.", translation: "This is today's news." },
+      { text: "*新闻*说明天会下雨。", romanization: "*Xīnwén* shuō míngtiān huì xiàyǔ.", translation: "The news says it will rain tomorrow." }
+    ],
+    478: [
+      { text: "我们在看*电视*。", romanization: "Wǒmen zài kàn *diànshì*.", translation: "We're watching TV." },
+      { text: "*电视*坏了。", romanization: "*Diànshì* huài le.", translation: "The TV is broken." },
+      { text: "孩子们喜欢看*电视*。", romanization: "Háizimen xǐhuan kàn *diànshì*.", translation: "Children like watching TV." }
+    ],
+    479: [
+      { text: "他在听*收音机*。", romanization: "Tā zài tīng *shōuyīnjī*.", translation: "He's listening to the radio." },
+      { text: "*收音机*坏了。", romanization: "*Shōuyīnjī* huài le.", translation: "The radio is broken." },
+      { text: "车里有一台*收音机*。", romanization: "Chē lǐ yǒu yì tái *shōuyīnjī*.", translation: "There's a radio in the car." }
+    ],
+    480: [
+      { text: "她带着*相机*。", romanization: "Tā dàizhe *xiàngjī*.", translation: "She's carrying a camera." },
+      { text: "这台*相机*很贵。", romanization: "Zhè tái *xiàngjī* hěn guì.", translation: "This camera is expensive." },
+      { text: "我用*相机*拍照。", romanization: "Wǒ yòng *xiàngjī* pāizhào.", translation: "I take photos with a camera." }
+    ],
+    481: [
+      { text: "我*也*喜欢音乐。", romanization: "Wǒ *yě* xǐhuan yīnyuè.", translation: "I also like music." },
+      { text: "她*也*会说中文。", romanization: "Tā *yě* huì shuō Zhōngwén.", translation: "She can also speak Chinese." },
+      { text: "我*也*想去。", romanization: "Wǒ *yě* xiǎng qù.", translation: "I also want to go." }
+    ],
+    482: [
+      { text: "我*只*有一个包。", romanization: "Wǒ *zhǐ* yǒu yí ge bāo.", translation: "I only have one bag." },
+      { text: "她*只*吃水果。", romanization: "Tā *zhǐ* chī shuǐguǒ.", translation: "She only eats fruit." },
+      { text: "这*只*要五分钟。", romanization: "Zhè *zhǐ* yào wǔ fēnzhōng.", translation: "This only takes five minutes." }
+    ],
+    483: [
+      { text: "她*很*高兴。", romanization: "Tā *hěn* gāoxìng.", translation: "She's very happy." },
+      { text: "这本书*很*有趣。", romanization: "Zhè běn shū *hěn* yǒuqù.", translation: "This book is very interesting." },
+      { text: "天气*很*冷。", romanization: "Tiānqì *hěn* lěng.", translation: "The weather is very cold." }
+    ],
+    484: [
+      { text: "*也许*他会来。", romanization: "*Yěxǔ* tā huì lái.", translation: "Maybe he'll come." },
+      { text: "*也许*明天会下雨。", romanization: "*Yěxǔ* míngtiān huì xiàyǔ.", translation: "Maybe it will rain tomorrow." },
+      { text: "*也许*你是对的。", romanization: "*Yěxǔ* nǐ shì duì de.", translation: "Maybe you're right." }
+    ],
+    485: [
+      { text: "他*已经*走了。", romanization: "Tā *yǐjīng* zǒu le.", translation: "He has already left." },
+      { text: "我*已经*吃过了。", romanization: "Wǒ *yǐjīng* chīguò le.", translation: "I've already eaten." },
+      { text: "电影*已经*开始了。", romanization: "Diànyǐng *yǐjīng* kāishǐ le.", translation: "The movie has already started." }
+    ],
+    486: [
+      { text: "*一月*很冷。", romanization: "*Yīyuè* hěn lěng.", translation: "January is cold." },
+      { text: "她*一月*出生。", romanization: "Tā *yīyuè* chūshēng.", translation: "She was born in January." },
+      { text: "我们*一月*去滑雪。", romanization: "Wǒmen *yīyuè* qù huáxuě.", translation: "We go skiing in January." }
+    ],
+    487: [
+      { text: "*二月*很短。", romanization: "*Èryuè* hěn duǎn.", translation: "February is short." },
+      { text: "他的生日在*二月*。", romanization: "Tā de shēngrì zài *èryuè*.", translation: "His birthday is in February." },
+      { text: "*二月*有时候会下雪。", romanization: "*Èryuè* yǒushíhou huì xiàxuě.", translation: "It sometimes snows in February." }
+    ],
+    488: [
+      { text: "春天从*三月*开始。", romanization: "Chūntiān cóng *sānyuè* kāishǐ.", translation: "Spring starts in March." },
+      { text: "*三月*天气还很冷。", romanization: "*Sānyuè* tiānqì hái hěn lěng.", translation: "It's still cold in March." },
+      { text: "我们*三月*去旅行。", romanization: "Wǒmen *sānyuè* qù lǚxíng.", translation: "We're traveling in March." }
+    ],
+    489: [
+      { text: "*四月*花都开了。", romanization: "*Sìyuè* huā dōu kāi le.", translation: "In April all the flowers bloom." },
+      { text: "她的生日在*四月*。", romanization: "Tā de shēngrì zài *sìyuè*.", translation: "Her birthday is in April." },
+      { text: "*四月*天气很好。", romanization: "*Sìyuè* tiānqì hěn hǎo.", translation: "April weather is nice." }
+    ],
+    490: [
+      { text: "*五月*很温暖。", romanization: "*Wǔyuè* hěn wēnnuǎn.", translation: "May is warm." },
+      { text: "我们*五月*结婚。", romanization: "Wǒmen *wǔyuè* jiéhūn.", translation: "We're getting married in May." },
+      { text: "*五月*有很多花。", romanization: "*Wǔyuè* yǒu hěn duō huā.", translation: "There are many flowers in May." }
+    ],
+    491: [
+      { text: "*六月*学校放假。", romanization: "*Liùyuè* xuéxiào fàngjià.", translation: "School lets out in June." },
+      { text: "夏天从*六月*开始。", romanization: "Xiàtiān cóng *liùyuè* kāishǐ.", translation: "Summer starts in June." },
+      { text: "她*六月*毕业。", romanization: "Tā *liùyuè* bìyè.", translation: "She graduates in June." }
+    ],
+    492: [
+      { text: "*七月*非常热。", romanization: "*Qīyuè* fēicháng rè.", translation: "July is very hot." },
+      { text: "我们*七月*去海边。", romanization: "Wǒmen *qīyuè* qù hǎibiān.", translation: "We're going to the beach in July." },
+      { text: "*七月*是一年中最热的月份。", romanization: "*Qīyuè* shì yì nián zhōng zuì rè de yuèfèn.", translation: "July is the hottest month of the year." }
+    ],
+    493: [
+      { text: "*八月*我们去度假。", romanization: "*Bāyuè* wǒmen qù dùjià.", translation: "We go on vacation in August." },
+      { text: "*八月*非常热。", romanization: "*Bāyuè* fēicháng rè.", translation: "August is very hot." },
+      { text: "他的生日在*八月*。", romanization: "Tā de shēngrì zài *bāyuè*.", translation: "His birthday is in August." }
+    ],
+    494: [
+      { text: "学校*九月*开学。", romanization: "Xuéxiào *jiǔyuè* kāixué.", translation: "School starts in September." },
+      { text: "*九月*天气开始变凉。", romanization: "*Jiǔyuè* tiānqì kāishǐ biàn liáng.", translation: "The weather starts getting cool in September." },
+      { text: "我们*九月*搬家。", romanization: "Wǒmen *jiǔyuè* bānjiā.", translation: "We're moving in September." }
+    ],
+    495: [
+      { text: "*十月*树叶变黄了。", romanization: "*Shíyuè* shùyè biàn huáng le.", translation: "In October the leaves turn yellow." },
+      { text: "她的生日在*十月*。", romanization: "Tā de shēngrì zài *shíyuè*.", translation: "Her birthday is in October." },
+      { text: "*十月*天气很凉爽。", romanization: "*Shíyuè* tiānqì hěn liángshuǎng.", translation: "October weather is cool." }
+    ],
+    496: [
+      { text: "*十一月*开始变冷。", romanization: "*Shíyīyuè* kāishǐ biàn lěng.", translation: "It starts getting cold in November." },
+      { text: "我们*十一月*去中国。", romanization: "Wǒmen *shíyīyuè* qù Zhōngguó.", translation: "We're going to China in November." },
+      { text: "*十一月*天气不太好。", romanization: "*Shíyīyuè* tiānqì bú tài hǎo.", translation: "November weather isn't very good." }
+    ],
+    497: [
+      { text: "*十二月*非常冷。", romanization: "*Shí'èryuè* fēicháng lěng.", translation: "December is very cold." },
+      { text: "我们*十二月*回家。", romanization: "Wǒmen *shí'èryuè* huí jiā.", translation: "We go home in December." },
+      { text: "*十二月*会下雪。", romanization: "*Shí'èryuè* huì xiàxuě.", translation: "It snows in December." }
+    ],
+    498: [
+      { text: "今天的*日期*是几号？", romanization: "Jīntiān de *rìqī* shì jǐ hào?", translation: "What's today's date?" },
+      { text: "请写下*日期*。", romanization: "Qǐng xiěxià *rìqī*.", translation: "Please write down the date." },
+      { text: "会议的*日期*改变了。", romanization: "Huìyì de *rìqī* gǎibiàn le.", translation: "The meeting date has changed." }
+    ],
+    499: [
+      { text: "*日历*挂在墙上。", romanization: "*Rìlì* guà zài qiáng shàng.", translation: "The calendar hangs on the wall." },
+      { text: "请看一下*日历*。", romanization: "Qǐng kàn yíxià *rìlì*.", translation: "Please check the calendar." },
+      { text: "这本*日历*是新的。", romanization: "Zhè běn *rìlì* shì xīn de.", translation: "This calendar is new." }
+    ],
+    500: [
+      { text: "*生日*快乐！", romanization: "*Shēngrì* kuàilè!", translation: "Happy birthday!" },
+      { text: "你的*生日*是什么时候？", romanization: "Nǐ de *shēngrì* shì shénme shíhou?", translation: "When is your birthday?" },
+      { text: "今天是我的*生日*。", romanization: "Jīntiān shì wǒ de *shēngrì*.", translation: "Today is my birthday." }
     ]
   },
 
