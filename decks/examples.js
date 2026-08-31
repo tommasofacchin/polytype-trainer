@@ -17281,6 +17281,256 @@ window.DECK_EXAMPLES = {
       { text: "彼の手に*血*がついています。", romanization: "Kare no te ni *chi* ga tsuite imasu.", translation: "There's blood on his hand." },
       { text: "医者は彼の*血*を調べました。", romanization: "Isha wa kare no *chi* o shirabemashita.", translation: "The doctor checked his blood." },
       { text: "傷口から*血*が出ています。", romanization: "Kizuguchi kara *chi* ga dete imasu.", translation: "The wound is bleeding." }
+    ],
+    451: [
+      { text: "*現金*で払いたいです。", romanization: "*Genkin* de haraitai desu.", translation: "I'd like to pay in cash." },
+      { text: "彼は*現金*を持っていません。", romanization: "Kare wa *genkin* o motte imasen.", translation: "He doesn't have cash." },
+      { text: "*現金*を少しください。", romanization: "*Genkin* o sukoshi kudasai.", translation: "Please give me some cash." }
+    ],
+    452: [
+      { text: "*クレジットカード*を使えますか。", romanization: "*Kurejittokaado* o tsukaemasu ka.", translation: "Can I use a credit card?" },
+      { text: "彼女は*クレジットカード*を使いました。", romanization: "Kanojo wa *kurejittokaado* o tsukaimashita.", translation: "She swiped her credit card." },
+      { text: "ここでは*クレジットカード*が使えません。", romanization: "Koko de wa *kurejittokaado* ga tsukaemasen.", translation: "Credit cards aren't accepted here." }
+    ],
+    453: [
+      { text: "このコートは*割引*があります。", romanization: "Kono kooto wa *waribiki* ga arimasu.", translation: "This coat has a discount." },
+      { text: "*割引*はいくらですか。", romanization: "*Waribiki* wa ikura desu ka.", translation: "What's the discount?" },
+      { text: "今日はすべての商品に*割引*があります。", romanization: "Kyou wa subete no shouhin ni *waribiki* ga arimasu.", translation: "All items have a discount today." }
+    ],
+    454: [
+      { text: "この店にはたくさんの*客*がいます。", romanization: "Kono mise ni wa takusan no *kyaku* ga imasu.", translation: "This shop has many customers." },
+      { text: "*客*はいつも正しいです。", romanization: "*Kyaku* wa itsumo tadashii desu.", translation: "The customer is always right." },
+      { text: "店員は*客*にとても親切です。", romanization: "Ten'in wa *kyaku* ni totemo shinsetsu desu.", translation: "The waiter is friendly to customers." }
+    ],
+    455: [
+      { text: "これはあなたへの*プレゼント*です。", romanization: "Kore wa anata e no *purezento* desu.", translation: "This is a gift for you." },
+      { text: "彼女は*プレゼント*をもらいました。", romanization: "Kanojo wa *purezento* o moraimashita.", translation: "She received a gift." },
+      { text: "*プレゼント*をありがとう。", romanization: "*Purezento* o arigatou.", translation: "Thanks for the gift." }
+    ],
+    456: [
+      { text: "私は*音楽*が好きです。", romanization: "Watashi wa *ongaku* ga suki desu.", translation: "I like music." },
+      { text: "彼女は*音楽*を聞いています。", romanization: "Kanojo wa *ongaku* o kiite imasu.", translation: "She's listening to music." },
+      { text: "この*音楽*はいいですね。", romanization: "Kono *ongaku* wa ii desu ne.", translation: "This music sounds great." }
+    ],
+    457: [
+      { text: "彼女は*歌*を歌いました。", romanization: "Kanojo wa *uta* o utaimashita.", translation: "She sang a song." },
+      { text: "この*歌*はいいですね。", romanization: "Kono *uta* wa ii desu ne.", translation: "This song sounds great." },
+      { text: "この*歌*の名前を知りません。", romanization: "Kono *uta* no namae o shirimasen.", translation: "I don't know the name of this song." }
+    ],
+    458: [
+      { text: "*映画*を見に行きましょう。", romanization: "*Eiga* o mi ni ikimashou.", translation: "Let's go watch a movie." },
+      { text: "この*映画*はおもしろいです。", romanization: "Kono *eiga* wa omoshiroi desu.", translation: "This movie is interesting." },
+      { text: "*映画*は何時に始まりますか。", romanization: "*Eiga* wa nanji ni hajimarimasu ka.", translation: "What time does the movie start?" }
+    ],
+    459: [
+      { text: "子供たちは*ゲーム*をするのが好きです。", romanization: "Kodomotachi wa *geemu* o suru no ga suki desu.", translation: "Children like playing games." },
+      { text: "この*ゲーム*はおもしろいです。", romanization: "Kono *geemu* wa omoshiroi desu.", translation: "This game is fun." },
+      { text: "一緒に*ゲーム*をしましょう。", romanization: "Issho ni *geemu* o shimashou.", translation: "Let's play a game together." }
+    ],
+    460: [
+      { text: "*パーティー*を開きます。", romanization: "*Paatii* o hirakimasu.", translation: "We're going to have a party." },
+      { text: "*パーティー*は何時に始まりますか。", romanization: "*Paatii* wa nanji ni hajimarimasu ka.", translation: "What time does the party start?" },
+      { text: "彼女は私を*パーティー*に招待しました。", romanization: "Kanojo wa watashi o *paatii* ni shoutai shimashita.", translation: "She invited me to the party." }
+    ],
+    461: [
+      { text: "彼は*サッカー*をするのが好きです。", romanization: "Kare wa *sakkaa* o suru no ga suki desu.", translation: "He likes playing football." },
+      { text: "私たちは公園で*サッカー*をしています。", romanization: "Watashitachi wa kouen de *sakkaa* o shite imasu.", translation: "We're playing football in the park." },
+      { text: "*サッカー*の試合は何時に始まりますか。", romanization: "*Sakkaa* no shiai wa nanji ni hajimarimasu ka.", translation: "What time does the football match start?" }
+    ],
+    462: [
+      { text: "彼女は*テニス*をするのが好きです。", romanization: "Kanojo wa *tenisu* o suru no ga suki desu.", translation: "She likes playing tennis." },
+      { text: "私たちは週末に*テニス*をします。", romanization: "Watashitachi wa shuumatsu ni *tenisu* o shimasu.", translation: "We play tennis on weekends." },
+      { text: "彼は*テニス*が上手です。", romanization: "Kare wa *tenisu* ga jouzu desu.", translation: "He plays tennis very well." }
+    ],
+    463: [
+      { text: "*スポーツ*は体にいいです。", romanization: "*Supootsu* wa karada ni ii desu.", translation: "Exercise is good for your body." },
+      { text: "彼は*スポーツ*をするのが好きです。", romanization: "Kare wa *supootsu* o suru no ga suki desu.", translation: "He likes doing exercise." },
+      { text: "どんな*スポーツ*が好きですか。", romanization: "Donna *supootsu* ga suki desu ka.", translation: "What sport do you like?" }
+    ],
+    464: [
+      { text: "私たちの*チーム*が勝ちました。", romanization: "Watashitachi no *chiimu* ga kachimashita.", translation: "Our team won." },
+      { text: "彼はバスケットボール*チーム*に入りました。", romanization: "Kare wa basukettobooru *chiimu* ni hairimashita.", translation: "He joined the basketball team." },
+      { text: "この*チーム*は強いです。", romanization: "Kono *chiimu* wa tsuyoi desu.", translation: "This team is strong." }
+    ],
+    465: [
+      { text: "子供が*ボール*を蹴っています。", romanization: "Kodomo ga *booru* o kette imasu.", translation: "The child is kicking a ball." },
+      { text: "*ボール*が通りに転がりました。", romanization: "*Booru* ga toori ni korogarimashita.", translation: "The ball rolled onto the street." },
+      { text: "*ボール*をください。", romanization: "*Booru* o kudasai.", translation: "Please give me the ball." }
+    ],
+    466: [
+      { text: "彼は*ギター*が弾けます。", romanization: "Kare wa *gitaa* ga hikemasu.", translation: "He knows how to play guitar." },
+      { text: "彼女は新しい*ギター*を買いました。", romanization: "Kanojo wa atarashii *gitaa* o kaimashita.", translation: "She bought a new guitar." },
+      { text: "*ギター*の音はいいですね。", romanization: "*Gitaa* no oto wa ii desu ne.", translation: "The guitar sounds great." }
+    ],
+    467: [
+      { text: "彼女は*ピアノ*を弾いています。", romanization: "Kanojo wa *piano* o hiite imasu.", translation: "She's playing the piano." },
+      { text: "私は*ピアノ*を習いたいです。", romanization: "Watashi wa *piano* o naraitai desu.", translation: "I want to learn piano." },
+      { text: "この*ピアノ*は古いです。", romanization: "Kono *piano* wa furui desu.", translation: "This piano is old." }
+    ],
+    468: [
+      { text: "この*写真*はきれいです。", romanization: "Kono *shashin* wa kirei desu.", translation: "This photo is beautiful." },
+      { text: "彼女は*写真*を何枚か見せてくれました。", romanization: "Kanojo wa *shashin* o nanmai ka misete kuremashita.", translation: "She showed me some photos." },
+      { text: "*写真*を撮りましょう。", romanization: "*Shashin* o torimashou.", translation: "Let's take a photo." }
+    ],
+    469: [
+      { text: "私の*趣味*は絵を描くことです。", romanization: "Watashi no *shumi* wa e o kaku koto desu.", translation: "My hobby is painting." },
+      { text: "あなたの*趣味*は何ですか。", romanization: "Anata no *shumi* wa nan desu ka.", translation: "What hobbies do you have?" },
+      { text: "読書は彼女の*趣味*です。", romanization: "Dokusho wa kanojo no *shumi* desu.", translation: "Reading is her hobby." }
+    ],
+    470: [
+      { text: "*休暇*はもうすぐです。", romanization: "*Kyuuka* wa mou sugu desu.", translation: "The holidays are coming soon." },
+      { text: "*休暇*に旅行するつもりです。", romanization: "*Kyuuka* ni ryokou suru tsumori desu.", translation: "We're going to travel during the holidays." },
+      { text: "*休暇*はあっという間に終わりました。", romanization: "*Kyuuka* wa atto iu ma ni owarimashita.", translation: "The holiday went by quickly." }
+    ],
+    471: [
+      { text: "ここの*インターネット*は速いです。", romanization: "Koko no *intaanetto* wa hayai desu.", translation: "The internet here is fast." },
+      { text: "*インターネット*が切れました。", romanization: "*Intaanetto* ga kiremashita.", translation: "The internet is down." },
+      { text: "*インターネット*で情報を調べています。", romanization: "*Intaanetto* de jouhou o shirabete imasu.", translation: "I'm using the internet to look up information." }
+    ],
+    472: [
+      { text: "この*ウェブサイト*は便利です。", romanization: "Kono *webusaito* wa benri desu.", translation: "This website is useful." },
+      { text: "この*ウェブサイト*を開いてください。", romanization: "Kono *webusaito* o hiraite kudasai.", translation: "Please open this website." },
+      { text: "彼は新しい*ウェブサイト*を作りました。", romanization: "Kare wa atarashii *webusaito* o tsukurimashita.", translation: "He built a new website." }
+    ],
+    473: [
+      { text: "*パスワード*を忘れました。", romanization: "*Pasuwaado* o wasuremashita.", translation: "I forgot my password." },
+      { text: "*パスワード*を入力してください。", romanization: "*Pasuwaado* o nyuuryoku shite kudasai.", translation: "Please enter your password." },
+      { text: "*パスワード*は簡単すぎます。", romanization: "*Pasuwaado* wa kantansugimasu.", translation: "The password is too simple." }
+    ],
+    474: [
+      { text: "*画面*が小さすぎます。", romanization: "*Gamen* ga chiisasugimasu.", translation: "The screen is too small." },
+      { text: "彼の*画面*が壊れました。", romanization: "Kare no *gamen* ga kowaremashita.", translation: "His screen is broken." },
+      { text: "この*画面*ははっきりしています。", romanization: "Kono *gamen* wa hakkiri shite imasu.", translation: "This screen is clear." }
+    ],
+    475: [
+      { text: "*キーボード*が壊れました。", romanization: "*Kiiboodo* ga kowaremashita.", translation: "The keyboard is broken." },
+      { text: "この*キーボード*は使いやすいです。", romanization: "Kono *kiiboodo* wa tsukaiyasui desu.", translation: "This keyboard is easy to use." },
+      { text: "*キーボード*を掃除してください。", romanization: "*Kiiboodo* o souji shite kudasai.", translation: "Please clean the keyboard." }
+    ],
+    476: [
+      { text: "彼女からの*メッセージ*を受け取りました。", romanization: "Kanojo kara no *messeeji* o uketorimashita.", translation: "I received her message." },
+      { text: "これはいい*メッセージ*です。", romanization: "Kore wa ii *messeeji* desu.", translation: "This is good news." },
+      { text: "*メッセージ*を送ってください。", romanization: "*Messeeji* o okutte kudasai.", translation: "Please send me a message." }
+    ],
+    477: [
+      { text: "彼は毎日*ニュース*を見ます。", romanization: "Kare wa mainichi *nyuusu* o mimasu.", translation: "He watches the news every day." },
+      { text: "これは今日の*ニュース*です。", romanization: "Kore wa kyou no *nyuusu* desu.", translation: "This is today's news." },
+      { text: "*ニュース*では明日雨が降ると言っています。", romanization: "*Nyuusu* de wa ashita ame ga furu to itte imasu.", translation: "The news says it will rain tomorrow." }
+    ],
+    478: [
+      { text: "私たちは*テレビ*を見ています。", romanization: "Watashitachi wa *terebi* o mite imasu.", translation: "We're watching TV." },
+      { text: "*テレビ*が壊れました。", romanization: "*Terebi* ga kowaremashita.", translation: "The TV is broken." },
+      { text: "子供たちは*テレビ*を見るのが好きです。", romanization: "Kodomotachi wa *terebi* o miru no ga suki desu.", translation: "Children like watching TV." }
+    ],
+    479: [
+      { text: "彼は*ラジオ*を聞いています。", romanization: "Kare wa *rajio* o kiite imasu.", translation: "He's listening to the radio." },
+      { text: "*ラジオ*が壊れました。", romanization: "*Rajio* ga kowaremashita.", translation: "The radio is broken." },
+      { text: "車の中に*ラジオ*があります。", romanization: "Kuruma no naka ni *rajio* ga arimasu.", translation: "There's a radio in the car." }
+    ],
+    480: [
+      { text: "彼女は*カメラ*を持っています。", romanization: "Kanojo wa *kamera* o motte imasu.", translation: "She's carrying a camera." },
+      { text: "この*カメラ*は高いです。", romanization: "Kono *kamera* wa takai desu.", translation: "This camera is expensive." },
+      { text: "私は*カメラ*で写真を撮ります。", romanization: "Watashi wa *kamera* de shashin o torimasu.", translation: "I take photos with a camera." }
+    ],
+    481: [
+      { text: "私*も*音楽が好きです。", romanization: "Watashi *mo* ongaku ga suki desu.", translation: "I also like music." },
+      { text: "彼女*も*英語を話せます。", romanization: "Kanojo *mo* Eigo o hanasemasu.", translation: "She can also speak English." },
+      { text: "私*も*行きたいです。", romanization: "Watashi *mo* ikitai desu.", translation: "I also want to go." }
+    ],
+    482: [
+      { text: "私はかばんが一つ*だけ*あります。", romanization: "Watashi wa kaban ga hitotsu *dake* arimasu.", translation: "I only have one bag." },
+      { text: "彼女は果物*だけ*食べます。", romanization: "Kanojo wa kudamono *dake* tabemasu.", translation: "She only eats fruit." },
+      { text: "これは五分*だけ*かかります。", romanization: "Kore wa gofun *dake* kakarimasu.", translation: "This only takes five minutes." }
+    ],
+    483: [
+      { text: "彼女は*とても*嬉しいです。", romanization: "Kanojo wa *totemo* ureshii desu.", translation: "She's very happy." },
+      { text: "この本は*とても*おもしろいです。", romanization: "Kono hon wa *totemo* omoshiroi desu.", translation: "This book is very interesting." },
+      { text: "天気が*とても*寒いです。", romanization: "Tenki ga *totemo* samui desu.", translation: "The weather is very cold." }
+    ],
+    484: [
+      { text: "*たぶん*彼は来るでしょう。", romanization: "*Tabun* kare wa kuru deshou.", translation: "Maybe he'll come." },
+      { text: "*たぶん*明日雨が降るでしょう。", romanization: "*Tabun* ashita ame ga furu deshou.", translation: "Maybe it will rain tomorrow." },
+      { text: "*たぶん*あなたが正しいでしょう。", romanization: "*Tabun* anata ga tadashii deshou.", translation: "Maybe you're right." }
+    ],
+    485: [
+      { text: "彼は*もう*行きました。", romanization: "Kare wa *mou* ikimashita.", translation: "He has already left." },
+      { text: "私は*もう*食べました。", romanization: "Watashi wa *mou* tabemashita.", translation: "I've already eaten." },
+      { text: "映画は*もう*始まりました。", romanization: "Eiga wa *mou* hajimarimashita.", translation: "The movie has already started." }
+    ],
+    486: [
+      { text: "*一月*は寒いです。", romanization: "*Ichigatsu* wa samui desu.", translation: "January is cold." },
+      { text: "彼女は*一月*に生まれました。", romanization: "Kanojo wa *ichigatsu* ni umaremashita.", translation: "She was born in January." },
+      { text: "私たちは*一月*にスキーに行きます。", romanization: "Watashitachi wa *ichigatsu* ni sukii ni ikimasu.", translation: "We go skiing in January." }
+    ],
+    487: [
+      { text: "*二月*は短いです。", romanization: "*Nigatsu* wa mijikai desu.", translation: "February is short." },
+      { text: "彼の誕生日は*二月*です。", romanization: "Kare no tanjoubi wa *nigatsu* desu.", translation: "His birthday is in February." },
+      { text: "*二月*はときどき雪が降ります。", romanization: "*Nigatsu* wa tokidoki yuki ga furimasu.", translation: "It sometimes snows in February." }
+    ],
+    488: [
+      { text: "春は*三月*から始まります。", romanization: "Haru wa *sangatsu* kara hajimarimasu.", translation: "Spring starts in March." },
+      { text: "*三月*はまだ寒いです。", romanization: "*Sangatsu* wa mada samui desu.", translation: "It's still cold in March." },
+      { text: "私たちは*三月*に旅行します。", romanization: "Watashitachi wa *sangatsu* ni ryokou shimasu.", translation: "We're traveling in March." }
+    ],
+    489: [
+      { text: "*四月*には花がたくさん咲きます。", romanization: "*Shigatsu* ni wa hana ga takusan sakimasu.", translation: "In April all the flowers bloom." },
+      { text: "彼女の誕生日は*四月*です。", romanization: "Kanojo no tanjoubi wa *shigatsu* desu.", translation: "Her birthday is in April." },
+      { text: "*四月*の天気はいいです。", romanization: "*Shigatsu* no tenki wa ii desu.", translation: "April weather is nice." }
+    ],
+    490: [
+      { text: "*五月*は暖かいです。", romanization: "*Gogatsu* wa atatakai desu.", translation: "May is warm." },
+      { text: "私たちは*五月*に結婚します。", romanization: "Watashitachi wa *gogatsu* ni kekkon shimasu.", translation: "We're getting married in May." },
+      { text: "*五月*にはたくさん花があります。", romanization: "*Gogatsu* ni wa takusan hana ga arimasu.", translation: "There are many flowers in May." }
+    ],
+    491: [
+      { text: "*六月*に学校が休みになります。", romanization: "*Rokugatsu* ni gakkou ga yasumi ni narimasu.", translation: "School lets out in June." },
+      { text: "夏は*六月*から始まります。", romanization: "Natsu wa *rokugatsu* kara hajimarimasu.", translation: "Summer starts in June." },
+      { text: "彼女は*六月*に卒業します。", romanization: "Kanojo wa *rokugatsu* ni sotsugyou shimasu.", translation: "She graduates in June." }
+    ],
+    492: [
+      { text: "*七月*はとても暑いです。", romanization: "*Shichigatsu* wa totemo atsui desu.", translation: "July is very hot." },
+      { text: "私たちは*七月*に海へ行きます。", romanization: "Watashitachi wa *shichigatsu* ni umi e ikimasu.", translation: "We're going to the beach in July." },
+      { text: "*七月*は一年で一番暑い月です。", romanization: "*Shichigatsu* wa ichinen de ichiban atsui tsuki desu.", translation: "July is the hottest month of the year." }
+    ],
+    493: [
+      { text: "*八月*に休暇に行きます。", romanization: "*Hachigatsu* ni kyuuka ni ikimasu.", translation: "We go on vacation in August." },
+      { text: "*八月*はとても暑いです。", romanization: "*Hachigatsu* wa totemo atsui desu.", translation: "August is very hot." },
+      { text: "彼の誕生日は*八月*です。", romanization: "Kare no tanjoubi wa *hachigatsu* desu.", translation: "His birthday is in August." }
+    ],
+    494: [
+      { text: "学校は*九月*に始まります。", romanization: "Gakkou wa *kugatsu* ni hajimarimasu.", translation: "School starts in September." },
+      { text: "*九月*には天気が涼しくなり始めます。", romanization: "*Kugatsu* ni wa tenki ga suzushiku nari hajimemasu.", translation: "The weather starts getting cool in September." },
+      { text: "私たちは*九月*に引っ越します。", romanization: "Watashitachi wa *kugatsu* ni hikkoshimasu.", translation: "We're moving in September." }
+    ],
+    495: [
+      { text: "*十月*には葉が黄色くなります。", romanization: "*Juugatsu* ni wa ha ga kiiroku narimasu.", translation: "In October the leaves turn yellow." },
+      { text: "彼女の誕生日は*十月*です。", romanization: "Kanojo no tanjoubi wa *juugatsu* desu.", translation: "Her birthday is in October." },
+      { text: "*十月*の天気は涼しいです。", romanization: "*Juugatsu* no tenki wa suzushii desu.", translation: "October weather is cool." }
+    ],
+    496: [
+      { text: "*十一月*は寒くなり始めます。", romanization: "*Juuichigatsu* wa samuku nari hajimemasu.", translation: "It starts getting cold in November." },
+      { text: "私たちは*十一月*に中国へ行きます。", romanization: "Watashitachi wa *juuichigatsu* ni Chuugoku e ikimasu.", translation: "We're going to China in November." },
+      { text: "*十一月*の天気はあまり良くないです。", romanization: "*Juuichigatsu* no tenki wa amari yokunai desu.", translation: "November weather isn't very good." }
+    ],
+    497: [
+      { text: "*十二月*はとても寒いです。", romanization: "*Juunigatsu* wa totemo samui desu.", translation: "December is very cold." },
+      { text: "私たちは*十二月*に家に帰ります。", romanization: "Watashitachi wa *juunigatsu* ni ie ni kaerimasu.", translation: "We go home in December." },
+      { text: "*十二月*には雪が降ります。", romanization: "*Juunigatsu* ni wa yuki ga furimasu.", translation: "It snows in December." }
+    ],
+    498: [
+      { text: "今日の*日付*は何ですか。", romanization: "Kyou no *hidzuke* wa nan desu ka.", translation: "What's today's date?" },
+      { text: "*日付*を書いてください。", romanization: "*Hidzuke* o kaite kudasai.", translation: "Please write down the date." },
+      { text: "会議の*日付*が変わりました。", romanization: "Kaigi no *hidzuke* ga kawarimashita.", translation: "The meeting date has changed." }
+    ],
+    499: [
+      { text: "*カレンダー*は壁にかかっています。", romanization: "*Karendaa* wa kabe ni kakatte imasu.", translation: "The calendar hangs on the wall." },
+      { text: "*カレンダー*を見てください。", romanization: "*Karendaa* o mite kudasai.", translation: "Please check the calendar." },
+      { text: "この*カレンダー*は新しいです。", romanization: "Kono *karendaa* wa atarashii desu.", translation: "This calendar is new." }
+    ],
+    500: [
+      { text: "*誕生日*おめでとう！", romanization: "*Tanjoubi* omedetou!", translation: "Happy birthday!" },
+      { text: "あなたの*誕生日*はいつですか。", romanization: "Anata no *tanjoubi* wa itsu desu ka.", translation: "When is your birthday?" },
+      { text: "今日は私の*誕生日*です。", romanization: "Kyou wa watashi no *tanjoubi* desu.", translation: "Today is my birthday." }
     ]
   }
 };
