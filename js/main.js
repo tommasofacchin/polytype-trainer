@@ -425,28 +425,17 @@ function updateRomajiUI() {
     settings.showRomanization = languageHasHints();
 }
 
-// On login, adopt the study language from the account's courses (the one with
-// the most XP) when the user hasn't picked one on this device. An explicit
-// local choice always wins, so manual switches are never overridden.
+// Trainer's half of "sign in on a new browser and land on the language you
+// were actually studying". Choosing it is js/app-shell.js's job now
+// (adoptAccountLanguage, which runs on every page and reloads when the choice
+// changes what a page should have rendered) - all this does is pick the
+// freshly stored value back up in the settings this page already built.
 function applyAccountLanguage() {
-    if (localStorage.getItem("polytype-language")) return;
+    const language = localStorage.getItem("polytype-language");
+    if (!language || language === settings.language) return;
+    if (!AVAILABLE_DECKS.some(deck => deck.language === language)) return;
 
-    const availableLanguages = new Set(AVAILABLE_DECKS.map(deck => deck.language));
-    let best = null;
-
-    for (const [courseId, course] of Object.entries(profile.courses || {})) {
-        if (!availableLanguages.has(courseId)) continue;
-        const xp = Number(course?.xp) || 0;
-        const level = Number(course?.level) || 0;
-        if (!best || xp > best.xp || (xp === best.xp && level > best.level)) {
-            best = { language: courseId, xp, level };
-        }
-    }
-
-    if (!best || best.language === settings.language) return;
-
-    settings.language = best.language;
-    localStorage.setItem("polytype-language", best.language);
+    settings.language = language;
     populateLevelSelect();
     updateRomajiUI();
 }

@@ -330,11 +330,27 @@ function sanitizeCoursesSummary(courses) {
           // field forward unchanged in their own courseResponse for the same
           // reason (see api/complete-practice-session.js for where it's
           // actually appended to).
-          lessonsCompleted: sanitizeLessonsCompleted(course.lessonsCompleted, courseId)
+          lessonsCompleted: sanitizeLessonsCompleted(course.lessonsCompleted, courseId),
+          // When this course was last touched - every write to the embedded
+          // courses map stamps updatedAt (practice sessions, unlocks, chest
+          // claims, purchases, start-course). The client needs it to reopen
+          // the language you were last studying when it signs in somewhere
+          // that has never picked one - see adoptAccountLanguage in
+          // js/app-shell.js.
+          lastStudiedAt: toMillis(course.updatedAt)
         }
       ];
     })
   );
+}
+
+// Firestore Timestamp -> plain epoch ms, so course timestamps survive the trip
+// through JSON. Tolerates a raw number, which is what a value that has already
+// been through this (a cached client profile echoed back) looks like.
+function toMillis(timestamp) {
+  if (!timestamp) return null;
+  if (typeof timestamp.toMillis === "function") return timestamp.toMillis();
+  return typeof timestamp === "number" ? timestamp : null;
 }
 
 // Keeps only ids that are real, known lessons for this course, in case the

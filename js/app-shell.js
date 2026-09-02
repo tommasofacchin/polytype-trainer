@@ -36,6 +36,20 @@
         swedish: "assets/flags/sweden.svg"
     };
 
+    const LANGUAGE_KEY = "polytype-language";
+    // What the whole app shows until the player has picked a study language -
+    // the key is only ever written by an explicit choice (the flag menu below,
+    // languages.html) or by adoptAccountLanguage further down.
+    const FALLBACK_LANGUAGE = "chinese";
+
+    function getStudyLanguage() {
+        try {
+            return localStorage.getItem(LANGUAGE_KEY) || FALLBACK_LANGUAGE;
+        } catch {
+            return FALLBACK_LANGUAGE;
+        }
+    }
+
     // Every *.html ships with the same hardcoded china.svg <link rel="icon">
     // (or, on the two pages with their own favicon logic - js/memory.js and
     // js/lessons.js - norway.svg) as a static fallback for the instant
@@ -47,7 +61,7 @@
     // header pill and the browser tab can never disagree about which flag
     // is "the" one for an unrecognized/missing language.
     function applyFavicon() {
-        const language = localStorage.getItem("polytype-language") || "chinese";
+        const language = getStudyLanguage();
         const icon = document.querySelector('link[rel="icon"]');
         if (icon) icon.href = getLanguageFlag(language);
     }
@@ -91,7 +105,7 @@
         const decks = window.DECK_INDEX;
         if (!cache || !decks) return;
 
-        const language = localStorage.getItem("polytype-language") || "chinese";
+        const language = getStudyLanguage();
         const meta = decks.find(deck => deck.language === language);
         if (meta) cache.prefetch(meta);
     }
@@ -223,7 +237,7 @@
         const mount = document.getElementById("app-header");
         if (!mount) return;
 
-        const language = localStorage.getItem("polytype-language") || "chinese";
+        const language = getStudyLanguage();
         const flagSrc = getLanguageFlag(language);
         const cached = readCachedProfile();
         const keysHeld = getKeysHeldForLanguage(language, cached);
@@ -263,11 +277,70 @@
         return window.PolytypeI18n?.languageLabel?.(language) || language;
     }
 
+    // The study language everything reads (localStorage "polytype-language").
+    // Nothing writes it until the player picks one - from the flag menu below
+    // or languages.html - which is why every read across the app falls back to
+    // "chinese". That fallback is the right one for a first-ever visit and the
+    // wrong one right after signing in on a browser that has never been used
+    // for this account: the player would land on Chinese no matter which
+    // language they had actually been studying. So once the account's own
+    // profile arrives, adopt the course it was last active in.
+    //
+    // Only ever fills the key in when it is absent: an explicit choice on this
+    // device always wins, including the one languages.html writes a moment
+    // before its course exists server-side.
+    function adoptAccountLanguage(profile) {
+        let stored = null;
+        try { stored = localStorage.getItem(LANGUAGE_KEY); } catch { return; }
+        if (stored) return;
+
+        const language = getMostRecentCourseLanguage(profile);
+        if (!language) return;
+
+        // A write that does not stick (storage disabled or full) must never
+        // reach the reload below: the page would come back with the key still
+        // missing and reload again, forever.
+        try { localStorage.setItem(LANGUAGE_KEY, language); } catch { return; }
+        if (localStorage.getItem(LANGUAGE_KEY) !== language) return;
+
+        applyFavicon();
+        renderHeader();
+
+        // Pages read the study language once, at init, so the one under this
+        // header is still showing the fallback language's deck and progress -
+        // same reason the flag switcher reloads. Skipped when the adopted
+        // language *is* the fallback, since then nothing painted wrong.
+        if (language !== FALLBACK_LANGUAGE) window.location.reload();
+    }
+
+    // Most recently active course, falling back to the furthest along: a
+    // profile written before lastStudiedAt shipped carries no timestamps at
+    // all, and "the one with the most XP" is the best guess available then.
+    function getMostRecentCourseLanguage(profile) {
+        let best = null;
+
+        Object.entries(profile?.courses || {}).forEach(([courseId, course]) => {
+            if (!LANGUAGE_FLAGS[courseId]) return;
+            const candidate = {
+                language: courseId,
+                lastStudiedAt: Number(course?.lastStudiedAt) || 0,
+                xp: Number(course?.xp) || 0
+            };
+            if (!best ||
+                candidate.lastStudiedAt > best.lastStudiedAt ||
+                (candidate.lastStudiedAt === best.lastStudiedAt && candidate.xp > best.xp)) {
+                best = candidate;
+            }
+        });
+
+        return best?.language || null;
+    }
+
     function renderFlagMenuContent() {
         const panel = document.getElementById("app-shell-language-menu");
         if (!panel) return;
 
-        const activeLanguage = localStorage.getItem("polytype-language") || "chinese";
+        const activeLanguage = getStudyLanguage();
         const cached = readCachedProfile();
         const studying = Object.keys(cached.courses || {}).filter(lang => LANGUAGE_FLAGS[lang]);
         if (!studying.includes(activeLanguage)) studying.unshift(activeLanguage);
@@ -288,11 +361,11 @@
 
         panel.querySelectorAll("[data-language]").forEach(btn => {
             btn.addEventListener("click", () => {
-                if (btn.dataset.language === (localStorage.getItem("polytype-language") || "chinese")) {
+                if (btn.dataset.language === getStudyLanguage()) {
                     closeFlagMenu();
                     return;
                 }
-                localStorage.setItem("polytype-language", btn.dataset.language);
+                localStorage.setItem(LANGUAGE_KEY, btn.dataset.language);
                 // Full reload, not just a header repaint: whatever page we're
                 // on (Trainer, Memory, Deck, Categories...) needs to reload
                 // its own deck/progress for the newly selected language too.
@@ -693,7 +766,7 @@
     function paintHeaderKeys(cached) {
         const keysEl = document.getElementById("app-shell-keys");
         if (!keysEl) return;
-        const language = localStorage.getItem("polytype-language") || "chinese";
+        const language = getStudyLanguage();
         keysEl.innerHTML = `${ICONS.key}${getKeysHeldForLanguage(language, cached || readCachedProfile())}`;
     }
 
@@ -806,7 +879,7 @@
     // fires polytype-profile-updated - so one function keeps them in sync
     // instead of two separate (and separately wired) renderers.
     function renderHeaderCurrency(event) {
-        const language = localStorage.getItem("polytype-language") || "chinese";
+        const language = getStudyLanguage();
         const cached = event?.detail || readCachedProfile();
 
         const coinsEl = document.getElementById("app-shell-coins");
@@ -1016,6 +1089,13 @@
     // does reload the page and so re-renders the header from scratch
     // anyway).
     document.addEventListener("polytype-profile-updated", renderHeaderCurrency);
+    // Same event, because it carries the account's courses: this is where a
+    // device that has never picked a study language learns which one to open.
+    document.addEventListener("polytype-profile-updated", event => adoptAccountLanguage(event.detail));
+    // And once up front, for a load that already has the profile cached (a
+    // refresh after clearing just this key, a second tab) - the sync above
+    // may not fire again for a while.
+    adoptAccountLanguage(readCachedProfile());
 
     // Unlike the paint above, this needs window.PolytypeFirebase to already
     // exist - only DOMContentLoaded guarantees that (it waits for every

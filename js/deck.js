@@ -716,7 +716,7 @@ function closeWordDetail() {
 }
 
 // Same glyph as .word-detail-audio's button in deck.html, just smaller - kept
-// as markup here since these buttons are built one per example at render time.
+// as markup here since these icons are built one per example at render time.
 const EXAMPLE_AUDIO_ICON =
     '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M19 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
 
@@ -726,10 +726,21 @@ function renderWordExamples(word) {
     const examples = window.DECK_EXAMPLES?.[activeLanguage]?.[getWordSuffix(word.id)] || [];
     if (el.detailNoExamples) el.detailNoExamples.hidden = examples.length > 0;
 
+    // These cards are about to be thrown away, so nothing that is playing
+    // right now still owns a highlight.
+    setPlayingExampleCard(null);
+
     el.detailExamples.replaceChildren(
         ...examples.map((example, index) => {
             const item = document.createElement("li");
-            item.className = "word-detail-example";
+
+            // The whole block is the play button when the sentence has audio:
+            // the card itself renders as a <button> and the speaker drops to a
+            // plain icon, since a button inside a button is invalid markup and
+            // there is nothing left for the small one to do.
+            const exampleAudioUrl = getExampleAudioUrl(word, index + 1);
+            const card = document.createElement(exampleAudioUrl ? "button" : "div");
+            card.className = "word-detail-example";
 
             const row = document.createElement("div");
             row.className = "word-detail-example-row";
@@ -739,18 +750,25 @@ function renderWordExamples(word) {
             text.replaceChildren(...renderExampleText(example.text));
             row.appendChild(text);
 
-            const exampleAudioUrl = getExampleAudioUrl(word, index + 1);
             if (exampleAudioUrl) {
-                const audioBtn = document.createElement("button");
-                audioBtn.type = "button";
-                audioBtn.className = "word-detail-example-audio";
-                audioBtn.setAttribute("aria-label", tr("deck.playAudio"));
-                audioBtn.innerHTML = EXAMPLE_AUDIO_ICON;
-                audioBtn.onclick = () => playExampleAudio(word, index + 1);
-                row.appendChild(audioBtn);
+                card.type = "button";
+                card.onclick = () => playExampleAudio(word, index + 1, card);
+
+                const audioIcon = document.createElement("span");
+                audioIcon.className = "word-detail-example-audio";
+                audioIcon.setAttribute("aria-hidden", "true");
+                audioIcon.innerHTML = EXAMPLE_AUDIO_ICON;
+                row.appendChild(audioIcon);
+
+                // The button's own text is the sentence, which says nothing
+                // about what tapping it does - this is the missing half.
+                const label = document.createElement("span");
+                label.className = "visually-hidden";
+                label.textContent = tr("deck.playAudio");
+                card.appendChild(label);
             }
 
-            item.appendChild(row);
+            card.appendChild(row);
 
             // Chinese/Japanese only, and only when the entry carries one -
             // a sentence in a script with no spaces is unreadable at this
@@ -759,14 +777,15 @@ function renderWordExamples(word) {
                 const roman = document.createElement("span");
                 roman.className = "word-detail-example-roman";
                 roman.replaceChildren(...renderExampleText(example.romanization));
-                item.appendChild(roman);
+                card.appendChild(roman);
             }
 
             const translation = document.createElement("span");
             translation.className = "word-detail-example-translation";
             translation.textContent = example.translation || "";
-            item.appendChild(translation);
+            card.appendChild(translation);
 
+            item.appendChild(card);
             return item;
         })
     );
@@ -1038,35 +1057,101 @@ function playWordAudio(word) {
     if (url) playAudioUrl(url);
 }
 
-function playExampleAudio(word, exampleNumber) {
-    const url = getExampleAudioUrl(word, exampleNumber);
-    if (url) playAudioUrl(url);
+// The card lit up while its sentence plays. Kept in one place so that starting
+// another sentence - or the audio ending, failing, or being cut off - always
+// leaves exactly one card lit, or none.
+let playingExampleCard = null;
+// Bumped on every play so a late "this one stopped" from an earlier sentence
+// cannot switch off the card that is playing now.
+let examplePlayToken = 0;
+
+function setPlayingExampleCard(card) {
+    if (playingExampleCard === card) return;
+    playingExampleCard?.classList.remove("is-playing");
+    playingExampleCard = card || null;
+    playingExampleCard?.classList.add("is-playing");
 }
 
-function playAudioUrl(url, isRetry = false) {
+function playExampleAudio(word, exampleNumber, card) {
+    const url = getExampleAudioUrl(word, exampleNumber);
+    if (!url) return;
+
+    const token = ++examplePlayToken;
+    setPlayingExampleCard(card);
+    playAudioUrl(url, false, () => {
+        if (token === examplePlayToken) setPlayingExampleCard(null);
+    });
+}
+
+// A clip that 404s once keeps 404-ing for as long as the browser and the CDN
+// hold on to that answer - which is why audio uploaded after a page was first
+// opened stayed "missing" until the cache was cleared by hand. A brand-new
+// <audio> element does not help there: it asks for the same URL and gets the
+// same stored miss back. So the retry asks for a URL that *cannot* be answered
+// from that miss, and once one works it is remembered for the rest of the
+// session so later taps go straight to it.
+const bustedAudioUrls = new Map();
+
+function cacheBustedUrl(url) {
+    return url + (url.includes("?") ? "&" : "?") + "cb=" + Date.now();
+}
+
+// Reports every way playback can end (finished, cut off, failed to load) and
+// then unhooks itself: elements come back out of preloadedAudio on later taps,
+// so listeners left behind would pile up on a reused element.
+function onAudioStop(audio, handler) {
+    const stop = () => { detach(); handler(); };
+    const detach = () => {
+        audio.removeEventListener("ended", stop);
+        audio.removeEventListener("pause", stop);
+        audio.removeEventListener("error", stop);
+    };
+    audio.addEventListener("ended", stop);
+    audio.addEventListener("pause", stop);
+    audio.addEventListener("error", stop);
+    return detach;
+}
+
+function playAudioUrl(url, isRetry = false, onStop = null) {
+    const src = bustedAudioUrls.get(url) || url;
     try {
         if (activeAudio) { activeAudio.pause(); activeAudio = null; }
 
         // Reuses the warmed element when there is one and it hasn't already
         // failed to load, so the second tap on any card is instant too.
-        let audio = preloadedAudio.get(url);
+        let audio = preloadedAudio.get(src);
         if (!audio || audio.error) {
-            audio = new Audio(url);
-            preloadedAudio.set(url, audio);
+            audio = new Audio(src);
+            preloadedAudio.set(src, audio);
         }
         // Rewind only when there's something to rewind: assigning currentTime
         // before an element has its metadata throws on some browsers, and a
         // freshly created or still-loading one is sitting at 0 anyway.
         if (audio.readyState > 0) audio.currentTime = 0;
         activeAudio = audio;
+
+        const detach = onStop ? onAudioStop(audio, onStop) : null;
+
         audio.play().catch(() => {
-            preloadedAudio.delete(url);
-            // One retry with a brand-new element covers the common case: the
-            // cached one failed because the file wasn't there yet or a
-            // one-off network error, and a second attempt just works.
-            if (!isRetry) playAudioUrl(url, true);
+            detach?.();
+            preloadedAudio.delete(src);
+            // One retry covers the common case: the file wasn't there when
+            // this URL was last asked for, or a one-off network error. Asking
+            // under a fresh query string is what makes the second attempt a
+            // real request instead of a replay of the stored failure.
+            if (!isRetry) {
+                bustedAudioUrls.set(url, cacheBustedUrl(url));
+                playAudioUrl(url, true, onStop);
+            } else {
+                // Genuinely not there - drop the bust so the next tap starts
+                // clean rather than chasing a URL that is stale by then too.
+                bustedAudioUrls.delete(url);
+                onStop?.();
+            }
         });
-    } catch {}
+    } catch {
+        onStop?.();
+    }
 }
 
 // Runs after every function/let/const above is defined - same reasoning as

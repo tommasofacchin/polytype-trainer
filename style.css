@@ -3833,13 +3833,53 @@ body.deck-overlay-open {
     list-style: none;
 }
 
+/* Rendered as a <button> whenever the sentence has audio (js/deck.js), so the
+   whole block is the tap target - hence the type/appearance resets. */
 .word-detail-example {
     display: grid;
     gap: 4px;
+    width: 100%;
     padding: 12px 14px;
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
     background: color-mix(in srgb, var(--surface-soft) 60%, transparent);
+    font: inherit;
+    color: inherit;
+    text-align: left;
+    transition: background var(--transition), border-color var(--transition),
+                box-shadow var(--transition), transform var(--dur-fast) var(--ease-out);
+}
+
+button.word-detail-example {
+    cursor: pointer;
+}
+
+/* :not(.is-playing) throughout, because the pointer is still sitting on the
+   card that was just tapped - without it the hover state would outrank the
+   playing one (same specificity, later in the file) and grey the glow out. */
+button.word-detail-example:not(.is-playing):hover,
+button.word-detail-example:not(.is-playing):focus-visible {
+    border-color: var(--border-strong);
+    background: var(--surface-soft);
+}
+
+button.word-detail-example:active {
+    transform: scale(0.985);
+}
+
+/* Lit for exactly as long as the sentence is being read out, so the block that
+   is speaking is never in doubt. Drops back on its own transition when the
+   audio ends, so there is nothing to dismiss. */
+.word-detail-example.is-playing {
+    border-color: color-mix(in srgb, var(--accent) 70%, transparent);
+    background: color-mix(in srgb, var(--accent) 22%, var(--surface));
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent),
+                0 0 18px color-mix(in srgb, var(--accent) 16%, transparent);
+}
+
+.word-detail-example.is-playing .word-detail-example-audio {
+    background: var(--accent);
+    color: var(--accent-on, var(--text-inverse));
 }
 
 .word-detail-example-row {
@@ -3856,6 +3896,7 @@ body.deck-overlay-open {
     color: var(--text);
 }
 
+/* A speaker badge, not a control: the card around it is the button now. */
 .word-detail-example-audio {
     display: grid;
     flex: none;
@@ -3863,22 +3904,16 @@ body.deck-overlay-open {
     width: 26px;
     height: 26px;
     margin-top: 2px;
-    padding: 0;
-    border: 0;
     border-radius: 50%;
     background: var(--surface-alt);
     color: var(--text-faint);
-    cursor: pointer;
-    transition: background var(--transition), color var(--transition), transform var(--dur-fast) var(--ease-out);
+    transition: background var(--transition), color var(--transition);
 }
 
-.word-detail-example-audio:hover, .word-detail-example-audio:focus-visible {
+button.word-detail-example:not(.is-playing):hover .word-detail-example-audio,
+button.word-detail-example:not(.is-playing):focus-visible .word-detail-example-audio {
     background: var(--accent);
     color: var(--accent-on, var(--text-inverse));
-}
-
-.word-detail-example-audio:active {
-    transform: scale(0.92);
 }
 
 .word-detail-example-roman {
