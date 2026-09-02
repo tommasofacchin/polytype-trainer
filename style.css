@@ -3891,10 +3891,11 @@ button.word-detail-example:active {
     color: var(--text);
 }
 
-/* A speaker badge, not a control: the card around it is the button now, and
-   it stays this quiet grey in every state - hover, focus, playing. The block
-   itself is what lights up, and a badge lighting up alongside it only splits
-   the eye between two yellows. */
+/* A speaker badge, not a control: the card around it is the button now. It
+   lights up with the card while the sentence plays and greys back the moment
+   it stops - and it does that on the playing class alone, never on :hover or
+   :focus, so it cannot get stuck lit under a pointer that is still resting on
+   the card (or a tap's sticky hover on mobile) after the audio has ended. */
 .word-detail-example-audio {
     display: grid;
     flex: none;
@@ -3905,6 +3906,12 @@ button.word-detail-example:active {
     border-radius: 50%;
     background: var(--surface-alt);
     color: var(--text-faint);
+    transition: background var(--transition), color var(--transition);
+}
+
+.word-detail-example.is-playing .word-detail-example-audio {
+    background: var(--accent);
+    color: var(--accent-on, var(--text-inverse));
 }
 
 .word-detail-example-roman {
