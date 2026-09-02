@@ -26,9 +26,17 @@
     const FEEDBACK_HOLD_WRONG_DELAY = 2000;
     const FADE_OUT_DELAY = 220;
 
+    // How long a review run is, capped by how many exercises the finished
+    // lessons actually hold. Sprint picks 10-20 rounds; a review sits at the
+    // short end of that, since every exercise here is also retried until it's
+    // answered right (see the retry phase below).
+    const REVIEW_MIN_EXERCISES = 10;
+    const REVIEW_MAX_EXERCISES = 15;
+
     const LOCK_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
     const CHECK_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l5 5L19.5 6.8"/></svg>';
     const STAR_SVG = '<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2.6l2.8 5.7 6.3.9-4.6 4.4 1.1 6.2-5.6-2.9-5.6 2.9 1.1-6.2L2.9 9.2l6.3-.9z"/></svg>';
+    const REVIEW_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20.4 12a8.4 8.4 0 1 1-2.5-6"/><path d="M20.6 4.3v5.2h-5.2"/></svg>';
 
     // Duolingo-style serpentine: each node in a module slides sideways by
     // shift * --path-amp (see .lesson-path-node in style.css). The pattern
@@ -43,6 +51,14 @@
         modules: [],             // [{ id, title, lessons: [...] }]
         lessonsCompleted: [],
         activeLesson: null,
+        // "lesson" (one lesson, played in curriculum order) or "review" (a
+        // mixed run over lessons already finished). Everything from
+        // startExercises down reads state.queue, so both modes share one
+        // player - the mode only decides what goes into that queue, what the
+        // chrome says, and how the finished session is posted.
+        mode: "lesson",
+        queue: [],               // the exercises this run actually plays
+        reviewLabel: "",         // scope chip shown during a review run
         mainIndex: 0,
         wrongList: [],           // exercises missed on the main pass
         retryQueue: [],
@@ -60,6 +76,7 @@
 
     function initLessonsPage() {
         el.pathView = document.getElementById("lessons-path-view");
+        el.reviewSlot = document.getElementById("lessons-review-slot");
         el.modulesRoot = document.getElementById("lessons-modules");
         el.playerView = document.getElementById("lessons-player-view");
         el.backBtn = document.getElementById("lessons-back-btn");
@@ -75,10 +92,13 @@
         el.exerciseScreen = document.getElementById("lessons-exercise-screen");
         el.reviewBanner = document.getElementById("lessons-review-banner");
         el.exerciseProgress = document.getElementById("lessons-exercise-progress");
+        el.progressBar = document.getElementById("lessons-progress");
+        el.progressFill = document.getElementById("lessons-progress-fill");
         el.exerciseRoot = document.getElementById("lessons-exercise-root");
 
         el.completeScreen = document.getElementById("lessons-complete-screen");
         el.completeTitle = document.getElementById("lessons-complete-title");
+        el.completeDetail = document.getElementById("lessons-complete-detail");
         el.completeCoins = document.getElementById("lessons-complete-coins");
         el.completeStatus = document.getElementById("lessons-complete-status");
         el.continueBtn = document.getElementById("lessons-continue-btn");
@@ -96,6 +116,14 @@
         el.sheet.addEventListener("keydown", event => {
             if (event.key === "Escape") closeSheet();
         });
+
+        // The path - module banners, node labels, the review card - is built
+        // in JS, so the shell's data-i18n sweep reaches none of it on a
+        // language switch; rebuilding it does. Registered through the router's
+        // shared hook slot rather than a document listener of our own, for the
+        // reason js/main.js spells out.
+        window.__polytypePageHooks = window.__polytypePageHooks || {};
+        window.__polytypePageHooks.onLanguageChanged = renderPath;
 
         loadLessons();
     }
@@ -180,7 +208,11 @@
     }
 
     function renderPath() {
-        if (!el.modulesRoot) return;
+        // The empty-modules guard is for the load-failure path: loadLessons
+        // leaves its error message in the modules root, and a language switch
+        // would otherwise wipe it for an equally empty path.
+        if (!el.modulesRoot || !state.modules.length) return;
+        el.reviewSlot.replaceChildren(buildReviewCard());
         el.modulesRoot.replaceChildren(...state.modules.map(buildModuleSection));
     }
 
@@ -207,7 +239,30 @@
         const progress = document.createElement("span");
         progress.className = "lesson-path-banner-progress";
         progress.textContent = tr("lessons.moduleProgress", { done: completedInModule, total: module.lessons.length });
-        banner.append(copy, progress);
+
+        const side = document.createElement("div");
+        side.className = "lesson-path-banner-side";
+        side.appendChild(progress);
+
+        // A review scoped to this module, next to that module's own progress.
+        // The card at the top of the path mixes everything finished, which is
+        // the wrong tool when what you want is another pass at one topic.
+        if (completedInModule) {
+            const label = tr("lessons.reviewModuleAria", { module: module.title });
+            const reviewBtn = document.createElement("button");
+            reviewBtn.type = "button";
+            reviewBtn.className = "lesson-path-banner-review";
+            reviewBtn.innerHTML = REVIEW_SVG;
+            reviewBtn.setAttribute("aria-label", label);
+            reviewBtn.title = label;
+            reviewBtn.addEventListener("click", () => startReview(
+                module.lessons.filter(lesson => state.lessonsCompleted.includes(lesson.id)),
+                tr("lessons.reviewModuleChip", { module: module.title })
+            ));
+            side.appendChild(reviewBtn);
+        }
+
+        banner.append(copy, side);
 
         const track = document.createElement("div");
         track.className = "lesson-path-track";
@@ -253,6 +308,108 @@
         return node;
     }
 
+    // ── Review: mixed practice over lessons already finished ──────────
+    //
+    // Sprint's shape - a shuffled run of mixed exercises behind a progress bar
+    // - pointed at lesson content instead of the vocabulary deck, and drawing
+    // only from lessons the player has actually finished. A review can never
+    // advance the unlock frontier or re-pay a lesson's one-time coin bonus: it
+    // posts its session without a lessonId, which
+    // api/complete-practice-session.js treats as ordinary practice - still
+    // worth XP, coins, the streak and mission progress.
+
+    function getCompletedLessons() {
+        return state.lessons.filter(lesson => state.lessonsCompleted.includes(lesson.id));
+    }
+
+    function buildReviewCard() {
+        const completed = getCompletedLessons();
+
+        const card = document.createElement("button");
+        card.type = "button";
+        card.className = "lessons-review-card";
+
+        const icon = document.createElement("span");
+        icon.className = "lessons-review-icon";
+        icon.innerHTML = REVIEW_SVG;
+
+        const copy = document.createElement("span");
+        copy.className = "lessons-review-copy";
+        const title = document.createElement("strong");
+        title.className = "lessons-review-title";
+        title.textContent = tr("lessons.reviewTitle");
+        const sub = document.createElement("span");
+        sub.className = "lessons-review-sub";
+        copy.append(title, sub);
+        card.append(icon, copy);
+
+        // Stays on the page while there is nothing to mix yet, rather than
+        // appearing out of nowhere later: the card is where this gets
+        // discovered, and an empty slot teaches nobody it exists.
+        if (!completed.length) {
+            card.classList.add("is-locked");
+            card.disabled = true;
+            sub.textContent = tr("lessons.reviewLocked");
+            return card;
+        }
+
+        sub.textContent = completed.length === 1
+            ? tr("lessons.reviewOne")
+            : tr("lessons.reviewAll", { count: completed.length });
+
+        const cta = document.createElement("span");
+        cta.className = "lessons-review-cta";
+        cta.textContent = tr("lessons.reviewStart");
+        card.appendChild(cta);
+
+        card.addEventListener("click", () => startReview(completed, tr("lessons.reviewChip")));
+        return card;
+    }
+
+    // No intro sheet on the way in, unlike a lesson: a mixed run has no single
+    // explanation to show, and the button was pressed to practise, not to read.
+    function startReview(lessons, label) {
+        const queue = buildReviewQueue(lessons);
+        if (!queue.length) return;
+
+        closeSheet();
+        state.mode = "review";
+        state.activeLesson = null;
+        state.queue = queue;
+        state.reviewLabel = label;
+        el.pathView.hidden = true;
+        el.playerView.hidden = false;
+        startExercises();
+    }
+
+    // Deals one exercise per lesson per pass - each lesson's own exercises
+    // shuffled first, and the lessons themselves shuffled so the same ones
+    // don't always contribute the leftovers - instead of shuffling one flat
+    // pool. A pool shuffle will happily hand back five exercises from a single
+    // lesson and skip three others entirely; dealing round-robin means a run
+    // spans as much of the finished curriculum as its length allows. The take
+    // is shuffled at the end so the order doesn't read lesson-by-lesson.
+    function buildReviewQueue(lessons) {
+        const decks = shuffle(lessons.slice()).map(lesson => shuffle((lesson.exercises || []).slice()));
+        const available = decks.reduce((sum, deck) => sum + deck.length, 0);
+        if (!available) return [];
+
+        const span = REVIEW_MAX_EXERCISES - REVIEW_MIN_EXERCISES + 1;
+        const target = Math.min(available, REVIEW_MIN_EXERCISES + Math.floor(Math.random() * span));
+
+        const dealt = [];
+        // Terminates because target <= available: the passes cannot run dry
+        // before dealt reaches target.
+        for (let pass = 0; dealt.length < target; pass += 1) {
+            for (const deck of decks) {
+                if (pass >= deck.length) continue;
+                dealt.push(deck[pass]);
+                if (dealt.length === target) break;
+            }
+        }
+        return shuffle(dealt);
+    }
+
     // ── Lesson intro sheet ──────────────────────────────────────────────────
     //
     // Tapping a node no longer jumps straight into the player; it slides a
@@ -295,6 +452,8 @@
 
     function beginLesson() {
         closeSheet();
+        state.mode = "lesson";
+        state.queue = state.activeLesson.exercises;
         el.pathView.hidden = true;
         el.playerView.hidden = false;
         startExercises();
@@ -334,26 +493,32 @@
     // than a one-shot arcade test.
 
     function startExercises() {
+        const isReview = state.mode === "review";
         state.mainIndex = 0;
         state.wrongList = [];
         state.wrongAttempts = 0;
         state.sessionStartTime = Date.now();
         el.completeScreen.hidden = true;
-        el.reviewBanner.hidden = true;
         el.exerciseScreen.hidden = false;
+        // The banner does double duty: a review run wears its scope there from
+        // the first exercise, and startRetryPhase later overwrites it with the
+        // "what you missed" line in both modes.
+        el.reviewBanner.hidden = !isReview;
+        if (isReview) el.reviewBanner.textContent = state.reviewLabel;
+        el.progressBar.hidden = !isReview;
         showNextMainExercise();
     }
 
     function showNextMainExercise() {
-        const lesson = state.activeLesson;
-        if (state.mainIndex >= lesson.exercises.length) {
+        const total = state.queue.length;
+        if (state.mainIndex >= total) {
             if (state.wrongList.length) startRetryPhase();
-            else finishLesson();
+            else finishSession();
             return;
         }
 
-        el.exerciseProgress.textContent = `${state.mainIndex + 1} / ${lesson.exercises.length}`;
-        const exercise = lesson.exercises[state.mainIndex];
+        setRunProgress(`${state.mainIndex + 1} / ${total}`, state.mainIndex / total);
+        const exercise = state.queue[state.mainIndex];
         renderExercise(exercise, isCorrect => {
             if (!isCorrect) {
                 state.wrongList.push(exercise);
@@ -375,11 +540,14 @@
 
     function showNextRetryExercise() {
         if (!state.retryQueue.length) {
-            finishLesson();
+            finishSession();
             return;
         }
 
-        el.exerciseProgress.textContent = `${state.retryDoneCount} / ${state.retryTotal}`;
+        // The bar stays pinned at 100% for the whole retry phase, the way
+        // js/sprint.js leaves it: the main pass really is done, and draining it
+        // back to empty read as losing progress.
+        setRunProgress(`${state.retryDoneCount} / ${state.retryTotal}`, 1);
         const exercise = state.retryQueue.shift();
         renderExercise(exercise, isCorrect => {
             if (isCorrect) {
@@ -390,6 +558,19 @@
             }
             advanceAfterFeedback(showNextRetryExercise, isCorrect);
         });
+    }
+
+    // The "3 / 12" line is the progress readout in both modes; the bar under
+    // it only exists during a review (see startExercises), so everything past
+    // the hidden check is skipped for a plain lesson.
+    function setRunProgress(label, fraction) {
+        el.exerciseProgress.textContent = label;
+        if (el.progressBar.hidden) return;
+
+        const percent = Math.max(0, Math.min(100, Math.round(fraction * 100)));
+        el.progressFill.style.width = `${percent}%`;
+        el.progressBar.setAttribute("aria-valuenow", String(percent));
+        el.progressBar.setAttribute("aria-valuetext", label);
     }
 
     function advanceAfterFeedback(next, isCorrect = true) {
@@ -523,25 +704,41 @@
 
     // ── Player: completion screen ────────────────────────────────────────────
 
-    async function finishLesson() {
-        const lesson = state.activeLesson;
+    async function finishSession() {
+        const isReview = state.mode === "review";
+        const total = state.queue.length;
+
         el.exerciseScreen.hidden = true;
         el.reviewBanner.hidden = true;
         el.completeScreen.hidden = false;
+        clearRevealed(el.completeDetail);
         clearRevealed(el.completeCoins);
         clearRevealed(el.completeStatus);
-        el.completeTitle.textContent = tr("lessons.completeTitle");
+        el.completeTitle.textContent = tr(isReview ? "lessons.reviewCompleteTitle" : "lessons.completeTitle");
+        // A review has no pass/fail - the retry phase means every exercise is
+        // answered right eventually - so what it can report is how many landed
+        // first time. Known before the save, so it shows straight away.
+        if (isReview) {
+            revealText(el.completeDetail, tr("lessons.reviewAccuracy", {
+                correct: total - state.wrongList.length,
+                total
+            }));
+        }
         el.continueBtn.disabled = true;
 
         const sessionSeconds = Math.round((Date.now() - state.sessionStartTime) / 1000);
         const payload = {
             courseId: COURSE_ID,
             gameType: "lesson",
-            lessonId: lesson.id,
-            correctAnswers: lesson.exercises.length,
+            // Deliberately absent on a review: an id here is exactly what
+            // advances the unlock frontier and pays the one-time lesson bonus,
+            // and a review must do neither (see
+            // api/complete-practice-session.js).
+            lessonId: isReview ? null : state.activeLesson.id,
+            correctAnswers: total,
             wrongAnswers: state.wrongAttempts,
             bestCombo: 0,
-            wordsUsed: lesson.exercises.length,
+            wordsUsed: total,
             sessionSeconds
         };
 
@@ -561,7 +758,15 @@
                 state.lessonsCompleted = progress.course.lessonsCompleted;
             }
 
-            if (progress?.newLessonCompletion) {
+            if (isReview) {
+                // No lesson bonus to report, so a review shows what it did
+                // earn instead: the session's own XP and coins, the pair
+                // Sprint's result card ends on.
+                revealText(el.completeCoins, tr("lessons.reviewReward", {
+                    xp: progress?.xpEarned || 0,
+                    coins: progress?.sessionCoins || 0
+                }));
+            } else if (progress?.newLessonCompletion) {
                 if (progress.lessonCoinsAwarded > 0) {
                     revealText(el.completeCoins, tr("lessons.coinsEarned", { count: progress.lessonCoinsAwarded }));
                 }
@@ -612,6 +817,14 @@
             .replace(/[̀-ͯ]/g, "")
             .replace(/\s+/g, "")
             .trim();
+    }
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i -= 1) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
     }
 
     function levenshtein(a, b) {

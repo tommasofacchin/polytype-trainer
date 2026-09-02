@@ -9438,6 +9438,109 @@ body:has(.game-result-overlay.is-entering:not([hidden])) #app-header {
     width: 100%;
 }
 
+/* ── Review card ─────────────────────────────────────────────────────────
+   Mixed practice over every lesson already finished - the path's own Sprint.
+   Built in js/lessons.js (buildReviewCard) and parked above the first module
+   rather than below the last node, since it's the one thing on this page you
+   come back for after the curriculum is behind you. Shares the map's column
+   width so the page reads as one stack. */
+.lessons-review-slot {
+    max-width: 520px;
+    margin: 0 auto var(--space-6);
+    width: 100%;
+}
+
+.lessons-review-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    width: 100%;
+    padding: var(--space-4) var(--space-5);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    /* A wash of accent behind the icon end only - enough to mark the card as
+       the page's action without turning it into a second banner competing
+       with the module headers right below it. */
+    background:
+        radial-gradient(circle at 0% 50%, var(--accent-soft), transparent 62%),
+        var(--surface);
+    color: var(--text);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color var(--transition), background var(--transition), transform var(--dur-fast) var(--ease-out);
+}
+
+.lessons-review-card:hover:not(:disabled),
+.lessons-review-card:focus-visible {
+    border-color: var(--border-strong);
+    outline: 0;
+}
+
+.lessons-review-card:not(:disabled):active {
+    transform: scale(0.99);
+}
+
+/* Nothing finished yet. The card still explains itself, it just can't be
+   pressed: no accent wash and no CTA pill, so it reads as "not yet" at a
+   glance instead of as a button that ignores taps. */
+.lessons-review-card.is-locked {
+    background: var(--surface-empty);
+    cursor: default;
+}
+
+.lessons-review-icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius-md);
+    background: var(--accent-soft);
+    color: var(--accent-ink);
+}
+
+.lessons-review-icon svg {
+    width: 21px;
+    height: 21px;
+}
+
+.lessons-review-card.is-locked .lessons-review-icon {
+    background: var(--surface-soft);
+    color: var(--text-faintest);
+}
+
+.lessons-review-copy {
+    display: grid;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+}
+
+.lessons-review-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--text-md);
+    color: var(--text);
+}
+
+.lessons-review-sub {
+    color: var(--text-faint);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    line-height: 1.35;
+}
+
+.lessons-review-cta {
+    flex: none;
+    padding: 7px 14px;
+    border-radius: var(--radius-pill);
+    background: var(--accent);
+    color: var(--text-inverse);
+    font-size: var(--text-xs);
+    font-weight: 800;
+}
+
 /* Duolingo-style vertical map: each module is a coloured banner followed by
    a winding trail of circular lesson nodes (built in js/lessons.js). The
    tone cycle below gives consecutive modules their own hue; everything else
@@ -9525,6 +9628,50 @@ body:has(.game-result-overlay.is-entering:not([hidden])) #app-header {
     font-size: var(--text-xs);
     font-weight: 800;
     white-space: nowrap;
+}
+
+/* Progress pill + this module's review button, wrapped as one flex child so
+   the banner stays a two-part copy/actions split - with three loose children
+   its space-between would strand the pill in the middle of the header. */
+.lesson-path-banner-side {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+    gap: var(--space-2);
+}
+
+/* Replays only this module's finished lessons (see buildModuleSection in
+   js/lessons.js). Same translucent-white chip treatment as the progress pill
+   beside it, so it belongs to the banner rather than sitting on it. */
+.lesson-path-banner-review {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.18);
+    color: inherit;
+    cursor: pointer;
+    transition: background var(--transition), transform var(--dur-fast) var(--ease-out);
+}
+
+.lesson-path-banner-review:hover,
+.lesson-path-banner-review:focus-visible {
+    background: rgba(255, 255, 255, 0.32);
+    outline: 0;
+}
+
+.lesson-path-banner-review:active {
+    transform: scale(0.92);
+}
+
+.lesson-path-banner-review svg {
+    width: 16px;
+    height: 16px;
 }
 
 .lesson-path-track {
@@ -9911,6 +10058,15 @@ body.lessons-sheet-open {
     letter-spacing: 0.02em;
 }
 
+/* .sprint-progress is flex:1 because on the Sprint page it shares a row with
+   the category chip; dropped into this card's column that would make it grow
+   downwards instead of sideways, so the review run's copy of it is pinned
+   back to a fixed strip. */
+.lessons-progress {
+    flex: 0 0 auto;
+    width: min(100%, 320px);
+}
+
 /* Shown under a wrong answer to spell out the correct one (see
    revealCorrection in js/lessons.js). Green to match the correct-option cue
    the mc/true-false rounds already give; the red input/button above it is
@@ -9930,6 +10086,20 @@ body.lessons-sheet-open {
     font-weight: 600;
     font-size: var(--text-xl);
     color: var(--text);
+}
+
+/* Review runs only: how many exercises landed on the first try. Unlike the
+   two lines below it this one is known before the save, so it needs no
+   reserved height - and :empty keeps it out of the layout entirely on a
+   normal lesson, where nothing ever sets it. */
+.lessons-complete-detail {
+    color: var(--text-soft);
+    font-size: var(--text-sm);
+    font-weight: 700;
+}
+
+.lessons-complete-detail:empty {
+    display: none;
 }
 
 .lessons-complete-coins {
@@ -9960,6 +10130,7 @@ body.lessons-sheet-open {
 /* Applied via JS the instant either line's text is actually set, so the
    reveal itself still reads as a deliberate, fast pop instead of a silent
    layout snap. */
+.lessons-complete-detail.is-revealed,
 .lessons-complete-coins.is-revealed,
 .lessons-complete-status.is-revealed {
     animation: lessons-complete-pop 220ms cubic-bezier(0.18, 0.9, 0.32, 1) both;

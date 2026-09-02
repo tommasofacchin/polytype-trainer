@@ -22,6 +22,11 @@
         <div id="lessons-path-view">
             <h1 class="page-title" data-i18n="lessons.title">Lessons</h1>
             <p class="page-subtitle" data-i18n="lessons.subtitle">Learn Norwegian grammar step by step</p>
+            <!-- Review card: a Sprint-style mixed run over the lessons already
+                 finished. Built in js/lessons.js (buildReviewCard) because its
+                 copy and locked/unlocked state both depend on how many lessons
+                 are complete. -->
+            <div id="lessons-review-slot" class="lessons-review-slot"></div>
             <div id="lessons-modules" class="lessons-modules"></div>
         </div>
 
@@ -31,11 +36,18 @@
             <section id="lessons-exercise-screen" class="lessons-card lessons-exercise-screen" hidden>
                 <div id="lessons-review-banner" class="lessons-review-banner" hidden></div>
                 <span id="lessons-exercise-progress" class="lessons-exercise-progress"></span>
+                <!-- Sprint's bar, borrowed for review runs only: a lesson is six
+                     exercises and the "3 / 6" line above already reads as pace,
+                     while a review run is two to three times longer. -->
+                <div id="lessons-progress" class="sprint-progress lessons-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" data-i18n-aria-label="lessons.reviewTitle" aria-label="Review" hidden>
+                    <div id="lessons-progress-fill" class="sprint-progress-fill"></div>
+                </div>
                 <div id="lessons-exercise-root"></div>
             </section>
 
             <section id="lessons-complete-screen" class="lessons-card lessons-complete-screen" hidden>
                 <h2 id="lessons-complete-title" class="lessons-complete-title"></h2>
+                <span id="lessons-complete-detail" class="lessons-complete-detail"></span>
                 <span id="lessons-complete-coins" class="lessons-complete-coins"></span>
                 <span id="lessons-complete-status" class="lessons-complete-status"></span>
                 <button type="button" id="lessons-continue-btn" class="restart-btn" data-i18n="lessons.continueBtn">Continue</button>
