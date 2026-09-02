@@ -715,6 +715,11 @@ function closeWordDetail() {
     window.setTimeout(() => { el.detailOverlay.hidden = true; }, 240);
 }
 
+// Same glyph as .word-detail-audio's button in deck.html, just smaller - kept
+// as markup here since these buttons are built one per example at render time.
+const EXAMPLE_AUDIO_ICON =
+    '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M19 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+
 function renderWordExamples(word) {
     if (!el.detailExamples) return;
 
@@ -722,14 +727,30 @@ function renderWordExamples(word) {
     if (el.detailNoExamples) el.detailNoExamples.hidden = examples.length > 0;
 
     el.detailExamples.replaceChildren(
-        ...examples.map(example => {
+        ...examples.map((example, index) => {
             const item = document.createElement("li");
             item.className = "word-detail-example";
+
+            const row = document.createElement("div");
+            row.className = "word-detail-example-row";
 
             const text = document.createElement("span");
             text.className = "word-detail-example-text";
             text.replaceChildren(...renderExampleText(example.text));
-            item.appendChild(text);
+            row.appendChild(text);
+
+            const exampleAudioUrl = getExampleAudioUrl(word, index + 1);
+            if (exampleAudioUrl) {
+                const audioBtn = document.createElement("button");
+                audioBtn.type = "button";
+                audioBtn.className = "word-detail-example-audio";
+                audioBtn.setAttribute("aria-label", tr("deck.playAudio"));
+                audioBtn.innerHTML = EXAMPLE_AUDIO_ICON;
+                audioBtn.onclick = () => playExampleAudio(word, index + 1);
+                row.appendChild(audioBtn);
+            }
+
+            item.appendChild(row);
 
             // Chinese/Japanese only, and only when the entry carries one -
             // a sentence in a script with no spaces is unreadable at this
@@ -968,6 +989,21 @@ function getWordAudioUrl(word) {
     return [audioBaseUrl, audioPrefix, encodeURIComponent(activeDeckMeta.id), `${encodeURIComponent(word.id)}.mp3`].join("/");
 }
 
+// exampleNumber is 1-based, matching the filenames generate-example-audio.cjs
+// uploads (nor_003_1.mp3, nor_003_2.mp3, ...).
+function getExampleAudioUrl(word, exampleNumber) {
+    const audioBaseUrl = (window.POLYTYPE_AUDIO_BASE_URL || "").replace(/\/+$/, "");
+    const audioPrefix = (window.POLYTYPE_AUDIO_PREFIX || "audio/v1").replace(/^\/+|\/+$/g, "");
+    if (!audioBaseUrl || !activeDeckMeta || !word?.id) return null;
+    return [
+        audioBaseUrl,
+        audioPrefix,
+        encodeURIComponent(activeDeckMeta.id),
+        "examples",
+        `${encodeURIComponent(word.id)}_${exampleNumber}.mp3`
+    ].join("/");
+}
+
 // Pulls a word's mp3 into the browser's HTTP cache without playing it, so the
 // first tap on that card starts on the spot. A cold CDN fetch does NOT reject
 // play() - it just waits (see the long comment above js/sprint.js's audio
@@ -997,10 +1033,17 @@ function preloadWordAudio(word) {
     preloadedAudio.set(url, audio);
 }
 
-function playWordAudio(word, isRetry = false) {
+function playWordAudio(word) {
     const url = getWordAudioUrl(word);
-    if (!url) return;
+    if (url) playAudioUrl(url);
+}
 
+function playExampleAudio(word, exampleNumber) {
+    const url = getExampleAudioUrl(word, exampleNumber);
+    if (url) playAudioUrl(url);
+}
+
+function playAudioUrl(url, isRetry = false) {
     try {
         if (activeAudio) { activeAudio.pause(); activeAudio = null; }
 
@@ -1021,7 +1064,7 @@ function playWordAudio(word, isRetry = false) {
             // One retry with a brand-new element covers the common case: the
             // cached one failed because the file wasn't there yet or a
             // one-off network error, and a second attempt just works.
-            if (!isRetry) playWordAudio(word, true);
+            if (!isRetry) playAudioUrl(url, true);
         });
     } catch {}
 }

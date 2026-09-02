@@ -3842,11 +3842,43 @@ body.deck-overlay-open {
     background: color-mix(in srgb, var(--surface-soft) 60%, transparent);
 }
 
+.word-detail-example-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+}
+
 .word-detail-example-text {
     font-size: var(--text-md);
     font-weight: 700;
     line-height: 1.4;
     color: var(--text);
+}
+
+.word-detail-example-audio {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    margin-top: 2px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--surface-alt);
+    color: var(--text-faint);
+    cursor: pointer;
+    transition: background var(--transition), color var(--transition), transform var(--dur-fast) var(--ease-out);
+}
+
+.word-detail-example-audio:hover, .word-detail-example-audio:focus-visible {
+    background: var(--accent);
+    color: var(--accent-on, var(--text-inverse));
+}
+
+.word-detail-example-audio:active {
+    transform: scale(0.92);
 }
 
 .word-detail-example-roman {
