@@ -3877,11 +3877,6 @@ button.word-detail-example:active {
                 0 0 18px color-mix(in srgb, var(--accent) 16%, transparent);
 }
 
-.word-detail-example.is-playing .word-detail-example-audio {
-    background: var(--accent);
-    color: var(--accent-on, var(--text-inverse));
-}
-
 .word-detail-example-row {
     display: flex;
     align-items: flex-start;
@@ -3896,7 +3891,10 @@ button.word-detail-example:active {
     color: var(--text);
 }
 
-/* A speaker badge, not a control: the card around it is the button now. */
+/* A speaker badge, not a control: the card around it is the button now, and
+   it stays this quiet grey in every state - hover, focus, playing. The block
+   itself is what lights up, and a badge lighting up alongside it only splits
+   the eye between two yellows. */
 .word-detail-example-audio {
     display: grid;
     flex: none;
@@ -3907,13 +3905,6 @@ button.word-detail-example:active {
     border-radius: 50%;
     background: var(--surface-alt);
     color: var(--text-faint);
-    transition: background var(--transition), color var(--transition);
-}
-
-button.word-detail-example:not(.is-playing):hover .word-detail-example-audio,
-button.word-detail-example:not(.is-playing):focus-visible .word-detail-example-audio {
-    background: var(--accent);
-    color: var(--accent-on, var(--text-inverse));
 }
 
 .word-detail-example-roman {
