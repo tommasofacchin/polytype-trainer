@@ -11,6 +11,6 @@ window.POLYTYPE_FIREBASE_USE_EMULATORS =
     window.location.hostname === "localhost" ||
     window.location.hostname === "127.0.0.1";
 
-window.POLYTYPE_AUDIO_BASE_URL = "https://link.storjshare.io/raw/jvwskpho2xlbkvmreojdplejzmga/polytype-bucket";
+window.POLYTYPE_AUDIO_BASE_URL = "https://link.eu1.storjshare.io/raw/jvwskpho2xlbkvmreojdplejzmga/polytype-bucket";
 
 window.POLYTYPE_AUDIO_PREFIX = "audio/v1";
