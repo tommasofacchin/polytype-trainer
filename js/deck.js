@@ -669,10 +669,8 @@ function buildUnlockBurst() {
 }
 
 // ---- Word detail: the flashcard, opened big -----------------------------
-// Tapping an unlocked card used to only fire its audio, which left the deck
-// with nowhere to show a word in context. The audio still plays on open (that
-// affordance is what people already expect from a tap), with the button in the
-// card there to replay it.
+// Audio only plays from the button in the card, never automatically on open -
+// tapping a card to read it shouldn't force the pronunciation to start too.
 
 function setupWordDetail() {
     if (!el.detailOverlay) return;
@@ -708,7 +706,6 @@ function openWordDetail(word) {
 
     el.detailOverlay.hidden = false;
     requestAnimationFrame(() => el.detailOverlay.classList.add("is-open"));
-    playWordAudio(word);
 }
 
 function closeWordDetail() {
@@ -989,21 +986,28 @@ function preloadWordAudio(word) {
 
     const audio = new Audio();
     audio.preload = "auto";
+    // A preload that fails (file not there yet, a network hiccup) must not
+    // wedge this word's audio for the rest of the session - drop it so the
+    // next play attempt starts over with a fresh element instead of reusing
+    // the one that's already known to be broken.
+    audio.addEventListener("error", () => {
+        if (preloadedAudio.get(url) === audio) preloadedAudio.delete(url);
+    });
     audio.src = url;
     preloadedAudio.set(url, audio);
 }
 
-function playWordAudio(word) {
+function playWordAudio(word, isRetry = false) {
     const url = getWordAudioUrl(word);
     if (!url) return;
 
     try {
         if (activeAudio) { activeAudio.pause(); activeAudio = null; }
 
-        // Reuses the warmed element when there is one (and keeps whatever it
-        // creates otherwise), so the second tap on any card is instant too.
+        // Reuses the warmed element when there is one and it hasn't already
+        // failed to load, so the second tap on any card is instant too.
         let audio = preloadedAudio.get(url);
-        if (!audio) {
+        if (!audio || audio.error) {
             audio = new Audio(url);
             preloadedAudio.set(url, audio);
         }
@@ -1012,7 +1016,13 @@ function playWordAudio(word) {
         // freshly created or still-loading one is sitting at 0 anyway.
         if (audio.readyState > 0) audio.currentTime = 0;
         activeAudio = audio;
-        audio.play().catch(() => {});
+        audio.play().catch(() => {
+            preloadedAudio.delete(url);
+            // One retry with a brand-new element covers the common case: the
+            // cached one failed because the file wasn't there yet or a
+            // one-off network error, and a second attempt just works.
+            if (!isRetry) playWordAudio(word, true);
+        });
     } catch {}
 }
 

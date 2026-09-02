@@ -1,0 +1,500 @@
+001. hei
+002. takk
+003. ja
+004. nei
+005. vær så snill
+006. unnskyld
+007. morgen
+008. kveld
+009. dag
+010. natt
+011. vann
+012. mat
+013. kaffe
+014. brød
+015. hus
+016. bil
+017. bok
+018. venn
+019. familie
+020. skole
+021. mann
+022. kvinne
+023. barn
+024. jente
+025. gutt
+026. mor
+027. far
+028. søster
+029. bror
+030. bestemor
+031. stor
+032. liten
+033. god
+034. dårlig
+035. ny
+036. gammel
+037. varm
+038. kald
+039. rask
+040. sakte
+041. jeg
+042. du
+043. han
+044. hun
+045. vi
+046. dere
+047. de
+048. min
+049. din
+050. vår
+051. å være
+052. å ha
+053. å gå
+054. å komme
+055. å gjøre
+056. å spise
+057. å drikke
+058. å lese
+059. å skrive
+060. å snakke
+061. en
+062. ei
+063. et
+064. den
+065. det
+066. her
+067. der
+068. nå
+069. senere
+070. alltid
+071. i dag
+072. i morgen
+073. i går
+074. uke
+075. måned
+076. rød
+077. blå
+078. grønn
+079. gul
+080. svart
+081. hvit
+082. brun
+083. rosa
+084. oransje
+085. lilla
+086. én
+087. to
+088. tre
+089. fire
+090. fem
+091. seks
+092. sju
+093. åtte
+094. ni
+095. ti
+096. hvor
+097. hva
+098. hvem
+099. når
+100. hvorfor
+101. hvordan
+102. hvilken
+103. hvor mye
+104. fordi
+105. men
+106. og
+107. eller
+108. med
+109. uten
+110. fra
+111. til
+112. i
+113. på
+114. under
+115. over
+116. by
+117. gate
+118. butikk
+119. marked
+120. park
+121. rom
+122. kjøkken
+123. bad
+124. soverom
+125. stue
+126. ost
+127. egg
+128. fisk
+129. kjøtt
+130. suppe
+131. eple
+132. banan
+133. appelsin
+134. potet
+135. gulrot
+136. te
+137. melk
+138. juice
+139. frokost
+140. lunsj
+141. middag
+142. salt
+143. sukker
+144. tallerken
+145. glass
+146. hode
+147. hånd
+148. fot
+149. øye
+150. øre
+151. nese
+152. munn
+153. hår
+154. jakke
+155. sko
+156. bukse
+157. skjorte
+158. kjole
+159. lue
+160. genser
+161. sekund
+162. time
+163. minutt
+164. år
+165. helg
+166. mandag
+167. tirsdag
+168. onsdag
+169. torsdag
+170. fredag
+171. lørdag
+172. søndag
+173. våren
+174. sommer
+175. høst
+176. vinter
+177. sol
+178. regn
+179. snø
+180. vind
+181. fint
+182. overskyet
+183. klart
+184. tørt
+185. vått
+186. tog
+187. buss
+188. fly
+189. sykkel
+190. båt
+191. stasjon
+192. flyplass
+193. billett
+194. kart
+195. hotell
+196. venstre
+197. høyre
+198. rett fram
+199. nær
+200. langt
+201. elleve
+202. tolv
+203. tretten
+204. fjorten
+205. femten
+206. seksten
+207. sytten
+208. atten
+209. nitten
+210. tjue
+211. bestefar
+212. foreldre
+213. sønn
+214. datter
+215. ektemann
+216. lærer
+217. student
+218. lege
+219. sykepleier
+220. politi
+221. jobb
+222. kontor
+223. klasse
+224. lekse
+225. prøve
+226. å sove
+227. å våkne
+228. å jobbe
+229. å studere
+230. å lære
+231. å kjøre
+232. å reise
+233. å vente
+234. å finne
+235. å møte
+236. å like
+237. å elske
+238. å ville
+239. å trenge
+240. å kjøpe
+241. å selge
+242. å betale
+243. å åpne
+244. å lukke
+245. å vaske
+246. å se
+247. å høre
+248. å si
+249. å spørre
+250. å svare
+251. glad
+252. trist
+253. sint
+254. trøtt
+255. syk
+256. lett
+257. vanskelig
+258. dyr
+259. billig
+260. gratis
+261. mange
+262. få
+263. mer
+264. mindre
+265. nok
+266. ofte
+267. aldri
+268. noen ganger
+269. tidlig
+270. sent
+271. denne
+272. dette
+273. disse
+274. samme
+275. annen
+276. ha det
+277. god morgen
+278. god kveld
+279. god natt
+280. velkommen
+281. vær så god
+282. tusen takk
+283. det går bra
+284. ikke sant
+285. selvfølgelig
+286. apotek
+287. sykehus
+288. tannlege
+289. hjelp
+290. problem
+291. pris
+292. penger
+293. kvittering
+294. pose
+295. størrelse
+296. telefon
+297. datamaskin
+298. nøkkel
+299. klokke
+300. veske
+301. å gi
+302. å ta
+303. å legge
+304. å begynne
+305. å avslutte
+306. å vite
+307. å tenke
+308. å forstå
+309. å huske
+310. å glemme
+311. å hjelpe
+312. å ringe
+313. å sende
+314. å miste
+315. å vinne
+316. å ankomme
+317. å gå inn
+318. å dra
+319. å bo
+320. å spasere
+321. å løpe
+322. å svømme
+323. å hoppe
+324. å danse
+325. å synge
+326. å leke
+327. å lage mat
+328. å rydde
+329. å bygge
+330. å endre
+331. ris
+332. pasta
+333. kylling
+334. storfekjøtt
+335. svinekjøtt
+336. smør
+337. olje
+338. pepper
+339. løk
+340. tomat
+341. hvitløk
+342. sitron
+343. jordbær
+344. drue
+345. kake
+346. sjokolade
+347. iskrem
+348. vin
+349. øl
+350. flaske
+351. bord
+352. stol
+353. seng
+354. dør
+355. vindu
+356. vegg
+357. gulv
+358. tak
+359. hage
+360. garasje
+361. lampe
+362. speil
+363. håndkle
+364. såpe
+365. kjøleskap
+366. ovn
+367. sofa
+368. hylle
+369. trapp
+370. heis
+371. hund
+372. katt
+373. fugl
+374. hest
+375. ku
+376. sau
+377. gris
+378. høne
+379. mus
+380. kanin
+381. et tre
+382. blomst
+383. gress
+384. fjell
+385. elv
+386. hav
+387. innsjø
+388. skog
+389. strand
+390. himmel
+391. tretti
+392. førti
+393. femti
+394. hundre
+395. tusen
+396. grå
+397. første
+398. siste
+399. halv
+400. nummer
+401. redd
+402. overrasket
+403. lei
+404. rolig
+405. stolt
+406. sterk
+407. svak
+408. vakker
+409. stygg
+410. ung
+411. rik
+412. fattig
+413. ren
+414. skitten
+415. morsom
+416. vei
+417. bro
+418. taxi
+419. bagasje
+420. pass
+421. flyreise
+422. sete
+423. sjåfør
+424. trafikk
+425. reise
+426. penn
+427. blyant
+428. papir
+429. notatbok
+430. skrivebord
+431. møte
+432. e-post
+433. sjef
+434. lønn
+435. firma
+436. arm
+437. bein
+438. finger
+439. rygg
+440. hjerte
+441. frakk
+442. skjørt
+443. sokk
+444. hanske
+445. skjerf
+446. medisin
+447. feber
+448. smerte
+449. hoste
+450. blod
+451. kontanter
+452. kredittkort
+453. rabatt
+454. kunde
+455. gave
+456. musikk
+457. sang
+458. film
+459. spill
+460. fest
+461. fotball
+462. tennis
+463. sport
+464. lag
+465. ball
+466. gitar
+467. piano
+468. bilde
+469. hobby
+470. ferie
+471. internett
+472. nettside
+473. passord
+474. skjerm
+475. tastatur
+476. melding
+477. nyheter
+478. tv
+479. radio
+480. kamera
+481. også
+482. bare
+483. veldig
+484. kanskje
+485. allerede
+486. januar
+487. februar
+488. mars
+489. april
+490. mai
+491. juni
+492. juli
+493. august
+494. september
+495. oktober
+496. november
+497. desember
+498. dato
+499. kalender
+500. bursdag

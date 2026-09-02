@@ -1,3 +1,9 @@
+// Generates audio for the 3 example sentences shown on each word's detail
+// card (decks/examples.js), one mp3 per sentence. Mirrors generate-audio.cjs
+// (voice/model/language-code resolution, Storj upload, retry) but reads
+// example sentences instead of the deck's word list, and stops the whole run
+// as soon as ElevenLabs reports the account is out of quota rather than
+// grinding through the rest of the sentences failing one by one.
 const crypto = require("crypto");
 const fs = require("fs");
 const path = require("path");
@@ -16,10 +22,6 @@ const dryRun = parseBoolean(options.dryRun || process.env.DRY_RUN);
 const limit = parsePositiveInt(options.limit || process.env.LIMIT);
 const delayMs = parsePositiveInt(options.delayMs || process.env.ELEVENLABS_DELAY_MS) || 250;
 const elevenLabsApiKey = process.env.ELEVENLABS_API_KEY;
-const elevenLabsVoiceName =
-  options.voiceName ||
-  process.env.ELEVENLABS_VOICE_NAME ||
-  "Mia Starset- Clear and Friendly";
 let elevenLabsVoiceId = options.voiceId || "";
 
 const storjConfig = {
@@ -40,22 +42,20 @@ async function main() {
   assertEnv();
 
   const deck = loadDeckMeta(deckId);
-  const defaultLanguageCode = getDefaultLanguageCode(deck.language);
-  const languageCode = options.languageCode || defaultLanguageCode || process.env.ELEVENLABS_LANGUAGE_CODE || "";
+  const languageCode = options.languageCode || getDefaultLanguageCode(deck.language) || process.env.ELEVENLABS_LANGUAGE_CODE || "";
   const modelId = options.model || getModelIdForLanguage(deck.language) || process.env.ELEVENLABS_MODEL_ID || "eleven_multilingual_v2";
   elevenLabsVoiceId = elevenLabsVoiceId || getVoiceIdForLanguage(deck.language);
-  const records = loadDeckRecords(deck);
-  const targets = limit ? records.slice(0, limit) : records;
 
-  if (!elevenLabsVoiceId && !dryRun) {
-    elevenLabsVoiceId = await resolveVoiceId(elevenLabsApiKey, elevenLabsVoiceName);
-  }
+  const words = loadDeckWords(deck);
+  const examplesByWord = loadExamples(deck.language);
+  const targets = buildTargets(words, examplesByWord);
+  const limited = limit ? targets.slice(0, limit) : targets;
 
   console.log(`Deck: ${deck.id}`);
-  console.log(`Words: ${targets.length}${limit ? ` of ${records.length}` : ""}`);
+  console.log(`Sentences: ${limited.length}${limit ? ` of ${targets.length}` : ""}`);
   console.log(`Storj bucket: ${storjConfig.bucket || "dry-run"}`);
-  console.log(`Storage prefix: ${audioPrefix}/${deck.id}/`);
-  console.log(`ElevenLabs voice: ${elevenLabsVoiceName} (${elevenLabsVoiceId || "dry-run"})`);
+  console.log(`Storage prefix: ${audioPrefix}/${deck.id}/examples/`);
+  console.log(`ElevenLabs voice: ${elevenLabsVoiceId || "dry-run"}`);
   console.log(`Model: ${modelId}`);
   if (languageCode) console.log(`Language code: ${languageCode}`);
   if (dryRun) console.log("Dry run: no audio will be generated or uploaded.");
@@ -63,34 +63,46 @@ async function main() {
   let generated = 0;
   let skipped = 0;
 
-  for (const [index, record] of targets.entries()) {
-    const objectKey = `${audioPrefix}/${deck.id}/${record.id}.mp3`;
+  for (const [index, target] of limited.entries()) {
+    const objectKey = `${audioPrefix}/${deck.id}/examples/${target.wordId}_${target.exampleIndex}.mp3`;
     const exists = dryRun ? false : await storjObjectExists(objectKey);
 
     if (exists && !force) {
       skipped += 1;
-      console.log(`[${index + 1}/${targets.length}] skip ${record.id}: already exists`);
+      console.log(`[${index + 1}/${limited.length}] skip ${objectKey}: already exists`);
       continue;
     }
 
-    console.log(`[${index + 1}/${targets.length}] generate ${record.id}: ${record.text}`);
+    console.log(`[${index + 1}/${limited.length}] generate ${objectKey}: ${target.text}`);
 
     if (dryRun) continue;
 
-    const audio = await createSpeech({
-      apiKey: elevenLabsApiKey,
-      voiceId: elevenLabsVoiceId,
-      text: record.text,
-      outputFormat,
-      modelId,
-      languageCode
-    });
+    let audio;
+    try {
+      audio = await createSpeech({
+        apiKey: elevenLabsApiKey,
+        voiceId: elevenLabsVoiceId,
+        text: target.text,
+        outputFormat,
+        modelId,
+        languageCode
+      });
+    } catch (error) {
+      if (error.quotaExceeded) {
+        console.error(`Stopping: ElevenLabs quota exhausted. ${error.message}`);
+        console.log("");
+        console.log(`Done. Generated: ${generated}. Skipped: ${skipped}. Stopped early on quota.`);
+        return;
+      }
+      throw error;
+    }
 
     await putStorjObject(objectKey, audio, {
       "content-type": "audio/mpeg",
       "cache-control": "public, max-age=31536000, immutable",
       "x-amz-meta-deck-id": deck.id,
-      "x-amz-meta-word-id": record.id,
+      "x-amz-meta-word-id": target.wordId,
+      "x-amz-meta-example-index": String(target.exampleIndex),
       "x-amz-meta-provider": "elevenlabs",
       "x-amz-meta-voice-id": elevenLabsVoiceId,
       "x-amz-meta-model-id": modelId
@@ -134,49 +146,46 @@ function loadDeckMeta(id) {
   return deck;
 }
 
-function loadDeckRecords(deck) {
+function loadDeckWords(deck) {
   const csvPath = path.join(rootDir, deck.path);
   const rows = parseCsv(fs.readFileSync(csvPath, "utf8").trim());
   const headers = rows.shift() || [];
 
   return rows
-    .map((row, index) => {
+    .map(row => {
       const record = Object.fromEntries(
         headers.map((header, headerIndex) => [header.trim(), row[headerIndex] || ""])
       );
-
-      return {
-        id: record[deck.columns.wordId]?.trim() || `${deck.id}-${index + 1}`,
-        text: record[deck.columns.script]?.trim() || ""
-      };
+      return record[deck.columns.wordId]?.trim() || "";
     })
-    .filter(record => record.id && record.text);
+    .filter(Boolean);
 }
 
-async function resolveVoiceId(apiKey, voiceName) {
-  const response = await fetch("https://api.elevenlabs.io/v2/voices", {
-    headers: { "xi-api-key": apiKey }
-  });
+// Examples are keyed by the numeric suffix of the word id (nor_003 -> 3),
+// same convention js/deck.js's getWordSuffix uses to look them up at runtime.
+function loadExamples(language) {
+  global.window = global.window || {};
+  require(path.join(rootDir, "decks", "examples.js"));
+  return global.window.DECK_EXAMPLES?.[language] || {};
+}
 
-  if (!response.ok) {
-    const details = await response.text().catch(() => "");
-    throw new Error(`Could not list ElevenLabs voices (${response.status}). ${details}`);
+function buildTargets(wordIds, examplesByWord) {
+  const targets = [];
+
+  for (const wordId of wordIds) {
+    const match = /(\d+)$/.exec(wordId);
+    const suffix = match ? Number.parseInt(match[0], 10) : null;
+    const examples = suffix !== null ? examplesByWord[suffix] : null;
+    if (!examples) continue;
+
+    examples.forEach((example, exampleIndex) => {
+      const text = String(example.text || "").replace(/\*/g, "").trim();
+      if (!text) return;
+      targets.push({ wordId, exampleIndex: exampleIndex + 1, text });
+    });
   }
 
-  const data = await response.json();
-  const voices = data.voices || [];
-  const target = normalizeName(voiceName);
-  const exact = voices.find(voice => normalizeName(voice.name) === target);
-  const partial = voices.find(voice => normalizeName(voice.name).includes(target));
-  const voice = exact || partial;
-
-  if (!voice) {
-    throw new Error(
-      `Could not find ElevenLabs voice "${voiceName}". Add it to your voices or set ELEVENLABS_VOICE_ID.`
-    );
-  }
-
-  return voice.voice_id;
+  return targets;
 }
 
 async function createSpeech({ apiKey, voiceId, text, outputFormat, modelId, languageCode }) {
@@ -205,6 +214,7 @@ async function createSpeech({ apiKey, voiceId, text, outputFormat, modelId, lang
       const details = await response.text().catch(() => "");
       const error = new Error(`ElevenLabs request failed (${response.status}) for "${text}". ${details}`);
       error.status = response.status;
+      error.quotaExceeded = response.status === 401 && /quota_exceeded|quota exceeded/i.test(details);
       throw error;
     }
 
@@ -317,6 +327,7 @@ async function retry(task, { attempts = 5, label = "request" } = {}) {
 
 function isRetryableError(error) {
   if (!error || error.status === undefined) return true;
+  if (error.quotaExceeded) return false;
   return error.status === 408 || error.status === 425 || error.status === 429 || error.status >= 500;
 }
 
@@ -451,23 +462,12 @@ function getVoiceIdForLanguage(language) {
 }
 
 function getModelIdForLanguage(language) {
-  // eleven_multilingual_v2 (the default model) ignores language_code and
-  // guesses the language from the text, which mispronounces short Norwegian
-  // words. eleven_flash_v2_5 supports forcing language_code=no instead.
   const defaults = {
     norwegian: "eleven_flash_v2_5"
   };
   const envKey = `ELEVENLABS_${String(language || "").toUpperCase()}_MODEL_ID`;
 
   return process.env[envKey] || defaults[language] || "";
-}
-
-function normalizeName(value) {
-  return String(value || "")
-    .toLowerCase()
-    .replace(/\s*-\s*/g, "-")
-    .replace(/\s+/g, " ")
-    .trim();
 }
 
 function toCamelCase(value) {
