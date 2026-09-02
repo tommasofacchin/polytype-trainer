@@ -23,7 +23,14 @@
 // Exercise types (rendered by js/lessons.js):
 //   { type: "mc", prompt, options: [...], answer: <index> }
 //   { type: "trueFalse", claim, answer: <bool> }
-//   { type: "type", prompt, answer: "<canonical>", accept: ["<alt spellings>"] }
+//   { type: "type", prompt, answer: "<canonical>", accept: ["<alt spellings>"],
+//     hint: "<dictionary form>" } - hint is optional: the base/infinitive
+//     form of whatever the blank inflects, shown next to the question so a
+//     blank testing conjugation/agreement doesn't also demand recalling the
+//     word itself out of context (e.g. in a Review run mixing it in from a
+//     lesson finished long ago). Only added where the blank is inflected
+//     from a distinct base form - not for invariant words (pronouns,
+//     conjunctions, particles) where the answer already is the citation form.
 // Example rows use { type: "example", de: "...", en: "..." }.
 
 const GERMAN_LESSONS_DATA = {
@@ -96,7 +103,7 @@ const GERMAN_LESSONS_DATA = {
                 { type: "type", prompt: "Type the form of 'sein' used with 'wir' (we).", answer: "sind", accept: ["sind"] },
                 { type: "trueFalse", claim: "German verbs keep the same form for every subject.", answer: false },
                 { type: "mc", prompt: "How do you say 'She is here'? (hier = here)", options: ["Sie bin hier.", "Sie bist hier.", "Sie ist hier.", "Sie sind hier."], answer: 2 },
-                { type: "type", prompt: "Complete: 'Ich ___ müde.' (I am tired.)", answer: "bin", accept: ["bin"] }
+                { type: "type", prompt: "Complete: 'Ich ___ müde.' (I am tired.)", answer: "bin", accept: ["bin"], hint: "sein" }
             ]
         },
         {
@@ -115,7 +122,7 @@ const GERMAN_LESSONS_DATA = {
             ],
             exercises: [
                 { type: "mc", prompt: "What is the 'du' form of 'haben'?", options: ["habe", "hast", "hat", "habt"], answer: 1 },
-                { type: "type", prompt: "Complete: 'Ich ___ ein Auto.' (I have a car.)", answer: "habe", accept: ["habe"] },
+                { type: "type", prompt: "Complete: 'Ich ___ ein Auto.' (I have a car.)", answer: "habe", accept: ["habe"], hint: "haben" },
                 { type: "mc", prompt: "How do you say 'She has two children'? (zwei Kinder)", options: ["Sie habe zwei Kinder.", "Sie hast zwei Kinder.", "Sie hat zwei Kinder.", "Sie haben zwei Kinder."], answer: 2 },
                 { type: "trueFalse", claim: "The 'er/sie/es' form of 'haben' is 'hat'.", answer: true },
                 { type: "type", prompt: "Type the form of 'haben' used with 'wir' (we).", answer: "haben", accept: ["haben"] },
@@ -660,7 +667,7 @@ const GERMAN_LESSONS_DATA = {
             ],
             exercises: [
                 { type: "mc", prompt: "Where does the second verb (infinitive) go after a modal?", options: ["right after the modal", "at the end of the sentence", "before the subject", "it's dropped"], answer: 1 },
-                { type: "type", prompt: "Complete: 'Ich ___ schwimmen.' (I can swim.)", answer: "kann", accept: ["kann"] },
+                { type: "type", prompt: "Complete: 'Ich ___ schwimmen.' (I can swim.)", answer: "kann", accept: ["kann"], hint: "können" },
                 { type: "mc", prompt: "Which modal means 'must / have to'?", options: ["können", "wollen", "müssen", "dürfen"], answer: 2 },
                 { type: "trueFalse", claim: "The 'ich' form of a modal verb takes no ending (e.g. 'ich kann').", answer: true },
                 { type: "type", prompt: "Type the 'ich' form of 'wollen' (to want).", answer: "will", accept: ["will"] },
@@ -746,7 +753,7 @@ const GERMAN_LESSONS_DATA = {
             ],
             exercises: [
                 { type: "mc", prompt: "What is the simple past of 'sein' for 'ich' (I)?", options: ["war", "bin", "hatte", "gewesen"], answer: 0 },
-                { type: "type", prompt: "Complete: 'Ich ___ müde.' (I was tired.)", answer: "war", accept: ["war"] },
+                { type: "type", prompt: "Complete: 'Ich ___ müde.' (I was tired.)", answer: "war", accept: ["war"], hint: "sein" },
                 { type: "mc", prompt: "What is the simple past of 'haben' for 'sie' (she)?", options: ["hat", "hatte", "war", "habte"], answer: 1 },
                 { type: "trueFalse", claim: "In everyday speech, 'sein' and 'haben' are usually used in the simple past.", answer: true },
                 { type: "type", prompt: "Type the simple past of 'sein' used with 'wir' (we).", answer: "waren", accept: ["waren"] },

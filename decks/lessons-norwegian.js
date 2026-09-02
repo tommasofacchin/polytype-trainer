@@ -18,7 +18,14 @@
 // Exercise types (rendered by js/lessons.js):
 //   { type: "mc", prompt, options: [...], answer: <index> }
 //   { type: "trueFalse", claim, answer: <bool> }
-//   { type: "type", prompt, answer: "<canonical>", accept: ["<alt spellings>"] }
+//   { type: "type", prompt, answer: "<canonical>", accept: ["<alt spellings>"],
+//     hint: "<dictionary form>" } - hint is optional: the base/infinitive
+//     form of whatever the blank inflects, shown next to the question so a
+//     blank testing conjugation/agreement doesn't also demand recalling the
+//     word itself out of context (e.g. in a Review run mixing it in from a
+//     lesson finished long ago). Only added where the blank is inflected
+//     from a distinct base form - not for invariant words (pronouns,
+//     conjunctions, particles) where the answer already is the citation form.
 
 const LESSONS_DATA = {
     norwegian: [
@@ -161,7 +168,7 @@ const LESSONS_DATA = {
                 { type: "mc", prompt: "How do you say 'You are happy' (singular)?", options: ["Du var glad.", "Du er glad.", "Du være glad.", "Du glad er."], answer: 1 },
                 { type: "type", prompt: "Type the present-tense form of 'å være' used for every subject.", answer: "er", accept: ["er"] },
                 { type: "mc", prompt: "What does 'å' mark at the start of a verb like 'å være'?", options: ["Past tense", "The infinitive (dictionary form)", "A question", "Plural"], answer: 1 },
-                { type: "type", prompt: "Complete: 'De ___ glade.' (They are happy.)", answer: "er", accept: ["er"] }
+                { type: "type", prompt: "Complete: 'De ___ glade.' (They are happy.)", answer: "er", accept: ["er"], hint: "å være" }
             ]
         },
         {
@@ -178,7 +185,7 @@ const LESSONS_DATA = {
             ],
             exercises: [
                 { type: "mc", prompt: "What is the present tense of 'å ha' (to have)?", options: ["har", "hadde", "ha", "havde"], answer: 0 },
-                { type: "type", prompt: "Type: 'Jeg ___ en bil.' (I have a car.)", answer: "har", accept: ["har"] },
+                { type: "type", prompt: "Type: 'Jeg ___ en bil.' (I have a car.)", answer: "har", accept: ["har"], hint: "å ha" },
                 { type: "trueFalse", claim: "'har' changes form depending on the subject (jeg har vs. hun har).", answer: false },
                 { type: "mc", prompt: "How do you say 'They have time'?", options: ["De har tid.", "De er tid.", "De ha tid.", "Dere har tid."], answer: 0 },
                 { type: "mc", prompt: "Which verb form later combines with 'har' to form the present perfect (e.g. 'have eaten')?", options: ["the infinitive", "the past participle", "the imperative", "the plural"], answer: 1 },
@@ -207,7 +214,7 @@ const LESSONS_DATA = {
                 { type: "mc", prompt: "How do you say 'She likes coffee'?", options: ["Hun like kaffe.", "Hun liker kaffe.", "Hun likes kaffe.", "Hun å like kaffe."], answer: 1 },
                 { type: "trueFalse", claim: "Most Norwegian verbs form the present tense by adding '-r' to the infinitive.", answer: true },
                 { type: "mc", prompt: "What is the present tense of 'å komme' (to come)?", options: ["komme", "kom", "kommer", "kommet"], answer: 2 },
-                { type: "type", prompt: "Complete: 'Jeg ___ i Oslo.' (I live in Oslo.)", answer: "bor", accept: ["bor"] }
+                { type: "type", prompt: "Complete: 'Jeg ___ i Oslo.' (I live in Oslo.)", answer: "bor", accept: ["bor"], hint: "å bo" }
             ]
         },
         {
@@ -577,7 +584,7 @@ const LESSONS_DATA = {
                 { type: "type", prompt: "Type the plural form of 'stor' (used with any plural noun).", answer: "store", accept: ["store"] },
                 { type: "trueFalse", claim: "Adjectives stay unchanged with en-words.", answer: true },
                 { type: "mc", prompt: "Which is correct for 'big cars' (plural)?", options: ["stor biler", "store biler", "storee biler", "stort biler"], answer: 1 },
-                { type: "type", prompt: "Complete: 'et ___ hus' (a big house).", answer: "stort", accept: ["stort"] },
+                { type: "type", prompt: "Complete: 'et ___ hus' (a big house).", answer: "stort", accept: ["stort"], hint: "stor" },
                 { type: "mc", prompt: "What ending do et-words typically add to an adjective?", options: ["-e", "-t", "-en", "-et"], answer: 1 }
             ]
         },
@@ -686,7 +693,7 @@ const LESSONS_DATA = {
             exercises: [
                 { type: "mc", prompt: "What is the present tense of 'å kunne' (can)?", options: ["kunne", "kan", "kunner", "kunnet"], answer: 1 },
                 { type: "trueFalse", claim: "A modal verb like 'kan' is followed by 'å' before the next verb.", answer: false },
-                { type: "type", prompt: "Complete: 'Jeg ___ svømme.' (I can swim.)", answer: "kan", accept: ["kan"] },
+                { type: "type", prompt: "Complete: 'Jeg ___ svømme.' (I can swim.)", answer: "kan", accept: ["kan"], hint: "å kunne" },
                 { type: "mc", prompt: "What is the present tense of 'å måtte' (must)?", options: ["måtte", "må", "mået", "måtter"], answer: 1 },
                 { type: "type", prompt: "Type the present tense of 'å ville' (want to).", answer: "vil", accept: ["vil"] },
                 { type: "mc", prompt: "How do you say 'I should go'?", options: ["Jeg bør å gå.", "Jeg bør gå.", "Jeg burde å gå.", "Jeg går bør."], answer: 1 }
@@ -709,7 +716,7 @@ const LESSONS_DATA = {
             exercises: [
                 { type: "mc", prompt: "How do you say 'I have eaten'?", options: ["Jeg har spise.", "Jeg har spist.", "Jeg har spiser.", "Jeg har å spise."], answer: 1 },
                 { type: "trueFalse", claim: "The present perfect is built with 'har' + past participle.", answer: true },
-                { type: "type", prompt: "Complete: 'Hun har ___ boka.' (She has read the book.)", answer: "lest", accept: ["lest"] },
+                { type: "type", prompt: "Complete: 'Hun har ___ boka.' (She has read the book.)", answer: "lest", accept: ["lest"], hint: "å lese" },
                 { type: "mc", prompt: "What is the past participle of 'å gjøre' (to do)?", options: ["gjørt", "gjort", "gjøret", "gjordt"], answer: 1 },
                 { type: "type", prompt: "Type the past participle of 'å komme' (to come).", answer: "kommet", accept: ["kommet"] },
                 { type: "mc", prompt: "Which is correct for 'They have spoken'?", options: ["De har snakke.", "De har snakker.", "De har snakket.", "De har å snakke."], answer: 2 }
@@ -751,7 +758,7 @@ const LESSONS_DATA = {
             ],
             exercises: [
                 { type: "mc", prompt: "Which word expresses a planned/decided future action?", options: ["skal", "kan", "må", "bør"], answer: 0 },
-                { type: "type", prompt: "Complete: 'Jeg ___ reise i morgen.' (I'm going to travel tomorrow.)", answer: "skal", accept: ["skal"] },
+                { type: "type", prompt: "Complete: 'Jeg ___ reise i morgen.' (I'm going to travel tomorrow.)", answer: "skal", accept: ["skal"], hint: "å skulle" },
                 { type: "trueFalse", claim: "Norwegian has a distinct future-tense verb form, separate from the present tense.", answer: false },
                 { type: "mc", prompt: "Which best fits a weather prediction, 'It will rain'?", options: ["Det kan regne.", "Det vil regne.", "Det må regne.", "Det bør regne."], answer: 1 },
                 { type: "type", prompt: "Type the modal verb that often signals intention about the future.", answer: "vil", accept: ["vil"] },
@@ -796,7 +803,7 @@ const LESSONS_DATA = {
                 { type: "mc", prompt: "What is the basic Norwegian word order?", options: ["V-S-O", "S-O-V", "S-V-O", "O-V-S"], answer: 2 },
                 { type: "trueFalse", claim: "'Jeg leser boka' follows Subject-Verb-Object order.", answer: true },
                 { type: "mc", prompt: "Which sentence correctly follows S-V-O?", options: ["Kaffe liker hun.", "Liker hun kaffe.", "Hun liker kaffe.", "Hun kaffe liker."], answer: 2 },
-                { type: "type", prompt: "Complete with the correct verb form: 'Hun ___ boka.' (She reads the book.)", answer: "leser", accept: ["leser"] },
+                { type: "type", prompt: "Complete with the correct verb form: 'Hun ___ boka.' (She reads the book.)", answer: "leser", accept: ["leser"], hint: "å lese" },
                 { type: "mc", prompt: "In 'Hun liker kaffe', what role does 'kaffe' play?", options: ["Subject", "Verb", "Object", "Adjective"], answer: 2 },
                 { type: "trueFalse", claim: "Norwegian's basic word order is different from English.", answer: false }
             ]
@@ -816,7 +823,7 @@ const LESSONS_DATA = {
                 { type: "mc", prompt: "What is always the SECOND element in a Norwegian main clause?", options: ["The subject", "The object", "The finite verb", "The adverb"], answer: 2 },
                 { type: "mc", prompt: "In 'I dag leser jeg boka', where is the verb?", options: ["First", "Second", "Third", "Last"], answer: 1 },
                 { type: "trueFalse", claim: "When a sentence starts with a time expression, the subject and verb swap places to keep the verb in position two.", answer: true },
-                { type: "type", prompt: "Complete: 'I dag ___ jeg boka.' (Today I read the book.)", answer: "leser", accept: ["leser"] },
+                { type: "type", prompt: "Complete: 'I dag ___ jeg boka.' (Today I read the book.)", answer: "leser", accept: ["leser"], hint: "å lese" },
                 { type: "mc", prompt: "Which sentence correctly follows the verb-second rule?", options: ["I dag jeg leser boka.", "I dag leser jeg boka.", "Jeg i dag leser boka.", "Leser jeg i dag boka."], answer: 1 },
                 { type: "trueFalse", claim: "The verb-second rule only applies to yes/no questions, not statements.", answer: false }
             ]
@@ -834,7 +841,7 @@ const LESSONS_DATA = {
             ],
             exercises: [
                 { type: "mc", prompt: "How do you say 'Now we eat' leading with 'nå'?", options: ["Nå vi spiser.", "Nå spiser vi.", "Vi nå spiser.", "Spiser nå vi."], answer: 1 },
-                { type: "type", prompt: "Complete: 'Her ___ jeg.' (I live here.)", answer: "bor", accept: ["bor"] },
+                { type: "type", prompt: "Complete: 'Her ___ jeg.' (I live here.)", answer: "bor", accept: ["bor"], hint: "å bo" },
                 { type: "trueFalse", claim: "Leading a sentence with a place adverb like 'her' still triggers subject-verb inversion.", answer: true },
                 { type: "mc", prompt: "Which word means 'tomorrow'?", options: ["nå", "senere", "i morgen", "der"], answer: 2 },
                 { type: "mc", prompt: "Which sentence is correctly inverted?", options: ["Der de bor.", "Der bor de.", "De der bor.", "Bor der de."], answer: 1 },
@@ -1280,7 +1287,7 @@ const LESSONS_DATA = {
                 { type: "type", prompt: "Type the Norwegian phrase for 'in a week'.", answer: "om en uke", accept: ["om en uke"] },
                 { type: "mc", prompt: "Which phrase means 'next year'?", options: ["i morgen", "om en uke", "neste år", "i dag"], answer: 2 },
                 { type: "trueFalse", claim: "'Jeg har planer om å...' means 'I have plans to...'", answer: true },
-                { type: "type", prompt: "Complete: 'Jeg ___ reise til Norge.' (I'm going to travel to Norway.)", answer: "skal", accept: ["skal"] },
+                { type: "type", prompt: "Complete: 'Jeg ___ reise til Norge.' (I'm going to travel to Norway.)", answer: "skal", accept: ["skal"], hint: "å skulle" },
                 { type: "mc", prompt: "Which phrase expresses a tentative future intention, 'Maybe I will...'?", options: ["Jeg skal...", "Jeg har planer om å...", "Kanskje jeg vil...", "Jeg foretrekker..."], answer: 2 }
             ]
         }

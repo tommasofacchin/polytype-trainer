@@ -16,22 +16,17 @@
 
     <main class="page-content lessons-page">
         <nav class="profile-topbar" aria-label="Lessons navigation">
-            <a class="back-link-mini" href="games.html">&lsaquo; <span data-i18n="nav.games">Games</span></a>
+            <a class="back-link-mini" href="games.html"><span data-i18n="nav.games">Games</span></a>
         </nav>
 
         <div id="lessons-path-view">
             <h1 class="page-title" data-i18n="lessons.title">Lessons</h1>
             <p class="page-subtitle" data-i18n="lessons.subtitle">Learn Norwegian grammar step by step</p>
-            <!-- Review card: a Sprint-style mixed run over the lessons already
-                 finished. Built in js/lessons.js (buildReviewCard) because its
-                 copy and locked/unlocked state both depend on how many lessons
-                 are complete. -->
-            <div id="lessons-review-slot" class="lessons-review-slot"></div>
             <div id="lessons-modules" class="lessons-modules"></div>
         </div>
 
         <div id="lessons-player-view" hidden>
-            <button type="button" id="lessons-back-btn" class="back-link-mini lessons-player-back">&lsaquo; <span data-i18n="lessons.backBtn">Back</span></button>
+            <button type="button" id="lessons-back-btn" class="back-link-mini lessons-player-back"><span data-i18n="lessons.backBtn">Back</span></button>
 
             <section id="lessons-exercise-screen" class="lessons-card lessons-exercise-screen" hidden>
                 <div id="lessons-review-banner" class="lessons-review-banner" hidden></div>
@@ -46,6 +41,7 @@
             </section>
 
             <section id="lessons-complete-screen" class="lessons-card lessons-complete-screen" hidden>
+                <span class="lessons-complete-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l5 5L19.5 6.8"/></svg></span>
                 <h2 id="lessons-complete-title" class="lessons-complete-title"></h2>
                 <span id="lessons-complete-detail" class="lessons-complete-detail"></span>
                 <span id="lessons-complete-coins" class="lessons-complete-coins"></span>
@@ -68,6 +64,19 @@
             </section>
         </div>
     </main>
+
+    <!-- Review FAB: a fixed bottom-right button into a Sprint-style mixed run
+         over the lessons already finished. Sits outside <main> as a sibling,
+         same as #app-header/#app-bottom-nav below - <main>'s own page-enter
+         animation (see body > main in style.css) makes it a containing block
+         for any position:fixed descendant of its own for as long as that
+         animation's fill-mode holds, which would pin a nested FAB to main's
+         scrollable box instead of the viewport. Empty (and so invisible)
+         until the first lesson is done - built in js/lessons.js
+         (buildReviewFab). Hidden/shown by js/lessons.js alongside the path
+         view since it's no longer inside it. -->
+    <div id="lessons-review-slot"></div>
+
     <div id="app-bottom-nav"></div>
 
     <script src="js/firebase-config.js"></script>

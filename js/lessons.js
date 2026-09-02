@@ -37,6 +37,12 @@
     const CHECK_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.8l5 5L19.5 6.8"/></svg>';
     const STAR_SVG = '<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2.6l2.8 5.7 6.3.9-4.6 4.4 1.1 6.2-5.6-2.9-5.6 2.9 1.1-6.2L2.9 9.2l6.3-.9z"/></svg>';
     const REVIEW_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20.4 12a8.4 8.4 0 1 1-2.5-6"/><path d="M20.6 4.3v5.2h-5.2"/></svg>';
+    // Matches js/sprint.js's own copy of this icon - kept local rather than
+    // shared, same as that file's and js/chest.js's and js/shop.js's copies.
+    const COIN_SVG = '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#ffc73a"/><circle cx="12" cy="12" r="6.5" fill="none" stroke="#d99a1c" stroke-width="2"/></svg>';
+    // Same triangle as Home's "Play" CTA (index.html) - the FAB below reuses
+    // it so the two read as the same action in two places.
+    const PLAY_SVG = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
 
     // Duolingo-style serpentine: each node in a module slides sideways by
     // shift * --path-amp (see .lesson-path-node in style.css). The pattern
@@ -58,7 +64,6 @@
         // chrome says, and how the finished session is posted.
         mode: "lesson",
         queue: [],               // the exercises this run actually plays
-        reviewLabel: "",         // scope chip shown during a review run
         mainIndex: 0,
         wrongList: [],           // exercises missed on the main pass
         retryQueue: [],
@@ -205,6 +210,9 @@
         renderPath();
         el.playerView.hidden = true;
         el.pathView.hidden = false;
+        // Lives outside <main> now (see lessons.html), so it no longer
+        // hides for free with the rest of the path view.
+        el.reviewSlot.hidden = false;
     }
 
     function renderPath() {
@@ -212,7 +220,8 @@
         // leaves its error message in the modules root, and a language switch
         // would otherwise wipe it for an equally empty path.
         if (!el.modulesRoot || !state.modules.length) return;
-        el.reviewSlot.replaceChildren(buildReviewCard());
+        const fab = buildReviewFab();
+        el.reviewSlot.replaceChildren(...(fab ? [fab] : []));
         el.modulesRoot.replaceChildren(...state.modules.map(buildModuleSection));
     }
 
@@ -256,8 +265,7 @@
             reviewBtn.setAttribute("aria-label", label);
             reviewBtn.title = label;
             reviewBtn.addEventListener("click", () => startReview(
-                module.lessons.filter(lesson => state.lessonsCompleted.includes(lesson.id)),
-                tr("lessons.reviewModuleChip", { module: module.title })
+                module.lessons.filter(lesson => state.lessonsCompleted.includes(lesson.id))
             ));
             side.appendChild(reviewBtn);
         }
@@ -322,53 +330,32 @@
         return state.lessons.filter(lesson => state.lessonsCompleted.includes(lesson.id));
     }
 
-    function buildReviewCard() {
+    // A floating action button - same shape and play-triangle icon as Home's
+    // "Play" CTA (index.html) - pinned over the path instead of a card in its
+    // flow, so it's reachable no matter how far down the path you've
+    // scrolled. Returns null while there's nothing to mix yet: an
+    // always-there but disabled FAB would just be a dead corner of the
+    // screen, and once the first lesson is done the button appearing in the
+    // corner is itself the discovery moment.
+    function buildReviewFab() {
         const completed = getCompletedLessons();
+        if (!completed.length) return null;
 
-        const card = document.createElement("button");
-        card.type = "button";
-        card.className = "lessons-review-card";
+        const fab = document.createElement("button");
+        fab.type = "button";
+        fab.className = "home-play-again-btn lessons-review-fab";
+        fab.innerHTML = PLAY_SVG;
+        const label = document.createElement("span");
+        label.textContent = tr("lessons.reviewTitle");
+        fab.appendChild(label);
 
-        const icon = document.createElement("span");
-        icon.className = "lessons-review-icon";
-        icon.innerHTML = REVIEW_SVG;
-
-        const copy = document.createElement("span");
-        copy.className = "lessons-review-copy";
-        const title = document.createElement("strong");
-        title.className = "lessons-review-title";
-        title.textContent = tr("lessons.reviewTitle");
-        const sub = document.createElement("span");
-        sub.className = "lessons-review-sub";
-        copy.append(title, sub);
-        card.append(icon, copy);
-
-        // Stays on the page while there is nothing to mix yet, rather than
-        // appearing out of nowhere later: the card is where this gets
-        // discovered, and an empty slot teaches nobody it exists.
-        if (!completed.length) {
-            card.classList.add("is-locked");
-            card.disabled = true;
-            sub.textContent = tr("lessons.reviewLocked");
-            return card;
-        }
-
-        sub.textContent = completed.length === 1
-            ? tr("lessons.reviewOne")
-            : tr("lessons.reviewAll", { count: completed.length });
-
-        const cta = document.createElement("span");
-        cta.className = "lessons-review-cta";
-        cta.textContent = tr("lessons.reviewStart");
-        card.appendChild(cta);
-
-        card.addEventListener("click", () => startReview(completed, tr("lessons.reviewChip")));
-        return card;
+        fab.addEventListener("click", () => startReview(completed));
+        return fab;
     }
 
     // No intro sheet on the way in, unlike a lesson: a mixed run has no single
     // explanation to show, and the button was pressed to practise, not to read.
-    function startReview(lessons, label) {
+    function startReview(lessons) {
         const queue = buildReviewQueue(lessons);
         if (!queue.length) return;
 
@@ -376,9 +363,9 @@
         state.mode = "review";
         state.activeLesson = null;
         state.queue = queue;
-        state.reviewLabel = label;
         el.pathView.hidden = true;
         el.playerView.hidden = false;
+        el.reviewSlot.hidden = true;
         startExercises();
     }
 
@@ -456,6 +443,7 @@
         state.queue = state.activeLesson.exercises;
         el.pathView.hidden = true;
         el.playerView.hidden = false;
+        el.reviewSlot.hidden = true;
         startExercises();
     }
 
@@ -500,11 +488,9 @@
         state.sessionStartTime = Date.now();
         el.completeScreen.hidden = true;
         el.exerciseScreen.hidden = false;
-        // The banner does double duty: a review run wears its scope there from
-        // the first exercise, and startRetryPhase later overwrites it with the
-        // "what you missed" line in both modes.
-        el.reviewBanner.hidden = !isReview;
-        if (isReview) el.reviewBanner.textContent = state.reviewLabel;
+        // The bar is the only thing marking a review run up front; the banner
+        // stays hidden until startRetryPhase has something worth saying.
+        el.reviewBanner.hidden = true;
         el.progressBar.hidden = !isReview;
         showNextMainExercise();
     }
@@ -667,9 +653,21 @@
     }
 
     function renderTypeExercise(exercise, onAnswered) {
+        // `hint` names the dictionary/infinitive form of whatever's being
+        // inflected in the blank (e.g. "å bo" for a "bor" answer) - added to
+        // exercises where the blank tests conjugation/agreement rather than
+        // recall of the word itself, so forgetting the base form (easy once
+        // this is pulled out of its lesson and mixed into a Review run)
+        // doesn't block answering a question that was never about that
+        // recall in the first place. See decks/lessons-*.js's exercise-type
+        // comment for which blanks carry one.
+        const hintHtml = exercise.hint
+            ? `<p class="lessons-type-hint">${tr("lessons.hintLabel", { word: escapeHtml(exercise.hint) })}</p>`
+            : "";
         el.exerciseRoot.innerHTML = `
             <div class="sprint-exercise">
                 <p class="sprint-exercise-kicker">${escapeHtml(exercise.prompt)}</p>
+                ${hintHtml}
                 <form class="sprint-type-form" autocomplete="off">
                     <input type="text" class="sprint-type-input" placeholder="${tr("lessons.typePlaceholder")}" inputmode="none" autocapitalize="off" autocorrect="off" spellcheck="false" data-vkbd="true" data-vkbd-enter="false">
                     <button type="submit" class="sprint-type-submit">${tr("lessons.checkBtn")}</button>
@@ -765,10 +763,10 @@
                 revealText(el.completeCoins, tr("lessons.reviewReward", {
                     xp: progress?.xpEarned || 0,
                     coins: progress?.sessionCoins || 0
-                }));
+                }), { icon: COIN_SVG });
             } else if (progress?.newLessonCompletion) {
                 if (progress.lessonCoinsAwarded > 0) {
-                    revealText(el.completeCoins, tr("lessons.coinsEarned", { count: progress.lessonCoinsAwarded }));
+                    revealText(el.completeCoins, tr("lessons.coinsEarned", { count: progress.lessonCoinsAwarded }), { icon: COIN_SVG });
                 }
             } else {
                 el.completeTitle.textContent = tr("lessons.replayTitle");
@@ -796,9 +794,14 @@
     // reused across multiple lesson plays, and re-adding a class that's
     // already present doesn't restart a CSS animation on its own (mirrors
     // js/main.js's animateStreakPop).
-    function revealText(target, text) {
+    // `icon` is markup on purpose (an inline SVG constant from this file,
+    // never anything server- or player-supplied) - mirrors js/sprint.js's
+    // revealResultReward. Every other caller passes plain text through
+    // textContent as before.
+    function revealText(target, text, { icon = "" } = {}) {
         target.classList.remove("is-revealed");
-        target.textContent = text;
+        if (icon) target.innerHTML = `${icon}<span>${escapeHtml(text)}</span>`;
+        else target.textContent = text;
         void target.offsetWidth;
         target.classList.add("is-revealed");
     }

@@ -9,32 +9,33 @@ const defaultProfile = {
     courses: {}
 };
 
-// Mirrors BADGE_DEFINITIONS in api/_lib.js — icon/labels only, unlock logic is server-side.
+// Mirrors BADGE_DEFINITIONS in api/_lib.js — icon/labels/descriptions only,
+// unlock logic is server-side.
 const BADGE_DEFINITIONS = [
-    { id: "first_steps", icon: "star", labelKey: "badge.firstSteps" },
-    { id: "streak_5", icon: "flame", labelKey: "badge.streak5" },
-    { id: "streak_30", icon: "flame", labelKey: "badge.streak30" },
-    { id: "word_master", icon: "book", labelKey: "badge.wordMaster" },
-    { id: "chest_hunter", icon: "chest", labelKey: "badge.chestHunter" },
-    { id: "level_10", icon: "star", labelKey: "badge.level10" },
-    { id: "lessons_10", icon: "book", labelKey: "badge.lessons10" },
-    { id: "lessons_25", icon: "book", labelKey: "badge.lessons25" },
-    { id: "lessons_all", icon: "crown", labelKey: "badge.lessonsAll" },
-    { id: "streak_50", icon: "flame", labelKey: "badge.streak50" },
-    { id: "streak_100", icon: "flame", labelKey: "badge.streak100" },
-    { id: "streak_365", icon: "flame", labelKey: "badge.streak365" },
-    { id: "words_50", icon: "book", labelKey: "badge.words50" },
-    { id: "deck_complete", icon: "crown", labelKey: "badge.deckComplete" },
-    { id: "chest_30", icon: "chest", labelKey: "badge.chest30" },
-    { id: "chest_100", icon: "chest", labelKey: "badge.chest100" },
-    { id: "polyglot", icon: "globe", labelKey: "badge.polyglot" },
-    { id: "social_butterfly", icon: "friends", labelKey: "badge.socialButterfly" },
-    { id: "friend_squad", icon: "friends", labelKey: "badge.friendSquad" },
-    { id: "combo_master", icon: "bolt", labelKey: "badge.comboMaster" },
-    { id: "flawless_round", icon: "target", labelKey: "badge.flawlessRound" },
-    { id: "night_owl", icon: "moon", labelKey: "badge.nightOwl" },
-    { id: "well_rounded", icon: "grid", labelKey: "badge.wellRounded" },
-    { id: "veteran", icon: "medal", labelKey: "badge.veteran" }
+    { id: "first_steps", icon: "star", labelKey: "badge.firstSteps", descriptionKey: "badge.firstStepsDesc" },
+    { id: "streak_5", icon: "flame", labelKey: "badge.streak5", descriptionKey: "badge.streak5Desc" },
+    { id: "streak_30", icon: "flame", labelKey: "badge.streak30", descriptionKey: "badge.streak30Desc" },
+    { id: "word_master", icon: "book", labelKey: "badge.wordMaster", descriptionKey: "badge.wordMasterDesc" },
+    { id: "chest_hunter", icon: "chest", labelKey: "badge.chestHunter", descriptionKey: "badge.chestHunterDesc" },
+    { id: "level_10", icon: "star", labelKey: "badge.level10", descriptionKey: "badge.level10Desc" },
+    { id: "lessons_10", icon: "book", labelKey: "badge.lessons10", descriptionKey: "badge.lessons10Desc" },
+    { id: "lessons_25", icon: "book", labelKey: "badge.lessons25", descriptionKey: "badge.lessons25Desc" },
+    { id: "lessons_all", icon: "crown", labelKey: "badge.lessonsAll", descriptionKey: "badge.lessonsAllDesc" },
+    { id: "streak_50", icon: "flame", labelKey: "badge.streak50", descriptionKey: "badge.streak50Desc" },
+    { id: "streak_100", icon: "flame", labelKey: "badge.streak100", descriptionKey: "badge.streak100Desc" },
+    { id: "streak_365", icon: "flame", labelKey: "badge.streak365", descriptionKey: "badge.streak365Desc" },
+    { id: "words_50", icon: "book", labelKey: "badge.words50", descriptionKey: "badge.words50Desc" },
+    { id: "deck_complete", icon: "crown", labelKey: "badge.deckComplete", descriptionKey: "badge.deckCompleteDesc" },
+    { id: "chest_30", icon: "chest", labelKey: "badge.chest30", descriptionKey: "badge.chest30Desc" },
+    { id: "chest_100", icon: "chest", labelKey: "badge.chest100", descriptionKey: "badge.chest100Desc" },
+    { id: "polyglot", icon: "globe", labelKey: "badge.polyglot", descriptionKey: "badge.polyglotDesc" },
+    { id: "social_butterfly", icon: "friends", labelKey: "badge.socialButterfly", descriptionKey: "badge.socialButterflyDesc" },
+    { id: "friend_squad", icon: "friends", labelKey: "badge.friendSquad", descriptionKey: "badge.friendSquadDesc" },
+    { id: "combo_master", icon: "bolt", labelKey: "badge.comboMaster", descriptionKey: "badge.comboMasterDesc" },
+    { id: "flawless_round", icon: "target", labelKey: "badge.flawlessRound", descriptionKey: "badge.flawlessRoundDesc" },
+    { id: "night_owl", icon: "moon", labelKey: "badge.nightOwl", descriptionKey: "badge.nightOwlDesc" },
+    { id: "well_rounded", icon: "grid", labelKey: "badge.wellRounded", descriptionKey: "badge.wellRoundedDesc" },
+    { id: "veteran", icon: "medal", labelKey: "badge.veteran", descriptionKey: "badge.veteranDesc" }
 ];
 
 const BADGE_ICONS = {
@@ -85,6 +86,7 @@ function initProfilePage() {
     currentProfile = loadProfile();
     renderProfilePage(currentProfile);
     observeActivityResize();
+    setupBadgeDetail();
     setupFirebaseSync();
     setupLocalProfileSync();
 
@@ -139,7 +141,12 @@ function loadActivityHistory() {
     firebaseClient.getActivityHistory()
         .then(result => {
             activityHistory = result.data || null;
-            renderActivity(sanitizeProfile(currentProfile));
+            // The only render worth animating: the card already painted its
+            // all-rest-days frame the instant the page opened (renderProfilePage
+            // below), so this is real data replacing a placeholder, not the
+            // page's own entrance. A resize refit (observeActivityResize)
+            // redraws the same way but stays plain - nothing new arrived there.
+            renderActivity(sanitizeProfile(currentProfile), { animate: true });
         })
         .catch(() => {
             // Leaves the all-rest-days frame on screen and allows a retry on
@@ -211,7 +218,7 @@ function observeActivityResize() {
 // Draws the trailing whole weeks that fit, oldest at the top left and today at
 // the bottom right. .activity-grid flows column by column, so appending the
 // days oldest-first is all the ordering this needs.
-function renderActivity(profile) {
+function renderActivity(profile, { animate = false } = {}) {
     const grid = document.getElementById("profile-activity-grid");
     if (!grid) return;
 
@@ -227,7 +234,7 @@ function renderActivity(profile) {
     }
 
     grid.replaceChildren(
-        ...days.map(day => {
+        ...days.map((day, index) => {
             const cell = document.createElement("i");
             cell.className = "activity-cell";
             cell.dataset.level = String(getActivityLevel(day.sessions));
@@ -235,6 +242,15 @@ function renderActivity(profile) {
             cell.title = day.xp
                 ? tr("profile.activityDay", { date: formatActivityDate(day.date), xp: day.xp.toLocaleString() })
                 : tr("profile.activityRestDay", { date: formatActivityDate(day.date) });
+            // Real data landing over the placeholder sweeps in column by
+            // column (oldest week first) instead of just popping into place -
+            // --col drives each column's delay in .activity-cell.is-revealing
+            // (style.css). Index, not offset: it already runs oldest-to-newest,
+            // same order the grid's column-flow lays cells out in.
+            if (animate) {
+                cell.style.setProperty("--col", String(Math.floor(index / ACTIVITY_ROWS)));
+                cell.classList.add("is-revealing");
+            }
             return cell;
         })
     );
@@ -301,20 +317,66 @@ function renderBadges(earnedIds) {
     badgeGrid.replaceChildren(
         ...BADGE_DEFINITIONS.map(badge => {
             const isEarned = earnedSet.has(badge.id);
-            const wrap = document.createElement("div");
-            wrap.style.textAlign = "center";
-            // Theme-token backgrounds (not hardcoded white alpha, which was
-            // near-invisible in light theme). Grid sizing keeps the tiles
-            // compact - see .badge-grid in style.css.
-            wrap.innerHTML = `
-                <div style="aspect-ratio:1;border-radius:13px;border:1px solid var(--border);background:${isEarned ? "var(--surface-soft)" : "var(--surface-empty)"};display:flex;align-items:center;justify-content:center;margin-bottom:5px;${isEarned ? "" : "color:var(--text-faintest)"}">
-                    ${isEarned ? BADGE_ICONS[badge.icon] : BADGE_ICONS.locked}
-                </div>
-                <div style="font-size:9px;font-weight:800;line-height:1.15;color:${isEarned ? "var(--text-soft)" : "var(--text-faintest)"}">${tr(badge.labelKey)}</div>
+            // A real button (not a div) - every tile, earned or locked, opens
+            // its detail popup (openBadgeDetail) on tap, so a locked one is
+            // exactly where you find out what it takes to unlock it.
+            const tile = document.createElement("button");
+            tile.type = "button";
+            tile.className = "badge-tile" + (isEarned ? "" : " is-locked");
+            tile.innerHTML = `
+                <span class="badge-tile-icon">${isEarned ? BADGE_ICONS[badge.icon] : BADGE_ICONS.locked}</span>
+                <span class="badge-tile-label">${tr(badge.labelKey)}</span>
             `;
-            return wrap;
+            tile.addEventListener("click", () => openBadgeDetail(badge, isEarned));
+            return tile;
         })
     );
+}
+
+// ── Badge detail popup ──────────────────────────────────────────────────
+// Reuses .confirm-overlay/.confirm-card (deck.html's unlock-confirm shell)
+// rather than a bespoke dialog - see profile.html for the markup.
+
+let badgeDetailEl = null;
+
+function setupBadgeDetail() {
+    const overlay = document.getElementById("badge-detail-overlay");
+    if (!overlay) return;
+    badgeDetailEl = {
+        overlay,
+        icon: document.getElementById("badge-detail-icon"),
+        name: document.getElementById("badge-detail-name"),
+        desc: document.getElementById("badge-detail-desc"),
+        status: document.getElementById("badge-detail-status")
+    };
+
+    overlay.querySelectorAll("[data-badge-detail-close]").forEach(node => {
+        node.addEventListener("click", closeBadgeDetail);
+    });
+    document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && !overlay.hidden) closeBadgeDetail();
+    });
+}
+
+function openBadgeDetail(badge, isEarned) {
+    if (!badgeDetailEl) return;
+    const { overlay, icon, name, desc, status } = badgeDetailEl;
+
+    icon.innerHTML = isEarned ? BADGE_ICONS[badge.icon] : BADGE_ICONS.locked;
+    icon.classList.toggle("is-locked", !isEarned);
+    name.textContent = tr(badge.labelKey);
+    desc.textContent = tr(badge.descriptionKey);
+    status.textContent = tr(isEarned ? "badge.detailEarned" : "badge.detailLocked");
+    status.classList.toggle("is-locked", !isEarned);
+
+    overlay.hidden = false;
+    requestAnimationFrame(() => overlay.classList.add("is-open"));
+}
+
+function closeBadgeDetail() {
+    if (!badgeDetailEl) return;
+    badgeDetailEl.overlay.classList.remove("is-open");
+    window.setTimeout(() => { badgeDetailEl.overlay.hidden = true; }, 240);
 }
 
 function setText(id, value) {

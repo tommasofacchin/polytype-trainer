@@ -29,7 +29,14 @@
 // Exercise types (rendered by js/lessons.js):
 //   { type: "mc", prompt, options: [...], answer: <index> }
 //   { type: "trueFalse", claim, answer: <bool> }
-//   { type: "type", prompt, answer: "<canonical>", accept: ["<alt spellings>"] }
+//   { type: "type", prompt, answer: "<canonical>", accept: ["<alt spellings>"],
+//     hint: "<dictionary form>" } - hint is optional: the base/infinitive
+//     form of whatever the blank inflects, shown next to the question so a
+//     blank testing conjugation/agreement doesn't also demand recalling the
+//     word itself out of context (e.g. in a Review run mixing it in from a
+//     lesson finished long ago). Only added where the blank is inflected
+//     from a distinct base form - not for invariant words (pronouns,
+//     conjunctions, particles) where the answer already is the citation form.
 // Example rows use { type: "example", ja: "日本語 (romaji)", en: "..." }.
 
 const JAPANESE_LESSONS_DATA = {

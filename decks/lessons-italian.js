@@ -22,7 +22,14 @@
 // Exercise types (rendered by js/lessons.js):
 //   { type: "mc", prompt, options: [...], answer: <index> }
 //   { type: "trueFalse", claim, answer: <bool> }
-//   { type: "type", prompt, answer: "<canonical>", accept: ["<alt spellings>"] }
+//   { type: "type", prompt, answer: "<canonical>", accept: ["<alt spellings>"],
+//     hint: "<dictionary form>" } - hint is optional: the base/infinitive
+//     form of whatever the blank inflects, shown next to the question so a
+//     blank testing conjugation/agreement doesn't also demand recalling the
+//     word itself out of context (e.g. in a Review run mixing it in from a
+//     lesson finished long ago). Only added where the blank is inflected
+//     from a distinct base form - not for invariant words (pronouns,
+//     conjunctions, particles) where the answer already is the citation form.
 // Example rows use { type: "example", it: "...", en: "..." }.
 
 const ITALIAN_LESSONS_DATA = {
@@ -96,7 +103,7 @@ const ITALIAN_LESSONS_DATA = {
                 { type: "type", prompt: "Type the form of 'essere' used with 'noi' (we).", answer: "siamo", accept: ["siamo"] },
                 { type: "trueFalse", claim: "'è' (is) has a written accent to tell it apart from 'e' (and).", answer: true },
                 { type: "mc", prompt: "How do you say 'She is here'? (qui = here)", options: ["Lei sono qui.", "Lei sei qui.", "Lei è qui.", "Lei siamo qui."], answer: 2 },
-                { type: "type", prompt: "Complete: 'Io ___ stanco.' (I am tired.)", answer: "sono", accept: ["sono"] }
+                { type: "type", prompt: "Complete: 'Io ___ stanco.' (I am tired.)", answer: "sono", accept: ["sono"], hint: "essere" }
             ]
         },
         {
@@ -116,7 +123,7 @@ const ITALIAN_LESSONS_DATA = {
             ],
             exercises: [
                 { type: "mc", prompt: "What is the 'io' form of 'avere'?", options: ["ho", "hai", "ha", "hanno"], answer: 0 },
-                { type: "type", prompt: "Complete: 'Io ___ una macchina.' (I have a car.)", answer: "ho", accept: ["ho"] },
+                { type: "type", prompt: "Complete: 'Io ___ una macchina.' (I have a car.)", answer: "ho", accept: ["ho"], hint: "avere" },
                 { type: "mc", prompt: "How do you say 'She has two children'? (due bambini)", options: ["Lei ho due bambini.", "Lei hai due bambini.", "Lei ha due bambini.", "Lei hanno due bambini."], answer: 2 },
                 { type: "trueFalse", claim: "The 'h' in 'ho' and 'hanno' is silent.", answer: true },
                 { type: "type", prompt: "Type the form of 'avere' used with 'noi' (we).", answer: "abbiamo", accept: ["abbiamo"] },
@@ -1111,7 +1118,7 @@ const ITALIAN_LESSONS_DATA = {
             ],
             exercises: [
                 { type: "mc", prompt: "What does 'Quanti anni hai?' ask?", options: ["What's your name?", "How old are you?", "Where do you live?", "What do you do?"], answer: 1 },
-                { type: "type", prompt: "Complete: 'Ho venti ___.' (I am twenty years old.)", answer: "anni", accept: ["anni"] },
+                { type: "type", prompt: "Complete: 'Ho venti ___.' (I am twenty years old.)", answer: "anni", accept: ["anni"], hint: "anno" },
                 { type: "mc", prompt: "Which question asks about someone's job?", options: ["Come ti chiami?", "Dove abiti?", "Che lavoro fai?", "Quanti anni hai?"], answer: 2 },
                 { type: "trueFalse", claim: "In Italian you say you HAVE a certain number of years, using 'avere'.", answer: true },
                 { type: "type", prompt: "Type the Italian question for 'What's your name?'.", answer: "come ti chiami", accept: ["come ti chiami", "Come ti chiami?"] },
@@ -1239,7 +1246,7 @@ const ITALIAN_LESSONS_DATA = {
                 { type: "type", prompt: "Type the Italian phrase for 'I agree'.", answer: "sono d'accordo", accept: ["sono d'accordo"] },
                 { type: "mc", prompt: "Which phrase means 'In my opinion...'?", options: ["Mi piace...", "Secondo me...", "Preferisco...", "Non sono d'accordo..."], answer: 1 },
                 { type: "trueFalse", claim: "'Non sono d'accordo' means 'I disagree'.", answer: true },
-                { type: "type", prompt: "Complete: 'Non mi ___ il pesce.' (I don't like fish.)", answer: "piace", accept: ["piace"] },
+                { type: "type", prompt: "Complete: 'Non mi ___ il pesce.' (I don't like fish.)", answer: "piace", accept: ["piace"], hint: "piacere" },
                 { type: "mc", prompt: "What does 'Preferisco il tè' mean?", options: ["I like tea", "I don't like tea", "I prefer tea", "I think tea"], answer: 2 }
             ]
         },

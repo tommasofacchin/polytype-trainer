@@ -530,8 +530,7 @@ body {
 .dashboard-tile,
 .dashboard-social-card,
 .friends-card,
-.category-card,
-.lessons-card {
+.category-card {
     --card-tint: 100%;
     background: color-mix(in srgb, var(--surface) var(--card-tint), var(--bg-soft));
     border: 1px solid var(--border);
@@ -542,7 +541,7 @@ body {
 .settings { --card-tint: 84%; }
 .hud-item, .dictate-hud-item, .mem-hud-item { --card-tint: 86%; }
 .profile-hero, .list-card { --card-tint: 88%; }
-.profile-detail-card, .dashboard-tile, .dashboard-social-card, .friends-card, .category-card, .lessons-card { --card-tint: 90%; }
+.profile-detail-card, .dashboard-tile, .dashboard-social-card, .friends-card, .category-card { --card-tint: 90%; }
 .language-menu-panel { --card-tint: 94%; }
 
 /* ---- Header: auth dropdown widget -------------------------------------------- */
@@ -1523,6 +1522,114 @@ input[type="password"]:focus {
     gap: 10px;
 }
 
+/* Every tile is a real button now - earned or locked, tapping one opens its
+   detail popup (openBadgeDetail in js/profile.js). appearance:none/border:0
+   strip the native button chrome so it reads exactly as the plain icon-over-
+   label tile it always was, just interactive. */
+.badge-tile {
+    appearance: none;
+    border: 0;
+    background: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+}
+
+.badge-tile-icon {
+    aspect-ratio: 1;
+    width: 100%;
+    border-radius: 13px;
+    border: 1px solid var(--border);
+    /* Theme-token background (not hardcoded white alpha, which was
+       near-invisible in light theme). */
+    background: var(--surface-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color var(--transition), transform var(--dur-fast) var(--ease-out);
+}
+
+.badge-tile:hover .badge-tile-icon,
+.badge-tile:focus-visible .badge-tile-icon {
+    border-color: var(--border-strong);
+    outline: 0;
+}
+
+.badge-tile:active .badge-tile-icon {
+    transform: scale(0.94);
+}
+
+.badge-tile.is-locked .badge-tile-icon {
+    background: var(--surface-empty);
+    color: var(--text-faintest);
+}
+
+.badge-tile-label {
+    font-size: 9px;
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--text-soft);
+}
+
+.badge-tile.is-locked .badge-tile-label {
+    color: var(--text-faintest);
+}
+
+/* ── Badge detail popup ──────────────────────────────────────────────────
+   Opened from a tap on any tile above (js/profile.js). Sits on
+   .confirm-card's existing shell (see deck.html's unlock-confirm popup for
+   the other user of it) - only the icon/name/description/status inside are
+   specific to badges. */
+.badge-detail-icon {
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    margin: 0 auto;
+    border-radius: 50%;
+    background: var(--surface-soft);
+}
+
+.badge-detail-icon svg {
+    width: 30px;
+    height: 30px;
+}
+
+.badge-detail-icon.is-locked {
+    background: var(--surface-empty);
+    color: var(--text-faintest);
+}
+
+.badge-detail-name {
+    margin: 0;
+    color: var(--text);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--text-lg);
+}
+
+/* inline-block, centered via .confirm-card's own text-align: center rather
+   than margin:auto (which does nothing on an inline-level box). */
+.badge-detail-status {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: var(--radius-pill);
+    background: var(--accent-soft);
+    color: var(--accent-ink);
+    font-size: var(--text-xs);
+    font-weight: 800;
+}
+
+.badge-detail-status.is-locked {
+    background: var(--surface-soft);
+    color: var(--text-faint);
+}
+
 /* ---- Profile: practice heatmap ---------------------------------------------
    dailyStats as a 7-row block, one column per week. Flowing by column (rather
    than the usual row flow) is what puts the oldest day at the top left and
@@ -1563,6 +1670,28 @@ input[type="password"]:focus {
    unpractised today reads as "still open" instead of as a missed day. */
 .activity-cell[data-today="true"] {
     border: 1px dashed var(--text-faintest);
+}
+
+/* Only on the redraw that swaps the all-rest-days placeholder for the real
+   heatmap once it arrives (see the `animate` flag on renderActivity in
+   js/profile.js) - a fresh page's first draw and a resize refit stay instant.
+   --col (set per cell in JS) sweeps the reveal oldest-week-first instead of
+   every cell popping in at once, so the fetch's own delay reads as the
+   card filling in rather than as something suddenly appearing late. */
+.activity-cell.is-revealing {
+    animation: activity-cell-in 320ms var(--ease-out) both;
+    animation-delay: calc(var(--col, 0) * 10ms);
+}
+
+@keyframes activity-cell-in {
+    from { opacity: 0; transform: scale(0.4); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .activity-cell.is-revealing {
+        animation: none;
+    }
 }
 
 /* Sits right next to the "Activity" label instead of pinned to the card's far
@@ -2036,8 +2165,16 @@ input[type="password"]:focus {
 
 /* ---- Sprint: mixed-round game ------------------------------------------- */
 
-/* .list-card qualifier only to raise specificity - see the grid-row note. */
+/* .list-card qualifier only to raise specificity - see the grid-row note.
+   Also strips .list-card's own grey/rounded card surface: the stage sits
+   directly on the page's black ground instead, matching the Lessons player
+   (see .lessons-card in the Lessons section) - .list-card itself stays as-is
+   for Trainer, which still wants the panel look. */
 .list-card.sprint-stage {
+    background: none;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
     align-items: center;
     justify-content: center;
     /* Row 2 is .game-hud's track on the pages that still have one; sprint
@@ -6186,30 +6323,6 @@ body > main {
     font-family: var(--font-sans);
 }
 
-/* ---- Home: the study-language pill under the greeting -------------------- */
-
-.home-language-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    margin-top: 8px;
-    padding: 5px 11px 5px 7px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-pill);
-    background: color-mix(in srgb, var(--surface) 90%, var(--bg-soft));
-    font-size: 12px;
-    font-weight: 800;
-    color: var(--text-soft);
-}
-
-.home-language-pill .flag-mark {
-    width: 20px;
-}
-
-.home-language-pill[hidden] {
-    display: none;
-}
-
 /* ---- Home: two columns on a desktop width -------------------------------- */
 /* Below this the two wrappers are plain blocks and Home stays a single stack.
    The threshold is well above the 860px where the nav becomes a 220px sidebar:
@@ -9438,107 +9551,24 @@ body:has(.game-result-overlay.is-entering:not([hidden])) #app-header {
     width: 100%;
 }
 
-/* ── Review card ─────────────────────────────────────────────────────────
-   Mixed practice over every lesson already finished - the path's own Sprint.
-   Built in js/lessons.js (buildReviewCard) and parked above the first module
-   rather than below the last node, since it's the one thing on this page you
-   come back for after the curriculum is behind you. Shares the map's column
-   width so the page reads as one stack. */
-.lessons-review-slot {
-    max-width: 520px;
-    margin: 0 auto var(--space-6);
-    width: 100%;
-}
-
-.lessons-review-card {
-    display: flex;
-    align-items: center;
-    gap: var(--space-4);
-    width: 100%;
-    padding: var(--space-4) var(--space-5);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    /* A wash of accent behind the icon end only - enough to mark the card as
-       the page's action without turning it into a second banner competing
-       with the module headers right below it. */
-    background:
-        radial-gradient(circle at 0% 50%, var(--accent-soft), transparent 62%),
-        var(--surface);
-    color: var(--text);
-    font: inherit;
-    text-align: left;
-    cursor: pointer;
-    transition: border-color var(--transition), background var(--transition), transform var(--dur-fast) var(--ease-out);
-}
-
-.lessons-review-card:hover:not(:disabled),
-.lessons-review-card:focus-visible {
-    border-color: var(--border-strong);
-    outline: 0;
-}
-
-.lessons-review-card:not(:disabled):active {
-    transform: scale(0.99);
-}
-
-/* Nothing finished yet. The card still explains itself, it just can't be
-   pressed: no accent wash and no CTA pill, so it reads as "not yet" at a
-   glance instead of as a button that ignores taps. */
-.lessons-review-card.is-locked {
-    background: var(--surface-empty);
-    cursor: default;
-}
-
-.lessons-review-icon {
-    display: grid;
-    place-items: center;
+/* ── Review FAB ──────────────────────────────────────────────────────────
+   Mixed practice over every lesson already finished, one tap away no matter
+   how far down the path you've scrolled. Built in js/lessons.js
+   (buildReviewFab) into an otherwise-empty slot that's only ever populated
+   once there's something to review - see the function for why an
+   always-visible disabled button isn't the fallback. Reuses
+   .home-play-again-btn (index.html) for its face/press so it reads as the
+   exact same action as Home's Play, just pinned in a different place; this
+   rule only repositions it and adds the floating glow. */
+.lessons-review-fab {
+    position: fixed;
+    right: 20px;
+    bottom: calc(84px + env(safe-area-inset-bottom, 0px));
+    z-index: 45;
     flex: none;
-    width: 42px;
-    height: 42px;
-    border-radius: var(--radius-md);
-    background: var(--accent-soft);
-    color: var(--accent-ink);
-}
-
-.lessons-review-icon svg {
-    width: 21px;
-    height: 21px;
-}
-
-.lessons-review-card.is-locked .lessons-review-icon {
-    background: var(--surface-soft);
-    color: var(--text-faintest);
-}
-
-.lessons-review-copy {
-    display: grid;
-    gap: 2px;
-    flex: 1;
-    min-width: 0;
-}
-
-.lessons-review-title {
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: var(--text-md);
-    color: var(--text);
-}
-
-.lessons-review-sub {
-    color: var(--text-faint);
-    font-size: var(--text-xs);
-    font-weight: 600;
-    line-height: 1.35;
-}
-
-.lessons-review-cta {
-    flex: none;
-    padding: 7px 14px;
-    border-radius: var(--radius-pill);
-    background: var(--accent);
-    color: var(--text-inverse);
-    font-size: var(--text-xs);
-    font-weight: 800;
+    width: auto;
+    padding: 13px 20px;
+    box-shadow: 0 var(--btn-depth) 0 var(--btn-edge), var(--shadow-cta);
 }
 
 /* Duolingo-style vertical map: each module is a coloured banner followed by
@@ -9858,6 +9888,9 @@ body:has(.game-result-overlay.is-entering:not([hidden])) #app-header {
     margin-bottom: var(--space-3);
 }
 
+/* Deliberately not part of the shared card surface primitive above: the
+   exercise and completion screens sit directly on the page's own black
+   ground rather than a grey panel, so this only carries layout. */
 .lessons-card {
     padding: clamp(20px, 4vw, 32px);
     display: flex;
@@ -10067,6 +10100,19 @@ body.lessons-sheet-open {
     width: min(100%, 320px);
 }
 
+/* The dictionary/infinitive form of whatever the blank is inflecting (see
+   renderTypeExercise in js/lessons.js). Sits between the prompt and the
+   input, styled quieter than the kicker above it so it reads as a side note,
+   not part of the question. */
+.lessons-type-hint {
+    margin: -4px 0 0;
+    color: var(--text-faint);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    font-style: italic;
+    text-align: center;
+}
+
 /* Shown under a wrong answer to spell out the correct one (see
    revealCorrection in js/lessons.js). Green to match the correct-option cue
    the mc/true-false rounds already give; the red input/button above it is
@@ -10078,6 +10124,56 @@ body.lessons-sheet-open {
     font-weight: 700;
     text-align: center;
     animation: sprint-answer-pop 260ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* The whole card pops in fresh every time it's unhidden (finishSession in
+   js/lessons.js just flips [hidden] off, no class dance needed - going from
+   display:none to flex always replays a CSS animation) rather than snapping
+   straight to its finished state the way it used to. */
+.lessons-complete-screen {
+    animation: lessons-complete-in 380ms var(--ease-out) both;
+}
+
+@keyframes lessons-complete-in {
+    0%   { opacity: 0; transform: scale(0.92) translateY(10px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .lessons-complete-screen {
+        animation: none;
+    }
+}
+
+/* Same checkmark as a completed path node (see .lesson-path-node.is-complete
+   .lesson-path-circle), given a bounce on arrival so the completion screen
+   opens on a small "job done" beat before the title even settles. */
+.lessons-complete-icon {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--text-inverse);
+    animation: lessons-complete-icon-in 460ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.lessons-complete-icon svg {
+    width: 28px;
+    height: 28px;
+}
+
+@keyframes lessons-complete-icon-in {
+    0%   { opacity: 0; transform: scale(0.4) rotate(-25deg); }
+    60%  { opacity: 1; transform: scale(1.12) rotate(4deg); }
+    100% { opacity: 1; transform: scale(1) rotate(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .lessons-complete-icon {
+        animation: none;
+    }
 }
 
 .lessons-complete-title {
@@ -10106,14 +10202,12 @@ body.lessons-sheet-open {
     /* Reserved up front (matches .lessons-complete-status's own min-height
        below) so the coin line popping in after the save round-trip doesn't
        shove the Continue button down a beat later - the space is already
-       there, only the text/animation appears. line-height is pinned to the
-       same value as min-height (not left to the font's own metrics) so the
-       reserved box and the actual text line are pixel-identical - a
-       min-height alone can still leave a few px of mismatch once real text
-       renders, which is exactly the residual "settles into place" shift
-       this is meant to eliminate. */
+       there, only the icon/text/animation appears. */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
     min-height: 22px;
-    line-height: 22px;
     color: var(--color-gold-text);
     font-weight: 800;
     font-size: var(--text-md);

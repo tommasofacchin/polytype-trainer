@@ -98,6 +98,24 @@
       </a>
     </section>
   </main>
+
+  <!-- Tap a badge tile (earned or locked) and it opens here - reuses
+       .confirm-overlay/.confirm-card, the same backdrop-and-card shell as
+       deck.html's unlock-confirm popup, rather than a new dialog primitive.
+       Built in js/profile.js (openBadgeDetail). -->
+  <div id="badge-detail-overlay" class="confirm-overlay" role="dialog" aria-modal="true" aria-labelledby="badge-detail-name" hidden>
+    <div class="confirm-overlay-backdrop" data-badge-detail-close></div>
+    <div class="confirm-card badge-detail-card" role="document">
+      <button type="button" class="word-detail-close" data-badge-detail-close aria-label="Close" data-i18n-aria-label="common.close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <span id="badge-detail-icon" class="badge-detail-icon"></span>
+      <h2 id="badge-detail-name" class="badge-detail-name"></h2>
+      <p id="badge-detail-desc" class="confirm-card-body"></p>
+      <span id="badge-detail-status" class="badge-detail-status"></span>
+    </div>
+  </div>
+
   <div id="app-bottom-nav"></div>
 
   <script src="js/firebase-config.js"></script>

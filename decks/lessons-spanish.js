@@ -27,7 +27,14 @@
 // Exercise types (rendered by js/lessons.js):
 //   { type: "mc", prompt, options: [...], answer: <index> }
 //   { type: "trueFalse", claim, answer: <bool> }
-//   { type: "type", prompt, answer: "<canonical>", accept: ["<alt spellings>"] }
+//   { type: "type", prompt, answer: "<canonical>", accept: ["<alt spellings>"],
+//     hint: "<dictionary form>" } - hint is optional: the base/infinitive
+//     form of whatever the blank inflects, shown next to the question so a
+//     blank testing conjugation/agreement doesn't also demand recalling the
+//     word itself out of context (e.g. in a Review run mixing it in from a
+//     lesson finished long ago). Only added where the blank is inflected
+//     from a distinct base form - not for invariant words (pronouns,
+//     conjunctions, particles) where the answer already is the citation form.
 // Example rows use { type: "example", es: "...", en: "..." }.
 
 const SPANISH_LESSONS_DATA = {
@@ -786,7 +793,7 @@ const SPANISH_LESSONS_DATA = {
             exercises: [
                 { type: "mc", prompt: "What is the default Spanish word order?", options: ["Verb-Subject-Object", "Subject-Verb-Object", "Object-Verb-Subject", "Subject-Object-Verb"], answer: 1 },
                 { type: "trueFalse", claim: "Spanish word order is more flexible than English.", answer: true },
-                { type: "type", prompt: "Type the Spanish verb in 'María ___ pan' (eats).", answer: "come", accept: ["come"] },
+                { type: "type", prompt: "Type the Spanish verb in 'María ___ pan' (eats).", answer: "come", accept: ["come"], hint: "comer" },
                 { type: "mc", prompt: "Which sentence is neutral S-V-O for 'The boy reads a book'?", options: ["Un libro lee el niño.", "El niño lee un libro.", "Lee el niño un libro.", "El niño un libro lee."], answer: 1 },
                 { type: "trueFalse", claim: "A beginner should stick to S-V-O as the neutral order.", answer: true },
                 { type: "mc", prompt: "Why is Spanish order flexible?", options: ["it has no verbs", "verb endings and pronouns carry the information", "it has no nouns", "it uses no articles"], answer: 1 }
@@ -915,7 +922,7 @@ const SPANISH_LESSONS_DATA = {
             ],
             exercises: [
                 { type: "mc", prompt: "How do you say 'My name is Ana'?", options: ["Soy Ana llamo.", "Me llamo Ana.", "Mi nombre Ana.", "Llamo me Ana."], answer: 1 },
-                { type: "type", prompt: "Type the phrase 'I'm from' (2 words): '___ ___ Italia'? Just the verb.", answer: "soy", accept: ["soy"] },
+                { type: "type", prompt: "Type the phrase 'I'm from' (2 words): '___ ___ Italia'? Just the verb.", answer: "soy", accept: ["soy"], hint: "ser" },
                 { type: "mc", prompt: "How do you ask someone's name (informal)?", options: ["¿Cómo te llamas?", "¿Dónde te llamas?", "¿Qué te llamas?", "¿Cuándo te llamas?"], answer: 0 },
                 { type: "trueFalse", claim: "'Mucho gusto' means 'Nice to meet you'.", answer: true },
                 { type: "mc", prompt: "'Soy de Italia' means...?", options: ["I go to Italy", "I'm from Italy", "I like Italy", "I speak Italian"], answer: 1 },
@@ -1110,7 +1117,7 @@ const SPANISH_LESSONS_DATA = {
             ],
             exercises: [
                 { type: "mc", prompt: "How do you ask 'Where are you from?' (informal)", options: ["¿Dónde vives?", "¿De dónde eres?", "¿Cómo te llamas?", "¿Cuántos años tienes?"], answer: 1 },
-                { type: "type", prompt: "Type the verb to answer 'I'm from...' : '___ de Italia'.", answer: "soy", accept: ["soy"] },
+                { type: "type", prompt: "Type the verb to answer 'I'm from...' : '___ de Italia'.", answer: "soy", accept: ["soy"], hint: "ser" },
                 { type: "mc", prompt: "How do you ask someone's age?", options: ["¿Cuántos años tienes?", "¿De dónde eres?", "¿Dónde vives?", "¿Cómo estás?"], answer: 0 },
                 { type: "trueFalse", claim: "You answer '¿Dónde vives?' with 'Vivo en...'.", answer: true },
                 { type: "mc", prompt: "How do you say 'My name is...'?", options: ["Soy de...", "Me llamo...", "Tengo...", "Vivo en..."], answer: 1 },
@@ -1153,7 +1160,7 @@ const SPANISH_LESSONS_DATA = {
             ],
             exercises: [
                 { type: "mc", prompt: "How do you ask 'How much does this cost?'", options: ["¿Cuándo cuesta esto?", "¿Cuánto cuesta esto?", "¿Cómo cuesta esto?", "¿Dónde cuesta esto?"], answer: 1 },
-                { type: "type", prompt: "Type the polite word for 'I'd like' (as in '___ un kilo').", answer: "quería", accept: ["queria", "quería"] },
+                { type: "type", prompt: "Type the polite word for 'I'd like' (as in '___ un kilo').", answer: "quería", accept: ["queria", "quería"], hint: "querer" },
                 { type: "mc", prompt: "How do you ask 'Do you have bread?'", options: ["¿Tiene pan?", "¿Hay tiene pan?", "¿Es pan?", "¿Quiere pan?"], answer: 0 },
                 { type: "trueFalse", claim: "'¿Puedo pagar con tarjeta?' asks to pay by card.", answer: true },
                 { type: "mc", prompt: "'Quería un kilo de manzanas' means...?", options: ["I want the apple shop", "I'd like a kilo of apples", "Where are the apples?", "The apples are expensive"], answer: 1 },
@@ -1196,7 +1203,7 @@ const SPANISH_LESSONS_DATA = {
             exercises: [
                 { type: "mc", prompt: "How do you ask 'What's the weather like?'", options: ["¿Qué hora hace?", "¿Qué tiempo hace?", "¿Cómo tiempo es?", "¿Dónde hace tiempo?"], answer: 1 },
                 { type: "mc", prompt: "What does 'Hace frío' mean?", options: ["It's hot", "It's cold", "It's sunny", "It's windy"], answer: 1 },
-                { type: "type", prompt: "Type the verb used in most weather phrases (as in '___ calor').", answer: "hace", accept: ["hace"] },
+                { type: "type", prompt: "Type the verb used in most weather phrases (as in '___ calor').", answer: "hace", accept: ["hace"], hint: "hacer" },
                 { type: "trueFalse", claim: "'Llueve' means 'It's raining'.", answer: true },
                 { type: "mc", prompt: "How do you say 'It's sunny'?", options: ["Hace sol", "Hace frío", "Nieva", "Hace viento"], answer: 0 },
                 { type: "trueFalse", claim: "'Nieva' means 'It's snowing'.", answer: true }

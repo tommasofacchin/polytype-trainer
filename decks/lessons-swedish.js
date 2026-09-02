@@ -20,7 +20,14 @@
 // Exercise types (rendered by js/lessons.js):
 //   { type: "mc", prompt, options: [...], answer: <index> }
 //   { type: "trueFalse", claim, answer: <bool> }
-//   { type: "type", prompt, answer: "<canonical>", accept: ["<alt spellings>"] }
+//   { type: "type", prompt, answer: "<canonical>", accept: ["<alt spellings>"],
+//     hint: "<dictionary form>" } - hint is optional: the base/infinitive
+//     form of whatever the blank inflects, shown next to the question so a
+//     blank testing conjugation/agreement doesn't also demand recalling the
+//     word itself out of context (e.g. in a Review run mixing it in from a
+//     lesson finished long ago). Only added where the blank is inflected
+//     from a distinct base form - not for invariant words (pronouns,
+//     conjunctions, particles) where the answer already is the citation form.
 // Example rows use { type: "example", sv: "...", en: "..." }.
 
 const SWEDISH_LESSONS_DATA = {
@@ -166,7 +173,7 @@ const SWEDISH_LESSONS_DATA = {
                 { type: "mc", prompt: "How do you say 'You are happy' (singular)?", options: ["Du var glad.", "Du är glad.", "Du vara glad.", "Du glad är."], answer: 1 },
                 { type: "type", prompt: "Type the present-tense form of 'att vara' used for every subject.", answer: "är", accept: ["är"] },
                 { type: "mc", prompt: "What does 'att' mark at the start of a verb like 'att vara'?", options: ["Past tense", "The infinitive (dictionary form)", "A question", "Plural"], answer: 1 },
-                { type: "type", prompt: "Complete: 'De ___ glada.' (They are happy.)", answer: "är", accept: ["är"] }
+                { type: "type", prompt: "Complete: 'De ___ glada.' (They are happy.)", answer: "är", accept: ["är"], hint: "att vara" }
             ]
         },
         {
@@ -183,7 +190,7 @@ const SWEDISH_LESSONS_DATA = {
             ],
             exercises: [
                 { type: "mc", prompt: "What is the present tense of 'att ha' (to have)?", options: ["har", "hade", "ha", "haft"], answer: 0 },
-                { type: "type", prompt: "Type: 'Jag ___ en bil.' (I have a car.)", answer: "har", accept: ["har"] },
+                { type: "type", prompt: "Type: 'Jag ___ en bil.' (I have a car.)", answer: "har", accept: ["har"], hint: "att ha" },
                 { type: "trueFalse", claim: "'har' changes form depending on the subject (jag har vs. hon har).", answer: false },
                 { type: "mc", prompt: "How do you say 'They have time'?", options: ["De har tid.", "De är tid.", "De ha tid.", "Ni har tid."], answer: 0 },
                 { type: "mc", prompt: "Which verb form later combines with 'har' to form the present perfect (e.g. 'have eaten')?", options: ["the infinitive", "the supine", "the imperative", "the plural"], answer: 1 },
@@ -212,7 +219,7 @@ const SWEDISH_LESSONS_DATA = {
                 { type: "mc", prompt: "How do you say 'She likes coffee'?", options: ["Hon gilla kaffe.", "Hon gillar kaffe.", "Hon giller kaffe.", "Hon att gilla kaffe."], answer: 1 },
                 { type: "trueFalse", claim: "A Swedish present-tense verb has the same form for every subject.", answer: true },
                 { type: "mc", prompt: "What is the present tense of 'att komma' (to come)?", options: ["komma", "kom", "kommer", "kommit"], answer: 2 },
-                { type: "type", prompt: "Complete: 'Jag ___ i Stockholm.' (I live in Stockholm.)", answer: "bor", accept: ["bor"] }
+                { type: "type", prompt: "Complete: 'Jag ___ i Stockholm.' (I live in Stockholm.)", answer: "bor", accept: ["bor"], hint: "att bo" }
             ]
         },
         {
@@ -583,7 +590,7 @@ const SWEDISH_LESSONS_DATA = {
                 { type: "type", prompt: "Type the plural form of 'stor' (used with any plural noun).", answer: "stora", accept: ["stora"] },
                 { type: "trueFalse", claim: "Adjectives stay unchanged with en-words.", answer: true },
                 { type: "mc", prompt: "Which is correct for 'big cars' (plural)?", options: ["stor bilar", "stora bilar", "stort bilar", "storet bilar"], answer: 1 },
-                { type: "type", prompt: "Complete: 'ett ___ hus' (a big house).", answer: "stort", accept: ["stort"] },
+                { type: "type", prompt: "Complete: 'ett ___ hus' (a big house).", answer: "stort", accept: ["stort"], hint: "stor" },
                 { type: "mc", prompt: "What ending do ett-words typically add to an adjective?", options: ["-a", "-t", "-en", "-et"], answer: 1 }
             ]
         },
@@ -692,7 +699,7 @@ const SWEDISH_LESSONS_DATA = {
             exercises: [
                 { type: "mc", prompt: "What is the present tense of 'att kunna' (can)?", options: ["kunna", "kan", "kanna", "kunnat"], answer: 1 },
                 { type: "trueFalse", claim: "A modal verb like 'kan' is followed by 'att' before the next verb.", answer: false },
-                { type: "type", prompt: "Complete: 'Jag ___ simma.' (I can swim.)", answer: "kan", accept: ["kan"] },
+                { type: "type", prompt: "Complete: 'Jag ___ simma.' (I can swim.)", answer: "kan", accept: ["kan"], hint: "att kunna" },
                 { type: "mc", prompt: "What is the present tense of 'att vilja' (to want to)?", options: ["vilja", "vill", "viller", "velat"], answer: 1 },
                 { type: "type", prompt: "Type the present tense of 'att skola' (shall/will).", answer: "ska", accept: ["ska", "skall"] },
                 { type: "mc", prompt: "How do you say 'I should go'?", options: ["Jag bör att gå.", "Jag bör gå.", "Jag borde att gå.", "Jag går bör."], answer: 1 }
@@ -715,7 +722,7 @@ const SWEDISH_LESSONS_DATA = {
             exercises: [
                 { type: "mc", prompt: "How do you say 'I have eaten'?", options: ["Jag har äta.", "Jag har ätit.", "Jag har äter.", "Jag har att äta."], answer: 1 },
                 { type: "trueFalse", claim: "The Swedish present perfect is built with 'har' + the supine form.", answer: true },
-                { type: "type", prompt: "Complete: 'Hon har ___ boken.' (She has read the book.)", answer: "läst", accept: ["läst"] },
+                { type: "type", prompt: "Complete: 'Hon har ___ boken.' (She has read the book.)", answer: "läst", accept: ["läst"], hint: "att läsa" },
                 { type: "mc", prompt: "What is the supine of 'att göra' (to do)?", options: ["gjört", "gjort", "göret", "gjordt"], answer: 1 },
                 { type: "type", prompt: "Type the supine of 'att komma' (to come).", answer: "kommit", accept: ["kommit"] },
                 { type: "mc", prompt: "Which is correct for 'They have talked'?", options: ["De har prata.", "De har pratar.", "De har pratat.", "De har att prata."], answer: 2 }
@@ -757,7 +764,7 @@ const SWEDISH_LESSONS_DATA = {
             ],
             exercises: [
                 { type: "mc", prompt: "Which word expresses a planned/decided future action?", options: ["ska", "kan", "måste", "bör"], answer: 0 },
-                { type: "type", prompt: "Complete: 'Jag ___ resa imorgon.' (I'm going to travel tomorrow.)", answer: "ska", accept: ["ska", "skall"] },
+                { type: "type", prompt: "Complete: 'Jag ___ resa imorgon.' (I'm going to travel tomorrow.)", answer: "ska", accept: ["ska", "skall"], hint: "att skola" },
                 { type: "trueFalse", claim: "Swedish has a distinct future-tense verb form, separate from the present tense.", answer: false },
                 { type: "mc", prompt: "Which best fits a weather prediction, 'It will rain'?", options: ["Det vill regna.", "Det kommer att regna.", "Det måste regna.", "Det bör regna."], answer: 1 },
                 { type: "type", prompt: "Type the two-word phrase (before an infinitive) that signals a prediction about the future.", answer: "kommer att", accept: ["kommer att"] },
@@ -802,7 +809,7 @@ const SWEDISH_LESSONS_DATA = {
                 { type: "mc", prompt: "What is the basic Swedish word order?", options: ["V-S-O", "S-O-V", "S-V-O", "O-V-S"], answer: 2 },
                 { type: "trueFalse", claim: "'Jag läser boken' follows Subject-Verb-Object order.", answer: true },
                 { type: "mc", prompt: "Which sentence correctly follows S-V-O?", options: ["Kaffe gillar hon.", "Gillar hon kaffe.", "Hon gillar kaffe.", "Hon kaffe gillar."], answer: 2 },
-                { type: "type", prompt: "Complete with the correct verb form: 'Hon ___ boken.' (She reads the book.)", answer: "läser", accept: ["läser"] },
+                { type: "type", prompt: "Complete with the correct verb form: 'Hon ___ boken.' (She reads the book.)", answer: "läser", accept: ["läser"], hint: "att läsa" },
                 { type: "mc", prompt: "In 'Hon gillar kaffe', what role does 'kaffe' play?", options: ["Subject", "Verb", "Object", "Adjective"], answer: 2 },
                 { type: "trueFalse", claim: "Swedish's basic word order is different from English.", answer: false }
             ]
@@ -822,7 +829,7 @@ const SWEDISH_LESSONS_DATA = {
                 { type: "mc", prompt: "What is always the SECOND element in a Swedish main clause?", options: ["The subject", "The object", "The finite verb", "The adverb"], answer: 2 },
                 { type: "mc", prompt: "In 'Idag läser jag boken', where is the verb?", options: ["First", "Second", "Third", "Last"], answer: 1 },
                 { type: "trueFalse", claim: "When a sentence starts with a time expression, the subject and verb swap places to keep the verb in position two.", answer: true },
-                { type: "type", prompt: "Complete: 'Idag ___ jag boken.' (Today I read the book.)", answer: "läser", accept: ["läser"] },
+                { type: "type", prompt: "Complete: 'Idag ___ jag boken.' (Today I read the book.)", answer: "läser", accept: ["läser"], hint: "att läsa" },
                 { type: "mc", prompt: "Which sentence correctly follows the verb-second rule?", options: ["Idag jag läser boken.", "Idag läser jag boken.", "Jag idag läser boken.", "Läser jag idag boken."], answer: 1 },
                 { type: "trueFalse", claim: "The verb-second rule only applies to yes/no questions, not statements.", answer: false }
             ]
@@ -840,7 +847,7 @@ const SWEDISH_LESSONS_DATA = {
             ],
             exercises: [
                 { type: "mc", prompt: "How do you say 'Now we eat' leading with 'nu'?", options: ["Nu vi äter.", "Nu äter vi.", "Vi nu äter.", "Äter nu vi."], answer: 1 },
-                { type: "type", prompt: "Complete: 'Här ___ jag.' (I live here.)", answer: "bor", accept: ["bor"] },
+                { type: "type", prompt: "Complete: 'Här ___ jag.' (I live here.)", answer: "bor", accept: ["bor"], hint: "att bo" },
                 { type: "trueFalse", claim: "Leading a sentence with a place adverb like 'här' still triggers subject-verb inversion.", answer: true },
                 { type: "mc", prompt: "Which word means 'tomorrow'?", options: ["nu", "senare", "imorgon", "där"], answer: 2 },
                 { type: "mc", prompt: "Which sentence is correctly inverted?", options: ["Där de bor.", "Där bor de.", "De där bor.", "Bor där de."], answer: 1 },
@@ -1286,7 +1293,7 @@ const SWEDISH_LESSONS_DATA = {
                 { type: "type", prompt: "Type the Swedish phrase for 'in a week'.", answer: "om en vecka", accept: ["om en vecka"] },
                 { type: "mc", prompt: "Which phrase means 'next year'?", options: ["imorgon", "om en vecka", "nästa år", "idag"], answer: 2 },
                 { type: "trueFalse", claim: "'Jag har planer på att...' means 'I have plans to...'", answer: true },
-                { type: "type", prompt: "Complete: 'Jag ___ resa till Sverige.' (I'm going to travel to Sweden.)", answer: "ska", accept: ["ska", "skall"] },
+                { type: "type", prompt: "Complete: 'Jag ___ resa till Sverige.' (I'm going to travel to Sweden.)", answer: "ska", accept: ["ska", "skall"], hint: "att skola" },
                 { type: "mc", prompt: "Which phrase expresses a tentative future intention, 'Maybe I'll travel...'?", options: ["Jag ska...", "Jag har planer på att...", "Kanske reser jag...", "Jag föredrar..."], answer: 2 }
             ]
         }

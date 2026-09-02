@@ -123,29 +123,6 @@ function renderGreeting(signedIn) {
     const LANGS_WITH_LESSONS = new Set(["norwegian", "swedish", "german", "italian", "chinese", "japanese", "spanish"]);
     const lessonsBtn = document.getElementById("home-lessons-btn");
     if (lessonsBtn) lessonsBtn.hidden = !LANGS_WITH_LESSONS.has(localStorage.getItem("polytype-language"));
-
-    renderLanguagePill(signedIn);
-}
-
-// The header already carries the active language as a flag, but a flag alone
-// doesn't say which language it is - and Home is where you land, so this is
-// where naming it is worth the row. Read-only on purpose: the header's flag
-// menu stays the one place a course is switched.
-function renderLanguagePill(signedIn) {
-    const pill = document.getElementById("home-language-pill");
-    if (!pill) return;
-
-    pill.hidden = !signedIn;
-    if (!signedIn) return;
-
-    const language = localStorage.getItem("polytype-language") || "chinese";
-    const flagSrc = window.PolytypeAppShell?.getLanguageFlag?.(language) || "";
-    const label = window.PolytypeI18n?.languageLabel?.(language) || language;
-
-    pill.innerHTML = `
-        <img class="flag-mark" src="${flagSrc}" alt="">
-        <span>${tr("home.learning", { language: label })}</span>
-    `;
 }
 
 function renderChest(state) {
