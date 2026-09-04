@@ -255,6 +255,19 @@
         window.PolytypeAppShell?.renderBottomNav?.();
 
         currentPage = page;
+        // The page being replaced gets one last call before its hooks are
+        // dropped. Re-running a page script is not enough on its own: the run
+        // that's leaving can still own live timers and document-level
+        // listeners, and those keep firing against a DOM that was just swapped
+        // out - a Dictate session left running would still answer keystrokes
+        // typed on Home (and play its wrong-answer sound), and Trainer's
+        // answer timeout kept advancing rows and playing word audio there.
+        try {
+            window.__polytypePageHooks?.onTeardown?.();
+        } catch {
+            // A page that throws on its way out must not strand the
+            // navigation half-done.
+        }
         window.__polytypePageHooks = {};
         // The next page re-attaches it (on focus, or explicitly for
         // callback-mode exercises) only if it actually needs it - without

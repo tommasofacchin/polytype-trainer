@@ -51,14 +51,15 @@
     const COUNTDOWN_STEP_DELAY = 780;
     const COUNTDOWN_GO_DELAY = 620;
 
-    const ALL_ROUND_TYPES = ["mc", "match", "audio", "trueFalse", "type"];
-    // TEMPORARY - the two example-sentence rounds ("cloze" = pick from four,
-    // "clozeType" = type it) are deliberately NOT in ALL_ROUND_TYPES, so a
-    // normal sprint never draws one. ?lab=cloze (the Home debug card, gated on
-    // the same handle as the other debug cards) is the only way in while the
-    // two formats are being looked at. To ship them: add them to the list
-    // above and delete this block plus getLabRoundTypes/isClozeLab. To drop
-    // them: delete the whole "Lab round types" section further down.
+    // "cloze" (fill the blank, pick from four) and "clozeType" (fill it from
+    // the keyboard) both run off decks/examples.js - see the sentence-round
+    // section below for how that file is loaded and what happens on a round
+    // drawn before it lands.
+    const ALL_ROUND_TYPES = ["mc", "match", "audio", "trueFalse", "type", "cloze", "clozeType"];
+    // TEMPORARY: ?lab=cloze (the Home debug card, gated on the same handle as
+    // the other debug cards) runs a short session of nothing but the two
+    // sentence rounds, for looking at them on their own. Delete this constant
+    // with isClozeLab/getLabRoundTypes and the card in js/dashboard.js.
     const CLOZE_LAB_ROUNDS = 6;
     // The verdict sound (recordAnswer) gets this long to itself before the
     // sentence starts reading, so the two don't talk over each other.
@@ -117,6 +118,11 @@
 
     let activeDeckMeta = null;
     let activeLanguage = FALLBACK_LANGUAGE;
+    // Set when a soft navigation (js/router.js) takes the page away mid-run.
+    // Rounds advance on timers and each new one renders - and often plays
+    // audio - on its own, so without this a sprint left half-played carried on
+    // in the background of whatever page came next.
+    let pageGone = false;
     let activeAudio = null;
 
     const el = {};
@@ -130,6 +136,9 @@
     }
 
     function initSprintPage() {
+        window.__polytypePageHooks = window.__polytypePageHooks || {};
+        window.__polytypePageHooks.onTeardown = () => { pageGone = true; };
+
         el.progress = document.getElementById("sprint-progress");
         el.progressFill = document.getElementById("sprint-progress-fill");
         el.exerciseRoot = document.getElementById("sprint-exercise-root");
@@ -203,13 +212,15 @@
             return;
         }
 
-        // Lab only, and awaited before the first round so it can't render
-        // "no sentences" while the file is still in flight.
+        // The lab has nothing but sentence rounds to draw, so there it has to
+        // be in hand before the first one; a normal sprint just skips those
+        // rounds until it arrives (see pickRoundType).
         if (isClozeLab()) await ensureExamplesLoaded();
 
         startSession();
-        // After startSession so the first round is on screen before the
+        // Both after startSession, so the first round is on screen before the
         // background fetches begin competing with it for connections.
+        ensureExamplesLoaded();
         scheduleAudioPreload(state.unlocked);
     }
 
@@ -372,13 +383,14 @@
     }
 
     function nextRound() {
+        if (pageGone) return;
         if (state.roundIndex >= state.totalRounds) {
             startRetryPhaseOrFinish();
             return;
         }
 
         state.roundLocked = false;
-        const type = state.availableRoundTypes[Math.floor(Math.random() * state.availableRoundTypes.length)];
+        const type = pickRoundType();
         // Fills as rounds are *completed*, so the bar reads empty on round 1
         // and only hits 100% once the last answer is in.
         setProgress(state.roundIndex / state.totalRounds, `${state.roundIndex + 1}/${state.totalRounds}`, false);
@@ -386,6 +398,26 @@
         el.exerciseRoot.innerHTML = "";
         if (type === "match") renderMatchRound();
         else renderSingleShotRound(type, null);
+    }
+
+    function isClozeType(type) {
+        return type === "cloze" || type === "clozeType";
+    }
+
+    // decks/examples.js is fetched in the background (it's 1.2MB, and four of
+    // the six round types have no use for it), so an early round can come up
+    // before it has landed. Rather than show a sentence round with nothing to
+    // blank out, draw again from the types that are ready - by the second or
+    // third round it always is. The lab is the exception: it has nothing else
+    // to draw, which is why init() waits for the file there.
+    function pickRoundType() {
+        const types = state.availableRoundTypes;
+        const type = types[Math.floor(Math.random() * types.length)];
+        if (!isClozeType(type) || window.DECK_EXAMPLES) return type;
+
+        const ready = types.filter(candidate => !isClozeType(candidate));
+        if (!ready.length) return type;
+        return ready[Math.floor(Math.random() * ready.length)];
     }
 
     function renderSingleShotRound(type, forcedWord) {
@@ -860,10 +892,9 @@
         return targets.some(t => norm === t || (t.length >= 3 && levenshtein(norm, t) <= 1));
     }
 
-    // ── Lab round types: fill the blank in an example sentence ──────────────
-    // TEMPORARY, reachable only through ?lab=cloze - see CLOZE_LAB_ROUNDS at
-    // the top of the file for how to ship or drop this section.
+    // ── Round types 6 & 7: fill the blank in an example sentence ────────────
 
+    // TEMPORARY - the Home debug card's way into a session of nothing else.
     function isClozeLab() {
         return new URLSearchParams(window.location.search).get("lab") === "cloze";
     }
@@ -995,12 +1026,11 @@
             });
         }
 
-        // Sinks the "type the missing word" prompt and the answer controls out
-        // of sight, leaving the sentence and its translation alone on screen.
-        // The class does all of it (see .is-clearing in style.css) and they
-        // keep their space while they go, deliberately: taking them out of the
-        // layout would jerk the sentence into the freed space just as it's
-        // being read out.
+        // Takes the "type the missing word" prompt and the answer controls off
+        // screen at once, leaving the sentence and its translation alone. The
+        // class does all of it (see .is-clearing in style.css) and they keep
+        // their space, deliberately: pulling them out of the layout would jerk
+        // the sentence into the freed space just as it's being read out.
         function clearAnswerUi() {
             el.exerciseRoot.querySelector(".sprint-exercise-kicker")?.classList.add("is-clearing");
             area.classList.add("is-clearing");

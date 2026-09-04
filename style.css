@@ -2322,10 +2322,14 @@ input[type="password"]:focus {
     letter-spacing: 0.04em;
 }
 
-/* Just the number on the ground - no ring, no plate. `block` rather than the
-   default inline so the pop below actually transforms it. */
+/* Just the number on the ground - no ring, no plate. A fixed box, not one that
+   hugs the text: "VIA!" is set smaller than the digits, and a line that shrank
+   with it pulled "PREPARATI" down a few pixels on the last step of the count. */
 .sprint-countdown-value {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 104px;
     font-family: var(--font-display);
     font-size: 92px;
     font-weight: 700;
@@ -2695,26 +2699,16 @@ input[type="password"]:focus {
 }
 
 /* Once the sentence is complete there is nothing left to answer with, so the
-   prompt and the options/keyboard sink out of the way and leave it to play
-   alone. They keep their box on the way out - `visibility`, never `hidden` or
-   `display`: pulling them out of the layout collapses the stage under the
-   sentence and snaps it to a new position mid-animation. The delayed
-   visibility step is what finally puts them out of reach of a tap or a screen
-   reader, once the fade has finished. */
+   prompt and the options/keyboard go, on the spot - no fade, nothing to watch.
+   `visibility`, never `hidden` or `display`: they have to keep their box, or
+   the stage collapses under the sentence and jerks it into the freed space
+   just as it's being read out. */
 .sprint-exercise-cloze .is-clearing {
-    opacity: 0;
     visibility: hidden;
-    transform: translateY(10px) scale(0.96);
-    pointer-events: none;
-    transition:
-        opacity 300ms var(--ease-out),
-        transform 300ms var(--ease-out),
-        visibility 0s linear 300ms;
 }
 
 @media (prefers-reduced-motion: reduce) {
     .sprint-cloze-answer { animation: none; }
-    .sprint-exercise-cloze .is-clearing { transform: none; }
 }
 
 /* Phones: nudge the answer buttons a little bigger (font + tap height) than
@@ -3514,6 +3508,20 @@ input[type="password"]:focus {
     flex-direction: column;
     align-items: center;
     padding: clamp(16px, 4vw, 40px) clamp(12px, 3vw, 24px);
+    /* The page ground, on the overlay itself - the same flat black the streak,
+       friends and missions pages of the run are painted on, so the last screen
+       doesn't arrive on a different colour than the four before it. */
+    background: var(--bg);
+}
+
+/* .timer-modal-backdrop is position:absolute, which inside this scroller means
+   it covers one viewport starting at the scroll origin - so a result card
+   taller than the screen (a phone, with the breakdown rows and both buttons)
+   scrolled straight off the end of its own background and showed the finished
+   game underneath. The overlay's own background above has no such edge; this
+   one only ever existed for .timer-modal's bounded-inside-a-card usage. */
+.game-result-overlay .timer-modal-backdrop {
+    display: none;
 }
 
 /* Self-sufficient [hidden] handling - this class is meant to be usable on
@@ -3671,16 +3679,33 @@ input[type="password"]:focus {
 
 /* ---- End-of-game XP burst ---------------------------------------------- */
 
-/* The result overlay is fixed at z-index 600 and would otherwise bury the
-   header - but the header is exactly where the XP is flying *to*, so it has
-   to stay visible and on top for the length of the result screen. */
-body:has(.game-result-overlay:not([hidden])) #app-header {
+/* The result overlay is fixed at z-index 600 and would otherwise bury the app
+   chrome - but the header is exactly where the XP is flying *to*, so it has to
+   stay visible and on top for the length of the result screen. The nav comes
+   up with it: lifting only the header left the chrome in halves, a strip of
+   header floating over the score with the sidebar (or, on a phone, the bottom
+   bar) swallowed by the overlay - which is what made this screen look broken
+   next to the full-bleed pages before it. */
+body:has(.game-result-overlay:not([hidden])) #app-header,
+body:has(.game-result-overlay:not([hidden])) #app-bottom-nav {
     z-index: 620;
 }
 
-/* Keeps a tall result card from sliding under the now-visible header. */
+/* Keeps a tall result card from sliding under either of them. The bottom
+   figure is the nav's own clearance (see .has-app-shell:has(#app-bottom-nav)),
+   which has to cover the selected tab's plate, not just the plank. */
 body:has(.game-result-overlay:not([hidden])) .game-result-overlay {
     padding-top: calc(clamp(16px, 4vw, 40px) + 56px);
+    padding-bottom: calc(clamp(16px, 4vw, 40px) + 78px + env(safe-area-inset-bottom, 0px));
+}
+
+/* Desktop: the nav is a 220px sidebar instead of a bottom bar, so the card
+   centres in what's left of the viewport rather than under the sidebar. */
+@media (min-width: 860px) {
+    body:has(.game-result-overlay:not([hidden])) .game-result-overlay {
+        padding-bottom: clamp(16px, 4vw, 40px);
+        padding-left: calc(clamp(12px, 3vw, 24px) + 220px);
+    }
 }
 
 .xp-star-layer {

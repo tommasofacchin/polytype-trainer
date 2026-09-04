@@ -119,6 +119,18 @@
         el.playAgainBtn.addEventListener("click", () => startSession(lastChosenDuration));
         document.addEventListener("click", onDocClick);
         document.addEventListener("keydown", onGlobalKeyDown);
+
+        // Soft navigation (js/router.js) swaps <main> out but leaves this run's
+        // document listeners and timers alive. Without this, a session left
+        // running kept answering keys pressed on whatever page came next -
+        // Enter on Home submitted an empty answer here and played the
+        // wrong-answer sound, from a game that wasn't on screen any more.
+        window.__polytypePageHooks = window.__polytypePageHooks || {};
+        window.__polytypePageHooks.onTeardown = () => {
+            document.removeEventListener("click", onDocClick);
+            document.removeEventListener("keydown", onGlobalKeyDown);
+            stopTimer();
+        };
         document.addEventListener("pointerdown", unlockAudio, { once: true });
 
         populateLangMenu();

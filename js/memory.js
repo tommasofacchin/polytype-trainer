@@ -137,6 +137,11 @@
     }
 
     function init() {
+        // See js/router.js's onTeardown call: this run's timer would otherwise
+        // keep ticking after a soft navigation swapped the board away.
+        window.__polytypePageHooks = window.__polytypePageHooks || {};
+        window.__polytypePageHooks.onTeardown = stopTimer;
+
         activeDeckMeta = getActiveDeckMeta();
         activeLanguage = activeDeckMeta?.language || FALLBACK_LANGUAGE;
         scriptFlag = getLanguageFlagSrc(activeLanguage);

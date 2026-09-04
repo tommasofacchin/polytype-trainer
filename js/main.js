@@ -155,6 +155,15 @@ function initTrainerPage() {
     // startSession() again) per revisit.
     window.__polytypePageHooks = window.__polytypePageHooks || {};
     window.__polytypePageHooks.onLanguageChanged = onAppLanguageChange;
+    // The answer timeout re-arms itself on every advance (moveToNextRow ->
+    // startActiveAnswerTimeout), so a session left running by a soft
+    // navigation kept timing rows out and playing their audio from a page it
+    // was no longer on. Same for the countdown, which would have ended the
+    // session over someone else's screen.
+    window.__polytypePageHooks.onTeardown = () => {
+        clearAnswerTimeout();
+        stopTimer();
+    };
     document.addEventListener("pointerdown", unlockAudioPlayback, true);
     document.addEventListener("keydown", unlockAudioPlayback, true);
 
