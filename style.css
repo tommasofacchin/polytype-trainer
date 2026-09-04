@@ -2322,30 +2322,20 @@ input[type="password"]:focus {
     letter-spacing: 0.04em;
 }
 
+/* Just the number on the ground - no ring, no plate. `block` rather than the
+   default inline so the pop below actually transforms it. */
 .sprint-countdown-value {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 128px;
-    height: 128px;
-    /* Pill, not a circle: "GO!" is wider than a digit, and a 50% radius would
-       stretch into an ellipse on that step alone. */
-    border-radius: var(--radius-pill);
-    padding: 0 var(--space-6);
-    border: 3px solid var(--border);
-    background: var(--surface);
+    display: block;
     font-family: var(--font-display);
-    font-size: 56px;
+    font-size: 92px;
     font-weight: 700;
     line-height: 1;
     color: var(--text);
 }
 
 .sprint-countdown-value.is-go {
-    border-color: var(--accent);
-    background: var(--accent-soft);
     color: var(--accent-ink);
-    font-size: 44px;
+    font-size: 72px;
     letter-spacing: 0.02em;
 }
 
@@ -2705,16 +2695,26 @@ input[type="password"]:focus {
 }
 
 /* Once the sentence is complete there is nothing left to answer with, so the
-   prompt and the options/keyboard bow out and let it play alone. Duration must
-   match CLOZE_CLEAR_FADE in js/sprint.js. */
+   prompt and the options/keyboard sink out of the way and leave it to play
+   alone. They keep their box on the way out - `visibility`, never `hidden` or
+   `display`: pulling them out of the layout collapses the stage under the
+   sentence and snaps it to a new position mid-animation. The delayed
+   visibility step is what finally puts them out of reach of a tap or a screen
+   reader, once the fade has finished. */
 .sprint-exercise-cloze .is-clearing {
     opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px) scale(0.96);
     pointer-events: none;
-    transition: opacity 180ms var(--ease-out);
+    transition:
+        opacity 300ms var(--ease-out),
+        transform 300ms var(--ease-out),
+        visibility 0s linear 300ms;
 }
 
 @media (prefers-reduced-motion: reduce) {
     .sprint-cloze-answer { animation: none; }
+    .sprint-exercise-cloze .is-clearing { transform: none; }
 }
 
 /* Phones: nudge the answer buttons a little bigger (font + tap height) than

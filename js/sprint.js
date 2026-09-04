@@ -66,10 +66,6 @@
     // Ceiling on the "sentence stays up while it plays" hold, so a clip that
     // is missing, blocked, or simply never ends can't strand the round.
     const CLOZE_MAX_HOLD = 5000;
-    // How long the prompt and the answer controls take to fade before they're
-    // pulled out of the layout. Must match .sprint-exercise-cloze .is-clearing's
-    // transition-duration (style.css).
-    const CLOZE_CLEAR_FADE = 180;
     // Flat bonus for a session with zero wrong answers (main rounds - a
     // retry-phase correction doesn't erase the original mistake, so any
     // retry activity at all already means this can't be perfect).
@@ -999,17 +995,15 @@
             });
         }
 
-        // Fades the "fill in the missing word" prompt and the answer controls
-        // out, then takes them out of the layout so the finished sentence
-        // recentres on the stage. Two steps rather than one `hidden`, which
-        // would make them disappear between one frame and the next. Hiding the
-        // input also blurs it, which is what puts the on-screen keyboard away.
+        // Sinks the "type the missing word" prompt and the answer controls out
+        // of sight, leaving the sentence and its translation alone on screen.
+        // The class does all of it (see .is-clearing in style.css) and they
+        // keep their space while they go, deliberately: taking them out of the
+        // layout would jerk the sentence into the freed space just as it's
+        // being read out.
         function clearAnswerUi() {
-            [el.exerciseRoot.querySelector(".sprint-exercise-kicker"), area].forEach(node => {
-                if (!node) return;
-                node.classList.add("is-clearing");
-                window.setTimeout(() => { node.hidden = true; }, CLOZE_CLEAR_FADE);
-            });
+            el.exerciseRoot.querySelector(".sprint-exercise-kicker")?.classList.add("is-clearing");
+            area.classList.add("is-clearing");
         }
 
         if (isTypeMode) renderClozeTypeInput(area, word, parts, reveal);
