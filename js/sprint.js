@@ -43,8 +43,29 @@
     // after this many wrong attempts the round is given up as wrong (see
     // failMatchRound in renderMatchRound) instead of allowing endless guesses.
     const MATCH_MAX_WRONG_ATTEMPTS = 3;
+    // Sprint has no duration modal to tap through, so without a count-in the
+    // first question was already on screen before the finger that opened the
+    // game had left the tile. runStartCountdown() spends this long per step on
+    // an otherwise empty stage ("3", "2", "1", then the shorter "GO!" beat)
+    // before round 1 renders.
+    const COUNTDOWN_STEP_DELAY = 460;
+    const COUNTDOWN_GO_DELAY = 380;
 
     const ALL_ROUND_TYPES = ["mc", "match", "audio", "trueFalse", "type"];
+    // TEMPORARY - the two example-sentence rounds ("cloze" = pick from four,
+    // "clozeType" = type it) are deliberately NOT in ALL_ROUND_TYPES, so a
+    // normal sprint never draws one. ?lab=cloze (the Home debug card, gated on
+    // the same handle as the other debug cards) is the only way in while the
+    // two formats are being looked at. To ship them: add them to the list
+    // above and delete this block plus getLabRoundTypes/isClozeLab. To drop
+    // them: delete the whole "Lab round types" section further down.
+    const CLOZE_LAB_ROUNDS = 6;
+    // The verdict sound (recordAnswer) gets this long to itself before the
+    // sentence starts reading, so the two don't talk over each other.
+    const CLOZE_VERDICT_DELAY = 420;
+    // Ceiling on the "sentence stays up while it plays" hold, so a clip that
+    // is missing, blocked, or simply never ends can't strand the round.
+    const CLOZE_MAX_HOLD = 5000;
     // Flat bonus for a session with zero wrong answers (main rounds - a
     // retry-phase correction doesn't erase the original mistake, so any
     // retry activity at all already means this can't be perfect).
@@ -182,6 +203,10 @@
             return;
         }
 
+        // Lab only, and awaited before the first round so it can't render
+        // "no sentences" while the file is still in flight.
+        if (isClozeLab()) await ensureExamplesLoaded();
+
         startSession();
         // After startSession so the first round is on screen before the
         // background fetches begin competing with it for connections.
@@ -235,7 +260,9 @@
     // ── Session lifecycle ──────────────────────────────────────────────────
 
     function startSession() {
-        state.totalRounds = 10 + Math.floor(Math.random() * 11); // 10-20 inclusive
+        state.totalRounds = isClozeLab()
+            ? CLOZE_LAB_ROUNDS
+            : 10 + Math.floor(Math.random() * 11); // 10-20 inclusive
         state.roundIndex = 0;
         state.lastWordIds = [];
         state.score = 0;
@@ -278,7 +305,57 @@
         });
         if (!state.availableRoundTypes.length) state.availableRoundTypes = ["type"];
 
-        nextRound();
+        const labTypes = getLabRoundTypes();
+        if (labTypes) state.availableRoundTypes = labTypes;
+
+        // Emptied before the count-in rather than in nextRound(), so "Play
+        // again" counts down over a fresh bar instead of the finished run's
+        // full one.
+        setProgress(0, `1/${state.totalRounds}`, false);
+        runStartCountdown(nextRound);
+    }
+
+    // Purely cosmetic: the session above is already fully set up by the time
+    // this runs, and `onDone` (nextRound) just waits its turn.
+    function runStartCountdown(onDone) {
+        if (!el.exerciseRoot) {
+            onDone();
+            return;
+        }
+
+        const steps = ["3", "2", "1", tr("sprint.countdown.go")];
+        el.exerciseRoot.innerHTML = `
+            <div class="sprint-countdown">
+                <span class="sprint-countdown-label">${tr("sprint.countdown.ready")}</span>
+                <span class="sprint-countdown-value" aria-hidden="true"></span>
+            </div>
+        `;
+
+        const root = el.exerciseRoot.querySelector(".sprint-countdown");
+        const value = root.querySelector(".sprint-countdown-value");
+        let index = 0;
+
+        function tick() {
+            // js/router.js can swap the page out mid-count on a soft
+            // navigation: the node we're counting on is detached by then, and
+            // round 1 must not be rendered into a stage nobody is looking at.
+            if (!root.isConnected) return;
+
+            const isLast = index === steps.length - 1;
+            value.textContent = steps[index];
+            value.classList.toggle("is-go", isLast);
+            value.classList.remove("is-ticking");
+            void value.offsetWidth; // restart the pop animation
+            value.classList.add("is-ticking");
+            index += 1;
+
+            window.setTimeout(
+                isLast ? () => { if (root.isConnected) onDone(); } : tick,
+                isLast ? COUNTDOWN_GO_DELAY : COUNTDOWN_STEP_DELAY
+            );
+        }
+
+        tick();
     }
 
     // The bar replaced the old "Round 3/12" HUD tile. The count it used to
@@ -315,6 +392,7 @@
         if (type === "mc") renderMcRound(forcedWord);
         else if (type === "audio") renderAudioRound(forcedWord);
         else if (type === "trueFalse") renderTrueFalseRound(forcedWord);
+        else if (type === "cloze" || type === "clozeType") renderClozeRound(type, forcedWord);
         else renderTypeRound(forcedWord);
     }
 
@@ -384,14 +462,19 @@
 
     // Routes a single-shot round's answer to normal scoring, or - during the
     // retry phase - to the 50%-value bonus without touching streak/accuracy.
-    function finishSingleShotRound(type, word, isCorrect) {
+    // `hold` (optional) delays only the *advance*: the answer is recorded and
+    // its verdict sound plays at once, while the round stays on screen until
+    // whatever `hold` is waiting on calls back. The cloze rounds use it to
+    // keep the completed sentence up for as long as its audio runs.
+    function finishSingleShotRound(type, word, isCorrect, hold = null) {
         if (state.inRetryPhase) {
             if (isCorrect) awardRetryBonus();
         } else {
             recordAnswer(isCorrect, word.id);
             if (!isCorrect) state.wrongRetryable.push({ type, word });
         }
-        advanceRound([word.id]);
+        if (hold) hold(() => advanceRound([word.id]));
+        else advanceRound([word.id]);
     }
 
     function awardRetryBonus() {
@@ -491,6 +574,10 @@
     function renderMatchRound() {
         const pairCount = Math.min(3 + Math.floor(Math.random() * 3), state.unlocked.length);
         const words = pickFeaturedWords(pairCount);
+        // So the reward playback below starts instantly on the first match
+        // instead of waiting on the CDN - the background queue started at
+        // init() may not have reached these words yet.
+        scheduleAudioPreload(words);
 
         el.exerciseRoot.innerHTML = `
             <div class="sprint-exercise sprint-exercise-match">
@@ -545,6 +632,10 @@
                 btn.disabled = true;
                 lockedCount += 2;
                 recordAnswer(true, btn.dataset.pair);
+                // Say the pair out loud the moment it lands: matching is the
+                // one round that never otherwise plays the target language,
+                // so a correct match was the player's only chance to hear it.
+                playWordAudio(words.find(word => word.id === btn.dataset.pair));
                 if (lockedCount === words.length * 2) {
                     state.wordsUsed += words.length;
                     advanceRound(words.map(w => w.id));
@@ -767,6 +858,220 @@
             targets.push(normalizeString(word.romanization));
         }
         return targets.some(t => norm === t || (t.length >= 3 && levenshtein(norm, t) <= 1));
+    }
+
+    // ── Lab round types: fill the blank in an example sentence ──────────────
+    // TEMPORARY, reachable only through ?lab=cloze - see CLOZE_LAB_ROUNDS at
+    // the top of the file for how to ship or drop this section.
+
+    function isClozeLab() {
+        return new URLSearchParams(window.location.search).get("lab") === "cloze";
+    }
+
+    function getLabRoundTypes() {
+        return isClozeLab() ? ["cloze", "clozeType"] : null;
+    }
+
+    // decks/examples.js is 1.2MB and every other sprint round works without
+    // it, so it is fetched on demand rather than added to sprint.html's script
+    // list. window.DECK_EXAMPLES outlives a soft navigation (js/router.js only
+    // re-runs the page script), so a second lab run costs nothing.
+    let examplesLoadPromise = null;
+
+    function ensureExamplesLoaded() {
+        if (window.DECK_EXAMPLES) return Promise.resolve();
+        if (!examplesLoadPromise) {
+            examplesLoadPromise = new Promise(resolve => {
+                const script = document.createElement("script");
+                script.src = "decks/examples.js";
+                // A failed load resolves too: renderClozeRound already has to
+                // handle "no sentence for this word" and says so on screen.
+                script.onload = () => resolve();
+                script.onerror = () => resolve();
+                document.head.appendChild(script);
+            });
+        }
+        return examplesLoadPromise;
+    }
+
+    function getWordExamples(word) {
+        if (!word?.id) return [];
+        return window.DECK_EXAMPLES?.[activeLanguage]?.[getWordSuffix(word.id)] || [];
+    }
+
+    // Sentences mark their own flashcard word with asterisks (decks/examples.js
+    // explains why the data carries the mark instead of the renderer searching
+    // for the word: inflected forms, multi-word entries, and scripts with no
+    // spaces to match on). That mark is exactly what this round blanks out.
+    function splitMarkedSentence(text) {
+        const pieces = String(text || "").split("*");
+        if (pieces.length < 3 || !pieces[1].trim()) return null;
+        return {
+            before: pieces[0],
+            answer: pieces[1],
+            // Any further marked run (none in the current data) is flattened
+            // back to plain text rather than blanked twice.
+            after: pieces.slice(2).join("")
+        };
+    }
+
+    function pickClozeSentence(forcedWord) {
+        const fresh = state.unlocked.filter(w => !state.lastWordIds.includes(w.id));
+        const seen = state.unlocked.filter(w => state.lastWordIds.includes(w.id));
+        const candidates = forcedWord ? [forcedWord] : [...shuffle(fresh), ...shuffle(seen)];
+
+        for (const word of candidates) {
+            const usable = getWordExamples(word)
+                .map((example, index) => ({ example, number: index + 1, parts: splitMarkedSentence(example.text) }))
+                .filter(entry => entry.parts);
+            if (!usable.length) continue;
+            return { word, ...usable[Math.floor(Math.random() * usable.length)] };
+        }
+        return null;
+    }
+
+    function renderClozeRound(mode, forcedWord) {
+        const picked = pickClozeSentence(forcedWord);
+        if (!picked) {
+            el.exerciseRoot.innerHTML = `<p class="sprint-load-error">${tr("sprint.cloze.noSentences")}</p>`;
+            return;
+        }
+
+        const { word, example, number, parts } = picked;
+        const isTypeMode = mode === "clozeType";
+
+        el.exerciseRoot.innerHTML = `
+            <div class="sprint-exercise sprint-exercise-cloze">
+                <span class="sprint-exercise-kicker">${tr(isTypeMode ? "sprint.cloze.typePrompt" : "sprint.cloze.choicePrompt")}</span>
+                <p class="sprint-cloze-sentence"></p>
+                <p class="sprint-cloze-translation">${escapeHtml(example.translation || "")}</p>
+                <div class="sprint-cloze-answer-area"></div>
+            </div>
+        `;
+
+        // Built as nodes, not as an innerHTML string: the sentences are data,
+        // and a word containing "<" must never become markup (same reasoning
+        // as renderExampleText in js/deck.js).
+        const sentenceEl = el.exerciseRoot.querySelector(".sprint-cloze-sentence");
+        const blank = document.createElement("span");
+        blank.className = "sprint-cloze-blank";
+        // The gap is sized off the hidden word, the way a printed exercise
+        // rules a line as long as the answer - a hint, on purpose, and the only
+        // one the sentence gives away. Clamped so one long compound can't push
+        // the sentence off the stage.
+        blank.style.setProperty("--blank-len", String(Math.min(12, Math.max(3, parts.answer.length))));
+        sentenceEl.append(document.createTextNode(parts.before), blank, document.createTextNode(parts.after));
+
+        const area = el.exerciseRoot.querySelector(".sprint-cloze-answer-area");
+
+        // Both formats end here: the blank becomes the real word, lit up, and
+        // the finished sentence holds the stage for as long as it takes to
+        // read it out - right or wrong, since hearing the sentence you just
+        // got wrong is the whole point of showing it.
+        function reveal(isCorrect) {
+            const answer = document.createElement("mark");
+            answer.className = "sprint-cloze-answer";
+            answer.textContent = parts.answer;
+            blank.replaceWith(answer);
+
+            finishSingleShotRound(mode, word, isCorrect, advance => {
+                let advanced = false;
+                const handOver = () => {
+                    if (advanced) return;
+                    advanced = true;
+                    advance();
+                };
+
+                window.setTimeout(() => {
+                    if (!answer.isConnected) return;
+                    answer.classList.add("is-playing");
+                    playAudioUrl(getExampleAudioUrl(word, number), 0, handOver);
+                }, CLOZE_VERDICT_DELAY);
+                window.setTimeout(handOver, CLOZE_MAX_HOLD);
+            });
+        }
+
+        if (isTypeMode) renderClozeTypeInput(area, word, parts, reveal);
+        else renderClozeOptions(area, word, parts, reveal);
+    }
+
+    function renderClozeOptions(area, word, parts, reveal) {
+        area.classList.add("sprint-mc-grid");
+
+        // Asked for one spare, because a distractor whose dictionary form
+        // happens to equal the sentence's own (inflected) answer would be a
+        // second correct button.
+        const distractors = pickDistractors(word, 4, w => w.script)
+            .filter(w => normalizeString(w.script) !== normalizeString(parts.answer))
+            .slice(0, 3);
+
+        shuffle([parts.answer, ...distractors.map(w => w.script)]).forEach(text => {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "sprint-mc-option";
+            btn.textContent = text;
+            btn.addEventListener("click", () => {
+                if (state.roundLocked) return;
+                state.roundLocked = true;
+
+                const isCorrect = text === parts.answer;
+                btn.classList.add(isCorrect ? "is-correct" : "is-wrong");
+                area.querySelectorAll(".sprint-mc-option").forEach(node => {
+                    if (node !== btn) node.classList.add("is-disabled");
+                    if (!isCorrect && node.textContent === parts.answer) node.classList.add("is-correct");
+                });
+                reveal(isCorrect);
+            });
+            area.appendChild(btn);
+        });
+    }
+
+    function renderClozeTypeInput(area, word, parts, reveal) {
+        area.innerHTML = `
+            <form id="sprint-cloze-form" class="sprint-type-form" autocomplete="off">
+                <input type="text" id="sprint-cloze-input" class="sprint-type-input" placeholder="${tr("sprint.type.placeholder")}" inputmode="none" autocapitalize="off" autocorrect="off" spellcheck="false" data-vkbd="true" data-vkbd-enter="false">
+                <button type="submit" class="sprint-type-submit">${tr("sprint.type.submit")}</button>
+            </form>
+        `;
+
+        const form = document.getElementById("sprint-cloze-form");
+        const input = document.getElementById("sprint-cloze-input");
+        input.focus();
+
+        // Same one-tap submit trick as renderTypeRound - see the long comment
+        // there for why a plain click on this button used to need two taps.
+        form.querySelector(".sprint-type-submit").addEventListener("pointerdown", event => {
+            event.preventDefault();
+            form.requestSubmit();
+        });
+
+        form.addEventListener("submit", event => {
+            event.preventDefault();
+            if (state.roundLocked) return;
+            state.roundLocked = true;
+
+            const isCorrect = isAcceptableClozeAnswer(input.value, parts.answer, word);
+            input.disabled = true;
+            input.classList.add(isCorrect ? "is-correct" : "is-wrong");
+            // No separate "the answer was X" line here: the sentence itself is
+            // about to fill its own blank in, which says it better.
+            reveal(isCorrect);
+        });
+    }
+
+    // Accepts the sentence's own (possibly inflected) form and the dictionary
+    // form the flashcard teaches - "Morgenen var kald og stille" shouldn't be
+    // marked wrong for typing "morgen". Same romanization allowance and
+    // one-character typo tolerance as the type round.
+    function isAcceptableClozeAnswer(typed, answer, word) {
+        const norm = normalizeString(typed);
+        if (!norm) return false;
+
+        const targets = [normalizeString(answer), normalizeString(word.script)];
+        if (languageHasRomanization(activeLanguage) && word.romanization) {
+            targets.push(normalizeString(word.romanization));
+        }
+        return targets.some(t => t && (norm === t || (t.length >= 3 && levenshtein(norm, t) <= 1)));
     }
 
     // ── End of session ───────────────────────────────────────────────────────
@@ -1262,6 +1567,20 @@
     const audioPreloadConcurrency = 4;
     const audioPreloadCache = new Map();
 
+    // exampleNumber is 1-based, matching the filenames
+    // scripts/generate-example-audio.cjs uploads (nor_003_1.mp3, ...) and the
+    // same URL js/deck.js's word card plays.
+    function getExampleAudioUrl(item, exampleNumber) {
+        if (!audioBaseUrl || !activeDeckMeta || !item?.id) return null;
+        return [
+            audioBaseUrl,
+            audioPrefix,
+            encodeURIComponent(activeDeckMeta.id),
+            "examples",
+            `${encodeURIComponent(item.id)}_${exampleNumber}.mp3`
+        ].join("/");
+    }
+
     function scheduleAudioPreload(items) {
         if (!audioBaseUrl || !items?.length) return;
 
@@ -1339,9 +1658,20 @@
     const SILENT_WAV = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=";
     let activeAudioUrl = null;
     let wordAudioPlayId = 0;
+    let onAudioEnded = null;
 
     function ensureWordAudio() {
-        if (!activeAudio) activeAudio = new Audio();
+        if (!activeAudio) {
+            activeAudio = new Audio();
+            // One listener for the element's whole life, with the callback
+            // swapped per play - adding a listener per play would fire every
+            // earlier round's callback again on every later clip.
+            activeAudio.addEventListener("ended", () => {
+                const handler = onAudioEnded;
+                onAudioEnded = null;
+                handler?.();
+            });
+        }
         return activeAudio;
     }
 
@@ -1357,7 +1687,14 @@
 
     function playWordAudio(item, attempt = 0) {
         if (!item?.id || !audioBaseUrl) return;
-        const url = getWordAudioUrl(item);
+        playAudioUrl(getWordAudioUrl(item), attempt);
+    }
+
+    // `onEnd` fires once, when the clip finishes playing - only the cloze
+    // rounds use it, to hold their sentence on screen for exactly that long.
+    // It is NOT called when playback fails; callers that must move on either
+    // way cap themselves with their own timer.
+    function playAudioUrl(url, attempt = 0, onEnd = null) {
         if (!url) return;
 
         // Covers the word the background queue hasn't reached yet: the fetch
@@ -1368,6 +1705,7 @@
         try {
             const audio = ensureWordAudio();
             const playId = ++wordAudioPlayId;
+            onAudioEnded = onEnd;
             // Re-assign src (which re-fetches) when this is a different word OR
             // the element is stuck in an error state from a failed load. Without
             // the audio.error check, a same-URL replay would take the seek-only
@@ -1395,7 +1733,7 @@
                 if (attempt < 1 && wordAudioPlayId === playId) {
                     activeAudioUrl = null;
                     window.setTimeout(() => {
-                        if (wordAudioPlayId === playId) playWordAudio(item, attempt + 1);
+                        if (wordAudioPlayId === playId) playAudioUrl(url, attempt + 1, onEnd);
                     }, 400);
                 }
             });

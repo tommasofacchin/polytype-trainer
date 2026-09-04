@@ -2300,6 +2300,86 @@ input[type="password"]:focus {
     100% { opacity: 0; transform: translateY(-6px) scale(0.98); }
 }
 
+/* Start count-in - js/sprint.js's runStartCountdown() puts this on the empty
+   stage before round 1 (and again on "Play again"), so the run has a start
+   line instead of the first question appearing under the opening tap. */
+.sprint-countdown {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-5);
+    margin: auto;
+    padding: var(--space-6) 0;
+    text-align: center;
+    animation: sprint-round-in 320ms cubic-bezier(0.18, 0.9, 0.32, 1) both;
+}
+
+.sprint-countdown-label {
+    color: var(--text-faint);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.sprint-countdown-value {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 128px;
+    height: 128px;
+    /* Pill, not a circle: "GO!" is wider than a digit, and a 50% radius would
+       stretch into an ellipse on that step alone. */
+    border-radius: var(--radius-pill);
+    padding: 0 var(--space-6);
+    border: 3px solid var(--border);
+    background: var(--surface);
+    font-family: var(--font-display);
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--text);
+}
+
+.sprint-countdown-value.is-go {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    color: var(--accent-ink);
+    font-size: 44px;
+    letter-spacing: 0.02em;
+}
+
+.sprint-countdown-value.is-ticking {
+    animation: sprint-countdown-pop 440ms var(--ease-out) both;
+}
+
+.sprint-countdown-value.is-go.is-ticking {
+    animation: sprint-countdown-go 380ms var(--ease-spring) both;
+}
+
+/* Each digit drops in big and settles, so the three of them read as a count
+   rather than as one number changing. */
+@keyframes sprint-countdown-pop {
+    0%   { opacity: 0; transform: scale(1.5); }
+    45%  { opacity: 1; transform: scale(0.94); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes sprint-countdown-go {
+    0%   { opacity: 0; transform: scale(0.6); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* The count-in is the one place where the delay is the point, so the timing
+   stays - only the scaling goes. */
+@media (prefers-reduced-motion: reduce) {
+    .sprint-countdown,
+    .sprint-countdown-value.is-ticking,
+    .sprint-countdown-value.is-go.is-ticking {
+        animation: none;
+    }
+}
+
 /* Shared answer-feedback animations - reused by every exercise type's
    correct/wrong states (MC/audio options, true/false, matching, type-answer
    input) so the "feel" of answering is consistent across the whole game. */
@@ -2573,6 +2653,65 @@ input[type="password"]:focus {
     color: var(--danger);
     font-size: var(--text-sm);
     font-weight: 600;
+}
+
+/* TEMPORARY - the two example-sentence rounds (?lab=cloze, see the "Lab round
+   types" section in js/sprint.js). Delete this block along with that section
+   if the format doesn't survive the trial. */
+.sprint-cloze-sentence {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(22px, 5.4vw, 28px);
+    font-weight: 600;
+    line-height: 1.55;
+    color: var(--text);
+}
+
+.sprint-cloze-translation {
+    margin: 0;
+    color: var(--text-faint);
+    font-size: var(--text-md);
+    font-weight: 600;
+}
+
+/* The gap, ruled as long as the word that belongs in it. Sized in ch off
+   --blank-len, which js/sprint.js sets from the hidden word's length. */
+.sprint-cloze-blank {
+    display: inline-block;
+    vertical-align: baseline;
+    min-width: calc(var(--blank-len, 4) * 1ch + 14px);
+    border-bottom: 3px solid var(--accent);
+    /* Holds the line's height without any text in it, so the sentence doesn't
+       reflow when the answer drops into the gap. */
+    height: 1.1em;
+    margin: 0 4px;
+    border-radius: 2px;
+}
+
+/* The revealed word, in the gap the blank left. */
+.sprint-cloze-answer {
+    display: inline-block;
+    background: var(--accent-soft);
+    color: var(--accent-ink);
+    border-radius: 8px;
+    padding: 0 6px;
+    margin: 0 2px;
+    font-weight: 700;
+    animation: sprint-answer-pop 280ms var(--ease-spring) both;
+}
+
+/* Lit for exactly as long as the sentence is being read out. */
+.sprint-cloze-answer.is-playing {
+    background: var(--accent);
+    color: var(--accent-on);
+}
+
+.sprint-cloze-answer-area {
+    width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sprint-cloze-answer { animation: none; }
 }
 
 /* Phones: nudge the answer buttons a little bigger (font + tap height) than

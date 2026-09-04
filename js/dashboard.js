@@ -89,6 +89,7 @@ function setupGameStateSync() {
         renderChest(state);
         renderDemoChest();
         renderDemoSprint();
+        renderLabCloze();
         renderMissions(state);
         renderFriendsPreview(state);
         renderDailyGoal(state);
@@ -250,6 +251,37 @@ function renderDemoSprint() {
     // reconstruction of it.
     document.getElementById("home-demo-sprint-btn").addEventListener("click", () => {
         window.location.href = "sprint.html?demo=finish";
+    });
+}
+
+// TEMPORARY: the way into the two example-sentence rounds while they're being
+// tried out. They are not in sprint's normal round rotation - ?lab=cloze is
+// what turns them on, and it runs a short session of nothing else. Delete this
+// together with the "Lab round types" section in js/sprint.js.
+function renderLabCloze() {
+    const mount = document.getElementById("home-lab-cloze");
+    if (!mount) return;
+
+    if (!isDebugHandle()) {
+        mount.hidden = true;
+        mount.replaceChildren();
+        return;
+    }
+
+    if (mount.dataset.built === "true") return;
+    mount.dataset.built = "true";
+    mount.hidden = false;
+    mount.className = "chest-card is-demo";
+    mount.innerHTML = `
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M4 12h7"/><path d="M15 12h5"/><path d="M4 17h16"/></svg>
+        <div class="chest-card-copy">
+            <strong>${tr("lab.clozeTitle")}</strong>
+            <span>${tr("lab.clozeDesc")}</span>
+        </div>
+        <button id="home-lab-cloze-btn" class="chest-open-btn" type="button">${tr("lab.clozeRun")}</button>
+    `;
+    document.getElementById("home-lab-cloze-btn").addEventListener("click", () => {
+        window.location.href = "sprint.html?lab=cloze";
     });
 }
 
