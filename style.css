@@ -2688,26 +2688,29 @@ input[type="password"]:focus {
     border-radius: 2px;
 }
 
-/* The revealed word, in the gap the blank left. */
+/* The revealed word, in the gap the blank left: the sentence's own type in the
+   brand yellow, with no highlighter block behind it. <mark> brings a yellow
+   background of its own, hence the explicit `none`. inline-block is for the
+   pop - a plain inline box ignores transforms. */
 .sprint-cloze-answer {
     display: inline-block;
-    background: var(--accent-soft);
+    background: none;
     color: var(--accent-ink);
-    border-radius: 8px;
-    padding: 0 6px;
-    margin: 0 2px;
     font-weight: 700;
     animation: sprint-answer-pop 280ms var(--ease-spring) both;
 }
 
-/* Lit for exactly as long as the sentence is being read out. */
-.sprint-cloze-answer.is-playing {
-    background: var(--accent);
-    color: var(--accent-on);
-}
-
 .sprint-cloze-answer-area {
     width: 100%;
+}
+
+/* Once the sentence is complete there is nothing left to answer with, so the
+   prompt and the options/keyboard bow out and let it play alone. Duration must
+   match CLOZE_CLEAR_FADE in js/sprint.js. */
+.sprint-exercise-cloze .is-clearing {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 180ms var(--ease-out);
 }
 
 @media (prefers-reduced-motion: reduce) {

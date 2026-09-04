@@ -48,8 +48,8 @@
     // game had left the tile. runStartCountdown() spends this long per step on
     // an otherwise empty stage ("3", "2", "1", then the shorter "GO!" beat)
     // before round 1 renders.
-    const COUNTDOWN_STEP_DELAY = 460;
-    const COUNTDOWN_GO_DELAY = 380;
+    const COUNTDOWN_STEP_DELAY = 780;
+    const COUNTDOWN_GO_DELAY = 620;
 
     const ALL_ROUND_TYPES = ["mc", "match", "audio", "trueFalse", "type"];
     // TEMPORARY - the two example-sentence rounds ("cloze" = pick from four,
@@ -66,6 +66,10 @@
     // Ceiling on the "sentence stays up while it plays" hold, so a clip that
     // is missing, blocked, or simply never ends can't strand the round.
     const CLOZE_MAX_HOLD = 5000;
+    // How long the prompt and the answer controls take to fade before they're
+    // pulled out of the layout. Must match .sprint-exercise-cloze .is-clearing's
+    // transition-duration (style.css).
+    const CLOZE_CLEAR_FADE = 180;
     // Flat bonus for a session with zero wrong answers (main rounds - a
     // retry-phase correction doesn't erase the original mistake, so any
     // retry activity at all already means this can't be perfect).
@@ -984,10 +988,27 @@
 
                 window.setTimeout(() => {
                     if (!answer.isConnected) return;
-                    answer.classList.add("is-playing");
+                    // The verdict has had its beat on the options (or the
+                    // input), and the sentence now says the answer better than
+                    // either of them - so they clear out and leave the stage to
+                    // the sentence and its audio.
+                    clearAnswerUi();
                     playAudioUrl(getExampleAudioUrl(word, number), 0, handOver);
                 }, CLOZE_VERDICT_DELAY);
                 window.setTimeout(handOver, CLOZE_MAX_HOLD);
+            });
+        }
+
+        // Fades the "fill in the missing word" prompt and the answer controls
+        // out, then takes them out of the layout so the finished sentence
+        // recentres on the stage. Two steps rather than one `hidden`, which
+        // would make them disappear between one frame and the next. Hiding the
+        // input also blurs it, which is what puts the on-screen keyboard away.
+        function clearAnswerUi() {
+            [el.exerciseRoot.querySelector(".sprint-exercise-kicker"), area].forEach(node => {
+                if (!node) return;
+                node.classList.add("is-clearing");
+                window.setTimeout(() => { node.hidden = true; }, CLOZE_CLEAR_FADE);
             });
         }
 
