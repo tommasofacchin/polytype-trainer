@@ -65,12 +65,19 @@ async function main() {
 
   for (const [index, target] of limited.entries()) {
     const objectKey = `${audioPrefix}/${deck.id}/examples/${target.wordId}_${target.exampleIndex}.mp3`;
-    const exists = dryRun ? false : await storjObjectExists(objectKey);
+    const existing = dryRun ? { exists: false } : await readStorjObjectMeta(objectKey);
+    const isCurrent = existing.exists &&
+      existing.voiceId === elevenLabsVoiceId &&
+      existing.modelId === modelId;
 
-    if (exists && !force) {
+    if (isCurrent && !force) {
       skipped += 1;
-      console.log(`[${index + 1}/${limited.length}] skip ${objectKey}: already exists`);
+      console.log(`[${index + 1}/${limited.length}] skip ${objectKey}: already current`);
       continue;
+    }
+
+    if (existing.exists && !force) {
+      console.log(`[${index + 1}/${limited.length}] restamp ${objectKey}: ${existing.modelId || "unknown"} -> ${modelId}`);
     }
 
     console.log(`[${index + 1}/${limited.length}] generate ${objectKey}: ${target.text}`);
@@ -222,15 +229,24 @@ async function createSpeech({ apiKey, voiceId, text, outputFormat, modelId, lang
   });
 }
 
-async function storjObjectExists(objectKey) {
+// Same contract as generate-audio.cjs's copy - see the note there for why the
+// stamped voice/model matter rather than mere existence.
+async function readStorjObjectMeta(objectKey) {
   const response = await retry(() => signedS3Request({
     method: "HEAD",
     objectKey,
     headers: {}
   }), { label: `Storj HEAD ${objectKey}` });
 
-  if (response.status === 200) return true;
-  if (response.status === 404 || response.status === 403) return false;
+  if (response.status === 404 || response.status === 403) return { exists: false };
+
+  if (response.status === 200) {
+    return {
+      exists: true,
+      voiceId: response.headers.get("x-amz-meta-voice-id") || "",
+      modelId: response.headers.get("x-amz-meta-model-id") || ""
+    };
+  }
 
   const details = await response.text().catch(() => "");
   throw new Error(`Storj HEAD failed (${response.status}) for ${objectKey}. ${details}`);
@@ -462,7 +478,9 @@ function getVoiceIdForLanguage(language) {
 }
 
 function getModelIdForLanguage(language) {
+  // Same pair, same reason, as generate-audio.cjs - see the note there.
   const defaults = {
+    chinese: "eleven_flash_v2_5",
     norwegian: "eleven_flash_v2_5"
   };
   const envKey = `ELEVENLABS_${String(language || "").toUpperCase()}_MODEL_ID`;

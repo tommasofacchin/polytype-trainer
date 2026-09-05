@@ -65,12 +65,24 @@ async function main() {
 
   for (const [index, record] of targets.entries()) {
     const objectKey = `${audioPrefix}/${deck.id}/${record.id}.mp3`;
-    const exists = dryRun ? false : await storjObjectExists(objectKey);
+    const existing = dryRun ? { exists: false } : await readStorjObjectMeta(objectKey);
+    // Only a clip that came from the voice and model this run is using counts
+    // as done. Anything older is stale by definition, so changing either
+    // setting re-cuts just the words that haven't caught up yet - and a run
+    // that dies half way through can simply be run again to finish the rest,
+    // without --force re-cutting (and re-billing) the ones already redone.
+    const isCurrent = existing.exists &&
+      existing.voiceId === elevenLabsVoiceId &&
+      existing.modelId === modelId;
 
-    if (exists && !force) {
+    if (isCurrent && !force) {
       skipped += 1;
-      console.log(`[${index + 1}/${targets.length}] skip ${record.id}: already exists`);
+      console.log(`[${index + 1}/${targets.length}] skip ${record.id}: already current`);
       continue;
+    }
+
+    if (existing.exists && !force) {
+      console.log(`[${index + 1}/${targets.length}] restamp ${record.id}: ${existing.modelId || "unknown"} -> ${modelId}`);
     }
 
     console.log(`[${index + 1}/${targets.length}] generate ${record.id}: ${record.text}`);
@@ -212,15 +224,27 @@ async function createSpeech({ apiKey, voiceId, text, outputFormat, modelId, lang
   });
 }
 
-async function storjObjectExists(objectKey) {
+// Returns what generated the object that's already there, not just whether
+// one is. Every upload stamps the voice and model it came from (see the
+// putStorjObject call in main), so the caller can tell "already done" apart
+// from "done, but by the settings we just changed away from" - which is what
+// makes a switch of voice or model resumable rather than all-or-nothing.
+async function readStorjObjectMeta(objectKey) {
   const response = await retry(() => signedS3Request({
     method: "HEAD",
     objectKey,
     headers: {}
   }), { label: `Storj HEAD ${objectKey}` });
 
-  if (response.status === 200) return true;
-  if (response.status === 404 || response.status === 403) return false;
+  if (response.status === 404 || response.status === 403) return { exists: false };
+
+  if (response.status === 200) {
+    return {
+      exists: true,
+      voiceId: response.headers.get("x-amz-meta-voice-id") || "",
+      modelId: response.headers.get("x-amz-meta-model-id") || ""
+    };
+  }
 
   const details = await response.text().catch(() => "");
   throw new Error(`Storj HEAD failed (${response.status}) for ${objectKey}. ${details}`);
@@ -453,8 +477,16 @@ function getVoiceIdForLanguage(language) {
 function getModelIdForLanguage(language) {
   // eleven_multilingual_v2 (the default model) ignores language_code and
   // guesses the language from the text, which mispronounces short Norwegian
-  // words. eleven_flash_v2_5 supports forcing language_code=no instead.
+  // words. eleven_flash_v2_5 supports forcing language_code instead.
+  //
+  // Chinese is here for the same reason, picked from a side-by-side listening
+  // test of the one voice across multilingual_v2 / flash_v2_5 / turbo_v2_5 /
+  // v3, at normal and 0.9 speed: with the language forced to zh the tones and
+  // the neutral-tone syllables land, where the guessing model blurred them.
+  // Default voice settings won - no voice_settings block is sent, so nothing
+  // below overrides the voice's own.
   const defaults = {
+    chinese: "eleven_flash_v2_5",
     norwegian: "eleven_flash_v2_5"
   };
   const envKey = `ELEVENLABS_${String(language || "").toUpperCase()}_MODEL_ID`;
