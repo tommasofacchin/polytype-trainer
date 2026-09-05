@@ -22,25 +22,15 @@
                 <span id="deck-progress-fill" class="deck-progress-fill"></span>
             </div>
             <span id="deck-progress-text" class="deck-progress-text"></span>
-            <span id="deck-mastered-text" class="deck-progress-text deck-mastered-text"></span>
         </div>
 
         <!-- Segmented filter over the whole deck: narrows the grids below to
-             only unlocked or only still-locked doors. Counts are filled in by
-             renderDeck so each option shows how much it would show. -->
+             only unlocked or only still-locked doors. The progress bar above
+             already carries the counts, so these are labels only. -->
         <div class="deck-filter" role="tablist" aria-label="Filter deck" data-i18n-aria-label="deck.filterLabel">
-            <button type="button" class="deck-filter-btn is-active" role="tab" aria-selected="true" data-deck-filter="all">
-                <span data-i18n="deck.filterAll">All</span>
-                <span class="deck-filter-count" data-deck-filter-count="all"></span>
-            </button>
-            <button type="button" class="deck-filter-btn" role="tab" aria-selected="false" data-deck-filter="unlocked">
-                <span data-i18n="deck.filterUnlocked">Unlocked</span>
-                <span class="deck-filter-count" data-deck-filter-count="unlocked"></span>
-            </button>
-            <button type="button" class="deck-filter-btn" role="tab" aria-selected="false" data-deck-filter="locked">
-                <span data-i18n="deck.filterLocked">Locked</span>
-                <span class="deck-filter-count" data-deck-filter-count="locked"></span>
-            </button>
+            <button type="button" class="deck-filter-btn is-active" role="tab" aria-selected="true" data-deck-filter="all" data-i18n="deck.filterAll">All</button>
+            <button type="button" class="deck-filter-btn" role="tab" aria-selected="false" data-deck-filter="unlocked" data-i18n="deck.filterUnlocked">Unlocked</button>
+            <button type="button" class="deck-filter-btn" role="tab" aria-selected="false" data-deck-filter="locked" data-i18n="deck.filterLocked">Locked</button>
         </div>
 
         <div id="deck-groups" class="deck-groups"></div>

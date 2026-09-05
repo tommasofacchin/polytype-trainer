@@ -4334,19 +4334,9 @@ button.word-detail-example:active {
     font-weight: 700;
 }
 
-.deck-mastered-text {
-    color: var(--text-faint);
-    font-size: var(--text-xs);
-}
-
-.deck-mastered-text:not(:empty)::before {
-    content: "\00b7";
-    margin: 0 4px;
-}
-
-/* Segmented all/unlocked/locked filter over the deck. Same construction as
-   .friends-leaderboard-tabs (inset track, raised active pill) so the two read
-   as one control across the app. */
+/* Segmented all/unlocked/locked filter over the deck. Same inset track as
+   .friends-leaderboard-tabs so the two read as one control across the app;
+   the selected option differs - see .deck-filter-btn.is-active below. */
 .deck-filter {
     display: flex;
     gap: 4px;
@@ -4382,22 +4372,13 @@ button.word-detail-example:active {
     color: var(--text-soft);
 }
 
+/* The selected option takes the brand yellow outright rather than the raised
+   white pill the leaderboard tabs use - with only three short words in the
+   row and no counts to read, the fill is what says which one is on. */
 .deck-filter-btn.is-active {
-    background: var(--surface);
-    color: var(--text);
-    box-shadow: var(--shadow-sm);
-}
-
-.deck-filter-count {
-    padding: 1px 6px;
-    border-radius: var(--radius-pill);
-    background: color-mix(in srgb, currentColor 12%, transparent);
-    font-size: 0.72em;
-    font-variant-numeric: tabular-nums;
-}
-
-.deck-filter-count:empty {
-    display: none;
+    background: var(--accent);
+    color: var(--accent-on);
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--accent) 40%, transparent);
 }
 
 .deck-groups {
@@ -7360,39 +7341,89 @@ body > main {
    The chest's contents are rolled per claim (CHEST_REWARD_TABLE in
    api/_lib.js). "common" gets no treatment at all - it is the baseline, and
    dressing it up would leave nothing for the rolls that earned it. Everything
-   above it lights the art from behind in that tier's colour and names itself
-   in a banner over the chest. */
-.chest-rarity-banner {
-    position: absolute;
-    top: -6px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 5px 14px;
-    border-radius: 999px;
-    background: var(--rarity-color, var(--accent));
-    color: var(--accent-on);
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: 12px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    white-space: nowrap;
-    box-shadow: 0 4px 16px color-mix(in srgb, var(--rarity-color, var(--accent)) 55%, transparent);
-    animation: chest-rewardpop 0.5s ease-out both;
-    animation-delay: 0.2s;
+   above it gets warmer and busier instead of being labelled: nothing here
+   says a word, which reads instantly and never needs translating. */
+.chest-overlay.is-rare-roll { --rarity-color: var(--color-gold-text); }
+.chest-overlay.is-epic { --rarity-color: #c9a4ff; }
+.chest-overlay.is-freeze { --rarity-color: #9fe4ff; }
+
+/* The warm wash. Three offset radial pools rather than one flat tint, so the
+   light has a source (low, behind the chest at 66%) and falls off unevenly
+   the way a glow does - a solid overlay colour just looked like the backdrop
+   had been swapped. All of it is stacked on the overlay's own near-black
+   ground, and it breathes very slowly so a screen the player may sit on for
+   a while never goes completely still. */
+.chest-overlay.is-rare-roll::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(58% 42% at 50% 68%, color-mix(in srgb, var(--rarity-color) 26%, transparent), transparent 70%),
+        radial-gradient(90% 60% at 50% 100%, color-mix(in srgb, var(--rarity-color) 15%, transparent), transparent 72%),
+        radial-gradient(120% 80% at 50% 0%, color-mix(in srgb, var(--rarity-color) 7%, transparent), transparent 60%);
+    animation: chest-bloom-breathe 5.2s ease-in-out infinite;
 }
 
+/* Everything the overlay draws sits above the wash - .chest-overlay-art is
+   already positioned, the two below are not. */
+.chest-overlay.is-rare-roll .chest-final-rewards,
+.chest-overlay.is-rare-roll .chest-collect-btn {
+    position: relative;
+}
+
+@keyframes chest-bloom-breathe {
+    0%, 100% { opacity: 0.82; }
+    50%      { opacity: 1; }
+}
+
+/* The chest itself picks up the same light. */
 .chest-overlay.is-rare-roll .chest-overlay-icon {
-    filter: drop-shadow(0 0 22px color-mix(in srgb, var(--rarity-color, var(--accent)) 70%, transparent));
+    filter: drop-shadow(0 0 26px color-mix(in srgb, var(--rarity-color) 65%, transparent));
 }
 
-.chest-overlay.is-rare { --rarity-color: var(--color-secondary); }
-.chest-overlay.is-epic { --rarity-color: #a855f7; }
-.chest-overlay.is-key { --rarity-color: var(--color-gold-text); }
-.chest-overlay.is-freeze { --rarity-color: var(--color-secondary-lighter); }
+.chest-overlay.is-rare-roll .chest-overlay-rays {
+    background: repeating-conic-gradient(from 0deg, color-mix(in srgb, var(--rarity-color) 30%, transparent) 0 9deg, transparent 9deg 18deg);
+}
+
+/* ── Embers ───────────────────────────────────────────────────────────────
+   A field of motes drifting up past the chest, count set per tier by
+   js/chest.js. Spans the art box but overflows it generously, so they rise
+   well clear of the chest instead of stopping at its edge. */
+.chest-mote-field {
+    position: absolute;
+    inset: -40px -60px 0;
+    pointer-events: none;
+    overflow: visible;
+}
+
+.chest-mote {
+    position: absolute;
+    bottom: 0;
+    left: var(--x, 50%);
+    width: var(--s, 4px);
+    height: var(--s, 4px);
+    border-radius: 50%;
+    background: var(--rarity-color, var(--color-gold-text));
+    /* Each mote carries its own little halo - a bare dot at these sizes reads
+       as dust, and the bloom is what makes it read as an ember. */
+    box-shadow: 0 0 6px color-mix(in srgb, var(--rarity-color, var(--color-gold-text)) 80%, transparent);
+    opacity: 0;
+    animation: chest-mote-rise var(--rise, 3200ms) linear var(--delay, 0ms) infinite;
+}
+
+/* Fades in low, drifts sideways as it climbs, and is gone before the top -
+   so the field has no hard edge at either end and the loop never shows. */
+@keyframes chest-mote-rise {
+    0%   { opacity: 0; transform: translate(0, 0) scale(0.6); }
+    18%  { opacity: 0.9; }
+    70%  { opacity: 0.55; }
+    100% { opacity: 0; transform: translate(var(--drift, 0), -230px) scale(1.1); }
+}
 
 @media (prefers-reduced-motion: reduce) {
-    .chest-rarity-banner { animation: none; opacity: 1; }
+    /* The wash stays (js/chest.js skips only the motes) but stops breathing. */
+    .chest-overlay.is-rare-roll::before { animation: none; opacity: 1; }
 }
 
 .chest-collect-btn {
@@ -7611,39 +7642,6 @@ body > main {
     color: var(--text-soft);
     text-align: center;
     animation: chest-rewardpop 1.3s ease-out forwards;
-}
-
-/* The day's hard mission on Home. Gold rather than the rotating accent its
-   two neighbours use, plus a tag on the label - it pays roughly double and
-   cannot be cleared in one round, and both need to be visible before the
-   player picks what to play. */
-.mission-row.is-hard .mission-copy strong {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    flex-wrap: wrap;
-}
-
-.mission-hard-tag {
-    padding: 1px 7px;
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--color-gold-text) 16%, transparent);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-gold-text) 38%, transparent);
-    color: var(--color-gold-text);
-    font-size: 10px;
-    font-weight: 900;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-}
-
-.home-missions-boost {
-    margin: 12px 0 0;
-    padding-top: 10px;
-    border-top: 1px dashed var(--border);
-    color: var(--text-faint);
-    font-size: 11px;
-    font-weight: 700;
-    text-align: center;
 }
 
 .mission-rewards-list {

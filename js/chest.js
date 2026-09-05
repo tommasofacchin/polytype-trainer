@@ -107,14 +107,36 @@
         return items;
     }
 
-    // "common" gets no treatment at all - it is the baseline, and dressing it
-    // up would leave nothing for the rolls that have actually earned it.
-    const RARITY_LABELS = {
-        rare: "chest.rarityRare",
-        epic: "chest.rarityEpic",
-        key: "chest.rarityKey",
-        freeze: "chest.rarityFreeze"
-    };
+    // How many motes drift up around the chest for each tier. "common" gets
+    // no treatment at all - it is the baseline, and dressing it up would
+    // leave nothing for the rolls that have actually earned it. Nothing here
+    // is ever named in words: a better roll is simply a busier, warmer
+    // screen, which is read instantly and never has to be translated.
+    const RARITY_MOTES = { rare: 18, key: 24, freeze: 24, epic: 32 };
+
+    // A slow, uneven field of embers rising past the chest. Each mote gets
+    // its own drift, size, speed and delay so the field never visibly loops
+    // as a block - the sequence lasts as long as the player takes to tap
+    // through it, so this has to hold up indefinitely rather than play once.
+    function buildMoteField(count) {
+        const field = document.createElement("div");
+        field.className = "chest-mote-field";
+
+        for (let i = 0; i < count; i += 1) {
+            const mote = document.createElement("span");
+            mote.className = "chest-mote";
+            // Spread across the art's width, biased outward from the chest so
+            // the middle stays clear for the item cards popping out of it.
+            mote.style.setProperty("--x", `${Math.round(Math.random() * 100)}%`);
+            mote.style.setProperty("--drift", `${Math.round(Math.random() * 60 - 30)}px`);
+            mote.style.setProperty("--s", `${3 + Math.round(Math.random() * 4)}px`);
+            mote.style.setProperty("--rise", `${2600 + Math.round(Math.random() * 2200)}ms`);
+            mote.style.setProperty("--delay", `${Math.round(Math.random() * 2600)}ms`);
+            field.appendChild(mote);
+        }
+
+        return field;
+    }
 
     // How long a tapped item's dismiss animation gets before the next one
     // appears, and how the final row of chips cascades in - kept together so
@@ -211,18 +233,23 @@
             return;
         }
 
-        // Dresses the whole overlay for the tier that was rolled - a brighter
-        // flash and a glow behind the items, plus a banner naming it. Applied
-        // once, here, so the rarity is established the instant the lid opens
-        // and carries through every tap rather than being revealed at the end.
+        // Dresses the whole overlay for the tier that was rolled: a warm bloom
+        // washing up behind everything and a field of embers around the chest,
+        // both scaled to the tier. Applied once, here, so the rarity is
+        // established the instant the lid opens and carries through every tap
+        // rather than being announced at the end.
         const rarity = reward?.rarity || "common";
-        const rarityLabelKey = RARITY_LABELS[rarity];
-        if (rarityLabelKey) {
+        const moteCount = RARITY_MOTES[rarity];
+        if (moteCount && !prefersReducedMotion()) {
             overlay.classList.add(`is-${rarity}`, "is-rare-roll");
-            const banner = document.createElement("div");
-            banner.className = "chest-rarity-banner";
-            banner.textContent = tr(rarityLabelKey);
-            overlay.querySelector(".chest-overlay-art").append(banner);
+            // Prepended so the embers sit behind the chest and its item cards
+            // rather than drifting over the top of them.
+            overlay.querySelector(".chest-overlay-art").prepend(buildMoteField(moteCount));
+        } else if (moteCount) {
+            // Reduced motion still gets the bloom - it is a static wash, and
+            // dropping it would leave a rare roll looking identical to a
+            // common one.
+            overlay.classList.add(`is-${rarity}`, "is-rare-roll");
         }
 
         // ── One tap per item ──────────────────────────────────────────────

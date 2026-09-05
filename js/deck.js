@@ -92,13 +92,8 @@ function tr(key, params = {}) {
 function initDeckPage() {
     el.progressFill = document.getElementById("deck-progress-fill");
     el.progressText = document.getElementById("deck-progress-text");
-    el.masteredText = document.getElementById("deck-mastered-text");
     el.groups = document.getElementById("deck-groups");
     el.filterBtns = [...document.querySelectorAll("[data-deck-filter]")];
-    el.filterCounts = new Map(
-        [...document.querySelectorAll("[data-deck-filter-count]")]
-            .map(node => [node.dataset.deckFilterCount, node])
-    );
     el.unlockOverlay = document.getElementById("unlock-confirm-overlay");
     el.unlockBody = document.getElementById("unlock-confirm-body");
     el.unlockError = document.getElementById("unlock-confirm-error");
@@ -411,14 +406,11 @@ function setupDeckFilter() {
     });
 }
 
-function syncDeckFilterUi(counts) {
+function syncDeckFilterUi() {
     el.filterBtns?.forEach(btn => {
         const isActive = btn.dataset.deckFilter === deckFilter;
         btn.classList.toggle("is-active", isActive);
         btn.setAttribute("aria-selected", String(isActive));
-    });
-    el.filterCounts?.forEach((node, key) => {
-        node.textContent = counts[key] ?? "";
     });
 }
 
@@ -447,10 +439,9 @@ function renderDeck() {
         empty.className = "deck-empty";
         empty.textContent = tr("trainer.noWordsLoaded");
         el.groups.appendChild(empty);
-        syncDeckFilterUi({ all: "", unlocked: "", locked: "" });
+        syncDeckFilterUi();
         if (el.progressFill) el.progressFill.style.width = "0%";
         if (el.progressText) el.progressText.textContent = "";
-        if (el.masteredText) el.masteredText.textContent = "";
         if (el.keysCount) el.keysCount.textContent = "";
         return;
     }
@@ -463,11 +454,7 @@ function renderDeck() {
     const unlockedCount = vocab.filter(word => unlockedWords.has(getWordSuffix(word.id))).length;
     const pct = Math.round((unlockedCount / vocab.length) * 100);
 
-    syncDeckFilterUi({
-        all: vocab.length,
-        unlocked: unlockedCount,
-        locked: vocab.length - unlockedCount
-    });
+    syncDeckFilterUi();
 
     if (el.progressFill) el.progressFill.style.width = `${pct}%`;
     if (el.progressText) {
@@ -475,15 +462,6 @@ function renderDeck() {
             unlocked: unlockedCount,
             total: vocab.length
         });
-    }
-    // wordsMastered only ever grows once a word's been answered correctly
-    // WORD_MASTERY_THRESHOLD times (see api/_lib.js's applyWordResults) -
-    // hidden until at least one word has actually crossed that bar, rather
-    // than cluttering a brand-new course's page with a "0 mastered" line.
-    if (el.masteredText) {
-        el.masteredText.textContent = courseProgress.wordsMastered > 0
-            ? tr("deck.wordsMastered", { count: courseProgress.wordsMastered })
-            : "";
     }
     pendingCourseKey = courseProgress.courseKey;
 
