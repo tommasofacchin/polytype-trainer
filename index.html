@@ -15,9 +15,16 @@
     <div id="app-header"></div>
 
     <main class="page-content">
-        <div style="margin-bottom:16px">
-            <div style="font-size:13px;font-weight:700;color:var(--text-soft)" data-i18n="dashboard.welcomeBack">Welcome back,</div>
-            <div id="home-greeting-name" style="font-family:var(--font-display);font-weight:600;font-size:24px;line-height:1.05;color:#fff">Learner</div>
+        <!-- The 2x XP pill sits here as well as in the topbar: on a phone the
+             header has no room left for it beside the level bar, streak, coins
+             and keys, so CSS shows this copy there and the header's one on a
+             desktop. Both are painted by paintXpBoost in js/app-shell.js. -->
+        <div class="home-greeting">
+            <div class="home-greeting-text">
+                <div class="home-greeting-hello" data-i18n="dashboard.welcomeBack">Welcome back,</div>
+                <div id="home-greeting-name" class="home-greeting-name">Learner</div>
+            </div>
+            <span class="app-shell-stat app-shell-stat-boost home-boost-pill js-xp-boost" id="home-boost" hidden></span>
         </div>
 
         <p id="home-signed-out" class="page-subtitle" data-i18n="dashboard.welcomeGuest">Sign in to save your progress, earn coins, and open your daily chest.</p>

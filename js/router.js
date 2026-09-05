@@ -26,7 +26,7 @@
         "deck.html": ["decks/index.js", "decks/categories.js", "decks/examples.js", "js/deck-cache.js", "js/deck.js"],
         "categories.html": ["decks/index.js", "decks/categories.js", "js/categories.js"],
         "shop.html": ["decks/index.js", "decks/categories.js", "js/shop.js"],
-        "lessons.html": ["decks/lessons-norwegian.js", "decks/lessons-swedish.js", "decks/lessons-german.js", "decks/lessons-italian.js", "decks/lessons-chinese.js", "decks/lessons-japanese.js", "decks/lessons-spanish.js", "js/mission-celebrate.js", "js/streak-celebrate.js", "js/lessons.js"],
+        "lessons.html": ["decks/lessons-norwegian.js", "decks/lessons-swedish.js", "decks/lessons-german.js", "decks/lessons-italian.js", "decks/lessons-chinese.js", "decks/lessons-japanese.js", "decks/lessons-spanish.js", "decks/lesson-audio.js", "js/mission-celebrate.js", "js/streak-celebrate.js", "js/lessons.js"],
         "friends.html": ["js/friends.js"],
         "find-friends.html": ["js/find-friends.js"],
         "visit-profile.html": ["js/visit-profile.js"],
@@ -295,7 +295,7 @@
     // window-level cache and nothing per-page. Re-running it would be
     // harmless (it self-guards) but would throw away the parsed decks it
     // exists to hold onto.
-    const STATIC_DATA_SCRIPTS = new Set(["decks/index.js", "decks/categories.js", "decks/lessons-norwegian.js", "decks/lessons-swedish.js", "decks/lessons-german.js", "decks/lessons-italian.js", "decks/lessons-chinese.js", "js/deck-cache.js"]);
+    const STATIC_DATA_SCRIPTS = new Set(["decks/index.js", "decks/categories.js", "decks/lessons-norwegian.js", "decks/lessons-swedish.js", "decks/lessons-german.js", "decks/lessons-italian.js", "decks/lessons-chinese.js", "decks/lesson-audio.js", "js/deck-cache.js"]);
     const loadedStaticScripts = new Set();
 
     async function loadPageScripts(page) {

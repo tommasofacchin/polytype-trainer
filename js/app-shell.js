@@ -258,7 +258,7 @@
                     <span class="app-shell-stat app-shell-stat-streak${isStreakAtRisk(cached) ? " is-at-risk" : ""}" id="app-shell-streak">${ICONS.streak}${cached.dayStreak || 0}</span>
                     <span class="app-shell-stat app-shell-stat-coin" id="app-shell-coins">${ICONS.coin}${coinsHeld}</span>
                     <span class="app-shell-stat app-shell-stat-key" id="app-shell-keys">${ICONS.key}${keysHeld}</span>
-                    <span class="app-shell-stat app-shell-stat-boost" id="app-shell-boost" hidden></span>
+                    <span class="app-shell-stat app-shell-stat-boost js-xp-boost" id="app-shell-boost" hidden></span>
                 </div>
                 <div class="language-menu app-shell-lang-menu">
                     <span class="app-shell-flag" id="app-shell-flag-toggle" tabindex="0" role="button" aria-haspopup="true" aria-expanded="false"><img src="${flagSrc}" alt=""></span>
@@ -313,6 +313,29 @@
         // same reason the flag switcher reloads. Skipped when the adopted
         // language *is* the fallback, since then nothing painted wrong.
         if (language !== FALLBACK_LANGUAGE) window.location.reload();
+    }
+
+    // Switching the course the whole app is pointed at. The header is painted
+    // once per hard load and never again on its own, so anything that changes
+    // the study language *without* a reload has to come through here - the
+    // flag, and the per-course coin and key counts beside it, would otherwise
+    // keep showing the course that was just left. Two such callers:
+    // js/languages.js (hands off to Deck/Trainer through the soft router) and
+    // Dictate's own in-page language menu (swaps the deck in place). The flag
+    // menu above doesn't need it - it reloads the whole page, which re-renders
+    // the header from scratch anyway.
+    function setStudyLanguage(language) {
+        if (!LANGUAGE_FLAGS[language]) return false;
+
+        try {
+            localStorage.setItem(LANGUAGE_KEY, language);
+        } catch {
+            return false;
+        }
+
+        applyFavicon();
+        renderHeader();
+        return true;
     }
 
     // Most recently active course, falling back to the furthest along: a
@@ -377,6 +400,7 @@
     }
 
     let flagMenuCloseTimer = null;
+    let outsideClickBound = false;
 
     function openFlagMenu() {
         clearTimeout(flagMenuCloseTimer);
@@ -415,11 +439,21 @@
             if (panel.hidden) openFlagMenu(); else closeFlagMenu();
         });
 
-        document.addEventListener("click", event => {
-            if (panel.hidden) return;
-            if (wrap.contains(event.target)) return;
-            closeFlagMenu();
-        });
+        // Once per tab, not once per renderHeader: the header is rebuilt on
+        // every UI-language switch and every study-language switch that isn't
+        // followed by a reload (see setStudyLanguage), and each rebuild used
+        // to leave one more copy of this listener behind, closing over a
+        // panel that had already been thrown away. It re-queries by id, so
+        // the single surviving copy always acts on the live menu.
+        if (!outsideClickBound) {
+            outsideClickBound = true;
+            document.addEventListener("click", event => {
+                const livePanel = document.getElementById("app-shell-language-menu");
+                if (!livePanel || livePanel.hidden) return;
+                if (document.querySelector(".app-shell-lang-menu")?.contains(event.target)) return;
+                closeFlagMenu();
+            });
+        }
     }
 
     function renderHeaderAuth(authState) {
@@ -899,24 +933,36 @@
     }
 
     function paintXpBoost(profile) {
-        const boostEl = document.getElementById("app-shell-boost");
-        if (!boostEl) return;
+        // Every mount of the pill, not just the header's: Home carries a
+        // second copy beside the greeting, because on a phone the header has
+        // no room left for a chip this wide (icon + "2x" + a live m:ss). Only
+        // one of the two is ever on screen - CSS picks which, by viewport,
+        // see .home-boost-pill in style.css - but both are painted here so
+        // whichever is showing carries the same countdown.
+        const pills = document.querySelectorAll(".js-xp-boost");
+        if (!pills.length) return;
 
         const remaining = getBoostExpiry(profile) - Date.now();
 
         if (remaining <= 0) {
             // Cleared rather than left showing 0:00 - the window is over, and
             // a stale pill would claim a multiplier the next session won't get.
-            boostEl.hidden = true;
-            boostEl.textContent = "";
+            pills.forEach(pill => {
+                pill.hidden = true;
+                pill.textContent = "";
+            });
             window.clearInterval(boostTicker);
             boostTicker = 0;
             return;
         }
 
-        boostEl.hidden = false;
-        boostEl.innerHTML = `${ICONS.boost}${XP_BOOST_MULTIPLIER}x <span class="app-shell-boost-time">${formatBoostRemaining(remaining)}</span>`;
-        boostEl.setAttribute("title", tr("boost.activeHint", { multiplier: XP_BOOST_MULTIPLIER }));
+        const markup = `${ICONS.boost}${XP_BOOST_MULTIPLIER}x <span class="app-shell-boost-time">${formatBoostRemaining(remaining)}</span>`;
+        const hint = tr("boost.activeHint", { multiplier: XP_BOOST_MULTIPLIER });
+        pills.forEach(pill => {
+            pill.hidden = false;
+            pill.innerHTML = markup;
+            pill.setAttribute("title", hint);
+        });
 
         // One interval for the life of the window, re-armed only if it was
         // allowed to lapse - repainting on every profile update would
@@ -1099,6 +1145,9 @@
     // FRIENDS_CACHE_STALE_MS before actually opening Friends).
     window.PolytypeAppShell = {
         renderBottomNav,
+        // For the one language switch that isn't followed by a page reload -
+        // see the function's own comment.
+        setStudyLanguage,
         prefetchFriendsOverview,
         prefetchActiveDeck,
         holdXpDisplay,

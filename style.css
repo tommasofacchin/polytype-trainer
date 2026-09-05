@@ -5794,6 +5794,15 @@ body > main {
     width: 17px;
     height: 17px;
 }
+
+/* The class selector above outranks the UA sheet's [hidden] { display: none },
+   so without this a chip js/app-shell.js has hidden (the 2x pill, whenever no
+   boost is running) still took its padding's worth of space in the header - an
+   empty, pulsing accent blob squeezing the chips that do have something to
+   say. */
+.app-shell-stat[hidden] {
+    display: none;
+}
 .app-shell-stat-streak { color: var(--color-streak-light); transition: color var(--transition); }
 
 /* Streak kept, but not fed today: the flame goes out (grey) instead of a
@@ -6592,6 +6601,67 @@ body > main {
            offset clears the sticky #app-header above it. */
         position: sticky;
         top: 74px;
+    }
+}
+
+/* ---- Home: greeting row ------------------------------------------------- */
+/* "Welcome back, <name>" on the left, the 2x XP countdown pushed to the far
+   right of the same line - see the comment in index.html for why this pill
+   exists twice. Baseline-ish alignment rather than centred: the pill should
+   sit against the name, which is the taller of the two text lines. */
+
+.home-greeting {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.home-greeting-text {
+    min-width: 0;
+}
+
+.home-greeting-hello {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-soft);
+}
+
+.home-greeting-name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 1.05;
+    color: var(--text);
+    /* A long display name must not push the pill off the row. */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Desktop keeps the pill in the header, where there is room for it, so this
+   copy stays out of the way; the phone rule below swaps the two. Never a bare
+   display:none on the element itself - paintXpBoost toggles [hidden], and the
+   :not() keeps this from showing an empty pill while no boost is running. */
+.home-boost-pill {
+    display: none;
+    flex: 0 0 auto;
+    /* Clears the descender of the name beside it, so the two read as one row
+       rather than the pill hanging low. */
+    margin-bottom: 2px;
+}
+
+@media (max-width: 859px) {
+    /* Scoped to Home, the only page with somewhere better to put it. Every
+       other page keeps the header pill even at this width: cramped or not,
+       the topbar is the only place they say the multiplier is running. */
+    body[data-tab="home"] .app-shell-stats .app-shell-stat-boost {
+        display: none;
+    }
+
+    .home-boost-pill:not([hidden]) {
+        display: inline-flex;
     }
 }
 
@@ -10377,6 +10447,70 @@ body:has(.game-result-overlay.is-entering:not([hidden])) #app-header {
     font-size: var(--text-xs);
     font-weight: 600;
     text-align: right;
+}
+
+/* A row with a recording is itself the play button (js/lessons.js renders it
+   as a <button> then) - the speaker is only the affordance, which is why it
+   is not focusable on its own. The row keeps the same look as a plain one so
+   the explanation does not turn into a wall of buttons; only the speaker and
+   the press state say it can be tapped. */
+.lessons-example-row.is-playable {
+    width: 100%;
+    appearance: none;
+    border: 0;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: background var(--transition), transform var(--transition);
+}
+
+.lessons-example-row.is-playable:hover {
+    background: var(--surface-alt);
+}
+
+.lessons-example-row.is-playable:active {
+    transform: scale(0.99);
+}
+
+/* Scoped to the row so it outranks the `.lessons-example-row span` rule above,
+   which would otherwise win on colour by having one more element in it. */
+.lessons-example-row .lessons-example-audio {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--surface-alt);
+    color: var(--text-faint);
+    transition: background var(--transition), color var(--transition);
+}
+
+/* Lit only by the playing class, never by :hover or :focus, so a tap's sticky
+   hover on a phone cannot leave it looking like it is still sounding. */
+.lessons-example-row.is-playing .lessons-example-audio {
+    background: var(--accent);
+    color: var(--accent-on, var(--text-inverse));
+}
+
+/* The exercise card gets the same cue while it reads an answer out, but it is
+   a whole card rather than a chip, so it glows at the edge instead of
+   filling. */
+.sprint-exercise.is-playing {
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 45%, transparent);
+    transition: box-shadow var(--transition);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .lessons-example-row.is-playable,
+    .lessons-example-row .lessons-example-audio,
+    .sprint-exercise.is-playing {
+        transition: none;
+    }
+
+    .lessons-example-row.is-playable:active {
+        transform: none;
+    }
 }
 
 /* ── Lesson intro sheet ──────────────────────────────────────────────────

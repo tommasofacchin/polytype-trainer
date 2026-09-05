@@ -33,6 +33,11 @@
 //     lesson finished long ago). Only added where the blank is inflected
 //     from a distinct base form - not for invariant words (pronouns,
 //     conjunctions, particles) where the answer already is the citation form.
+//
+// Any exercise may carry `mute: true`, which keeps js/lessons.js from reading
+// its correct answer aloud. Only needed where that answer is deliberately bad
+// language (a "spot the wrong form" question) - see decks/lesson-audio.js,
+// which decides what every other exercise pronounces.
 // Example rows use { type: "example", zh: "汉字 (pīnyīn)", en: "..." }.
 
 const CHINESE_LESSONS_DATA = {

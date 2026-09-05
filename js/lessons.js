@@ -129,6 +129,9 @@
         // reason js/main.js spells out.
         window.__polytypePageHooks = window.__polytypePageHooks || {};
         window.__polytypePageHooks.onLanguageChanged = renderPath;
+        // A clip still playing when the player leaves would keep talking over
+        // whatever page the soft navigation lands on.
+        window.__polytypePageHooks.onTeardown = stopLineAudio;
 
         loadLessons();
     }
@@ -449,17 +452,44 @@
 
     function buildExplanationBlock(block) {
         if (block.type === "example") {
-            const row = document.createElement("div");
-            row.className = "lessons-example-row";
-            const term = document.createElement("strong");
             // Foreign-language term: keyed per course in the data files
             // (`no` for Norwegian, `sv` for Swedish, `de` for German, `it` for
             // Italian, `zh` for Chinese, `ja` for Japanese, `es` for Spanish);
             // `term` is a generic fallback for any future language.
-            term.textContent = block.no ?? block.sv ?? block.de ?? block.it ?? block.zh ?? block.ja ?? block.es ?? block.term ?? "";
+            const termText = block.no ?? block.sv ?? block.de ?? block.it ?? block.zh ?? block.ja ?? block.es ?? block.term ?? "";
+            const spoken = spokenLine(termText);
+
+            // The whole row is the play button when the line has a recording,
+            // the same way a Deck example card works - a small speaker inside
+            // a row that is itself tappable would be a button in a button.
+            const row = document.createElement(spoken ? "button" : "div");
+            row.className = "lessons-example-row";
+
+            const term = document.createElement("strong");
+            term.textContent = termText;
             const en = document.createElement("span");
             en.textContent = block.en;
             row.append(term, en);
+
+            if (spoken) {
+                row.type = "button";
+                row.classList.add("is-playable");
+                row.addEventListener("click", () => playLine(spoken, row));
+
+                const icon = document.createElement("span");
+                icon.className = "lessons-example-audio";
+                icon.setAttribute("aria-hidden", "true");
+                icon.innerHTML = LINE_AUDIO_ICON;
+                row.appendChild(icon);
+
+                // The button's text is the sentence, which says nothing about
+                // what tapping it does - this is the missing half.
+                const label = document.createElement("span");
+                label.className = "visually-hidden";
+                label.textContent = tr("lessons.playAudio");
+                row.appendChild(label);
+            }
+
             return row;
         }
         const p = document.createElement("p");
@@ -585,9 +615,21 @@
     // delay before actually advancing happens in advanceAfterFeedback above.
     function renderExercise(exercise, onAnswered) {
         el.exerciseRoot.innerHTML = "";
-        if (exercise.type === "mc") renderMcExercise(exercise, onAnswered);
-        else if (exercise.type === "trueFalse") renderTrueFalseExercise(exercise, onAnswered);
-        else renderTypeExercise(exercise, onAnswered);
+
+        // Wrapped once here rather than in each of the three renderers: they
+        // all call onAnswered at exactly the moment the answer locks, which is
+        // also the moment to say it out loud. This is what gives a Review run
+        // sound at all - a review never shows an explanation, so the example
+        // rows above are not on screen and the exercises are the only voice.
+        const spoken = exerciseLine(exercise);
+        const answeredWithAudio = isCorrect => {
+            if (spoken) playLine(spoken, el.exerciseRoot.querySelector(".sprint-exercise"));
+            onAnswered(isCorrect);
+        };
+
+        if (exercise.type === "mc") renderMcExercise(exercise, answeredWithAudio);
+        else if (exercise.type === "trueFalse") renderTrueFalseExercise(exercise, answeredWithAudio);
+        else renderTypeExercise(exercise, answeredWithAudio);
     }
 
     function renderMcExercise(exercise, onAnswered) {
@@ -691,6 +733,130 @@
             if (!isCorrect) revealCorrection(exercise.answer);
             onAnswered(isCorrect);
         });
+    }
+
+    // ── Voice ─────────────────────────────────────────────────────────────
+    //
+    // Clips are cut by scripts/generate-lesson-audio.cjs and stored under
+    // <base>/<prefix>/lessons/<courseId>/<key>.mp3. Which lines have one, how
+    // their text is cleaned up before it is spoken, and the key itself all
+    // come from decks/lesson-audio.js, which that script reads too - so a
+    // clip is looked for under exactly the name it was uploaded with.
+    //
+    // Everything here degrades to silence: a course with no recordings, a
+    // line the generator skipped, a fetch that fails, a browser that refuses
+    // to autoplay. None of it is allowed to interrupt the lesson.
+
+    const LINE_AUDIO_ICON =
+        '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M19 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+
+    // Built once per visit: on a Latin-script course, deciding whether a
+    // multiple-choice option is Norwegian or an English explanation needs the
+    // course's own word list (see looksForeign in decks/lesson-audio.js).
+    let lineVocabulary = null;
+    let lineAudio = null;
+    let lineAudioUrl = "";
+    let playingLineEl = null;
+    let playingLineTimer = 0;
+
+    function lessonAudioApi() {
+        return window.PolytypeLessonAudio || null;
+    }
+
+    function getLineVocabulary() {
+        const api = lessonAudioApi();
+        if (!api) return null;
+        if (!lineVocabulary) {
+            lineVocabulary = api.buildVocabulary(COURSE_ID, window.POLYTYPE_LESSONS?.[COURSE_ID] || []);
+        }
+        return lineVocabulary;
+    }
+
+    // The spoken form of an explanation row's term, or "" if there is nothing
+    // to say.
+    function spokenLine(rawText) {
+        const api = lessonAudioApi();
+        if (!api || !audioBaseUrl()) return "";
+        return api.spokenText(COURSE_ID, rawText);
+    }
+
+    function exerciseLine(exercise) {
+        const api = lessonAudioApi();
+        if (!api || !audioBaseUrl()) return "";
+        return api.exerciseSpokenText(COURSE_ID, exercise, getLineVocabulary());
+    }
+
+    function audioBaseUrl() {
+        return String(window.POLYTYPE_AUDIO_BASE_URL || "").replace(/\/+$/, "");
+    }
+
+    function getLineAudioUrl(spoken) {
+        const api = lessonAudioApi();
+        const base = audioBaseUrl();
+        if (!api || !base || !spoken) return "";
+        const prefix = String(window.POLYTYPE_AUDIO_PREFIX || "audio/v1").replace(/^\/+|\/+$/g, "");
+        return [base, prefix, "lessons", encodeURIComponent(COURSE_ID), `${api.audioKey(spoken)}.mp3`].join("/");
+    }
+
+    function ensureLineAudio() {
+        if (!lineAudio) {
+            lineAudio = new Audio();
+            lineAudio.preload = "auto";
+            lineAudio.addEventListener("ended", () => markLinePlaying(null));
+            lineAudio.addEventListener("error", () => markLinePlaying(null));
+        }
+        return lineAudio;
+    }
+
+    function playLine(spoken, sourceEl) {
+        const url = getLineAudioUrl(spoken);
+        if (!url) return;
+
+        try {
+            const audio = ensureLineAudio();
+            // Re-assign src (which refetches) for a different line OR when the
+            // element is sitting in an error state from a failed load: seeking
+            // an errored element just rejects again, which would leave that
+            // line permanently mute on every later tap.
+            if (lineAudioUrl !== url || audio.error) {
+                audio.src = url;
+                lineAudioUrl = url;
+            } else {
+                audio.currentTime = 0;
+            }
+            markLinePlaying(sourceEl);
+            audio.play().catch(() => markLinePlaying(null));
+        } catch {
+            markLinePlaying(null);
+        }
+    }
+
+    // Lights the row (or the exercise card) that is currently sounding. The
+    // timeout is only a stuck-state guard, not the real duration - a clip
+    // clears it through the "ended" listener above the moment it finishes.
+    // Comfortably past the longest line in the curriculum (a three-item
+    // vocabulary list, around 8s), so it can never cut a clip's highlight
+    // short while it is still talking.
+    function markLinePlaying(node) {
+        if (playingLineTimer) { window.clearTimeout(playingLineTimer); playingLineTimer = 0; }
+        if (playingLineEl && playingLineEl !== node) playingLineEl.classList.remove("is-playing");
+        playingLineEl = node || null;
+        if (!node) return;
+
+        node.classList.add("is-playing");
+        playingLineTimer = window.setTimeout(() => {
+            node.classList.remove("is-playing");
+            if (playingLineEl === node) playingLineEl = null;
+            playingLineTimer = 0;
+        }, 12000);
+    }
+
+    // Leaving the page mid-clip must not leave a voice talking over whatever
+    // comes next - see the onTeardown note in js/router.js.
+    function stopLineAudio() {
+        markLinePlaying(null);
+        if (!lineAudio) return;
+        try { lineAudio.pause(); } catch {}
     }
 
     function isAcceptableAnswer(typed, exercise) {

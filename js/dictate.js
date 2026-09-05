@@ -208,7 +208,13 @@
     async function selectLanguage(language) {
         await flushSessionProgress();
         activeLanguage = language;
-        localStorage.setItem(LANGUAGE_KEY, language);
+        // Through the shell, not straight into localStorage: this menu swaps
+        // the deck in place without reloading, so the topbar flag and the
+        // per-course coin/key counts have to be repainted by hand or they stay
+        // on the language we just left.
+        if (!window.PolytypeAppShell?.setStudyLanguage?.(language)) {
+            localStorage.setItem(LANGUAGE_KEY, language);
+        }
         closeLangMenu();
         syncLangMenu();
         await loadAndStart();

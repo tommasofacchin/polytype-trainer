@@ -26,6 +26,11 @@
 //     lesson finished long ago). Only added where the blank is inflected
 //     from a distinct base form - not for invariant words (pronouns,
 //     conjunctions, particles) where the answer already is the citation form.
+//
+// Any exercise may carry `mute: true`, which keeps js/lessons.js from reading
+// its correct answer aloud. Only needed where that answer is deliberately bad
+// language (a "spot the wrong form" question) - see decks/lesson-audio.js,
+// which decides what every other exercise pronounces.
 
 const LESSONS_DATA = {
     norwegian: [
@@ -452,7 +457,7 @@ const LESSONS_DATA = {
             exercises: [
                 { type: "mc", prompt: "Which article goes with a neuter noun?", options: ["en", "ei", "et", "de"], answer: 2 },
                 { type: "trueFalse", claim: "'ei' can usually be replaced with 'en' in Bokmål.", answer: true },
-                { type: "mc", prompt: "Which of these is the odd one out?", options: ["en bil", "et hus", "en bok", "ei bil"], answer: 3 },
+                { type: "mc", prompt: "Which of these is the odd one out?", options: ["en bil", "et hus", "en bok", "ei bil"], answer: 3, mute: true },
                 { type: "type", prompt: "Type the neuter indefinite article.", answer: "et", accept: ["et"] },
                 { type: "trueFalse", claim: "An et-word can also correctly take the article 'en'.", answer: false },
                 { type: "mc", prompt: "Roughly what share of Norwegian nouns are et-words?", options: ["10%", "20%", "40%", "70%"], answer: 2 }

@@ -25,6 +25,12 @@ function initDashboardPage() {
     setupProfileSync();
     setupGameStateSync();
 
+    // Home owns the phone-width copy of the 2x XP pill (see index.html).
+    // A hard load paints it via renderHeaderAuth, but a soft navigation onto
+    // Home never touches the shell - without this the pill would sit blank
+    // until the countdown's own once-a-second tick found it.
+    window.PolytypeAppShell?.paintXpBoost?.(window.PolytypeFirebase?.state?.profile || profile);
+
     // Delegated through js/router.js's shared hook slot instead of a direct
     // document-level listener - see js/main.js's identical comment for why.
     window.__polytypePageHooks = window.__polytypePageHooks || {};

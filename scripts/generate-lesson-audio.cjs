@@ -1,3 +1,22 @@
+// Generates audio for the lesson curriculum (decks/lessons-*.js): every example
+// sentence in a lesson's explanation, plus the correct answer of every exercise
+// that has something in the course's language to pronounce. Mirrors
+// generate-example-audio.cjs (voice/model/language-code resolution, Storj
+// upload, retry, stop-on-quota) but reads lessons instead of the word decks.
+//
+// What is speakable, how it is cleaned up before it reaches the voice, and the
+// key each clip is stored under all come from decks/lesson-audio.js - the same
+// file js/lessons.js loads in the browser to find a clip. Never duplicate that
+// logic here: a key derived two ways is a clip the player can never hear.
+//
+// Objects land at <prefix>/lessons/<courseId>/<key>.mp3, one flat folder per
+// course, because the key is a hash of the sentence rather than a lesson id -
+// two lessons using the same sentence share one clip.
+//
+// Usage:
+//   node scripts/generate-lesson-audio.cjs --course=norwegian
+//   node scripts/generate-lesson-audio.cjs --course=chinese --dryRun=true
+//   node scripts/generate-lesson-audio.cjs                  (every course with lessons)
 const crypto = require("crypto");
 const fs = require("fs");
 const path = require("path");
@@ -7,26 +26,20 @@ const rootDir = path.resolve(__dirname, "..");
 loadDotenv(".env");
 loadDotenv(".env.local");
 
+const lessonAudio = require(path.join(rootDir, "decks", "lesson-audio.js"));
+
 const options = parseArgs(process.argv.slice(2));
-const deckId = options.deck || process.env.DECK_ID || "norwegian-a1";
 const audioPrefix = stripSlashes(options.prefix || process.env.AUDIO_PREFIX || "audio/v1");
 const outputFormat = options.outputFormat || process.env.ELEVENLABS_OUTPUT_FORMAT || "mp3_44100_128";
+const force = parseBoolean(options.force || process.env.FORCE_AUDIO);
 const dryRun = parseBoolean(options.dryRun || process.env.DRY_RUN);
 const limit = parsePositiveInt(options.limit || process.env.LIMIT);
-// Re-cut one clip (or a handful) instead of walking the deck: --only takes a
-// comma-separated list of word ids or of the words themselves, matched
-// case-insensitively, e.g. --only=nor_004 or --only=nei. Pointless without
-// --force, since every named word already has a current clip - that is the
-// whole reason to be re-cutting it - so --only implies it.
-const only = parseList(options.only || process.env.ONLY);
-const force = parseBoolean(options.force || process.env.FORCE_AUDIO) || only.length > 0;
 const delayMs = parsePositiveInt(options.delayMs || process.env.ELEVENLABS_DELAY_MS) || 250;
 const elevenLabsApiKey = process.env.ELEVENLABS_API_KEY;
-const elevenLabsVoiceName =
-  options.voiceName ||
-  process.env.ELEVENLABS_VOICE_NAME ||
-  "Mia Starset- Clear and Friendly";
-let elevenLabsVoiceId = options.voiceId || "";
+
+// Which courses to walk. Defaults to every course that ships lessons, so a bare
+// run brings the whole curriculum up to date.
+const requestedCourses = parseList(options.course || process.env.COURSE);
 
 const storjConfig = {
   endpoint: stripTrailingSlash(options.storjEndpoint || process.env.STORJ_ENDPOINT || "https://gateway.storjshare.io"),
@@ -45,85 +58,87 @@ async function main() {
   assertRuntime();
   assertEnv();
 
-  const deck = loadDeckMeta(deckId);
-  const defaultLanguageCode = getDefaultLanguageCode(deck.language);
-  const languageCode = options.languageCode || defaultLanguageCode || process.env.ELEVENLABS_LANGUAGE_CODE || "";
-  const modelId = options.model || getModelIdForLanguage(deck.language) || process.env.ELEVENLABS_MODEL_ID || "eleven_multilingual_v2";
-  elevenLabsVoiceId = elevenLabsVoiceId || getVoiceIdForLanguage(deck.language);
-  const records = loadDeckRecords(deck);
-  const selected = only.length ? records.filter(matchesOnly) : records;
+  const lessonsByCourse = loadLessons();
+  const courses = pickCourses(lessonsByCourse);
 
-  if (only.length && !selected.length) {
-    throw new Error(`No word in ${deck.id} matches --only=${only.join(",")}`);
-  }
-
-  const targets = limit ? selected.slice(0, limit) : selected;
-
-  if (!elevenLabsVoiceId && !dryRun) {
-    elevenLabsVoiceId = await resolveVoiceId(elevenLabsApiKey, elevenLabsVoiceName);
-  }
-
-  console.log(`Deck: ${deck.id}`);
-  console.log(`Words: ${targets.length}${limit ? ` of ${selected.length}` : ""}${only.length ? ` (--only=${only.join(",")}, re-cut)` : ""}`);
+  console.log(`Courses: ${courses.join(", ")}`);
   console.log(`Storj bucket: ${storjConfig.bucket || "dry-run"}`);
-  console.log(`Storage prefix: ${audioPrefix}/${deck.id}/`);
-  console.log(`ElevenLabs voice: ${elevenLabsVoiceName} (${elevenLabsVoiceId || "dry-run"})`);
-  console.log(`Model: ${modelId}`);
-  if (languageCode) console.log(`Language code: ${languageCode}`);
   if (dryRun) console.log("Dry run: no audio will be generated or uploaded.");
 
   let generated = 0;
   let skipped = 0;
 
-  for (const [index, record] of targets.entries()) {
-    const objectKey = `${audioPrefix}/${deck.id}/${record.id}.mp3`;
-    const existing = dryRun ? { exists: false } : await readStorjObjectMeta(objectKey);
-    // Only a clip that came from the voice and model this run is using counts
-    // as done. Anything older is stale by definition, so changing either
-    // setting re-cuts just the words that haven't caught up yet - and a run
-    // that dies half way through can simply be run again to finish the rest,
-    // without --force re-cutting (and re-billing) the ones already redone.
-    const isCurrent = existing.exists &&
-      existing.voiceId === elevenLabsVoiceId &&
-      existing.modelId === modelId;
+  for (const courseId of courses) {
+    const languageCode = options.languageCode || getDefaultLanguageCode(courseId) || "";
+    const modelId = options.model || getModelIdForLanguage(courseId) || process.env.ELEVENLABS_MODEL_ID || "eleven_multilingual_v2";
+    const voiceId = options.voiceId || getVoiceIdForLanguage(courseId);
 
-    if (isCurrent && !force) {
-      skipped += 1;
-      console.log(`[${index + 1}/${targets.length}] skip ${record.id}: already current`);
-      continue;
+    if (!voiceId && !dryRun) throw new Error(`No ElevenLabs voice configured for ${courseId}.`);
+
+    const { items } = lessonAudio.collectCourse(courseId, lessonsByCourse[courseId]);
+    const targets = limit ? items.slice(0, limit) : items;
+
+    console.log("");
+    console.log(`=== ${courseId} ===`);
+    console.log(`Lines: ${targets.length}${limit ? ` of ${items.length}` : ""}`);
+    console.log(`Storage prefix: ${audioPrefix}/lessons/${courseId}/`);
+    console.log(`ElevenLabs voice: ${voiceId || "dry-run"}`);
+    console.log(`Model: ${modelId}`);
+    if (languageCode) console.log(`Language code: ${languageCode}`);
+
+    for (const [index, target] of targets.entries()) {
+      const objectKey = `${audioPrefix}/lessons/${courseId}/${target.key}.mp3`;
+      const existing = dryRun ? { exists: false } : await readStorjObjectMeta(objectKey);
+      const isCurrent = existing.exists &&
+        existing.voiceId === voiceId &&
+        existing.modelId === modelId;
+
+      if (isCurrent && !force) {
+        skipped += 1;
+        console.log(`[${index + 1}/${targets.length}] skip ${target.key}: already current`);
+        continue;
+      }
+
+      console.log(`[${index + 1}/${targets.length}] generate ${target.key}: ${target.text}  <${target.source}>`);
+
+      if (dryRun) continue;
+
+      let audio;
+      try {
+        audio = await createSpeech({
+          apiKey: elevenLabsApiKey,
+          voiceId,
+          text: target.text,
+          outputFormat,
+          modelId,
+          languageCode
+        });
+      } catch (error) {
+        if (error.quotaExceeded) {
+          console.error(`Stopping: ElevenLabs quota exhausted. ${error.message}`);
+          console.log("");
+          console.log(`Done. Generated: ${generated}. Skipped: ${skipped}. Stopped early on quota.`);
+          return;
+        }
+        throw error;
+      }
+
+      await putStorjObject(objectKey, audio, {
+        "content-type": "audio/mpeg",
+        "cache-control": "public, max-age=31536000, immutable",
+        "x-amz-meta-course-id": courseId,
+        "x-amz-meta-line-key": target.key,
+        "x-amz-meta-provider": "elevenlabs",
+        "x-amz-meta-voice-id": voiceId,
+        "x-amz-meta-model-id": modelId
+      });
+
+      generated += 1;
+      await sleep(delayMs);
     }
-
-    if (existing.exists && !force) {
-      console.log(`[${index + 1}/${targets.length}] restamp ${record.id}: ${existing.modelId || "unknown"} -> ${modelId}`);
-    }
-
-    console.log(`[${index + 1}/${targets.length}] generate ${record.id}: ${record.text}`);
-
-    if (dryRun) continue;
-
-    const audio = await createSpeech({
-      apiKey: elevenLabsApiKey,
-      voiceId: elevenLabsVoiceId,
-      text: record.text,
-      outputFormat,
-      modelId,
-      languageCode
-    });
-
-    await putStorjObject(objectKey, audio, {
-      "content-type": "audio/mpeg",
-      "cache-control": "public, max-age=31536000, immutable",
-      "x-amz-meta-deck-id": deck.id,
-      "x-amz-meta-word-id": record.id,
-      "x-amz-meta-provider": "elevenlabs",
-      "x-amz-meta-voice-id": elevenLabsVoiceId,
-      "x-amz-meta-model-id": modelId
-    });
-
-    generated += 1;
-    await sleep(delayMs);
   }
 
+  console.log("");
   console.log(`Done. Generated: ${generated}. Skipped: ${skipped}.`);
 }
 
@@ -149,58 +164,31 @@ function assertEnv() {
   }
 }
 
-function loadDeckMeta(id) {
-  global.window = {};
-  require(path.join(rootDir, "decks", "index.js"));
-
-  const deck = global.window.DECK_INDEX.find(item => item.id === id);
-  if (!deck) throw new Error(`Deck not found: ${id}`);
-  return deck;
+// Every decks/lessons-*.js at once, merged the same additive way the browser
+// merges them - so a course is present here exactly when it is present there.
+function loadLessons() {
+  global.window = global.window || {};
+  for (const file of fs.readdirSync(path.join(rootDir, "decks"))) {
+    if (!/^lessons-.+\.js$/.test(file)) continue;
+    require(path.join(rootDir, "decks", file));
+  }
+  return global.window.POLYTYPE_LESSONS || {};
 }
 
-function loadDeckRecords(deck) {
-  const csvPath = path.join(rootDir, deck.path);
-  const rows = parseCsv(fs.readFileSync(csvPath, "utf8").trim());
-  const headers = rows.shift() || [];
+function pickCourses(lessonsByCourse) {
+  const available = Object.keys(lessonsByCourse).filter(id => (lessonsByCourse[id] || []).length);
+  if (!requestedCourses.length) return available;
 
-  return rows
-    .map((row, index) => {
-      const record = Object.fromEntries(
-        headers.map((header, headerIndex) => [header.trim(), row[headerIndex] || ""])
-      );
-
-      return {
-        id: record[deck.columns.wordId]?.trim() || `${deck.id}-${index + 1}`,
-        text: record[deck.columns.script]?.trim() || ""
-      };
-    })
-    .filter(record => record.id && record.text);
+  const unknown = requestedCourses.filter(id => !available.includes(id));
+  if (unknown.length) {
+    throw new Error(`No lessons for: ${unknown.join(", ")}. Available: ${available.join(", ")}`);
+  }
+  return requestedCourses;
 }
 
-async function resolveVoiceId(apiKey, voiceName) {
-  const response = await fetch("https://api.elevenlabs.io/v2/voices", {
-    headers: { "xi-api-key": apiKey }
-  });
-
-  if (!response.ok) {
-    const details = await response.text().catch(() => "");
-    throw new Error(`Could not list ElevenLabs voices (${response.status}). ${details}`);
-  }
-
-  const data = await response.json();
-  const voices = data.voices || [];
-  const target = normalizeName(voiceName);
-  const exact = voices.find(voice => normalizeName(voice.name) === target);
-  const partial = voices.find(voice => normalizeName(voice.name).includes(target));
-  const voice = exact || partial;
-
-  if (!voice) {
-    throw new Error(
-      `Could not find ElevenLabs voice "${voiceName}". Add it to your voices or set ELEVENLABS_VOICE_ID.`
-    );
-  }
-
-  return voice.voice_id;
+function parseList(value) {
+  if (!value || value === "true") return [];
+  return String(value).split(",").map(item => item.trim().toLowerCase()).filter(Boolean);
 }
 
 async function createSpeech({ apiKey, voiceId, text, outputFormat, modelId, languageCode }) {
@@ -229,6 +217,7 @@ async function createSpeech({ apiKey, voiceId, text, outputFormat, modelId, lang
       const details = await response.text().catch(() => "");
       const error = new Error(`ElevenLabs request failed (${response.status}) for "${text}". ${details}`);
       error.status = response.status;
+      error.quotaExceeded = response.status === 401 && /quota_exceeded|quota exceeded/i.test(details);
       throw error;
     }
 
@@ -236,11 +225,8 @@ async function createSpeech({ apiKey, voiceId, text, outputFormat, modelId, lang
   });
 }
 
-// Returns what generated the object that's already there, not just whether
-// one is. Every upload stamps the voice and model it came from (see the
-// putStorjObject call in main), so the caller can tell "already done" apart
-// from "done, but by the settings we just changed away from" - which is what
-// makes a switch of voice or model resumable rather than all-or-nothing.
+// Same contract as generate-audio.cjs's copy - see the note there for why the
+// stamped voice/model matter rather than mere existence.
 async function readStorjObjectMeta(objectKey) {
   const response = await retry(() => signedS3Request({
     method: "HEAD",
@@ -353,41 +339,8 @@ async function retry(task, { attempts = 5, label = "request" } = {}) {
 
 function isRetryableError(error) {
   if (!error || error.status === undefined) return true;
+  if (error.quotaExceeded) return false;
   return error.status === 408 || error.status === 425 || error.status === 429 || error.status >= 500;
-}
-
-function parseCsv(csvText) {
-  const rows = [];
-  let row = [];
-  let field = "";
-  let inQuotes = false;
-
-  for (let i = 0; i < csvText.length; i += 1) {
-    const char = csvText[i];
-    const nextChar = csvText[i + 1];
-
-    if (char === "\"" && inQuotes && nextChar === "\"") {
-      field += "\"";
-      i += 1;
-    } else if (char === "\"") {
-      inQuotes = !inQuotes;
-    } else if (char === "," && !inQuotes) {
-      row.push(field);
-      field = "";
-    } else if ((char === "\n" || char === "\r") && !inQuotes) {
-      if (char === "\r" && nextChar === "\n") i += 1;
-      row.push(field);
-      rows.push(row);
-      row = [];
-      field = "";
-    } else {
-      field += char;
-    }
-  }
-
-  row.push(field);
-  rows.push(row);
-  return rows.filter(values => values.some(value => value.trim() !== ""));
 }
 
 function normalizeHeaders(headers) {
@@ -447,21 +400,6 @@ function parseArgs(args) {
   return parsed;
 }
 
-function parseList(value) {
-  if (!value || value === "true") return [];
-  return String(value)
-    .split(",")
-    .map(item => item.trim().toLowerCase())
-    .filter(Boolean);
-}
-
-// A word is named by --only either by its deck id (nor_004) or by the word
-// itself (nei) - the id is what the object key uses, the word is what someone
-// listening to a bad clip actually has in front of them.
-function matchesOnly(record) {
-  return only.includes(record.id.toLowerCase()) || only.includes(record.text.toLowerCase());
-}
-
 function parseBoolean(value) {
   if (value === undefined || value === null || value === "") return false;
   return /^(1|true|yes)$/i.test(String(value));
@@ -502,16 +440,7 @@ function getVoiceIdForLanguage(language) {
 }
 
 function getModelIdForLanguage(language) {
-  // eleven_multilingual_v2 (the default model) ignores language_code and
-  // guesses the language from the text, which mispronounces short Norwegian
-  // words. eleven_flash_v2_5 supports forcing language_code instead.
-  //
-  // Chinese is here for the same reason, picked from a side-by-side listening
-  // test of the one voice across multilingual_v2 / flash_v2_5 / turbo_v2_5 /
-  // v3, at normal and 0.9 speed: with the language forced to zh the tones and
-  // the neutral-tone syllables land, where the guessing model blurred them.
-  // Default voice settings won - no voice_settings block is sent, so nothing
-  // below overrides the voice's own.
+  // Same pair, same reason, as generate-audio.cjs - see the note there.
   const defaults = {
     chinese: "eleven_flash_v2_5",
     norwegian: "eleven_flash_v2_5"
@@ -519,14 +448,6 @@ function getModelIdForLanguage(language) {
   const envKey = `ELEVENLABS_${String(language || "").toUpperCase()}_MODEL_ID`;
 
   return process.env[envKey] || defaults[language] || "";
-}
-
-function normalizeName(value) {
-  return String(value || "")
-    .toLowerCase()
-    .replace(/\s*-\s*/g, "-")
-    .replace(/\s+/g, " ")
-    .trim();
 }
 
 function toCamelCase(value) {

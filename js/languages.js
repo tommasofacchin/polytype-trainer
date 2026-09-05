@@ -67,7 +67,13 @@ function buildLanguageCard(deck, courses, activeLanguage) {
         ${deck.language === activeLanguage ? `<span class="profile-stat-pill">${tr("languages.current")}</span>` : ""}
     `;
     card.addEventListener("click", async () => {
-        localStorage.setItem("polytype-language", deck.language);
+        // Not a bare localStorage write: goTo below is a *soft* navigation, so
+        // nothing reloads the shell, and the topbar would keep flying the
+        // previous course's flag (and its coin/key counts) on the page we land
+        // on. setStudyLanguage writes the key and repaints the header with it.
+        if (!window.PolytypeAppShell?.setStudyLanguage?.(deck.language)) {
+            localStorage.setItem("polytype-language", deck.language);
+        }
 
         // Signed-in players no longer get free starter words on their first
         // session in a language (see api/start-course.js) - a course needs
