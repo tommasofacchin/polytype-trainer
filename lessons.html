@@ -49,21 +49,29 @@
                 <button type="button" id="lessons-continue-btn" class="restart-btn" data-i18n="lessons.continueBtn">Continue</button>
             </section>
         </div>
-
-        <!-- Lesson intro sheet: slides up from the bottom when a lesson node
-             is tapped. Its "Start lesson" button drops the player straight
-             into the exercises (see js/lessons.js). -->
-        <div id="lessons-sheet" class="lessons-sheet" hidden>
-            <div id="lessons-sheet-backdrop" class="lessons-sheet-backdrop"></div>
-            <section class="lessons-sheet-panel" role="dialog" aria-modal="true" aria-labelledby="lessons-sheet-title">
-                <button type="button" id="lessons-sheet-close" class="lessons-sheet-close" aria-label="Close" data-i18n-aria-label="common.close">&times;</button>
-                <span id="lessons-sheet-kicker" class="lessons-sheet-kicker"></span>
-                <h2 id="lessons-sheet-title" class="lessons-explanation-title"></h2>
-                <div id="lessons-sheet-body" class="lessons-explanation-body"></div>
-                <button type="button" id="lessons-sheet-start-btn" class="restart-btn" data-i18n="lessons.startBtn">Start lesson</button>
-            </section>
-        </div>
     </main>
+
+    <!-- Lesson intro sheet: slides up from the bottom when a lesson node is
+         tapped. Its "Start lesson" button drops the player straight into the
+         exercises (see js/lessons.js).
+
+         Outside <main> for exactly the reason the Review FAB below is: this is
+         a position:fixed overlay meant to cover the viewport, and <main>'s
+         page-enter animation makes main the containing block for its own fixed
+         descendants for as long as that animation's fill-mode holds. Nested
+         inside, the sheet anchored to main's scrollable box instead - landing
+         off-screen, at the bottom of the whole lesson list rather than the
+         bottom of the window. -->
+    <div id="lessons-sheet" class="lessons-sheet" hidden>
+        <div id="lessons-sheet-backdrop" class="lessons-sheet-backdrop"></div>
+        <section class="lessons-sheet-panel" role="dialog" aria-modal="true" aria-labelledby="lessons-sheet-title">
+            <button type="button" id="lessons-sheet-close" class="lessons-sheet-close" aria-label="Close" data-i18n-aria-label="common.close">&times;</button>
+            <span id="lessons-sheet-kicker" class="lessons-sheet-kicker"></span>
+            <h2 id="lessons-sheet-title" class="lessons-explanation-title"></h2>
+            <div id="lessons-sheet-body" class="lessons-explanation-body"></div>
+            <button type="button" id="lessons-sheet-start-btn" class="restart-btn" data-i18n="lessons.startBtn">Start lesson</button>
+        </section>
+    </div>
 
     <!-- Review FAB: a fixed bottom-right button into a Sprint-style mixed run
          over the lessons already finished. Sits outside <main> as a sibling,

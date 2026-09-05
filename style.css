@@ -10477,6 +10477,11 @@ body:has(.game-result-overlay.is-entering:not([hidden])) #app-header {
 .lessons-example-row .lessons-example-audio {
     display: grid;
     flex: none;
+    /* The row aligns its two text columns on their shared baseline. This chip
+       has no text to sit on one, and a grid box with no baseline gets one
+       synthesised from its bottom edge - which would hang it below the line it
+       belongs to. Centred against the row instead. */
+    align-self: center;
     place-items: center;
     width: 24px;
     height: 24px;
@@ -10517,7 +10522,14 @@ body:has(.game-result-overlay.is-entering:not([hidden])) #app-header {
    Tapping a lesson node slides this up from the bottom of the screen; its
    "Start lesson" button then opens the player (see js/lessons.js). Layered
    at the same z-index footing as .deck-overlay, above the bottom nav (40). */
-body.lessons-sheet-open {
+/* Both selectors, and the long one is the one that actually does the work:
+   on this page body is the scroller (.has-app-shell.is-scroll-page, two
+   classes) and a plain `body.lessons-sheet-open` is a class less specific
+   than that, so it lost every time and the lesson list went on scrolling
+   underneath the open sheet. Specificity here, not !important, so a future
+   page that scrolls some other way can still say otherwise. */
+body.lessons-sheet-open,
+body.has-app-shell.is-scroll-page.lessons-sheet-open {
     overflow: hidden;
 }
 
