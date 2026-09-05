@@ -776,7 +776,10 @@
             // there. A no-op unless this was the day's first session.
             await window.PolytypeStreakCelebrate?.show?.(progress?.streak);
             if (progress?.completedMissions?.length) {
-                await window.PolytypeMissionCelebrate?.show?.(progress.completedMissions);
+                await window.PolytypeMissionCelebrate?.show?.(progress.completedMissions, {
+                    xpBoostStarted: progress.xpBoostStarted,
+                    xpBoostExpiresAt: progress.xpBoostExpiresAt
+                });
             }
             if (progress?.newBadges?.length) {
                 await window.PolytypeBadgeCelebrate?.show?.(progress.newBadges);

@@ -79,15 +79,14 @@ const GAME_TYPES = ["trainer", "memory", "dictate", "sprint", "lesson"];
 const TUTORIAL_STEPS = ["deck-intro", "buy-keys", "choose-words", "play-sprint", "done"];
 const TUTORIAL_STARTER_COINS = 500;
 const TUTORIAL_STARTER_KEYS = 5;
-const CHEST_COIN_REWARD = 50;
-const CHEST_XP_REWARD = 20;
 // Debug-only: set DEBUG_ALWAYS_CLAIM_CHEST=true in the environment to let the
 // daily chest be reopened on every claim instead of once per day. Never set
 // this in production - it lets any signed-in user farm coins/XP at will.
 const DEBUG_ALWAYS_CLAIM_CHEST = process.env.DEBUG_ALWAYS_CLAIM_CHEST === "true";
 
-// Small fixed pool; 3 are picked deterministically per (uid, date) so the set
-// rotates daily without needing a cron job or extra Firestore writes.
+// Small fixed pool; 2 are picked deterministically per (uid, date) so the set
+// rotates daily without needing a cron job or extra Firestore writes. The
+// third slot comes from HARD_MISSION_POOL below.
 const MISSION_POOL = [
   { id: "earn_30_xp", metric: "xp", target: 30, coinReward: 30, labelKey: "mission.earn30Xp" },
   { id: "earn_50_xp", metric: "xp", target: 50, coinReward: 40, labelKey: "mission.earn50Xp" },
@@ -98,6 +97,71 @@ const MISSION_POOL = [
   { id: "play_sprint", metric: "gameSessions.sprint", target: 1, coinReward: 50, labelKey: "mission.playSprint" },
   { id: "correct_20", metric: "correctAnswers", target: 20, coinReward: 50, labelKey: "mission.correct20" }
 ];
+
+// The day's third mission, always drawn from here so it is deliberately out
+// of reach of a single round. A sprint is 10-20 questions (js/sprint.js), so
+// its best possible session is 20 correct = 200 base + 40 combo + 25 accuracy
+// + 50 perfect = 315 XP, and MAX_SESSION_XP caps any session at 500. Every
+// target below therefore needs a second session at minimum:
+//   - 350 XP clears the best realistic single sprint;
+//   - the rest count sessions or game types, which one round cannot satisfy
+//     however well it is played.
+// Coin rewards are roughly double a regular mission's, since these are.
+const HARD_MISSION_POOL = [
+  { id: "earn_350_xp", metric: "xp", target: 350, coinReward: 120, labelKey: "mission.earn350Xp" },
+  { id: "play_3_sessions", metric: "sessions", target: 3, coinReward: 110, labelKey: "mission.play3Sessions" },
+  { id: "correct_60", metric: "correctAnswers", target: 60, coinReward: 110, labelKey: "mission.correct60" },
+  { id: "play_sprint_2", metric: "gameSessions.sprint", target: 2, coinReward: 100, labelKey: "mission.playSprint2" },
+  { id: "play_two_games", metric: "gameTypesToday", target: 2, coinReward: 100, labelKey: "mission.playTwoGames" }
+];
+
+// Clearing all three of the day's missions arms a temporary XP multiplier -
+// the point of the hard third mission: it turns "I finished my dailies" into
+// a window worth playing straight through rather than a payout and a stop.
+// Applied to whole sessions only (see api/complete-practice-session.js), so
+// a session that starts inside the window but saves after it has expired
+// earns normally; ten minutes is comfortably more than one round.
+const XP_BOOST_MULTIPLIER = 2;
+const XP_BOOST_DURATION_MS = 10 * 60 * 1000;
+
+// ── Randomized reward drops ───────────────────────────────────────────────
+// The daily chest and mission payouts roll a rarity tier rather than paying a
+// flat amount, so most days are ordinary and the occasional one is worth
+// talking about.
+//
+// Weights are per-thousand and must total REWARD_WEIGHT_TOTAL within each
+// table. They are tuned against how often each table is rolled, so the rare
+// tiers land at a comparable real-world cadence:
+//   - the chest rolls ~30x/month (once a day): 67/1000 puts a key at about
+//     twice a month, 33/1000 puts a streak freeze at about once.
+//   - missions roll ~90x/month (three a day): reaching the same monthly
+//     cadence needs weights roughly a third as large, hence 22 and 8.
+const REWARD_WEIGHT_TOTAL = 1000;
+
+const CHEST_REWARD_TABLE = [
+  { id: "common", weight: 580, coins: [30, 50], xp: 20 },
+  { id: "rare", weight: 250, coins: [70, 95], xp: 28 },
+  { id: "epic", weight: 70, coins: [140, 180], xp: 40 },
+  { id: "key", weight: 67, coins: [40, 60], xp: 20, keys: 1 },
+  { id: "freeze", weight: 33, coins: [40, 60], xp: 20, streakFreezes: 1 }
+];
+
+// Percentages of the mission's own coinReward, so a hard mission's rare roll
+// stays proportionally bigger than an easy one's.
+const MISSION_REWARD_TABLE = [
+  { id: "common", weight: 780, coinPercent: [100, 100] },
+  { id: "rare", weight: 160, coinPercent: [150, 200] },
+  { id: "epic", weight: 30, coinPercent: [300, 300] },
+  { id: "key", weight: 22, coinPercent: [100, 100], keys: 1 },
+  { id: "freeze", weight: 8, coinPercent: [100, 100], streakFreezes: 1 }
+];
+
+// Paid instead when a rolled key or freeze has nowhere to go (already at
+// MAX_KEYS / maxStreakFreezes). Deliberately well under what the item costs
+// in the shop - 100 and 500 coins - so sitting at the cap is never the more
+// profitable outcome.
+const CAPPED_KEY_COINS = 50;
+const CAPPED_FREEZE_COINS = 100;
 
 // Evaluated (in order) against the updated user profile after every session;
 // the first time a condition is met the badge is written and stays earned.
@@ -212,6 +276,10 @@ function buildDefaultUserProfile(uid, authProfile, timezone) {
     friendCount: 0,
     lastChestClaimedDate: null,
     chestsClaimed: 0,
+    // Epoch ms the all-missions XP multiplier runs until; past (or 0) means
+    // no boost. Stored as a plain number rather than a Timestamp so the
+    // client can compare it against Date.now() without any conversion.
+    xpBoostExpiresAt: 0,
     dailyGoalXp: DEFAULT_DAILY_GOAL_XP,
     // Both are pure server bookkeeping for badge conditions below (well_
     // rounded / veteran) - never sanitized into the client-facing profile,
@@ -264,6 +332,7 @@ function sanitizeUserProfile(user) {
     friendCount: user.friendCount || 0,
     lastChestClaimedDate: user.lastChestClaimedDate || null,
     chestsClaimed: user.chestsClaimed || 0,
+    xpBoostExpiresAt: Number(user.xpBoostExpiresAt) || 0,
     dailyGoalXp: normalizeDailyGoalXp(user.dailyGoalXp),
     tutorial: sanitizeTutorial(user.tutorial),
     courses: sanitizeCoursesSummary(user.courses)
@@ -725,32 +794,128 @@ function buildLeaderboard(entries) {
   return sorted.map((entry, index) => ({ ...entry, rank: index + 1 }));
 }
 
-// Deterministic 3-of-N daily pick from (uid, dateKey) so missions rotate
-// without needing a scheduled job or extra writes.
+// Deterministic daily pick from (uid, dateKey) so missions rotate without
+// needing a scheduled job or extra writes: two from MISSION_POOL, then one
+// from HARD_MISSION_POOL. The hard one is always last, so "the third mission"
+// is the demanding one wherever the day's set is rendered.
 function pickDailyMissions(uid, dateKey) {
-  const seed = `${uid}:${dateKey}`;
-  let hash = 0;
-  for (let i = 0; i < seed.length; i += 1) {
-    hash = (hash * 31 + seed.charCodeAt(i)) >>> 0;
-  }
+  const rng = makeSeededRng(`missions:${uid}:${dateKey}`);
 
   const pool = [...MISSION_POOL];
   const picked = [];
-  for (let i = 0; i < 3 && pool.length; i += 1) {
-    hash = (hash * 1103515245 + 12345) >>> 0;
-    const index = hash % pool.length;
-    picked.push(pool.splice(index, 1)[0]);
+  for (let i = 0; i < 2 && pool.length; i += 1) {
+    picked.push(pool.splice(Math.floor(rng() * pool.length), 1)[0]);
   }
+
+  const hard = HARD_MISSION_POOL[Math.floor(rng() * HARD_MISSION_POOL.length)];
+  if (hard) picked.push(hard);
+
   return picked;
 }
 
+// Small deterministic PRNG (mulberry32). Math.imul keeps every step in exact
+// 32-bit integer math - a plain `*` on 32-bit operands overflows Number's
+// 53-bit mantissa and silently drops the low bits that carry the randomness.
+//
+// Seeded rather than Math.random for two reasons: a Firestore transaction
+// that retries under contention must re-roll identically, or the payout would
+// depend on how busy the database was; and a deterministic roll cannot be
+// re-rolled by replaying the request.
+function makeSeededRng(seed) {
+  let state = 0;
+  for (let i = 0; i < seed.length; i += 1) {
+    state = (Math.imul(state, 31) + seed.charCodeAt(i)) >>> 0;
+  }
+
+  return function next() {
+    state = (state + 0x6d2b79f5) >>> 0;
+    let t = state;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function pickRewardTier(table, roll) {
+  let ticket = Math.floor(roll * REWARD_WEIGHT_TOTAL);
+  for (const tier of table) {
+    ticket -= tier.weight;
+    if (ticket < 0) return tier;
+  }
+  return table[0];
+}
+
+function randomIntInRange(rng, [min, max]) {
+  return min + Math.floor(rng() * (max - min + 1));
+}
+
+// Shared tail of both rolls: swaps an unusable key/freeze for coins, and
+// downgrades the reported rarity when it does, so the client never announces
+// an item that isn't in the payout. Coins are rounded to the nearest 5 so a
+// rolled amount still reads as a deliberate number.
+function settleRewardTier(tier, coins, { keysHeld, streakFreezes, maxStreakFreezes }) {
+  let keys = tier.keys || 0;
+  let freezes = tier.streakFreezes || 0;
+  let payout = coins;
+
+  if (keys && keysHeld + keys > MAX_KEYS) {
+    keys = 0;
+    payout += CAPPED_KEY_COINS;
+  }
+  if (freezes && streakFreezes + freezes > maxStreakFreezes) {
+    freezes = 0;
+    payout += CAPPED_FREEZE_COINS;
+  }
+
+  const droppedItem = (tier.keys || tier.streakFreezes) && !keys && !freezes;
+
+  return {
+    rarity: droppedItem ? "rare" : tier.id,
+    coins: Math.round(payout / 5) * 5,
+    keys,
+    streakFreezes: freezes
+  };
+}
+
+// One roll per (uid, day) - the claim is already gated to once a day by
+// lastChestClaimedDate, and seeding on the same pair means a retried
+// transaction pays out exactly what the first attempt would have.
+function rollChestReward(uid, dateKey, held) {
+  const rng = makeSeededRng(`chest:${uid}:${dateKey}`);
+  const tier = pickRewardTier(CHEST_REWARD_TABLE, rng());
+  const settled = settleRewardTier(tier, randomIntInRange(rng, tier.coins), held);
+  return { ...settled, xp: tier.xp };
+}
+
+// One roll per (uid, day, mission). `held` must carry the running totals when
+// several missions complete in the same session, or two key rolls could both
+// see room for a key that only one of them can have.
+function rollMissionReward(uid, dateKey, mission, held) {
+  const rng = makeSeededRng(`mission:${uid}:${dateKey}:${mission.id}`);
+  const tier = pickRewardTier(MISSION_REWARD_TABLE, rng());
+  const percent = randomIntInRange(rng, tier.coinPercent);
+  const settled = settleRewardTier(tier, (mission.coinReward * percent) / 100, held);
+  return { ...settled, baseCoins: mission.coinReward };
+}
+
+function isXpBoostActive(user, nowMs) {
+  return Number(user?.xpBoostExpiresAt) > nowMs;
+}
+
 function getMetricValue(dailyStats, metric) {
+  // Derived rather than stored: how many distinct game types were played
+  // today. gameSessions is a per-type counter map, so the count of its
+  // non-zero entries is the answer, and no extra field has to be written.
+  if (metric === "gameTypesToday") {
+    return Object.values((dailyStats && dailyStats.gameSessions) || {}).filter(count => count > 0).length;
+  }
   return metric.split(".").reduce((value, key) => (value && typeof value === "object" ? value[key] : undefined), dailyStats) || 0;
 }
 
 function evaluateMissions(uid, dateKey, dailyStats) {
   const missions = pickDailyMissions(uid, dateKey);
   const completedFlags = (dailyStats && dailyStats.missionsCompleted) || {};
+  const hardIds = new Set(HARD_MISSION_POOL.map(mission => mission.id));
 
   return missions.map(mission => {
     const value = getMetricValue(dailyStats || {}, mission.metric);
@@ -761,7 +926,14 @@ function evaluateMissions(uid, dateKey, dailyStats) {
       labelKey: mission.labelKey,
       progress,
       target: mission.target,
+      // The amount advertised on Home. What actually lands is rolled at
+      // completion time (rollMissionReward) and can be higher - the surprise
+      // is the point, so this deliberately stays the base figure.
       coinReward: mission.coinReward,
+      // Lets Home mark the day's demanding one rather than leaving its bigger
+      // reward looking arbitrary. Read off the pool instead of the array
+      // index, so nothing breaks if the ordering ever changes.
+      hard: hardIds.has(mission.id),
       completed
     };
   });
@@ -827,6 +999,9 @@ module.exports = {
   pickDailyMissions,
   evaluateMissions,
   getNewlyCompletedMissions,
+  rollChestReward,
+  rollMissionReward,
+  isXpBoostActive,
   evaluateNewBadges,
   MAX_STREAK_FREEZES,
   DEFAULT_DAILY_GOAL_XP,
@@ -851,9 +1026,10 @@ module.exports = {
   TUTORIAL_STEPS,
   TUTORIAL_STARTER_COINS,
   TUTORIAL_STARTER_KEYS,
-  CHEST_COIN_REWARD,
-  CHEST_XP_REWARD,
   DEBUG_ALWAYS_CLAIM_CHEST,
   MISSION_POOL,
+  HARD_MISSION_POOL,
+  XP_BOOST_MULTIPLIER,
+  XP_BOOST_DURATION_MS,
   BADGE_DEFINITIONS
 };

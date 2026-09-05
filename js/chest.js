@@ -6,8 +6,9 @@
     window.PolytypeChest = { open };
 
     // Fixed, so a replay always looks the same and is easy to compare against
-    // the real thing.
-    const DEMO_REWARD = { coinsEarned: 50, xpEarned: 20 };
+    // the real thing. Rolls a "rare" tier on purpose - the demo exists to
+    // preview the animation, and the rare dressing is the part worth seeing.
+    const DEMO_REWARD = { coinsEarned: 85, xpEarned: 28, keysEarned: 1, rarity: "rare" };
 
     const CHEST_SVG = `
         <svg class="chest-overlay-icon" width="130" height="130" viewBox="0 0 48 48">
@@ -23,6 +24,14 @@
 
     const XP_SVG =
         '<svg width="32" height="32" viewBox="0 0 24 24" fill="var(--accent-ink)"><path d="M12 2l2.9 6.2 6.6.7-4.9 4.5 1.3 6.6L12 17.8 6.1 20.6l1.3-6.6L2.5 8.9l6.6-.7z"/></svg>';
+
+    // Same shapes the header uses for these two, so a key pulled out of the
+    // chest is visibly the same key that lands in the stat row behind it.
+    const KEY_SVG =
+        '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--color-gold-text)" stroke-width="1.8" stroke-linecap="round"><circle cx="7" cy="12" r="4.2" fill="color-mix(in srgb, currentColor 18%, transparent)"></circle><circle cx="7" cy="12" r="1.4"></circle><path d="M10.6 12h10"></path><path d="M17 12v3"></path><path d="M20 12v2.4"></path></svg>';
+
+    const FREEZE_SVG =
+        '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--color-secondary)" stroke-width="1.9" stroke-linecap="round"><path d="M12 2v20M3.4 7l17.2 10M20.6 7 3.4 17"/><path d="M9 4.2 12 6l3-1.8M9 19.8 12 18l3 1.8"/></svg>';
 
     function prefersReducedMotion() {
         return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches === true;
@@ -49,10 +58,13 @@
         });
     }
 
-    // Coins and XP are what the daily chest actually contains (see
-    // CHEST_COIN_REWARD / CHEST_XP_REWARD in api/_lib.js). Badges can also
-    // come back on a claim, but those have their own celebration
-    // (PolytypeBadgeCelebrate), so they're deliberately not duplicated here.
+    // What the chest holds is rolled per claim (CHEST_REWARD_TABLE in
+    // api/_lib.js): coins and XP every time, and on a rare enough roll a key
+    // or a streak freeze on top. Each present item gets its own tap in the
+    // sequence, so a rare drop is literally an extra beat rather than a
+    // bigger number. Badges can also come back on a claim, but those have
+    // their own celebration (PolytypeBadgeCelebrate), so they're deliberately
+    // not duplicated here.
     function buildItems(reward) {
         const items = [];
 
@@ -74,8 +86,35 @@
             });
         }
 
+        if (Number(reward?.keysEarned) > 0) {
+            items.push({
+                kind: "key",
+                icon: KEY_SVG,
+                amount: `+${reward.keysEarned}`,
+                label: tr("chest.itemKey")
+            });
+        }
+
+        if (Number(reward?.streakFreezesEarned) > 0) {
+            items.push({
+                kind: "freeze",
+                icon: FREEZE_SVG,
+                amount: `+${reward.streakFreezesEarned}`,
+                label: tr("chest.itemFreeze")
+            });
+        }
+
         return items;
     }
+
+    // "common" gets no treatment at all - it is the baseline, and dressing it
+    // up would leave nothing for the rolls that have actually earned it.
+    const RARITY_LABELS = {
+        rare: "chest.rarityRare",
+        epic: "chest.rarityEpic",
+        key: "chest.rarityKey",
+        freeze: "chest.rarityFreeze"
+    };
 
     // How long a tapped item's dismiss animation gets before the next one
     // appears, and how the final row of chips cascades in - kept together so
@@ -170,6 +209,20 @@
             window.PolytypeAppShell?.releaseXpDisplay?.();
             close();
             return;
+        }
+
+        // Dresses the whole overlay for the tier that was rolled - a brighter
+        // flash and a glow behind the items, plus a banner naming it. Applied
+        // once, here, so the rarity is established the instant the lid opens
+        // and carries through every tap rather than being revealed at the end.
+        const rarity = reward?.rarity || "common";
+        const rarityLabelKey = RARITY_LABELS[rarity];
+        if (rarityLabelKey) {
+            overlay.classList.add(`is-${rarity}`, "is-rare-roll");
+            const banner = document.createElement("div");
+            banner.className = "chest-rarity-banner";
+            banner.textContent = tr(rarityLabelKey);
+            overlay.querySelector(".chest-overlay-art").append(banner);
         }
 
         // ── One tap per item ──────────────────────────────────────────────

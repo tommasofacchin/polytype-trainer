@@ -108,7 +108,40 @@
         });
     }
 
-    function show(missions) {
+    const COIN_ICON =
+        '<svg width="14" height="14" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#ffc73a"/><circle cx="12" cy="12" r="6.5" fill="none" stroke="#d99a1c" stroke-width="2"/></svg>';
+    const KEY_ICON =
+        '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--color-gold-text)" stroke-width="1.9" stroke-linecap="round"><circle cx="7" cy="12" r="4.2"></circle><path d="M10.6 12h10"></path><path d="M17 12v3"></path><path d="M20 12v2.4"></path></svg>';
+    const FREEZE_ICON =
+        '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--color-secondary)" stroke-width="2" stroke-linecap="round"><path d="M12 2v20M3.4 7l17.2 10M20.6 7 3.4 17"/></svg>';
+
+    // A mission's payout is rolled, not fixed (MISSION_REWARD_TABLE in
+    // api/_lib.js), so the row has to show what actually dropped: the coins
+    // paid, plus a chip for a key or freeze when one came with them. The
+    // Home card advertised `baseCoinReward`, so anything above it is called
+    // out as a bonus rather than left to look like a different number.
+    function buildRewardChips(mission) {
+        const paid = Number(mission.coinReward) || 0;
+        const base = Number(mission.baseCoinReward) || paid;
+        const chips = [
+            `<span class="mission-reward-coin${paid > base ? " is-bonus" : ""}">${COIN_ICON}+${paid}</span>`
+        ];
+
+        if (Number(mission.keysEarned) > 0) {
+            chips.push(`<span class="mission-reward-extra">${KEY_ICON}+${mission.keysEarned}</span>`);
+        }
+        if (Number(mission.streakFreezesEarned) > 0) {
+            chips.push(`<span class="mission-reward-extra">${FREEZE_ICON}+${mission.streakFreezesEarned}</span>`);
+        }
+
+        return chips.join("");
+    }
+
+    // `options.xpBoostStarted` comes straight off the session response - the
+    // server decides when the day's set is cleared, so the overlay never has
+    // to work out whether all three are done from the rows it was handed
+    // (which only ever carry the ones that completed in *this* session).
+    function show(missions, options = {}) {
         if (!missions || !missions.length) return Promise.resolve();
 
         document.querySelector(".mission-overlay")?.remove();
@@ -151,14 +184,38 @@
             row.innerHTML = `
                 <div class="mission-reward-head">
                     <strong>${tr(mission.labelKey)}</strong>
-                    <span class="mission-reward-coin"><svg width="14" height="14" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#ffc73a"/><circle cx="12" cy="12" r="6.5" fill="none" stroke="#d99a1c" stroke-width="2"/></svg>+${mission.coinReward}</span>
+                    <span class="mission-reward-amounts">${buildRewardChips(mission)}</span>
                 </div>
                 <div class="mission-bar"><div class="mission-bar-fill"></div></div>
             `;
+            if (mission.rarity && mission.rarity !== "common") row.classList.add("is-rare-roll");
             list.appendChild(row);
         });
 
+        // Clearing all three arms the 2x XP window. Announced here, in the
+        // same breath as the last mission completing, because that is the
+        // only moment it is caused - the header pill takes over from here and
+        // carries the countdown for the rest of it.
+        if (options.xpBoostStarted) {
+            const boost = document.createElement("div");
+            boost.className = "mission-boost-banner";
+            boost.style.setProperty("--delay", `${0.35 + missions.length * 0.15}s`);
+            boost.innerHTML = `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg>
+                <span>
+                    <strong>${tr("boost.startedTitle")}</strong>
+                    <span>${tr("boost.startedBody", { minutes: 10 })}</span>
+                </span>
+            `;
+            overlay.querySelector(".mission-rewards-list").after(boost);
+        }
+
         document.body.append(overlay);
+
+        // The pill is normally painted by the next profile update, which for
+        // Trainer's buffered flush can be a while - light it now so the
+        // banner above and the header agree from this frame on.
+        if (options.xpBoostStarted) window.PolytypeAppShell?.paintXpBoost?.({ xpBoostExpiresAt: options.xpBoostExpiresAt });
 
         return new Promise(resolve => {
             let closed = false;

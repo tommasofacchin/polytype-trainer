@@ -40,6 +40,11 @@ const state = {
     savePromise: null,
     pendingSessionCoins: 0,
     pendingCompletedMissions: [],
+    // The autosave that clears the day's last mission is usually mid-session,
+    // so the boost banner has to be buffered alongside the missions it
+    // belongs to and shown with them at the end - see
+    // flushPendingMissionCelebration.
+    pendingXpBoost: null,
     pendingNewBadges: [],
     // Same accumulate-then-flush rule as the two above. Holds the server's
     // `streak` block from whichever autosave first reported the flame going
@@ -629,6 +634,7 @@ function resetState() {
     state.savePromise = null;
     state.pendingSessionCoins = 0;
     state.pendingCompletedMissions = [];
+    state.pendingXpBoost = null;
     state.pendingNewBadges = [];
     state.pendingStreakAdvance = null;
 }
@@ -1360,8 +1366,10 @@ function flushPendingStreakCelebration() {
 function flushPendingMissionCelebration() {
     if (!state.pendingCompletedMissions.length) return Promise.resolve();
     const missions = state.pendingCompletedMissions;
+    const boost = state.pendingXpBoost;
     state.pendingCompletedMissions = [];
-    return window.PolytypeMissionCelebrate?.show?.(missions) || Promise.resolve();
+    state.pendingXpBoost = null;
+    return window.PolytypeMissionCelebrate?.show?.(missions, boost || {}) || Promise.resolve();
 }
 
 // Same accumulate-then-flush rule as flushPendingMissionCelebration above -
@@ -1580,6 +1588,12 @@ async function saveCurrentSessionProgress() {
                 // Same accumulate-then-flush rule: shown once, when the
                 // session actually ends (see endSession).
                 state.pendingCompletedMissions.push(...progress.completedMissions);
+                if (progress.xpBoostStarted) {
+                    state.pendingXpBoost = {
+                        xpBoostStarted: true,
+                        xpBoostExpiresAt: progress.xpBoostExpiresAt
+                    };
+                }
                 if (!isActivelyPlayingSession()) flushPendingMissionCelebration();
             }
 

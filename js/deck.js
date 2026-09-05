@@ -78,6 +78,10 @@ let justUnlockedSuffix = null;
 // records that one was wanted, and it runs the moment the burst is done.
 let unlockBurstEndsAt = 0;
 let deckRenderDeferred = false;
+// "all" | "unlocked" | "locked" - which doors the grids below show. View
+// state only: deliberately not persisted, so every visit opens on the whole
+// deck rather than on a narrowed slice the player set days ago and forgot.
+let deckFilter = "all";
 
 const el = {};
 
@@ -90,6 +94,11 @@ function initDeckPage() {
     el.progressText = document.getElementById("deck-progress-text");
     el.masteredText = document.getElementById("deck-mastered-text");
     el.groups = document.getElementById("deck-groups");
+    el.filterBtns = [...document.querySelectorAll("[data-deck-filter]")];
+    el.filterCounts = new Map(
+        [...document.querySelectorAll("[data-deck-filter-count]")]
+            .map(node => [node.dataset.deckFilterCount, node])
+    );
     el.unlockOverlay = document.getElementById("unlock-confirm-overlay");
     el.unlockBody = document.getElementById("unlock-confirm-body");
     el.unlockError = document.getElementById("unlock-confirm-error");
@@ -104,6 +113,7 @@ function initDeckPage() {
     el.detailNoExamples = document.getElementById("word-detail-no-examples");
 
     resolveActiveLanguage();
+    setupDeckFilter();
     setupUnlockConfirm();
     setupWordDetail();
     preloadUnlockSfx();
@@ -389,6 +399,39 @@ function languageHasHints() {
     return activeLanguage === "chinese" || activeLanguage === "japanese";
 }
 
+// The filter only ever changes which cards are drawn, never any stored
+// state, so it just parks the choice and re-renders.
+function setupDeckFilter() {
+    el.filterBtns?.forEach(btn => {
+        btn.addEventListener("click", () => {
+            if (deckFilter === btn.dataset.deckFilter) return;
+            deckFilter = btn.dataset.deckFilter;
+            renderDeck();
+        });
+    });
+}
+
+function syncDeckFilterUi(counts) {
+    el.filterBtns?.forEach(btn => {
+        const isActive = btn.dataset.deckFilter === deckFilter;
+        btn.classList.toggle("is-active", isActive);
+        btn.setAttribute("aria-selected", String(isActive));
+    });
+    el.filterCounts?.forEach((node, key) => {
+        node.textContent = counts[key] ?? "";
+    });
+}
+
+// A card the player just unlocked has to survive the "locked" filter for one
+// render, or the lock-breaking burst would be torn out of the DOM by the very
+// unlock that earned it. It drops out on the next render, which reads as the
+// door leaving the locked list under its own steam.
+function matchesDeckFilter(word, isUnlocked) {
+    if (deckFilter === "all") return true;
+    if (getWordSuffix(word.id) === justUnlockedSuffix) return true;
+    return deckFilter === "unlocked" ? isUnlocked : !isUnlocked;
+}
+
 function renderDeck() {
     if (!el.groups) return;
 
@@ -404,6 +447,7 @@ function renderDeck() {
         empty.className = "deck-empty";
         empty.textContent = tr("trainer.noWordsLoaded");
         el.groups.appendChild(empty);
+        syncDeckFilterUi({ all: "", unlocked: "", locked: "" });
         if (el.progressFill) el.progressFill.style.width = "0%";
         if (el.progressText) el.progressText.textContent = "";
         if (el.masteredText) el.masteredText.textContent = "";
@@ -418,6 +462,12 @@ function renderDeck() {
     const keysHeld = getKeysHeld(courseProgress.purchasedKeys);
     const unlockedCount = vocab.filter(word => unlockedWords.has(getWordSuffix(word.id))).length;
     const pct = Math.round((unlockedCount / vocab.length) * 100);
+
+    syncDeckFilterUi({
+        all: vocab.length,
+        unlocked: unlockedCount,
+        locked: vocab.length - unlockedCount
+    });
 
     if (el.progressFill) el.progressFill.style.width = `${pct}%`;
     if (el.progressText) {
@@ -458,8 +508,20 @@ function renderDeck() {
         if (!categoryWords.length) return;
         // Not courseProgress.courseKey - the toggle must write under the same
         // stable key everything else reads. See getDisabledWordsKey.
-        el.groups.appendChild(buildDeckGroup(category, categoryWords, unlockedWords, disabledWords, keysHeld, getDisabledWordsKey()));
+        const group = buildDeckGroup(category, categoryWords, unlockedWords, disabledWords, keysHeld, getDisabledWordsKey());
+        if (group) el.groups.appendChild(group);
     });
+
+    // Every category filtered itself away - say so rather than leaving the
+    // page looking like the deck failed to load.
+    if (!el.groups.childElementCount) {
+        const empty = document.createElement("p");
+        empty.className = "deck-empty";
+        empty.textContent = deckFilter === "unlocked"
+            ? tr("deck.filterEmptyUnlocked")
+            : tr("deck.filterEmptyLocked");
+        el.groups.appendChild(empty);
+    }
 }
 
 function buildDeckGroup(category, words, unlockedWords, disabledWords, keysHeld, courseKey) {
@@ -494,9 +556,16 @@ function buildDeckGroup(category, words, unlockedWords, disabledWords, keysHeld,
     grid.className = "deck-grid";
     words.forEach(word => {
         const isUnlocked = unlockedWords.has(getWordSuffix(word.id));
+        if (!matchesDeckFilter(word, isUnlocked)) return;
         const isDisabled = disabledWords.has(getWordSuffix(word.id));
         grid.appendChild(buildDeckCard(word, isUnlocked, isDisabled, keysHeld, courseKey));
     });
+
+    // Nothing in this category passed the filter - the caller drops the whole
+    // section rather than leaving a heading over an empty grid. The heading's
+    // counts above stay category-wide on purpose: they report progress, which
+    // shouldn't change just because the view is narrowed.
+    if (!grid.childElementCount) return null;
 
     group.append(head, grid);
     return group;

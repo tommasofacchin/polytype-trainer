@@ -61,6 +61,9 @@
         // to actually end before celebrating, instead of popping a full-
         // screen overlay over active gameplay.
         pendingCompletedMissions: [],
+        // Buffered with the missions it belongs to, for the same reason -
+        // see flushPendingMissionCelebration.
+        pendingXpBoost: null,
         pendingNewBadges: [],
         // Same rule again. Holds the server's `streak` block from whichever
         // batch first reported the flame going up; at most one batch per day
@@ -461,6 +464,7 @@
         state.batchStartTime = Date.now();
         state.pendingSessionCoins = 0;
         state.pendingCompletedMissions = [];
+        state.pendingXpBoost = null;
         state.pendingNewBadges = [];
         state.pendingStreakAdvance = null;
         stopTimer();
@@ -593,8 +597,10 @@
     function flushPendingMissionCelebration() {
         if (!state.pendingCompletedMissions.length) return Promise.resolve();
         const missions = state.pendingCompletedMissions;
+        const boost = state.pendingXpBoost;
         state.pendingCompletedMissions = [];
-        return window.PolytypeMissionCelebrate?.show?.(missions) || Promise.resolve();
+        state.pendingXpBoost = null;
+        return window.PolytypeMissionCelebrate?.show?.(missions, boost || {}) || Promise.resolve();
     }
 
     function flushPendingBadgeCelebration() {
@@ -767,6 +773,12 @@
             }
             if (progress?.completedMissions?.length) {
                 state.pendingCompletedMissions.push(...progress.completedMissions);
+            }
+            if (progress?.xpBoostStarted) {
+                state.pendingXpBoost = {
+                    xpBoostStarted: true,
+                    xpBoostExpiresAt: progress.xpBoostExpiresAt
+                };
             }
             if (progress?.newBadges?.length) {
                 state.pendingNewBadges.push(...progress.newBadges);

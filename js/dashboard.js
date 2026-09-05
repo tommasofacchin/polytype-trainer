@@ -308,6 +308,11 @@ function renderMissions(state) {
     const completedCount = missions.filter(mission => mission.completed).length;
     if (countEl) countEl.textContent = `${completedCount} / ${missions.length}`;
 
+    // The hint is an instruction, so it goes once the set is cleared - the
+    // header pill is what reports the boost from that point on.
+    const boostHint = document.getElementById("home-missions-boost");
+    if (boostHint) boostHint.hidden = missions.length > 0 && completedCount === missions.length;
+
     // Tokens rather than hexes so the three mission rows follow the theme.
     // The alpha wash below is a color-mix for the same reason - the old
     // `${color}26` string trick only works on a literal hex.
@@ -316,14 +321,19 @@ function renderMissions(state) {
         ...missions.map((mission, index) => {
             const row = document.createElement("div");
             const pct = Math.round((mission.progress / mission.target) * 100);
-            const color = icons[index % icons.length];
-            row.className = "mission-row";
+            const color = mission.hard ? "var(--color-gold-text)" : icons[index % icons.length];
+            row.className = mission.hard ? "mission-row is-hard" : "mission-row";
+            // The day's hard mission (HARD_MISSION_POOL in api/_lib.js) can't
+            // be cleared in a single round, so it is marked as such - its
+            // bigger reward and slower bar would otherwise just look odd next
+            // to the two beside it. The badge also names the payoff: clearing
+            // all three is what arms the 2x XP window.
             row.innerHTML = `
                 <div class="mission-icon" style="background:color-mix(in srgb, ${color} 15%, transparent)">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="${color}"><path d="M12 2l2.9 6.2 6.6.7-4.9 4.5 1.3 6.6L12 17.8 6.1 20.6l1.3-6.6L2.5 8.9l6.6-.7z"/></svg>
                 </div>
                 <div class="mission-copy">
-                    <strong>${tr(mission.labelKey)}</strong>
+                    <strong>${tr(mission.labelKey)}${mission.hard ? `<span class="mission-hard-tag">${tr("mission.hardTag")}</span>` : ""}</strong>
                     <div class="mission-bar"><div class="mission-bar-fill" style="width:${pct}%;background:${color}"></div></div>
                 </div>
                 <span class="mission-reward">

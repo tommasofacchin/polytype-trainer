@@ -3,7 +3,8 @@ const {
   withAuth, getAuthProfile, buildDefaultUserProfile, buildPublicProfile,
   normalizeCourseId, resolveUnlockedWords, sanitizeLessonsCompleted,
   getLevelInfo, getDateKeyForTimezone, normalizeTimezone, evaluateNewBadges,
-  CHEST_COIN_REWARD, CHEST_XP_REWARD, DEBUG_ALWAYS_CLAIM_CHEST, ApiError
+  getKeysHeld, rollChestReward,
+  MAX_STREAK_FREEZES, DEBUG_ALWAYS_CLAIM_CHEST, ApiError
 } = require("./_lib");
 
 // One claim per day per player (not per language) - the coin reward goes to
@@ -36,10 +37,25 @@ module.exports = withAuth(async (data, token) => {
       throw new ApiError(409, "The daily chest has already been claimed today.");
     }
 
-    const totalXp = (existingUser?.totalXp || 0) + CHEST_XP_REWARD;
+    // What the chest holds is rolled, not fixed - see CHEST_REWARD_TABLE in
+    // api/_lib.js. The roll is seeded on (uid, todayKey), so a transaction
+    // retry re-rolls identically and the payout can't be shaken by replaying
+    // the request. Current holdings go in so a key or freeze the player has
+    // no room for is paid as coins instead of vanishing.
+    const purchasedKeys = existingCourse?.purchasedKeys || 0;
+    const maxStreakFreezes = existingUser?.maxStreakFreezes || MAX_STREAK_FREEZES;
+    const heldStreakFreezes = existingUser?.streakFreezes || 0;
+    const reward = rollChestReward(token.uid, todayKey, {
+      keysHeld: getKeysHeld(purchasedKeys),
+      streakFreezes: heldStreakFreezes,
+      maxStreakFreezes
+    });
+
+    const totalXp = (existingUser?.totalXp || 0) + reward.xp;
     const globalLevel = getLevelInfo(totalXp).level;
     const chestsClaimed = (existingUser?.chestsClaimed || 0) + 1;
-    const courseCoins = (existingCourse?.coins || 0) + CHEST_COIN_REWARD;
+    const courseCoins = (existingCourse?.coins || 0) + reward.coins;
+    const nextStreakFreezes = heldStreakFreezes + reward.streakFreezes;
 
     const now = FieldValue.serverTimestamp();
     const courseResponse = {
@@ -50,7 +66,7 @@ module.exports = withAuth(async (data, token) => {
       unlockedWords: resolveUnlockedWords(existingCourse, !existingCourse),
       wordsUnlocked: 0,
       wordsMastered: existingCourse?.wordsMastered || 0,
-      purchasedKeys: existingCourse?.purchasedKeys || 0,
+      purchasedKeys: purchasedKeys + reward.keys,
       coins: courseCoins,
       // Same round-trip requirement noted in api/buy-key.js.
       lessonsCompleted: sanitizeLessonsCompleted(existingCourse?.lessonsCompleted, courseId)
@@ -67,6 +83,8 @@ module.exports = withAuth(async (data, token) => {
       totalXp,
       globalLevel,
       chestsClaimed,
+      streakFreezes: nextStreakFreezes,
+      maxStreakFreezes,
       lastChestClaimedDate: todayKey,
       courses: {
         ...(existingUser?.courses || {}),
@@ -94,8 +112,16 @@ module.exports = withAuth(async (data, token) => {
       course: courseResponse,
       totalXp,
       globalLevel,
-      coinsEarned: CHEST_COIN_REWARD,
-      xpEarned: CHEST_XP_REWARD,
+      coinsEarned: reward.coins,
+      xpEarned: reward.xp,
+      // Drives the chest's reveal sequence in js/chest.js: one card per item,
+      // with `rarity` picking the treatment the whole sequence is dressed in.
+      keysEarned: reward.keys,
+      streakFreezesEarned: reward.streakFreezes,
+      rarity: reward.rarity,
+      keys: getKeysHeld(purchasedKeys + reward.keys),
+      streakFreezes: nextStreakFreezes,
+      maxStreakFreezes,
       newBadges: newBadges.map(badge => ({ id: badge.id }))
     };
   });

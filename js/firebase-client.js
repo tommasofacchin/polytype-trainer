@@ -760,6 +760,10 @@
             lastPracticeDate: remoteProfile.lastPracticeDate || null,
             streakFreezes: remoteProfile.streakFreezes || 0,
             maxStreakFreezes: remoteProfile.maxStreakFreezes || 2,
+            // Epoch ms the all-missions 2x XP window runs until - mirrored so
+            // the header pill can appear from cache on the first frame, the
+            // same way the streak flame does above.
+            xpBoostExpiresAt: Number(remoteProfile.xpBoostExpiresAt) || 0,
             dailyGoalXp: remoteProfile.dailyGoalXp || 50,
             tutorial: remoteProfile.tutorial || null,
             badges: remoteProfile.badges || [],
@@ -797,6 +801,9 @@
             streakFreezes:
                 progress.streak?.streakFreezes ?? progress.streakFreezes ?? currentProfile?.streakFreezes ?? 0,
             maxStreakFreezes: progress.maxStreakFreezes ?? currentProfile?.maxStreakFreezes ?? 2,
+            // Only a completed session reports this; every other action
+            // (unlock, buy) leaves a running boost alone.
+            xpBoostExpiresAt: progress.xpBoostExpiresAt ?? currentProfile?.xpBoostExpiresAt ?? 0,
             tutorial: "tutorial" in progress ? progress.tutorial : (currentProfile?.tutorial ?? null),
             courses: {
                 ...(currentProfile?.courses || {})

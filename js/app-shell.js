@@ -71,6 +71,7 @@
     const ICONS = {
         streak: '<svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M12 2c3 4 5 6 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 1 2 2 2 3 2 0-3-1-5 0-8z"/></svg>',
         coin: '<svg viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="10" fill="#ffc73a"/><circle cx="12" cy="12" r="6.5" fill="none" stroke="#d99a1c" stroke-width="2"/></svg>',
+        boost: '<svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg>',
         key: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="7" cy="12" r="4.2" fill="color-mix(in srgb, currentColor 12%, transparent)"></circle><circle cx="7" cy="12" r="1.4"></circle><path d="M10.6 12h10"></path><path d="M17 12v3"></path><path d="M20 12v2.4"></path></svg>',
         home: '<svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>',
         games: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><rect x="3" y="4" width="7" height="7" rx="1.6"/><rect x="14" y="4" width="7" height="7" rx="1.6"/><rect x="3" y="14" width="7" height="7" rx="1.6"/><rect x="14" y="14" width="7" height="7" rx="1.6"/></svg>',
@@ -257,6 +258,7 @@
                     <span class="app-shell-stat app-shell-stat-streak${isStreakAtRisk(cached) ? " is-at-risk" : ""}" id="app-shell-streak">${ICONS.streak}${cached.dayStreak || 0}</span>
                     <span class="app-shell-stat app-shell-stat-coin" id="app-shell-coins">${ICONS.coin}${coinsHeld}</span>
                     <span class="app-shell-stat app-shell-stat-key" id="app-shell-keys">${ICONS.key}${keysHeld}</span>
+                    <span class="app-shell-stat app-shell-stat-boost" id="app-shell-boost" hidden></span>
                 </div>
                 <div class="language-menu app-shell-lang-menu">
                     <span class="app-shell-flag" id="app-shell-flag-toggle" tabindex="0" role="button" aria-haspopup="true" aria-expanded="false"><img src="${flagSrc}" alt=""></span>
@@ -424,6 +426,8 @@
         if (typeof authState.profile?.currentStreak === "number") {
             paintStreak(authState.profile);
         }
+
+        paintXpBoost(authState.profile || readCachedProfile());
 
         if (typeof authState.profile?.totalXp === "number") {
             renderHeaderLevel(authState.profile.totalXp);
@@ -874,6 +878,56 @@
         keysEl.classList.add("is-bumped");
     }
 
+    // ---- All-missions XP boost pill ----------------------------------------
+    // Clearing all three daily missions arms a 2x XP window (XP_BOOST_
+    // DURATION_MS in api/_lib.js). It is invisible in the numbers until the
+    // next session lands, so the header carries a live countdown for as long
+    // as it runs - the player can see both that it is on and how much of it
+    // is left, from any page.
+    //
+    // Keep in sync with XP_BOOST_MULTIPLIER in api/_lib.js.
+    const XP_BOOST_MULTIPLIER = 2;
+    let boostTicker = 0;
+
+    function getBoostExpiry(profile) {
+        return Number(profile?.xpBoostExpiresAt) || 0;
+    }
+
+    function formatBoostRemaining(ms) {
+        const total = Math.max(0, Math.ceil(ms / 1000));
+        return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, "0")}`;
+    }
+
+    function paintXpBoost(profile) {
+        const boostEl = document.getElementById("app-shell-boost");
+        if (!boostEl) return;
+
+        const remaining = getBoostExpiry(profile) - Date.now();
+
+        if (remaining <= 0) {
+            // Cleared rather than left showing 0:00 - the window is over, and
+            // a stale pill would claim a multiplier the next session won't get.
+            boostEl.hidden = true;
+            boostEl.textContent = "";
+            window.clearInterval(boostTicker);
+            boostTicker = 0;
+            return;
+        }
+
+        boostEl.hidden = false;
+        boostEl.innerHTML = `${ICONS.boost}${XP_BOOST_MULTIPLIER}x <span class="app-shell-boost-time">${formatBoostRemaining(remaining)}</span>`;
+        boostEl.setAttribute("title", tr("boost.activeHint", { multiplier: XP_BOOST_MULTIPLIER }));
+
+        // One interval for the life of the window, re-armed only if it was
+        // allowed to lapse - repainting on every profile update would
+        // otherwise stack a new ticker each time.
+        if (!boostTicker) {
+            boostTicker = window.setInterval(() => {
+                paintXpBoost(window.PolytypeFirebase?.state?.profile || readCachedProfile());
+            }, 1000);
+        }
+    }
+
     // Coins and keys are both per-course, both sourced from the same cached
     // profile, and both change together whenever a purchase/session-save
     // fires polytype-profile-updated - so one function keeps them in sync
@@ -892,6 +946,7 @@
         // lastPracticeDate right after a session save, so prefer it over the
         // localStorage mirror for deciding whether the flame is lit.
         paintStreak(window.PolytypeFirebase?.state?.profile || cached);
+        paintXpBoost(window.PolytypeFirebase?.state?.profile || cached);
 
         // The local mirror calls it `xp`; the remote profile calls the same
         // number `totalXp` (see syncProfileToLocalStorage in firebase-client.js).
@@ -1053,6 +1108,9 @@
         releaseKeyDisplay,
         playKeyGain,
         paintStreakAhead,
+        // So the mission overlay can light the pill the moment the boost is
+        // announced, rather than on whatever repaint happens to come next.
+        paintXpBoost,
         // So pages that want to name the active course (Home's "Learning
         // Norwegian" pill) don't have to keep their own copy of the flag map.
         getLanguageFlag,

@@ -1330,7 +1330,10 @@
         // twice.
         if (!pagesShown) await runStreakAndFriendsPages(progress, { demo });
         if (progress?.completedMissions?.length) {
-            await window.PolytypeMissionCelebrate?.show?.(progress.completedMissions);
+            await window.PolytypeMissionCelebrate?.show?.(progress.completedMissions, {
+                xpBoostStarted: progress.xpBoostStarted,
+                xpBoostExpiresAt: progress.xpBoostExpiresAt
+            });
         }
         if (progress?.newBadges?.length) {
             await window.PolytypeBadgeCelebrate?.show?.(progress.newBadges);

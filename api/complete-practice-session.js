@@ -6,7 +6,9 @@ const {
   getLevelInfo, getCourseLevel, resolveUnlockedWords, getKeysHeld,
   getDateKeyForTimezone, getHourForTimezone, diffDateKeys, normalizeTimezone, getFriendPairId,
   getNewlyCompletedMissions, evaluateNewBadges, sanitizeLessonsCompleted,
-  LESSON_COIN_REWARD, LESSON_IDS_BY_COURSE,
+  pickDailyMissions, rollMissionReward, isXpBoostActive,
+  LESSON_COIN_REWARD, LESSON_IDS_BY_COURSE, MAX_STREAK_FREEZES,
+  XP_BOOST_MULTIPLIER, XP_BOOST_DURATION_MS,
   ApiError
 } = require("./_lib");
 const {
@@ -15,16 +17,20 @@ const {
 
 module.exports = withAuth(async (data, token) => {
   const session = normalizeSessionPayload(data);
-  const xpEarned = calculateSessionXp(session);
+  // What the session was worth on its own merits. The all-missions XP boost
+  // is applied on top inside the transaction below, where the player's boost
+  // state can actually be read.
+  const baseXpEarned = calculateSessionXp(session);
 
-  if (xpEarned <= 0) {
+  if (baseXpEarned <= 0) {
     throw new ApiError(422, "A session needs at least one correct answer to update progress.");
   }
 
   // Small direct coin reward for any completed session - kept low on
   // purpose so daily missions (see MISSION_POOL) are clearly the bigger
-  // payout, not something a single round can match.
-  const sessionCoins = Math.max(2, Math.round(xpEarned / 15));
+  // payout, not something a single round can match. Deliberately off the
+  // unboosted XP: the missions boost multiplies XP, not income.
+  const sessionCoins = Math.max(2, Math.round(baseXpEarned / 15));
 
   // Sprint-only. None of the friends *reads* depend on the transaction below,
   // so they're started here and awaited after it instead of running strictly
@@ -70,6 +76,12 @@ module.exports = withAuth(async (data, token) => {
     const previousDailyStats = dailyStatsSnap.exists ? dailyStatsSnap.data() : {};
     const earnedBadgeIds = badgesSnap.docs.map(doc => doc.id);
 
+    // Read before anything below can grant a new boost, so a session never
+    // doubles its own reward by being the one that completed the missions -
+    // the multiplier starts on the next session.
+    const boostWasActive = isXpBoostActive(existingUser, requestTime.getTime());
+    const xpEarned = boostWasActive ? baseXpEarned * XP_BOOST_MULTIPLIER : baseXpEarned;
+
     const previousTotalXp = existingUser?.totalXp || 0;
     const existingCourse = existingUser?.courses?.[session.courseId] || null;
     const previousCourseXp = courseSnap.exists
@@ -89,9 +101,11 @@ module.exports = withAuth(async (data, token) => {
     // categoryUnlocked) into a real suffix set the first time it's touched.
     const existingCourseData = courseSnap.exists ? courseSnap.data() : existingCourse;
     const unlockedWords = resolveUnlockedWords(existingCourseData, !hasExistingCourse);
-    // Never touched by XP - carried forward unchanged so it survives the
-    // round trip to the client (api/buy-key.js is the only writer).
-    const purchasedKeys = existingCourseData?.purchasedKeys || 0;
+    // Never touched by XP. Normally just carried forward so it survives the
+    // round trip to the client; the only thing here that can add to it is a
+    // key rolled out of a mission reward below (api/buy-key.js and
+    // api/claim-daily-chest.js are the other writers).
+    const previousPurchasedKeys = existingCourseData?.purchasedKeys || 0;
 
     // Lessons (see decks/lessons-norwegian.js) unlock strictly in sequence:
     // lessonId is only "new" - and only then worth a coin bonus/unlock
@@ -136,13 +150,50 @@ module.exports = withAuth(async (data, token) => {
       }
     };
 
-    const completedMissions = getNewlyCompletedMissions(token.uid, todayKey, previousDailyStats, updatedDailyStats);
-    const coinsEarned = completedMissions.reduce((sum, mission) => sum + mission.coinReward, 0);
+    const newlyCompleted = getNewlyCompletedMissions(token.uid, todayKey, previousDailyStats, updatedDailyStats);
+
+    // Each mission's payout is rolled rather than paid flat - see
+    // MISSION_REWARD_TABLE in api/_lib.js. `held` is threaded through the
+    // loop because several missions can complete in the same session: two
+    // key rolls must not both see the same last free key slot and grant it
+    // twice.
+    const maxStreakFreezes = existingUser?.maxStreakFreezes || MAX_STREAK_FREEZES;
+    const held = {
+      keysHeld: getKeysHeld(previousPurchasedKeys),
+      streakFreezes: streak.streakFreezes,
+      maxStreakFreezes
+    };
+
+    const completedMissions = newlyCompleted.map(mission => {
+      const reward = rollMissionReward(token.uid, todayKey, mission, held);
+      held.keysHeld += reward.keys;
+      held.streakFreezes += reward.streakFreezes;
+      return { ...mission, reward };
+    });
+
+    const coinsEarned = completedMissions.reduce((sum, mission) => sum + mission.reward.coins, 0);
+    const missionKeysEarned = completedMissions.reduce((sum, mission) => sum + mission.reward.keys, 0);
+    const missionFreezesEarned = completedMissions.reduce((sum, mission) => sum + mission.reward.streakFreezes, 0);
+    const purchasedKeys = previousPurchasedKeys + missionKeysEarned;
+    const streakFreezesHeld = streak.streakFreezes + missionFreezesEarned;
+
     const missionsCompleted = {
       ...(previousDailyStats.missionsCompleted || {}),
       ...Object.fromEntries(completedMissions.map(mission => [mission.id, true]))
     };
     updatedDailyStats.missionsCompleted = missionsCompleted;
+
+    // Clearing the whole day's set - including the hard third mission - arms
+    // the XP multiplier. Gated on having *just* completed the last one, so
+    // every further session on an already-cleared day doesn't keep renewing
+    // a ten-minute window for the rest of the day.
+    const dailyMissions = pickDailyMissions(token.uid, todayKey);
+    const clearedAllMissions = dailyMissions.length > 0 &&
+      dailyMissions.every(mission => missionsCompleted[mission.id]);
+    const xpBoostStarted = clearedAllMissions && completedMissions.length > 0;
+    const xpBoostExpiresAt = xpBoostStarted
+      ? requestTime.getTime() + XP_BOOST_DURATION_MS
+      : Number(existingUser?.xpBoostExpiresAt) || 0;
 
     // Coins are per-course (this language's own balance), not shared across
     // languages the way totalXp/globalLevel are - see start-course.js.
@@ -166,8 +217,9 @@ module.exports = withAuth(async (data, token) => {
       currentStreak: streak.currentStreak,
       longestStreak: streak.longestStreak,
       lastPracticeDate: todayKey,
-      streakFreezes: streak.streakFreezes,
-      maxStreakFreezes: existingUser?.maxStreakFreezes || 2,
+      streakFreezes: streakFreezesHeld,
+      maxStreakFreezes,
+      xpBoostExpiresAt,
       sessionsCompleted: (existingUser?.sessionsCompleted || 0) + 1,
       gameTypesPlayed: { ...(existingUser?.gameTypesPlayed || {}), [session.gameType]: true },
       updatedAt: now,
@@ -289,12 +341,32 @@ module.exports = withAuth(async (data, token) => {
       course: courseResponse,
       streak,
       keys: getKeysHeld(purchasedKeys),
+      streakFreezes: streakFreezesHeld,
+      maxStreakFreezes,
       coinsEarned,
       sessionCoins,
+      // The client needs both to be honest about the reward: what the session
+      // was worth, and what it actually paid after the multiplier.
+      baseXpEarned,
+      xpBoostApplied: boostWasActive,
+      xpBoostMultiplier: XP_BOOST_MULTIPLIER,
+      xpBoostExpiresAt,
+      xpBoostStarted,
       newLessonCompletion: isNewLessonCompletion,
       lessonCoinsAwarded,
       tutorial: userData.tutorial || null,
-      completedMissions: completedMissions.map(mission => ({ id: mission.id, coinReward: mission.coinReward, labelKey: mission.labelKey })),
+      completedMissions: completedMissions.map(mission => ({
+        id: mission.id,
+        labelKey: mission.labelKey,
+        // coinReward is what was actually paid; baseCoinReward is the amount
+        // the Home card advertised, so the overlay can show a rare roll as
+        // the bonus it is rather than as a number that came from nowhere.
+        coinReward: mission.reward.coins,
+        baseCoinReward: mission.reward.baseCoins,
+        rarity: mission.reward.rarity,
+        keysEarned: mission.reward.keys,
+        streakFreezesEarned: mission.reward.streakFreezes
+      })),
       newBadges: newBadges.map(badge => ({ id: badge.id }))
     };
   });

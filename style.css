@@ -4344,6 +4344,62 @@ button.word-detail-example:active {
     margin: 0 4px;
 }
 
+/* Segmented all/unlocked/locked filter over the deck. Same construction as
+   .friends-leaderboard-tabs (inset track, raised active pill) so the two read
+   as one control across the app. */
+.deck-filter {
+    display: flex;
+    gap: 4px;
+    margin: 0 clamp(20px, 3.5vw, 30px) var(--space-2);
+    padding: 4px;
+    border-radius: var(--radius-md);
+    background: var(--surface-soft);
+    box-shadow: inset 0 0 0 1px var(--border);
+}
+
+.deck-filter-btn {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-width: 0;
+    padding: 9px 8px;
+    border: 0;
+    border-radius: calc(var(--radius-md) - 4px);
+    background: transparent;
+    color: var(--text-faint);
+    font-family: var(--font-sans);
+    font-size: var(--text-xs);
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background var(--transition), color var(--transition);
+}
+
+.deck-filter-btn:hover:not(.is-active) {
+    color: var(--text-soft);
+}
+
+.deck-filter-btn.is-active {
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: var(--shadow-sm);
+}
+
+.deck-filter-count {
+    padding: 1px 6px;
+    border-radius: var(--radius-pill);
+    background: color-mix(in srgb, currentColor 12%, transparent);
+    font-size: 0.72em;
+    font-variant-numeric: tabular-nums;
+}
+
+.deck-filter-count:empty {
+    display: none;
+}
+
 .deck-groups {
     flex: 1;
     overflow-y: auto;
@@ -5766,6 +5822,38 @@ body > main {
 .app-shell-stat-coin { color: var(--color-gold-text); }
 .app-shell-stat-key { color: var(--color-secondary-lighter); }
 
+/* The 2x XP window from clearing all three daily missions. Present only while
+   it runs (js/app-shell.js hides it otherwise), so unlike the stats beside it
+   this one is allowed to be loud - a filled accent pill with a slow pulse,
+   because it is the only thing on screen saying the multiplier is on. */
+.app-shell-stat-boost {
+    gap: 5px;
+    background: var(--accent);
+    color: var(--accent-on);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent-ink) 25%, transparent);
+    animation: app-shell-boost-pulse 2.4s ease-in-out infinite;
+}
+
+.app-shell-stat-boost svg {
+    width: 15px;
+    height: 15px;
+}
+
+.app-shell-boost-time {
+    font-variant-numeric: tabular-nums;
+    font-size: 12px;
+    opacity: 0.85;
+}
+
+@keyframes app-shell-boost-pulse {
+    0%, 100% { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent-ink) 25%, transparent), 0 0 0 0 color-mix(in srgb, var(--accent) 45%, transparent); }
+    50%      { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent-ink) 25%, transparent), 0 0 0 5px color-mix(in srgb, var(--accent) 0%, transparent); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .app-shell-stat-boost { animation: none; }
+}
+
 /* Catches the key at the end of its flight: the counter swells around the new
    value the moment it lands. Every stop repeats the stat's own inset border,
    which the shorthand would otherwise drop for the length of the animation. */
@@ -7160,6 +7248,8 @@ body > main {
 
 .chest-item-card.is-coin .chest-item-amount { color: var(--color-gold-text); }
 .chest-item-card.is-xp .chest-item-amount { color: var(--accent-ink); }
+.chest-item-card.is-key .chest-item-amount { color: var(--color-gold-text); }
+.chest-item-card.is-freeze .chest-item-amount { color: var(--color-secondary); }
 
 .chest-item-label {
     font-size: 12px;
@@ -7252,6 +7342,57 @@ body > main {
     background: var(--accent-soft);
     border: 1px solid rgba(255, 214, 10, 0.4);
     color: var(--accent-ink);
+}
+
+.chest-reward-chip.is-key {
+    background: color-mix(in srgb, var(--color-gold-text) 14%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-gold-text) 42%, transparent);
+    color: var(--color-gold-text);
+}
+
+.chest-reward-chip.is-freeze {
+    background: color-mix(in srgb, var(--color-secondary) 14%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-secondary) 42%, transparent);
+    color: var(--color-secondary);
+}
+
+/* ── Rolled rarity ────────────────────────────────────────────────────────
+   The chest's contents are rolled per claim (CHEST_REWARD_TABLE in
+   api/_lib.js). "common" gets no treatment at all - it is the baseline, and
+   dressing it up would leave nothing for the rolls that earned it. Everything
+   above it lights the art from behind in that tier's colour and names itself
+   in a banner over the chest. */
+.chest-rarity-banner {
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px 14px;
+    border-radius: 999px;
+    background: var(--rarity-color, var(--accent));
+    color: var(--accent-on);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--rarity-color, var(--accent)) 55%, transparent);
+    animation: chest-rewardpop 0.5s ease-out both;
+    animation-delay: 0.2s;
+}
+
+.chest-overlay.is-rare-roll .chest-overlay-icon {
+    filter: drop-shadow(0 0 22px color-mix(in srgb, var(--rarity-color, var(--accent)) 70%, transparent));
+}
+
+.chest-overlay.is-rare { --rarity-color: var(--color-secondary); }
+.chest-overlay.is-epic { --rarity-color: #a855f7; }
+.chest-overlay.is-key { --rarity-color: var(--color-gold-text); }
+.chest-overlay.is-freeze { --rarity-color: var(--color-secondary-lighter); }
+
+@media (prefers-reduced-motion: reduce) {
+    .chest-rarity-banner { animation: none; opacity: 1; }
 }
 
 .chest-collect-btn {
@@ -7472,6 +7613,39 @@ body > main {
     animation: chest-rewardpop 1.3s ease-out forwards;
 }
 
+/* The day's hard mission on Home. Gold rather than the rotating accent its
+   two neighbours use, plus a tag on the label - it pays roughly double and
+   cannot be cleared in one round, and both need to be visible before the
+   player picks what to play. */
+.mission-row.is-hard .mission-copy strong {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+
+.mission-hard-tag {
+    padding: 1px 7px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-gold-text) 16%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-gold-text) 38%, transparent);
+    color: var(--color-gold-text);
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.home-missions-boost {
+    margin: 12px 0 0;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border);
+    color: var(--text-faint);
+    font-size: 11px;
+    font-weight: 700;
+    text-align: center;
+}
+
 .mission-rewards-list {
     display: flex;
     flex-direction: column;
@@ -7528,10 +7702,93 @@ body > main {
     animation-delay: calc(var(--delay, 0s) + 300ms);
 }
 
-.mission-reward-coin {
+.mission-reward-amounts {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 0 0 auto;
     opacity: 0;
     animation: mission-coin-land 460ms var(--ease-spring) forwards;
     animation-delay: calc(var(--delay, 0s) + 900ms);
+}
+
+/* A roll that paid above the amount Home advertised - the extra is the whole
+   point of rolling, so the chip is worth marking rather than leaving the
+   player to notice the number changed. */
+.mission-reward-coin.is-bonus {
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-gold-text) 16%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-gold-text) 40%, transparent);
+}
+
+/* A key or streak freeze that came out of the same roll. */
+.mission-reward-extra {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex: 0 0 auto;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--surface-soft);
+    box-shadow: inset 0 0 0 1px var(--border);
+    font-weight: 900;
+    font-size: 13px;
+    color: var(--text-soft);
+}
+
+.mission-reward-row.is-rare-roll {
+    border-color: color-mix(in srgb, var(--color-gold-text) 45%, var(--border));
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-gold-text) 18%, transparent),
+                0 6px 18px color-mix(in srgb, var(--color-gold-text) 14%, transparent);
+}
+
+/* Announces the 2x XP window the moment all three missions land. Sits under
+   the mission rows and enters one beat after the last of them, so it reads as
+   the consequence of finishing the set rather than a fourth reward. */
+.mission-boost-banner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 320px;
+    margin-top: 10px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: var(--accent-soft);
+    border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+    color: var(--accent-ink);
+    opacity: 0;
+    animation: chest-rewardpop 0.6s ease-out forwards;
+    animation-delay: var(--delay, 0s);
+}
+
+.mission-boost-banner svg {
+    flex: 0 0 auto;
+}
+
+.mission-boost-banner span {
+    display: grid;
+    gap: 2px;
+    min-width: 0;
+}
+
+.mission-boost-banner strong {
+    font-size: 14px;
+    font-weight: 900;
+}
+
+.mission-boost-banner span span {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .mission-boost-banner {
+        animation: none;
+        opacity: 1;
+    }
 }
 
 @keyframes mission-bar-complete {
