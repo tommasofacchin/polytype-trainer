@@ -95,7 +95,7 @@ function setupGameStateSync() {
         renderChest(state);
         renderDemoChest();
         renderDemoSprint();
-        renderLabCloze();
+        renderLabCards();
         renderMissions(state);
         renderFriendsPreview(state);
         renderDailyGoal(state);
@@ -260,12 +260,31 @@ function renderDemoSprint() {
     });
 }
 
-// TEMPORARY: the way into the two example-sentence rounds while they're being
-// tried out. They are not in sprint's normal round rotation - ?lab=cloze is
-// what turns them on, and it runs a short session of nothing else. Delete this
-// together with the "Lab round types" section in js/sprint.js.
-function renderLabCloze() {
-    const mount = document.getElementById("home-lab-cloze");
+// TEMPORARY: the way into the example-sentence rounds while they're being
+// tried out. ?lab=<mode> is what turns one family on, and it runs a short
+// session of nothing else. Delete this together with the sentence-round lab
+// handling in js/sprint.js.
+const LAB_CARDS = [
+    {
+        mount: "home-lab-cloze",
+        mode: "cloze",
+        prefix: "lab.cloze",
+        icon: `<path d="M4 7h16"/><path d="M4 12h7"/><path d="M15 12h5"/><path d="M4 17h16"/>`
+    },
+    {
+        mount: "home-lab-build",
+        mode: "build",
+        prefix: "lab.build",
+        icon: `<rect x="3" y="5" width="7" height="6" rx="1.5"/><rect x="14" y="5" width="7" height="6" rx="1.5"/><rect x="3" y="14" width="18" height="5" rx="1.5"/>`
+    }
+];
+
+function renderLabCards() {
+    LAB_CARDS.forEach(renderLabCard);
+}
+
+function renderLabCard(card) {
+    const mount = document.getElementById(card.mount);
     if (!mount) return;
 
     if (!isDebugHandle()) {
@@ -279,15 +298,15 @@ function renderLabCloze() {
     mount.hidden = false;
     mount.className = "chest-card is-demo";
     mount.innerHTML = `
-        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M4 12h7"/><path d="M15 12h5"/><path d="M4 17h16"/></svg>
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${card.icon}</svg>
         <div class="chest-card-copy">
-            <strong>${tr("lab.clozeTitle")}</strong>
-            <span>${tr("lab.clozeDesc")}</span>
+            <strong>${tr(`${card.prefix}Title`)}</strong>
+            <span>${tr(`${card.prefix}Desc`)}</span>
         </div>
-        <button id="home-lab-cloze-btn" class="chest-open-btn" type="button">${tr("lab.clozeRun")}</button>
+        <button class="chest-open-btn" type="button">${tr(`${card.prefix}Run`)}</button>
     `;
-    document.getElementById("home-lab-cloze-btn").addEventListener("click", () => {
-        window.location.href = "sprint.html?lab=cloze";
+    mount.querySelector(".chest-open-btn").addEventListener("click", () => {
+        window.location.href = `sprint.html?lab=${card.mode}`;
     });
 }
 

@@ -54,19 +54,19 @@
     // "cloze" (fill the blank, pick from four) and "clozeType" (fill it from
     // the keyboard) both run off decks/examples.js - see the sentence-round
     // section below for how that file is loaded and what happens on a round
-    // drawn before it lands.
+    // drawn before it lands. "build" (put the scrambled sentence back in
+    // order) reads the same file but is lab-only while it's being tried out,
+    // which is why it isn't in this list.
     const ALL_ROUND_TYPES = ["mc", "match", "audio", "trueFalse", "type", "cloze", "clozeType"];
-    // TEMPORARY: ?lab=cloze (the Home debug card, gated on the same handle as
-    // the other debug cards) runs a short session of nothing but the two
-    // sentence rounds, for looking at them on their own. Delete this constant
-    // with isClozeLab/getLabRoundTypes and the card in js/dashboard.js.
-    const CLOZE_LAB_ROUNDS = 6;
+    // TEMPORARY: ?lab=cloze / ?lab=build (the Home debug cards, gated on the
+    // same handle as the other debug cards) run a short session of nothing but
+    // one family of sentence rounds, for looking at them on their own. Delete
+    // this constant with getLabRoundTypes and the cards in js/dashboard.js.
+    const SENTENCE_LAB_ROUNDS = 6;
     // The verdict sound (recordAnswer) gets this long to itself before the
-    // sentence starts reading, so the two don't talk over each other.
-    const CLOZE_VERDICT_DELAY = 420;
-    // Ceiling on the "sentence stays up while it plays" hold, so a clip that
-    // is missing, blocked, or simply never ends can't strand the round.
-    const CLOZE_MAX_HOLD = 5000;
+    // sentence starts reading, so the two don't talk over each other. The
+    // wrong-answer correction goes up on the same beat.
+    const SENTENCE_VERDICT_DELAY = 420;
     // Flat bonus for a session with zero wrong answers (main rounds - a
     // retry-phase correction doesn't erase the original mistake, so any
     // retry activity at all already means this can't be perfect).
@@ -215,7 +215,7 @@
         // The lab has nothing but sentence rounds to draw, so there it has to
         // be in hand before the first one; a normal sprint just skips those
         // rounds until it arrives (see pickRoundType).
-        if (isClozeLab()) await ensureExamplesLoaded();
+        if (isSentenceLab()) await ensureExamplesLoaded();
 
         startSession();
         // Both after startSession, so the first round is on screen before the
@@ -271,8 +271,8 @@
     // ── Session lifecycle ──────────────────────────────────────────────────
 
     function startSession() {
-        state.totalRounds = isClozeLab()
-            ? CLOZE_LAB_ROUNDS
+        state.totalRounds = isSentenceLab()
+            ? SENTENCE_LAB_ROUNDS
             : 10 + Math.floor(Math.random() * 11); // 10-20 inclusive
         state.roundIndex = 0;
         state.lastWordIds = [];
@@ -400,8 +400,8 @@
         else renderSingleShotRound(type, null);
     }
 
-    function isClozeType(type) {
-        return type === "cloze" || type === "clozeType";
+    function needsExamples(type) {
+        return type === "cloze" || type === "clozeType" || type === "build";
     }
 
     // decks/examples.js is fetched in the background (it's 1.2MB, and four of
@@ -413,9 +413,9 @@
     function pickRoundType() {
         const types = state.availableRoundTypes;
         const type = types[Math.floor(Math.random() * types.length)];
-        if (!isClozeType(type) || window.DECK_EXAMPLES) return type;
+        if (!needsExamples(type) || window.DECK_EXAMPLES) return type;
 
-        const ready = types.filter(candidate => !isClozeType(candidate));
+        const ready = types.filter(candidate => !needsExamples(candidate));
         if (!ready.length) return type;
         return ready[Math.floor(Math.random() * ready.length)];
     }
@@ -425,10 +425,11 @@
         else if (type === "audio") renderAudioRound(forcedWord);
         else if (type === "trueFalse") renderTrueFalseRound(forcedWord);
         else if (type === "cloze" || type === "clozeType") renderClozeRound(type, forcedWord);
+        else if (type === "build") renderBuildRound(forcedWord);
         else renderTypeRound(forcedWord);
     }
 
-    function advanceRound(featuredWordIds) {
+    function advanceRound(featuredWordIds, skipFeedbackHold = false) {
         state.lastWordIds = featuredWordIds;
         if (!state.inRetryPhase) state.roundIndex += 1;
         // Every answer is already recorded by the time we get here, so once
@@ -442,7 +443,7 @@
                 if (state.inRetryPhase) nextRetryRound();
                 else nextRound();
             }, FADE_OUT_DELAY);
-        }, FEEDBACK_HOLD_DELAY);
+        }, skipFeedbackHold ? 0 : FEEDBACK_HOLD_DELAY);
     }
 
     // Mirrors the two "nothing left to play" guards below (nextRound's round
@@ -496,8 +497,10 @@
     // retry phase - to the 50%-value bonus without touching streak/accuracy.
     // `hold` (optional) delays only the *advance*: the answer is recorded and
     // its verdict sound plays at once, while the round stays on screen until
-    // whatever `hold` is waiting on calls back. The cloze rounds use it to
-    // keep the completed sentence up for as long as its audio runs.
+    // whatever `hold` is waiting on calls back. The sentence rounds use it to
+    // keep the completed sentence up until the player is done with it - and
+    // since a hold has already spent the look-at-your-verdict beat (usually
+    // several times over), what it hands back skips FEEDBACK_HOLD_DELAY.
     function finishSingleShotRound(type, word, isCorrect, hold = null) {
         if (state.inRetryPhase) {
             if (isCorrect) awardRetryBonus();
@@ -505,7 +508,7 @@
             recordAnswer(isCorrect, word.id);
             if (!isCorrect) state.wrongRetryable.push({ type, word });
         }
-        if (hold) hold(() => advanceRound([word.id]));
+        if (hold) hold(() => advanceRound([word.id], true));
         else advanceRound([word.id]);
     }
 
@@ -892,15 +895,78 @@
         return targets.some(t => norm === t || (t.length >= 3 && levenshtein(norm, t) <= 1));
     }
 
-    // ── Round types 6 & 7: fill the blank in an example sentence ────────────
+    // ── The tail every sentence round shares ────────────────────────────────
 
-    // TEMPORARY - the Home debug card's way into a session of nothing else.
-    function isClozeLab() {
-        return new URLSearchParams(window.location.search).get("lab") === "cloze";
+    // The completed sentence keeps the stage, its recording plays through to
+    // the end, and the round then waits: nothing here advances on a timer, the
+    // player taps Continue when they're done with the line. That is also what
+    // makes a replay button worth offering - on a timer it would have been
+    // gone before anyone could reach it.
+    //
+    // `area` is the block the answer was given in (the four options, the
+    // keyboard, the word bank). It is emptied and handed the two controls,
+    // which is why it keeps the exact height it had: pulling it out of the
+    // layout would jerk the sentence down the stage mid-reading. `onSettle`
+    // runs on the same beat, for a round with a correction to put up.
+    function holdSentenceRound(mode, word, isCorrect, audioUrl, area, onSettle = null) {
+        finishSingleShotRound(mode, word, isCorrect, advance => {
+            let advanced = false;
+            const handOver = () => {
+                if (advanced) return;
+                advanced = true;
+                advance();
+            };
+
+            window.setTimeout(() => {
+                // The round is already gone (a soft navigation mid-answer, in
+                // practice): hand over rather than leave the session parked on
+                // a Continue button nobody can see.
+                if (!area.isConnected) {
+                    handOver();
+                    return;
+                }
+                onSettle?.();
+                // The verdict has had its beat on the answer controls, and the
+                // sentence now says it better than they do - so the prompt goes
+                // and they give up their place to the two controls.
+                el.exerciseRoot.querySelector(".sprint-exercise-kicker")?.classList.add("is-clearing");
+                showSentenceControls(area, audioUrl, handOver);
+                playAudioUrl(audioUrl);
+            }, SENTENCE_VERDICT_DELAY);
+        });
     }
 
+    function showSentenceControls(area, audioUrl, onContinue) {
+        // Pinned before the swap, for the same reason .is-clearing keeps its
+        // box: the controls are a single short row where four options used to
+        // be, and without this the sentence drops down the stage just as it
+        // starts being read out.
+        area.style.minHeight = `${area.offsetHeight}px`;
+        area.className = "sprint-sentence-after";
+        // No replay button without a clip to replay (a deck with no audio
+        // host configured) - a dead button next to Continue reads as broken.
+        area.innerHTML = `
+            ${audioUrl ? `<button type="button" class="sprint-audio-replay-btn sprint-sentence-replay" aria-label="${tr("sprint.audio.replay")}">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5Z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+            </button>` : ""}
+            <button type="button" class="sprint-sentence-continue">${tr("sprint.sentence.continue")}</button>
+        `;
+        area.querySelector(".sprint-sentence-replay")?.addEventListener("click", () => playAudioUrl(audioUrl));
+        area.querySelector(".sprint-sentence-continue").addEventListener("click", onContinue);
+    }
+
+    // ── Round types 6 & 7: fill the blank in an example sentence ────────────
+
+    // TEMPORARY - the Home debug cards' way into a session of nothing else.
     function getLabRoundTypes() {
-        return isClozeLab() ? ["cloze", "clozeType"] : null;
+        const mode = new URLSearchParams(window.location.search).get("lab");
+        if (mode === "cloze") return ["cloze", "clozeType"];
+        if (mode === "build") return ["build"];
+        return null;
+    }
+
+    function isSentenceLab() {
+        return Boolean(getLabRoundTypes());
     }
 
     // decks/examples.js is 1.2MB and every other sprint round works without
@@ -946,14 +1012,18 @@
         };
     }
 
-    function pickClozeSentence(forcedWord) {
+    // Every sentence round draws the same way: a word the player hasn't just
+    // seen, then one of its sentences at random. `parse` is what tells the
+    // formats apart - it returns the pieces that round needs, or null for a
+    // sentence it can't use, in which case the next word is tried.
+    function pickSentence(forcedWord, parse) {
         const fresh = state.unlocked.filter(w => !state.lastWordIds.includes(w.id));
         const seen = state.unlocked.filter(w => state.lastWordIds.includes(w.id));
         const candidates = forcedWord ? [forcedWord] : [...shuffle(fresh), ...shuffle(seen)];
 
         for (const word of candidates) {
             const usable = getWordExamples(word)
-                .map((example, index) => ({ example, number: index + 1, parts: splitMarkedSentence(example.text) }))
+                .map((example, index) => ({ example, number: index + 1, parts: parse(example) }))
                 .filter(entry => entry.parts);
             if (!usable.length) continue;
             return { word, ...usable[Math.floor(Math.random() * usable.length)] };
@@ -962,7 +1032,7 @@
     }
 
     function renderClozeRound(mode, forcedWord) {
-        const picked = pickClozeSentence(forcedWord);
+        const picked = pickSentence(forcedWord, example => splitMarkedSentence(example.text));
         if (!picked) {
             el.exerciseRoot.innerHTML = `<p class="sprint-load-error">${tr("sprint.cloze.noSentences")}</p>`;
             return;
@@ -996,44 +1066,16 @@
         const area = el.exerciseRoot.querySelector(".sprint-cloze-answer-area");
 
         // Both formats end here: the blank becomes the real word, lit up, and
-        // the finished sentence holds the stage for as long as it takes to
-        // read it out - right or wrong, since hearing the sentence you just
-        // got wrong is the whole point of showing it.
+        // the finished sentence holds the stage while its recording plays -
+        // right or wrong, since hearing the sentence you just got wrong is the
+        // whole point of showing it.
         function reveal(isCorrect) {
             const answer = document.createElement("mark");
             answer.className = "sprint-cloze-answer";
             answer.textContent = parts.answer;
             blank.replaceWith(answer);
 
-            finishSingleShotRound(mode, word, isCorrect, advance => {
-                let advanced = false;
-                const handOver = () => {
-                    if (advanced) return;
-                    advanced = true;
-                    advance();
-                };
-
-                window.setTimeout(() => {
-                    if (!answer.isConnected) return;
-                    // The verdict has had its beat on the options (or the
-                    // input), and the sentence now says the answer better than
-                    // either of them - so they clear out and leave the stage to
-                    // the sentence and its audio.
-                    clearAnswerUi();
-                    playAudioUrl(getExampleAudioUrl(word, number), 0, handOver);
-                }, CLOZE_VERDICT_DELAY);
-                window.setTimeout(handOver, CLOZE_MAX_HOLD);
-            });
-        }
-
-        // Takes the "type the missing word" prompt and the answer controls off
-        // screen at once, leaving the sentence and its translation alone. The
-        // class does all of it (see .is-clearing in style.css) and they keep
-        // their space, deliberately: pulling them out of the layout would jerk
-        // the sentence into the freed space just as it's being read out.
-        function clearAnswerUi() {
-            el.exerciseRoot.querySelector(".sprint-exercise-kicker")?.classList.add("is-clearing");
-            area.classList.add("is-clearing");
+            holdSentenceRound(mode, word, isCorrect, getExampleAudioUrl(word, number), area);
         }
 
         if (isTypeMode) renderClozeTypeInput(area, word, parts, reveal);
@@ -1117,6 +1159,290 @@
             targets.push(normalizeString(word.romanization));
         }
         return targets.some(t => t && (norm === t || (t.length >= 3 && levenshtein(norm, t) <= 1)));
+    }
+
+    // ── Round type 8: put the sentence back together ────────────────────────
+
+    // The translation up top, the sentence's own words scrambled underneath,
+    // and you tap them into place one at a time. Long-pressing any word - in
+    // either row - opens its gloss, which is the round's only way of asking
+    // "what was that one again?" without giving the order away.
+
+    // Under three words there is no puzzle left; past nine the bank wraps into
+    // a wall of tiles on a phone. A sentence outside that range goes back in
+    // the pile and pickSentence tries the next one.
+    const BUILD_MIN_TOKENS = 3;
+    const BUILD_MAX_TOKENS = 9;
+    // Long enough that tapping a word into place never trips it, short enough
+    // that holding one doesn't feel like waiting.
+    const GLOSS_PRESS_DELAY = 380;
+    // A press that travels further than this is the page being scrolled.
+    const GLOSS_MOVE_TOLERANCE = 10;
+
+    // Punctuation is stripped off the tiles rather than kept: a lone trailing
+    // "?" would say which word ends the sentence, and a capital would say
+    // which one starts it (that one the comparison forgives instead).
+    function stripEdgePunctuation(token) {
+        return String(token || "").replace(/^[^\p{L}\p{N}]+/u, "").replace(/[^\p{L}\p{N}]+$/u, "");
+    }
+
+    function splitBuildTokens(text) {
+        // The asterisks marking the flashcard's own word go too - this round
+        // has no blank to point at, and they would show up on the tile.
+        const tokens = String(text || "")
+            .replace(/\*/g, "")
+            .split(/\s+/)
+            .map(stripEdgePunctuation)
+            .filter(Boolean);
+        if (tokens.length < BUILD_MIN_TOKENS || tokens.length > BUILD_MAX_TOKENS) return null;
+        return { tokens };
+    }
+
+    // A script written without spaces between words (Chinese, Japanese) comes
+    // out of that split as one tile holding the whole sentence, which
+    // BUILD_MIN_TOKENS then refuses - so those decks simply never draw this
+    // round. Segmenting them is a different job from this one.
+
+    // The gloss a long-press shows, looked up in both directions: the press
+    // lands either on a target-language tile (wanted: what it means) or on a
+    // word of the translation above it (wanted: how it is said). Built once
+    // per session off the deck itself - the sentence data carries no per-word
+    // alignment, so the deck's own vocabulary is all there is to go on.
+    let glossaryCache = null;
+
+    function getGlossary() {
+        if (glossaryCache) return glossaryCache;
+
+        const target = new Map();
+        const source = new Map();
+        // First entry wins: the deck is ordered by frequency, so a key two
+        // words share keeps the one the player is likelier to have meant.
+        const add = (map, key, value) => {
+            const norm = normalizeString(key);
+            if (norm && value && !map.has(norm)) map.set(norm, value);
+        };
+
+        state.vocab.forEach(word => {
+            add(target, word.script, word.meaning);
+            add(target, word.romanization, word.meaning);
+            // Keyed on the English column specifically, whatever the interface
+            // language is: the sentences in decks/examples.js are translated
+            // into English and nothing else, so English is what a press up
+            // there will be landing on.
+            add(source, word.meaningEn, word.script);
+            // Then the pieces of a multi-word gloss, so pressing one word of
+            // "good morning" still finds it. Short pieces are left out: "to",
+            // "a" and "the" belong to no word in particular, and mapping them
+            // to whichever entry came first is worse than leaving them blank.
+            word.meaningEn.split(/[,;/]|\s+/).forEach(piece => {
+                if (stripEdgePunctuation(piece).length >= 4) add(source, piece, word.script);
+            });
+        });
+
+        glossaryCache = { target, source };
+        return glossaryCache;
+    }
+
+    function lookUpGloss(text, direction) {
+        const glossary = getGlossary();
+        return (direction === "target" ? glossary.target : glossary.source).get(normalizeString(text)) || "";
+    }
+
+    let glossPopup = null;
+
+    function hideGloss() {
+        glossPopup?.remove();
+        glossPopup = null;
+    }
+
+    function showGloss(node, gloss) {
+        const stage = node.closest(".sprint-exercise");
+        if (!stage) return;
+        hideGloss();
+
+        glossPopup = document.createElement("span");
+        glossPopup.className = "sprint-gloss-popup";
+        // A word the deck has no entry for still answers, rather than leaving
+        // a held finger wondering whether the press registered at all.
+        if (!gloss) glossPopup.classList.add("is-empty");
+        glossPopup.textContent = gloss || tr("sprint.build.noGloss");
+        stage.appendChild(glossPopup);
+
+        // Measured only once it is in the DOM - the clamp needs its width.
+        const stageBox = stage.getBoundingClientRect();
+        const nodeBox = node.getBoundingClientRect();
+        const half = glossPopup.offsetWidth / 2;
+        const centre = nodeBox.left - stageBox.left + nodeBox.width / 2;
+        glossPopup.style.left = `${Math.round(Math.min(Math.max(centre, half + 4), stageBox.width - half - 4))}px`;
+        glossPopup.style.top = `${Math.round(nodeBox.top - stageBox.top)}px`;
+    }
+
+    // Opens `node`'s gloss on a held press. The finger coming back up still
+    // fires a click, so a press that opened a gloss leaves a mark for the
+    // node's own click handler to check with consumeGlossPress - without it,
+    // reading a tile would also play it into the sentence.
+    function attachGlossPress(node, text, direction) {
+        let timer = null;
+        let origin = null;
+
+        const cancel = () => {
+            window.clearTimeout(timer);
+            timer = null;
+            origin = null;
+            hideGloss();
+        };
+
+        node.addEventListener("pointerdown", event => {
+            // A mark left behind by a press that never produced a click (the
+            // finger wandered off the tile) would otherwise eat this tap.
+            delete node.dataset.glossOpen;
+            origin = { x: event.clientX, y: event.clientY };
+            timer = window.setTimeout(() => {
+                timer = null;
+                node.dataset.glossOpen = "true";
+                showGloss(node, lookUpGloss(text, direction));
+            }, GLOSS_PRESS_DELAY);
+        });
+        node.addEventListener("pointermove", event => {
+            if (!timer || !origin) return;
+            if (Math.hypot(event.clientX - origin.x, event.clientY - origin.y) > GLOSS_MOVE_TOLERANCE) cancel();
+        });
+        node.addEventListener("pointerup", cancel);
+        node.addEventListener("pointercancel", cancel);
+        node.addEventListener("pointerleave", cancel);
+        // Holding a finger on a word otherwise raises iOS's own selection
+        // callout, on top of the gloss.
+        node.addEventListener("contextmenu", event => event.preventDefault());
+    }
+
+    function consumeGlossPress(node) {
+        if (node.dataset.glossOpen !== "true") return false;
+        delete node.dataset.glossOpen;
+        return true;
+    }
+
+    function renderBuildRound(forcedWord) {
+        const picked = pickSentence(forcedWord, example => splitBuildTokens(example.text));
+        // Nothing among the unlocked words has a sentence this round can use
+        // (all of them too short, too long, or unwritten). The type round
+        // needs nothing but the word itself, so it stands in - the alternative
+        // is a dead end with no way on, since this round is what would have
+        // advanced the session.
+        if (!picked) {
+            renderTypeRound(forcedWord);
+            return;
+        }
+
+        const { word, example, number, parts } = picked;
+
+        el.exerciseRoot.innerHTML = `
+            <div class="sprint-exercise sprint-exercise-build">
+                <span class="sprint-exercise-kicker">${tr("sprint.build.prompt")}</span>
+                <p class="sprint-build-translation"></p>
+                <div class="sprint-build-line"></div>
+                <div class="sprint-build-answer-area">
+                    <div class="sprint-build-bank"></div>
+                    <span class="sprint-build-hint">${tr("sprint.build.hint")}</span>
+                    <button type="button" class="sprint-build-check" disabled>${tr("sprint.type.submit")}</button>
+                </div>
+            </div>
+        `;
+
+        const translationEl = el.exerciseRoot.querySelector(".sprint-build-translation");
+        const line = el.exerciseRoot.querySelector(".sprint-build-line");
+        const bank = el.exerciseRoot.querySelector(".sprint-build-bank");
+        const area = el.exerciseRoot.querySelector(".sprint-build-answer-area");
+        const checkBtn = el.exerciseRoot.querySelector(".sprint-build-check");
+
+        // The translation keeps its punctuation and capitals - it is a
+        // sentence being read, not a puzzle - but every word is its own node
+        // so it can be pressed. Splitting on a captured separator is what
+        // keeps the spaces between them as text.
+        String(example.translation || "").split(/(\s+)/).forEach(chunk => {
+            if (!chunk) return;
+            if (!chunk.trim()) {
+                translationEl.append(document.createTextNode(chunk));
+                return;
+            }
+            const span = document.createElement("span");
+            span.className = "sprint-build-word";
+            span.textContent = chunk;
+            attachGlossPress(span, stripEdgePunctuation(chunk), "source");
+            translationEl.appendChild(span);
+        });
+
+        // Tiles are made once and moved between the two rows rather than
+        // rebuilt on each tap: a sentence using the same word twice then keeps
+        // two distinct nodes, and the tile under the finger stays itself.
+        const slotByTile = new Map();
+        const tiles = shuffle(parts.tokens.slice()).map(token => {
+            const tile = document.createElement("button");
+            tile.type = "button";
+            tile.className = "sprint-build-tile";
+            tile.textContent = token;
+            tile.dataset.token = token;
+            attachGlossPress(tile, token, "target");
+            tile.addEventListener("click", () => {
+                if (state.roundLocked || consumeGlossPress(tile)) return;
+                if (tile.parentElement === line) slotByTile.get(tile).appendChild(tile);
+                else line.appendChild(tile);
+                checkBtn.disabled = !line.children.length;
+            });
+
+            const slot = document.createElement("span");
+            slot.className = "sprint-build-slot";
+            slot.appendChild(tile);
+            bank.appendChild(slot);
+            slotByTile.set(tile, slot);
+            return tile;
+        });
+
+        // Pinned once the bank has laid itself out: the hole a word leaves
+        // behind has to hold its shape, or picking one reflows the rows under
+        // the finger and the word you wanted next has moved. It is also where
+        // each word goes back to when it is tapped out of the sentence.
+        slotByTile.forEach(slot => {
+            slot.style.width = `${slot.offsetWidth}px`;
+            slot.style.height = `${slot.offsetHeight}px`;
+        });
+        // The line ends up holding exactly what the bank is holding now, so
+        // the bank's own height is the right amount of room to reserve for
+        // it - otherwise the stage grows the moment the answer wraps onto a
+        // second row, and everything below it shifts under the finger. Plus
+        // the line's own padding, which min-height (border-box) counts in.
+        const linePadding = Number.parseFloat(getComputedStyle(line).paddingBottom) || 0;
+        line.style.minHeight = `${bank.offsetHeight + linePadding}px`;
+
+        // Pulls every tile into the line in the sentence's own order. Shown
+        // only for a wrong answer, where the line is otherwise the player's
+        // own guess with a red edge and nothing to compare it against - and
+        // the recording about to play is reading exactly this.
+        function revealSolution() {
+            const remaining = tiles.slice();
+            parts.tokens.forEach(token => {
+                const index = remaining.findIndex(tile => tile.dataset.token === token);
+                if (index === -1) return;
+                const [tile] = remaining.splice(index, 1);
+                tile.classList.add("is-solution");
+                line.appendChild(tile);
+            });
+        }
+
+        checkBtn.addEventListener("click", () => {
+            if (state.roundLocked || !line.children.length) return;
+            state.roundLocked = true;
+            hideGloss();
+
+            const answer = Array.from(line.children).map(tile => tile.dataset.token);
+            // normalizeString drops case, accents and the spaces themselves,
+            // so what is compared is the words in order and nothing else.
+            const isCorrect = normalizeString(answer.join("")) === normalizeString(parts.tokens.join(""));
+            line.classList.add(isCorrect ? "is-correct" : "is-wrong");
+
+            holdSentenceRound("build", word, isCorrect, getExampleAudioUrl(word, number), area, () => {
+                if (!isCorrect) revealSolution();
+            });
+        });
     }
 
     // ── End of session ───────────────────────────────────────────────────────
@@ -1706,20 +2032,9 @@
     const SILENT_WAV = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=";
     let activeAudioUrl = null;
     let wordAudioPlayId = 0;
-    let onAudioEnded = null;
 
     function ensureWordAudio() {
-        if (!activeAudio) {
-            activeAudio = new Audio();
-            // One listener for the element's whole life, with the callback
-            // swapped per play - adding a listener per play would fire every
-            // earlier round's callback again on every later clip.
-            activeAudio.addEventListener("ended", () => {
-                const handler = onAudioEnded;
-                onAudioEnded = null;
-                handler?.();
-            });
-        }
+        if (!activeAudio) activeAudio = new Audio();
         return activeAudio;
     }
 
@@ -1738,11 +2053,7 @@
         playAudioUrl(getWordAudioUrl(item), attempt);
     }
 
-    // `onEnd` fires once, when the clip finishes playing - only the cloze
-    // rounds use it, to hold their sentence on screen for exactly that long.
-    // It is NOT called when playback fails; callers that must move on either
-    // way cap themselves with their own timer.
-    function playAudioUrl(url, attempt = 0, onEnd = null) {
+    function playAudioUrl(url, attempt = 0) {
         if (!url) return;
 
         // Covers the word the background queue hasn't reached yet: the fetch
@@ -1753,7 +2064,6 @@
         try {
             const audio = ensureWordAudio();
             const playId = ++wordAudioPlayId;
-            onAudioEnded = onEnd;
             // Re-assign src (which re-fetches) when this is a different word OR
             // the element is stuck in an error state from a failed load. Without
             // the audio.error check, a same-URL replay would take the seek-only
@@ -1781,7 +2091,7 @@
                 if (attempt < 1 && wordAudioPlayId === playId) {
                     activeAudioUrl = null;
                     window.setTimeout(() => {
-                        if (wordAudioPlayId === playId) playAudioUrl(url, attempt + 1, onEnd);
+                        if (wordAudioPlayId === playId) playAudioUrl(url, attempt + 1);
                     }, 400);
                 }
             });
@@ -1840,6 +2150,11 @@
                     script: record[columns.script] || "",
                     romanization: record[columns.romanization] || "",
                     meaning: getRecordMeaning(record, columns),
+                    // The English column specifically, which `meaning` only
+                    // is on an English interface: the sentence translations in
+                    // decks/examples.js are English, so English is what the
+                    // build round's long-press glossary has to match against.
+                    meaningEn: record[columns.meaning] || "",
                     unlockLevel: Number.isFinite(unlockLevel) && unlockLevel > 0 ? unlockLevel : 1
                 };
             })
