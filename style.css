@@ -2699,33 +2699,45 @@ input[type="password"]:focus {
     width: 100%;
 }
 
-/* Once the sentence is complete there is nothing left to answer with, so the
-   prompt goes, on the spot - no fade, nothing to watch. `visibility`, never
-   `hidden` or `display`: it has to keep its box, or the stage collapses under
-   the sentence and jerks it into the freed space just as it's being read out.
-   (The answer controls below it don't hide - they hand their place, and their
-   pinned height, to the replay/continue row. See showSentenceControls.) */
-.sprint-exercise .is-clearing {
-    visibility: hidden;
+/* The answer controls on their way out, a beat before the reveal takes their
+   place. They keep their box the whole way (the block's height is pinned to
+   it in showSentenceReveal) - this is only the fade. */
+.sprint-exercise .is-dissolving {
+    opacity: 0;
+    transform: scale(0.97);
+    transition: opacity 150ms var(--ease-out), transform 150ms var(--ease-out);
+    pointer-events: none;
 }
 
-/* The two controls every sentence round ends on, in the space the options or
-   the word bank just gave up. Centred in it rather than pinned to the top:
-   dead centre of the freed block is the one spot that reads the same whether
-   it came from four options or from two rows of tiles. */
-.sprint-sentence-after {
+/* The play button, in the prompt's old place directly above the sentence -
+   the one control that is about the line rather than about the round, so it
+   sits with it. It drops in just behind the sentence's own glide. */
+.sprint-sentence-audio {
     display: flex;
-    align-items: center;
     justify-content: center;
-    gap: var(--space-3);
     width: 100%;
-    animation: sprint-answer-pop 260ms var(--ease-spring) both;
+    animation: sprint-sentence-audio-in 380ms var(--ease-spring) 80ms backwards;
 }
 
-.sprint-sentence-replay {
+.sprint-sentence-audio .sprint-audio-replay-btn {
     width: 56px;
     height: 56px;
-    flex: none;
+}
+
+@keyframes sprint-sentence-audio-in {
+    0%   { opacity: 0; transform: translateY(-8px) scale(0.7); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Continue, in the block the options or the word bank just gave up. Pinned to
+   the bottom of it rather than centred: the round is over and this is the only
+   thing left to do, so it belongs under everything else, where the thumb that
+   was tapping options already is. */
+.sprint-sentence-after {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: 100%;
 }
 
 .sprint-sentence-continue {
@@ -2738,9 +2750,17 @@ input[type="password"]:focus {
     font-size: var(--text-lg);
     font-weight: 700;
     padding: 18px var(--space-6);
-    min-width: 180px;
+    width: 100%;
     cursor: pointer;
     transition: background var(--transition), transform var(--transition);
+    /* `backwards`, never `both`: a filled-forwards animation keeps its final
+       transform applied and the :active press below would never show. */
+    animation: sprint-sentence-continue-in 360ms var(--ease-out) 140ms backwards;
+}
+
+@keyframes sprint-sentence-continue-in {
+    0%   { opacity: 0; transform: translateY(14px); }
+    100% { opacity: 1; transform: translateY(0); }
 }
 
 .sprint-sentence-continue:hover {
@@ -2920,11 +2940,6 @@ input[type="password"]:focus {
     100% { opacity: 1; transform: translate(-50%, -100%) scale(1); }
 }
 
-.sprint-gloss-popup.is-empty {
-    font-weight: 500;
-    opacity: 0.8;
-}
-
 /* The little tail pointing back down at the word. */
 .sprint-gloss-popup::after {
     content: "";
@@ -2938,9 +2953,12 @@ input[type="password"]:focus {
 
 @media (prefers-reduced-motion: reduce) {
     .sprint-cloze-answer,
-    .sprint-sentence-after,
+    .sprint-sentence-audio,
+    .sprint-sentence-continue,
     .sprint-gloss-popup,
     .sprint-build-line.is-wrong .sprint-build-tile.is-solution { animation: none; }
+
+    .sprint-exercise .is-dissolving { transition: none; }
 }
 
 /* Phones: nudge the answer buttons a little bigger (font + tap height) than
@@ -2957,9 +2975,7 @@ input[type="password"]:focus {
         font-size: 19px;
     }
 
-    /* The row has to fit a 56px round button beside it on a 320px screen. */
-    .sprint-build-check,
-    .sprint-sentence-continue {
+    .sprint-build-check {
         min-width: 0;
         flex: 1;
     }

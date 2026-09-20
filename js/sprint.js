@@ -67,6 +67,13 @@
     // sentence starts reading, so the two don't talk over each other. The
     // wrong-answer correction goes up on the same beat.
     const SENTENCE_VERDICT_DELAY = 420;
+    // ...then the answer controls dim out, and the reveal lands in the quiet
+    // they leave behind rather than on top of them.
+    const SENTENCE_DISSOLVE_DELAY = 160;
+    // How long the sentence takes to travel to where the reveal leaves it
+    // (showSentenceReveal's FLIP). Long enough to read as a move rather than
+    // a jump cut, short enough not to still be going when the audio starts.
+    const SENTENCE_GLIDE_DURATION = 420;
     // Flat bonus for a session with zero wrong answers (main rounds - a
     // retry-phase correction doesn't erase the original mistake, so any
     // retry activity at all already means this can't be perfect).
@@ -904,11 +911,11 @@
     // gone before anyone could reach it.
     //
     // `area` is the block the answer was given in (the four options, the
-    // keyboard, the word bank). It is emptied and handed the two controls,
-    // which is why it keeps the exact height it had: pulling it out of the
-    // layout would jerk the sentence down the stage mid-reading. `onSettle`
-    // runs on the same beat, for a round with a correction to put up.
-    function holdSentenceRound(mode, word, isCorrect, audioUrl, area, onSettle = null) {
+    // keyboard, the word bank) and `sentence` the line that was being worked
+    // on. Between them they are the whole reveal: the area hands its space to
+    // Continue, the play button lands right above the sentence. `onSettle`
+    // runs a beat before either, for a round with a correction to put up.
+    function holdSentenceRound({ mode, word, isCorrect, audioUrl, area, sentence, onSettle = null }) {
         finishSingleShotRound(mode, word, isCorrect, advance => {
             let advanced = false;
             const handOver = () => {
@@ -926,33 +933,85 @@
                     return;
                 }
                 onSettle?.();
-                // The verdict has had its beat on the answer controls, and the
-                // sentence now says it better than they do - so the prompt goes
-                // and they give up their place to the two controls.
-                el.exerciseRoot.querySelector(".sprint-exercise-kicker")?.classList.add("is-clearing");
-                showSentenceControls(area, audioUrl, handOver);
-                playAudioUrl(audioUrl);
+                // The answer controls have had their verdict beat and there is
+                // nothing left to answer with, so they dim out first - the
+                // reveal then arrives into a quiet stage rather than on top of
+                // four coloured options.
+                area.classList.add("is-dissolving");
+                window.setTimeout(() => {
+                    if (!area.isConnected) {
+                        handOver();
+                        return;
+                    }
+                    showSentenceReveal(area, sentence, audioUrl, handOver);
+                    playAudioUrl(audioUrl);
+                }, SENTENCE_DISSOLVE_DELAY);
             }, SENTENCE_VERDICT_DELAY);
         });
     }
 
-    function showSentenceControls(area, audioUrl, onContinue) {
-        // Pinned before the swap, for the same reason .is-clearing keeps its
-        // box: the controls are a single short row where four options used to
-        // be, and without this the sentence drops down the stage just as it
-        // starts being read out.
+    // The reveal, in one move: the prompt goes, a play button takes its place
+    // directly above the sentence, and the answer controls hand their block -
+    // and its exact height - to a single Continue button at the bottom of it.
+    // Everything still on screen glides from where it was to where that
+    // leaves it (captureGlide), so the line being read out travels instead of
+    // jumping, and the two new controls arrive on their own beat behind it.
+    function showSentenceReveal(area, sentence, audioUrl, onContinue) {
+        const exercise = sentence.closest(".sprint-exercise") || el.exerciseRoot;
+        const kicker = exercise.querySelector(".sprint-exercise-kicker");
+        const settle = captureGlide(Array.from(exercise.children).filter(node => node !== area && node !== kicker));
+
+        // The prompt asked for an answer that has now been given. It goes for
+        // real - no longer just hidden to hold its space, because the glide is
+        // what keeps the column from lurching now.
+        kicker?.remove();
+
+        // Pinned before the swap: the block the controls occupied stays as
+        // tall as it was, so the sentence doesn't drop down the stage the
+        // moment it starts being read out - and Continue, sitting at the
+        // bottom of that block, lands where the thumb already is.
         area.style.minHeight = `${area.offsetHeight}px`;
         area.className = "sprint-sentence-after";
-        // No replay button without a clip to replay (a deck with no audio
-        // host configured) - a dead button next to Continue reads as broken.
-        area.innerHTML = `
-            ${audioUrl ? `<button type="button" class="sprint-audio-replay-btn sprint-sentence-replay" aria-label="${tr("sprint.audio.replay")}">
-                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5Z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-            </button>` : ""}
-            <button type="button" class="sprint-sentence-continue">${tr("sprint.sentence.continue")}</button>
-        `;
-        area.querySelector(".sprint-sentence-replay")?.addEventListener("click", () => playAudioUrl(audioUrl));
+        area.innerHTML = `<button type="button" class="sprint-sentence-continue">${tr("sprint.sentence.continue")}</button>`;
         area.querySelector(".sprint-sentence-continue").addEventListener("click", onContinue);
+
+        // No play button without a clip to play (a deck with no audio host
+        // configured) - a dead button over the sentence reads as broken.
+        if (audioUrl) {
+            const slot = document.createElement("div");
+            slot.className = "sprint-sentence-audio";
+            slot.innerHTML = `
+                <button type="button" class="sprint-audio-replay-btn" aria-label="${tr("sprint.audio.replay")}">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5Z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                </button>
+            `;
+            slot.querySelector("button").addEventListener("click", () => playAudioUrl(audioUrl));
+            sentence.parentNode.insertBefore(slot, sentence);
+        }
+
+        settle();
+    }
+
+    // FLIP, the short version: note where these nodes are, let the caller
+    // rearrange the column around them, then animate each one back from where
+    // it used to be. Without it the sentence would simply appear 40-odd pixels
+    // from where the player was reading it.
+    function captureGlide(nodes) {
+        if (prefersReducedMotion()) return () => {};
+        const before = nodes.map(node => node.getBoundingClientRect().top);
+        return () => nodes.forEach((node, index) => {
+            if (!node.isConnected) return;
+            const delta = before[index] - node.getBoundingClientRect().top;
+            if (Math.abs(delta) < 1) return;
+            node.animate(
+                [{ transform: `translateY(${delta}px)` }, { transform: "none" }],
+                { duration: SENTENCE_GLIDE_DURATION, easing: "cubic-bezier(0.22, 0.61, 0.36, 1)" }
+            );
+        });
+    }
+
+    function prefersReducedMotion() {
+        return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches === true;
     }
 
     // ── Round types 6 & 7: fill the blank in an example sentence ────────────
@@ -971,24 +1030,33 @@
 
     // decks/examples.js is 1.2MB and every other sprint round works without
     // it, so it is fetched on demand rather than added to sprint.html's script
-    // list. window.DECK_EXAMPLES outlives a soft navigation (js/router.js only
-    // re-runs the page script), so a second lab run costs nothing.
+    // list; decks/word-glosses.js is what the long-press reads and rides along
+    // with it. Both outlive a soft navigation (js/router.js only re-runs the
+    // page script), so a second lab run costs nothing.
     let examplesLoadPromise = null;
 
     function ensureExamplesLoaded() {
-        if (window.DECK_EXAMPLES) return Promise.resolve();
+        if (window.DECK_EXAMPLES && window.WORD_GLOSSES) return Promise.resolve();
         if (!examplesLoadPromise) {
-            examplesLoadPromise = new Promise(resolve => {
-                const script = document.createElement("script");
-                script.src = "decks/examples.js";
-                // A failed load resolves too: renderClozeRound already has to
-                // handle "no sentence for this word" and says so on screen.
-                script.onload = () => resolve();
-                script.onerror = () => resolve();
-                document.head.appendChild(script);
-            });
+            examplesLoadPromise = Promise.all([
+                loadDeckScript("decks/examples.js"),
+                loadDeckScript("decks/word-glosses.js")
+            ]);
         }
         return examplesLoadPromise;
+    }
+
+    // A failed load resolves too, rather than rejecting: renderClozeRound
+    // already has to handle "no sentence for this word" and says so on screen,
+    // and a missing glossary only costs the long-press, not the round.
+    function loadDeckScript(src) {
+        return new Promise(resolve => {
+            const script = document.createElement("script");
+            script.src = src;
+            script.onload = () => resolve();
+            script.onerror = () => resolve();
+            document.head.appendChild(script);
+        });
     }
 
     function getWordExamples(word) {
@@ -1075,7 +1143,12 @@
             answer.textContent = parts.answer;
             blank.replaceWith(answer);
 
-            holdSentenceRound(mode, word, isCorrect, getExampleAudioUrl(word, number), area);
+            holdSentenceRound({
+                mode, word, isCorrect,
+                audioUrl: getExampleAudioUrl(word, number),
+                area,
+                sentence: sentenceEl
+            });
         }
 
         if (isTypeMode) renderClozeTypeInput(area, word, parts, reveal);
@@ -1206,8 +1279,11 @@
     // The gloss a long-press shows, looked up in both directions: the press
     // lands either on a target-language tile (wanted: what it means) or on a
     // word of the translation above it (wanted: how it is said). Built once
-    // per session off the deck itself - the sentence data carries no per-word
-    // alignment, so the deck's own vocabulary is all there is to go on.
+    // per session from two sources - the deck's own words, which carry their
+    // meanings already, and decks/word-glosses.js, which carries every other
+    // word the sentences are written with. Between them every tile on screen
+    // has an answer, which is the point: a word the round shows you and then
+    // won't explain is worse than no long-press at all.
     let glossaryCache = null;
 
     function getGlossary() {
@@ -1239,6 +1315,19 @@
             });
         });
 
+        // Second, and only where the deck left a gap (add keeps the first
+        // entry): everything else the sentences use. Same two directions and
+        // the same rule about short pieces - "the" and "was" belong to no word
+        // in particular, and mapping them to whichever entry came first is
+        // worse than leaving the English side of them blank.
+        Object.entries(window.WORD_GLOSSES?.[activeLanguage] || {}).forEach(([written, gloss]) => {
+            add(target, written, gloss);
+            add(source, gloss, written);
+            gloss.split(/[,;/]|\s+/).forEach(piece => {
+                if (stripEdgePunctuation(piece).length >= 4) add(source, piece, written);
+            });
+        });
+
         glossaryCache = { target, source };
         return glossaryCache;
     }
@@ -1255,17 +1344,18 @@
         glossPopup = null;
     }
 
+    // Nothing to say, nothing shown: every word of every sentence has a gloss
+    // (see getGlossary), so the empty case is now a gap in the data rather
+    // than a normal outcome, and a popup announcing it would only make the
+    // gap the player's problem.
     function showGloss(node, gloss) {
-        const stage = node.closest(".sprint-exercise");
-        if (!stage) return;
         hideGloss();
+        const stage = node.closest(".sprint-exercise");
+        if (!gloss || !stage) return false;
 
         glossPopup = document.createElement("span");
         glossPopup.className = "sprint-gloss-popup";
-        // A word the deck has no entry for still answers, rather than leaving
-        // a held finger wondering whether the press registered at all.
-        if (!gloss) glossPopup.classList.add("is-empty");
-        glossPopup.textContent = gloss || tr("sprint.build.noGloss");
+        glossPopup.textContent = gloss;
         stage.appendChild(glossPopup);
 
         // Measured only once it is in the DOM - the clamp needs its width.
@@ -1275,6 +1365,7 @@
         const centre = nodeBox.left - stageBox.left + nodeBox.width / 2;
         glossPopup.style.left = `${Math.round(Math.min(Math.max(centre, half + 4), stageBox.width - half - 4))}px`;
         glossPopup.style.top = `${Math.round(nodeBox.top - stageBox.top)}px`;
+        return true;
     }
 
     // Opens `node`'s gloss on a held press. The finger coming back up still
@@ -1299,8 +1390,10 @@
             origin = { x: event.clientX, y: event.clientY };
             timer = window.setTimeout(() => {
                 timer = null;
-                node.dataset.glossOpen = "true";
-                showGloss(node, lookUpGloss(text, direction));
+                // Only a press that actually opened something counts as one:
+                // otherwise the release would be eaten by consumeGlossPress
+                // and the tile would refuse to move for no visible reason.
+                if (showGloss(node, lookUpGloss(text, direction))) node.dataset.glossOpen = "true";
             }, GLOSS_PRESS_DELAY);
         });
         node.addEventListener("pointermove", event => {
@@ -1439,8 +1532,12 @@
             const isCorrect = normalizeString(answer.join("")) === normalizeString(parts.tokens.join(""));
             line.classList.add(isCorrect ? "is-correct" : "is-wrong");
 
-            holdSentenceRound("build", word, isCorrect, getExampleAudioUrl(word, number), area, () => {
-                if (!isCorrect) revealSolution();
+            holdSentenceRound({
+                mode: "build", word, isCorrect,
+                audioUrl: getExampleAudioUrl(word, number),
+                area,
+                sentence: line,
+                onSettle: () => { if (!isCorrect) revealSolution(); }
             });
         });
     }
