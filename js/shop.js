@@ -455,6 +455,7 @@ function parseDeckCsv(csvText, columns) {
                 id: record[columns.wordId]?.trim() || `w-${i}`,
                 script: record[columns.script] || "",
                 romanization: record[columns.romanization] || "",
+                hint: record[columns.hint] || "",
                 meaning: record[columns.meaning] || record[columns.italianMeaning] || ""
             };
         })
@@ -504,6 +505,18 @@ function languageHasHints() {
     return activeLanguage === "chinese" || activeLanguage === "japanese";
 }
 
+// Same reading line, and the same per-word switch, as the Deck page - see
+// getWordHint in js/deck.js.
+function getWordHint(word) {
+    if (!languageHasHints() || !word?.hint) return "";
+    try {
+        const map = JSON.parse(localStorage.getItem("polytype-hidden-hints")) || {};
+        return new Set(map[activeLanguage] || []).has(getWordSuffix(word.id)) ? "" : word.hint;
+    } catch {
+        return word.hint;
+    }
+}
+
 function escapeHtml(value) {
     return String(value || "").replace(/[&<>"']/g, ch => ({
         "&": "&amp;",
@@ -534,7 +547,7 @@ function showWordChestReveal(word) {
         <div class="chest-overlay-title">${tr("shop.chestRevealTitle")}</div>
         <div class="word-reveal-card">
             <strong class="word-reveal-script">${escapeHtml(word.script)}</strong>
-            ${languageHasHints() && word.romanization ? `<span class="word-reveal-roman">${escapeHtml(word.romanization)}</span>` : ""}
+            ${getWordHint(word) ? `<span class="word-reveal-roman">${escapeHtml(getWordHint(word))}</span>` : ""}
             <span class="word-reveal-meaning">${escapeHtml(word.meaning)}</span>
         </div>
         <button class="chest-collect-btn" type="button">${tr("shop.chestRevealCta")}</button>

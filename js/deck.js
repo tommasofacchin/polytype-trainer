@@ -55,6 +55,12 @@ const maxKeys = 5; // keep in sync with MAX_KEYS in api/_lib.js
 // never wiped by a server profile refresh. Keyed by courseKey, same as
 // unlockedWords/purchasedKeys elsewhere in this file.
 const DISABLED_WORDS_KEY = "polytype-disabled-words";
+// Words whose reading line (pinyin / furigana) the player has switched off,
+// one by one, from the manager below. Same shape and the same reasoning as
+// the key above - a per-device practice preference, keyed by language - and
+// the point of it is that a crutch you no longer need should be droppable
+// word by word rather than all at once.
+const HIDDEN_HINTS_KEY = "polytype-hidden-hints";
 
 let activeDeckMeta = null;
 let activeLanguage = FALLBACK_LANGUAGE;
@@ -106,9 +112,17 @@ function initDeckPage() {
     el.detailAudioBtn = document.getElementById("word-detail-audio");
     el.detailExamples = document.getElementById("word-detail-example-list");
     el.detailNoExamples = document.getElementById("word-detail-no-examples");
+    el.hintsBtn = document.getElementById("deck-hints-btn");
+    el.hintsBtnLabel = document.getElementById("deck-hints-btn-label");
+    el.hintsOverlay = document.getElementById("deck-hints-overlay");
+    el.hintsList = document.getElementById("deck-hints-list");
+    el.hintsNote = document.getElementById("deck-hints-note");
+    el.hintsColReading = document.getElementById("deck-hints-col-reading");
+    el.hintsEmpty = document.getElementById("deck-hints-empty");
 
     resolveActiveLanguage();
     setupDeckFilter();
+    setupHintsManager();
     setupUnlockConfirm();
     setupWordDetail();
     preloadUnlockSfx();
@@ -212,6 +226,7 @@ function parseDeckCsv(csvText, columns) {
                 id: record[columns.wordId]?.trim() || `w-${i}`,
                 script: record[columns.script] || "",
                 romanization: record[columns.romanization] || "",
+                hint: record[columns.hint] || "",
                 meaning: getRecordMeaning(record, columns)
             };
         })
@@ -394,6 +409,126 @@ function languageHasHints() {
     return activeLanguage === "chinese" || activeLanguage === "japanese";
 }
 
+// ── Per-word readings ───────────────────────────────────────────────────────
+
+// What the deck calls the line under the word, in the language the player is
+// learning: Chinese reads pinyin, Japanese reads furigana. Used in the
+// manager's own copy, so it never says "readings" where it can say the word
+// the learner already knows.
+function getReadingLabel() {
+    return tr(activeLanguage === "japanese" ? "deck.readingFurigana" : "deck.readingPinyin");
+}
+
+function getHiddenHintsMap() {
+    try {
+        return JSON.parse(localStorage.getItem(HIDDEN_HINTS_KEY)) || {};
+    } catch {
+        return {};
+    }
+}
+
+function getHiddenHints() {
+    return new Set(getHiddenHintsMap()[activeLanguage] || []);
+}
+
+function toggleWordHint(suffix) {
+    const map = getHiddenHintsMap();
+    const current = new Set(map[activeLanguage] || []);
+    if (current.has(suffix)) current.delete(suffix); else current.add(suffix);
+    map[activeLanguage] = [...current];
+    localStorage.setItem(HIDDEN_HINTS_KEY, JSON.stringify(map));
+}
+
+// The reading to show for this word, or "" for none: a deck that doesn't use
+// readings, a word that has none (Japanese words already written in kana are
+// their own reading), or one the player has switched off.
+function getWordHint(word, hidden = getHiddenHints()) {
+    if (!languageHasHints() || !word?.hint) return "";
+    return hidden.has(getWordSuffix(word.id)) ? "" : word.hint;
+}
+
+function setupHintsManager() {
+    el.hintsBtn?.addEventListener("click", openHintsManager);
+    el.hintsOverlay?.querySelectorAll("[data-hints-close]").forEach(node => {
+        node.addEventListener("click", closeHintsManager);
+    });
+    document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && el.hintsOverlay && !el.hintsOverlay.hidden) closeHintsManager();
+    });
+}
+
+// Opened and closed the same way as the word-detail card, transition and all.
+function openHintsManager() {
+    if (!el.hintsOverlay) return;
+    renderHintsList();
+    el.hintsOverlay.hidden = false;
+    requestAnimationFrame(() => el.hintsOverlay.classList.add("is-open"));
+}
+
+function closeHintsManager() {
+    if (!el.hintsOverlay || el.hintsOverlay.hidden) return;
+    el.hintsOverlay.classList.remove("is-open");
+    window.setTimeout(() => { el.hintsOverlay.hidden = true; }, 240);
+}
+
+// One row per unlocked word: the word, its reading, what it means, and the
+// switch. A word with no reading of its own (kana already reads as itself)
+// is listed too, with the switch off and out of use - leaving it out would
+// read as a word missing from the deck.
+function renderHintsList() {
+    if (!el.hintsList) return;
+
+    const reading = getReadingLabel();
+    if (el.hintsNote) el.hintsNote.textContent = tr("deck.hintsNote", { reading });
+    if (el.hintsColReading) el.hintsColReading.textContent = reading;
+
+    const { unlockedWords } = getCourseProgress();
+    const words = vocab.filter(word => unlockedWords.has(getWordSuffix(word.id)));
+    const hidden = getHiddenHints();
+
+    el.hintsList.replaceChildren();
+    if (el.hintsEmpty) el.hintsEmpty.hidden = words.length > 0;
+
+    words.forEach(word => {
+        const row = document.createElement("div");
+        row.className = "deck-hints-row";
+
+        const script = document.createElement("span");
+        script.className = "deck-hints-script";
+        script.textContent = word.script;
+
+        const hintCell = document.createElement("span");
+        hintCell.className = "deck-hints-reading";
+        hintCell.textContent = word.hint || "—";
+
+        const meaning = document.createElement("span");
+        meaning.className = "deck-hints-meaning";
+        meaning.textContent = word.meaning;
+
+        const suffix = getWordSuffix(word.id);
+        const isShown = Boolean(word.hint) && !hidden.has(suffix);
+        const toggle = document.createElement("button");
+        toggle.type = "button";
+        toggle.className = "deck-hints-switch";
+        toggle.disabled = !word.hint;
+        toggle.setAttribute("aria-pressed", String(isShown));
+        toggle.setAttribute("aria-label", tr(isShown ? "deck.hintsHideFor" : "deck.hintsShowFor", {
+            reading,
+            word: word.script
+        }));
+        toggle.addEventListener("click", () => {
+            toggleWordHint(suffix);
+            // Both lists are looking at the same switch, so both repaint: the
+            // row under the finger, and the cards behind the overlay.
+            renderHintsList();
+            renderDeck();
+        });
+
+        row.append(script, hintCell, meaning, toggle);
+        el.hintsList.appendChild(row);
+    });
+}
+
 // The filter only ever changes which cards are drawn, never any stored
 // state, so it just parks the choice and re-renders.
 function setupDeckFilter() {
@@ -430,6 +565,14 @@ function renderDeck() {
     if (Date.now() < unlockBurstEndsAt) {
         deckRenderDeferred = true;
         return;
+    }
+
+    // Only the decks that have a reading to manage show the button, and it is
+    // labelled with the word that deck's learner uses for it.
+    if (el.hintsBtn) {
+        el.hintsBtn.hidden = !languageHasHints();
+        if (!languageHasHints()) closeHintsManager();
+        else if (el.hintsBtnLabel) el.hintsBtnLabel.textContent = tr("deck.hintsButton", { reading: getReadingLabel() });
     }
 
     el.groups.replaceChildren();
@@ -609,10 +752,11 @@ function buildDeckCard(word, isUnlocked, isDisabled, keysHeld, courseKey) {
     script.textContent = word.script;
     card.appendChild(script);
 
-    if (languageHasHints() && word.romanization) {
+    const hint = getWordHint(word);
+    if (hint) {
         const roman = document.createElement("span");
         roman.className = "deck-card-roman";
-        roman.textContent = word.romanization;
+        roman.textContent = hint;
         card.appendChild(roman);
     }
 
@@ -737,9 +881,9 @@ function openWordDetail(word) {
     if (el.detailScript) el.detailScript.textContent = word.script || "";
     if (el.detailMeaning) el.detailMeaning.textContent = word.meaning || "";
     if (el.detailRoman) {
-        const romanization = languageHasHints() ? word.romanization : "";
-        el.detailRoman.textContent = romanization || "";
-        el.detailRoman.hidden = !romanization;
+        const hint = getWordHint(word);
+        el.detailRoman.textContent = hint;
+        el.detailRoman.hidden = !hint;
     }
 
     // Rebound every open rather than once at setup: the handler closes over

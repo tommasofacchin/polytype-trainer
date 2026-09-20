@@ -2673,9 +2673,9 @@ input[type="password"]:focus {
     font-weight: 600;
 }
 
-/* TEMPORARY - the two example-sentence rounds (?lab=cloze, see the "Lab round
-   types" section in js/sprint.js). Delete this block along with that section
-   if the format doesn't survive the trial. */
+/* The two fill-the-blank rounds (see "Round types 6 & 7" in js/sprint.js).
+   Both draw in every sprint; ?lab=cloze is only a way of getting a run of
+   nothing else while working on them. */
 .sprint-cloze-sentence {
     margin: 0;
     font-family: var(--font-display);
@@ -2797,9 +2797,9 @@ input[type="password"]:focus {
     transform: scale(0.98);
 }
 
-/* TEMPORARY - the sentence-building round (?lab=build, see "Round type 8" in
-   js/sprint.js). Delete this block with that section if it doesn't survive
-   the trial. */
+/* The sentence-building round - see "Round type 8" in js/sprint.js. It draws
+   in every sprint now, on the decks whose script is written with spaces
+   between words (languageWritesWordsApart there). */
 
 /* The translation being worked from. Same weight as the cloze round's own
    translation line, but it's the prompt here rather than a footnote, so it
@@ -2815,7 +2815,11 @@ input[type="password"]:focus {
 
 /* Each word of it is its own node so it can be long-pressed; the dotted rule
    is what says so. */
-.sprint-build-word {
+/* Any word a long press can look up: the sentence being read, the
+   translation under it, the words in the line being ordered. The dotted rule
+   is the only thing that says so - quiet enough not to turn a sentence into a
+   row of links. */
+.sprint-glossable {
     border-bottom: 1px dotted color-mix(in srgb, var(--text-faint) 45%, transparent);
     cursor: help;
     -webkit-user-select: none;
@@ -2893,6 +2897,17 @@ input[type="password"]:focus {
     border-color: var(--success);
     background: color-mix(in srgb, var(--success) 14%, var(--surface));
     color: var(--success);
+}
+
+/* Only the words that landed in the wrong place, for the beat before the
+   solution slides in (markMisplacedTiles in js/sprint.js). The ones that were
+   already right keep the line's own colour - marking the whole sentence red
+   says nothing about where it went wrong. */
+.sprint-build-line.is-wrong .sprint-build-tile.is-misplaced {
+    border-color: var(--danger);
+    background: color-mix(in srgb, var(--danger) 14%, var(--surface));
+    color: var(--danger);
+    animation: sprint-answer-shake 320ms ease-out;
 }
 
 /* The corrected order, once a wrong answer has had its beat. The tiles are
@@ -2982,6 +2997,7 @@ input[type="password"]:focus {
     .sprint-sentence-audio,
     .sprint-sentence-continue,
     .sprint-gloss-popup,
+    .sprint-build-line.is-wrong .sprint-build-tile.is-misplaced,
     .sprint-build-line.is-wrong .sprint-build-tile.is-solution { animation: none; }
 
     .sprint-exercise .is-dissolving { transition: none; }
@@ -3044,6 +3060,16 @@ input[type="password"]:focus {
        just a gap in the middle of the stage. */
     .sprint-sentence-after {
         margin-top: 0;
+    }
+
+    /* The bar covers the foot of the stage, so the round stops centring into
+       that strip: without this the build round's hint ("Hold a word to see
+       what it means") ends up pressed against Check, or under it. 76px is the
+       strip the button takes inside the stage - its 90px offset plus its own
+       height, less the nav clearance the page already carries - and a gap. */
+    .sprint-stage:has(.sprint-build-check),
+    .sprint-stage:has(.sprint-sentence-continue) {
+        padding-bottom: 76px;
     }
 
     /* Any transformed ancestor becomes the containing block for a fixed child,
@@ -4852,6 +4878,183 @@ button.word-detail-example:active {
     color: var(--accent-ink);
     font-size: var(--text-xs);
     font-weight: 700;
+}
+
+/* ---- Deck: per-word readings (pinyin / furigana) ------------------------- */
+
+/* Sits under the filter row on the Chinese and Japanese decks only, and opens
+   the manager below. Deliberately quiet: it is a settings door, not an action
+   on the deck itself. */
+.deck-hints-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 0 clamp(20px, 3.5vw, 30px) var(--space-3);
+    padding: 10px var(--space-4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface-soft);
+    color: var(--text-soft);
+    font: inherit;
+    font-size: var(--text-sm);
+    font-weight: 700;
+    cursor: pointer;
+    transition: background var(--transition), color var(--transition);
+}
+
+.deck-hints-btn[hidden] {
+    display: none;
+}
+
+.deck-hints-btn:hover {
+    background: var(--surface);
+    color: var(--text);
+}
+
+.deck-hints-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    width: min(100%, 520px);
+    max-height: min(86vh, 760px);
+    padding: clamp(20px, 4vw, 28px);
+    border: 1px solid var(--border);
+    border-radius: clamp(18px, 2.5vw, 24px);
+    background: var(--surface);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(14px) scale(0.97);
+    opacity: 0;
+    transition: transform var(--dur-med) var(--ease-out), opacity var(--dur-med) var(--ease-out);
+}
+
+.confirm-overlay.is-open .deck-hints-card {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+}
+
+.deck-hints-card h2 {
+    margin: 0;
+    padding-right: 36px;
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+}
+
+.deck-hints-note {
+    margin: 0 0 var(--space-2);
+    color: var(--text-soft);
+    font-size: var(--text-sm);
+    line-height: 1.45;
+}
+
+/* The four columns: word, its reading, what it means, and the switch. One
+   grid shared by the header row and every word row, so the columns line up
+   without the header having to know anything about the rows. */
+.deck-hints-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.2fr) 46px;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 9px 2px;
+    border-bottom: 1px solid var(--border);
+}
+
+.deck-hints-row.is-head {
+    border-bottom-width: 2px;
+    color: var(--text-faint);
+    font-size: var(--text-xs);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.deck-hints-row.is-head .deck-hints-col-switch {
+    text-align: center;
+}
+
+.deck-hints-list {
+    overflow-y: auto;
+    min-height: 0;
+}
+
+.deck-hints-list .deck-hints-row:last-child {
+    border-bottom: 0;
+}
+
+.deck-hints-script {
+    font-size: var(--text-lg);
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.deck-hints-reading {
+    color: var(--accent-ink);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.deck-hints-meaning {
+    color: var(--text-soft);
+    font-size: var(--text-sm);
+    overflow-wrap: anywhere;
+}
+
+/* A switch rather than the deck card's eye: the eye already means "practise
+   this word", and two different questions answered by the same glyph on the
+   same page would be one glyph too many. */
+.deck-hints-switch {
+    justify-self: center;
+    position: relative;
+    width: 42px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: var(--border-strong);
+    cursor: pointer;
+    transition: background var(--transition);
+}
+
+.deck-hints-switch::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--surface);
+    transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.deck-hints-switch[aria-pressed="true"] {
+    background: var(--accent);
+}
+
+.deck-hints-switch[aria-pressed="true"]::after {
+    transform: translateX(18px);
+}
+
+.deck-hints-switch:disabled {
+    opacity: 0.35;
+    cursor: default;
+}
+
+.deck-hints-empty {
+    margin: var(--space-3) 0 0;
+    color: var(--text-faint);
+    font-size: var(--text-sm);
+}
+
+.deck-hints-empty[hidden] {
+    display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .deck-hints-card,
+    .deck-hints-switch::after { transition: none; }
 }
 
 .deck-card-meaning {
@@ -6965,9 +7168,12 @@ body > main {
    exists twice. Baseline-ish alignment rather than centred: the pill should
    sit against the name, which is the taller of the two text lines. */
 
+/* Centred, not bottom-aligned: the greeting is two lines and the boost pill
+   beside it is one, and hanging the pill off the bottom edge of the taller
+   block reads as a pill that slipped rather than one that lines up. */
 .home-greeting {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: space-between;
     gap: 12px;
     margin-bottom: 16px;
@@ -7002,16 +7208,14 @@ body > main {
 .home-boost-pill {
     display: none;
     flex: 0 0 auto;
-    /* Clears the descender of the name beside it, so the two read as one row
-       rather than the pill hanging low. */
-    margin-bottom: 2px;
 }
 
 @media (max-width: 859px) {
-    /* Scoped to Home, the only page with somewhere better to put it. Every
-       other page keeps the header pill even at this width: cramped or not,
-       the topbar is the only place they say the multiplier is running. */
-    body[data-tab="home"] .app-shell-stats .app-shell-stat-boost {
+    /* On a phone the multiplier lives on Home and nowhere else: the header has
+       no room for a chip this wide next to the other stats, and the countdown
+       is something you go and look at rather than something every screen has
+       to carry. Desktop keeps the header pill on every tab - there it fits. */
+    .app-shell-stats .app-shell-stat-boost {
         display: none;
     }
 

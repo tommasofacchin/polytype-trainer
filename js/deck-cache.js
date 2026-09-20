@@ -78,6 +78,7 @@
                     id: record[columns.wordId]?.trim() || `w-${index}`,
                     script: record[columns.script] || "",
                     romanization: record[columns.romanization] || "",
+                    hint: record[columns.hint] || "",
                     meaning: record[columns.meaning] || record[columns.italianMeaning] || ""
                 };
             })

@@ -260,10 +260,10 @@ function renderDemoSprint() {
     });
 }
 
-// TEMPORARY: the way into the example-sentence rounds while they're being
-// tried out. ?lab=<mode> is what turns one family on, and it runs a short
-// session of nothing else. Delete this together with the sentence-round lab
-// handling in js/sprint.js.
+// TEMPORARY: a way of getting one family of sentence rounds on its own, for
+// working on them - they all draw in a normal sprint now. ?lab=<mode> turns
+// one family on and runs a short session of nothing else. Delete this
+// together with the sentence-round lab handling in js/sprint.js.
 const LAB_CARDS = [
     {
         mount: "home-lab-cloze",

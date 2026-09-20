@@ -433,6 +433,24 @@ function languageHasHints() {
     return settings.language === "chinese" || settings.language === "japanese";
 }
 
+// The reading line (pinyin / furigana) for a word, or "" for none - a word
+// that has no reading of its own, or one the player has switched off from the
+// Deck page's reading manager (js/deck.js's HIDDEN_HINTS_KEY; see that file
+// for why it lives in localStorage rather than the profile).
+function getWordHint(item) {
+    if (!languageHasHints() || !item?.hint) return "";
+    return getHiddenHintSuffixes().has(getWordSuffix(item.id)) ? "" : item.hint;
+}
+
+function getHiddenHintSuffixes() {
+    try {
+        const map = JSON.parse(localStorage.getItem("polytype-hidden-hints")) || {};
+        return new Set(map[settings.language] || []);
+    } catch {
+        return new Set();
+    }
+}
+
 // Romanization hints are always shown when the language has them (Pinyin/
 // Romaji) - no per-user toggle anymore.
 function updateRomajiUI() {
@@ -535,6 +553,7 @@ function parseDeckCsv(csvText, columns) {
                 id: record[columns.wordId]?.trim() || `${settings.deckName}-${index + 1}`,
                 script,
                 romanization: record[columns.romanization]?.trim() || "",
+                hint: record[columns.hint]?.trim() || "",
                 meaning: getRecordMeaning(record, columns),
                 unlockLevel: Number.isFinite(unlockLevel) && unlockLevel > 0 ? unlockLevel : 1
             };
@@ -699,10 +718,11 @@ function spawnNextRow() {
 
     colScript.append(scriptText);
 
-    if (languageHasHints() && item.romanization) {
+    const hint = getWordHint(item);
+    if (hint) {
         const romanizationHint = document.createElement("span");
         romanizationHint.className = "romanization-hint";
-        romanizationHint.textContent = `(${item.romanization})`;
+        romanizationHint.textContent = `(${hint})`;
         colScript.append(romanizationHint);
     }
 

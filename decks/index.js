@@ -9,6 +9,10 @@ window.DECK_INDEX = [
     columns: {
       script: "chinese",
       romanization: "pinyin",
+      // What the reading line under the word shows. Chinese reads it off the
+      // same column it types from; Japanese has a furigana column of its own,
+      // because romaji is for typing and kana is for reading.
+      hint: "pinyin",
       meaning: "english",
       italianMeaning: "italian",
       wordId: "word_id",
@@ -57,6 +61,7 @@ window.DECK_INDEX = [
     columns: {
       script: "japanese",
       romanization: "romaji",
+      hint: "furigana",
       meaning: "english",
       italianMeaning: "italian",
       wordId: "word_id",

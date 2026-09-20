@@ -51,13 +51,13 @@
     const COUNTDOWN_STEP_DELAY = 780;
     const COUNTDOWN_GO_DELAY = 620;
 
-    // "cloze" (fill the blank, pick from four) and "clozeType" (fill it from
-    // the keyboard) both run off decks/examples.js - see the sentence-round
-    // section below for how that file is loaded and what happens on a round
-    // drawn before it lands. "build" (put the scrambled sentence back in
-    // order) reads the same file but is lab-only while it's being tried out,
-    // which is why it isn't in this list.
-    const ALL_ROUND_TYPES = ["mc", "match", "audio", "trueFalse", "type", "cloze", "clozeType"];
+    // The last three are the sentence rounds and all run off decks/examples.js:
+    // "cloze" (fill the blank, pick from four), "clozeType" (fill it from the
+    // keyboard) and "build" (put the scrambled sentence back in order). See
+    // the sentence-round section below for how that file is loaded, what
+    // happens on a round drawn before it lands, and what the tiles of "build"
+    // are cut from on a deck whose script has no spaces (getBuildText).
+    const ALL_ROUND_TYPES = ["mc", "match", "audio", "trueFalse", "type", "cloze", "clozeType", "build"];
     // TEMPORARY: ?lab=cloze / ?lab=build (the Home debug cards, gated on the
     // same handle as the other debug cards) run a short session of nothing but
     // one family of sentence rounds, for looking at them on their own. Delete
@@ -318,6 +318,11 @@
         // excluded entirely rather than degrading awkwardly mid-round.
         state.availableRoundTypes = ALL_ROUND_TYPES.filter(type => {
             if (type === "audio" && !audioBaseUrl) return false;
+            // Typing a word in hanzi is not something a keyboard does by hand,
+            // so Chinese doesn't get the round that asks for one. The four
+            // options of "cloze" ask the same thing without the typing, and
+            // stay.
+            if (type === "clozeType" && activeLanguage === "chinese") return false;
             if (type !== "type" && state.unlocked.length < 2) return false;
             return true;
         });
@@ -411,10 +416,10 @@
         return type === "cloze" || type === "clozeType" || type === "build";
     }
 
-    // decks/examples.js is fetched in the background (it's 1.2MB, and four of
-    // the six round types have no use for it), so an early round can come up
-    // before it has landed. Rather than show a sentence round with nothing to
-    // blank out, draw again from the types that are ready - by the second or
+    // decks/examples.js is fetched in the background (it's 1.2MB, and the five
+    // non-sentence round types have no use for it), so an early round can come
+    // up before it has landed. Rather than show a sentence round with no
+    // sentence, draw again from the types that are ready - by the second or
     // third round it always is. The lab is the exception: it has nothing else
     // to draw, which is why init() waits for the file there.
     function pickRoundType() {
@@ -1111,15 +1116,18 @@
             <div class="sprint-exercise sprint-exercise-cloze">
                 <span class="sprint-exercise-kicker">${tr(isTypeMode ? "sprint.cloze.typePrompt" : "sprint.cloze.choicePrompt")}</span>
                 <p class="sprint-cloze-sentence"></p>
-                <p class="sprint-cloze-translation">${escapeHtml(example.translation || "")}</p>
+                <p class="sprint-cloze-translation"></p>
                 <div class="sprint-cloze-answer-area"></div>
             </div>
         `;
 
-        // Built as nodes, not as an innerHTML string: the sentences are data,
-        // and a word containing "<" must never become markup (same reasoning
-        // as renderExampleText in js/deck.js).
+        // Both lines are written out word by word (appendGlossableWords), so
+        // a held finger anywhere in either of them opens that word's gloss -
+        // the sentence is the round's reading practice, and a word in it you
+        // can't read is exactly where help is wanted.
         const sentenceEl = el.exerciseRoot.querySelector(".sprint-cloze-sentence");
+        appendGlossableWords(el.exerciseRoot.querySelector(".sprint-cloze-translation"), example.translation, "source");
+
         const blank = document.createElement("span");
         blank.className = "sprint-cloze-blank";
         // The gap is sized off the hidden word, the way a printed exercise
@@ -1127,7 +1135,9 @@
         // one the sentence gives away. Clamped so one long compound can't push
         // the sentence off the stage.
         blank.style.setProperty("--blank-len", String(Math.min(12, Math.max(3, parts.answer.length))));
-        sentenceEl.append(document.createTextNode(parts.before), blank, document.createTextNode(parts.after));
+        appendGlossableWords(sentenceEl, parts.before, "target");
+        sentenceEl.appendChild(blank);
+        appendGlossableWords(sentenceEl, parts.after, "target");
 
         const area = el.exerciseRoot.querySelector(".sprint-cloze-answer-area");
 
@@ -1139,6 +1149,10 @@
             const answer = document.createElement("mark");
             answer.className = "sprint-cloze-answer";
             answer.textContent = parts.answer;
+            // Pressable like the rest of the sentence now that it is part of
+            // it - the word the round was about is the likeliest one to want
+            // to look up once it is on screen.
+            attachGlossPress(answer, stripEdgePunctuation(parts.answer), "target");
             blank.replaceWith(answer);
 
             holdSentenceRound({ mode, word, isCorrect, audioUrl: getExampleAudioUrl(word, number), area });
@@ -1264,10 +1278,96 @@
         return { tokens };
     }
 
-    // A script written without spaces between words (Chinese, Japanese) comes
-    // out of that split as one tile holding the whole sentence, which
-    // BUILD_MIN_TOKENS then refuses - so those decks simply never draw this
-    // round. Segmenting them is a different job from this one.
+    // What the tiles are cut from. A script written without spaces between
+    // words gives splitBuildTokens nothing to split on - the whole sentence
+    // comes back as one tile - so those decks build the sentence out of its
+    // reading instead, which is spaced and is what a learner at this level is
+    // reading anyway: pinyin for Chinese, kana for Japanese (the data carries
+    // romaji, and toKana turns it into the furigana the round shows).
+    function getBuildText(example) {
+        if (activeLanguage === "chinese") return example.romanization || "";
+        if (activeLanguage === "japanese") return toKana(example.romanization || "");
+        return example.text;
+    }
+
+    // Hepburn romaji -> hiragana, for the Japanese sentence tiles. The deck's
+    // own words don't come through here - decks/japanese_a1.csv carries a
+    // furigana column, so a reading that needs fixing can be fixed in the data
+    // - but there is no such column for the 1500 example sentences, and this
+    // table is what the column itself was generated with.
+    //
+    // Two rules do most of the work: "n" is ん unless it opens a syllable, and
+    // a doubled consonant is っ. The third is grammar rather than sound - a
+    // word that is only "wa", "e" or "o" is a particle, written は / へ / を.
+    const KANA_PARTICLES = { wa: "は", e: "へ", o: "を" };
+    const KANA_TABLE = [
+        ["kya", "きゃ"], ["kyu", "きゅ"], ["kyo", "きょ"], ["gya", "ぎゃ"], ["gyu", "ぎゅ"], ["gyo", "ぎょ"],
+        ["sha", "しゃ"], ["shu", "しゅ"], ["sho", "しょ"], ["she", "しぇ"], ["shi", "し"],
+        ["cha", "ちゃ"], ["chu", "ちゅ"], ["cho", "ちょ"], ["che", "ちぇ"], ["chi", "ち"],
+        ["ja", "じゃ"], ["ju", "じゅ"], ["jo", "じょ"], ["je", "じぇ"], ["ji", "じ"],
+        ["nya", "にゃ"], ["nyu", "にゅ"], ["nyo", "にょ"], ["hya", "ひゃ"], ["hyu", "ひゅ"], ["hyo", "ひょ"],
+        ["bya", "びゃ"], ["byu", "びゅ"], ["byo", "びょ"], ["pya", "ぴゃ"], ["pyu", "ぴゅ"], ["pyo", "ぴょ"],
+        ["mya", "みゃ"], ["myu", "みゅ"], ["myo", "みょ"], ["rya", "りゃ"], ["ryu", "りゅ"], ["ryo", "りょ"],
+        ["tsu", "つ"], ["dzu", "づ"], ["fu", "ふ"],
+        ["ka", "か"], ["ki", "き"], ["ku", "く"], ["ke", "け"], ["ko", "こ"],
+        ["ga", "が"], ["gi", "ぎ"], ["gu", "ぐ"], ["ge", "げ"], ["go", "ご"],
+        ["sa", "さ"], ["su", "す"], ["se", "せ"], ["so", "そ"],
+        ["za", "ざ"], ["zu", "ず"], ["ze", "ぜ"], ["zo", "ぞ"],
+        ["ta", "た"], ["te", "て"], ["to", "と"], ["ti", "てぃ"], ["tu", "とぅ"],
+        ["da", "だ"], ["de", "で"], ["do", "ど"], ["di", "ぢ"], ["du", "づ"],
+        ["na", "な"], ["ni", "に"], ["nu", "ぬ"], ["ne", "ね"], ["no", "の"],
+        ["ha", "は"], ["hi", "ひ"], ["he", "へ"], ["ho", "ほ"],
+        ["ba", "ば"], ["bi", "び"], ["bu", "ぶ"], ["be", "べ"], ["bo", "ぼ"],
+        ["pa", "ぱ"], ["pi", "ぴ"], ["pu", "ぷ"], ["pe", "ぺ"], ["po", "ぽ"],
+        ["fa", "ふぁ"], ["fi", "ふぃ"], ["fe", "ふぇ"], ["fo", "ふぉ"],
+        ["ma", "ま"], ["mi", "み"], ["mu", "む"], ["me", "め"], ["mo", "も"],
+        ["ya", "や"], ["yu", "ゆ"], ["yo", "よ"],
+        ["ra", "ら"], ["ri", "り"], ["ru", "る"], ["re", "れ"], ["ro", "ろ"],
+        ["wa", "わ"], ["wo", "を"], ["wi", "うぃ"], ["we", "うぇ"],
+        ["a", "あ"], ["i", "い"], ["u", "う"], ["e", "え"], ["o", "お"]
+    ];
+    const KANA_DOUBLES = "kgsztdhbpmyrwcfj";
+
+    // Only the letters are touched: the marks around the flashcard's own word,
+    // the spaces the tiles are cut on and the punctuation all stay exactly
+    // where they were, so what comes out is the same sentence in kana.
+    const KANA_IDIOMS = { konnichiwa: "こんにちは", konbanwa: "こんばんは" };
+
+    function toKana(romaji) {
+        return String(romaji || "")
+            .toLowerCase()
+            // A hyphen inside a word is romaji's own seam ("tanaka-san"), and
+            // kana has no use for it.
+            .replace(/([a-z])-([a-z])/g, "$1$2")
+            .replace(/[a-z]+/g, word => KANA_IDIOMS[word] || KANA_PARTICLES[word] || wordToKana(word));
+    }
+
+    function wordToKana(text) {
+        let out = "";
+        let i = 0;
+        while (i < text.length) {
+            const ch = text[i];
+            if (ch === "n") {
+                const next = text[i + 1] || "";
+                // `next` is empty at the end of a word, where there is nothing
+                // left for the n to open - and "".includes() is true for every
+                // string, so the emptiness has to be asked about first.
+                const opensSyllable = Boolean(next) &&
+                    ("aiueo".includes(next) || (next === "y" && "aiueo".includes(text[i + 2] || "")));
+                if (!opensSyllable) { out += "ん"; i += 1; continue; }
+            }
+            if (ch !== "n" && KANA_DOUBLES.includes(ch) && text[i + 1] === ch) {
+                out += "っ";
+                i += 1;
+                continue;
+            }
+            const match = KANA_TABLE.find(([romaji]) => text.startsWith(romaji, i));
+            if (!match) { i += 1; continue; }
+            out += match[1];
+            i += match[0].length;
+        }
+        return out;
+    }
 
     // The gloss a long-press shows, looked up in both directions: the press
     // lands either on a target-language tile (wanted: what it means) or on a
@@ -1407,8 +1507,38 @@
         return true;
     }
 
+    // Every sentence on screen is written out word by word, each word its own
+    // node, so a held finger anywhere in it answers - the sentence being read,
+    // the translation under it, the line being put back in order. The only
+    // text deliberately left out is the answer controls themselves: a long
+    // press on one of four options would just hand over the round.
+    //
+    // Built as nodes, never as markup: the sentences are data, and a word
+    // containing "<" must not become an element (same reasoning as
+    // renderExampleText in js/deck.js). Punctuation and capitals stay as
+    // written - it is a sentence being read, not a puzzle - and splitting on a
+    // captured separator keeps the spaces between the words as text.
+    function appendGlossableWords(parent, text, direction) {
+        String(text || "").split(/(\s+)/).forEach(chunk => {
+            if (!chunk) return;
+            if (!chunk.trim()) {
+                parent.append(document.createTextNode(chunk));
+                return;
+            }
+            parent.appendChild(buildGlossableWord(chunk, direction));
+        });
+    }
+
+    function buildGlossableWord(text, direction) {
+        const span = document.createElement("span");
+        span.className = "sprint-glossable";
+        span.textContent = text;
+        attachGlossPress(span, stripEdgePunctuation(text), direction);
+        return span;
+    }
+
     function renderBuildRound(forcedWord) {
-        const picked = pickSentence(forcedWord, example => splitBuildTokens(example.text));
+        const picked = pickSentence(forcedWord, example => splitBuildTokens(getBuildText(example)));
         // Nothing among the unlocked words has a sentence this round can use
         // (all of them too short, too long, or unwritten). The type round
         // needs nothing but the word itself, so it stands in - the alternative
@@ -1440,22 +1570,7 @@
         const area = el.exerciseRoot.querySelector(".sprint-build-answer-area");
         const checkBtn = el.exerciseRoot.querySelector(".sprint-build-check");
 
-        // The translation keeps its punctuation and capitals - it is a
-        // sentence being read, not a puzzle - but every word is its own node
-        // so it can be pressed. Splitting on a captured separator is what
-        // keeps the spaces between them as text.
-        String(example.translation || "").split(/(\s+)/).forEach(chunk => {
-            if (!chunk) return;
-            if (!chunk.trim()) {
-                translationEl.append(document.createTextNode(chunk));
-                return;
-            }
-            const span = document.createElement("span");
-            span.className = "sprint-build-word";
-            span.textContent = chunk;
-            attachGlossPress(span, stripEdgePunctuation(chunk), "source");
-            translationEl.appendChild(span);
-        });
+        appendGlossableWords(translationEl, example.translation, "source");
 
         // Tiles are made once and moved between the two rows rather than
         // rebuilt on each tap: a sentence using the same word twice then keeps
@@ -1499,16 +1614,34 @@
         const linePadding = Number.parseFloat(getComputedStyle(line).paddingBottom) || 0;
         line.style.minHeight = `${bank.offsetHeight + linePadding}px`;
 
+        // Red on the words that are in the wrong place, and only those: the
+        // ones that landed right are left alone, so what the eye picks out is
+        // the part that actually needs fixing rather than the whole sentence
+        // reading as a failure. Compared by word rather than by tile, so a
+        // sentence using the same word twice counts either of them as right
+        // in either of its places.
+        function markMisplacedTiles() {
+            Array.from(line.children).forEach((tile, index) => {
+                const wanted = parts.tokens[index] || "";
+                if (normalizeString(tile.dataset.token) !== normalizeString(wanted)) {
+                    tile.classList.add("is-misplaced");
+                }
+            });
+        }
+
         // Pulls every tile into the line in the sentence's own order. Shown
         // only for a wrong answer, where the line is otherwise the player's
         // own guess with a red edge and nothing to compare it against - and
-        // the recording about to play is reading exactly this.
+        // the recording about to play is reading exactly this. The red goes
+        // as the words move: once they are in the right order, nothing in the
+        // line is wrong any more.
         function revealSolution() {
             const remaining = tiles.slice();
             parts.tokens.forEach(token => {
                 const index = remaining.findIndex(tile => tile.dataset.token === token);
                 if (index === -1) return;
                 const [tile] = remaining.splice(index, 1);
+                tile.classList.remove("is-misplaced");
                 tile.classList.add("is-solution");
                 line.appendChild(tile);
             });
@@ -1524,6 +1657,7 @@
             // so what is compared is the words in order and nothing else.
             const isCorrect = normalizeString(answer.join("")) === normalizeString(parts.tokens.join(""));
             line.classList.add(isCorrect ? "is-correct" : "is-wrong");
+            if (!isCorrect) markMisplacedTiles();
 
             holdSentenceRound({
                 mode: "build", word, isCorrect,

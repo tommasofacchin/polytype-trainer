@@ -33,8 +33,37 @@
             <button type="button" class="deck-filter-btn" role="tab" aria-selected="false" data-deck-filter="locked" data-i18n="deck.filterLocked">Locked</button>
         </div>
 
+        <!-- Chinese and Japanese only (js/deck.js shows it from
+             languageHasHints): opens the per-word reading manager below. -->
+        <button type="button" id="deck-hints-btn" class="deck-hints-btn" hidden>
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7V5h16v2"/><path d="M9 19h6"/><path d="M12 5v14"/></svg>
+            <span id="deck-hints-btn-label">Readings</span>
+        </button>
+
         <div id="deck-groups" class="deck-groups"></div>
     </main>
+
+    <!-- Every unlocked word with its reading, and a switch per row. Turning one
+         off drops the reading line from that word everywhere it is shown -
+         the deck card, its detail card, and the Trainer rows. -->
+    <div id="deck-hints-overlay" class="confirm-overlay deck-hints-overlay" role="dialog" aria-modal="true" aria-labelledby="deck-hints-title" hidden>
+        <div class="confirm-overlay-backdrop" data-hints-close></div>
+        <div class="deck-hints-card" role="document">
+            <button type="button" class="word-detail-close" data-hints-close aria-label="Close" data-i18n-aria-label="common.close">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+            </button>
+            <h2 id="deck-hints-title" data-i18n="deck.hintsTitle">Readings</h2>
+            <p id="deck-hints-note" class="deck-hints-note"></p>
+            <div class="deck-hints-row is-head">
+                <span data-i18n="deck.hintsColWord">Word</span>
+                <span id="deck-hints-col-reading">Reading</span>
+                <span data-i18n="deck.hintsColMeaning">Meaning</span>
+                <span class="deck-hints-col-switch" data-i18n="deck.hintsColShow">Show</span>
+            </div>
+            <div id="deck-hints-list" class="deck-hints-list"></div>
+            <p id="deck-hints-empty" class="deck-hints-empty" data-i18n="deck.hintsEmpty" hidden>Unlock a word first.</p>
+        </div>
+    </div>
 
     <div id="unlock-confirm-overlay" class="confirm-overlay" role="dialog" aria-modal="true" aria-labelledby="unlock-confirm-title" hidden>
         <div class="confirm-overlay-backdrop" data-unlock-cancel></div>
