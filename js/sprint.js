@@ -911,11 +911,10 @@
     // gone before anyone could reach it.
     //
     // `area` is the block the answer was given in (the four options, the
-    // keyboard, the word bank) and `sentence` the line that was being worked
-    // on. Between them they are the whole reveal: the area hands its space to
-    // Continue, the play button lands right above the sentence. `onSettle`
-    // runs a beat before either, for a round with a correction to put up.
-    function holdSentenceRound({ mode, word, isCorrect, audioUrl, area, sentence, onSettle = null }) {
+    // keyboard, the word bank); it hands its space to Continue, while the play
+    // button goes to the top of the column. `onSettle` runs a beat before
+    // either, for a round with a correction to put up.
+    function holdSentenceRound({ mode, word, isCorrect, audioUrl, area, onSettle = null }) {
         finishSingleShotRound(mode, word, isCorrect, advance => {
             let advanced = false;
             const handOver = () => {
@@ -943,40 +942,39 @@
                         handOver();
                         return;
                     }
-                    showSentenceReveal(area, sentence, audioUrl, handOver);
+                    showSentenceReveal(area, audioUrl, handOver);
                     playAudioUrl(audioUrl);
                 }, SENTENCE_DISSOLVE_DELAY);
             }, SENTENCE_VERDICT_DELAY);
         });
     }
 
-    // The reveal, in one move: the prompt goes, a play button takes its place
-    // directly above the sentence, and the answer controls hand their block -
-    // and its exact height - to a single Continue button at the bottom of it.
-    // Everything still on screen glides from where it was to where that
-    // leaves it (captureGlide), so the line being read out travels instead of
-    // jumping, and the two new controls arrive on their own beat behind it.
-    function showSentenceReveal(area, sentence, audioUrl, onContinue) {
-        const exercise = sentence.closest(".sprint-exercise") || el.exerciseRoot;
-        const kicker = exercise.querySelector(".sprint-exercise-kicker");
-        const settle = captureGlide(Array.from(exercise.children).filter(node => node !== area && node !== kicker));
-
-        // The prompt asked for an answer that has now been given. It goes for
-        // real - no longer just hidden to hold its space, because the glide is
-        // what keeps the column from lurching now.
-        kicker?.remove();
+    // The reveal, in one move: a play button arrives at the top of the column,
+    // above the prompt, and the answer controls hand their block - and its
+    // exact height - to a single Continue button. Everything already on screen
+    // glides from where it was to where that leaves it (captureGlide), so the
+    // line being read out travels instead of jumping, and the two new controls
+    // arrive on their own beat behind it.
+    function showSentenceReveal(area, audioUrl, onContinue) {
+        const exercise = el.exerciseRoot.querySelector(".sprint-exercise");
+        if (!exercise) return;
+        const settle = captureGlide(Array.from(exercise.children).filter(node => node !== area));
 
         // Pinned before the swap: the block the controls occupied stays as
         // tall as it was, so the sentence doesn't drop down the stage the
-        // moment it starts being read out - and Continue, sitting at the
-        // bottom of that block, lands where the thumb already is.
+        // moment it starts being read out. Continue sits at the bottom of that
+        // block on a wide screen, and leaves it for the foot of the phone
+        // screen on a narrow one (see .sprint-sentence-continue in style.css).
         area.style.minHeight = `${area.offsetHeight}px`;
         area.className = "sprint-sentence-after";
         area.innerHTML = `<button type="button" class="sprint-sentence-continue">${tr("sprint.sentence.continue")}</button>`;
         area.querySelector(".sprint-sentence-continue").addEventListener("click", onContinue);
 
-        // No play button without a clip to play (a deck with no audio host
-        // configured) - a dead button over the sentence reads as broken.
+        // Above the prompt rather than beside the sentence: it is the one
+        // control that belongs to the line itself, and the top of the column
+        // is the only place it can take without pushing the line around. No
+        // button at all without a clip to play (a deck with no audio host
+        // configured) - a dead button up there reads as broken.
         if (audioUrl) {
             const slot = document.createElement("div");
             slot.className = "sprint-sentence-audio";
@@ -986,7 +984,7 @@
                 </button>
             `;
             slot.querySelector("button").addEventListener("click", () => playAudioUrl(audioUrl));
-            sentence.parentNode.insertBefore(slot, sentence);
+            exercise.prepend(slot);
         }
 
         settle();
@@ -1143,12 +1141,7 @@
             answer.textContent = parts.answer;
             blank.replaceWith(answer);
 
-            holdSentenceRound({
-                mode, word, isCorrect,
-                audioUrl: getExampleAudioUrl(word, number),
-                area,
-                sentence: sentenceEl
-            });
+            holdSentenceRound({ mode, word, isCorrect, audioUrl: getExampleAudioUrl(word, number), area });
         }
 
         if (isTypeMode) renderClozeTypeInput(area, word, parts, reveal);
@@ -1536,7 +1529,6 @@
                 mode: "build", word, isCorrect,
                 audioUrl: getExampleAudioUrl(word, number),
                 area,
-                sentence: line,
                 onSettle: () => { if (!isCorrect) revealSolution(); }
             });
         });

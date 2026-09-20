@@ -5,7 +5,12 @@ const maxUploadAvatarBytes = 2 * 1024 * 1024;
 const avatarCanvasSize = 512;
 const sfxMutedKey = "polytype-sfx-muted";
 let isSavingProfile = false;
-let isUploadingAvatar = false;
+let isPreparingAvatar = false;
+// The cropped photo waiting for Save. Picking one only ever gets this far:
+// nothing leaves the device until the form is submitted, so a wrong file
+// picked by accident is undone by walking away rather than by uploading a
+// second photo over it.
+let pendingAvatarDataUrl = null;
 
 function tr(key, params = {}) {
     return window.PolytypeI18n?.t?.(key, params) || key;
@@ -349,7 +354,7 @@ function setupProfileControls() {
         avatarInput.addEventListener("change", async () => {
             const file = avatarInput.files?.[0];
             avatarInput.value = "";
-            if (file) await uploadAvatar(file);
+            if (file) await stageAvatar(file);
         });
     }
 }
@@ -390,7 +395,12 @@ function setupFirebaseSync() {
             handleInput.value = authState.profile?.handle || "";
         }
 
-        renderAvatar(document.getElementById("profile-page-avatar"), authState.profile);
+        // A photo waiting for Save keeps the avatar: the stored one coming
+        // back with any routine profile update (XP, streak, anything) would
+        // otherwise wipe the choice off the screen while it is still the thing
+        // about to be saved.
+        if (pendingAvatarDataUrl) renderPendingAvatar();
+        else renderAvatar(document.getElementById("profile-page-avatar"), authState.profile);
 
         if (authState.user) refreshPasswordSectionCopy();
 
@@ -435,6 +445,18 @@ async function saveProfile() {
         await firebaseClient.setDisplayName(name);
         stage = "handle";
         await firebaseClient.setUserHandle(handle);
+        // Last, and only if one is waiting: the photo is the slow part of the
+        // save, and the name and handle shouldn't sit behind an upload. The
+        // status line here is progress, not a receipt - it's cleared either
+        // way, and the avatar on screen is what says the photo landed.
+        if (pendingAvatarDataUrl) {
+            stage = "avatar";
+            setEditStatus(tr("profile.uploadingPhoto"));
+            await firebaseClient.uploadProfileAvatar(pendingAvatarDataUrl);
+            pendingAvatarDataUrl = null;
+            document.getElementById("profile-page-avatar")?.classList.remove("is-pending");
+            setEditStatus("");
+        }
         // Repaint once, now, with the canonical values we just saved (handle
         // lowercased / @-stripped by normalizeHandleInput) so the fields show
         // what actually got stored rather than the raw typed text - the
@@ -450,29 +472,40 @@ async function saveProfile() {
     }
 }
 
-async function uploadAvatar(file) {
-    const firebaseClient = window.PolytypeFirebase;
-
-    if (!firebaseClient?.isSignedIn?.()) {
+// Picking a photo crops it and puts it straight into the avatar, and stops
+// there. That preview *is* the feedback - it's the new face, on the page,
+// where the old one was - so there is nothing for a line of text to add.
+// Saving it is saveProfile's job, on Save, with the rest of the form.
+async function stageAvatar(file) {
+    if (!window.PolytypeFirebase?.isSignedIn?.()) {
         setEditStatus(tr("profile.signInToEdit"), "error");
         return;
     }
 
-    isUploadingAvatar = true;
+    isPreparingAvatar = true;
     updateEditControls();
     setEditStatus(tr("profile.preparingPhoto"));
 
     try {
-        const imageDataUrl = await prepareAvatarDataUrl(file);
-        setEditStatus(tr("profile.uploadingPhoto"));
-        await firebaseClient.uploadProfileAvatar(imageDataUrl);
-        setEditStatus(tr("profile.photoSaved"), "success");
+        pendingAvatarDataUrl = await prepareAvatarDataUrl(file);
+        setEditStatus("");
+        renderPendingAvatar();
     } catch (error) {
-        setEditStatus(getProfileErrorMessage(error), "error");
+        setEditStatus(getProfileErrorMessage(error, "avatar"), "error");
     } finally {
-        isUploadingAvatar = false;
+        isPreparingAvatar = false;
         updateEditControls();
     }
+}
+
+// The staged photo, wearing the ring that says Save still has it to store
+// (.profile-avatar.is-pending in style.css).
+function renderPendingAvatar() {
+    const element = document.getElementById("profile-page-avatar");
+    if (!element || !pendingAvatarDataUrl) return;
+
+    renderAvatar(element, { avatarUrl: pendingAvatarDataUrl });
+    element.classList.add("is-pending");
 }
 
 async function prepareAvatarDataUrl(file) {
@@ -568,7 +601,7 @@ function renderAvatar(element, profile) {
 
 function updateEditControls() {
     const signedIn = Boolean(window.PolytypeFirebase?.isSignedIn?.());
-    const busy = isSavingProfile || isUploadingAvatar;
+    const busy = isSavingProfile || isPreparingAvatar;
     const nameInput = document.getElementById("profile-name-input");
     const handleInput = document.getElementById("profile-handle-input");
     const saveButton = document.getElementById("profile-save-btn");
@@ -604,8 +637,15 @@ function showToast(message) {
 
 function getProfileErrorMessage(error, context = "handle") {
     const code = error?.code || "";
+    // Which field a rejected-input error is about depends on how far the save
+    // had got (saveProfile's `stage`), since all three go up one after another.
+    const invalidInput = {
+        name: "profile.nameInvalid",
+        handle: "profile.handleInvalid",
+        avatar: "profile.photoUnsupported"
+    };
     const messages = {
-        "api/400": context === "name" ? tr("profile.nameInvalid") : tr("profile.handleInvalid"),
+        "api/400": tr(invalidInput[context] || invalidInput.handle),
         "api/409": tr("profile.handleTaken"),
         "api/413": tr("profile.photoTooLarge"),
         "api/503": tr("profile.storageUnavailable"),
