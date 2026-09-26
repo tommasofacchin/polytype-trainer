@@ -9,2510 +9,4014 @@
 // makes this work for inflected forms, multi-word entries ("vær så snill"),
 // and scripts with no spaces to match on.
 //
-// Currently the first five words of every course (hello / thanks / yes / no /
-// please) - deliberately a sample while the card's design is being reviewed.
+// The card shows the first three sentences of a word and no more. Norwegian
+// and Chinese carry three further ones after those: never shown on the card,
+// they are only there so the sprint's sentence rounds (js/sprint.js) have six
+// to draw from instead of the same three over and over. Their audio follows
+// the same numbering (nor_003_4.mp3 ... _6).
+//
 // A word with no entry here still opens; it just shows the "coming soon" note.
 window.DECK_EXAMPLES = {
   norwegian: {
     1: [
       { text: "*Hei*, hvordan går det?", translation: "Hi, how are you?" },
       { text: "*Hei* på deg!", translation: "Hello there!" },
-      { text: "Hun sa *hei* til læreren.", translation: "She said hi to the teacher." }
+      { text: "Hun sa *hei* til læreren.", translation: "She said hi to the teacher." },
+      { text: "*Hei*, jeg heter Ola.", translation: "Hi, my name is Ola." },
+      { text: "Barna sa *hei* til naboen.", translation: "The children said hi to the neighbour." },
+      { text: "*Hei*, er du ny her?", translation: "Hi, are you new here?" }
     ],
     2: [
       { text: "*Takk* for hjelpen!", translation: "Thanks for the help!" },
       { text: "Tusen *takk* for maten.", translation: "Thank you very much for the meal." },
-      { text: "Ja *takk*, gjerne.", translation: "Yes please, gladly." }
+      { text: "Ja *takk*, gjerne.", translation: "Yes please, gladly." },
+      { text: "*Takk* for i går!", translation: "Thanks for yesterday!" },
+      { text: "*Takk* for gaven.", translation: "Thanks for the gift." },
+      { text: "Nei *takk*, jeg har nok.", translation: "No thanks, I have enough." }
     ],
     3: [
       { text: "*Ja*, det stemmer.", translation: "Yes, that's right." },
       { text: "Vil du ha kaffe? *Ja*, takk.", translation: "Do you want coffee? Yes, please." },
-      { text: "Hun svarte *ja* med en gang.", translation: "She answered yes right away." }
+      { text: "Hun svarte *ja* med en gang.", translation: "She answered yes right away." },
+      { text: "*Ja*, jeg kommer i morgen.", translation: "Yes, I'm coming tomorrow." },
+      { text: "Hun sa *ja* til jobben.", translation: "She said yes to the job." },
+      { text: "*Ja*, det er min bil.", translation: "Yes, that's my car." }
     ],
     4: [
       { text: "*Nei*, jeg kan ikke i dag.", translation: "No, I can't today." },
       { text: "*Nei* takk, jeg er mett.", translation: "No thanks, I'm full." },
-      { text: "Han sa *nei* til tilbudet.", translation: "He said no to the offer." }
+      { text: "Han sa *nei* til tilbudet.", translation: "He said no to the offer." },
+      { text: "*Nei*, det er ikke sant.", translation: "No, that's not true." },
+      { text: "*Nei*, jeg har ikke tid.", translation: "No, I don't have time." },
+      { text: "Barnet sa *nei* til suppen.", translation: "The child said no to the soup." }
     ],
     5: [
       { text: "Kan du hjelpe meg, *vær så snill*?", translation: "Can you help me, please?" },
       { text: "*Vær så snill*, vent litt.", translation: "Please, wait a moment." },
-      { text: "Gi meg saltet, *vær så snill*.", translation: "Pass me the salt, please." }
+      { text: "Gi meg saltet, *vær så snill*.", translation: "Pass me the salt, please." },
+      { text: "Kom hit, *vær så snill*.", translation: "Come here, please." },
+      { text: "*Vær så snill*, snakk sakte.", translation: "Please speak slowly." },
+      { text: "Lukk døren, *vær så snill*.", translation: "Close the door, please." }
     ],
     6: [
       { text: "*Unnskyld*, jeg kom for sent.", translation: "Sorry, I'm late." },
       { text: "*Unnskyld*, jeg hørte ikke.", translation: "Sorry, I didn't hear." },
-      { text: "Han sa *unnskyld* for feilen.", translation: "He said sorry for the mistake." }
+      { text: "Han sa *unnskyld* for feilen.", translation: "He said sorry for the mistake." },
+      { text: "*Unnskyld*, hvor er stasjonen?", translation: "Excuse me, where is the station?" },
+      { text: "*Unnskyld*, er denne stolen ledig?", translation: "Excuse me, is this chair free?" },
+      { text: "Jeg må si *unnskyld* til henne.", translation: "I have to say sorry to her." }
     ],
     7: [
       { text: "God *morgen*!", translation: "Good morning!" },
       { text: "Hver *morgen* drikker jeg kaffe.", translation: "Every morning I drink coffee." },
-      { text: "*Morgenen* var kald og stille.", translation: "The morning was cold and quiet." }
+      { text: "*Morgenen* var kald og stille.", translation: "The morning was cold and quiet." },
+      { text: "I *morgen* tidlig reiser vi.", translation: "We leave early tomorrow morning." },
+      { text: "Jeg løper hver *morgen*.", translation: "I run every morning." },
+      { text: "Hun ringte meg i *morges*.", translation: "She called me this morning." }
     ],
     8: [
       { text: "God *kveld*!", translation: "Good evening!" },
       { text: "Om *kvelden* leser jeg en bok.", translation: "In the evening I read a book." },
-      { text: "Vi spiser middag om *kvelden*.", translation: "We eat dinner in the evening." }
+      { text: "Vi spiser middag om *kvelden*.", translation: "We eat dinner in the evening." },
+      { text: "Vi spiser middag hver *kveld*.", translation: "We eat dinner every evening." },
+      { text: "I *kveld* ser vi en film.", translation: "Tonight we are watching a film." },
+      { text: "Det var en fin *kveld*.", translation: "It was a nice evening." }
     ],
     9: [
       { text: "Det er en fin *dag* i dag.", translation: "It's a nice day today." },
       { text: "Hver *dag* går jeg en tur.", translation: "Every day I go for a walk." },
-      { text: "*Dagen* var lang og slitsom.", translation: "The day was long and tiring." }
+      { text: "*Dagen* var lang og slitsom.", translation: "The day was long and tiring." },
+      { text: "Ha en fin *dag*!", translation: "Have a nice day!" },
+      { text: "Jeg jobber hele *dagen*.", translation: "I work all day." },
+      { text: "Hvilken *dag* er det i dag?", translation: "What day is it today?" }
     ],
     10: [
       { text: "God *natt*!", translation: "Good night!" },
       { text: "Jeg sover godt om *natten*.", translation: "I sleep well at night." },
-      { text: "*Natten* var full av stjerner.", translation: "The night was full of stars." }
+      { text: "*Natten* var full av stjerner.", translation: "The night was full of stars." },
+      { text: "God *natt*, sov godt!", translation: "Good night, sleep well!" },
+      { text: "Jeg sov dårlig i *natt*.", translation: "I slept badly last night." },
+      { text: "Det snødde hele *natten*.", translation: "It snowed all night." }
     ],
     11: [
       { text: "Kan jeg få et glass *vann*?", translation: "Can I have a glass of water?" },
       { text: "*Vannet* er kaldt og friskt.", translation: "The water is cold and fresh." },
-      { text: "Han drikker mye *vann* hver dag.", translation: "He drinks a lot of water every day." }
+      { text: "Han drikker mye *vann* hver dag.", translation: "He drinks a lot of water every day." },
+      { text: "Hunden drikker *vann* fra bollen.", translation: "The dog drinks water from the bowl." },
+      { text: "*Vannet* i innsjøen er kaldt.", translation: "The water in the lake is cold." },
+      { text: "Jeg drikker mye *vann*.", translation: "I drink a lot of water." }
     ],
     12: [
       { text: "*Maten* var veldig god.", translation: "The food was very good." },
       { text: "Vi spiser *mat* klokka sju.", translation: "We eat food at seven o'clock." },
-      { text: "*Mat* er viktig for helsen.", translation: "Food is important for health." }
+      { text: "*Mat* er viktig for helsen.", translation: "Food is important for health." },
+      { text: "*Maten* er klar!", translation: "The food is ready!" },
+      { text: "Jeg liker norsk *mat*.", translation: "I like Norwegian food." },
+      { text: "Vi kjøper *mat* på butikken.", translation: "We buy food at the shop." }
     ],
     13: [
       { text: "Jeg drikker *kaffe* hver morgen.", translation: "I drink coffee every morning." },
       { text: "En kopp *kaffe*, takk.", translation: "A cup of coffee, please." },
-      { text: "*Kaffen* er varm og sterk.", translation: "The coffee is hot and strong." }
+      { text: "*Kaffen* er varm og sterk.", translation: "The coffee is hot and strong." },
+      { text: "Vi tar en *kaffe* etter lunsj.", translation: "We have a coffee after lunch." },
+      { text: "Vil du ha mer *kaffe*?", translation: "Do you want more coffee?" },
+      { text: "*Kaffen* er for varm.", translation: "The coffee is too hot." }
     ],
     14: [
       { text: "Vi kjøper *brød* på bakeriet.", translation: "We buy bread at the bakery." },
       { text: "*Brødet* er ferskt og mykt.", translation: "The bread is fresh and soft." },
-      { text: "Han spiser *brød* til frokost.", translation: "He eats bread for breakfast." }
+      { text: "Han spiser *brød* til frokost.", translation: "He eats bread for breakfast." },
+      { text: "Vi kjøper *brød* i butikken.", translation: "We buy bread in the shop." },
+      { text: "*Brødet* er ferskt i dag.", translation: "The bread is fresh today." },
+      { text: "Hun spiser *brød* med ost.", translation: "She eats bread with cheese." }
     ],
     15: [
       { text: "De bor i et stort *hus*.", translation: "They live in a big house." },
       { text: "Vårt *hus* har tre etasjer.", translation: "Our house has three floors." },
-      { text: "*Huset* ligger ved sjøen.", translation: "The house is by the sea." }
+      { text: "*Huset* ligger ved sjøen.", translation: "The house is by the sea." },
+      { text: "Vi har et gult *hus*.", translation: "We have a yellow house." },
+      { text: "*Huset* har tre soverom.", translation: "The house has three bedrooms." },
+      { text: "De bygger et nytt *hus*.", translation: "They are building a new house." }
     ],
     16: [
       { text: "Han kjører en rød *bil*.", translation: "He drives a red car." },
       { text: "*Bilen* er parkert utenfor.", translation: "The car is parked outside." },
-      { text: "Vi skal kjøpe en ny *bil*.", translation: "We're going to buy a new car." }
+      { text: "Vi skal kjøpe en ny *bil*.", translation: "We're going to buy a new car." },
+      { text: "Min *bil* er rød.", translation: "My car is red." },
+      { text: "Vi reiser med *bil* i dag.", translation: "We are travelling by car today." },
+      { text: "*Bilen* står i garasjen.", translation: "The car is in the garage." }
     ],
     17: [
       { text: "Jeg leser en spennende *bok*.", translation: "I'm reading an exciting book." },
       { text: "*Boken* ligger på bordet.", translation: "The book is on the table." },
-      { text: "Hun liker *bøker* om eventyr.", translation: "She likes books about adventures." }
+      { text: "Hun liker *bøker* om eventyr.", translation: "She likes books about adventures." },
+      { text: "Jeg leser en god *bok*.", translation: "I'm reading a good book." },
+      { text: "*Boka* ligger på bordet.", translation: "The book is on the table." },
+      { text: "Hun skrev en *bok* om Norge.", translation: "She wrote a book about Norway." }
     ],
     18: [
       { text: "Han er min beste *venn*.", translation: "He's my best friend." },
       { text: "Vi møter *venner* på helgen.", translation: "We meet friends on the weekend." },
-      { text: "*Vennen* min bor ved siden av.", translation: "My friend lives next door." }
+      { text: "*Vennen* min bor ved siden av.", translation: "My friend lives next door." },
+      { text: "Jeg ringer en *venn* hver dag.", translation: "I call a friend every day." },
+      { text: "Jeg møter en *venn* i kveld.", translation: "I'm meeting a friend tonight." },
+      { text: "Hun har mange *venner*.", translation: "She has many friends." }
     ],
     19: [
       { text: "Min *familie* er stor og hyggelig.", translation: "My family is big and nice." },
       { text: "Vi samles som *familie* hver jul.", translation: "We gather as a family every Christmas." },
-      { text: "*Familien* spiser middag sammen.", translation: "The family eats dinner together." }
+      { text: "*Familien* spiser middag sammen.", translation: "The family eats dinner together." },
+      { text: "Min *familie* bor i Bergen.", translation: "My family lives in Bergen." },
+      { text: "Vi er en stor *familie*.", translation: "We are a big family." },
+      { text: "Jeg reiser hjem til *familien*.", translation: "I'm going home to my family." }
     ],
     20: [
       { text: "Jeg går på *skolen* hver dag.", translation: "I go to school every day." },
       { text: "*Skolen* ligger nær huset mitt.", translation: "The school is near my house." },
-      { text: "Hun jobber på en *skole*.", translation: "She works at a school." }
+      { text: "Hun jobber på en *skole*.", translation: "She works at a school." },
+      { text: "*Skolen* begynner klokka åtte.", translation: "School starts at eight o'clock." },
+      { text: "Barna går på *skole*.", translation: "The children go to school." },
+      { text: "Hvor ligger *skolen*?", translation: "Where is the school?" }
     ],
     21: [
       { text: "En *mann* gikk forbi oss.", translation: "A man walked past us." },
       { text: "*Mannen* ved vinduet er hyggelig.", translation: "The man by the window is nice." },
-      { text: "Min *mann* heter Johan.", translation: "My husband's name is Johan." }
+      { text: "Min *mann* heter Johan.", translation: "My husband's name is Johan." },
+      { text: "*Mannen* heter Per.", translation: "The man is called Per." },
+      { text: "En *mann* står ved døren.", translation: "A man is standing by the door." },
+      { text: "Den *mannen* er min far.", translation: "That man is my father." }
     ],
     22: [
       { text: "En *kvinne* ringte meg i dag.", translation: "A woman called me today." },
       { text: "*Kvinnen* var veldig høflig.", translation: "The woman was very polite." },
-      { text: "*Kvinnen* som styrer firmaet, er dyktig.", translation: "The woman who runs the company is skilled." }
+      { text: "*Kvinnen* som styrer firmaet, er dyktig.", translation: "The woman who runs the company is skilled." },
+      { text: "*Kvinnen* leser en avis.", translation: "The woman is reading a newspaper." },
+      { text: "En *kvinne* ringte deg.", translation: "A woman called you." },
+      { text: "Hun er en sterk *kvinne*.", translation: "She is a strong woman." }
     ],
     23: [
       { text: "Det *barnet* er veldig snilt.", translation: "That child is very kind." },
       { text: "*Barnet* leker i hagen.", translation: "The child is playing in the garden." },
-      { text: "Vi har tre *barn* hjemme.", translation: "We have three children at home." }
+      { text: "Vi har tre *barn* hjemme.", translation: "We have three children at home." },
+      { text: "*Barnet* sover nå.", translation: "The child is sleeping now." },
+      { text: "De har tre *barn*.", translation: "They have three children." },
+      { text: "*Barna* leker i hagen.", translation: "The children are playing in the garden." }
     ],
     24: [
       { text: "*Jenten* har rødt hår.", translation: "The girl has red hair." },
       { text: "En ung *jente* satt på benken.", translation: "A young girl sat on the bench." },
-      { text: "Min *jente* er åtte år gammel.", translation: "My daughter is eight years old." }
+      { text: "Min *jente* er åtte år gammel.", translation: "My daughter is eight years old." },
+      { text: "*Jenta* heter Nora.", translation: "The girl is called Nora." },
+      { text: "En liten *jente* synger.", translation: "A little girl is singing." },
+      { text: "*Jenta* løper veldig fort.", translation: "The girl runs very fast." }
     ],
     25: [
       { text: "*Gutten* spiller fotball hver dag.", translation: "The boy plays football every day." },
       { text: "En liten *gutt* ropte høyt.", translation: "A small boy shouted loudly." },
-      { text: "Min *gutt* liker musikk.", translation: "My son likes music." }
+      { text: "Min *gutt* liker musikk.", translation: "My son likes music." },
+      { text: "*Gutten* spiller fotball.", translation: "The boy plays football." },
+      { text: "En *gutt* står i gaten.", translation: "A boy is standing in the street." },
+      { text: "*Gutten* er ti år gammel.", translation: "The boy is ten years old." }
     ],
     26: [
       { text: "Min *mor* er lærer.", translation: "My mother is a teacher." },
       { text: "*Moren* lager mat hver kveld.", translation: "Mother makes food every evening." },
-      { text: "Jeg ringer *moren* min ofte.", translation: "I call my mother often." }
+      { text: "Jeg ringer *moren* min ofte.", translation: "I call my mother often." },
+      { text: "Min *mor* heter Anne.", translation: "My mother's name is Anne." },
+      { text: "Jeg ringer *mor* hver dag.", translation: "I call mum every day." },
+      { text: "*Mor* lager middag nå.", translation: "Mum is making dinner now." }
     ],
     27: [
       { text: "Min *far* jobber som ingeniør.", translation: "My father works as an engineer." },
       { text: "*Faren* kjører oss til skolen.", translation: "Father drives us to school." },
-      { text: "Jeg er stolt av *faren* min.", translation: "I'm proud of my father." }
+      { text: "Jeg er stolt av *faren* min.", translation: "I'm proud of my father." },
+      { text: "Min *far* kjører bil.", translation: "My father drives a car." },
+      { text: "*Far* leser avisen.", translation: "Dad is reading the newspaper." },
+      { text: "Jeg hjelper *far* i hagen.", translation: "I help dad in the garden." }
     ],
     28: [
       { text: "Min *søster* er tre år yngre.", translation: "My sister is three years younger." },
       { text: "*Søsteren* min studerer medisin.", translation: "My sister studies medicine." },
-      { text: "Jeg og *søsteren* min liker å reise.", translation: "My sister and I like to travel." }
+      { text: "Jeg og *søsteren* min liker å reise.", translation: "My sister and I like to travel." },
+      { text: "Min *søster* bor i Oslo.", translation: "My sister lives in Oslo." },
+      { text: "Hun har to *søstre*.", translation: "She has two sisters." },
+      { text: "Min *søster* er yngre enn meg.", translation: "My sister is younger than me." }
     ],
     29: [
       { text: "Min *bror* er høyere enn meg.", translation: "My brother is taller than me." },
       { text: "*Broren* min spiller gitar.", translation: "My brother plays guitar." },
-      { text: "Jeg og *broren* min er gode venner.", translation: "My brother and I are good friends." }
+      { text: "Jeg og *broren* min er gode venner.", translation: "My brother and I are good friends." },
+      { text: "Min *bror* spiller gitar.", translation: "My brother plays the guitar." },
+      { text: "Har du en *bror*?", translation: "Do you have a brother?" },
+      { text: "Min *bror* er veldig høy.", translation: "My brother is very tall." }
     ],
     30: [
       { text: "Min *bestemor* bor på landet.", translation: "My grandmother lives in the countryside." },
       { text: "*Bestemoren* min baker kaker hver søndag.", translation: "My grandmother bakes cakes every Sunday." },
-      { text: "Jeg besøker *bestemoren* min ofte.", translation: "I visit my grandmother often." }
+      { text: "Jeg besøker *bestemoren* min ofte.", translation: "I visit my grandmother often." },
+      { text: "*Bestemor* baker kake.", translation: "Grandma is baking a cake." },
+      { text: "Vi besøker *bestemor* på søndag.", translation: "We visit grandma on Sunday." },
+      { text: "Min *bestemor* er åtti år.", translation: "My grandmother is eighty." }
     ],
     31: [
       { text: "Et *stort* hus ligger på toppen.", translation: "A big house sits on top." },
       { text: "Han har en *stor* hund.", translation: "He has a big dog." },
-      { text: "Byen er veldig *stor*.", translation: "The city is very big." }
+      { text: "Byen er veldig *stor*.", translation: "The city is very big." },
+      { text: "Det er en *stor* by.", translation: "It is a big city." },
+      { text: "Vi har en *stor* hage.", translation: "We have a big garden." },
+      { text: "Hunden er veldig *stor*.", translation: "The dog is very big." }
     ],
     32: [
       { text: "Et *lite* barn leker i parken.", translation: "A small child plays in the park." },
       { text: "Hun har en *liten* hund.", translation: "She has a small dog." },
-      { text: "Rommet er ganske *lite*.", translation: "The room is quite small." }
+      { text: "Rommet er ganske *lite*.", translation: "The room is quite small." },
+      { text: "Jeg har en *liten* katt.", translation: "I have a small cat." },
+      { text: "Vi har et *lite* kjøkken.", translation: "We have a small kitchen." },
+      { text: "Hun bor i en *liten* by.", translation: "She lives in a small town." }
     ],
     33: [
       { text: "Dette er en *god* bok.", translation: "This is a good book." },
       { text: "Maten smaker veldig *god*.", translation: "The food tastes very good." },
-      { text: "Været er *godt* i dag.", translation: "The weather is good today." }
+      { text: "Været er *godt* i dag.", translation: "The weather is good today." },
+      { text: "Maten er veldig *god*.", translation: "The food is very good." },
+      { text: "Hun er en *god* lærer.", translation: "She is a good teacher." },
+      { text: "Det var en *god* idé.", translation: "That was a good idea." }
     ],
     34: [
       { text: "Filmen var *dårlig* og kjedelig.", translation: "The movie was bad and boring." },
       { text: "Han har en *dårlig* vane.", translation: "He has a bad habit." },
-      { text: "Været blir *dårlig* i morgen.", translation: "The weather will be bad tomorrow." }
+      { text: "Været blir *dårlig* i morgen.", translation: "The weather will be bad tomorrow." },
+      { text: "Været er *dårlig* i dag.", translation: "The weather is bad today." },
+      { text: "Jeg har en *dårlig* dag.", translation: "I'm having a bad day." },
+      { text: "Filmen var ganske *dårlig*.", translation: "The film was quite bad." }
     ],
     35: [
       { text: "Jeg kjøpte en *ny* telefon.", translation: "I bought a new phone." },
       { text: "Dette er en *ny* bok fra biblioteket.", translation: "This is a new book from the library." },
-      { text: "Vi flytter til en *ny* by.", translation: "We're moving to a new city." }
+      { text: "Vi flytter til en *ny* by.", translation: "We're moving to a new city." },
+      { text: "Jeg har en *ny* jakke.", translation: "I have a new jacket." },
+      { text: "Vi har et *nytt* hus.", translation: "We have a new house." },
+      { text: "Hun er *ny* på skolen.", translation: "She is new at school." }
     ],
     36: [
       { text: "En *gammel* mann satt på benken.", translation: "An old man sat on the bench." },
       { text: "Huset er *gammelt* og vakkert.", translation: "The house is old and beautiful." },
-      { text: "Hun har en *gammel* bil.", translation: "She has an old car." }
+      { text: "Hun har en *gammel* bil.", translation: "She has an old car." },
+      { text: "Bilen er veldig *gammel*.", translation: "The car is very old." },
+      { text: "Han bor i et *gammelt* hus.", translation: "He lives in an old house." },
+      { text: "Hvor *gammel* er du?", translation: "How old are you?" }
     ],
     37: [
       { text: "*Varm* kaffe smaker godt om vinteren.", translation: "Hot coffee tastes good in winter." },
       { text: "Det er *varmt* i rommet.", translation: "It's warm in the room." },
-      { text: "Vi hadde en *varm* sommer i fjor.", translation: "We had a warm summer last year." }
+      { text: "Vi hadde en *varm* sommer i fjor.", translation: "We had a warm summer last year." },
+      { text: "Suppen er *varm*.", translation: "The soup is hot." },
+      { text: "Det er *varmt* i dag.", translation: "It is warm today." },
+      { text: "Jeg vil ha en *varm* kopp te.", translation: "I want a hot cup of tea." }
     ],
     38: [
       { text: "En *kald* vind blåser i dag.", translation: "A cold wind is blowing today." },
       { text: "*Kald* melk er forfriskende.", translation: "Cold milk is refreshing." },
-      { text: "Det er *kaldt* ute i kveld.", translation: "It's cold outside tonight." }
+      { text: "Det er *kaldt* ute i kveld.", translation: "It's cold outside tonight." },
+      { text: "Vannet er *kaldt*.", translation: "The water is cold." },
+      { text: "Det er en *kald* vinter.", translation: "It is a cold winter." },
+      { text: "Jeg er *kald* på hendene.", translation: "My hands are cold." }
     ],
     39: [
       { text: "Han kjører altfor *raskt*.", translation: "He drives too fast." },
       { text: "Hun er en *rask* løper.", translation: "She's a fast runner." },
-      { text: "Toget var veldig *raskt*.", translation: "The train was very fast." }
+      { text: "Toget var veldig *raskt*.", translation: "The train was very fast." },
+      { text: "Bilen er veldig *rask*.", translation: "The car is very fast." },
+      { text: "Han er *rask* på sykkelen.", translation: "He is fast on the bike." },
+      { text: "Toget er *raskere* enn bussen.", translation: "The train is faster than the bus." }
     ],
     40: [
       { text: "*Sakte* og rolig vinner løpet.", translation: "Slow and steady wins the race." },
       { text: "Han gikk *sakte* gjennom parken.", translation: "He walked slowly through the park." },
-      { text: "Musikken spilte *sakte* og mykt.", translation: "The music played slow and soft." }
+      { text: "Musikken spilte *sakte* og mykt.", translation: "The music played slow and soft." },
+      { text: "Bussen kjører *sakte*.", translation: "The bus drives slowly." },
+      { text: "Snakk *sakte*, vær så snill.", translation: "Speak slowly, please." },
+      { text: "Han går veldig *sakte*.", translation: "He walks very slowly." }
     ],
     41: [
       { text: "*Jeg* heter Petter.", translation: "My name is Petter." },
       { text: "*Jeg* liker å lese bøker.", translation: "I like to read books." },
-      { text: "*Jeg* er glad i musikk.", translation: "I love music." }
+      { text: "*Jeg* er glad i musikk.", translation: "I love music." },
+      { text: "*Jeg* bor i Norge.", translation: "I live in Norway." },
+      { text: "*Jeg* liker å lese.", translation: "I like to read." },
+      { text: "*Jeg* er student.", translation: "I am a student." }
     ],
     42: [
       { text: "*Du* er en god venn.", translation: "You are a good friend." },
       { text: "Hvor bor *du*?", translation: "Where do you live?" },
-      { text: "Kommer *du* i kveld?", translation: "Are you coming tonight?" }
+      { text: "Kommer *du* i kveld?", translation: "Are you coming tonight?" },
+      { text: "Vil *du* ha kaffe?", translation: "Do you want coffee?" },
+      { text: "Kan *du* hjelpe meg?", translation: "Can you help me?" },
+      { text: "*Du* snakker godt norsk.", translation: "You speak good Norwegian." }
     ],
     43: [
       { text: "*Han* er lærer på skolen.", translation: "He is a teacher at the school." },
       { text: "*Han* spiller fotball hver uke.", translation: "He plays football every week." },
-      { text: "Jeg så *han* i går.", translation: "I saw him yesterday." }
+      { text: "Jeg så *han* i går.", translation: "I saw him yesterday." },
+      { text: "*Han* heter Lars.", translation: "His name is Lars." },
+      { text: "*Han* jobber på sykehuset.", translation: "He works at the hospital." },
+      { text: "*Han* spiller fotball.", translation: "He plays football." }
     ],
     44: [
       { text: "*Hun* er en dyktig musiker.", translation: "She is a skilled musician." },
       { text: "*Hun* jobber som lege.", translation: "She works as a doctor." },
-      { text: "Jeg møtte *hun* på butikken.", translation: "I met her at the store." }
+      { text: "Jeg møtte *hun* på butikken.", translation: "I met her at the store." },
+      { text: "*Hun* er min søster.", translation: "She is my sister." },
+      { text: "*Hun* bor i Tromsø.", translation: "She lives in Tromsø." },
+      { text: "*Hun* synger veldig fint.", translation: "She sings very nicely." }
     ],
     45: [
       { text: "*Vi* går på kino i kveld.", translation: "We're going to the movies tonight." },
       { text: "*Vi* bor i samme by.", translation: "We live in the same city." },
-      { text: "*Vi* skal reise til Norge.", translation: "We're going to travel to Norway." }
+      { text: "*Vi* skal reise til Norge.", translation: "We're going to travel to Norway." },
+      { text: "*Vi* spiser middag nå.", translation: "We are eating dinner now." },
+      { text: "*Vi* bor i samme gate.", translation: "We live on the same street." },
+      { text: "*Vi* reiser til Spania.", translation: "We are travelling to Spain." }
     ],
     46: [
       { text: "Hvor skal *dere* i kveld?", translation: "Where are you all going tonight?" },
       { text: "*Dere* er velkomne til festen.", translation: "You're all welcome to the party." },
-      { text: "Kommer *dere* sammen?", translation: "Are you all coming together?" }
+      { text: "Kommer *dere* sammen?", translation: "Are you all coming together?" },
+      { text: "Hvor bor *dere*?", translation: "Where do you all live?" },
+      { text: "Kommer *dere* i kveld?", translation: "Are you all coming tonight?" },
+      { text: "*Dere* er veldig snille.", translation: "You are all very kind." }
     ],
     47: [
       { text: "*De* er veldig snille mennesker.", translation: "They are very kind people." },
       { text: "*De* kommer i morgen.", translation: "They're coming tomorrow." },
-      { text: "Jeg liker *de* veldig godt.", translation: "I like them very much." }
+      { text: "Jeg liker *de* veldig godt.", translation: "I like them very much." },
+      { text: "*De* bor i Bergen.", translation: "They live in Bergen." },
+      { text: "*De* har to barn.", translation: "They have two children." },
+      { text: "*De* spiser middag sammen.", translation: "They eat dinner together." }
     ],
     48: [
       { text: "Dette er *min* bok.", translation: "This is my book." },
       { text: "*Min* venn heter Lars.", translation: "My friend's name is Lars." },
-      { text: "Bilen er *min*.", translation: "The car is mine." }
+      { text: "Bilen er *min*.", translation: "The car is mine." },
+      { text: "*Min* katt sover mye.", translation: "My cat sleeps a lot." },
+      { text: "*Min* bror er lærer.", translation: "My brother is a teacher." },
+      { text: "Hvor er *mitt* glass?", translation: "Where is my glass?" }
     ],
     49: [
       { text: "Er dette *din* telefon?", translation: "Is this your phone?" },
       { text: "*Din* familie er hyggelig.", translation: "Your family is nice." },
-      { text: "Jeg liker *din* nye jakke.", translation: "I like your new jacket." }
+      { text: "Jeg liker *din* nye jakke.", translation: "I like your new jacket." },
+      { text: "Er dette *din* jakke?", translation: "Is this your jacket?" },
+      { text: "Hvor er *din* bil?", translation: "Where is your car?" },
+      { text: "Jeg liker *ditt* hus.", translation: "I like your house." }
     ],
     50: [
       { text: "Dette er *vårt* hus.", translation: "This is our house." },
       { text: "*Vår* skole ligger nær sentrum.", translation: "Our school is near the center." },
-      { text: "Familien *vår* er stor.", translation: "Our family is big." }
+      { text: "Familien *vår* er stor.", translation: "Our family is big." },
+      { text: "*Vår* hage er stor.", translation: "Our garden is big." },
+      { text: "*Vårt* kjøkken er lite.", translation: "Our kitchen is small." },
+      { text: "*Vår* lærer er snill.", translation: "Our teacher is kind." }
     ],
     51: [
       { text: "Jeg ønsker å *være* lykkelig.", translation: "I want to be happy." },
       { text: "Det er godt å *være* hjemme.", translation: "It's good to be home." },
-      { text: "Han vil *være* lege en dag.", translation: "He wants to be a doctor someday." }
+      { text: "Han vil *være* lege en dag.", translation: "He wants to be a doctor someday." },
+      { text: "Jeg *er* veldig trøtt.", translation: "I am very tired." },
+      { text: "Hvor *er* du nå?", translation: "Where are you now?" },
+      { text: "Det *var* kaldt i går.", translation: "It was cold yesterday." }
     ],
     52: [
       { text: "Jeg vil *ha* en kopp te.", translation: "I want to have a cup of tea." },
       { text: "Vi *har* ikke mye tid.", translation: "We don't have much time." },
-      { text: "Hun ønsker å *ha* en hund.", translation: "She wishes to have a dog." }
+      { text: "Hun ønsker å *ha* en hund.", translation: "She wishes to have a dog." },
+      { text: "Jeg *har* en hund.", translation: "I have a dog." },
+      { text: "*Har* du en penn?", translation: "Do you have a pen?" },
+      { text: "Vi *hadde* en fin dag.", translation: "We had a nice day." }
     ],
     53: [
       { text: "Jeg *går* til skolen hver dag.", translation: "I go to school every day." },
       { text: "Skal vi *gå* en tur?", translation: "Shall we go for a walk?" },
-      { text: "Hun *går* raskt hjem.", translation: "She walks home quickly." }
+      { text: "Hun *går* raskt hjem.", translation: "She walks home quickly." },
+      { text: "Jeg *går* til skolen.", translation: "I walk to school." },
+      { text: "Vi *går* på kino i kveld.", translation: "We are going to the cinema tonight." },
+      { text: "Hun *gikk* hjem tidlig.", translation: "She went home early." }
     ],
     54: [
       { text: "Jeg *kommer* snart.", translation: "I'll come soon." },
       { text: "Kan du *komme* hit?", translation: "Can you come here?" },
-      { text: "Han *kommer* fra Norge.", translation: "He comes from Norway." }
+      { text: "Han *kommer* fra Norge.", translation: "He comes from Norway." },
+      { text: "Når *kommer* du hjem?", translation: "When are you coming home?" },
+      { text: "Bussen *kommer* snart.", translation: "The bus is coming soon." },
+      { text: "Hun *kom* sent i går.", translation: "She came late yesterday." }
     ],
     55: [
       { text: "Hva *gjør* du nå?", translation: "What are you doing now?" },
       { text: "Jeg *gjør* mitt beste.", translation: "I'm doing my best." },
-      { text: "Vi må *gjøre* leksene våre.", translation: "We have to do our homework." }
+      { text: "Vi må *gjøre* leksene våre.", translation: "We have to do our homework." },
+      { text: "Hva *gjør* dere i helgen?", translation: "What are you all doing at the weekend?" },
+      { text: "Jeg *gjør* leksene mine.", translation: "I'm doing my homework." },
+      { text: "Hva *gjorde* du i går?", translation: "What did you do yesterday?" }
     ],
     56: [
       { text: "Jeg *spiser* frokost klokka åtte.", translation: "I eat breakfast at eight." },
       { text: "Skal vi *spise* sammen i kveld?", translation: "Shall we eat together tonight?" },
-      { text: "Hun *spiser* aldri kjøtt.", translation: "She never eats meat." }
+      { text: "Hun *spiser* aldri kjøtt.", translation: "She never eats meat." },
+      { text: "Vi *spiser* middag klokka fem.", translation: "We eat dinner at five o'clock." },
+      { text: "Jeg vil *spise* pizza.", translation: "I want to eat pizza." },
+      { text: "Hun *spiste* et eple.", translation: "She ate an apple." }
     ],
     57: [
       { text: "Jeg *drikker* vann hver dag.", translation: "I drink water every day." },
       { text: "Hva vil du *drikke*?", translation: "What would you like to drink?" },
-      { text: "Han *drikker* kaffe uten sukker.", translation: "He drinks coffee without sugar." }
+      { text: "Han *drikker* kaffe uten sukker.", translation: "He drinks coffee without sugar." },
+      { text: "Jeg *drikker* te om morgenen.", translation: "I drink tea in the morning." },
+      { text: "Barna *drikker* melk.", translation: "The children drink milk." },
+      { text: "Han *drakk* et glass melk.", translation: "He drank a glass of milk." }
     ],
     58: [
       { text: "Jeg *leser* en spennende bok.", translation: "I'm reading an exciting book." },
       { text: "Liker du å *lese*?", translation: "Do you like to read?" },
-      { text: "Hun *leser* avisen hver morgen.", translation: "She reads the newspaper every morning." }
+      { text: "Hun *leser* avisen hver morgen.", translation: "She reads the newspaper every morning." },
+      { text: "Jeg *leser* en bok nå.", translation: "I'm reading a book now." },
+      { text: "Hun liker å *lese*.", translation: "She likes to read." },
+      { text: "Vi *leste* avisen i går.", translation: "We read the newspaper yesterday." }
     ],
     59: [
       { text: "Jeg *skriver* et brev til bestemor.", translation: "I'm writing a letter to grandmother." },
       { text: "Kan du *skrive* navnet ditt her?", translation: "Can you write your name here?" },
-      { text: "Han *skriver* bøker om historie.", translation: "He writes books about history." }
+      { text: "Han *skriver* bøker om historie.", translation: "He writes books about history." },
+      { text: "Jeg *skriver* et brev.", translation: "I'm writing a letter." },
+      { text: "Kan du *skrive* navnet ditt?", translation: "Can you write your name?" },
+      { text: "Hun *skrev* en e-post.", translation: "She wrote an email." }
     ],
     60: [
       { text: "Jeg *snakker* litt norsk.", translation: "I speak a little Norwegian." },
       { text: "Kan du *snakke* saktere?", translation: "Can you speak more slowly?" },
-      { text: "Hun *snakker* tre språk.", translation: "She speaks three languages." }
+      { text: "Hun *snakker* tre språk.", translation: "She speaks three languages." },
+      { text: "Vi *snakker* norsk hjemme.", translation: "We speak Norwegian at home." },
+      { text: "Vi må *snakke* sammen.", translation: "We need to talk." },
+      { text: "Han *snakket* med læreren.", translation: "He talked to the teacher." }
     ],
     61: [
       { text: "Jeg har *en* katt.", translation: "I have a cat." },
       { text: "Kan jeg få *en* kopp te?", translation: "Can I have a cup of tea?" },
-      { text: "Det står *en* bil utenfor.", translation: "There's a car outside." }
+      { text: "Det står *en* bil utenfor.", translation: "There's a car outside." },
+      { text: "Jeg kjøper *en* bok.", translation: "I'm buying a book." },
+      { text: "Han har *en* stor hund.", translation: "He has a big dog." },
+      { text: "Vi venter på *en* buss.", translation: "We are waiting for a bus." }
     ],
     62: [
       { text: "Hun kjøpte *ei* bok i går.", translation: "She bought a book yesterday." },
       { text: "Jeg så *ei* jente på gaten.", translation: "I saw a girl on the street." },
-      { text: "Det bor *ei* geit på gården.", translation: "A goat lives on the farm." }
+      { text: "Det bor *ei* geit på gården.", translation: "A goat lives on the farm." },
+      { text: "Jeg har *ei* søster.", translation: "I have a sister." },
+      { text: "Hun kjøpte *ei* ny veske.", translation: "She bought a new bag." },
+      { text: "Det bor *ei* jente her.", translation: "A girl lives here." }
     ],
     63: [
       { text: "Jeg har *et* hus på landet.", translation: "I have a house in the countryside." },
       { text: "Kan jeg få *et* glass vann?", translation: "Can I have a glass of water?" },
-      { text: "Hun kjøpte *et* nytt kamera.", translation: "She bought a new camera." }
+      { text: "Hun kjøpte *et* nytt kamera.", translation: "She bought a new camera." },
+      { text: "Vi har *et* stort hus.", translation: "We have a big house." },
+      { text: "Jeg vil ha *et* eple.", translation: "I want an apple." },
+      { text: "Han drikker *et* glass vann.", translation: "He drinks a glass of water." }
     ],
     64: [
       { text: "Bilen er rød. *Den* er ny.", translation: "The car is red. It's new." },
       { text: "Jeg liker denne boken. *Den* er spennende.", translation: "I like this book. It's exciting." },
-      { text: "Se på katten. *Den* sover.", translation: "Look at the cat. It's sleeping." }
+      { text: "Se på katten. *Den* sover.", translation: "Look at the cat. It's sleeping." },
+      { text: "Jeg liker jakka. *Den* er fin.", translation: "I like the jacket. It's nice." },
+      { text: "Hvor er bilen? *Den* står ute.", translation: "Where is the car? It's outside." },
+      { text: "Boka er ny. Jeg kjøpte *den* i går.", translation: "The book is new. I bought it yesterday." }
     ],
     65: [
       { text: "*Det* regner ute.", translation: "It's raining outside." },
       { text: "Huset er stort. *Det* har fem rom.", translation: "The house is big. It has five rooms." },
-      { text: "*Det* er kaldt i dag.", translation: "It's cold today." }
+      { text: "*Det* er kaldt i dag.", translation: "It's cold today." },
+      { text: "*Det* regner i dag.", translation: "It is raining today." },
+      { text: "*Det* er kaldt ute.", translation: "It is cold outside." },
+      { text: "Huset er stort, og *det* er gult.", translation: "The house is big, and it is yellow." }
     ],
     66: [
       { text: "Kom *her*, vær så snill.", translation: "Come here, please." },
       { text: "Jeg bor *her* nå.", translation: "I live here now." },
-      { text: "*Her* er nøklene dine.", translation: "Here are your keys." }
+      { text: "*Her* er nøklene dine.", translation: "Here are your keys." },
+      { text: "Jeg bor *her*.", translation: "I live here." },
+      { text: "Vi har bodd *her* lenge.", translation: "We have lived here a long time." },
+      { text: "Er det ledig *her*?", translation: "Is it free here?" }
     ],
     67: [
       { text: "Boken ligger *der* borte.", translation: "The book is over there." },
       { text: "Hvem er *der*?", translation: "Who is there?" },
-      { text: "Vi møttes *der* i fjor.", translation: "We met there last year." }
+      { text: "Vi møttes *der* i fjor.", translation: "We met there last year." },
+      { text: "Butikken ligger *der*.", translation: "The shop is over there." },
+      { text: "Hun bor *der* borte.", translation: "She lives over there." },
+      { text: "Jeg var *der* i fjor.", translation: "I was there last year." }
     ],
     68: [
       { text: "Jeg må gå *nå*.", translation: "I have to go now." },
       { text: "Hva gjør du *nå*?", translation: "What are you doing now?" },
-      { text: "*Nå* er det på tide å spise.", translation: "Now it's time to eat." }
+      { text: "*Nå* er det på tide å spise.", translation: "Now it's time to eat." },
+      { text: "Jeg er sulten *nå*.", translation: "I'm hungry now." },
+      { text: "Hvor er du *nå*?", translation: "Where are you now?" },
+      { text: "*Nå* regner det.", translation: "Now it's raining." }
     ],
     69: [
       { text: "Vi snakkes *senere*.", translation: "We'll talk later." },
       { text: "Jeg kommer *senere* i kveld.", translation: "I'll come later tonight." },
-      { text: "Kan vi gjøre det *senere*?", translation: "Can we do it later?" }
+      { text: "Kan vi gjøre det *senere*?", translation: "Can we do it later?" },
+      { text: "Vi ses *senere* i dag.", translation: "See you later today." },
+      { text: "Jeg ringer deg *senere*.", translation: "I'll call you later." },
+      { text: "Kan vi spise *senere*?", translation: "Can we eat later?" }
     ],
     70: [
       { text: "Hun er *alltid* glad.", translation: "She's always happy." },
       { text: "Jeg drikker *alltid* kaffe om morgenen.", translation: "I always drink coffee in the morning." },
-      { text: "Han kommer *alltid* for sent.", translation: "He always comes late." }
+      { text: "Han kommer *alltid* for sent.", translation: "He always comes late." },
+      { text: "Han kommer *alltid* tidlig.", translation: "He always comes early." },
+      { text: "Jeg drikker *alltid* kaffe.", translation: "I always drink coffee." },
+      { text: "Bussen er *alltid* sent.", translation: "The bus is always late." }
     ],
     71: [
       { text: "Hva skal vi gjøre *i dag*?", translation: "What shall we do today?" },
       { text: "*I dag* er det fint vær.", translation: "Today the weather is nice." },
-      { text: "Jeg har mye å gjøre *i dag*.", translation: "I have a lot to do today." }
+      { text: "Jeg har mye å gjøre *i dag*.", translation: "I have a lot to do today." },
+      { text: "*I dag* er det mandag.", translation: "Today is Monday." },
+      { text: "Jeg jobber ikke *i dag*.", translation: "I'm not working today." },
+      { text: "Hva gjør du *i dag*?", translation: "What are you doing today?" }
     ],
     72: [
       { text: "Vi sees *i morgen*!", translation: "See you tomorrow!" },
       { text: "*I morgen* skal jeg reise til Oslo.", translation: "Tomorrow I'll travel to Oslo." },
-      { text: "Hva skjer *i morgen*?", translation: "What's happening tomorrow?" }
+      { text: "Hva skjer *i morgen*?", translation: "What's happening tomorrow?" },
+      { text: "Vi ses *i morgen*!", translation: "See you tomorrow!" },
+      { text: "*I morgen* reiser jeg hjem.", translation: "Tomorrow I'm going home." },
+      { text: "Har du tid *i morgen*?", translation: "Do you have time tomorrow?" }
     ],
     73: [
       { text: "*I går* var jeg på jobb.", translation: "Yesterday I was at work." },
       { text: "Vi så en film *i går*.", translation: "We watched a movie yesterday." },
-      { text: "Det regnet mye *i går*.", translation: "It rained a lot yesterday." }
+      { text: "Det regnet mye *i går*.", translation: "It rained a lot yesterday." },
+      { text: "*I går* var det kaldt.", translation: "Yesterday it was cold." },
+      { text: "Jeg så ham *i går*.", translation: "I saw him yesterday." },
+      { text: "Hva spiste du *i går*?", translation: "What did you eat yesterday?" }
     ],
     74: [
       { text: "Jeg jobber fem dager i *uken*.", translation: "I work five days a week." },
       { text: "Neste *uke* skal vi reise.", translation: "Next week we're going to travel." },
-      { text: "*Uken* har vært travel.", translation: "The week has been busy." }
+      { text: "*Uken* har vært travel.", translation: "The week has been busy." },
+      { text: "Jeg jobber fem dager i *uka*.", translation: "I work five days a week." },
+      { text: "Neste *uke* reiser vi.", translation: "Next week we travel." },
+      { text: "Det var en lang *uke*.", translation: "It was a long week." }
     ],
     75: [
       { text: "Vi flytter neste *måned*.", translation: "We're moving next month." },
       { text: "Hver *måned* betaler jeg husleie.", translation: "Every month I pay rent." },
-      { text: "*Måneden* gikk fort.", translation: "The month went by quickly." }
+      { text: "*Måneden* gikk fort.", translation: "The month went by quickly." },
+      { text: "Neste *måned* flytter vi.", translation: "Next month we're moving." },
+      { text: "Jeg betaler hver *måned*.", translation: "I pay every month." },
+      { text: "Hun var her i en *måned*.", translation: "She was here for a month." }
     ],
     76: [
       { text: "Han kjørte en *rød* bil.", translation: "He drove a red car." },
       { text: "Blomsten er *rød* og vakker.", translation: "The flower is red and beautiful." },
-      { text: "Jeg liker den *røde* genseren.", translation: "I like the red sweater." }
+      { text: "Jeg liker den *røde* genseren.", translation: "I like the red sweater." },
+      { text: "Jeg har en *rød* bil.", translation: "I have a red car." },
+      { text: "Eplet er *rødt*.", translation: "The apple is red." },
+      { text: "Hun har på seg en *rød* kjole.", translation: "She is wearing a red dress." }
     ],
     77: [
       { text: "Himmelen er *blå* i dag.", translation: "The sky is blue today." },
       { text: "Hun har *blå* øyne.", translation: "She has blue eyes." },
-      { text: "Jeg kjøpte en *blå* jakke.", translation: "I bought a blue jacket." }
+      { text: "Jeg kjøpte en *blå* jakke.", translation: "I bought a blue jacket." },
+      { text: "Himmelen er *blå*.", translation: "The sky is blue." },
+      { text: "Han har *blå* øyne.", translation: "He has blue eyes." },
+      { text: "Jeg liker den *blå* jakka.", translation: "I like the blue jacket." }
     ],
     78: [
       { text: "Gresset er *grønt* om sommeren.", translation: "The grass is green in summer." },
       { text: "Han har en *grønn* bil.", translation: "He has a green car." },
-      { text: "Jeg liker den *grønne* skjorten.", translation: "I like the green shirt." }
+      { text: "Jeg liker den *grønne* skjorten.", translation: "I like the green shirt." },
+      { text: "Gresset er *grønt*.", translation: "The grass is green." },
+      { text: "Hun kjøpte en *grønn* genser.", translation: "She bought a green sweater." },
+      { text: "Døren er *grønn*.", translation: "The door is green." }
     ],
     79: [
       { text: "Solen er *gul*.", translation: "The sun is yellow." },
       { text: "Hun har en *gul* kjole.", translation: "She has a yellow dress." },
-      { text: "Det *gule* huset er vårt.", translation: "The yellow house is ours." }
+      { text: "Det *gule* huset er vårt.", translation: "The yellow house is ours." },
+      { text: "Bananen er *gul*.", translation: "The banana is yellow." },
+      { text: "Vi har et *gult* hus.", translation: "We have a yellow house." },
+      { text: "Hun kjøpte en *gul* lue.", translation: "She bought a yellow hat." }
     ],
     80: [
       { text: "Katten er helt *svart*.", translation: "The cat is completely black." },
       { text: "Han har en *svart* bil.", translation: "He has a black car." },
-      { text: "Jeg kjøpte *svarte* sko.", translation: "I bought black shoes." }
+      { text: "Jeg kjøpte *svarte* sko.", translation: "I bought black shoes." },
+      { text: "Katten er *svart*.", translation: "The cat is black." },
+      { text: "Han har *svart* hår.", translation: "He has black hair." },
+      { text: "Jeg drikker *svart* kaffe.", translation: "I drink black coffee." }
     ],
     81: [
       { text: "Snøen er *hvit* og kald.", translation: "The snow is white and cold." },
       { text: "Hun har et *hvitt* hus.", translation: "She has a white house." },
-      { text: "Han bruker en *hvit* skjorte.", translation: "He wears a white shirt." }
+      { text: "Han bruker en *hvit* skjorte.", translation: "He wears a white shirt." },
+      { text: "Snøen er *hvit*.", translation: "The snow is white." },
+      { text: "Hun har en *hvit* skjorte.", translation: "She has a white shirt." },
+      { text: "Veggen er *hvit*.", translation: "The wall is white." }
     ],
     82: [
       { text: "Hunden min er *brun*.", translation: "My dog is brown." },
       { text: "Hun har *brune* øyne.", translation: "She has brown eyes." },
-      { text: "Jeg kjøpte et *brunt* bord.", translation: "I bought a brown table." }
+      { text: "Jeg kjøpte et *brunt* bord.", translation: "I bought a brown table." },
+      { text: "Hunden er *brun*.", translation: "The dog is brown." },
+      { text: "Han har *brune* øyne.", translation: "He has brown eyes." },
+      { text: "Jeg kjøpte *brune* sko.", translation: "I bought brown shoes." }
     ],
     83: [
       { text: "Jenta har en *rosa* kjole.", translation: "The girl has a pink dress." },
       { text: "Blomstene er *rosa*.", translation: "The flowers are pink." },
-      { text: "Hun malte rommet *rosa*.", translation: "She painted the room pink." }
+      { text: "Hun malte rommet *rosa*.", translation: "She painted the room pink." },
+      { text: "Hun liker *rosa* blomster.", translation: "She likes pink flowers." },
+      { text: "Kjolen er *rosa*.", translation: "The dress is pink." },
+      { text: "Jenta har en *rosa* sykkel.", translation: "The girl has a pink bicycle." }
     ],
     84: [
       { text: "Solnedgangen var *oransje*.", translation: "The sunset was orange." },
       { text: "Han har en *oransje* jakke.", translation: "He has an orange jacket." },
-      { text: "Appelsinen er *oransje*.", translation: "The orange is orange." }
+      { text: "Appelsinen er *oransje*.", translation: "The orange is orange." },
+      { text: "Solen er *oransje* om kvelden.", translation: "The sun is orange in the evening." },
+      { text: "Jeg kjøpte en *oransje* genser.", translation: "I bought an orange sweater." },
+      { text: "Bussen er *oransje*.", translation: "The bus is orange." }
     ],
     85: [
       { text: "Blomsten er *lilla*.", translation: "The flower is purple." },
       { text: "Hun har en *lilla* veske.", translation: "She has a purple bag." },
-      { text: "Himmelen ble *lilla* om kvelden.", translation: "The sky turned purple in the evening." }
+      { text: "Himmelen ble *lilla* om kvelden.", translation: "The sky turned purple in the evening." },
+      { text: "Hun har en *lilla* kjole.", translation: "She has a purple dress." },
+      { text: "Rommet hennes er *lilla*.", translation: "Her room is purple." },
+      { text: "Jeg liker fargen *lilla*.", translation: "I like the colour purple." }
     ],
     86: [
       { text: "Jeg har bare *én* bror.", translation: "I only have one brother." },
       { text: "Kan jeg få *én* kaffe?", translation: "Can I have one coffee?" },
-      { text: "Bare *én* person kom.", translation: "Only one person came." }
+      { text: "Bare *én* person kom.", translation: "Only one person came." },
+      { text: "Jeg har bare *én* nøkkel.", translation: "I only have one key." },
+      { text: "Vent *ett* minutt.", translation: "Wait one minute." },
+      { text: "Vi har *én* bil.", translation: "We have one car." }
     ],
     87: [
       { text: "Jeg har *to* søsken.", translation: "I have two siblings." },
       { text: "Klokka er *to*.", translation: "It's two o'clock." },
-      { text: "Huset har *to* etasjer.", translation: "The house has two floors." }
+      { text: "Huset har *to* etasjer.", translation: "The house has two floors." },
+      { text: "Jeg har *to* katter.", translation: "I have two cats." },
+      { text: "Vi bor her i *to* år.", translation: "We've lived here for two years." },
+      { text: "Kan jeg få *to* kaffe?", translation: "Can I have two coffees?" }
     ],
     88: [
       { text: "Jeg har *tre* barn.", translation: "I have three children." },
       { text: "Klokka er *tre*.", translation: "It's three o'clock." },
-      { text: "Vi ventet i *tre* timer.", translation: "We waited for three hours." }
+      { text: "Vi ventet i *tre* timer.", translation: "We waited for three hours." },
+      { text: "Hun har *tre* barn.", translation: "She has three children." },
+      { text: "Jeg kjøpte *tre* epler.", translation: "I bought three apples." },
+      { text: "Vi var der i *tre* dager.", translation: "We were there for three days." }
     ],
     89: [
       { text: "Bordet har *fire* stoler.", translation: "The table has four chairs." },
       { text: "Klokka er *fire*.", translation: "It's four o'clock." },
-      { text: "Vi er *fire* i familien.", translation: "There are four of us in the family." }
+      { text: "Vi er *fire* i familien.", translation: "There are four of us in the family." },
+      { text: "Bordet har *fire* bein.", translation: "The table has four legs." },
+      { text: "Hun har *fire* katter.", translation: "She has four cats." },
+      { text: "Jeg kommer klokka *fire*.", translation: "I'm coming at four o'clock." }
     ],
     90: [
       { text: "Jeg har *fem* venner her.", translation: "I have five friends here." },
       { text: "Klokka er *fem*.", translation: "It's five o'clock." },
-      { text: "Huset har *fem* rom.", translation: "The house has five rooms." }
+      { text: "Huset har *fem* rom.", translation: "The house has five rooms." },
+      { text: "Hun er *fem* år gammel.", translation: "She is five years old." },
+      { text: "Jeg jobber *fem* dager.", translation: "I work five days." },
+      { text: "Det tar *fem* minutter.", translation: "It takes five minutes." }
     ],
     91: [
       { text: "Klokka er *seks*.", translation: "It's six o'clock." },
       { text: "Vi er *seks* personer.", translation: "We are six people." },
-      { text: "Han sover *seks* timer hver natt.", translation: "He sleeps six hours every night." }
+      { text: "Han sover *seks* timer hver natt.", translation: "He sleeps six hours every night." },
+      { text: "Toget går klokka *seks*.", translation: "The train leaves at six o'clock." },
+      { text: "Jeg har *seks* egg.", translation: "I have six eggs." },
+      { text: "Vi var *seks* personer.", translation: "We were six people." }
     ],
     92: [
       { text: "Klokka er *sju*.", translation: "It's seven o'clock." },
       { text: "Hun har *sju* bøker på bordet.", translation: "She has seven books on the table." },
-      { text: "Han spiste *sju* jordbær.", translation: "He ate seven strawberries." }
+      { text: "Han spiste *sju* jordbær.", translation: "He ate seven strawberries." },
+      { text: "Det er *sju* dager i uka.", translation: "There are seven days in a week." },
+      { text: "Jeg våkner klokka *sju*.", translation: "I wake up at seven o'clock." },
+      { text: "Han er *sju* år.", translation: "He is seven." }
     ],
     93: [
       { text: "Klokka er *åtte*.", translation: "It's eight o'clock." },
       { text: "Jeg jobber *åtte* timer om dagen.", translation: "I work eight hours a day." },
-      { text: "Vi var *åtte* personer på festen.", translation: "There were eight of us at the party." }
+      { text: "Vi var *åtte* personer på festen.", translation: "There were eight of us at the party." },
+      { text: "Skolen begynner klokka *åtte*.", translation: "School starts at eight." },
+      { text: "Vi har *åtte* stoler.", translation: "We have eight chairs." },
+      { text: "Hun sov i *åtte* timer.", translation: "She slept for eight hours." }
     ],
     94: [
       { text: "Klokka er *ni*.", translation: "It's nine o'clock." },
       { text: "Hun er *ni* år gammel.", translation: "She's nine years old." },
-      { text: "Vi ventet i *ni* minutter.", translation: "We waited nine minutes." }
+      { text: "Vi ventet i *ni* minutter.", translation: "We waited nine minutes." },
+      { text: "Butikken åpner klokka *ni*.", translation: "The shop opens at nine o'clock." },
+      { text: "Han er *ni* år gammel.", translation: "He is nine years old." },
+      { text: "Vi har *ni* høner.", translation: "We have nine hens." }
     ],
     95: [
       { text: "Klokka er *ti*.", translation: "It's ten o'clock." },
       { text: "Han har *ti* fingre.", translation: "He has ten fingers." },
-      { text: "Vi bodde der i *ti* år.", translation: "We lived there for ten years." }
+      { text: "Vi bodde der i *ti* år.", translation: "We lived there for ten years." },
+      { text: "Jeg har *ti* kroner.", translation: "I have ten kroner." },
+      { text: "Vent *ti* minutter.", translation: "Wait ten minutes." },
+      { text: "Hun kommer klokka *ti*.", translation: "She's coming at ten o'clock." }
     ],
     96: [
       { text: "*Hvor* bor du?", translation: "Where do you live?" },
       { text: "Vet du *hvor* boken er?", translation: "Do you know where the book is?" },
-      { text: "*Hvor* skal vi møtes?", translation: "Where shall we meet?" }
+      { text: "*Hvor* skal vi møtes?", translation: "Where shall we meet?" },
+      { text: "*Hvor* er toalettet?", translation: "Where is the toilet?" },
+      { text: "*Hvor* skal du?", translation: "Where are you going?" },
+      { text: "*Hvor* kommer du fra?", translation: "Where do you come from?" }
     ],
     97: [
       { text: "*Hva* heter du?", translation: "What's your name?" },
       { text: "*Hva* gjør du nå?", translation: "What are you doing now?" },
-      { text: "Jeg vet ikke *hva* jeg skal si.", translation: "I don't know what to say." }
+      { text: "Jeg vet ikke *hva* jeg skal si.", translation: "I don't know what to say." },
+      { text: "*Hva* gjør du i kveld?", translation: "What are you doing tonight?" },
+      { text: "*Hva* er klokka?", translation: "What time is it?" },
+      { text: "*Hva* vil du spise?", translation: "What do you want to eat?" }
     ],
     98: [
       { text: "*Hvem* er det?", translation: "Who is that?" },
       { text: "*Hvem* kommer i kveld?", translation: "Who's coming tonight?" },
-      { text: "Vet du *hvem* hun er?", translation: "Do you know who she is?" }
+      { text: "Vet du *hvem* hun er?", translation: "Do you know who she is?" },
+      { text: "*Hvem* bor i huset?", translation: "Who lives in the house?" },
+      { text: "*Hvem* ringte deg?", translation: "Who called you?" },
+      { text: "*Hvem* er læreren din?", translation: "Who is your teacher?" }
     ],
     99: [
       { text: "*Når* kommer du?", translation: "When are you coming?" },
       { text: "Jeg vet ikke *når* toget går.", translation: "I don't know when the train leaves." },
-      { text: "*Når* er bursdagen din?", translation: "When is your birthday?" }
+      { text: "*Når* er bursdagen din?", translation: "When is your birthday?" },
+      { text: "*Når* går toget?", translation: "When does the train leave?" },
+      { text: "*Når* kommer du hjem?", translation: "When are you coming home?" },
+      { text: "*Når* åpner butikken?", translation: "When does the shop open?" }
     ],
     100: [
       { text: "*Hvorfor* er du sen?", translation: "Why are you late?" },
       { text: "*Hvorfor* liker du ikke fisk?", translation: "Why don't you like fish?" },
-      { text: "Jeg vet ikke *hvorfor* han dro.", translation: "I don't know why he left." }
+      { text: "Jeg vet ikke *hvorfor* han dro.", translation: "I don't know why he left." },
+      { text: "*Hvorfor* er du trist?", translation: "Why are you sad?" },
+      { text: "*Hvorfor* kom du sent?", translation: "Why were you late?" },
+      { text: "*Hvorfor* regner det alltid?", translation: "Why does it always rain?" }
     ],
     101: [
       { text: "*Hvordan* går det?", translation: "How's it going?" },
       { text: "*Hvordan* lager man denne retten?", translation: "How do you make this dish?" },
-      { text: "Jeg vet ikke *hvordan* jeg skal svare.", translation: "I don't know how to answer." }
+      { text: "Jeg vet ikke *hvordan* jeg skal svare.", translation: "I don't know how to answer." },
+      { text: "*Hvordan* har du det?", translation: "How are you?" },
+      { text: "*Hvordan* kommer jeg til stasjonen?", translation: "How do I get to the station?" },
+      { text: "*Hvordan* staver du navnet ditt?", translation: "How do you spell your name?" }
     ],
     102: [
       { text: "*Hvilken* bok leser du?", translation: "Which book are you reading?" },
       { text: "*Hvilken* dag passer best?", translation: "Which day suits best?" },
-      { text: "Vet du *hvilken* vei vi skal gå?", translation: "Do you know which way we should go?" }
+      { text: "Vet du *hvilken* vei vi skal gå?", translation: "Do you know which way we should go?" },
+      { text: "*Hvilken* farge liker du best?", translation: "Which colour do you like best?" },
+      { text: "*Hvilken* buss tar du?", translation: "Which bus do you take?" },
+      { text: "I *hvilken* by bor du?", translation: "Which city do you live in?" }
     ],
     103: [
       { text: "*Hvor mye* koster dette?", translation: "How much does this cost?" },
       { text: "*Hvor mye* tid har vi?", translation: "How much time do we have?" },
-      { text: "Jeg vet ikke *hvor mye* det veier.", translation: "I don't know how much it weighs." }
+      { text: "Jeg vet ikke *hvor mye* det veier.", translation: "I don't know how much it weighs." },
+      { text: "*Hvor mye* koster billetten?", translation: "How much does the ticket cost?" },
+      { text: "*Hvor mye* melk trenger vi?", translation: "How much milk do we need?" },
+      { text: "*Hvor mye* tjener du?", translation: "How much do you earn?" }
     ],
     104: [
       { text: "Jeg er glad *fordi* det er fredag.", translation: "I'm happy because it's Friday." },
       { text: "Hun kom sent *fordi* toget var forsinket.", translation: "She came late because the train was delayed." },
-      { text: "Vi ble hjemme *fordi* det regnet.", translation: "We stayed home because it rained." }
+      { text: "Vi ble hjemme *fordi* det regnet.", translation: "We stayed home because it rained." },
+      { text: "Jeg spiser nå *fordi* jeg er sulten.", translation: "I'm eating now because I'm hungry." },
+      { text: "Han er trøtt *fordi* han jobbet sent.", translation: "He is tired because he worked late." },
+      { text: "Vi tar bussen *fordi* bilen er ødelagt.", translation: "We take the bus because the car is broken." }
     ],
     105: [
       { text: "Jeg vil gå, *men* jeg er sliten.", translation: "I want to go, but I'm tired." },
       { text: "Det er dyrt, *men* verdt det.", translation: "It's expensive, but worth it." },
-      { text: "Hun ringte, *men* jeg svarte ikke.", translation: "She called, but I didn't answer." }
+      { text: "Hun ringte, *men* jeg svarte ikke.", translation: "She called, but I didn't answer." },
+      { text: "Jeg er trøtt, *men* glad.", translation: "I'm tired, but happy." },
+      { text: "Huset er lite, *men* fint.", translation: "The house is small, but nice." },
+      { text: "Han er ung, *men* veldig klok.", translation: "He is young, but very wise." }
     ],
     106: [
       { text: "Jeg liker te *og* kaffe.", translation: "I like tea and coffee." },
       { text: "Han er hyggelig *og* smart.", translation: "He's nice and smart." },
-      { text: "Vi kjøpte brød, melk *og* egg.", translation: "We bought bread, milk and eggs." }
+      { text: "Vi kjøpte brød, melk *og* egg.", translation: "We bought bread, milk and eggs." },
+      { text: "Jeg har en katt *og* en hund.", translation: "I have a cat and a dog." },
+      { text: "Hun leser *og* skriver.", translation: "She reads and writes." },
+      { text: "Mor *og* far er hjemme.", translation: "Mum and dad are at home." }
     ],
     107: [
       { text: "Vil du ha te *eller* kaffe?", translation: "Would you like tea or coffee?" },
       { text: "Skal vi gå *eller* kjøre?", translation: "Shall we walk or drive?" },
-      { text: "Kommer du i dag *eller* i morgen?", translation: "Are you coming today or tomorrow?" }
+      { text: "Kommer du i dag *eller* i morgen?", translation: "Are you coming today or tomorrow?" },
+      { text: "Er det mandag *eller* tirsdag?", translation: "Is it Monday or Tuesday?" },
+      { text: "Vil du ha fisk *eller* kjøtt?", translation: "Do you want fish or meat?" },
+      { text: "Tar du bussen *eller* toget?", translation: "Do you take the bus or the train?" }
     ],
     108: [
       { text: "Jeg drikker kaffe *med* melk.", translation: "I drink coffee with milk." },
       { text: "Hun bor *med* familien sin.", translation: "She lives with her family." },
-      { text: "Han snakket *med* læreren.", translation: "He spoke with the teacher." }
+      { text: "Han snakket *med* læreren.", translation: "He spoke with the teacher." },
+      { text: "Jeg går *med* hunden.", translation: "I'm walking with the dog." },
+      { text: "Hun spiser brød *med* ost.", translation: "She eats bread with cheese." },
+      { text: "Vil du komme *med* oss?", translation: "Do you want to come with us?" }
     ],
     109: [
       { text: "Jeg drikker te *uten* sukker.", translation: "I drink tea without sugar." },
       { text: "Han dro *uten* å si noe.", translation: "He left without saying anything." },
-      { text: "Vi klarte det *uten* hjelp.", translation: "We managed it without help." }
+      { text: "Vi klarte det *uten* hjelp.", translation: "We managed it without help." },
+      { text: "Han gikk ut *uten* jakke.", translation: "He went out without a jacket." },
+      { text: "Jeg kan ikke leve *uten* kaffe.", translation: "I can't live without coffee." },
+      { text: "Hun reiste *uten* bagasje.", translation: "She travelled without luggage." }
     ],
     110: [
       { text: "Jeg kommer *fra* Norge.", translation: "I come from Norway." },
       { text: "Brevet er *fra* min søster.", translation: "The letter is from my sister." },
-      { text: "Vi reiste *fra* Oslo til Bergen.", translation: "We travelled from Oslo to Bergen." }
+      { text: "Vi reiste *fra* Oslo til Bergen.", translation: "We travelled from Oslo to Bergen." },
+      { text: "Toget *fra* Oslo er sent.", translation: "The train from Oslo is late." },
+      { text: "Hun fikk en gave *fra* bestemor.", translation: "She got a gift from grandma." },
+      { text: "Jeg jobber *fra* ni til fire.", translation: "I work from nine to four." }
     ],
     111: [
       { text: "Jeg skal *til* skolen.", translation: "I'm going to school." },
       { text: "Hun ga en gave *til* meg.", translation: "She gave a gift to me." },
-      { text: "Vi reiste *til* Spania i sommer.", translation: "We travelled to Spain this summer." }
+      { text: "Vi reiste *til* Spania i sommer.", translation: "We travelled to Spain this summer." },
+      { text: "Jeg går *til* butikken.", translation: "I'm going to the shop." },
+      { text: "Hun ringte *til* moren sin.", translation: "She called her mother." },
+      { text: "Vi flytter *til* Bergen.", translation: "We are moving to Bergen." }
     ],
     112: [
       { text: "Boken ligger *i* skuffen.", translation: "The book is in the drawer." },
       { text: "Jeg bor *i* Oslo.", translation: "I live in Oslo." },
-      { text: "Han er *i* hagen.", translation: "He is in the garden." }
+      { text: "Han er *i* hagen.", translation: "He is in the garden." },
+      { text: "Vi bor *i* et gult hus.", translation: "We live in a yellow house." },
+      { text: "Melken står *i* kjøleskapet.", translation: "The milk is in the fridge." },
+      { text: "Barna leker *i* parken.", translation: "The children are playing in the park." }
     ],
     113: [
       { text: "Boken ligger *på* bordet.", translation: "The book is on the table." },
       { text: "Bildet henger *på* veggen.", translation: "The picture hangs on the wall." },
-      { text: "Vi møtes *på* kafeen.", translation: "We're meeting at the café." }
+      { text: "Vi møtes *på* kafeen.", translation: "We're meeting at the café." },
+      { text: "Koppen står *på* bordet.", translation: "The cup is on the table." },
+      { text: "Katten sover *på* sofaen.", translation: "The cat sleeps on the sofa." },
+      { text: "Vi er *på* jobb nå.", translation: "We are at work now." }
     ],
     114: [
       { text: "Katten sover *under* bordet.", translation: "The cat is sleeping under the table." },
       { text: "Nøklene ligger *under* matten.", translation: "The keys are under the mat." },
-      { text: "Vi satt *under* et tre.", translation: "We sat under a tree." }
+      { text: "Vi satt *under* et tre.", translation: "We sat under a tree." },
+      { text: "Hunden ligger *under* sengen.", translation: "The dog is lying under the bed." },
+      { text: "Skoene står *under* stolen.", translation: "The shoes are under the chair." },
+      { text: "Vi står *under* taket.", translation: "We are standing under the roof." }
     ],
     115: [
       { text: "Lampen henger *over* bordet.", translation: "The lamp hangs above the table." },
       { text: "Flyet fløy *over* fjellet.", translation: "The plane flew over the mountain." },
-      { text: "Hun bor *over* butikken.", translation: "She lives above the shop." }
+      { text: "Hun bor *over* butikken.", translation: "She lives above the shop." },
+      { text: "Fuglen flyr *over* huset.", translation: "The bird flies over the house." },
+      { text: "Vi gikk *over* broen.", translation: "We walked over the bridge." },
+      { text: "Bildet henger *over* sofaen.", translation: "The picture hangs above the sofa." }
     ],
     116: [
       { text: "Oslo er en fin *by*.", translation: "Oslo is a nice city." },
       { text: "Vi bor i en liten *by*.", translation: "We live in a small city." },
-      { text: "*Byen* har mange gamle bygninger.", translation: "The city has many old buildings." }
+      { text: "*Byen* har mange gamle bygninger.", translation: "The city has many old buildings." },
+      { text: "Bergen er en vakker *by*.", translation: "Bergen is a beautiful city." },
+      { text: "Jeg bor midt i *byen*.", translation: "I live in the middle of the city." },
+      { text: "*Byen* er stille om natten.", translation: "The city is quiet at night." }
     ],
     117: [
       { text: "Vi bor i samme *gate*.", translation: "We live on the same street." },
       { text: "*Gaten* var full av folk.", translation: "The street was full of people." },
-      { text: "Butikken ligger på denne *gaten*.", translation: "The shop is on this street." }
+      { text: "Butikken ligger på denne *gaten*.", translation: "The shop is on this street." },
+      { text: "*Gaten* er lang og smal.", translation: "The street is long and narrow." },
+      { text: "Barna leker i *gaten*.", translation: "The children are playing in the street." },
+      { text: "Hva heter denne *gaten*?", translation: "What is this street called?" }
     ],
     118: [
       { text: "Jeg skal til *butikken* etter melk.", translation: "I'm going to the shop for milk." },
       { text: "*Butikken* åpner klokka ni.", translation: "The shop opens at nine." },
-      { text: "Det er en ny *butikk* i sentrum.", translation: "There's a new shop in the center." }
+      { text: "Det er en ny *butikk* i sentrum.", translation: "There's a new shop in the center." },
+      { text: "*Butikken* er stengt i dag.", translation: "The shop is closed today." },
+      { text: "Hun jobber i en *butikk*.", translation: "She works in a shop." },
+      { text: "Jeg kjøpte skoene i den *butikken*.", translation: "I bought the shoes in that shop." }
     ],
     119: [
       { text: "Vi kjøper grønnsaker på *markedet*.", translation: "We buy vegetables at the market." },
       { text: "*Markedet* er åpent på lørdager.", translation: "The market is open on Saturdays." },
-      { text: "Det var mye folk på *markedet*.", translation: "There were a lot of people at the market." }
+      { text: "Det var mye folk på *markedet*.", translation: "There were a lot of people at the market." },
+      { text: "Vi går på *markedet* på lørdag.", translation: "We go to the market on Saturday." },
+      { text: "Jeg kjøpte fisk på *markedet*.", translation: "I bought fish at the market." },
+      { text: "*Markedet* er stort og fargerikt.", translation: "The market is big and colourful." }
     ],
     120: [
       { text: "Vi går en tur i *parken*.", translation: "We're taking a walk in the park." },
       { text: "Barna leker i *parken*.", translation: "The children are playing in the park." },
-      { text: "Det er en stor *park* nær huset.", translation: "There's a big park near the house." }
+      { text: "Det er en stor *park* nær huset.", translation: "There's a big park near the house." },
+      { text: "Hunden løper i *parken*.", translation: "The dog runs in the park." },
+      { text: "Vi spiste lunsj i *parken*.", translation: "We ate lunch in the park." },
+      { text: "*Parken* er full av blomster.", translation: "The park is full of flowers." }
     ],
     121: [
       { text: "Dette *rommet* er veldig lyst.", translation: "This room is very bright." },
       { text: "Huset har fem *rom*.", translation: "The house has five rooms." },
-      { text: "Jeg rydder *rommet* mitt.", translation: "I'm cleaning my room." }
+      { text: "Jeg rydder *rommet* mitt.", translation: "I'm cleaning my room." },
+      { text: "*Rommet* mitt er lite.", translation: "My room is small." },
+      { text: "Hotellet har et fint *rom*.", translation: "The hotel has a nice room." },
+      { text: "Hvor mange *rom* har huset?", translation: "How many rooms does the house have?" }
     ],
     122: [
       { text: "Vi lager mat på *kjøkkenet*.", translation: "We cook in the kitchen." },
       { text: "*Kjøkkenet* er stort og lyst.", translation: "The kitchen is big and bright." },
-      { text: "Hun sitter på *kjøkkenet* og drikker kaffe.", translation: "She's sitting in the kitchen drinking coffee." }
+      { text: "Hun sitter på *kjøkkenet* og drikker kaffe.", translation: "She's sitting in the kitchen drinking coffee." },
+      { text: "*Kjøkkenet* er rent nå.", translation: "The kitchen is clean now." },
+      { text: "Mor er på *kjøkkenet*.", translation: "Mum is in the kitchen." },
+      { text: "Vi har et nytt *kjøkken*.", translation: "We have a new kitchen." }
     ],
     123: [
       { text: "*Badet* er ved siden av soverommet.", translation: "The bathroom is next to the bedroom." },
       { text: "Jeg dusjer på *badet* hver morgen.", translation: "I shower in the bathroom every morning." },
-      { text: "Huset har to *bad*.", translation: "The house has two bathrooms." }
+      { text: "Huset har to *bad*.", translation: "The house has two bathrooms." },
+      { text: "Hvor er *badet*?", translation: "Where is the bathroom?" },
+      { text: "*Badet* er ledig nå.", translation: "The bathroom is free now." },
+      { text: "Jeg vasker *badet* i dag.", translation: "I'm cleaning the bathroom today." }
     ],
     124: [
       { text: "*Soverommet* mitt er lite men koselig.", translation: "My bedroom is small but cozy." },
       { text: "Barna sover i det samme *soverommet*.", translation: "The children sleep in the same bedroom." },
-      { text: "Vi malte *soverommet* blått.", translation: "We painted the bedroom blue." }
+      { text: "Vi malte *soverommet* blått.", translation: "We painted the bedroom blue." },
+      { text: "*Soverommet* er ved siden av badet.", translation: "The bedroom is next to the bathroom." },
+      { text: "Jeg leser på *soverommet*.", translation: "I read in the bedroom." },
+      { text: "Huset har tre *soverom*.", translation: "The house has three bedrooms." }
     ],
     125: [
       { text: "Vi ser på TV i *stuen*.", translation: "We watch TV in the living room." },
       { text: "*Stuen* har en stor sofa.", translation: "The living room has a big sofa." },
-      { text: "Familien samles i *stuen* om kvelden.", translation: "The family gathers in the living room in the evening." }
+      { text: "Familien samles i *stuen* om kvelden.", translation: "The family gathers in the living room in the evening." },
+      { text: "*Stuen* er stor og lys.", translation: "The living room is big and bright." },
+      { text: "Katten sover i *stuen*.", translation: "The cat sleeps in the living room." },
+      { text: "Vi spiser middag i *stuen*.", translation: "We eat dinner in the living room." }
     ],
     126: [
       { text: "Jeg liker *ost* på brødet.", translation: "I like cheese on bread." },
       { text: "Vi kjøpte norsk *ost* på markedet.", translation: "We bought Norwegian cheese at the market." },
-      { text: "*Osten* smaker veldig godt.", translation: "The cheese tastes very good." }
+      { text: "*Osten* smaker veldig godt.", translation: "The cheese tastes very good." },
+      { text: "Jeg kjøper *ost* og brød.", translation: "I'm buying cheese and bread." },
+      { text: "*Osten* ligger i kjøleskapet.", translation: "The cheese is in the fridge." },
+      { text: "Vil du ha mer *ost*?", translation: "Do you want more cheese?" }
     ],
     127: [
       { text: "Jeg spiser *egg* til frokost.", translation: "I eat eggs for breakfast." },
       { text: "Kan du kjøpe *egg* på butikken?", translation: "Can you buy eggs at the shop?" },
-      { text: "*Egget* var kokt akkurat riktig.", translation: "The egg was cooked just right." }
+      { text: "*Egget* var kokt akkurat riktig.", translation: "The egg was cooked just right." },
+      { text: "Jeg kokte et *egg*.", translation: "I boiled an egg." },
+      { text: "Vi trenger seks *egg*.", translation: "We need six eggs." },
+      { text: "Hønen la et *egg*.", translation: "The hen laid an egg." }
     ],
     128: [
       { text: "Vi spiser *fisk* hver fredag.", translation: "We eat fish every Friday." },
       { text: "*Fisken* var veldig fersk.", translation: "The fish was very fresh." },
-      { text: "Han fanget en stor *fisk* i sjøen.", translation: "He caught a big fish in the sea." }
+      { text: "Han fanget en stor *fisk* i sjøen.", translation: "He caught a big fish in the sea." },
+      { text: "Katten liker *fisk*.", translation: "The cat likes fish." },
+      { text: "Vi kjøpte *fisk* på markedet.", translation: "We bought fish at the market." },
+      { text: "*Fisken* svømmer i elva.", translation: "The fish swims in the river." }
     ],
     129: [
       { text: "Hun spiser ikke *kjøtt*.", translation: "She doesn't eat meat." },
       { text: "Vi grillet *kjøtt* i hagen.", translation: "We grilled meat in the garden." },
-      { text: "*Kjøttet* var mørt og godt.", translation: "The meat was tender and good." }
+      { text: "*Kjøttet* var mørt og godt.", translation: "The meat was tender and good." },
+      { text: "Jeg kjøpte *kjøtt* til middag.", translation: "I bought meat for dinner." },
+      { text: "Hunden spiser *kjøtt*.", translation: "The dog eats meat." },
+      { text: "*Kjøttet* er i ovnen.", translation: "The meat is in the oven." }
     ],
     130: [
       { text: "Vi spiser *suppe* når det er kaldt.", translation: "We eat soup when it's cold." },
       { text: "*Suppen* var varm og god.", translation: "The soup was warm and good." },
-      { text: "Mamma lagde *suppe* til middag.", translation: "Mom made soup for dinner." }
+      { text: "Mamma lagde *suppe* til middag.", translation: "Mom made soup for dinner." },
+      { text: "Jeg lager *suppe* i dag.", translation: "I'm making soup today." },
+      { text: "*Suppen* er for salt.", translation: "The soup is too salty." },
+      { text: "Vil du ha mer *suppe*?", translation: "Do you want more soup?" }
     ],
     131: [
       { text: "Jeg spiser et *eple* hver dag.", translation: "I eat an apple every day." },
       { text: "*Eplet* var rødt og søtt.", translation: "The apple was red and sweet." },
-      { text: "Vi plukket *epler* i hagen.", translation: "We picked apples in the garden." }
+      { text: "Vi plukket *epler* i hagen.", translation: "We picked apples in the garden." },
+      { text: "Kan jeg få et *eple*?", translation: "Can I have an apple?" },
+      { text: "*Eplet* ligger på bordet.", translation: "The apple is on the table." },
+      { text: "Hun kjøpte grønne *epler*.", translation: "She bought green apples." }
     ],
     132: [
       { text: "Jeg tar en *banan* til lunsj.", translation: "I'll have a banana for lunch." },
       { text: "*Bananen* var moden og søt.", translation: "The banana was ripe and sweet." },
-      { text: "Barna liker *bananer* godt.", translation: "The children like bananas a lot." }
+      { text: "Barna liker *bananer* godt.", translation: "The children like bananas a lot." },
+      { text: "Apen spiser en *banan*.", translation: "The monkey is eating a banana." },
+      { text: "Jeg kjøpte fem *bananer*.", translation: "I bought five bananas." },
+      { text: "*Bananen* er gul.", translation: "The banana is yellow." }
     ],
     133: [
       { text: "Jeg drikker juice av *appelsin*.", translation: "I drink juice made from oranges." },
       { text: "*Appelsinen* var saftig og søt.", translation: "The orange was juicy and sweet." },
-      { text: "Vi kjøpte en pose *appelsiner*.", translation: "We bought a bag of oranges." }
+      { text: "Vi kjøpte en pose *appelsiner*.", translation: "We bought a bag of oranges." },
+      { text: "Jeg spiser en *appelsin*.", translation: "I'm eating an orange." },
+      { text: "Hun skreller en *appelsin*.", translation: "She is peeling an orange." },
+      { text: "*Appelsinene* er fra Spania.", translation: "The oranges are from Spain." }
     ],
     134: [
       { text: "Vi spiser *poteter* til middag.", translation: "We eat potatoes for dinner." },
       { text: "*Poteten* var kokt og myk.", translation: "The potato was boiled and soft." },
-      { text: "Han dyrker *poteter* i hagen.", translation: "He grows potatoes in the garden." }
+      { text: "Han dyrker *poteter* i hagen.", translation: "He grows potatoes in the garden." },
+      { text: "Jeg skreller *potetene*.", translation: "I'm peeling the potatoes." },
+      { text: "Vi kjøper *poteter* på markedet.", translation: "We buy potatoes at the market." },
+      { text: "Hun liker *poteter* med smør.", translation: "She likes potatoes with butter." }
     ],
     135: [
       { text: "Kaninen spiser en *gulrot*.", translation: "The rabbit is eating a carrot." },
       { text: "*Gulroten* var søt og sprø.", translation: "The carrot was sweet and crisp." },
-      { text: "Vi kutter *gulrøtter* til suppen.", translation: "We cut carrots for the soup." }
+      { text: "Vi kutter *gulrøtter* til suppen.", translation: "We cut carrots for the soup." },
+      { text: "Hesten spiser en *gulrot*.", translation: "The horse is eating a carrot." },
+      { text: "Jeg kjøpte *gulrøtter* og løk.", translation: "I bought carrots and onions." },
+      { text: "Barnet liker ikke *gulrøtter*.", translation: "The child doesn't like carrots." }
     ],
     136: [
       { text: "Jeg drikker *te* om morgenen.", translation: "I drink tea in the morning." },
       { text: "Kan jeg få en kopp *te*?", translation: "Can I have a cup of tea?" },
-      { text: "*Teen* var for varm å drikke.", translation: "The tea was too hot to drink." }
+      { text: "*Teen* var for varm å drikke.", translation: "The tea was too hot to drink." },
+      { text: "Vil du ha *te*?", translation: "Would you like tea?" },
+      { text: "Hun drikker grønn *te*.", translation: "She drinks green tea." },
+      { text: "*Teen* er klar.", translation: "The tea is ready." }
     ],
     137: [
       { text: "Barnet drikker *melk* til frokost.", translation: "The child drinks milk for breakfast." },
       { text: "Kan du kjøpe *melk* på butikken?", translation: "Can you buy milk at the shop?" },
-      { text: "*Melken* var kald og frisk.", translation: "The milk was cold and fresh." }
+      { text: "*Melken* var kald og frisk.", translation: "The milk was cold and fresh." },
+      { text: "Jeg drikker kaffe med *melk*.", translation: "I drink coffee with milk." },
+      { text: "Katten drikker *melk*.", translation: "The cat drinks milk." },
+      { text: "Vi har ikke mer *melk*.", translation: "We don't have any more milk." }
     ],
     138: [
       { text: "Jeg drikker *juice* hver morgen.", translation: "I drink juice every morning." },
       { text: "*Juicen* smaker søtt og friskt.", translation: "The juice tastes sweet and fresh." },
-      { text: "Vi laget *juice* av epler.", translation: "We made juice from apples." }
+      { text: "Vi laget *juice* av epler.", translation: "We made juice from apples." },
+      { text: "Vil du ha *juice*?", translation: "Would you like juice?" },
+      { text: "Barna drikker *juice* til frokost.", translation: "The children drink juice at breakfast." },
+      { text: "Jeg kjøpte *juice* på butikken.", translation: "I bought juice at the shop." }
     ],
     139: [
       { text: "Jeg spiser *frokost* klokka sju.", translation: "I eat breakfast at seven." },
       { text: "*Frokosten* var deilig i morges.", translation: "Breakfast was delicious this morning." },
-      { text: "Vi spiser *frokost* sammen hver dag.", translation: "We eat breakfast together every day." }
+      { text: "Vi spiser *frokost* sammen hver dag.", translation: "We eat breakfast together every day." },
+      { text: "*Frokosten* er klar!", translation: "Breakfast is ready!" },
+      { text: "Jeg spiser egg til *frokost*.", translation: "I eat eggs for breakfast." },
+      { text: "Han spiste ikke *frokost* i dag.", translation: "He didn't eat breakfast today." }
     ],
     140: [
       { text: "Vi spiser *lunsj* klokka tolv.", translation: "We eat lunch at twelve." },
       { text: "*Lunsjen* var rask men god.", translation: "Lunch was quick but good." },
-      { text: "Han tar med seg *lunsj* på jobb.", translation: "He brings lunch to work." }
+      { text: "Han tar med seg *lunsj* på jobb.", translation: "He brings lunch to work." },
+      { text: "Hva spiser du til *lunsj*?", translation: "What do you eat for lunch?" },
+      { text: "Vi har *lunsj* nå.", translation: "We are having lunch now." },
+      { text: "*Lunsjen* står på bordet.", translation: "Lunch is on the table." }
     ],
     141: [
       { text: "Vi spiser *middag* klokka seks.", translation: "We eat dinner at six." },
       { text: "*Middagen* var veldig god i kveld.", translation: "Dinner was very good tonight." },
-      { text: "Familien samles til *middag* hver søndag.", translation: "The family gathers for dinner every Sunday." }
+      { text: "Familien samles til *middag* hver søndag.", translation: "The family gathers for dinner every Sunday." },
+      { text: "Hva skal vi ha til *middag*?", translation: "What are we having for dinner?" },
+      { text: "Far lager *middag* i kveld.", translation: "Dad is making dinner tonight." },
+      { text: "*Middagen* er klar klokka fem.", translation: "Dinner is ready at five o'clock." }
     ],
     142: [
       { text: "Kan du sende meg *saltet*?", translation: "Can you pass me the salt?" },
       { text: "Suppen trenger litt mer *salt*.", translation: "The soup needs a bit more salt." },
-      { text: "Han bruker for mye *salt* i maten.", translation: "He uses too much salt in the food." }
+      { text: "Han bruker for mye *salt* i maten.", translation: "He uses too much salt in the food." },
+      { text: "*Saltet* står på bordet.", translation: "The salt is on the table." },
+      { text: "Jeg bruker lite *salt*.", translation: "I use little salt." },
+      { text: "Poteter trenger litt *salt*.", translation: "Potatoes need a little salt." }
     ],
     143: [
       { text: "Jeg drikker kaffe uten *sukker*.", translation: "I drink coffee without sugar." },
       { text: "Kan du sende meg *sukkeret*?", translation: "Can you pass me the sugar?" },
-      { text: "Kaken trenger mye *sukker*.", translation: "The cake needs a lot of sugar." }
+      { text: "Kaken trenger mye *sukker*.", translation: "The cake needs a lot of sugar." },
+      { text: "Vil du ha *sukker* i teen?", translation: "Do you want sugar in your tea?" },
+      { text: "Vi har ikke mer *sukker*.", translation: "We don't have any more sugar." },
+      { text: "Jeg kjøpte *sukker* og melk.", translation: "I bought sugar and milk." }
     ],
     144: [
       { text: "Maten ligger på *tallerkenen*.", translation: "The food is on the plate." },
       { text: "Kan du vaske *tallerkenen*?", translation: "Can you wash the plate?" },
-      { text: "Vi dekker bordet med *tallerkener*.", translation: "We're setting the table with plates." }
+      { text: "Vi dekker bordet med *tallerkener*.", translation: "We're setting the table with plates." },
+      { text: "*Tallerkenen* er tom.", translation: "The plate is empty." },
+      { text: "Hun satte en *tallerken* på bordet.", translation: "She put a plate on the table." },
+      { text: "Vi trenger fire *tallerkener*.", translation: "We need four plates." }
     ],
     145: [
       { text: "Kan jeg få et *glass* vann?", translation: "Can I have a glass of water?" },
       { text: "*Glasset* falt og knuste.", translation: "The glass fell and broke." },
-      { text: "Hun fylte *glasset* med juice.", translation: "She filled the glass with juice." }
+      { text: "Hun fylte *glasset* med juice.", translation: "She filled the glass with juice." },
+      { text: "*Glasset* er fullt.", translation: "The glass is full." },
+      { text: "Hun drakk et *glass* vin.", translation: "She drank a glass of wine." },
+      { text: "Jeg vasker *glassene*.", translation: "I'm washing the glasses." }
     ],
     146: [
       { text: "Jeg har vondt i *hodet*.", translation: "I have a headache." },
       { text: "Han rista på *hodet*.", translation: "He shook his head." },
-      { text: "*Hodet* mitt gjør vondt.", translation: "My head hurts." }
+      { text: "*Hodet* mitt gjør vondt.", translation: "My head hurts." },
+      { text: "Hun la *hodet* på puten.", translation: "She put her head on the pillow." },
+      { text: "Han har en lue på *hodet*.", translation: "He has a hat on his head." },
+      { text: "Jeg slo *hodet* mitt.", translation: "I hit my head." }
     ],
     147: [
       { text: "Hun holdt meg i *hånden*.", translation: "She held my hand." },
       { text: "Vask *hendene* dine før du spiser.", translation: "Wash your hands before you eat." },
-      { text: "Han vinket med *hånden*.", translation: "He waved with his hand." }
+      { text: "Han vinket med *hånden*.", translation: "He waved with his hand." },
+      { text: "Løft *hånden*, vær så snill.", translation: "Raise your hand, please." },
+      { text: "Hun har kalde *hender*.", translation: "She has cold hands." },
+      { text: "Jeg skriver med høyre *hånd*.", translation: "I write with my right hand." }
     ],
     148: [
       { text: "Jeg vred om på *foten*.", translation: "I twisted my foot." },
       { text: "Barnet har små *føtter*.", translation: "The child has small feet." },
-      { text: "Han sparket ballen med *foten*.", translation: "He kicked the ball with his foot." }
+      { text: "Han sparket ballen med *foten*.", translation: "He kicked the ball with his foot." },
+      { text: "*Foten* min gjør vondt.", translation: "My foot hurts." },
+      { text: "Vi gikk til byen til *fots*.", translation: "We walked to town on foot." },
+      { text: "Han har store *føtter*.", translation: "He has big feet." }
     ],
     149: [
       { text: "Hun har blå *øyne*.", translation: "She has blue eyes." },
       { text: "Jeg fikk noe i *øyet*.", translation: "I got something in my eye." },
-      { text: "Barnet lukket *øynene* og sov.", translation: "The child closed its eyes and slept." }
+      { text: "Barnet lukket *øynene* og sov.", translation: "The child closed its eyes and slept." },
+      { text: "Katten har grønne *øyne*.", translation: "The cat has green eyes." },
+      { text: "Lukk *øynene* nå.", translation: "Close your eyes now." },
+      { text: "Hun har vakre *øyne*.", translation: "She has beautiful eyes." }
     ],
     150: [
       { text: "Han hvisket noe i *øret* mitt.", translation: "He whispered something in my ear." },
       { text: "Musikken var høy, så jeg dekket *ørene*.", translation: "The music was loud, so I covered my ears." },
-      { text: "Hunden har store *ører*.", translation: "The dog has big ears." }
+      { text: "Hunden har store *ører*.", translation: "The dog has big ears." },
+      { text: "Jeg har vondt i *øret*.", translation: "I have an earache." },
+      { text: "Katten har små *ører*.", translation: "The cat has small ears." },
+      { text: "Hun har ringer i *ørene*.", translation: "She has rings in her ears." }
     ],
     151: [
       { text: "Barnet har en liten *nese*.", translation: "The child has a small nose." },
       { text: "Jeg puster gjennom *nesen*.", translation: "I breathe through my nose." },
-      { text: "Han har en forkjølet *nese*.", translation: "He has a stuffy nose." }
+      { text: "Han har en forkjølet *nese*.", translation: "He has a stuffy nose." },
+      { text: "Hunden har en kald *nese*.", translation: "The dog has a cold nose." },
+      { text: "*Nesen* min er rød.", translation: "My nose is red." },
+      { text: "Han slo *nesen* sin.", translation: "He hit his nose." }
     ],
     152: [
       { text: "Lukk *munnen* din, vær så snill.", translation: "Close your mouth, please." },
       { text: "Hun smilte med hele *munnen*.", translation: "She smiled with her whole mouth." },
-      { text: "Ikke snakk med mat i *munnen*.", translation: "Don't talk with food in your mouth." }
+      { text: "Ikke snakk med mat i *munnen*.", translation: "Don't talk with food in your mouth." },
+      { text: "Åpne *munnen*, vær så snill.", translation: "Open your mouth, please." },
+      { text: "Barnet har en liten *munn*.", translation: "The child has a small mouth." },
+      { text: "Hun tørket *munnen*.", translation: "She wiped her mouth." }
     ],
     153: [
       { text: "Hun har langt, mørkt *hår*.", translation: "She has long, dark hair." },
       { text: "Han klipper *håret* sitt selv.", translation: "He cuts his own hair." },
-      { text: "*Håret* mitt blir vått i regnet.", translation: "My hair gets wet in the rain." }
+      { text: "*Håret* mitt blir vått i regnet.", translation: "My hair gets wet in the rain." },
+      { text: "Hun har langt *hår*.", translation: "She has long hair." },
+      { text: "*Håret* hans er grått.", translation: "His hair is grey." },
+      { text: "Jeg vasker *håret* hver dag.", translation: "I wash my hair every day." }
     ],
     154: [
       { text: "Ta på deg *jakken*, det er kaldt ute.", translation: "Put on your jacket, it's cold outside." },
       { text: "Jeg kjøpte en ny *jakke* i går.", translation: "I bought a new jacket yesterday." },
-      { text: "*Jakken* hennes er blå og varm.", translation: "Her jacket is blue and warm." }
+      { text: "*Jakken* hennes er blå og varm.", translation: "Her jacket is blue and warm." },
+      { text: "Hvor er *jakken* min?", translation: "Where is my jacket?" },
+      { text: "Han glemte *jakken* sin.", translation: "He forgot his jacket." },
+      { text: "Denne *jakken* er for stor.", translation: "This jacket is too big." }
     ],
     155: [
       { text: "Ta av deg *skoene* før du går inn.", translation: "Take off your shoes before you go in." },
       { text: "Disse *skoene* er veldig komfortable.", translation: "These shoes are very comfortable." },
-      { text: "Jeg trenger nye *sko* til vinteren.", translation: "I need new shoes for winter." }
+      { text: "Jeg trenger nye *sko* til vinteren.", translation: "I need new shoes for winter." },
+      { text: "Hvor er *skoene* mine?", translation: "Where are my shoes?" },
+      { text: "Jeg kjøpte nye *sko* i dag.", translation: "I bought new shoes today." },
+      { text: "*Skoene* er våte.", translation: "The shoes are wet." }
     ],
     156: [
       { text: "Jeg kjøpte en ny *bukse* i går.", translation: "I bought new pants yesterday." },
       { text: "*Buksen* min er for lang.", translation: "My pants are too long." },
-      { text: "Han går alltid med svarte *bukser*.", translation: "He always wears black pants." }
+      { text: "Han går alltid med svarte *bukser*.", translation: "He always wears black pants." },
+      { text: "*Buksen* er for kort.", translation: "The trousers are too short." },
+      { text: "Han har på seg blå *bukser*.", translation: "He is wearing blue trousers." },
+      { text: "Jeg vasker *buksen* min.", translation: "I'm washing my trousers." }
     ],
     157: [
       { text: "Han har på seg en hvit *skjorte*.", translation: "He's wearing a white shirt." },
       { text: "*Skjorten* min trenger stryking.", translation: "My shirt needs ironing." },
-      { text: "Vi kjøpte en ny *skjorte* til bursdagen hans.", translation: "We bought a new shirt for his birthday." }
+      { text: "Vi kjøpte en ny *skjorte* til bursdagen hans.", translation: "We bought a new shirt for his birthday." },
+      { text: "*Skjorten* er ren.", translation: "The shirt is clean." },
+      { text: "Han kjøpte en blå *skjorte*.", translation: "He bought a blue shirt." },
+      { text: "Denne *skjorten* er for liten.", translation: "This shirt is too small." }
     ],
     158: [
       { text: "Hun har en fin *kjole* på seg.", translation: "She's wearing a nice dress." },
       { text: "*Kjolen* var rød og lang.", translation: "The dress was red and long." },
-      { text: "Jeg skal kjøpe en ny *kjole* til festen.", translation: "I'm going to buy a new dress for the party." }
+      { text: "Jeg skal kjøpe en ny *kjole* til festen.", translation: "I'm going to buy a new dress for the party." },
+      { text: "*Kjolen* er for lang.", translation: "The dress is too long." },
+      { text: "Hun har på seg en hvit *kjole*.", translation: "She is wearing a white dress." },
+      { text: "Jeg liker den grønne *kjolen*.", translation: "I like the green dress." }
     ],
     159: [
       { text: "Ta på deg *luen*, det er kaldt.", translation: "Put on your hat, it's cold." },
       { text: "*Luen* hans er blå og varm.", translation: "His hat is blue and warm." },
-      { text: "Jeg mistet *luen* min i vinden.", translation: "I lost my hat in the wind." }
+      { text: "Jeg mistet *luen* min i vinden.", translation: "I lost my hat in the wind." },
+      { text: "Han har en rød *lue*.", translation: "He has a red hat." },
+      { text: "Hvor er *luen* min?", translation: "Where is my hat?" },
+      { text: "Bestemor strikket en *lue*.", translation: "Grandma knitted a hat." }
     ],
     160: [
       { text: "Jeg har på meg en varm *genser*.", translation: "I'm wearing a warm sweater." },
       { text: "*Genseren* min er av ull.", translation: "My sweater is made of wool." },
-      { text: "Hun strikket en *genser* til meg.", translation: "She knitted a sweater for me." }
+      { text: "Hun strikket en *genser* til meg.", translation: "She knitted a sweater for me." },
+      { text: "Ta på deg en *genser*.", translation: "Put on a sweater." },
+      { text: "*Genseren* er for stor.", translation: "The sweater is too big." },
+      { text: "Jeg kjøpte en grå *genser*.", translation: "I bought a grey sweater." }
     ],
     161: [
       { text: "Vent bare et *sekund*.", translation: "Just wait a second." },
       { text: "Det tok bare noen *sekunder*.", translation: "It only took a few seconds." },
-      { text: "Hvert *sekund* teller.", translation: "Every second counts." }
+      { text: "Hvert *sekund* teller.", translation: "Every second counts." },
+      { text: "Vent et *sekund*!", translation: "Wait a second!" },
+      { text: "Han løp i ti *sekunder*.", translation: "He ran for ten seconds." },
+      { text: "Det tar bare ett *sekund*.", translation: "It only takes one second." }
     ],
     162: [
       { text: "Møtet varte i en *time*.", translation: "The meeting lasted an hour." },
       { text: "Jeg venter en *time* til.", translation: "I'll wait one more hour." },
-      { text: "Turen tar tre *timer*.", translation: "The trip takes three hours." }
+      { text: "Turen tar tre *timer*.", translation: "The trip takes three hours." },
+      { text: "Jeg sov i åtte *timer*.", translation: "I slept for eight hours." },
+      { text: "Filmen varer i to *timer*.", translation: "The film lasts two hours." },
+      { text: "Vi ses om en *time*.", translation: "See you in an hour." }
     ],
     163: [
       { text: "Vent et *minutt*, vær så snill.", translation: "Wait a minute, please." },
       { text: "Toget kommer om fem *minutter*.", translation: "The train arrives in five minutes." },
-      { text: "Det tar bare noen *minutter*.", translation: "It only takes a few minutes." }
+      { text: "Det tar bare noen *minutter*.", translation: "It only takes a few minutes." },
+      { text: "Bussen kommer om ti *minutter*.", translation: "The bus comes in ten minutes." },
+      { text: "Jeg er klar om ett *minutt*.", translation: "I'll be ready in one minute." },
+      { text: "Vi har fem *minutter* igjen.", translation: "We have five minutes left." }
     ],
     164: [
       { text: "Jeg er tjue *år* gammel.", translation: "I am twenty years old." },
       { text: "Vi flyttet hit for to *år* siden.", translation: "We moved here two years ago." },
-      { text: "Neste *år* skal vi reise til Italia.", translation: "Next year we're going to travel to Italy." }
+      { text: "Neste *år* skal vi reise til Italia.", translation: "Next year we're going to travel to Italy." },
+      { text: "Hun er seks *år* gammel.", translation: "She is six years old." },
+      { text: "Godt nytt *år*!", translation: "Happy New Year!" },
+      { text: "Jeg har bodd her i ti *år*.", translation: "I have lived here for ten years." }
     ],
     165: [
       { text: "Hva skal du gjøre i *helgen*?", translation: "What are you doing this weekend?" },
       { text: "Vi drar til hytta hver *helg*.", translation: "We go to the cabin every weekend." },
-      { text: "*Helgen* var kort men fin.", translation: "The weekend was short but nice." }
+      { text: "*Helgen* var kort men fin.", translation: "The weekend was short but nice." },
+      { text: "Ha en fin *helg*!", translation: "Have a nice weekend!" },
+      { text: "Jeg jobber ikke i *helgen*.", translation: "I don't work at the weekend." },
+      { text: "Vi var på fjellet i *helgen*.", translation: "We were in the mountains at the weekend." }
     ],
     166: [
       { text: "*Mandag* begynner jeg på ny jobb.", translation: "On Monday I start a new job." },
       { text: "Vi møtes hver *mandag*.", translation: "We meet every Monday." },
-      { text: "*Mandagen* var travel og lang.", translation: "Monday was busy and long." }
+      { text: "*Mandagen* var travel og lang.", translation: "Monday was busy and long." },
+      { text: "I dag er det *mandag*.", translation: "Today is Monday." },
+      { text: "Skolen begynner på *mandag*.", translation: "School starts on Monday." },
+      { text: "Jeg jobber hver *mandag*.", translation: "I work every Monday." }
     ],
     167: [
       { text: "*Tirsdag* har jeg trening.", translation: "On Tuesday I have training." },
       { text: "Vi drar til byen på *tirsdag*.", translation: "We're going to town on Tuesday." },
-      { text: "*Tirsdager* er alltid rolige.", translation: "Tuesdays are always calm." }
+      { text: "*Tirsdager* er alltid rolige.", translation: "Tuesdays are always calm." },
+      { text: "Vi møtes på *tirsdag*.", translation: "We meet on Tuesday." },
+      { text: "I morgen er det *tirsdag*.", translation: "Tomorrow is Tuesday." },
+      { text: "Butikken er stengt på *tirsdag*.", translation: "The shop is closed on Tuesday." }
     ],
     168: [
       { text: "Møtet er *onsdag* klokka ti.", translation: "The meeting is Wednesday at ten." },
       { text: "Hun jobber ikke på *onsdager*.", translation: "She doesn't work on Wednesdays." },
-      { text: "Vi ses igjen på *onsdag*.", translation: "We'll see each other again on Wednesday." }
+      { text: "Vi ses igjen på *onsdag*.", translation: "We'll see each other again on Wednesday." },
+      { text: "I dag er det *onsdag*.", translation: "Today is Wednesday." },
+      { text: "Jeg har norskkurs på *onsdag*.", translation: "I have a Norwegian course on Wednesday." },
+      { text: "Hun kommer hjem på *onsdag*.", translation: "She comes home on Wednesday." }
     ],
     169: [
       { text: "*Torsdag* skal vi ha middag sammen.", translation: "On Thursday we're having dinner together." },
       { text: "Han reiser hjem på *torsdag*.", translation: "He travels home on Thursday." },
-      { text: "*Torsdager* er min favorittdag.", translation: "Thursdays are my favorite day." }
+      { text: "*Torsdager* er min favorittdag.", translation: "Thursdays are my favorite day." },
+      { text: "Vi spiser fisk på *torsdag*.", translation: "We eat fish on Thursday." },
+      { text: "*Torsdag* er en lang dag.", translation: "Thursday is a long day." },
+      { text: "Jeg ringer deg på *torsdag*.", translation: "I'll call you on Thursday." }
     ],
     170: [
       { text: "Endelig er det *fredag*!", translation: "Finally it's Friday!" },
       { text: "Vi feirer alltid på *fredager*.", translation: "We always celebrate on Fridays." },
-      { text: "*Fredag* kveld går vi ut.", translation: "Friday evening we go out." }
+      { text: "*Fredag* kveld går vi ut.", translation: "Friday evening we go out." },
+      { text: "På *fredag* spiser vi pizza.", translation: "On Friday we eat pizza." },
+      { text: "Jeg er fri på *fredag*.", translation: "I'm off on Friday." },
+      { text: "*Fredag* er min favorittdag.", translation: "Friday is my favourite day." }
     ],
     171: [
       { text: "Vi handler på *lørdager*.", translation: "We shop on Saturdays." },
       { text: "*Lørdag* skal vi til stranden.", translation: "On Saturday we're going to the beach." },
-      { text: "Festen er på *lørdag*.", translation: "The party is on Saturday." }
+      { text: "Festen er på *lørdag*.", translation: "The party is on Saturday." },
+      { text: "På *lørdag* sover jeg lenge.", translation: "On Saturday I sleep late." },
+      { text: "Vi vasker huset på *lørdag*.", translation: "We clean the house on Saturday." },
+      { text: "Hva gjør du på *lørdag*?", translation: "What are you doing on Saturday?" }
     ],
     172: [
       { text: "Vi spiser stor middag på *søndager*.", translation: "We eat a big dinner on Sundays." },
       { text: "*Søndag* er en rolig dag.", translation: "Sunday is a calm day." },
-      { text: "Familien samles hver *søndag*.", translation: "The family gathers every Sunday." }
+      { text: "Familien samles hver *søndag*.", translation: "The family gathers every Sunday." },
+      { text: "På *søndag* går vi tur.", translation: "On Sunday we go for a walk." },
+      { text: "Butikken er stengt på *søndag*.", translation: "The shop is closed on Sunday." },
+      { text: "Jeg ringer mor på *søndag*.", translation: "I call mum on Sunday." }
     ],
     173: [
       { text: "Blomstene blomstrer om *våren*.", translation: "The flowers bloom in spring." },
       { text: "*Våren* er min favorittårstid.", translation: "Spring is my favorite season." },
-      { text: "Vi planter grønnsaker om *våren*.", translation: "We plant vegetables in spring." }
+      { text: "Vi planter grønnsaker om *våren*.", translation: "We plant vegetables in spring." },
+      { text: "Om *våren* blir det varmere.", translation: "In spring it gets warmer." },
+      { text: "*Våren* kommer sent i år.", translation: "Spring is coming late this year." },
+      { text: "Fuglene synger om *våren*.", translation: "The birds sing in spring." }
     ],
     174: [
       { text: "Vi reiser til Italia hver *sommer*.", translation: "We travel to Italy every summer." },
       { text: "*Sommeren* var varm og solrik.", translation: "The summer was warm and sunny." },
-      { text: "Om *sommeren* bader vi hver dag.", translation: "In summer we swim every day." }
+      { text: "Om *sommeren* bader vi hver dag.", translation: "In summer we swim every day." },
+      { text: "Jeg elsker *sommeren*.", translation: "I love summer." },
+      { text: "Vi har ferie om *sommeren*.", translation: "We have holidays in the summer." },
+      { text: "Det var en varm *sommer*.", translation: "It was a warm summer." }
     ],
     175: [
       { text: "Bladene faller om *høsten*.", translation: "The leaves fall in autumn." },
       { text: "*Høsten* er kald og våt her.", translation: "Autumn is cold and wet here." },
-      { text: "Skolen begynner om *høsten*.", translation: "School starts in autumn." }
+      { text: "Skolen begynner om *høsten*.", translation: "School starts in autumn." },
+      { text: "Om *høsten* regner det mye.", translation: "In autumn it rains a lot." },
+      { text: "Trærne er røde om *høsten*.", translation: "The trees are red in autumn." },
+      { text: "*Høsten* kommer snart.", translation: "Autumn is coming soon." }
     ],
     176: [
       { text: "Det snør mye om *vinteren*.", translation: "It snows a lot in winter." },
       { text: "*Vinteren* er lang og mørk i Norge.", translation: "Winter is long and dark in Norway." },
-      { text: "Vi går på ski om *vinteren*.", translation: "We go skiing in winter." }
+      { text: "Vi går på ski om *vinteren*.", translation: "We go skiing in winter." },
+      { text: "*Vinteren* er kald.", translation: "Winter is cold." },
+      { text: "Jeg liker ikke *vinter*.", translation: "I don't like winter." },
+      { text: "Om *vinteren* er det mørkt.", translation: "In winter it is dark." }
     ],
     177: [
       { text: "*Solen* skinner i dag.", translation: "The sun is shining today." },
       { text: "Vi solte oss i *solen* hele dagen.", translation: "We sunbathed in the sun all day." },
-      { text: "*Solen* går ned klokka åtte.", translation: "The sun sets at eight." }
+      { text: "*Solen* går ned klokka åtte.", translation: "The sun sets at eight." },
+      { text: "*Solen* er varm i dag.", translation: "The sun is warm today." },
+      { text: "Vi sitter i *solen*.", translation: "We are sitting in the sun." },
+      { text: "*Solen* står opp tidlig.", translation: "The sun rises early." }
     ],
     178: [
       { text: "Det er mye *regn* i dag.", translation: "There's a lot of rain today." },
       { text: "Vi ble våte av *regnet*.", translation: "We got wet from the rain." },
-      { text: "*Regnet* stoppet etter en time.", translation: "The rain stopped after an hour." }
+      { text: "*Regnet* stoppet etter en time.", translation: "The rain stopped after an hour." },
+      { text: "Jeg liker lyden av *regn*.", translation: "I like the sound of rain." },
+      { text: "*Regnet* faller hele dagen.", translation: "The rain falls all day." },
+      { text: "Vi går ut i *regnet*.", translation: "We go out in the rain." }
     ],
     179: [
       { text: "Det ligger mye *snø* på bakken.", translation: "There's a lot of snow on the ground." },
       { text: "Barna leker i *snøen*.", translation: "The children are playing in the snow." },
-      { text: "*Snøen* smeltet fort i sola.", translation: "The snow melted quickly in the sun." }
+      { text: "*Snøen* smeltet fort i sola.", translation: "The snow melted quickly in the sun." },
+      { text: "*Snøen* er hvit og kald.", translation: "The snow is white and cold." },
+      { text: "Vi fikk mye *snø* i natt.", translation: "We got a lot of snow last night." },
+      { text: "Jeg elsker *snø*!", translation: "I love snow!" }
     ],
     180: [
       { text: "Det blåser mye *vind* i dag.", translation: "There's a lot of wind today." },
       { text: "*Vinden* rev av seg taket.", translation: "The wind ripped off the roof." },
-      { text: "Vi kjente en kald *vind* fra havet.", translation: "We felt a cold wind from the sea." }
+      { text: "Vi kjente en kald *vind* fra havet.", translation: "We felt a cold wind from the sea." },
+      { text: "*Vinden* er kald i dag.", translation: "The wind is cold today." },
+      { text: "Det er mye *vind* ved havet.", translation: "There is a lot of wind by the sea." },
+      { text: "*Vinden* blåser hardt.", translation: "The wind blows hard." }
     ],
     181: [
       { text: "Det er *fint* vær i dag.", translation: "The weather is nice today." },
       { text: "Du ser *fint* ut i den kjolen.", translation: "You look nice in that dress." },
-      { text: "Det var *fint* å se deg igjen.", translation: "It was nice to see you again." }
+      { text: "Det var *fint* å se deg igjen.", translation: "It was nice to see you again." },
+      { text: "For et *fint* hus!", translation: "What a nice house!" },
+      { text: "Det var *fint* i parken.", translation: "It was nice in the park." },
+      { text: "Du har et *fint* smil.", translation: "You have a nice smile." }
     ],
     182: [
       { text: "Det er *overskyet* i dag.", translation: "It's cloudy today." },
       { text: "Himmelen ble *overskyet* om ettermiddagen.", translation: "The sky became cloudy in the afternoon." },
-      { text: "Vi hadde *overskyet* vær hele uken.", translation: "We had cloudy weather all week." }
+      { text: "Vi hadde *overskyet* vær hele uken.", translation: "We had cloudy weather all week." },
+      { text: "Himmelen er *overskyet*.", translation: "The sky is cloudy." },
+      { text: "Det blir *overskyet* i morgen.", translation: "It will be cloudy tomorrow." },
+      { text: "Det var *overskyet* hele dagen.", translation: "It was cloudy all day." }
     ],
     183: [
       { text: "Himmelen er *klar* i kveld.", translation: "The sky is clear tonight." },
       { text: "Vannet i innsjøen er helt *klart*.", translation: "The water in the lake is completely clear." },
-      { text: "Det blir *klart* vær i morgen.", translation: "It will be clear weather tomorrow." }
+      { text: "Det blir *klart* vær i morgen.", translation: "It will be clear weather tomorrow." },
+      { text: "Vannet er *klart* og rent.", translation: "The water is clear and clean." },
+      { text: "Det er *klart* vær i dag.", translation: "It is clear weather today." },
+      { text: "Himmelen er helt *klar*.", translation: "The sky is completely clear." }
     ],
     184: [
       { text: "Været har vært *tørt* hele sommeren.", translation: "The weather has been dry all summer." },
       { text: "Bakken er *tørr* etter mange dager uten regn.", translation: "The ground is dry after many days without rain." },
-      { text: "Klærne er *tørre* nå.", translation: "The clothes are dry now." }
+      { text: "Klærne er *tørre* nå.", translation: "The clothes are dry now." },
+      { text: "Det er *tørt* ute i dag.", translation: "It is dry outside today." },
+      { text: "Brødet er *tørt*.", translation: "The bread is dry." },
+      { text: "Gresset er *tørt*.", translation: "The grass is dry." }
     ],
     185: [
       { text: "Gresset er *vått* om morgenen.", translation: "The grass is wet in the morning." },
       { text: "Skoene mine ble *våte* i regnet.", translation: "My shoes got wet in the rain." },
-      { text: "Håret hennes var *vått* etter dusjen.", translation: "Her hair was wet after the shower." }
+      { text: "Håret hennes var *vått* etter dusjen.", translation: "Her hair was wet after the shower." },
+      { text: "Gulvet er *vått*.", translation: "The floor is wet." },
+      { text: "Håndkleet er *vått*.", translation: "The towel is wet." },
+      { text: "Hunden er *våt* etter badet.", translation: "The dog is wet after the bath." }
     ],
     186: [
       { text: "Jeg tar *toget* til jobb hver dag.", translation: "I take the train to work every day." },
       { text: "*Toget* var forsinket i dag.", translation: "The train was delayed today." },
-      { text: "Vi reiste med *tog* til Bergen.", translation: "We travelled by train to Bergen." }
+      { text: "Vi reiste med *tog* til Bergen.", translation: "We travelled by train to Bergen." },
+      { text: "*Toget* går klokka ni.", translation: "The train leaves at nine o'clock." },
+      { text: "Jeg sover på *toget*.", translation: "I sleep on the train." },
+      { text: "*Toget* er fullt i dag.", translation: "The train is full today." }
     ],
     187: [
       { text: "*Bussen* kommer om ti minutter.", translation: "The bus arrives in ten minutes." },
       { text: "Jeg tar *buss* til skolen.", translation: "I take the bus to school." },
-      { text: "Vi ventet lenge på *bussen*.", translation: "We waited a long time for the bus." }
+      { text: "Vi ventet lenge på *bussen*.", translation: "We waited a long time for the bus." },
+      { text: "Jeg venter på *bussen*.", translation: "I'm waiting for the bus." },
+      { text: "*Bussen* er sent i dag.", translation: "The bus is late today." },
+      { text: "Vi tar *bussen* til byen.", translation: "We take the bus to town." }
     ],
     188: [
       { text: "*Flyet* letter klokka ti.", translation: "The plane takes off at ten." },
       { text: "Vi reiste med *fly* til Spania.", translation: "We travelled by plane to Spain." },
-      { text: "*Flyet* landet trygt.", translation: "The plane landed safely." }
+      { text: "*Flyet* landet trygt.", translation: "The plane landed safely." },
+      { text: "*Flyet* er sent.", translation: "The plane is late." },
+      { text: "Vi tar *fly* til Oslo.", translation: "We fly to Oslo." },
+      { text: "*Flyet* er fullt.", translation: "The plane is full." }
     ],
     189: [
       { text: "Jeg har en ny *sykkel*.", translation: "I have a new bicycle." },
       { text: "*Sykkelen* min er ødelagt.", translation: "My bicycle is broken." },
-      { text: "Han kjører *sykkel* til skolen.", translation: "He rides his bicycle to school." }
+      { text: "Han kjører *sykkel* til skolen.", translation: "He rides his bicycle to school." },
+      { text: "Jeg sykler på *sykkelen* min.", translation: "I ride my bicycle." },
+      { text: "Hun kjøpte en rød *sykkel*.", translation: "She bought a red bicycle." },
+      { text: "*Sykkelen* står ute.", translation: "The bicycle is outside." }
     ],
     190: [
       { text: "Vi tok en *båt* over fjorden.", translation: "We took a boat across the fjord." },
       { text: "*Båten* var liten men rask.", translation: "The boat was small but fast." },
-      { text: "Han fisker fra *båten* sin.", translation: "He fishes from his boat." }
+      { text: "Han fisker fra *båten* sin.", translation: "He fishes from his boat." },
+      { text: "*Båten* er i havnen.", translation: "The boat is in the harbour." },
+      { text: "Vi har en liten *båt*.", translation: "We have a small boat." },
+      { text: "Vi reiser med *båt* i dag.", translation: "We are travelling by boat today." }
     ],
     191: [
       { text: "Toget stopper på denne *stasjonen*.", translation: "The train stops at this station." },
       { text: "Vi møttes på *stasjonen*.", translation: "We met at the station." },
-      { text: "*Stasjonen* ligger midt i byen.", translation: "The station is in the middle of the city." }
+      { text: "*Stasjonen* ligger midt i byen.", translation: "The station is in the middle of the city." },
+      { text: "Hvor er *stasjonen*?", translation: "Where is the station?" },
+      { text: "Jeg venter på *stasjonen*.", translation: "I'm waiting at the station." },
+      { text: "*Stasjonen* er stor og ny.", translation: "The station is big and new." }
     ],
     192: [
       { text: "Vi kjørte til *flyplassen* tidlig.", translation: "We drove to the airport early." },
       { text: "*Flyplassen* var full av folk.", translation: "The airport was full of people." },
-      { text: "Han jobber på *flyplassen*.", translation: "He works at the airport." }
+      { text: "Han jobber på *flyplassen*.", translation: "He works at the airport." },
+      { text: "*Flyplassen* er langt herfra.", translation: "The airport is far from here." },
+      { text: "Vi tar toget til *flyplassen*.", translation: "We take the train to the airport." },
+      { text: "Hvor ligger *flyplassen*?", translation: "Where is the airport?" }
     ],
     193: [
       { text: "Jeg kjøpte en *billett* til konserten.", translation: "I bought a ticket to the concert." },
       { text: "Kan jeg få se *billetten* din?", translation: "Can I see your ticket?" },
-      { text: "Vi trenger to *billetter* til toget.", translation: "We need two tickets for the train." }
+      { text: "Vi trenger to *billetter* til toget.", translation: "We need two tickets for the train." },
+      { text: "Hvor mye koster en *billett*?", translation: "How much does a ticket cost?" },
+      { text: "Jeg har mistet *billetten* min.", translation: "I have lost my ticket." },
+      { text: "Hun kjøpte *billett* på nettet.", translation: "She bought a ticket online." }
     ],
     194: [
       { text: "Kan du vise meg på *kartet*?", translation: "Can you show me on the map?" },
       { text: "Vi brukte et *kart* for å finne veien.", translation: "We used a map to find the way." },
-      { text: "*Kartet* viser hele byen.", translation: "The map shows the whole city." }
+      { text: "*Kartet* viser hele byen.", translation: "The map shows the whole city." },
+      { text: "Har du et *kart*?", translation: "Do you have a map?" },
+      { text: "Jeg ser på *kartet*.", translation: "I'm looking at the map." },
+      { text: "*Kartet* er gammelt.", translation: "The map is old." }
     ],
     195: [
       { text: "Vi bor på et fint *hotell*.", translation: "We're staying at a nice hotel." },
       { text: "*Hotellet* ligger nær stranden.", translation: "The hotel is near the beach." },
-      { text: "Rommet på *hotellet* var stort.", translation: "The room at the hotel was big." }
+      { text: "Rommet på *hotellet* var stort.", translation: "The room at the hotel was big." },
+      { text: "*Hotellet* er fullt.", translation: "The hotel is full." },
+      { text: "Hvor er *hotellet*?", translation: "Where is the hotel?" },
+      { text: "Vi sover på *hotell* i natt.", translation: "We are sleeping at a hotel tonight." }
     ],
     196: [
       { text: "Sving til *venstre* ved lyskrysset.", translation: "Turn left at the traffic light." },
       { text: "Boken ligger på *venstre* side av bordet.", translation: "The book is on the left side of the table." },
-      { text: "Han skriver med *venstre* hånd.", translation: "He writes with his left hand." }
+      { text: "Han skriver med *venstre* hånd.", translation: "He writes with his left hand." },
+      { text: "Gå til *venstre* her.", translation: "Go left here." },
+      { text: "Døren er til *venstre*.", translation: "The door is on the left." },
+      { text: "Hun sitter til *venstre* for meg.", translation: "She is sitting to my left." }
     ],
     197: [
       { text: "Sving til *høyre* etter broen.", translation: "Turn right after the bridge." },
       { text: "Butikken ligger på *høyre* side av gaten.", translation: "The shop is on the right side of the street." },
-      { text: "Hun holder pennen i *høyre* hånd.", translation: "She holds the pen in her right hand." }
+      { text: "Hun holder pennen i *høyre* hånd.", translation: "She holds the pen in her right hand." },
+      { text: "Ta til *høyre* ved kirken.", translation: "Turn right at the church." },
+      { text: "Badet er til *høyre*.", translation: "The bathroom is on the right." },
+      { text: "Han står til *høyre* for meg.", translation: "He is standing to my right." }
     ],
     198: [
       { text: "Gå *rett fram* til du ser skolen.", translation: "Go straight ahead until you see the school." },
       { text: "Kjør *rett fram* i to kilometer.", translation: "Drive straight ahead for two kilometers." },
-      { text: "Stasjonen er *rett fram*, ikke langt herfra.", translation: "The station is straight ahead, not far from here." }
+      { text: "Stasjonen er *rett fram*, ikke langt herfra.", translation: "The station is straight ahead, not far from here." },
+      { text: "Hotellet ligger *rett fram*.", translation: "The hotel is straight ahead." },
+      { text: "Gå *rett fram* og ta til venstre.", translation: "Go straight ahead and turn left." },
+      { text: "Butikken er *rett fram*.", translation: "The shop is straight ahead." }
     ],
     199: [
       { text: "Vi bor *nær* skolen.", translation: "We live near the school." },
       { text: "Butikken er *nær* huset vårt.", translation: "The shop is near our house." },
-      { text: "Han bor *nær* meg.", translation: "He lives near me." }
+      { text: "Han bor *nær* meg.", translation: "He lives near me." },
+      { text: "Stasjonen er *nær* hotellet.", translation: "The station is near the hotel." },
+      { text: "Hun bor *nær* sjøen.", translation: "She lives near the sea." },
+      { text: "Er parken *nær* her?", translation: "Is the park near here?" }
     ],
     200: [
       { text: "Det er *langt* til flyplassen herfra.", translation: "It's far to the airport from here." },
       { text: "Vi bor ikke *langt* fra sentrum.", translation: "We don't live far from the center." },
-      { text: "Hun reiste *langt* for å komme hit.", translation: "She travelled far to get here." }
+      { text: "Hun reiste *langt* for å komme hit.", translation: "She travelled far to get here." },
+      { text: "Er det *langt* til byen?", translation: "Is it far to the city?" },
+      { text: "Hun bor *langt* borte.", translation: "She lives far away." },
+      { text: "Vi gikk *langt* i dag.", translation: "We walked far today." }
     ],
     201: [
       { text: "Klokka er *elleve*.", translation: "It's eleven o'clock." },
       { text: "Hun er *elleve* år gammel.", translation: "She's eleven years old." },
-      { text: "Vi møtes klokka *elleve*.", translation: "We meet at eleven." }
+      { text: "Vi møtes klokka *elleve*.", translation: "We meet at eleven." },
+      { text: "Toget går klokka *elleve*.", translation: "The train leaves at eleven o'clock." },
+      { text: "Vi har *elleve* spillere på laget.", translation: "We have eleven players on the team." },
+      { text: "Jeg sov i *elleve* timer.", translation: "I slept for eleven hours." }
     ],
     202: [
       { text: "Klokka er *tolv*.", translation: "It's twelve o'clock." },
       { text: "Året har *tolv* måneder.", translation: "The year has twelve months." },
-      { text: "Vi var *tolv* personer på middagen.", translation: "There were twelve of us at dinner." }
+      { text: "Vi var *tolv* personer på middagen.", translation: "There were twelve of us at dinner." },
+      { text: "Vi spiser lunsj klokka *tolv*.", translation: "We eat lunch at twelve o'clock." },
+      { text: "Jeg kjøpte *tolv* egg.", translation: "I bought twelve eggs." },
+      { text: "Gutten er *tolv* år gammel.", translation: "The boy is twelve years old." }
     ],
     203: [
       { text: "Han er *tretten* år gammel.", translation: "He's thirteen years old." },
       { text: "Vi ventet i *tretten* minutter.", translation: "We waited thirteen minutes." },
-      { text: "Det er *tretten* elever i klassen.", translation: "There are thirteen students in the class." }
+      { text: "Det er *tretten* elever i klassen.", translation: "There are thirteen students in the class." },
+      { text: "Bussen kommer klokka *tretten*.", translation: "The bus comes at one p.m." },
+      { text: "Jeg har *tretten* bøker.", translation: "I have thirteen books." },
+      { text: "Hun bor i nummer *tretten*.", translation: "She lives at number thirteen." }
     ],
     204: [
       { text: "Hun blir *fjorten* år i mars.", translation: "She turns fourteen in March." },
       { text: "Vi var på ferie i *fjorten* dager.", translation: "We were on vacation for fourteen days." },
-      { text: "Det er *fjorten* dager til jul.", translation: "There are fourteen days until Christmas." }
+      { text: "Det er *fjorten* dager til jul.", translation: "There are fourteen days until Christmas." },
+      { text: "Jenta er *fjorten* år.", translation: "The girl is fourteen." },
+      { text: "Vi har *fjorten* høner.", translation: "We have fourteen hens." },
+      { text: "Filmen begynner klokka *fjorten*.", translation: "The film starts at two p.m." }
     ],
     205: [
       { text: "Han er *femten* år gammel.", translation: "He is fifteen years old." },
       { text: "Vi ventet i *femten* minutter.", translation: "We waited fifteen minutes." },
-      { text: "Butikken stenger om *femten* minutter.", translation: "The shop closes in fifteen minutes." }
+      { text: "Butikken stenger om *femten* minutter.", translation: "The shop closes in fifteen minutes." },
+      { text: "Det koster *femten* kroner.", translation: "It costs fifteen kroner." },
+      { text: "Vi har *femten* minutter igjen.", translation: "We have fifteen minutes left." },
+      { text: "Toget går klokka *femten*.", translation: "The train leaves at three p.m." }
     ],
     206: [
       { text: "Hun er *seksten* år gammel.", translation: "She's sixteen years old." },
       { text: "Vi ventet i *seksten* minutter.", translation: "We waited sixteen minutes." },
-      { text: "Det er *seksten* elever i klassen.", translation: "There are sixteen students in the class." }
+      { text: "Det er *seksten* elever i klassen.", translation: "There are sixteen students in the class." },
+      { text: "Vi spiser middag klokka *seksten*.", translation: "We eat dinner at four p.m." },
+      { text: "Hun kjøpte *seksten* epler.", translation: "She bought sixteen apples." },
+      { text: "Han fikk bil da han var *seksten*.", translation: "He got a car when he was sixteen." }
     ],
     207: [
       { text: "Han fyller *sytten* år i juni.", translation: "He turns seventeen in June." },
       { text: "Vi bodde der i *sytten* år.", translation: "We lived there for seventeen years." },
-      { text: "Det er *sytten* dager til ferien.", translation: "There are seventeen days until the holiday." }
+      { text: "Det er *sytten* dager til ferien.", translation: "There are seventeen days until the holiday." },
+      { text: "Det bor *sytten* barn i gaten.", translation: "Seventeen children live on the street." },
+      { text: "Møtet er klokka *sytten*.", translation: "The meeting is at five p.m." },
+      { text: "Jeg har *sytten* bilder.", translation: "I have seventeen photos." }
     ],
     208: [
       { text: "Hun blir *atten* år neste måned.", translation: "She turns eighteen next month." },
       { text: "Vi kjøpte *atten* billetter til konserten.", translation: "We bought eighteen tickets for the concert." },
-      { text: "Det er *atten* bord på restauranten.", translation: "There are eighteen tables at the restaurant." }
+      { text: "Det er *atten* bord på restauranten.", translation: "There are eighteen tables at the restaurant." },
+      { text: "Nå er han *atten* år.", translation: "Now he is eighteen." },
+      { text: "Butikken stenger klokka *atten*.", translation: "The shop closes at six p.m." },
+      { text: "Vi har *atten* stoler.", translation: "We have eighteen chairs." }
     ],
     209: [
       { text: "Han er *nitten* år gammel.", translation: "He's nineteen years old." },
       { text: "Vi ventet i *nitten* minutter på bussen.", translation: "We waited nineteen minutes for the bus." },
-      { text: "Det er *nitten* studenter i klassen.", translation: "There are nineteen students in the class." }
+      { text: "Det er *nitten* studenter i klassen.", translation: "There are nineteen students in the class." },
+      { text: "Toget går klokka *nitten*.", translation: "The train leaves at seven p.m." },
+      { text: "Jeg kjøpte *nitten* blomster.", translation: "I bought nineteen flowers." },
+      { text: "Hun var *nitten* da hun flyttet.", translation: "She was nineteen when she moved." }
     ],
     210: [
       { text: "Jeg er *tjue* år gammel.", translation: "I am twenty years old." },
       { text: "Vi ventet i *tjue* minutter.", translation: "We waited twenty minutes." },
-      { text: "Det er *tjue* elever i klassen vår.", translation: "There are twenty students in our class." }
+      { text: "Det er *tjue* elever i klassen vår.", translation: "There are twenty students in our class." },
+      { text: "Det koster *tjue* kroner.", translation: "It costs twenty kroner." },
+      { text: "Vi kommer klokka *tjue*.", translation: "We are coming at eight p.m." },
+      { text: "Hun har *tjue* kyr.", translation: "She has twenty cows." }
     ],
     211: [
       { text: "Min *bestefar* bor på landet.", translation: "My grandfather lives in the countryside." },
       { text: "*Bestefaren* min forteller gode historier.", translation: "My grandfather tells good stories." },
-      { text: "Jeg besøker *bestefaren* min hver sommer.", translation: "I visit my grandfather every summer." }
+      { text: "Jeg besøker *bestefaren* min hver sommer.", translation: "I visit my grandfather every summer." },
+      { text: "*Bestefar* leser avisen.", translation: "Grandpa is reading the newspaper." },
+      { text: "*Bestefar* er åtti år.", translation: "Grandpa is eighty." },
+      { text: "Vi fisker med *bestefar*.", translation: "We go fishing with grandpa." }
     ],
     212: [
       { text: "Mine *foreldre* bor i Bergen.", translation: "My parents live in Bergen." },
       { text: "*Foreldrene* mine er lærere.", translation: "My parents are teachers." },
-      { text: "Vi besøker *foreldrene* våre hver jul.", translation: "We visit our parents every Christmas." }
+      { text: "Vi besøker *foreldrene* våre hver jul.", translation: "We visit our parents every Christmas." },
+      { text: "Mine *foreldre* er gamle.", translation: "My parents are old." },
+      { text: "*Foreldrene* hans bor i Oslo.", translation: "His parents live in Oslo." },
+      { text: "Jeg ringer *foreldrene* mine.", translation: "I call my parents." }
     ],
     213: [
       { text: "Min *sønn* går på skolen.", translation: "My son goes to school." },
       { text: "*Sønnen* deres er veldig hyggelig.", translation: "Their son is very nice." },
-      { text: "Jeg er stolt av *sønnen* min.", translation: "I'm proud of my son." }
+      { text: "Jeg er stolt av *sønnen* min.", translation: "I'm proud of my son." },
+      { text: "De har en *sønn* og en datter.", translation: "They have a son and a daughter." },
+      { text: "Min *sønn* er fem år.", translation: "My son is five." },
+      { text: "*Sønnen* min spiller fotball.", translation: "My son plays football." }
     ],
     214: [
       { text: "Min *datter* liker å tegne.", translation: "My daughter likes to draw." },
       { text: "*Datteren* deres studerer medisin.", translation: "Their daughter studies medicine." },
-      { text: "Jeg ringer *datteren* min hver dag.", translation: "I call my daughter every day." }
+      { text: "Jeg ringer *datteren* min hver dag.", translation: "I call my daughter every day." },
+      { text: "*Datteren* min heter Ida.", translation: "My daughter's name is Ida." },
+      { text: "Hun har en *datter*.", translation: "She has a daughter." },
+      { text: "Min *datter* går på skole.", translation: "My daughter goes to school." }
     ],
     215: [
       { text: "Min *ektemann* jobber som ingeniør.", translation: "My husband works as an engineer." },
       { text: "*Ektemannen* hennes er fransk.", translation: "Her husband is French." },
-      { text: "Vi møtte *ektemannen* hennes på festen.", translation: "We met her husband at the party." }
+      { text: "Vi møtte *ektemannen* hennes på festen.", translation: "We met her husband at the party." },
+      { text: "Min *ektemann* lager middag.", translation: "My husband is making dinner." },
+      { text: "Hun venter på *ektemannen* sin.", translation: "She is waiting for her husband." },
+      { text: "Dette er min *ektemann*, Per.", translation: "This is my husband, Per." }
     ],
     216: [
       { text: "Min *lærer* er veldig hyggelig.", translation: "My teacher is very nice." },
       { text: "Hun jobber som *lærer* på skolen.", translation: "She works as a teacher at the school." },
-      { text: "*Læreren* ga oss mye lekser.", translation: "The teacher gave us a lot of homework." }
+      { text: "*Læreren* ga oss mye lekser.", translation: "The teacher gave us a lot of homework." },
+      { text: "*Læreren* snakker sakte.", translation: "The teacher speaks slowly." },
+      { text: "Min far er *lærer*.", translation: "My father is a teacher." },
+      { text: "Vi liker den nye *læreren*.", translation: "We like the new teacher." }
     ],
     217: [
       { text: "Han er *student* ved universitetet.", translation: "He's a student at the university." },
       { text: "*Studenten* studerte hele natten.", translation: "The student studied all night." },
-      { text: "Jeg var *student* i fem år.", translation: "I was a student for five years." }
+      { text: "Jeg var *student* i fem år.", translation: "I was a student for five years." },
+      { text: "Jeg er *student*.", translation: "I am a student." },
+      { text: "Hun er *student* i Oslo.", translation: "She is a student in Oslo." },
+      { text: "Han er en flink *student*.", translation: "He is a clever student." }
     ],
     218: [
       { text: "Min mor er *lege*.", translation: "My mother is a doctor." },
       { text: "Jeg må til *legen* i morgen.", translation: "I have to go to the doctor tomorrow." },
-      { text: "*Legen* undersøkte pasienten.", translation: "The doctor examined the patient." }
+      { text: "*Legen* undersøkte pasienten.", translation: "The doctor examined the patient." },
+      { text: "Han er *lege* på sykehuset.", translation: "He is a doctor at the hospital." },
+      { text: "Ring *legen*, vær så snill.", translation: "Call the doctor, please." },
+      { text: "Hun vil bli *lege*.", translation: "She wants to become a doctor." }
     ],
     219: [
       { text: "Min søster er *sykepleier*.", translation: "My sister is a nurse." },
       { text: "*Sykepleieren* var veldig omsorgsfull.", translation: "The nurse was very caring." },
-      { text: "Han jobber som *sykepleier* på sykehuset.", translation: "He works as a nurse at the hospital." }
+      { text: "Han jobber som *sykepleier* på sykehuset.", translation: "He works as a nurse at the hospital." },
+      { text: "Hun er *sykepleier*.", translation: "She is a nurse." },
+      { text: "*Sykepleieren* hjalp meg.", translation: "The nurse helped me." },
+      { text: "Min bror er *sykepleier*.", translation: "My brother is a nurse." }
     ],
     220: [
       { text: "Vi ringte *politiet* etter ulykken.", translation: "We called the police after the accident." },
       { text: "*Politiet* kom raskt til stedet.", translation: "The police arrived quickly at the scene." },
-      { text: "Han jobber i *politiet*.", translation: "He works in the police force." }
+      { text: "Han jobber i *politiet*.", translation: "He works in the police force." },
+      { text: "Vi må ringe *politiet*!", translation: "We have to call the police!" },
+      { text: "*Politiet* står ved døren.", translation: "The police are at the door." },
+      { text: "Hun jobber i *politiet*.", translation: "She works in the police." }
     ],
     221: [
       { text: "Jeg elsker *jobben* min.", translation: "I love my job." },
       { text: "Hun fikk en ny *jobb* i går.", translation: "She got a new job yesterday." },
-      { text: "*Jobben* hans er veldig krevende.", translation: "His job is very demanding." }
+      { text: "*Jobben* hans er veldig krevende.", translation: "His job is very demanding." },
+      { text: "Jeg har en ny *jobb*.", translation: "I have a new job." },
+      { text: "Han har ikke *jobb* nå.", translation: "He doesn't have a job now." },
+      { text: "Jeg går til *jobben* nå.", translation: "I'm going to work now." }
     ],
     222: [
       { text: "Jeg jobber på et *kontor* i sentrum.", translation: "I work at an office downtown." },
       { text: "*Kontoret* mitt er på tredje etasje.", translation: "My office is on the third floor." },
-      { text: "Vi møttes på *kontoret* klokka ni.", translation: "We met at the office at nine." }
+      { text: "Vi møttes på *kontoret* klokka ni.", translation: "We met at the office at nine." },
+      { text: "*Kontoret* er stort og lyst.", translation: "The office is big and bright." },
+      { text: "Hun er på *kontoret* nå.", translation: "She is at the office now." },
+      { text: "Jeg har et lite *kontor*.", translation: "I have a small office." }
     ],
     223: [
       { text: "Vi er tjue elever i *klassen*.", translation: "There are twenty students in the class." },
       { text: "*Klassen* vår er veldig hyggelig.", translation: "Our class is very nice." },
-      { text: "Han er den beste i *klassen*.", translation: "He's the best in the class." }
+      { text: "Han er den beste i *klassen*.", translation: "He's the best in the class." },
+      { text: "*Klassen* har tjue elever.", translation: "The class has twenty pupils." },
+      { text: "Vi er i samme *klasse*.", translation: "We are in the same class." },
+      { text: "*Klassen* begynner klokka ni.", translation: "Class starts at nine o'clock." }
     ],
     224: [
       { text: "Jeg må gjøre *leksene* mine.", translation: "I have to do my homework." },
       { text: "*Leksen* var vanskelig i dag.", translation: "The homework was difficult today." },
-      { text: "Læreren ga oss mye *lekse*.", translation: "The teacher gave us a lot of homework." }
+      { text: "Læreren ga oss mye *lekse*.", translation: "The teacher gave us a lot of homework." },
+      { text: "Har du gjort *leksene*?", translation: "Have you done your homework?" },
+      { text: "Jeg har mye *lekser* i dag.", translation: "I have a lot of homework today." },
+      { text: "*Leksen* er lett.", translation: "The homework is easy." }
     ],
     225: [
       { text: "Vi har en *prøve* i morgen.", translation: "We have a test tomorrow." },
       { text: "*Prøven* var lettere enn jeg trodde.", translation: "The test was easier than I thought." },
-      { text: "Jeg må øve til *prøven*.", translation: "I need to study for the test." }
+      { text: "Jeg må øve til *prøven*.", translation: "I need to study for the test." },
+      { text: "*Prøven* var vanskelig.", translation: "The test was difficult." },
+      { text: "Jeg har en *prøve* på fredag.", translation: "I have a test on Friday." },
+      { text: "Hun fikk en god karakter på *prøven*.", translation: "She got a good grade on the test." }
     ],
     226: [
       { text: "Jeg *sover* åtte timer hver natt.", translation: "I sleep eight hours every night." },
       { text: "Barnet *sover* allerede.", translation: "The child is already asleep." },
-      { text: "Jeg klarer ikke å *sove* i kveld.", translation: "I can't manage to sleep tonight." }
+      { text: "Jeg klarer ikke å *sove* i kveld.", translation: "I can't manage to sleep tonight." },
+      { text: "Katten *sover* på sengen.", translation: "The cat sleeps on the bed." },
+      { text: "Jeg vil *sove* nå.", translation: "I want to sleep now." },
+      { text: "Han *sov* hele dagen.", translation: "He slept all day." }
     ],
     227: [
       { text: "Jeg *våkner* klokka sju hver morgen.", translation: "I wake up at seven every morning." },
       { text: "Hun *våknet* av lyden fra gaten.", translation: "She woke up from the noise on the street." },
-      { text: "Han pleier å *våkne* tidlig.", translation: "He usually wakes up early." }
+      { text: "Han pleier å *våkne* tidlig.", translation: "He usually wakes up early." },
+      { text: "Jeg *våkner* tidlig.", translation: "I wake up early." },
+      { text: "Barnet *våknet* i natt.", translation: "The child woke up last night." },
+      { text: "Når *våkner* du?", translation: "When do you wake up?" }
     ],
     228: [
       { text: "Jeg *jobber* i en butikk.", translation: "I work in a shop." },
       { text: "Hun *jobber* hardt hver dag.", translation: "She works hard every day." },
-      { text: "Vil du *jobbe* med meg i morgen?", translation: "Do you want to work with me tomorrow?" }
+      { text: "Vil du *jobbe* med meg i morgen?", translation: "Do you want to work with me tomorrow?" },
+      { text: "Hun *jobber* på sykehuset.", translation: "She works at the hospital." },
+      { text: "Jeg *jobber* hjemme i dag.", translation: "I'm working from home today." },
+      { text: "Han *jobbet* hele helgen.", translation: "He worked all weekend." }
     ],
     229: [
       { text: "Jeg *studerer* medisin ved universitetet.", translation: "I study medicine at the university." },
       { text: "Hun *studerer* til prøven i kveld.", translation: "She's studying for the test tonight." },
-      { text: "Vi må *studere* mer denne uken.", translation: "We need to study more this week." }
+      { text: "Vi må *studere* mer denne uken.", translation: "We need to study more this week." },
+      { text: "Jeg *studerer* norsk.", translation: "I study Norwegian." },
+      { text: "Hun vil *studere* i Oslo.", translation: "She wants to study in Oslo." },
+      { text: "Vi *studerte* sammen i går.", translation: "We studied together yesterday." }
     ],
     230: [
       { text: "Jeg *lærer* norsk nå.", translation: "I'm learning Norwegian now." },
       { text: "Barn *lærer* fort.", translation: "Children learn fast." },
-      { text: "Det er gøy å *lære* nye ting.", translation: "It's fun to learn new things." }
+      { text: "Det er gøy å *lære* nye ting.", translation: "It's fun to learn new things." },
+      { text: "Hun *lærer* å sykle.", translation: "She is learning to ride a bike." },
+      { text: "Jeg vil *lære* norsk.", translation: "I want to learn Norwegian." },
+      { text: "Han *lærte* mye i dag.", translation: "He learned a lot today." }
     ],
     231: [
       { text: "Jeg *kjører* til jobb hver dag.", translation: "I drive to work every day." },
       { text: "Kan du *kjøre* meg til flyplassen?", translation: "Can you drive me to the airport?" },
-      { text: "Hun *kjører* alltid forsiktig.", translation: "She always drives carefully." }
+      { text: "Hun *kjører* alltid forsiktig.", translation: "She always drives carefully." },
+      { text: "Hun *kjører* en rød bil.", translation: "She drives a red car." },
+      { text: "Jeg *kjører* til Bergen i morgen.", translation: "I'm driving to Bergen tomorrow." },
+      { text: "Kan du *kjøre* bil?", translation: "Can you drive a car?" }
     ],
     232: [
       { text: "Vi *reiser* til Norge i sommer.", translation: "We're travelling to Norway this summer." },
       { text: "Jeg elsker å *reise*.", translation: "I love to travel." },
-      { text: "De *reiser* mye for jobben.", translation: "They travel a lot for work." }
+      { text: "De *reiser* mye for jobben.", translation: "They travel a lot for work." },
+      { text: "Jeg *reiser* hjem i morgen.", translation: "I'm going home tomorrow." },
+      { text: "Vi *reiste* til Spania.", translation: "We travelled to Spain." },
+      { text: "Hun vil *reise* rundt i verden.", translation: "She wants to travel around the world." }
     ],
     233: [
       { text: "Jeg *venter* på bussen.", translation: "I'm waiting for the bus." },
       { text: "Kan du *vente* litt?", translation: "Can you wait a bit?" },
-      { text: "Vi *ventet* i en time.", translation: "We waited for an hour." }
+      { text: "Vi *ventet* i en time.", translation: "We waited for an hour." },
+      { text: "*Vent* her, vær så snill.", translation: "Wait here, please." },
+      { text: "Vi *venter* på toget.", translation: "We are waiting for the train." },
+      { text: "Hun *venter* på meg.", translation: "She is waiting for me." }
     ],
     234: [
       { text: "Jeg kan ikke *finne* nøklene mine.", translation: "I can't find my keys." },
       { text: "Han *fant* boken under sengen.", translation: "He found the book under the bed." },
-      { text: "Kan du hjelpe meg å *finne* veien?", translation: "Can you help me find the way?" }
+      { text: "Kan du hjelpe meg å *finne* veien?", translation: "Can you help me find the way?" },
+      { text: "Jeg *fant* nøkkelen!", translation: "I found the key!" },
+      { text: "Kan du *finne* boka mi?", translation: "Can you find my book?" },
+      { text: "Hun *finner* alltid veien.", translation: "She always finds the way." }
     ],
     235: [
       { text: "Jeg skal *møte* venner i kveld.", translation: "I'm going to meet friends tonight." },
       { text: "Vi *møttes* på kafeen.", translation: "We met at the café." },
-      { text: "Hyggelig å *møte* deg!", translation: "Nice to meet you!" }
+      { text: "Hyggelig å *møte* deg!", translation: "Nice to meet you!" },
+      { text: "Vi *møtes* på stasjonen.", translation: "We meet at the station." },
+      { text: "Jeg *møtte* henne i går.", translation: "I met her yesterday." },
+      { text: "Vil du *møte* familien min?", translation: "Do you want to meet my family?" }
     ],
     236: [
       { text: "Jeg *liker* denne boken.", translation: "I like this book." },
       { text: "Hun *liker* å lese om kvelden.", translation: "She likes to read in the evening." },
-      { text: "*Liker* du å reise?", translation: "Do you like to travel?" }
+      { text: "*Liker* du å reise?", translation: "Do you like to travel?" },
+      { text: "Jeg *liker* kaffe.", translation: "I like coffee." },
+      { text: "*Liker* du hunder?", translation: "Do you like dogs?" },
+      { text: "Hun *liker* ikke fisk.", translation: "She doesn't like fish." }
     ],
     237: [
       { text: "Jeg *elsker* deg.", translation: "I love you." },
       { text: "Hun *elsker* musikk.", translation: "She loves music." },
-      { text: "Vi *elsker* å reise sammen.", translation: "We love to travel together." }
+      { text: "Vi *elsker* å reise sammen.", translation: "We love to travel together." },
+      { text: "Barna *elsker* is.", translation: "The children love ice cream." },
+      { text: "Jeg *elsker* sommeren.", translation: "I love summer." },
+      { text: "Han *elsker* familien sin.", translation: "He loves his family." }
     ],
     238: [
       { text: "Jeg *vil* ha en kaffe.", translation: "I want a coffee." },
       { text: "Hva *vil* du gjøre i kveld?", translation: "What do you want to do tonight?" },
-      { text: "Hun *ville* ikke gå hjem ennå.", translation: "She didn't want to go home yet." }
+      { text: "Hun *ville* ikke gå hjem ennå.", translation: "She didn't want to go home yet." },
+      { text: "Jeg *vil* gå hjem.", translation: "I want to go home." },
+      { text: "*Vil* du ha te?", translation: "Do you want tea?" },
+      { text: "Hun *vil* bli lege.", translation: "She wants to become a doctor." }
     ],
     239: [
       { text: "Jeg *trenger* hjelp med dette.", translation: "I need help with this." },
       { text: "Vi *trenger* mer tid.", translation: "We need more time." },
-      { text: "Hun *trenger* nye sko.", translation: "She needs new shoes." }
+      { text: "Hun *trenger* nye sko.", translation: "She needs new shoes." },
+      { text: "Jeg *trenger* en ny jakke.", translation: "I need a new jacket." },
+      { text: "*Trenger* du hjelp?", translation: "Do you need help?" },
+      { text: "Barnet *trenger* søvn.", translation: "The child needs sleep." }
     ],
     240: [
       { text: "Jeg skal *kjøpe* melk på butikken.", translation: "I'm going to buy milk at the shop." },
       { text: "Vil du *kjøpe* denne boken?", translation: "Do you want to buy this book?" },
-      { text: "Hun *kjøpte* en ny bil i går.", translation: "She bought a new car yesterday." }
+      { text: "Hun *kjøpte* en ny bil i går.", translation: "She bought a new car yesterday." },
+      { text: "Jeg *kjøper* brød hver dag.", translation: "I buy bread every day." },
+      { text: "Vi *kjøpte* et hus.", translation: "We bought a house." },
+      { text: "Hva vil du *kjøpe*?", translation: "What do you want to buy?" }
     ],
     241: [
       { text: "Vi *selger* huset vårt.", translation: "We're selling our house." },
       { text: "Han *solgte* bilen sin i fjor.", translation: "He sold his car last year." },
-      { text: "De vil *selge* leiligheten snart.", translation: "They want to sell the apartment soon." }
+      { text: "De vil *selge* leiligheten snart.", translation: "They want to sell the apartment soon." },
+      { text: "Han *selger* fisk på markedet.", translation: "He sells fish at the market." },
+      { text: "Hun *solgte* sykkelen sin.", translation: "She sold her bicycle." },
+      { text: "Vil du *selge* bilen?", translation: "Do you want to sell the car?" }
     ],
     242: [
       { text: "Kan jeg *betale* med kort?", translation: "Can I pay with card?" },
       { text: "Jeg *betalte* for middagen.", translation: "I paid for dinner." },
-      { text: "Vi må *betale* husleien i dag.", translation: "We have to pay the rent today." }
+      { text: "Vi må *betale* husleien i dag.", translation: "We have to pay the rent today." },
+      { text: "Jeg *betaler* for kaffen.", translation: "I'll pay for the coffee." },
+      { text: "Hvem skal *betale*?", translation: "Who is going to pay?" },
+      { text: "Hun *betalte* med kort.", translation: "She paid by card." }
     ],
     243: [
       { text: "Kan du *åpne* vinduet?", translation: "Can you open the window?" },
       { text: "Butikken *åpner* klokka ti.", translation: "The shop opens at ten." },
-      { text: "Hun *åpnet* døren forsiktig.", translation: "She opened the door carefully." }
+      { text: "Hun *åpnet* døren forsiktig.", translation: "She opened the door carefully." },
+      { text: "*Åpne* døren, vær så snill.", translation: "Open the door, please." },
+      { text: "Jeg *åpner* vinduet.", translation: "I'm opening the window." },
+      { text: "Han *åpnet* gaven.", translation: "He opened the gift." }
     ],
     244: [
       { text: "Kan du *lukke* døren?", translation: "Can you close the door?" },
       { text: "Butikken *lukker* klokka seks.", translation: "The shop closes at six." },
-      { text: "Han *lukket* vinduet fordi det var kaldt.", translation: "He closed the window because it was cold." }
+      { text: "Han *lukket* vinduet fordi det var kaldt.", translation: "He closed the window because it was cold." },
+      { text: "*Lukk* vinduet, vær så snill.", translation: "Close the window, please." },
+      { text: "Jeg *lukker* døren.", translation: "I'm closing the door." },
+      { text: "Hun *lukket* boka.", translation: "She closed the book." }
     ],
     245: [
       { text: "Jeg må *vaske* klærne mine.", translation: "I need to wash my clothes." },
       { text: "Hun *vasker* hendene før hun spiser.", translation: "She washes her hands before she eats." },
-      { text: "Vi *vasket* bilen i helgen.", translation: "We washed the car over the weekend." }
+      { text: "Vi *vasket* bilen i helgen.", translation: "We washed the car over the weekend." },
+      { text: "Jeg *vasker* bilen.", translation: "I'm washing the car." },
+      { text: "*Vask* hendene dine!", translation: "Wash your hands!" },
+      { text: "Han *vasket* gulvet.", translation: "He washed the floor." }
     ],
     246: [
       { text: "Jeg kan *se* fjellet herfra.", translation: "I can see the mountain from here." },
       { text: "Vil du *se* en film i kveld?", translation: "Do you want to see a movie tonight?" },
-      { text: "Hun *så* en fugl i treet.", translation: "She saw a bird in the tree." }
+      { text: "Hun *så* en fugl i treet.", translation: "She saw a bird in the tree." },
+      { text: "Jeg *ser* en fugl.", translation: "I see a bird." },
+      { text: "*Ser* du bussen?", translation: "Do you see the bus?" },
+      { text: "Vi *så* en film i går.", translation: "We watched a film yesterday." }
     ],
     247: [
       { text: "Jeg kan *høre* musikk fra naboen.", translation: "I can hear music from the neighbor." },
       { text: "Kan du *høre* meg?", translation: "Can you hear me?" },
-      { text: "Hun *hørte* et rart lyd.", translation: "She heard a strange sound." }
+      { text: "Hun *hørte* et rart lyd.", translation: "She heard a strange sound." },
+      { text: "Jeg *hører* på musikk.", translation: "I'm listening to music." },
+      { text: "*Hører* du regnet?", translation: "Do you hear the rain?" },
+      { text: "Vi *hørte* en hund.", translation: "We heard a dog." }
     ],
     248: [
       { text: "Hva vil du *si* til henne?", translation: "What do you want to say to her?" },
       { text: "Han *sa* ingenting.", translation: "He said nothing." },
-      { text: "Kan du *si* det igjen?", translation: "Can you say that again?" }
+      { text: "Kan du *si* det igjen?", translation: "Can you say that again?" },
+      { text: "Hva *sa* du?", translation: "What did you say?" },
+      { text: "Hun *sier* alltid takk.", translation: "She always says thank you." },
+      { text: "Jeg vil *si* noe.", translation: "I want to say something." }
     ],
     249: [
       { text: "Kan jeg *spørre* deg om noe?", translation: "Can I ask you something?" },
       { text: "Hun *spurte* om veien til stasjonen.", translation: "She asked for directions to the station." },
-      { text: "Vi må *spørre* læreren om dette.", translation: "We need to ask the teacher about this." }
+      { text: "Vi må *spørre* læreren om dette.", translation: "We need to ask the teacher about this." },
+      { text: "Jeg *spør* læreren.", translation: "I ask the teacher." },
+      { text: "Han *spurte* om navnet mitt.", translation: "He asked about my name." },
+      { text: "Kan jeg *spørre* om noe?", translation: "Can I ask something?" }
     ],
     250: [
       { text: "Kan du *svare* på spørsmålet mitt?", translation: "Can you answer my question?" },
       { text: "Han *svarte* raskt på e-posten.", translation: "He answered the email quickly." },
-      { text: "Hun *svarer* aldri på telefonen.", translation: "She never answers the phone." }
+      { text: "Hun *svarer* aldri på telefonen.", translation: "She never answers the phone." },
+      { text: "Hun *svarer* på spørsmålet.", translation: "She answers the question." },
+      { text: "Jeg *svarte* ja.", translation: "I answered yes." },
+      { text: "Han vil ikke *svare*.", translation: "He won't answer." }
     ],
     251: [
       { text: "Jeg er veldig *glad* i dag.", translation: "I'm very happy today." },
       { text: "Hun ble *glad* for gaven.", translation: "She was happy about the gift." },
-      { text: "Vi er *glade* for å se deg.", translation: "We're happy to see you." }
+      { text: "Vi er *glade* for å se deg.", translation: "We're happy to see you." },
+      { text: "Barna er *glade*.", translation: "The children are happy." },
+      { text: "Hun er alltid *glad*.", translation: "She is always happy." },
+      { text: "Jeg er *glad* i deg.", translation: "I'm fond of you." }
     ],
     252: [
       { text: "Han er *trist* fordi hunden hans er syk.", translation: "He's sad because his dog is sick." },
       { text: "Filmen gjorde meg *trist*.", translation: "The movie made me sad." },
-      { text: "Vi følte oss *triste* etter nyheten.", translation: "We felt sad after the news." }
+      { text: "Vi følte oss *triste* etter nyheten.", translation: "We felt sad after the news." },
+      { text: "Hvorfor er du *trist*?", translation: "Why are you sad?" },
+      { text: "Det er en *trist* sang.", translation: "It is a sad song." },
+      { text: "Hun var *trist* i går.", translation: "She was sad yesterday." }
     ],
     253: [
       { text: "Hun ble *sint* da han kom for sent.", translation: "She got angry when he came late." },
       { text: "Ikke vær *sint* på meg.", translation: "Don't be angry with me." },
-      { text: "Han var *sint* hele dagen.", translation: "He was angry all day." }
+      { text: "Han var *sint* hele dagen.", translation: "He was angry all day." },
+      { text: "Er du *sint* på meg?", translation: "Are you angry with me?" },
+      { text: "Far er *sint* nå.", translation: "Dad is angry now." },
+      { text: "Hunden er ikke *sint*.", translation: "The dog is not angry." }
     ],
     254: [
       { text: "Jeg er veldig *trøtt* i kveld.", translation: "I'm very tired tonight." },
       { text: "Hun ble *trøtt* etter jobben.", translation: "She got tired after work." },
-      { text: "Vi var *trøtte* etter den lange turen.", translation: "We were tired after the long trip." }
+      { text: "Vi var *trøtte* etter den lange turen.", translation: "We were tired after the long trip." },
+      { text: "Jeg er så *trøtt*.", translation: "I'm so tired." },
+      { text: "Barna er *trøtte* nå.", translation: "The children are tired now." },
+      { text: "Han er *trøtt* etter jobben.", translation: "He is tired after work." }
     ],
     255: [
       { text: "Jeg er *syk* i dag og blir hjemme.", translation: "I'm sick today and staying home." },
       { text: "Barnet er *sykt* og har feber.", translation: "The child is sick and has a fever." },
-      { text: "Hun var *syk* hele uken.", translation: "She was sick all week." }
+      { text: "Hun var *syk* hele uken.", translation: "She was sick all week." },
+      { text: "Jeg er *syk* i dag.", translation: "I'm sick today." },
+      { text: "Katten er *syk*.", translation: "The cat is sick." },
+      { text: "Han var *syk* i går.", translation: "He was sick yesterday." }
     ],
     256: [
       { text: "Prøven var *lett*.", translation: "The test was easy." },
       { text: "Dette er en *lett* oppgave.", translation: "This is an easy task." },
-      { text: "Det var *lett* å finne veien.", translation: "It was easy to find the way." }
+      { text: "Det var *lett* å finne veien.", translation: "It was easy to find the way." },
+      { text: "Norsk er ikke *lett*.", translation: "Norwegian isn't easy." },
+      { text: "Denne boka er *lett* å lese.", translation: "This book is easy to read." },
+      { text: "Det er *lett* å lage suppe.", translation: "It is easy to make soup." }
     ],
     257: [
       { text: "Denne oppgaven er *vanskelig*.", translation: "This task is difficult." },
       { text: "Det var *vanskelig* å forstå ham.", translation: "It was difficult to understand him." },
-      { text: "Norsk er ikke så *vanskelig* å lære.", translation: "Norwegian isn't so difficult to learn." }
+      { text: "Norsk er ikke så *vanskelig* å lære.", translation: "Norwegian isn't so difficult to learn." },
+      { text: "Matte er *vanskelig*.", translation: "Maths is difficult." },
+      { text: "Prøven var veldig *vanskelig*.", translation: "The test was very difficult." },
+      { text: "Det er *vanskelig* å våkne tidlig.", translation: "It is hard to wake up early." }
     ],
     258: [
       { text: "Denne bilen er veldig *dyr*.", translation: "This car is very expensive." },
       { text: "Hotellet var *dyrt*.", translation: "The hotel was expensive." },
-      { text: "Vi fant en *dyr* men fin restaurant.", translation: "We found an expensive but nice restaurant." }
+      { text: "Vi fant en *dyr* men fin restaurant.", translation: "We found an expensive but nice restaurant." },
+      { text: "Kaffen her er *dyr*.", translation: "The coffee here is expensive." },
+      { text: "Det er *dyrt* å bo i Oslo.", translation: "It is expensive to live in Oslo." },
+      { text: "Denne jakken er for *dyr*.", translation: "This jacket is too expensive." }
     ],
     259: [
       { text: "Denne genseren var *billig*.", translation: "This sweater was cheap." },
       { text: "Vi lette etter et *billig* hotell.", translation: "We looked for a cheap hotel." },
-      { text: "Flybilletten var overraskende *billig*.", translation: "The plane ticket was surprisingly cheap." }
+      { text: "Flybilletten var overraskende *billig*.", translation: "The plane ticket was surprisingly cheap." },
+      { text: "Bussen er *billig*.", translation: "The bus is cheap." },
+      { text: "Denne boka var *billig*.", translation: "This book was cheap." },
+      { text: "Frukt er *billig* på markedet.", translation: "Fruit is cheap at the market." }
     ],
     260: [
       { text: "Inngangen er *gratis* i dag.", translation: "Entry is free today." },
       { text: "Kaffen på kontoret er *gratis*.", translation: "The coffee at the office is free." },
-      { text: "Museet er *gratis* for barn.", translation: "The museum is free for children." }
+      { text: "Museet er *gratis* for barn.", translation: "The museum is free for children." },
+      { text: "Kaffen er *gratis* i dag.", translation: "The coffee is free today." },
+      { text: "Er det *gratis*?", translation: "Is it free?" },
+      { text: "Bussen er *gratis* for barn.", translation: "The bus is free for children." }
     ],
     261: [
       { text: "Vi har *mange* venner her.", translation: "We have many friends here." },
       { text: "Det var *mange* mennesker på festen.", translation: "There were many people at the party." },
-      { text: "Hun har lest *mange* bøker.", translation: "She has read many books." }
+      { text: "Hun har lest *mange* bøker.", translation: "She has read many books." },
+      { text: "Hun har *mange* venner.", translation: "She has many friends." },
+      { text: "Det er *mange* biler i gaten.", translation: "There are many cars on the street." },
+      { text: "Vi har *mange* bøker hjemme.", translation: "We have many books at home." }
     ],
     262: [
       { text: "Det var *få* folk på museet i dag.", translation: "There were few people at the museum today." },
       { text: "Vi har *få* dager igjen av ferien.", translation: "We have few days left of the holiday." },
-      { text: "Bare *få* elever kom til timen.", translation: "Only a few students came to class." }
+      { text: "Bare *få* elever kom til timen.", translation: "Only a few students came to class." },
+      { text: "Det er *få* folk her i dag.", translation: "There are few people here today." },
+      { text: "Han har *få* venner.", translation: "He has few friends." },
+      { text: "Vi har *få* egg igjen.", translation: "We have few eggs left." }
     ],
     263: [
       { text: "Kan jeg få *mer* kaffe?", translation: "Can I have more coffee?" },
       { text: "Jeg trenger *mer* tid.", translation: "I need more time." },
-      { text: "Hun snakker *mer* enn broren sin.", translation: "She talks more than her brother." }
+      { text: "Hun snakker *mer* enn broren sin.", translation: "She talks more than her brother." },
+      { text: "Jeg vil ha *mer* te.", translation: "I want more tea." },
+      { text: "Du må spise *mer*.", translation: "You must eat more." },
+      { text: "Han jobber *mer* enn meg.", translation: "He works more than me." }
     ],
     264: [
       { text: "Jeg spiser *mindre* kjøtt nå.", translation: "I eat less meat now." },
       { text: "Vi har *mindre* tid enn vi trodde.", translation: "We have less time than we thought." },
-      { text: "Han jobber *mindre* enn før.", translation: "He works less than before." }
+      { text: "Han jobber *mindre* enn før.", translation: "He works less than before." },
+      { text: "Jeg drikker *mindre* kaffe nå.", translation: "I drink less coffee now." },
+      { text: "Hun har *mindre* tid i dag.", translation: "She has less time today." },
+      { text: "Vi bruker *mindre* penger nå.", translation: "We spend less money now." }
     ],
     265: [
       { text: "Har vi *nok* mat til alle?", translation: "Do we have enough food for everyone?" },
       { text: "Jeg har ikke *nok* penger.", translation: "I don't have enough money." },
-      { text: "Det er *nok* plass i bilen.", translation: "There's enough room in the car." }
+      { text: "Det er *nok* plass i bilen.", translation: "There's enough room in the car." },
+      { text: "Vi har *nok* brød.", translation: "We have enough bread." },
+      { text: "Er det *nok* te?", translation: "Is there enough tea?" },
+      { text: "Jeg har sovet *nok*.", translation: "I have slept enough." }
     ],
     266: [
       { text: "Jeg reiser *ofte* til Norge.", translation: "I often travel to Norway." },
       { text: "Hun ringer *ofte* til foreldrene sine.", translation: "She often calls her parents." },
-      { text: "Vi spiser *ofte* fisk til middag.", translation: "We often eat fish for dinner." }
+      { text: "Vi spiser *ofte* fisk til middag.", translation: "We often eat fish for dinner." },
+      { text: "Vi går *ofte* på kino.", translation: "We often go to the cinema." },
+      { text: "Det regner *ofte* her.", translation: "It often rains here." },
+      { text: "Hun leser *ofte* om kvelden.", translation: "She often reads in the evening." }
     ],
     267: [
       { text: "Jeg drikker *aldri* kaffe om kvelden.", translation: "I never drink coffee in the evening." },
       { text: "Han kommer *aldri* for sent.", translation: "He never comes late." },
-      { text: "Vi har *aldri* vært i Japan.", translation: "We have never been to Japan." }
+      { text: "Vi har *aldri* vært i Japan.", translation: "We have never been to Japan." },
+      { text: "Jeg spiser *aldri* fisk.", translation: "I never eat fish." },
+      { text: "Hun er *aldri* sint.", translation: "She is never angry." },
+      { text: "Han har *aldri* sett snø.", translation: "He has never seen snow." }
     ],
     268: [
       { text: "Jeg går *noen ganger* tur alene.", translation: "I sometimes go for a walk alone." },
       { text: "Hun spiser *noen ganger* frokost sent.", translation: "She sometimes eats breakfast late." },
-      { text: "Vi drar *noen ganger* til hytta i helgen.", translation: "We sometimes go to the cabin on weekends." }
+      { text: "Vi drar *noen ganger* til hytta i helgen.", translation: "We sometimes go to the cabin on weekends." },
+      { text: "*Noen ganger* regner det hele dagen.", translation: "Sometimes it rains all day." },
+      { text: "Jeg drikker te *noen ganger*.", translation: "I drink tea sometimes." },
+      { text: "*Noen ganger* jobber jeg hjemme.", translation: "Sometimes I work from home." }
     ],
     269: [
       { text: "Jeg våkner *tidlig* hver dag.", translation: "I wake up early every day." },
       { text: "Vi kom *tidlig* til flyplassen.", translation: "We arrived early at the airport." },
-      { text: "Møtet begynner *tidlig* i morgen.", translation: "The meeting starts early tomorrow." }
+      { text: "Møtet begynner *tidlig* i morgen.", translation: "The meeting starts early tomorrow." },
+      { text: "Jeg står opp *tidlig*.", translation: "I get up early." },
+      { text: "Butikken åpner *tidlig*.", translation: "The shop opens early." },
+      { text: "Vi spiste middag *tidlig*.", translation: "We ate dinner early." }
     ],
     270: [
       { text: "Han kom *sent* til jobb i dag.", translation: "He came late to work today." },
       { text: "Vi spiste middag *sent* i går.", translation: "We ate dinner late yesterday." },
-      { text: "Toget gikk *sent* om kvelden.", translation: "The train left late in the evening." }
+      { text: "Toget gikk *sent* om kvelden.", translation: "The train left late in the evening." },
+      { text: "Det er *sent* nå.", translation: "It's late now." },
+      { text: "Jeg la meg *sent*.", translation: "I went to bed late." },
+      { text: "Bussen kom *sent*.", translation: "The bus came late." }
     ],
     271: [
       { text: "*Denne* boken er veldig god.", translation: "This book is very good." },
       { text: "Jeg liker *denne* genseren.", translation: "I like this sweater." },
-      { text: "*Denne* uken har vært travel.", translation: "This week has been busy." }
+      { text: "*Denne* uken har vært travel.", translation: "This week has been busy." },
+      { text: "*Denne* kaffen er god.", translation: "This coffee is good." },
+      { text: "Jeg vil ha *denne* jakken.", translation: "I want this jacket." },
+      { text: "*Denne* bilen er ny.", translation: "This car is new." }
     ],
     272: [
       { text: "*Dette* huset er stort.", translation: "This house is big." },
       { text: "Jeg forstår ikke *dette* ordet.", translation: "I don't understand this word." },
-      { text: "*Dette* er min bror.", translation: "This is my brother." }
+      { text: "*Dette* er min bror.", translation: "This is my brother." },
+      { text: "*Dette* er min søster.", translation: "This is my sister." },
+      { text: "Jeg liker *dette* bildet.", translation: "I like this photo." },
+      { text: "Hva er *dette*?", translation: "What is this?" }
     ],
     273: [
       { text: "*Disse* skoene er nye.", translation: "These shoes are new." },
       { text: "Jeg liker *disse* bildene.", translation: "I like these pictures." },
-      { text: "*Disse* bøkene er fra biblioteket.", translation: "These books are from the library." }
+      { text: "*Disse* bøkene er fra biblioteket.", translation: "These books are from the library." },
+      { text: "*Disse* eplene er søte.", translation: "These apples are sweet." },
+      { text: "Jeg kjøper *disse* skoene.", translation: "I'm buying these shoes." },
+      { text: "*Disse* barna er mine.", translation: "These children are mine." }
     ],
     274: [
       { text: "Vi bor i *samme* by.", translation: "We live in the same city." },
       { text: "Han har *samme* jakke som meg.", translation: "He has the same jacket as me." },
-      { text: "De gikk på *samme* skole.", translation: "They went to the same school." }
+      { text: "De gikk på *samme* skole.", translation: "They went to the same school." },
+      { text: "Vi har *samme* lærer.", translation: "We have the same teacher." },
+      { text: "Hun spiser alltid *samme* mat.", translation: "She always eats the same food." },
+      { text: "De kom på *samme* dag.", translation: "They came on the same day." }
     ],
     275: [
       { text: "Jeg vil heller ha den *andre* boken.", translation: "I'd rather have the other book." },
       { text: "Vi tar den *andre* veien.", translation: "We'll take the other way." },
-      { text: "Hun bor på den *andre* siden av gaten.", translation: "She lives on the other side of the street." }
+      { text: "Hun bor på den *andre* siden av gaten.", translation: "She lives on the other side of the street." },
+      { text: "Hun har en *annen* bil nå.", translation: "She has a different car now." },
+      { text: "Kan jeg få en *annen* kopp?", translation: "Can I have another cup?" },
+      { text: "Vi tar et *annet* tog.", translation: "We take a different train." }
     ],
     276: [
       { text: "*Ha det*! Vi ses i morgen.", translation: "Bye! See you tomorrow." },
       { text: "Hun vinket og sa *ha det*.", translation: "She waved and said bye." },
-      { text: "*Ha det* bra, snakkes snart!", translation: "Bye, talk soon!" }
+      { text: "*Ha det* bra, snakkes snart!", translation: "Bye, talk soon!" },
+      { text: "*Ha det*, vi snakkes!", translation: "Bye, talk soon!" },
+      { text: "Hun sa *ha det* og gikk.", translation: "She said bye and left." },
+      { text: "*Ha det*, mamma!", translation: "Bye, mum!" }
     ],
     277: [
       { text: "*God morgen*! Sov du godt?", translation: "Good morning! Did you sleep well?" },
       { text: "Han sa *god morgen* til alle på kontoret.", translation: "He said good morning to everyone at the office." },
-      { text: "*God morgen*, det er en fin dag i dag.", translation: "Good morning, it's a nice day today." }
+      { text: "*God morgen*, det er en fin dag i dag.", translation: "Good morning, it's a nice day today." },
+      { text: "*God morgen*, mamma!", translation: "Good morning, mum!" },
+      { text: "*God morgen*, alle sammen!", translation: "Good morning, everyone!" },
+      { text: "Hun sa *god morgen* til meg.", translation: "She said good morning to me." }
     ],
     278: [
       { text: "*God kveld*! Hvordan går det?", translation: "Good evening! How's it going?" },
       { text: "Vi sa *god kveld* og gikk inn.", translation: "We said good evening and went in." },
-      { text: "*God kveld*, velkommen til restauranten.", translation: "Good evening, welcome to the restaurant." }
+      { text: "*God kveld*, velkommen til restauranten.", translation: "Good evening, welcome to the restaurant." },
+      { text: "*God kveld*, alle sammen!", translation: "Good evening, everyone!" },
+      { text: "Han sa *god kveld* til naboen.", translation: "He said good evening to the neighbour." },
+      { text: "*God kveld*, og velkommen!", translation: "Good evening, and welcome!" }
     ],
     279: [
       { text: "*God natt*, sov godt!", translation: "Good night, sleep well!" },
       { text: "Hun sa *god natt* til barna.", translation: "She said good night to the children." },
-      { text: "*God natt*, vi ses i morgen tidlig.", translation: "Good night, see you early tomorrow." }
+      { text: "*God natt*, vi ses i morgen tidlig.", translation: "Good night, see you early tomorrow." },
+      { text: "*God natt*, mamma!", translation: "Good night, mum!" },
+      { text: "Vi sa *god natt* og la oss.", translation: "We said good night and went to bed." },
+      { text: "*God natt*, alle sammen!", translation: "Good night, everyone!" }
     ],
     280: [
       { text: "*Velkommen* til Norge!", translation: "Welcome to Norway!" },
       { text: "Du er alltid *velkommen* hjem til oss.", translation: "You're always welcome at our home." },
-      { text: "*Velkommen* inn, vær så god!", translation: "Welcome in, please!" }
+      { text: "*Velkommen* inn, vær så god!", translation: "Welcome in, please!" },
+      { text: "*Velkommen* hjem, pappa!", translation: "Welcome home, dad!" },
+      { text: "*Velkommen* til Oslo!", translation: "Welcome to Oslo!" },
+      { text: "*Velkommen* til klassen!", translation: "Welcome to the class!" }
     ],
     281: [
       { text: "*Vær så god*, her er kaffen din.", translation: "Here you are, here's your coffee." },
       { text: "*Vær så god*, sitt ned.", translation: "Please, sit down." },
-      { text: "Hun ga meg boken og sa *vær så god*.", translation: "She gave me the book and said here you are." }
+      { text: "Hun ga meg boken og sa *vær så god*.", translation: "She gave me the book and said here you are." },
+      { text: "*Vær så god*, maten er klar.", translation: "Here you are, the food is ready." },
+      { text: "*Vær så god*, her er billetten.", translation: "Here you are, here is the ticket." },
+      { text: "*Vær så god*, kom inn.", translation: "Come in, please." }
     ],
     282: [
       { text: "*Tusen takk* for hjelpen!", translation: "Many thanks for the help!" },
       { text: "*Tusen takk*, det var veldig snilt av deg.", translation: "Thank you so much, that was very kind of you." },
-      { text: "Vi sa *tusen takk* og gikk hjem.", translation: "We said thanks a lot and went home." }
+      { text: "Vi sa *tusen takk* og gikk hjem.", translation: "We said thanks a lot and went home." },
+      { text: "*Tusen takk* for maten!", translation: "Thank you so much for the meal!" },
+      { text: "*Tusen takk* for gaven.", translation: "Thank you so much for the gift." },
+      { text: "*Tusen takk*, du er snill.", translation: "Thank you so much, you're kind." }
     ],
     283: [
       { text: "*Det går bra*, ikke bekymre deg.", translation: "It's fine, don't worry." },
       { text: "Hvordan går det? *Det går bra*, takk.", translation: "How's it going? It's fine, thanks." },
-      { text: "*Det går bra* med meg nå.", translation: "I'm doing fine now." }
+      { text: "*Det går bra* med meg nå.", translation: "I'm doing fine now." },
+      { text: "*Det går bra* med meg.", translation: "I'm doing fine." },
+      { text: "*Det går bra*, takk.", translation: "It's fine, thanks." },
+      { text: "Ikke vær redd, *det går bra*.", translation: "Don't be afraid, it's fine." }
     ],
     284: [
       { text: "Det var en fin film, *ikke sant*?", translation: "That was a nice movie, right?" },
       { text: "Du liker kaffe, *ikke sant*?", translation: "You like coffee, right?" },
-      { text: "Vi møttes i fjor, *ikke sant*?", translation: "We met last year, right?" }
+      { text: "Vi møttes i fjor, *ikke sant*?", translation: "We met last year, right?" },
+      { text: "Det er kaldt i dag, *ikke sant*?", translation: "It's cold today, isn't it?" },
+      { text: "Du er fra Bergen, *ikke sant*?", translation: "You're from Bergen, right?" },
+      { text: "*Ikke sant*, det er dyrt!", translation: "That's right, it's expensive!" }
     ],
     285: [
       { text: "*Selvfølgelig* kan jeg hjelpe deg.", translation: "Of course I can help you." },
       { text: "Kommer du i kveld? *Selvfølgelig*!", translation: "Are you coming tonight? Of course!" },
-      { text: "*Selvfølgelig* husker jeg deg.", translation: "Of course I remember you." }
+      { text: "*Selvfølgelig* husker jeg deg.", translation: "Of course I remember you." },
+      { text: "*Selvfølgelig* kommer jeg!", translation: "Of course I'm coming!" },
+      { text: "Ja, *selvfølgelig* kan du det.", translation: "Yes, of course you can." },
+      { text: "Vi hjelper deg *selvfølgelig*.", translation: "Of course we'll help you." }
     ],
     286: [
       { text: "Jeg må til *apoteket* og kjøpe medisin.", translation: "I need to go to the pharmacy and buy medicine." },
       { text: "*Apoteket* ligger ved siden av butikken.", translation: "The pharmacy is next to the shop." },
-      { text: "*Apoteket* åpner klokka åtte.", translation: "The pharmacy opens at eight." }
+      { text: "*Apoteket* åpner klokka åtte.", translation: "The pharmacy opens at eight." },
+      { text: "Hvor er *apoteket*?", translation: "Where is the pharmacy?" },
+      { text: "Jeg går til *apoteket*.", translation: "I'm going to the pharmacy." },
+      { text: "*Apoteket* er stengt nå.", translation: "The pharmacy is closed now." }
     ],
     287: [
       { text: "Han ble kjørt til *sykehuset* i går.", translation: "He was taken to the hospital yesterday." },
       { text: "*Sykehuset* ligger utenfor byen.", translation: "The hospital is outside the city." },
-      { text: "Hun jobber på *sykehuset* som sykepleier.", translation: "She works at the hospital as a nurse." }
+      { text: "Hun jobber på *sykehuset* som sykepleier.", translation: "She works at the hospital as a nurse." },
+      { text: "Hun er på *sykehuset*.", translation: "She is at the hospital." },
+      { text: "*Sykehuset* er stort.", translation: "The hospital is big." },
+      { text: "Vi besøker bestefar på *sykehuset*.", translation: "We visit grandpa at the hospital." }
     ],
     288: [
       { text: "Jeg har time hos *tannlegen* i morgen.", translation: "I have an appointment with the dentist tomorrow." },
       { text: "*Tannlegen* sjekket tennene mine.", translation: "The dentist checked my teeth." },
-      { text: "Barn bør gå til *tannlegen* hvert år.", translation: "Children should go to the dentist every year." }
+      { text: "Barn bør gå til *tannlegen* hvert år.", translation: "Children should go to the dentist every year." },
+      { text: "Jeg er redd for *tannlegen*.", translation: "I'm afraid of the dentist." },
+      { text: "Hun er *tannlege*.", translation: "She is a dentist." },
+      { text: "Jeg går til *tannlegen* i dag.", translation: "I'm going to the dentist today." }
     ],
     289: [
       { text: "Kan jeg få litt *hjelp*?", translation: "Can I get some help?" },
       { text: "Tusen takk for *hjelpen*!", translation: "Thanks a lot for the help!" },
-      { text: "Hun trengte *hjelp* med leksene.", translation: "She needed help with the homework." }
+      { text: "Hun trengte *hjelp* med leksene.", translation: "She needed help with the homework." },
+      { text: "Jeg trenger *hjelp*.", translation: "I need help." },
+      { text: "Takk for *hjelpen*!", translation: "Thanks for the help!" },
+      { text: "Han ropte om *hjelp*.", translation: "He shouted for help." }
     ],
     290: [
       { text: "Vi har et lite *problem*.", translation: "We have a small problem." },
       { text: "*Problemet* ble løst raskt.", translation: "The problem was solved quickly." },
-      { text: "Ikke noe *problem*, jeg kan hjelpe.", translation: "No problem, I can help." }
+      { text: "Ikke noe *problem*, jeg kan hjelpe.", translation: "No problem, I can help." },
+      { text: "Det er et stort *problem*.", translation: "It is a big problem." },
+      { text: "Hva er *problemet*?", translation: "What's the problem?" },
+      { text: "Vi har et *problem* med bilen.", translation: "We have a problem with the car." }
     ],
     291: [
       { text: "Hva er *prisen* på denne genseren?", translation: "What's the price of this sweater?" },
       { text: "*Prisen* var høyere enn jeg forventet.", translation: "The price was higher than I expected." },
-      { text: "Vi sammenlignet *priser* i flere butikker.", translation: "We compared prices in several shops." }
+      { text: "Vi sammenlignet *priser* i flere butikker.", translation: "We compared prices in several shops." },
+      { text: "*Prisen* er for høy.", translation: "The price is too high." },
+      { text: "Hva er *prisen*?", translation: "What is the price?" },
+      { text: "*Prisene* er lave her.", translation: "The prices are low here." }
     ],
     292: [
       { text: "Jeg har ikke nok *penger* i dag.", translation: "I don't have enough money today." },
       { text: "Hun sparer *penger* til reisen.", translation: "She's saving money for the trip." },
-      { text: "Vi trenger mer *penger* til prosjektet.", translation: "We need more money for the project." }
+      { text: "Vi trenger mer *penger* til prosjektet.", translation: "We need more money for the project." },
+      { text: "Jeg har ingen *penger*.", translation: "I have no money." },
+      { text: "Hun bruker mye *penger*.", translation: "She spends a lot of money." },
+      { text: "Vi sparer *penger*.", translation: "We are saving money." }
     ],
     293: [
       { text: "Kan jeg få en *kvittering*, vær så snill?", translation: "Can I have a receipt, please?" },
       { text: "Jeg mistet *kvitteringen* min.", translation: "I lost my receipt." },
-      { text: "*Kvitteringen* viser hva du betalte.", translation: "The receipt shows what you paid." }
+      { text: "*Kvitteringen* viser hva du betalte.", translation: "The receipt shows what you paid." },
+      { text: "Her er *kvitteringen*.", translation: "Here is the receipt." },
+      { text: "Trenger du *kvittering*?", translation: "Do you need a receipt?" },
+      { text: "Jeg har *kvitteringen* i vesken.", translation: "I have the receipt in my bag." }
     ],
     294: [
       { text: "Trenger du en *pose*?", translation: "Do you need a bag?" },
       { text: "*Posen* var full av grønnsaker.", translation: "The bag was full of vegetables." },
-      { text: "Jeg glemte *posene* mine hjemme.", translation: "I forgot my bags at home." }
+      { text: "Jeg glemte *posene* mine hjemme.", translation: "I forgot my bags at home." },
+      { text: "Kan jeg få en *pose*?", translation: "Can I have a bag?" },
+      { text: "*Posen* er tung.", translation: "The bag is heavy." },
+      { text: "Jeg har en *pose* med epler.", translation: "I have a bag of apples." }
     ],
     295: [
       { text: "Hvilken *størrelse* bruker du?", translation: "What size do you wear?" },
       { text: "Denne genseren er feil *størrelse*.", translation: "This sweater is the wrong size." },
-      { text: "De har alle *størrelser* i denne butikken.", translation: "They have all sizes in this shop." }
+      { text: "De har alle *størrelser* i denne butikken.", translation: "They have all sizes in this shop." },
+      { text: "Har du en mindre *størrelse*?", translation: "Do you have a smaller size?" },
+      { text: "Hva er din *størrelse*?", translation: "What is your size?" },
+      { text: "*Størrelsen* er perfekt.", translation: "The size is perfect." }
     ],
     296: [
       { text: "Jeg glemte *telefonen* min hjemme.", translation: "I forgot my phone at home." },
       { text: "*Telefonen* ringte midt på natten.", translation: "The phone rang in the middle of the night." },
-      { text: "Kan jeg låne *telefonen* din?", translation: "Can I borrow your phone?" }
+      { text: "Kan jeg låne *telefonen* din?", translation: "Can I borrow your phone?" },
+      { text: "*Telefonen* ringer igjen!", translation: "The phone is ringing again!" },
+      { text: "Hvor er *telefonen* min?", translation: "Where is my phone?" },
+      { text: "Hun snakker i *telefonen*.", translation: "She is talking on the phone." }
     ],
     297: [
       { text: "Min *datamaskin* er veldig gammel.", translation: "My computer is very old." },
       { text: "*Datamaskinen* sluttet å virke i går.", translation: "The computer stopped working yesterday." },
-      { text: "Jeg jobber på *datamaskinen* hele dagen.", translation: "I work on the computer all day." }
+      { text: "Jeg jobber på *datamaskinen* hele dagen.", translation: "I work on the computer all day." },
+      { text: "Jeg kjøpte en ny *datamaskin*.", translation: "I bought a new computer." },
+      { text: "*Datamaskinen* er på bordet.", translation: "The computer is on the table." },
+      { text: "Han spiller på *datamaskinen*.", translation: "He plays on the computer." }
     ],
     298: [
       { text: "Jeg har mistet *nøkkelen* min.", translation: "I've lost my key." },
       { text: "*Nøkkelen* ligger under matten.", translation: "The key is under the mat." },
-      { text: "Kan du gi meg *nøklene*?", translation: "Can you give me the keys?" }
+      { text: "Kan du gi meg *nøklene*?", translation: "Can you give me the keys?" },
+      { text: "Hvor er *nøkkelen*?", translation: "Where is the key?" },
+      { text: "Jeg fant *nøkkelen* min.", translation: "I found my key." },
+      { text: "*Nøkkelen* er i døren.", translation: "The key is in the door." }
     ],
     299: [
       { text: "*Klokka* på veggen viser feil tid.", translation: "The clock on the wall shows the wrong time." },
       { text: "Jeg kjøpte en ny *klokke* i går.", translation: "I bought a new watch yesterday." },
-      { text: "*Klokken* ringte klokka sju.", translation: "The clock rang at seven." }
+      { text: "*Klokken* ringte klokka sju.", translation: "The clock rang at seven." },
+      { text: "*Klokka* er åtte.", translation: "It is eight o'clock." },
+      { text: "Han har en fin *klokke*.", translation: "He has a nice watch." },
+      { text: "*Klokka* på kjøkkenet går feil.", translation: "The kitchen clock is wrong." }
     ],
     300: [
       { text: "Hun bærer alltid en stor *veske*.", translation: "She always carries a big bag." },
       { text: "*Vesken* min er full av bøker.", translation: "My bag is full of books." },
-      { text: "Jeg kjøpte en ny *veske* til skolen.", translation: "I bought a new bag for school." }
+      { text: "Jeg kjøpte en ny *veske* til skolen.", translation: "I bought a new bag for school." },
+      { text: "*Vesken* er tung.", translation: "The bag is heavy." },
+      { text: "Hvor er *vesken* min?", translation: "Where is my bag?" },
+      { text: "Hun har en rød *veske*.", translation: "She has a red bag." }
     ],
     301: [
       { text: "Kan du *gi* meg boken?", translation: "Can you give me the book?" },
       { text: "Han *ga* henne en gave.", translation: "He gave her a gift." },
-      { text: "Vi vil *gi* penger til veldedighet.", translation: "We want to give money to charity." }
+      { text: "Vi vil *gi* penger til veldedighet.", translation: "We want to give money to charity." },
+      { text: "*Gi* meg hånden din.", translation: "Give me your hand." },
+      { text: "Jeg *gir* katten mat.", translation: "I give the cat food." },
+      { text: "Hun *ga* meg en blomst.", translation: "She gave me a flower." }
     ],
     302: [
       { text: "Kan du *ta* denne posen for meg?", translation: "Can you take this bag for me?" },
       { text: "Hun *tok* bussen til jobb.", translation: "She took the bus to work." },
-      { text: "Jeg må *ta* en pause nå.", translation: "I need to take a break now." }
+      { text: "Jeg må *ta* en pause nå.", translation: "I need to take a break now." },
+      { text: "*Ta* en kopp kaffe.", translation: "Have a cup of coffee." },
+      { text: "Jeg *tar* toget hjem.", translation: "I take the train home." },
+      { text: "Han *tok* det siste eplet.", translation: "He took the last apple." }
     ],
     303: [
       { text: "Kan du *legge* boken på bordet?", translation: "Can you put the book on the table?" },
       { text: "Hun *la* nøklene i vesken.", translation: "She put the keys in the bag." },
-      { text: "Jeg skal *legge* meg tidlig i kveld.", translation: "I'm going to bed early tonight." }
+      { text: "Jeg skal *legge* meg tidlig i kveld.", translation: "I'm going to bed early tonight." },
+      { text: "Hvor skal jeg *legge* boka?", translation: "Where should I put the book?" },
+      { text: "Jeg *legger* nøkkelen på bordet.", translation: "I put the key on the table." },
+      { text: "Han *la* telefonen i lomma.", translation: "He put the phone in his pocket." }
     ],
     304: [
       { text: "Filmen *begynner* klokka åtte.", translation: "The movie begins at eight." },
       { text: "Vi må *begynne* å jobbe nå.", translation: "We need to begin working now." },
-      { text: "Skolen *begynte* i august.", translation: "School began in August." }
+      { text: "Skolen *begynte* i august.", translation: "School began in August." },
+      { text: "Kurset *begynner* i dag.", translation: "The course begins today." },
+      { text: "Når *begynner* filmen?", translation: "When does the film begin?" },
+      { text: "Det *begynte* å regne.", translation: "It started to rain." }
     ],
     305: [
       { text: "Jeg må *avslutte* dette prosjektet i dag.", translation: "I need to finish this project today." },
       { text: "Møtet *avsluttet* tidlig.", translation: "The meeting finished early." },
-      { text: "Vi skal *avslutte* kurset neste uke.", translation: "We're going to finish the course next week." }
+      { text: "Vi skal *avslutte* kurset neste uke.", translation: "We're going to finish the course next week." },
+      { text: "Vi må *avslutte* møtet nå.", translation: "We have to finish the meeting now." },
+      { text: "Hun *avsluttet* samtalen.", translation: "She ended the conversation." },
+      { text: "Han *avslutter* jobben klokka fire.", translation: "He finishes work at four o'clock." }
     ],
     306: [
       { text: "Jeg *vet* ikke svaret.", translation: "I don't know the answer." },
       { text: "*Vet* du hvor hun bor?", translation: "Do you know where she lives?" },
-      { text: "Hun *visste* ikke hva hun skulle si.", translation: "She didn't know what to say." }
+      { text: "Hun *visste* ikke hva hun skulle si.", translation: "She didn't know what to say." },
+      { text: "Jeg *vet* det.", translation: "I know that." },
+      { text: "Hun *vet* ikke svaret.", translation: "She doesn't know the answer." },
+      { text: "*Vet* du hva klokka er?", translation: "Do you know what time it is?" }
     ],
     307: [
       { text: "Jeg *tenker* på deg.", translation: "I'm thinking of you." },
       { text: "Hva *tenker* du om dette?", translation: "What do you think about this?" },
-      { text: "Han *tenkte* lenge før han svarte.", translation: "He thought for a long time before answering." }
+      { text: "Han *tenkte* lenge før han svarte.", translation: "He thought for a long time before answering." },
+      { text: "Jeg *tenker* på ferien.", translation: "I'm thinking about the holiday." },
+      { text: "*Tenk* før du snakker.", translation: "Think before you speak." },
+      { text: "Hun *tenkte* på mor.", translation: "She thought about mum." }
     ],
     308: [
       { text: "Jeg *forstår* ikke spørsmålet.", translation: "I don't understand the question." },
       { text: "Kan du *forstå* norsk?", translation: "Can you understand Norwegian?" },
-      { text: "Hun *forsto* ikke hvorfor han var sint.", translation: "She didn't understand why he was angry." }
+      { text: "Hun *forsto* ikke hvorfor han var sint.", translation: "She didn't understand why he was angry." },
+      { text: "Jeg *forstår* ikke.", translation: "I don't understand." },
+      { text: "*Forstår* du meg?", translation: "Do you understand me?" },
+      { text: "Han *forsto* alt.", translation: "He understood everything." }
     ],
     309: [
       { text: "Jeg *husker* ikke navnet hans.", translation: "I don't remember his name." },
       { text: "Kan du *huske* hva jeg sa?", translation: "Can you remember what I said?" },
-      { text: "Hun *husket* bursdagen min.", translation: "She remembered my birthday." }
+      { text: "Hun *husket* bursdagen min.", translation: "She remembered my birthday." },
+      { text: "*Husker* du meg?", translation: "Do you remember me?" },
+      { text: "Jeg *husker* ikke passordet.", translation: "I don't remember the password." },
+      { text: "Hun *husket* å kjøpe melk.", translation: "She remembered to buy milk." }
     ],
     310: [
       { text: "Jeg *glemmer* alltid nøklene mine.", translation: "I always forget my keys." },
       { text: "Ikke *glem* å ringe meg.", translation: "Don't forget to call me." },
-      { text: "Han *glemte* boken hjemme.", translation: "He forgot the book at home." }
+      { text: "Han *glemte* boken hjemme.", translation: "He forgot the book at home." },
+      { text: "Jeg *glemte* nøkkelen.", translation: "I forgot the key." },
+      { text: "*Glem* ikke jakken!", translation: "Don't forget the jacket!" },
+      { text: "Han *glemmer* alltid navnet mitt.", translation: "He always forgets my name." }
     ],
     311: [
       { text: "Kan du *hjelpe* meg med dette?", translation: "Can you help me with this?" },
       { text: "Hun *hjelper* alltid andre.", translation: "She always helps others." },
-      { text: "Vi *hjalp* naboen med hagen.", translation: "We helped the neighbor with the garden." }
+      { text: "Vi *hjalp* naboen med hagen.", translation: "We helped the neighbor with the garden." },
+      { text: "Jeg *hjelper* mor på kjøkkenet.", translation: "I help mum in the kitchen." },
+      { text: "Kan jeg *hjelpe* deg?", translation: "Can I help you?" },
+      { text: "Han *hjalp* meg med leksene.", translation: "He helped me with the homework." }
     ],
     312: [
       { text: "Jeg skal *ringe* deg i kveld.", translation: "I'll call you tonight." },
       { text: "Kan du *ringe* legen for meg?", translation: "Can you call the doctor for me?" },
-      { text: "Hun *ringte* moren sin hver søndag.", translation: "She called her mother every Sunday." }
+      { text: "Hun *ringte* moren sin hver søndag.", translation: "She called her mother every Sunday." },
+      { text: "Jeg *ringer* deg i morgen.", translation: "I'll call you tomorrow." },
+      { text: "Hvem *ringte* i går?", translation: "Who called yesterday?" },
+      { text: "*Ring* meg når du kommer.", translation: "Call me when you arrive." }
     ],
     313: [
       { text: "Kan du *sende* meg boken?", translation: "Can you send me the book?" },
       { text: "Jeg *sendte* en e-post i går.", translation: "I sent an email yesterday." },
-      { text: "Vi skal *sende* pakken i morgen.", translation: "We're going to send the package tomorrow." }
+      { text: "Vi skal *sende* pakken i morgen.", translation: "We're going to send the package tomorrow." },
+      { text: "Jeg *sender* deg et bilde.", translation: "I'll send you a photo." },
+      { text: "Hun *sendte* meg en melding.", translation: "She sent me a message." },
+      { text: "*Send* meg adressen.", translation: "Send me the address." }
     ],
     314: [
       { text: "Jeg *mistet* nøkkelen min.", translation: "I lost my key." },
       { text: "Ikke *mist* motet.", translation: "Don't lose heart." },
-      { text: "Hun er redd for å *miste* jobben.", translation: "She's afraid of losing her job." }
+      { text: "Hun er redd for å *miste* jobben.", translation: "She's afraid of losing her job." },
+      { text: "Jeg *mistet* telefonen min.", translation: "I lost my phone." },
+      { text: "Hun *mister* alltid hanskene.", translation: "She always loses her gloves." },
+      { text: "Vi *mistet* bussen.", translation: "We missed the bus." }
     ],
     315: [
       { text: "Vi håper å *vinne* kampen i dag.", translation: "We hope to win the match today." },
       { text: "Hun *vant* konkurransen i fjor.", translation: "She won the competition last year." },
-      { text: "Laget vårt *vinner* ofte.", translation: "Our team often wins." }
+      { text: "Laget vårt *vinner* ofte.", translation: "Our team often wins." },
+      { text: "Hvem *vant* kampen?", translation: "Who won the match?" },
+      { text: "Vi *vant* kampen!", translation: "We won the match!" },
+      { text: "Jeg vil *vinne* i dag.", translation: "I want to win today." }
     ],
     316: [
       { text: "Toget *ankommer* klokka ti.", translation: "The train arrives at ten." },
       { text: "Vi *ankom* sent til festen.", translation: "We arrived late at the party." },
-      { text: "Flyet skal *ankomme* om en time.", translation: "The plane is due to arrive in an hour." }
+      { text: "Flyet skal *ankomme* om en time.", translation: "The plane is due to arrive in an hour." },
+      { text: "Flyet *ankommer* klokka tre.", translation: "The plane arrives at three o'clock." },
+      { text: "Når *ankommer* toget?", translation: "When does the train arrive?" },
+      { text: "Vi *ankom* Oslo i går.", translation: "We arrived in Oslo yesterday." }
     ],
     317: [
       { text: "Vi kan *gå inn* nå.", translation: "We can enter now." },
       { text: "Hun *gikk inn* i rommet stille.", translation: "She entered the room quietly." },
-      { text: "Kan jeg *gå inn*?", translation: "Can I come in?" }
+      { text: "Kan jeg *gå inn*?", translation: "Can I come in?" },
+      { text: "Kom og *gå inn*, vær så snill.", translation: "Come and go in, please." },
+      { text: "Vi *gikk inn* i butikken.", translation: "We went into the shop." },
+      { text: "Du kan *gå inn* nå.", translation: "You can go in now." }
     ],
     318: [
       { text: "Toget *drar* klokka ni.", translation: "The train departs at nine." },
       { text: "Vi må *dra* nå for å rekke flyet.", translation: "We have to leave now to catch the plane." },
-      { text: "Han *dro* uten å si farvel.", translation: "He left without saying goodbye." }
+      { text: "Han *dro* uten å si farvel.", translation: "He left without saying goodbye." },
+      { text: "Vi *drar* i morgen tidlig.", translation: "We leave early tomorrow." },
+      { text: "Når *drar* bussen?", translation: "When does the bus leave?" },
+      { text: "Hun *dro* hjem klokka ti.", translation: "She went home at ten o'clock." }
     ],
     319: [
       { text: "Jeg *bor* i Oslo.", translation: "I live in Oslo." },
       { text: "Hvor *bor* du?", translation: "Where do you live?" },
-      { text: "De *bodde* der i mange år.", translation: "They lived there for many years." }
+      { text: "De *bodde* der i mange år.", translation: "They lived there for many years." },
+      { text: "Vi *bor* i et lite hus.", translation: "We live in a small house." },
+      { text: "Hun *bor* alene.", translation: "She lives alone." },
+      { text: "Han *bodde* i Bergen før.", translation: "He lived in Bergen before." }
     ],
     320: [
       { text: "Vi liker å *spasere* i parken.", translation: "We like to walk in the park." },
       { text: "Hun *spaserer* til jobb hver dag.", translation: "She walks to work every day." },
-      { text: "Skal vi *spasere* en tur?", translation: "Shall we go for a walk?" }
+      { text: "Skal vi *spasere* en tur?", translation: "Shall we go for a walk?" },
+      { text: "Jeg *spaserer* med hunden.", translation: "I'm walking the dog." },
+      { text: "Vi *spaserte* langs stranden.", translation: "We walked along the beach." },
+      { text: "De *spaserer* i byen.", translation: "They are strolling in the city." }
     ],
     321: [
       { text: "Jeg *løper* hver morgen.", translation: "I run every morning." },
       { text: "Barna *løp* rundt i hagen.", translation: "The children ran around in the garden." },
-      { text: "Han kan *løpe* veldig fort.", translation: "He can run very fast." }
+      { text: "Han kan *løpe* veldig fort.", translation: "He can run very fast." },
+      { text: "Hunden *løper* i parken.", translation: "The dog runs in the park." },
+      { text: "Jeg *løp* til bussen.", translation: "I ran to the bus." },
+      { text: "Vi *løper* sammen hver dag.", translation: "We run together every day." }
     ],
     322: [
       { text: "Vi elsker å *svømme* om sommeren.", translation: "We love to swim in summer." },
       { text: "Kan du *svømme*?", translation: "Can you swim?" },
-      { text: "Hun *svømte* over hele innsjøen.", translation: "She swam across the whole lake." }
+      { text: "Hun *svømte* over hele innsjøen.", translation: "She swam across the whole lake." },
+      { text: "Jeg *svømmer* hver uke.", translation: "I swim every week." },
+      { text: "Fisken *svømmer* i vannet.", translation: "The fish swims in the water." },
+      { text: "Vi *svømte* i havet.", translation: "We swam in the sea." }
     ],
     323: [
       { text: "Barnet lærte å *hoppe* i dag.", translation: "The child learned to jump today." },
       { text: "Han *hoppet* over gjerdet.", translation: "He jumped over the fence." },
-      { text: "Kan du *hoppe* så høyt?", translation: "Can you jump that high?" }
+      { text: "Kan du *hoppe* så høyt?", translation: "Can you jump that high?" },
+      { text: "Katten *hopper* på bordet.", translation: "The cat jumps on the table." },
+      { text: "Barna *hopper* i snøen.", translation: "The children jump in the snow." },
+      { text: "Han *hoppet* i vannet.", translation: "He jumped into the water." }
     ],
     324: [
       { text: "Vi elsker å *danse* på fester.", translation: "We love to dance at parties." },
       { text: "Kan du *danse* vals?", translation: "Can you dance the waltz?" },
-      { text: "De *danset* hele natten.", translation: "They danced all night." }
+      { text: "De *danset* hele natten.", translation: "They danced all night." },
+      { text: "Hun *danser* veldig godt.", translation: "She dances very well." },
+      { text: "Vil du *danse* med meg?", translation: "Do you want to dance with me?" },
+      { text: "Vi *danset* på festen.", translation: "We danced at the party." }
     ],
     325: [
       { text: "Hun kan *synge* veldig godt.", translation: "She can sing very well." },
       { text: "Vi *sang* sammen ved bålet.", translation: "We sang together by the campfire." },
-      { text: "Han *synger* i et kor.", translation: "He sings in a choir." }
+      { text: "Han *synger* i et kor.", translation: "He sings in a choir." },
+      { text: "Fuglene *synger* om morgenen.", translation: "The birds sing in the morning." },
+      { text: "Jeg liker å *synge*.", translation: "I like to sing." },
+      { text: "Hun *sang* en fin sang.", translation: "She sang a nice song." }
     ],
     326: [
       { text: "Barna *leker* i hagen.", translation: "The children are playing in the garden." },
       { text: "Vil du *leke* med meg?", translation: "Do you want to play with me?" },
-      { text: "De *lekte* hele ettermiddagen.", translation: "They played all afternoon." }
+      { text: "De *lekte* hele ettermiddagen.", translation: "They played all afternoon." },
+      { text: "Katten *leker* med ballen.", translation: "The cat plays with the ball." },
+      { text: "Barna *leker* ute.", translation: "The children are playing outside." },
+      { text: "Vi *lekte* i snøen.", translation: "We played in the snow." }
     ],
     327: [
       { text: "Jeg liker å *lage mat* på søndager.", translation: "I like to cook on Sundays." },
       { text: "Kan du *lage mat* til oss i kveld?", translation: "Can you cook for us tonight?" },
-      { text: "Hun *lager mat* hver dag.", translation: "She cooks every day." }
+      { text: "Hun *lager mat* hver dag.", translation: "She cooks every day." },
+      { text: "Far *lager mat* i kveld.", translation: "Dad is cooking tonight." },
+      { text: "Jeg liker å *lage mat*.", translation: "I like to cook." },
+      { text: "Hvem *lager mat* i dag?", translation: "Who is cooking today?" }
     ],
     328: [
       { text: "Jeg må *rydde* rommet mitt.", translation: "I need to tidy my room." },
       { text: "Kan du *rydde* kjøkkenet?", translation: "Can you clean the kitchen?" },
-      { text: "Vi *ryddet* huset før gjestene kom.", translation: "We tidied the house before the guests arrived." }
+      { text: "Vi *ryddet* huset før gjestene kom.", translation: "We tidied the house before the guests arrived." },
+      { text: "Vi *rydder* huset i dag.", translation: "We're tidying the house today." },
+      { text: "Hun *ryddet* kjøkkenet.", translation: "She tidied the kitchen." },
+      { text: "*Rydd* rommet ditt!", translation: "Tidy your room!" }
     ],
     329: [
       { text: "De skal *bygge* et nytt hus.", translation: "They're going to build a new house." },
       { text: "Han *bygde* et bord av tre.", translation: "He built a table out of wood." },
-      { text: "Vi *bygger* et team sammen.", translation: "We're building a team together." }
+      { text: "Vi *bygger* et team sammen.", translation: "We're building a team together." },
+      { text: "Vi *bygger* et nytt hus.", translation: "We are building a new house." },
+      { text: "Barna *bygger* en snømann.", translation: "The children are building a snowman." },
+      { text: "Han *bygde* en båt.", translation: "He built a boat." }
     ],
     330: [
       { text: "Jeg vil *endre* planene mine.", translation: "I want to change my plans." },
       { text: "Kan vi *endre* tidspunktet?", translation: "Can we change the time?" },
-      { text: "Livet hennes *endret* seg fullstendig.", translation: "Her life changed completely." }
+      { text: "Livet hennes *endret* seg fullstendig.", translation: "Her life changed completely." },
+      { text: "Hun *endret* håret sitt.", translation: "She changed her hair." },
+      { text: "Vi må *endre* planen.", translation: "We have to change the plan." },
+      { text: "Været *endrer* seg fort.", translation: "The weather changes fast." }
     ],
     331: [
       { text: "Vi spiser *ris* til middag.", translation: "We eat rice for dinner." },
       { text: "*Risen* var kokt perfekt.", translation: "The rice was cooked perfectly." },
-      { text: "Han liker *ris* med kylling.", translation: "He likes rice with chicken." }
+      { text: "Han liker *ris* med kylling.", translation: "He likes rice with chicken." },
+      { text: "Jeg kokte *ris*.", translation: "I cooked rice." },
+      { text: "Vi spiser *ris* med fisk.", translation: "We eat rice with fish." },
+      { text: "*Risen* er klar.", translation: "The rice is ready." }
     ],
     332: [
       { text: "Vi lager *pasta* i kveld.", translation: "We're making pasta tonight." },
       { text: "*Pastaen* var deilig.", translation: "The pasta was delicious." },
-      { text: "Hun spiser *pasta* hver uke.", translation: "She eats pasta every week." }
+      { text: "Hun spiser *pasta* hver uke.", translation: "She eats pasta every week." },
+      { text: "Jeg elsker *pasta*.", translation: "I love pasta." },
+      { text: "Vi har *pasta* til middag.", translation: "We're having pasta for dinner." },
+      { text: "*Pastaen* er for varm.", translation: "The pasta is too hot." }
     ],
     333: [
       { text: "Vi griller *kylling* i helgen.", translation: "We're grilling chicken this weekend." },
       { text: "*Kyllingen* smakte veldig godt.", translation: "The chicken tasted very good." },
-      { text: "Han spiser aldri *kylling*.", translation: "He never eats chicken." }
+      { text: "Han spiser aldri *kylling*.", translation: "He never eats chicken." },
+      { text: "Vi har *kylling* til middag.", translation: "We're having chicken for dinner." },
+      { text: "*Kyllingen* er i ovnen.", translation: "The chicken is in the oven." },
+      { text: "Jeg kjøpte en *kylling*.", translation: "I bought a chicken." }
     ],
     334: [
       { text: "Vi spiser *storfekjøtt* til søndagsmiddag.", translation: "We eat beef for Sunday dinner." },
       { text: "*Storfekjøttet* var mørt og saftig.", translation: "The beef was tender and juicy." },
-      { text: "Han foretrekker *storfekjøtt* fremfor kylling.", translation: "He prefers beef to chicken." }
+      { text: "Han foretrekker *storfekjøtt* fremfor kylling.", translation: "He prefers beef to chicken." },
+      { text: "Jeg kjøpte *storfekjøtt* i butikken.", translation: "I bought beef in the shop." },
+      { text: "Vi lager suppe med *storfekjøtt*.", translation: "We make soup with beef." },
+      { text: "*Storfekjøtt* er dyrt.", translation: "Beef is expensive." }
     ],
     335: [
       { text: "Hun spiser ikke *svinekjøtt*.", translation: "She doesn't eat pork." },
       { text: "Vi grillet *svinekjøtt* i går.", translation: "We grilled pork yesterday." },
-      { text: "*Svinekjøttet* var litt for salt.", translation: "The pork was a bit too salty." }
+      { text: "*Svinekjøttet* var litt for salt.", translation: "The pork was a bit too salty." },
+      { text: "Jeg kjøpte *svinekjøtt* til middag.", translation: "I bought pork for dinner." },
+      { text: "*Svinekjøttet* er i ovnen.", translation: "The pork is in the oven." },
+      { text: "Han liker *svinekjøtt* med poteter.", translation: "He likes pork with potatoes." }
     ],
     336: [
       { text: "Kan du sende meg *smøret*?", translation: "Can you pass me the butter?" },
       { text: "Hun smører *smør* på brødet.", translation: "She spreads butter on the bread." },
-      { text: "Vi trenger mer *smør* til kaken.", translation: "We need more butter for the cake." }
+      { text: "Vi trenger mer *smør* til kaken.", translation: "We need more butter for the cake." },
+      { text: "Jeg vil ha *smør* på brødet.", translation: "I want butter on the bread." },
+      { text: "*Smøret* er i kjøleskapet.", translation: "The butter is in the fridge." },
+      { text: "Vi har ikke mer *smør*.", translation: "We don't have any more butter." }
     ],
     337: [
       { text: "Vi steker fisken i *olje*.", translation: "We fry the fish in oil." },
       { text: "*Oljen* var for varm.", translation: "The oil was too hot." },
-      { text: "Kan du sende meg *oljen*?", translation: "Can you pass me the oil?" }
+      { text: "Kan du sende meg *oljen*?", translation: "Can you pass me the oil?" },
+      { text: "Jeg kjøpte en flaske *olje*.", translation: "I bought a bottle of oil." },
+      { text: "Hun steker egg i *olje*.", translation: "She fries eggs in oil." },
+      { text: "Vi trenger mer *olje*.", translation: "We need more oil." }
     ],
     338: [
       { text: "Kan du sende meg *pepperet*?", translation: "Can you pass me the pepper?" },
       { text: "Suppen trenger litt mer *pepper*.", translation: "The soup needs a bit more pepper." },
-      { text: "Hun bruker mye *pepper* i maten.", translation: "She uses a lot of pepper in the food." }
+      { text: "Hun bruker mye *pepper* i maten.", translation: "She uses a lot of pepper in the food." },
+      { text: "Jeg liker mye *pepper*.", translation: "I like a lot of pepper." },
+      { text: "Salt og *pepper*, takk.", translation: "Salt and pepper, please." },
+      { text: "*Pepperet* står på bordet.", translation: "The pepper is on the table." }
     ],
     339: [
       { text: "Vi kutter *løk* til suppen.", translation: "We're cutting onion for the soup." },
       { text: "*Løken* fikk meg til å gråte.", translation: "The onion made me cry." },
-      { text: "Han liker ikke rå *løk*.", translation: "He doesn't like raw onion." }
+      { text: "Han liker ikke rå *løk*.", translation: "He doesn't like raw onion." },
+      { text: "Jeg skjærer *løken*.", translation: "I'm cutting the onion." },
+      { text: "Vi trenger to *løk*.", translation: "We need two onions." },
+      { text: "Suppen har mye *løk*.", translation: "The soup has a lot of onion." }
     ],
     340: [
       { text: "Vi trenger flere *tomater* til salaten.", translation: "We need more tomatoes for the salad." },
       { text: "*Tomaten* var moden og rød.", translation: "The tomato was ripe and red." },
-      { text: "Hun dyrker *tomater* i hagen.", translation: "She grows tomatoes in the garden." }
+      { text: "Hun dyrker *tomater* i hagen.", translation: "She grows tomatoes in the garden." },
+      { text: "Jeg kjøpte fem *tomater*.", translation: "I bought five tomatoes." },
+      { text: "*Tomaten* er rød.", translation: "The tomato is red." },
+      { text: "Hun liker *tomater* med ost.", translation: "She likes tomatoes with cheese." }
     ],
     341: [
       { text: "Vi steker *hvitløk* i olje.", translation: "We fry garlic in oil." },
       { text: "Retten smaker sterkt av *hvitløk*.", translation: "The dish tastes strongly of garlic." },
-      { text: "Han elsker *hvitløk* i alt han lager.", translation: "He loves garlic in everything he cooks." }
+      { text: "Han elsker *hvitløk* i alt han lager.", translation: "He loves garlic in everything he cooks." },
+      { text: "Jeg liker *hvitløk* i maten.", translation: "I like garlic in the food." },
+      { text: "Vi trenger *hvitløk* til suppen.", translation: "We need garlic for the soup." },
+      { text: "*Hvitløken* lukter sterkt.", translation: "The garlic smells strong." }
     ],
     342: [
       { text: "Jeg drikker vann med *sitron*.", translation: "I drink water with lemon." },
       { text: "*Sitronen* var veldig sur.", translation: "The lemon was very sour." },
-      { text: "Hun presset en *sitron* over fisken.", translation: "She squeezed a lemon over the fish." }
+      { text: "Hun presset en *sitron* over fisken.", translation: "She squeezed a lemon over the fish." },
+      { text: "Jeg vil ha te med *sitron*.", translation: "I want tea with lemon." },
+      { text: "*Sitronen* er gul.", translation: "The lemon is yellow." },
+      { text: "Hun kjøpte tre *sitroner*.", translation: "She bought three lemons." }
     ],
     343: [
       { text: "Vi plukket *jordbær* i hagen.", translation: "We picked strawberries in the garden." },
       { text: "*Jordbærene* var søte og røde.", translation: "The strawberries were sweet and red." },
-      { text: "Hun laget syltetøy av *jordbær*.", translation: "She made jam from strawberries." }
+      { text: "Hun laget syltetøy av *jordbær*.", translation: "She made jam from strawberries." },
+      { text: "Jeg elsker *jordbær*.", translation: "I love strawberries." },
+      { text: "Vi spiser *jordbær* med fløte.", translation: "We eat strawberries with cream." },
+      { text: "*Jordbærene* er røde.", translation: "The strawberries are red." }
     ],
     344: [
       { text: "Barna spiser *druer* som snacks.", translation: "The children eat grapes as snacks." },
       { text: "*Druene* var grønne og søte.", translation: "The grapes were green and sweet." },
-      { text: "Vi kjøpte en pose *druer* på markedet.", translation: "We bought a bag of grapes at the market." }
+      { text: "Vi kjøpte en pose *druer* på markedet.", translation: "We bought a bag of grapes at the market." },
+      { text: "Jeg kjøpte grønne *druer*.", translation: "I bought green grapes." },
+      { text: "Katten liker ikke *druer*.", translation: "The cat doesn't like grapes." },
+      { text: "Vil du ha en *drue*?", translation: "Do you want a grape?" }
     ],
     345: [
       { text: "Hun bakte en *kake* til bursdagen min.", translation: "She baked a cake for my birthday." },
       { text: "*Kaken* smakte fantastisk.", translation: "The cake tasted amazing." },
-      { text: "Vi spiser *kake* på søndager.", translation: "We eat cake on Sundays." }
+      { text: "Vi spiser *kake* på søndager.", translation: "We eat cake on Sundays." },
+      { text: "Vil du ha mer *kake*?", translation: "Do you want more cake?" },
+      { text: "Mor baker en *kake*.", translation: "Mum is baking a cake." },
+      { text: "*Kaken* er i kjøleskapet.", translation: "The cake is in the fridge." }
     ],
     346: [
       { text: "Jeg elsker mørk *sjokolade*.", translation: "I love dark chocolate." },
       { text: "*Sjokoladen* smeltet i solen.", translation: "The chocolate melted in the sun." },
-      { text: "Hun ga meg en eske *sjokolade*.", translation: "She gave me a box of chocolate." }
+      { text: "Hun ga meg en eske *sjokolade*.", translation: "She gave me a box of chocolate." },
+      { text: "Barna elsker *sjokolade*.", translation: "The children love chocolate." },
+      { text: "Vil du ha *sjokolade*?", translation: "Do you want chocolate?" },
+      { text: "Jeg kjøpte *sjokolade* til deg.", translation: "I bought chocolate for you." }
     ],
     347: [
       { text: "Vi spiser *iskrem* om sommeren.", translation: "We eat ice cream in summer." },
       { text: "*Iskremen* smeltet fort.", translation: "The ice cream melted fast." },
-      { text: "Barna elsker jordbær-*iskrem*.", translation: "The children love strawberry ice cream." }
+      { text: "Barna elsker jordbær-*iskrem*.", translation: "The children love strawberry ice cream." },
+      { text: "Jeg vil ha en *iskrem*.", translation: "I want an ice cream." },
+      { text: "Barna spiser *iskrem* i parken.", translation: "The children eat ice cream in the park." },
+      { text: "*Iskremen* er kald.", translation: "The ice cream is cold." }
     ],
     348: [
       { text: "Vi drakk *vin* til middagen.", translation: "We drank wine with dinner." },
       { text: "*Vinen* var rød og tørr.", translation: "The wine was red and dry." },
-      { text: "Han samler på *vin*.", translation: "He collects wine." }
+      { text: "Han samler på *vin*.", translation: "He collects wine." },
+      { text: "Vil du ha et glass *vin*?", translation: "Would you like a glass of wine?" },
+      { text: "Hun drikker hvit *vin*.", translation: "She drinks white wine." },
+      { text: "*Vinen* er fra Italia.", translation: "The wine is from Italy." }
     ],
     349: [
       { text: "Han drikker *øl* med vennene sine.", translation: "He drinks beer with his friends." },
       { text: "*Ølet* var kaldt og friskt.", translation: "The beer was cold and refreshing." },
-      { text: "Vi bestilte to *øl* på puben.", translation: "We ordered two beers at the pub." }
+      { text: "Vi bestilte to *øl* på puben.", translation: "We ordered two beers at the pub." },
+      { text: "Jeg vil ha en *øl*.", translation: "I'd like a beer." },
+      { text: "Han drikker ikke *øl*.", translation: "He doesn't drink beer." },
+      { text: "*Ølet* er i kjøleskapet.", translation: "The beer is in the fridge." }
     ],
     350: [
       { text: "Kan du åpne denne *flasken*?", translation: "Can you open this bottle?" },
       { text: "*Flasken* var full av vann.", translation: "The bottle was full of water." },
-      { text: "Vi kjøpte en *flaske* vin til festen.", translation: "We bought a bottle of wine for the party." }
+      { text: "Vi kjøpte en *flaske* vin til festen.", translation: "We bought a bottle of wine for the party." },
+      { text: "*Flasken* er tom.", translation: "The bottle is empty." },
+      { text: "Jeg kjøpte en *flaske* vann.", translation: "I bought a bottle of water." },
+      { text: "Hun åpnet *flasken*.", translation: "She opened the bottle." }
     ],
     351: [
       { text: "Maten står på *bordet*.", translation: "The food is on the table." },
       { text: "Vi kjøpte et nytt *bord* til stuen.", translation: "We bought a new table for the living room." },
-      { text: "Sett deg ved *bordet*.", translation: "Sit down at the table." }
+      { text: "Sett deg ved *bordet*.", translation: "Sit down at the table." },
+      { text: "*Bordet* er rent.", translation: "The table is clean." },
+      { text: "Vi har et stort *bord*.", translation: "We have a big table." },
+      { text: "Katten sitter på *bordet*.", translation: "The cat is sitting on the table." }
     ],
     352: [
       { text: "Denne *stolen* er veldig komfortabel.", translation: "This chair is very comfortable." },
       { text: "Kan du hente en *stol* til meg?", translation: "Can you get me a chair?" },
-      { text: "Vi trenger flere *stoler* til middagen.", translation: "We need more chairs for the dinner." }
+      { text: "Vi trenger flere *stoler* til middagen.", translation: "We need more chairs for the dinner." },
+      { text: "Sett deg på *stolen*.", translation: "Sit on the chair." },
+      { text: "*Stolen* er ny.", translation: "The chair is new." },
+      { text: "Katten sover på *stolen*.", translation: "The cat sleeps on the chair." }
     ],
     353: [
       { text: "Jeg legger meg i *sengen* klokka ti.", translation: "I get into bed at ten." },
       { text: "*Sengen* min er veldig myk.", translation: "My bed is very soft." },
-      { text: "Barnet sover i en liten *seng*.", translation: "The child sleeps in a small bed." }
+      { text: "Barnet sover i en liten *seng*.", translation: "The child sleeps in a small bed." },
+      { text: "*Sengen* er stor.", translation: "The bed is big." },
+      { text: "Jeg går til *sengs* nå.", translation: "I'm going to bed now." },
+      { text: "Hunden sover i *sengen* min.", translation: "The dog sleeps in my bed." }
     ],
     354: [
       { text: "Kan du lukke *døren*?", translation: "Can you close the door?" },
       { text: "*Døren* var låst.", translation: "The door was locked." },
-      { text: "Han banket på *døren*.", translation: "He knocked on the door." }
+      { text: "Han banket på *døren*.", translation: "He knocked on the door." },
+      { text: "*Døren* er åpen.", translation: "The door is open." },
+      { text: "Hvem står ved *døren*?", translation: "Who is at the door?" },
+      { text: "Vi har en rød *dør*.", translation: "We have a red door." }
     ],
     355: [
       { text: "Kan du åpne *vinduet*?", translation: "Can you open the window?" },
       { text: "*Vinduet* var skittent.", translation: "The window was dirty." },
-      { text: "Solen skinte inn gjennom *vinduet*.", translation: "The sun shone in through the window." }
+      { text: "Solen skinte inn gjennom *vinduet*.", translation: "The sun shone in through the window." },
+      { text: "*Vinduet* er åpent.", translation: "The window is open." },
+      { text: "Katten sitter i *vinduet*.", translation: "The cat is sitting in the window." },
+      { text: "Rommet har to *vinduer*.", translation: "The room has two windows." }
     ],
     356: [
       { text: "Bildet henger på *veggen*.", translation: "The picture hangs on the wall." },
       { text: "*Veggen* er malt hvit.", translation: "The wall is painted white." },
-      { text: "Vi festet en hylle på *veggen*.", translation: "We attached a shelf to the wall." }
+      { text: "Vi festet en hylle på *veggen*.", translation: "We attached a shelf to the wall." },
+      { text: "*Veggen* er gul.", translation: "The wall is yellow." },
+      { text: "Vi maler *veggene* i dag.", translation: "We are painting the walls today." },
+      { text: "Klokka henger på *veggen*.", translation: "The clock hangs on the wall." }
     ],
     357: [
       { text: "*Gulvet* er kaldt om vinteren.", translation: "The floor is cold in winter." },
       { text: "Hun vasket *gulvet* i går.", translation: "She washed the floor yesterday." },
-      { text: "Barnet leker på *gulvet*.", translation: "The child is playing on the floor." }
+      { text: "Barnet leker på *gulvet*.", translation: "The child is playing on the floor." },
+      { text: "*Gulvet* er rent.", translation: "The floor is clean." },
+      { text: "Katten ligger på *gulvet*.", translation: "The cat is lying on the floor." },
+      { text: "Vi har et nytt *gulv*.", translation: "We have a new floor." }
     ],
     358: [
       { text: "*Taket* lekker når det regner.", translation: "The roof leaks when it rains." },
       { text: "Vi malte *taket* i sommer.", translation: "We painted the roof this summer." },
-      { text: "Snøen dekket hele *taket*.", translation: "The snow covered the whole roof." }
+      { text: "Snøen dekket hele *taket*.", translation: "The snow covered the whole roof." },
+      { text: "Huset har et rødt *tak*.", translation: "The house has a red roof." },
+      { text: "Katten sitter på *taket*.", translation: "The cat is sitting on the roof." },
+      { text: "*Taket* er gammelt.", translation: "The roof is old." }
     ],
     359: [
       { text: "Vi dyrker grønnsaker i *hagen*.", translation: "We grow vegetables in the garden." },
       { text: "*Hagen* vår er full av blomster.", translation: "Our garden is full of flowers." },
-      { text: "Barna leker i *hagen* hver dag.", translation: "The children play in the garden every day." }
+      { text: "Barna leker i *hagen* hver dag.", translation: "The children play in the garden every day." },
+      { text: "*Hagen* er stor.", translation: "The garden is big." },
+      { text: "Vi spiser i *hagen*.", translation: "We eat in the garden." },
+      { text: "Bestemor har en fin *hage*.", translation: "Grandma has a nice garden." }
     ],
     360: [
       { text: "Bilen står i *garasjen*.", translation: "The car is in the garage." },
       { text: "Vi bygde en ny *garasje* i fjor.", translation: "We built a new garage last year." },
-      { text: "*Garasjen* er full av verktøy.", translation: "The garage is full of tools." }
+      { text: "*Garasjen* er full av verktøy.", translation: "The garage is full of tools." },
+      { text: "Huset har en stor *garasje*.", translation: "The house has a big garage." },
+      { text: "Sykkelen står i *garasjen*.", translation: "The bicycle is in the garage." },
+      { text: "*Garasjen* er åpen.", translation: "The garage is open." }
     ],
     361: [
       { text: "*Lampen* i stuen er veldig fin.", translation: "The lamp in the living room is very nice." },
       { text: "Kan du skru på *lampen*?", translation: "Can you turn on the lamp?" },
-      { text: "Vi kjøpte en ny *lampe* til soverommet.", translation: "We bought a new lamp for the bedroom." }
+      { text: "Vi kjøpte en ny *lampe* til soverommet.", translation: "We bought a new lamp for the bedroom." },
+      { text: "Slå på *lampen*.", translation: "Turn on the lamp." },
+      { text: "*Lampen* står på bordet.", translation: "The lamp is on the table." },
+      { text: "Jeg kjøpte en gul *lampe*.", translation: "I bought a yellow lamp." }
     ],
     362: [
       { text: "Hun ser seg i *speilet*.", translation: "She looks at herself in the mirror." },
       { text: "*Speilet* på badet er stort.", translation: "The mirror in the bathroom is big." },
-      { text: "Vi hengte opp et nytt *speil* i gangen.", translation: "We hung up a new mirror in the hallway." }
+      { text: "Vi hengte opp et nytt *speil* i gangen.", translation: "We hung up a new mirror in the hallway." },
+      { text: "*Speilet* er skittent.", translation: "The mirror is dirty." },
+      { text: "Vi har et stort *speil*.", translation: "We have a big mirror." },
+      { text: "Katten ser seg i *speilet*.", translation: "The cat looks in the mirror." }
     ],
     363: [
       { text: "Kan du gi meg et *håndkle*?", translation: "Can you give me a towel?" },
       { text: "*Håndkleet* var vått.", translation: "The towel was wet." },
-      { text: "Vi vasker *håndklærne* hver uke.", translation: "We wash the towels every week." }
+      { text: "Vi vasker *håndklærne* hver uke.", translation: "We wash the towels every week." },
+      { text: "Hvor er *håndkleet*?", translation: "Where is the towel?" },
+      { text: "Jeg trenger et rent *håndkle*.", translation: "I need a clean towel." },
+      { text: "Hun tok med et *håndkle* til stranden.", translation: "She brought a towel to the beach." }
     ],
     364: [
       { text: "Vask hendene med *såpe*.", translation: "Wash your hands with soap." },
       { text: "*Såpen* luktet lavendel.", translation: "The soap smelled like lavender." },
-      { text: "Vi trenger mer *såpe* på badet.", translation: "We need more soap in the bathroom." }
+      { text: "Vi trenger mer *såpe* på badet.", translation: "We need more soap in the bathroom." },
+      { text: "*Såpen* er på badet.", translation: "The soap is in the bathroom." },
+      { text: "Vi kjøpte ny *såpe*.", translation: "We bought new soap." },
+      { text: "Vask deg med *såpe*.", translation: "Wash yourself with soap." }
     ],
     365: [
       { text: "Melken er i *kjøleskapet*.", translation: "The milk is in the fridge." },
       { text: "*Kjøleskapet* vårt er nesten tomt.", translation: "Our fridge is almost empty." },
-      { text: "Vi kjøpte et nytt *kjøleskap* i går.", translation: "We bought a new fridge yesterday." }
+      { text: "Vi kjøpte et nytt *kjøleskap* i går.", translation: "We bought a new fridge yesterday." },
+      { text: "*Kjøleskapet* er fullt.", translation: "The fridge is full." },
+      { text: "Legg osten i *kjøleskapet*.", translation: "Put the cheese in the fridge." },
+      { text: "*Kjøleskapet* er tomt.", translation: "The fridge is empty." }
     ],
     366: [
       { text: "Brødet er i *ovnen*.", translation: "The bread is in the oven." },
       { text: "*Ovnen* er veldig varm nå.", translation: "The oven is very hot now." },
-      { text: "Hun satte kaken inn i *ovnen*.", translation: "She put the cake in the oven." }
+      { text: "Hun satte kaken inn i *ovnen*.", translation: "She put the cake in the oven." },
+      { text: "*Ovnen* er varm.", translation: "The oven is hot." },
+      { text: "Pizzaen er i *ovnen*.", translation: "The pizza is in the oven." },
+      { text: "Vi har en ny *ovn*.", translation: "We have a new oven." }
     ],
     367: [
       { text: "Vi sitter på *sofaen* og ser på TV.", translation: "We're sitting on the sofa watching TV." },
       { text: "*Sofaen* er myk og komfortabel.", translation: "The sofa is soft and comfortable." },
-      { text: "Katten sover alltid på *sofaen*.", translation: "The cat always sleeps on the sofa." }
+      { text: "Katten sover alltid på *sofaen*.", translation: "The cat always sleeps on the sofa." },
+      { text: "Vi kjøpte en ny *sofa*.", translation: "We bought a new sofa." },
+      { text: "Hunden ligger på *sofaen*.", translation: "The dog is lying on the sofa." },
+      { text: "*Sofaen* er grå.", translation: "The sofa is grey." }
     ],
     368: [
       { text: "Boken står på *hyllen*.", translation: "The book is on the shelf." },
       { text: "Vi trenger en ny *hylle* til kjøkkenet.", translation: "We need a new shelf for the kitchen." },
-      { text: "*Hyllen* er full av bøker.", translation: "The shelf is full of books." }
+      { text: "*Hyllen* er full av bøker.", translation: "The shelf is full of books." },
+      { text: "Bøkene står på *hylla*.", translation: "The books are on the shelf." },
+      { text: "Legg koppen på *hyllen*.", translation: "Put the cup on the shelf." },
+      { text: "*Hyllen* er tom.", translation: "The shelf is empty." }
     ],
     369: [
       { text: "Han løp opp *trappen*.", translation: "He ran up the stairs." },
       { text: "*Trappen* er bratt og smal.", translation: "The stairs are steep and narrow." },
-      { text: "Vær forsiktig i *trappen*.", translation: "Be careful on the stairs." }
+      { text: "Vær forsiktig i *trappen*.", translation: "Be careful on the stairs." },
+      { text: "Katten sitter i *trappen*.", translation: "The cat is sitting on the stairs." },
+      { text: "Vi går opp *trappen*.", translation: "We walk up the stairs." },
+      { text: "*Trappen* er lang.", translation: "The stairs are long." }
     ],
     370: [
       { text: "Vi tok *heisen* opp til femte etasje.", translation: "We took the elevator up to the fifth floor." },
       { text: "*Heisen* var ødelagt i dag.", translation: "The elevator was broken today." },
-      { text: "Han er redd for å ta *heisen*.", translation: "He's afraid of taking the elevator." }
+      { text: "Han er redd for å ta *heisen*.", translation: "He's afraid of taking the elevator." },
+      { text: "Vi tar *heisen*.", translation: "We take the lift." },
+      { text: "*Heisen* er full.", translation: "The lift is full." },
+      { text: "Hotellet har ingen *heis*.", translation: "The hotel has no lift." }
     ],
     371: [
       { text: "Vi har en *hund* som heter Rex.", translation: "We have a dog named Rex." },
       { text: "*Hunden* løp etter ballen.", translation: "The dog ran after the ball." },
-      { text: "Han går tur med *hunden* hver morgen.", translation: "He walks the dog every morning." }
+      { text: "Han går tur med *hunden* hver morgen.", translation: "He walks the dog every morning." },
+      { text: "*Hunden* sover i sengen.", translation: "The dog is sleeping in the bed." },
+      { text: "Vi har en stor *hund*.", translation: "We have a big dog." },
+      { text: "*Hunden* er glad.", translation: "The dog is happy." }
     ],
     372: [
       { text: "*Katten* sover hele dagen.", translation: "The cat sleeps all day." },
       { text: "Vi adopterte en *katt* i fjor.", translation: "We adopted a cat last year." },
-      { text: "*Katten* vår er svart og hvit.", translation: "Our cat is black and white." }
+      { text: "*Katten* vår er svart og hvit.", translation: "Our cat is black and white." },
+      { text: "*Katten* er svart.", translation: "The cat is black." },
+      { text: "Jeg har en liten *katt*.", translation: "I have a small cat." },
+      { text: "*Katten* drikker melk.", translation: "The cat drinks milk." }
     ],
     373: [
       { text: "Jeg hørte en *fugl* synge utenfor.", translation: "I heard a bird singing outside." },
       { text: "*Fuglen* fløy bort raskt.", translation: "The bird flew away quickly." },
-      { text: "Vi så mange *fugler* i parken.", translation: "We saw many birds in the park." }
+      { text: "Vi så mange *fugler* i parken.", translation: "We saw many birds in the park." },
+      { text: "*Fuglen* synger om morgenen.", translation: "The bird sings in the morning." },
+      { text: "En *fugl* sitter på taket.", translation: "A bird is sitting on the roof." },
+      { text: "*Fuglen* er blå.", translation: "The bird is blue." }
     ],
     374: [
       { text: "Hun rir på en *hest* hver helg.", translation: "She rides a horse every weekend." },
       { text: "*Hesten* løp fort over marken.", translation: "The horse ran fast across the field." },
-      { text: "Vi så *hester* på gården.", translation: "We saw horses at the farm." }
+      { text: "Vi så *hester* på gården.", translation: "We saw horses at the farm." },
+      { text: "*Hesten* er brun.", translation: "The horse is brown." },
+      { text: "Hun har en *hest*.", translation: "She has a horse." },
+      { text: "*Hesten* spiser gress.", translation: "The horse eats grass." }
     ],
     375: [
       { text: "Bonden har mange *kuer*.", translation: "The farmer has many cows." },
       { text: "*Kua* beitet i marken.", translation: "The cow grazed in the field." },
-      { text: "Vi så *kuer* langs veien.", translation: "We saw cows along the road." }
+      { text: "Vi så *kuer* langs veien.", translation: "We saw cows along the road." },
+      { text: "*Kua* gir melk.", translation: "The cow gives milk." },
+      { text: "*Kua* spiser gress.", translation: "The cow eats grass." },
+      { text: "Vi har en *ku* på gården.", translation: "We have a cow on the farm." }
     ],
     376: [
       { text: "Det er mange *sauer* på fjellet.", translation: "There are many sheep in the mountains." },
       { text: "*Sauen* hadde hvit ull.", translation: "The sheep had white wool." },
-      { text: "Bonden klipper *sauene* om våren.", translation: "The farmer shears the sheep in spring." }
+      { text: "Bonden klipper *sauene* om våren.", translation: "The farmer shears the sheep in spring." },
+      { text: "*Sauen* er hvit.", translation: "The sheep is white." },
+      { text: "Det er mange *sauer* her.", translation: "There are many sheep here." },
+      { text: "*Sauene* spiser gress.", translation: "The sheep eat grass." }
     ],
     377: [
       { text: "Bonden har fem *griser*.", translation: "The farmer has five pigs." },
       { text: "*Grisen* var rosa og skitten.", translation: "The pig was pink and dirty." },
-      { text: "Vi så *griser* på gårdsbesøket.", translation: "We saw pigs on the farm visit." }
+      { text: "Vi så *griser* på gårdsbesøket.", translation: "We saw pigs on the farm visit." },
+      { text: "*Grisen* er rosa.", translation: "The pig is pink." },
+      { text: "*Grisen* spiser mye.", translation: "The pig eats a lot." },
+      { text: "Vi har tre *griser*.", translation: "We have three pigs." }
     ],
     378: [
       { text: "*Hønen* la egg hver dag.", translation: "The hen laid eggs every day." },
       { text: "Vi har fem *høner* i hagen.", translation: "We have five hens in the garden." },
-      { text: "*Hønene* løp rundt i gårdsplassen.", translation: "The hens ran around the farmyard." }
+      { text: "*Hønene* løp rundt i gårdsplassen.", translation: "The hens ran around the farmyard." },
+      { text: "*Hønen* er brun.", translation: "The hen is brown." },
+      { text: "*Hønene* spiser korn.", translation: "The hens eat grain." },
+      { text: "Vi har en *høne* i hagen.", translation: "We have a hen in the garden." }
     ],
     379: [
       { text: "Det er en *mus* i kjøkkenet.", translation: "There's a mouse in the kitchen." },
       { text: "Katten jaget *musen*.", translation: "The cat chased the mouse." },
-      { text: "Vi så en liten *mus* løpe forbi.", translation: "We saw a small mouse run by." }
+      { text: "Vi så en liten *mus* løpe forbi.", translation: "We saw a small mouse run by." },
+      { text: "*Musen* er liten.", translation: "The mouse is small." },
+      { text: "Katten fanget en *mus*.", translation: "The cat caught a mouse." },
+      { text: "Jeg er redd for *mus*.", translation: "I'm afraid of mice." }
     ],
     380: [
       { text: "Barna har en *kanin* som kjæledyr.", translation: "The children have a rabbit as a pet." },
       { text: "*Kaninen* spiste gulrøtter.", translation: "The rabbit ate carrots." },
-      { text: "Vi så en vill *kanin* i hagen.", translation: "We saw a wild rabbit in the garden." }
+      { text: "Vi så en vill *kanin* i hagen.", translation: "We saw a wild rabbit in the garden." },
+      { text: "*Kaninen* er hvit.", translation: "The rabbit is white." },
+      { text: "Vi har en *kanin*.", translation: "We have a rabbit." },
+      { text: "*Kaninen* hopper i hagen.", translation: "The rabbit hops in the garden." }
     ],
     381: [
       { text: "Vi plantet et *tre* i hagen.", translation: "We planted a tree in the garden." },
       { text: "*Treet* er veldig høyt.", translation: "The tree is very tall." },
-      { text: "Fuglene bygget rede i *treet*.", translation: "The birds built a nest in the tree." }
+      { text: "Fuglene bygget rede i *treet*.", translation: "The birds built a nest in the tree." },
+      { text: "*Treet* er gammelt.", translation: "The tree is old." },
+      { text: "Katten sitter i *treet*.", translation: "The cat is sitting in the tree." },
+      { text: "Det står *et tre* ved huset.", translation: "There is a tree by the house." }
     ],
     382: [
       { text: "Hun ga meg en *blomst*.", translation: "She gave me a flower." },
       { text: "*Blomstene* i hagen er vakre.", translation: "The flowers in the garden are beautiful." },
-      { text: "Vi plantet nye *blomster* i vår.", translation: "We planted new flowers in spring." }
+      { text: "Vi plantet nye *blomster* i vår.", translation: "We planted new flowers in spring." },
+      { text: "Jeg kjøpte *blomster* til mor.", translation: "I bought flowers for mum." },
+      { text: "*Blomsten* er rød.", translation: "The flower is red." },
+      { text: "Hun elsker *blomster*.", translation: "She loves flowers." }
     ],
     383: [
       { text: "*Gresset* er grønt om sommeren.", translation: "The grass is green in summer." },
       { text: "Barna leker på *gresset*.", translation: "The children are playing on the grass." },
-      { text: "Vi klipper *gresset* hver uke.", translation: "We mow the grass every week." }
+      { text: "Vi klipper *gresset* hver uke.", translation: "We mow the grass every week." },
+      { text: "*Gresset* er vått.", translation: "The grass is wet." },
+      { text: "Hunden ligger i *gresset*.", translation: "The dog is lying in the grass." },
+      { text: "Kua spiser *gress*.", translation: "The cow eats grass." }
     ],
     384: [
       { text: "Vi klatret opp *fjellet* i går.", translation: "We climbed the mountain yesterday." },
       { text: "*Fjellet* var dekket av snø.", translation: "The mountain was covered in snow." },
-      { text: "Utsikten fra *fjellet* var fantastisk.", translation: "The view from the mountain was fantastic." }
+      { text: "Utsikten fra *fjellet* var fantastisk.", translation: "The view from the mountain was fantastic." },
+      { text: "*Fjellet* er høyt.", translation: "The mountain is high." },
+      { text: "Vi går på *fjellet*.", translation: "We go hiking in the mountains." },
+      { text: "Norge har mange *fjell*.", translation: "Norway has many mountains." }
     ],
     385: [
       { text: "*Elven* renner gjennom byen.", translation: "The river runs through the city." },
       { text: "Vi fisket i *elven* i går.", translation: "We fished in the river yesterday." },
-      { text: "Barna svømte i *elven*.", translation: "The children swam in the river." }
+      { text: "Barna svømte i *elven*.", translation: "The children swam in the river." },
+      { text: "*Elven* er lang.", translation: "The river is long." },
+      { text: "Vi bor ved *elven*.", translation: "We live by the river." },
+      { text: "*Elven* er kald.", translation: "The river is cold." }
     ],
     386: [
       { text: "Vi bor nær *havet*.", translation: "We live near the sea." },
       { text: "*Havet* var rolig i dag.", translation: "The sea was calm today." },
-      { text: "De seilte over *havet*.", translation: "They sailed across the sea." }
+      { text: "De seilte over *havet*.", translation: "They sailed across the sea." },
+      { text: "*Havet* er blått.", translation: "The sea is blue." },
+      { text: "Vi bader i *havet*.", translation: "We swim in the sea." },
+      { text: "*Havet* er kaldt i dag.", translation: "The sea is cold today." }
     ],
     387: [
       { text: "Vi svømmer i *innsjøen* om sommeren.", translation: "We swim in the lake in summer." },
       { text: "*Innsjøen* var stille og klar.", translation: "The lake was calm and clear." },
-      { text: "Hytta ligger ved en liten *innsjø*.", translation: "The cabin is by a small lake." }
+      { text: "Hytta ligger ved en liten *innsjø*.", translation: "The cabin is by a small lake." },
+      { text: "*Innsjøen* er stor.", translation: "The lake is big." },
+      { text: "Vi fisker i *innsjøen*.", translation: "We fish in the lake." },
+      { text: "*Innsjøen* er kald.", translation: "The lake is cold." }
     ],
     388: [
       { text: "Vi gikk en tur i *skogen*.", translation: "We went for a walk in the forest." },
       { text: "*Skogen* var full av trær og fugler.", translation: "The forest was full of trees and birds." },
-      { text: "Barna plukket sopp i *skogen*.", translation: "The children picked mushrooms in the forest." }
+      { text: "Barna plukket sopp i *skogen*.", translation: "The children picked mushrooms in the forest." },
+      { text: "*Skogen* er stor.", translation: "The forest is big." },
+      { text: "Vi går tur i *skogen*.", translation: "We go for a walk in the forest." },
+      { text: "Det bor mange dyr i *skogen*.", translation: "Many animals live in the forest." }
     ],
     389: [
       { text: "Vi tilbrakte hele dagen på *stranden*.", translation: "We spent the whole day at the beach." },
       { text: "*Stranden* var full av folk.", translation: "The beach was full of people." },
-      { text: "Barna bygde sandslott på *stranden*.", translation: "The children built sandcastles on the beach." }
+      { text: "Barna bygde sandslott på *stranden*.", translation: "The children built sandcastles on the beach." },
+      { text: "Vi går til *stranden*.", translation: "We go to the beach." },
+      { text: "*Stranden* er lang.", translation: "The beach is long." },
+      { text: "Hunden løper på *stranden*.", translation: "The dog runs on the beach." }
     ],
     390: [
       { text: "*Himmelen* er blå i dag.", translation: "The sky is blue today." },
       { text: "Vi så stjernene på *himmelen*.", translation: "We saw the stars in the sky." },
-      { text: "*Himmelen* ble rød ved solnedgang.", translation: "The sky turned red at sunset." }
+      { text: "*Himmelen* ble rød ved solnedgang.", translation: "The sky turned red at sunset." },
+      { text: "*Himmelen* er grå.", translation: "The sky is grey." },
+      { text: "Fuglen flyr på *himmelen*.", translation: "The bird flies in the sky." },
+      { text: "*Himmelen* er klar i natt.", translation: "The sky is clear tonight." }
     ],
     391: [
       { text: "Hun er *tretti* år gammel.", translation: "She's thirty years old." },
       { text: "Vi ventet i *tretti* minutter.", translation: "We waited thirty minutes." },
-      { text: "Det er *tretti* dager i april.", translation: "There are thirty days in April." }
+      { text: "Det er *tretti* dager i april.", translation: "There are thirty days in April." },
+      { text: "Jeg er *tretti* år.", translation: "I am thirty." },
+      { text: "Det koster *tretti* kroner.", translation: "It costs thirty kroner." },
+      { text: "Vi har *tretti* elever.", translation: "We have thirty pupils." }
     ],
     392: [
       { text: "Han er *førti* år gammel.", translation: "He's forty years old." },
       { text: "Vi kjørte i *førti* minutter.", translation: "We drove for forty minutes." },
-      { text: "Billetten kostet *førti* kroner.", translation: "The ticket cost forty kroner." }
+      { text: "Billetten kostet *førti* kroner.", translation: "The ticket cost forty kroner." },
+      { text: "Hun er *førti* år gammel.", translation: "She is forty years old." },
+      { text: "Det tar *førti* minutter.", translation: "It takes forty minutes." },
+      { text: "Vi har *førti* sauer.", translation: "We have forty sheep." }
     ],
     393: [
       { text: "Bestemor er *femti* år gammel.", translation: "Grandmother is fifty years old." },
       { text: "Vi ventet i *femti* minutter på flyet.", translation: "We waited fifty minutes for the plane." },
-      { text: "Det var *femti* gjester i bryllupet.", translation: "There were fifty guests at the wedding." }
+      { text: "Det var *femti* gjester i bryllupet.", translation: "There were fifty guests at the wedding." },
+      { text: "Det koster *femti* kroner.", translation: "It costs fifty kroner." },
+      { text: "Far er *femti* år.", translation: "Dad is fifty." },
+      { text: "Vi kjørte *femti* kilometer.", translation: "We drove fifty kilometres." }
     ],
     394: [
       { text: "Det er *hundre* år siden huset ble bygget.", translation: "It's a hundred years since the house was built." },
       { text: "Vi betalte *hundre* kroner for billetten.", translation: "We paid a hundred kroner for the ticket." },
-      { text: "Det var *hundre* mennesker på konserten.", translation: "There were a hundred people at the concert." }
+      { text: "Det var *hundre* mennesker på konserten.", translation: "There were a hundred people at the concert." },
+      { text: "Det koster *hundre* kroner.", translation: "It costs a hundred kroner." },
+      { text: "Huset er *hundre* år gammelt.", translation: "The house is a hundred years old." },
+      { text: "Vi har *hundre* høner.", translation: "We have a hundred hens." }
     ],
     395: [
       { text: "Byen har over *tusen* innbyggere.", translation: "The town has over a thousand inhabitants." },
       { text: "Vi betalte *tusen* kroner for reisen.", translation: "We paid a thousand kroner for the trip." },
-      { text: "Det var *tusen* stjerner på himmelen.", translation: "There were a thousand stars in the sky." }
+      { text: "Det var *tusen* stjerner på himmelen.", translation: "There were a thousand stars in the sky." },
+      { text: "Det koster *tusen* kroner.", translation: "It costs a thousand kroner." },
+      { text: "Jeg har *tusen* bilder.", translation: "I have a thousand photos." },
+      { text: "*Tusen* mennesker bor her.", translation: "A thousand people live here." }
     ],
     396: [
       { text: "Himmelen er *grå* i dag.", translation: "The sky is grey today." },
       { text: "Han har en *grå* bil.", translation: "He has a grey car." },
-      { text: "Katten hennes er *grå* og hvit.", translation: "Her cat is grey and white." }
+      { text: "Katten hennes er *grå* og hvit.", translation: "Her cat is grey and white." },
+      { text: "Katten er *grå*.", translation: "The cat is grey." },
+      { text: "Han har *grått* hår.", translation: "He has grey hair." },
+      { text: "Jeg kjøpte en *grå* jakke.", translation: "I bought a grey jacket." }
     ],
     397: [
       { text: "Dette er min *første* dag på jobben.", translation: "This is my first day at work." },
       { text: "Vi bor i *første* etasje.", translation: "We live on the first floor." },
-      { text: "Hun kom *først* i løpet.", translation: "She came first in the race." }
+      { text: "Hun kom *først* i løpet.", translation: "She came first in the race." },
+      { text: "Det er min *første* bil.", translation: "It's my first car." },
+      { text: "Hun var den *første* som kom.", translation: "She was the first to arrive." },
+      { text: "I dag er *første* skoledag.", translation: "Today is the first day of school." }
     ],
     398: [
       { text: "Dette er den *siste* dagen på ferien.", translation: "This is the last day of the holiday." },
       { text: "Han var den *siste* som gikk.", translation: "He was the last one to leave." },
-      { text: "Det var det *siste* eplet i kurven.", translation: "It was the last apple in the basket." }
+      { text: "Det var det *siste* eplet i kurven.", translation: "It was the last apple in the basket." },
+      { text: "Dette er det *siste* eplet.", translation: "This is the last apple." },
+      { text: "Vi tok den *siste* bussen.", translation: "We took the last bus." },
+      { text: "Det er *siste* dag i dag.", translation: "Today is the last day." }
     ],
     399: [
       { text: "Klokka er *halv* ni.", translation: "It's half past eight." },
       { text: "Jeg spiste bare en *halv* eple.", translation: "I only ate half an apple." },
-      { text: "Vi delte kaken i to *halve* deler.", translation: "We divided the cake into two halves." }
+      { text: "Vi delte kaken i to *halve* deler.", translation: "We divided the cake into two halves." },
+      { text: "Klokka er *halv* fire.", translation: "It is half past three." },
+      { text: "Jeg spiste et *halvt* eple.", translation: "I ate half an apple." },
+      { text: "Vi ventet en *halv* time.", translation: "We waited half an hour." }
     ],
     400: [
       { text: "Hva er *nummeret* ditt?", translation: "What's your number?" },
       { text: "Vi bor i *nummer* ti.", translation: "We live at number ten." },
-      { text: "Kan du gi meg *nummeret* hennes?", translation: "Can you give me her number?" }
+      { text: "Kan du gi meg *nummeret* hennes?", translation: "Can you give me her number?" },
+      { text: "Jeg har glemt *nummeret* hennes.", translation: "I have forgotten her number." },
+      { text: "Hun bor i *nummer* fem.", translation: "She lives at number five." },
+      { text: "Ring dette *nummeret*.", translation: "Call this number." }
     ],
     401: [
       { text: "Jeg er *redd* for edderkopper.", translation: "I'm afraid of spiders." },
       { text: "Hun ble *redd* av lynet.", translation: "She got scared by the lightning." },
-      { text: "Ikke vær *redd*, alt går bra.", translation: "Don't be afraid, everything's fine." }
+      { text: "Ikke vær *redd*, alt går bra.", translation: "Don't be afraid, everything's fine." },
+      { text: "Katten er *redd* for hunden.", translation: "The cat is afraid of the dog." },
+      { text: "Er du *redd* for mørket?", translation: "Are you afraid of the dark?" },
+      { text: "Barnet var *redd* i natt.", translation: "The child was scared last night." }
     ],
     402: [
       { text: "Jeg ble veldig *overrasket* over gaven.", translation: "I was very surprised by the gift." },
       { text: "Hun så *overrasket* ut.", translation: "She looked surprised." },
-      { text: "Vi var *overrasket* over resultatet.", translation: "We were surprised by the result." }
+      { text: "Vi var *overrasket* over resultatet.", translation: "We were surprised by the result." },
+      { text: "Hun ble *overrasket* over festen.", translation: "She was surprised by the party." },
+      { text: "Jeg er ikke *overrasket*.", translation: "I'm not surprised." },
+      { text: "Han så veldig *overrasket* ut.", translation: "He looked very surprised." }
     ],
     403: [
       { text: "Jeg er *lei* av dette spillet.", translation: "I'm bored of this game." },
       { text: "Barna ble *lei* etter en time.", translation: "The children got bored after an hour." },
-      { text: "Hun så *lei* ut i timen.", translation: "She looked bored in class." }
+      { text: "Hun så *lei* ut i timen.", translation: "She looked bored in class." },
+      { text: "Jeg er *lei* av regnet.", translation: "I'm tired of the rain." },
+      { text: "Barna er *lei* nå.", translation: "The children are bored now." },
+      { text: "Hun er *lei* av jobben.", translation: "She is fed up with the job." }
     ],
     404: [
       { text: "Hun er alltid *rolig* i vanskelige situasjoner.", translation: "She's always calm in difficult situations." },
       { text: "Havet var *rolig* i dag.", translation: "The sea was calm today." },
-      { text: "Vi hadde en *rolig* kveld hjemme.", translation: "We had a calm evening at home." }
+      { text: "Vi hadde en *rolig* kveld hjemme.", translation: "We had a calm evening at home." },
+      { text: "Vær *rolig*, alt er bra.", translation: "Stay calm, everything is fine." },
+      { text: "Han er en *rolig* mann.", translation: "He is a calm man." },
+      { text: "Byen er *rolig* om natten.", translation: "The city is calm at night." }
     ],
     405: [
       { text: "Jeg er veldig *stolt* av deg.", translation: "I'm very proud of you." },
       { text: "Han var *stolt* over prestasjonen sin.", translation: "He was proud of his achievement." },
-      { text: "Foreldrene var *stolte* av barna sine.", translation: "The parents were proud of their children." }
+      { text: "Foreldrene var *stolte* av barna sine.", translation: "The parents were proud of their children." },
+      { text: "Mor er *stolt* av meg.", translation: "Mum is proud of me." },
+      { text: "Vi er *stolte* av laget.", translation: "We are proud of the team." },
+      { text: "Han er *stolt* av huset sitt.", translation: "He is proud of his house." }
     ],
     406: [
       { text: "Han er veldig *sterk*.", translation: "He's very strong." },
       { text: "Kaffen var for *sterk* for meg.", translation: "The coffee was too strong for me." },
-      { text: "Hun har *sterke* armer.", translation: "She has strong arms." }
+      { text: "Hun har *sterke* armer.", translation: "She has strong arms." },
+      { text: "Hesten er veldig *sterk*.", translation: "The horse is very strong." },
+      { text: "Vinden er *sterk* i dag.", translation: "The wind is strong today." },
+      { text: "Hun er *sterkere* enn meg.", translation: "She is stronger than me." }
     ],
     407: [
       { text: "Han følte seg *svak* etter sykdommen.", translation: "He felt weak after the illness." },
       { text: "Signalet er *svakt* her.", translation: "The signal is weak here." },
-      { text: "Teen var litt *svak*.", translation: "The tea was a bit weak." }
+      { text: "Teen var litt *svak*.", translation: "The tea was a bit weak." },
+      { text: "Jeg er *svak* i dag.", translation: "I'm weak today." },
+      { text: "Kaffen er for *svak*.", translation: "The coffee is too weak." },
+      { text: "Han var *svak* etter feberen.", translation: "He was weak after the fever." }
     ],
     408: [
       { text: "Utsikten var *vakker*.", translation: "The view was beautiful." },
       { text: "Hun har et *vakkert* smil.", translation: "She has a beautiful smile." },
-      { text: "Blomstene i hagen er *vakre*.", translation: "The flowers in the garden are beautiful." }
+      { text: "Blomstene i hagen er *vakre*.", translation: "The flowers in the garden are beautiful." },
+      { text: "For en *vakker* dag!", translation: "What a beautiful day!" },
+      { text: "Hun er veldig *vakker*.", translation: "She is very beautiful." },
+      { text: "Norge er et *vakkert* land.", translation: "Norway is a beautiful country." }
     ],
     409: [
       { text: "Den bygningen er ganske *stygg*.", translation: "That building is quite ugly." },
       { text: "Han hadde et *stygt* sår på armen.", translation: "He had an ugly wound on his arm." },
-      { text: "Været var *stygt* i går.", translation: "The weather was ugly yesterday." }
+      { text: "Været var *stygt* i går.", translation: "The weather was ugly yesterday." },
+      { text: "Hunden er *stygg*, men snill.", translation: "The dog is ugly, but kind." },
+      { text: "Det er en *stygg* bil.", translation: "It is an ugly car." },
+      { text: "Jeg synes jakken er *stygg*.", translation: "I think the jacket is ugly." }
     ],
     410: [
       { text: "Hun er fortsatt veldig *ung*.", translation: "She's still very young." },
       { text: "Han var *ung* da han flyttet hjemmefra.", translation: "He was young when he moved out." },
-      { text: "De *unge* liker å reise mye.", translation: "Young people like to travel a lot." }
+      { text: "De *unge* liker å reise mye.", translation: "Young people like to travel a lot." },
+      { text: "Hun er *ung* og sterk.", translation: "She is young and strong." },
+      { text: "Min mor ser *ung* ut.", translation: "My mother looks young." },
+      { text: "Læreren er veldig *ung*.", translation: "The teacher is very young." }
     ],
     411: [
       { text: "Familien hans er veldig *rik*.", translation: "His family is very rich." },
       { text: "Han ble *rik* av å selge huset.", translation: "He became rich from selling the house." },
-      { text: "Landet er *rikt* på naturressurser.", translation: "The country is rich in natural resources." }
+      { text: "Landet er *rikt* på naturressurser.", translation: "The country is rich in natural resources." },
+      { text: "Han er en *rik* mann.", translation: "He is a rich man." },
+      { text: "Hun vil bli *rik*.", translation: "She wants to become rich." },
+      { text: "De er *rike*, men ikke glade.", translation: "They are rich, but not happy." }
     ],
     412: [
       { text: "Mange mennesker der er *fattige*.", translation: "Many people there are poor." },
       { text: "Familien var *fattig* men lykkelig.", translation: "The family was poor but happy." },
-      { text: "Han vokste opp i et *fattig* strøk.", translation: "He grew up in a poor neighborhood." }
+      { text: "Han vokste opp i et *fattig* strøk.", translation: "He grew up in a poor neighborhood." },
+      { text: "De er *fattige*, men glade.", translation: "They are poor, but happy." },
+      { text: "Han var *fattig* som barn.", translation: "He was poor as a child." },
+      { text: "Det er et *fattig* land.", translation: "It is a poor country." }
     ],
     413: [
       { text: "Kjøkkenet er helt *rent* nå.", translation: "The kitchen is completely clean now." },
       { text: "Vannet i innsjøen er *rent*.", translation: "The water in the lake is clean." },
-      { text: "Hun liker et *rent* hjem.", translation: "She likes a clean home." }
+      { text: "Hun liker et *rent* hjem.", translation: "She likes a clean home." },
+      { text: "Håndkleet er *rent*.", translation: "The towel is clean." },
+      { text: "Rommet er *rent* nå.", translation: "The room is clean now." },
+      { text: "Jeg har en *ren* skjorte.", translation: "I have a clean shirt." }
     ],
     414: [
       { text: "Skoene mine er veldig *skitne*.", translation: "My shoes are very dirty." },
       { text: "Gulvet var *skittent* etter festen.", translation: "The floor was dirty after the party." },
-      { text: "Han hadde *skitne* hender fra hagearbeidet.", translation: "He had dirty hands from gardening." }
+      { text: "Han hadde *skitne* hender fra hagearbeidet.", translation: "He had dirty hands from gardening." },
+      { text: "Bilen er veldig *skitten*.", translation: "The car is very dirty." },
+      { text: "Hunden er *skitten* etter turen.", translation: "The dog is dirty after the walk." },
+      { text: "Kjøkkenet er *skittent*.", translation: "The kitchen is dirty." }
     ],
     415: [
       { text: "Filmen var veldig *morsom*.", translation: "The movie was very funny." },
       { text: "Han forteller alltid *morsomme* historier.", translation: "He always tells funny stories." },
-      { text: "Det var et *morsomt* spill.", translation: "It was a funny game." }
+      { text: "Det var et *morsomt* spill.", translation: "It was a funny game." },
+      { text: "Han er veldig *morsom*.", translation: "He is very funny." },
+      { text: "Det var en *morsom* dag.", translation: "It was a fun day." },
+      { text: "Du er så *morsom*!", translation: "You are so funny!" }
     ],
     416: [
       { text: "*Veien* var full av biler.", translation: "The road was full of cars." },
       { text: "Vi kjørte på en smal *vei*.", translation: "We drove on a narrow road." },
-      { text: "Hvilken *vei* skal vi ta?", translation: "Which road should we take?" }
+      { text: "Hvilken *vei* skal vi ta?", translation: "Which road should we take?" },
+      { text: "*Veien* er lang.", translation: "The road is long." },
+      { text: "Vi går langs *veien*.", translation: "We walk along the road." },
+      { text: "Kan du vise meg *veien*?", translation: "Can you show me the way?" }
     ],
     417: [
       { text: "Vi kjørte over *broen* til byen.", translation: "We drove over the bridge to the city." },
       { text: "*Broen* er veldig gammel.", translation: "The bridge is very old." },
-      { text: "Det er en fin utsikt fra *broen*.", translation: "There's a nice view from the bridge." }
+      { text: "Det er en fin utsikt fra *broen*.", translation: "There's a nice view from the bridge." },
+      { text: "Vi går over *broen*.", translation: "We walk over the bridge." },
+      { text: "*Broen* er lang.", translation: "The bridge is long." },
+      { text: "Det er en *bro* over elven.", translation: "There is a bridge over the river." }
     ],
     418: [
       { text: "Vi tok en *taxi* til flyplassen.", translation: "We took a taxi to the airport." },
       { text: "*Taxien* kom raskt.", translation: "The taxi arrived quickly." },
-      { text: "Kan du ringe etter en *taxi*?", translation: "Can you call for a taxi?" }
+      { text: "Kan du ringe etter en *taxi*?", translation: "Can you call for a taxi?" },
+      { text: "Vi tar en *taxi* hjem.", translation: "We take a taxi home." },
+      { text: "*Taxien* står ute.", translation: "The taxi is outside." },
+      { text: "En *taxi* er dyrt her.", translation: "A taxi is expensive here." }
     ],
     419: [
       { text: "Min *bagasje* ble borte på flyplassen.", translation: "My luggage got lost at the airport." },
       { text: "Vi pakket *bagasjen* kvelden før.", translation: "We packed the luggage the evening before." },
-      { text: "*Bagasjen* var for tung.", translation: "The luggage was too heavy." }
+      { text: "*Bagasjen* var for tung.", translation: "The luggage was too heavy." },
+      { text: "Hvor er *bagasjen* min?", translation: "Where is my luggage?" },
+      { text: "Jeg har mye *bagasje*.", translation: "I have a lot of luggage." },
+      { text: "*Bagasjen* er i bilen.", translation: "The luggage is in the car." }
     ],
     420: [
       { text: "Husk å ta med *passet* ditt.", translation: "Remember to bring your passport." },
       { text: "Jeg mistet *passet* mitt i fjor.", translation: "I lost my passport last year." },
-      { text: "*Passet* mitt går ut neste år.", translation: "My passport expires next year." }
+      { text: "*Passet* mitt går ut neste år.", translation: "My passport expires next year." },
+      { text: "Hvor er *passet* mitt?", translation: "Where is my passport?" },
+      { text: "Jeg trenger et nytt *pass*.", translation: "I need a new passport." },
+      { text: "Vis meg *passet* ditt.", translation: "Show me your passport." }
     ],
     421: [
       { text: "*Flyreisen* var lang og trøtt.", translation: "The flight was long and tiring." },
       { text: "Vi booket en *flyreise* til Roma.", translation: "We booked a flight to Rome." },
-      { text: "*Flyreisen* ble forsinket på grunn av været.", translation: "The flight was delayed because of the weather." }
+      { text: "*Flyreisen* ble forsinket på grunn av været.", translation: "The flight was delayed because of the weather." },
+      { text: "*Flyreisen* tok tre timer.", translation: "The flight took three hours." },
+      { text: "Jeg kjøpte en billig *flyreise*.", translation: "I bought a cheap flight." },
+      { text: "Hvor lang er *flyreisen*?", translation: "How long is the flight?" }
     ],
     422: [
       { text: "Er dette *setet* ledig?", translation: "Is this seat free?" },
       { text: "Jeg satt i et *sete* ved vinduet.", translation: "I sat in a seat by the window." },
-      { text: "*Setene* på flyet var trange.", translation: "The seats on the plane were cramped." }
+      { text: "*Setene* på flyet var trange.", translation: "The seats on the plane were cramped." },
+      { text: "Hvor er *setet* mitt?", translation: "Where is my seat?" },
+      { text: "Jeg vil ha et *sete* ved vinduet.", translation: "I want a seat by the window." },
+      { text: "Dette *setet* er ledig.", translation: "This seat is free." }
     ],
     423: [
       { text: "*Sjåføren* kjørte veldig forsiktig.", translation: "The driver drove very carefully." },
       { text: "Han jobber som *sjåfør* for et firma.", translation: "He works as a driver for a company." },
-      { text: "Vi takket *sjåføren* da vi gikk av.", translation: "We thanked the driver when we got off." }
+      { text: "Vi takket *sjåføren* da vi gikk av.", translation: "We thanked the driver when we got off." },
+      { text: "*Sjåføren* er hyggelig.", translation: "The driver is nice." },
+      { text: "Han er *sjåfør* på bussen.", translation: "He is a bus driver." },
+      { text: "*Sjåføren* kjører for fort.", translation: "The driver drives too fast." }
     ],
     424: [
       { text: "Det var mye *trafikk* i morges.", translation: "There was a lot of traffic this morning." },
       { text: "*Trafikken* sto helt stille.", translation: "The traffic was completely still." },
-      { text: "Vi kom for sent på grunn av *trafikken*.", translation: "We were late because of the traffic." }
+      { text: "Vi kom for sent på grunn av *trafikken*.", translation: "We were late because of the traffic." },
+      { text: "Det er mye *trafikk* i dag.", translation: "There is a lot of traffic today." },
+      { text: "Jeg liker ikke *trafikk*.", translation: "I don't like traffic." },
+      { text: "*Trafikken* er dårlig i byen.", translation: "The traffic is bad in the city." }
     ],
     425: [
       { text: "*Reisen* til Norge tok ti timer.", translation: "The journey to Norway took ten hours." },
       { text: "Vi planlegger en lang *reise* neste år.", translation: "We're planning a long journey next year." },
-      { text: "*Reisen* var full av eventyr.", translation: "The journey was full of adventures." }
+      { text: "*Reisen* var full av eventyr.", translation: "The journey was full of adventures." },
+      { text: "Ha en god *reise*!", translation: "Have a good trip!" },
+      { text: "*Reisen* var fin.", translation: "The journey was nice." },
+      { text: "Hvor lang er *reisen*?", translation: "How long is the journey?" }
     ],
     426: [
       { text: "Kan jeg låne *pennen* din?", translation: "Can I borrow your pen?" },
       { text: "*Pennen* min sluttet å skrive.", translation: "My pen stopped writing." },
-      { text: "Hun skrev brevet med en blå *penn*.", translation: "She wrote the letter with a blue pen." }
+      { text: "Hun skrev brevet med en blå *penn*.", translation: "She wrote the letter with a blue pen." },
+      { text: "Jeg har en rød *penn*.", translation: "I have a red pen." },
+      { text: "*Pennen* ligger på bordet.", translation: "The pen is on the table." },
+      { text: "Har du en *penn*?", translation: "Do you have a pen?" }
     ],
     427: [
       { text: "Jeg tegner alltid med *blyant*.", translation: "I always draw with a pencil." },
       { text: "*Blyanten* min trenger spissing.", translation: "My pencil needs sharpening." },
-      { text: "Kan jeg få låne en *blyant*?", translation: "Can I borrow a pencil?" }
+      { text: "Kan jeg få låne en *blyant*?", translation: "Can I borrow a pencil?" },
+      { text: "Jeg skriver med *blyant*.", translation: "I write with a pencil." },
+      { text: "*Blyanten* er i vesken.", translation: "The pencil is in the bag." },
+      { text: "Har du en *blyant*?", translation: "Do you have a pencil?" }
     ],
     428: [
       { text: "Kan du gi meg et ark *papir*?", translation: "Can you give me a piece of paper?" },
       { text: "*Papiret* var fullt av notater.", translation: "The paper was full of notes." },
-      { text: "Vi trenger mer *papir* til skriveren.", translation: "We need more paper for the printer." }
+      { text: "Vi trenger mer *papir* til skriveren.", translation: "We need more paper for the printer." },
+      { text: "Jeg trenger mer *papir*.", translation: "I need more paper." },
+      { text: "*Papiret* er hvitt.", translation: "The paper is white." },
+      { text: "Skriv navnet på *papiret*.", translation: "Write the name on the paper." }
     ],
     429: [
       { text: "Jeg skriver alltid i *notatboken* min.", translation: "I always write in my notebook." },
       { text: "*Notatboken* var full av tegninger.", translation: "The notebook was full of drawings." },
-      { text: "Hun kjøpte en ny *notatbok* til skolen.", translation: "She bought a new notebook for school." }
+      { text: "Hun kjøpte en ny *notatbok* til skolen.", translation: "She bought a new notebook for school." },
+      { text: "Jeg har en ny *notatbok*.", translation: "I have a new notebook." },
+      { text: "*Notatboken* er blå.", translation: "The notebook is blue." },
+      { text: "Hvor er *notatboken* min?", translation: "Where is my notebook?" }
     ],
     430: [
       { text: "Boken ligger på *skrivebordet*.", translation: "The book is on the desk." },
       { text: "*Skrivebordet* mitt er alltid rotete.", translation: "My desk is always messy." },
-      { text: "Vi kjøpte et nytt *skrivebord* til kontoret.", translation: "We bought a new desk for the office." }
+      { text: "Vi kjøpte et nytt *skrivebord* til kontoret.", translation: "We bought a new desk for the office." },
+      { text: "Jeg sitter ved *skrivebordet*.", translation: "I'm sitting at the desk." },
+      { text: "*Skrivebordet* er stort.", translation: "The desk is big." },
+      { text: "Datamaskinen står på *skrivebordet*.", translation: "The computer is on the desk." }
     ],
     431: [
       { text: "Vi har et *møte* klokka ti.", translation: "We have a meeting at ten." },
       { text: "*Møtet* varte i to timer.", translation: "The meeting lasted two hours." },
-      { text: "Hun forberedte seg til *møtet* i går kveld.", translation: "She prepared for the meeting last night." }
+      { text: "Hun forberedte seg til *møtet* i går kveld.", translation: "She prepared for the meeting last night." },
+      { text: "*Møtet* begynner nå.", translation: "The meeting starts now." },
+      { text: "Jeg har et *møte* i dag.", translation: "I have a meeting today." },
+      { text: "*Møtet* var langt.", translation: "The meeting was long." }
     ],
     432: [
       { text: "Jeg sendte deg en *e-post* i går.", translation: "I sent you an email yesterday." },
       { text: "Har du sjekket *e-posten* din i dag?", translation: "Have you checked your email today?" },
-      { text: "Vi kommuniserer mest via *e-post*.", translation: "We communicate mostly via email." }
+      { text: "Vi kommuniserer mest via *e-post*.", translation: "We communicate mostly via email." },
+      { text: "Jeg skriver en *e-post*.", translation: "I'm writing an email." },
+      { text: "Hun svarte på *e-posten*.", translation: "She replied to the email." },
+      { text: "Send meg en *e-post*.", translation: "Send me an email." }
     ],
     433: [
       { text: "Min *sjef* er veldig hyggelig.", translation: "My boss is very nice." },
       { text: "*Sjefen* ga oss fri i dag.", translation: "The boss gave us the day off." },
-      { text: "Hun ble *sjef* for avdelingen i fjor.", translation: "She became boss of the department last year." }
+      { text: "Hun ble *sjef* for avdelingen i fjor.", translation: "She became boss of the department last year." },
+      { text: "*Sjefen* er på kontoret.", translation: "The boss is in the office." },
+      { text: "Hun er en god *sjef*.", translation: "She is a good boss." },
+      { text: "Jeg snakket med *sjefen*.", translation: "I spoke with the boss." }
     ],
     434: [
       { text: "Jeg får *lønn* hver måned.", translation: "I get paid a salary every month." },
       { text: "*Lønnen* hans økte i år.", translation: "His salary increased this year." },
-      { text: "Vi diskuterte *lønnen* min med sjefen.", translation: "We discussed my salary with the boss." }
+      { text: "Vi diskuterte *lønnen* min med sjefen.", translation: "We discussed my salary with the boss." },
+      { text: "Jeg vil ha høyere *lønn*.", translation: "I want a higher salary." },
+      { text: "*Lønnen* er god.", translation: "The salary is good." },
+      { text: "Han har lav *lønn*.", translation: "He has a low salary." }
     ],
     435: [
       { text: "Han jobber i et stort *firma*.", translation: "He works at a big company." },
       { text: "*Firmaet* ansatte ti nye folk.", translation: "The company hired ten new people." },
-      { text: "Vi startet et eget *firma* i fjor.", translation: "We started our own company last year." }
+      { text: "Vi startet et eget *firma* i fjor.", translation: "We started our own company last year." },
+      { text: "*Firmaet* er stort.", translation: "The company is big." },
+      { text: "Hun jobber i et nytt *firma*.", translation: "She works at a new company." },
+      { text: "*Firmaet* ligger i Oslo.", translation: "The company is in Oslo." }
     ],
     436: [
       { text: "Hun brakk *armen* i går.", translation: "She broke her arm yesterday." },
       { text: "Han holdt barnet i *armene*.", translation: "He held the child in his arms." },
-      { text: "Jeg har vondt i *armen*.", translation: "My arm hurts." }
+      { text: "Jeg har vondt i *armen*.", translation: "My arm hurts." },
+      { text: "Hun holder en bok under *armen*.", translation: "She is holding a book under her arm." },
+      { text: "Han har sterke *armer*.", translation: "He has strong arms." },
+      { text: "Hun la *armen* rundt meg.", translation: "She put her arm around me." }
     ],
     437: [
       { text: "Han skadet *beinet* sitt i fotball.", translation: "He injured his leg in football." },
       { text: "Hunden har fire *bein*.", translation: "The dog has four legs." },
-      { text: "Jeg har vondt i *beinet* etter løpeturen.", translation: "My leg hurts after the run." }
+      { text: "Jeg har vondt i *beinet* etter løpeturen.", translation: "My leg hurts after the run." },
+      { text: "Hun har lange *bein*.", translation: "She has long legs." },
+      { text: "*Beinet* mitt gjør vondt.", translation: "My leg hurts." },
+      { text: "Han brakk *beinet*.", translation: "He broke his leg." }
     ],
     438: [
       { text: "Hun kuttet seg i *fingeren*.", translation: "She cut her finger." },
       { text: "Han pekte med *fingeren* mot huset.", translation: "He pointed with his finger at the house." },
-      { text: "Ringen passer på denne *fingeren*.", translation: "The ring fits on this finger." }
+      { text: "Ringen passer på denne *fingeren*.", translation: "The ring fits on this finger." },
+      { text: "Jeg har ti *fingre*.", translation: "I have ten fingers." },
+      { text: "*Fingeren* min er kald.", translation: "My finger is cold." },
+      { text: "Hun har en ring på *fingeren*.", translation: "She has a ring on her finger." }
     ],
     439: [
       { text: "Jeg har vondt i *ryggen* i dag.", translation: "My back hurts today." },
       { text: "Han bar sekken på *ryggen*.", translation: "He carried the backpack on his back." },
-      { text: "Hun ligger på *ryggen* og hviler.", translation: "She's lying on her back resting." }
+      { text: "Hun ligger på *ryggen* og hviler.", translation: "She's lying on her back resting." },
+      { text: "*Ryggen* min gjør vondt.", translation: "My back hurts." },
+      { text: "Han har en sterk *rygg*.", translation: "He has a strong back." },
+      { text: "Hun sover på *ryggen*.", translation: "She sleeps on her back." }
     ],
     440: [
       { text: "*Hjertet* hennes banket fort.", translation: "Her heart beat fast." },
       { text: "Han har et godt *hjerte*.", translation: "He has a good heart." },
-      { text: "Legen lyttet til *hjertet* mitt.", translation: "The doctor listened to my heart." }
+      { text: "Legen lyttet til *hjertet* mitt.", translation: "The doctor listened to my heart." },
+      { text: "*Hjertet* mitt banker fort.", translation: "My heart is beating fast." },
+      { text: "Hun har et stort *hjerte*.", translation: "She has a big heart." },
+      { text: "*Hjertet* er en muskel.", translation: "The heart is a muscle." }
     ],
     441: [
       { text: "Ta på deg *frakken*, det er kaldt ute.", translation: "Put on your coat, it's cold outside." },
       { text: "*Frakken* hennes var lang og svart.", translation: "Her coat was long and black." },
-      { text: "Jeg kjøpte en ny *frakk* til vinteren.", translation: "I bought a new coat for winter." }
+      { text: "Jeg kjøpte en ny *frakk* til vinteren.", translation: "I bought a new coat for winter." },
+      { text: "Jeg har en svart *frakk*.", translation: "I have a black coat." },
+      { text: "*Frakken* er varm.", translation: "The coat is warm." },
+      { text: "Hvor er *frakken* min?", translation: "Where is my coat?" }
     ],
     442: [
       { text: "Hun har på seg et fint *skjørt*.", translation: "She's wearing a nice skirt." },
       { text: "*Skjørtet* var rødt og kort.", translation: "The skirt was red and short." },
-      { text: "Jeg kjøpte et nytt *skjørt* i går.", translation: "I bought a new skirt yesterday." }
+      { text: "Jeg kjøpte et nytt *skjørt* i går.", translation: "I bought a new skirt yesterday." },
+      { text: "Hun har et blått *skjørt*.", translation: "She has a blue skirt." },
+      { text: "*Skjørtet* er for kort.", translation: "The skirt is too short." },
+      { text: "Jeg liker det nye *skjørtet*.", translation: "I like the new skirt." }
     ],
     443: [
       { text: "Jeg finner bare én *sokk*.", translation: "I can only find one sock." },
       { text: "*Sokkene* mine er alle forskjellige.", translation: "My socks are all different." },
-      { text: "Han mistet en *sokk* i vaskemaskinen.", translation: "He lost a sock in the washing machine." }
+      { text: "Han mistet en *sokk* i vaskemaskinen.", translation: "He lost a sock in the washing machine." },
+      { text: "Jeg har våte *sokker*.", translation: "I have wet socks." },
+      { text: "Hvor er *sokkene* mine?", translation: "Where are my socks?" },
+      { text: "Han har på seg røde *sokker*.", translation: "He is wearing red socks." }
     ],
     444: [
       { text: "Ta på deg *hanskene*, det er kaldt.", translation: "Put on your gloves, it's cold." },
       { text: "Jeg mistet en *hanske* i går.", translation: "I lost a glove yesterday." },
-      { text: "*Hanskene* hennes var laget av ull.", translation: "Her gloves were made of wool." }
+      { text: "*Hanskene* hennes var laget av ull.", translation: "Her gloves were made of wool." },
+      { text: "Jeg har mistet *hansken* min.", translation: "I have lost my glove." },
+      { text: "*Hanskene* er varme.", translation: "The gloves are warm." },
+      { text: "Hun har røde *hansker*.", translation: "She has red gloves." }
     ],
     445: [
       { text: "Hun hadde på seg et varmt *skjerf*.", translation: "She wore a warm scarf." },
       { text: "*Skjerfet* var blått og mykt.", translation: "The scarf was blue and soft." },
-      { text: "Jeg fikk et *skjerf* i gave til jul.", translation: "I got a scarf as a gift for Christmas." }
+      { text: "Jeg fikk et *skjerf* i gave til jul.", translation: "I got a scarf as a gift for Christmas." },
+      { text: "Ta på deg *skjerfet*.", translation: "Put on your scarf." },
+      { text: "Jeg har et rødt *skjerf*.", translation: "I have a red scarf." },
+      { text: "*Skjerfet* er varmt.", translation: "The scarf is warm." }
     ],
     446: [
       { text: "Jeg må ta *medisinen* min hver dag.", translation: "I have to take my medicine every day." },
       { text: "*Medisinen* hjalp mot hodepinen.", translation: "The medicine helped with the headache." },
-      { text: "Legen skrev ut *medisin* til meg.", translation: "The doctor prescribed medicine for me." }
+      { text: "Legen skrev ut *medisin* til meg.", translation: "The doctor prescribed medicine for me." },
+      { text: "Ta *medisinen* nå.", translation: "Take the medicine now." },
+      { text: "Jeg kjøpte *medisin* på apoteket.", translation: "I bought medicine at the pharmacy." },
+      { text: "*Medisinen* hjelper mot hosten.", translation: "The medicine helps against the cough." }
     ],
     447: [
       { text: "Barnet har høy *feber* i dag.", translation: "The child has a high fever today." },
       { text: "*Feberen* gikk ned etter medisinen.", translation: "The fever went down after the medicine." },
-      { text: "Hun ble hjemme på grunn av *feber*.", translation: "She stayed home because of a fever." }
+      { text: "Hun ble hjemme på grunn av *feber*.", translation: "She stayed home because of a fever." },
+      { text: "Jeg har *feber* i dag.", translation: "I have a fever today." },
+      { text: "Han har høy *feber*.", translation: "He has a high fever." },
+      { text: "*Feberen* er borte nå.", translation: "The fever is gone now." }
     ],
     448: [
       { text: "Jeg kjenner *smerte* i ryggen.", translation: "I feel pain in my back." },
       { text: "*Smerten* forsvant etter hvile.", translation: "The pain disappeared after rest." },
-      { text: "Hun hadde sterke *smerter* i magen.", translation: "She had strong pains in her stomach." }
+      { text: "Hun hadde sterke *smerter* i magen.", translation: "She had strong pains in her stomach." },
+      { text: "Jeg har *smerter* i hodet.", translation: "I have pain in my head." },
+      { text: "*Smerten* er sterk.", translation: "The pain is strong." },
+      { text: "Hun har *smerter* i foten.", translation: "She has pain in her foot." }
     ],
     449: [
       { text: "Han har hatt *hoste* i en uke.", translation: "He has had a cough for a week." },
       { text: "*Hosten* hennes ble verre om natten.", translation: "Her cough got worse at night." },
-      { text: "Jeg tok medisin mot *hosten*.", translation: "I took medicine for the cough." }
+      { text: "Jeg tok medisin mot *hosten*.", translation: "I took medicine for the cough." },
+      { text: "Jeg har *hoste* og feber.", translation: "I have a cough and fever." },
+      { text: "*Hosten* er verre i dag.", translation: "The cough is worse today." },
+      { text: "Barnet har en stygg *hoste*.", translation: "The child has a bad cough." }
     ],
     450: [
       { text: "Legen tok en prøve av *blodet* mitt.", translation: "The doctor took a sample of my blood." },
       { text: "*Blodet* rant fra kuttet.", translation: "The blood flowed from the cut." },
-      { text: "Han donerte *blod* i går.", translation: "He donated blood yesterday." }
+      { text: "Han donerte *blod* i går.", translation: "He donated blood yesterday." },
+      { text: "*Blodet* er rødt.", translation: "The blood is red." },
+      { text: "Han mistet mye *blod*.", translation: "He lost a lot of blood." },
+      { text: "Det er *blod* på skjorten.", translation: "There is blood on the shirt." }
     ],
     451: [
       { text: "Jeg betaler alltid med *kontanter*.", translation: "I always pay with cash." },
       { text: "Har du *kontanter* på deg?", translation: "Do you have cash on you?" },
-      { text: "Butikken tar ikke imot *kontanter* lenger.", translation: "The shop no longer accepts cash." }
+      { text: "Butikken tar ikke imot *kontanter* lenger.", translation: "The shop no longer accepts cash." },
+      { text: "Jeg har ikke *kontanter*.", translation: "I don't have cash." },
+      { text: "Hun betaler med *kontanter*.", translation: "She pays in cash." },
+      { text: "Kan jeg betale *kontant*?", translation: "Can I pay in cash?" }
     ],
     452: [
       { text: "Jeg betalte med *kredittkort*.", translation: "I paid with credit card." },
       { text: "*Kredittkortet* mitt ble avvist.", translation: "My credit card was declined." },
-      { text: "Kan jeg bruke *kredittkort* her?", translation: "Can I use a credit card here?" }
+      { text: "Kan jeg bruke *kredittkort* her?", translation: "Can I use a credit card here?" },
+      { text: "Kan jeg betale med *kredittkort*?", translation: "Can I pay by credit card?" },
+      { text: "Jeg har mistet *kredittkortet* mitt.", translation: "I have lost my credit card." },
+      { text: "Hun har et nytt *kredittkort*.", translation: "She has a new credit card." }
     ],
     453: [
       { text: "Vi fikk *rabatt* på hotellet.", translation: "We got a discount on the hotel." },
       { text: "*Rabatten* var tjue prosent.", translation: "The discount was twenty percent." },
-      { text: "Butikken ga *rabatt* til studenter.", translation: "The shop gave a discount to students." }
+      { text: "Butikken ga *rabatt* til studenter.", translation: "The shop gave a discount to students." },
+      { text: "Får jeg *rabatt*?", translation: "Do I get a discount?" },
+      { text: "Studenter får *rabatt*.", translation: "Students get a discount." },
+      { text: "Det er femti prosent *rabatt*.", translation: "There is fifty percent off." }
     ],
     454: [
       { text: "Han er en trofast *kunde*.", translation: "He's a loyal customer." },
       { text: "*Kunden* klagde på prisen.", translation: "The customer complained about the price." },
-      { text: "Vi har mange nye *kunder* i år.", translation: "We have many new customers this year." }
+      { text: "Vi har mange nye *kunder* i år.", translation: "We have many new customers this year." },
+      { text: "*Kunden* vil betale nå.", translation: "The customer wants to pay now." },
+      { text: "Butikken har mange *kunder*.", translation: "The shop has many customers." },
+      { text: "Hun er en god *kunde*.", translation: "She is a good customer." }
     ],
     455: [
       { text: "Hun ga meg en fin *gave*.", translation: "She gave me a nice gift." },
       { text: "*Gaven* var pakket inn i rødt papir.", translation: "The gift was wrapped in red paper." },
-      { text: "Vi kjøpte en *gave* til bursdagen hans.", translation: "We bought a gift for his birthday." }
+      { text: "Vi kjøpte en *gave* til bursdagen hans.", translation: "We bought a gift for his birthday." },
+      { text: "Takk for *gaven*!", translation: "Thanks for the gift!" },
+      { text: "Jeg kjøpte en *gave* til mor.", translation: "I bought a gift for mum." },
+      { text: "*Gaven* ligger under treet.", translation: "The gift is under the tree." }
     ],
     456: [
       { text: "Jeg elsker å høre på *musikk*.", translation: "I love listening to music." },
       { text: "*Musikken* på festen var fantastisk.", translation: "The music at the party was fantastic." },
-      { text: "Hun spiller klassisk *musikk*.", translation: "She plays classical music." }
+      { text: "Hun spiller klassisk *musikk*.", translation: "She plays classical music." },
+      { text: "Jeg liker norsk *musikk*.", translation: "I like Norwegian music." },
+      { text: "*Musikken* er for høy.", translation: "The music is too loud." },
+      { text: "Vi hører på *musikk* i bilen.", translation: "We listen to music in the car." }
     ],
     457: [
       { text: "Denne *sangen* er min favoritt.", translation: "This song is my favorite." },
       { text: "Vi sang en gammel *sang* sammen.", translation: "We sang an old song together." },
-      { text: "*Sangen* handler om kjærlighet.", translation: "The song is about love." }
+      { text: "*Sangen* handler om kjærlighet.", translation: "The song is about love." },
+      { text: "Jeg liker denne *sangen*.", translation: "I like this song." },
+      { text: "Hun skrev en *sang*.", translation: "She wrote a song." },
+      { text: "*Sangen* er veldig fin.", translation: "The song is very nice." }
     ],
     458: [
       { text: "Vi så en spennende *film* i går.", translation: "We watched an exciting film yesterday." },
       { text: "*Filmen* varte i to timer.", translation: "The film lasted two hours." },
-      { text: "Hvilken *film* vil du se i kveld?", translation: "Which film do you want to watch tonight?" }
+      { text: "Hvilken *film* vil du se i kveld?", translation: "Which film do you want to watch tonight?" },
+      { text: "*Filmen* var lang.", translation: "The film was long." },
+      { text: "Vi ser en *film* i kveld.", translation: "We are watching a film tonight." },
+      { text: "Jeg liker den *filmen*.", translation: "I like that film." }
     ],
     459: [
       { text: "Barna spiller et morsomt *spill*.", translation: "The children are playing a fun game." },
       { text: "*Spillet* varte hele kvelden.", translation: "The game lasted all evening." },
-      { text: "Vi kjøpte et nytt *spill* til bursdagen hans.", translation: "We bought a new game for his birthday." }
+      { text: "Vi kjøpte et nytt *spill* til bursdagen hans.", translation: "We bought a new game for his birthday." },
+      { text: "Vil du spille et *spill*?", translation: "Do you want to play a game?" },
+      { text: "Jeg vant *spillet*!", translation: "I won the game!" },
+      { text: "*Spillet* er morsomt.", translation: "The game is fun." }
     ],
     460: [
       { text: "Vi skal ha en *fest* på lørdag.", translation: "We're having a party on Saturday." },
       { text: "*Festen* var veldig hyggelig.", translation: "The party was very nice." },
-      { text: "Hun inviterte alle vennene sine til *festen*.", translation: "She invited all her friends to the party." }
+      { text: "Hun inviterte alle vennene sine til *festen*.", translation: "She invited all her friends to the party." },
+      { text: "Kommer du på *festen*?", translation: "Are you coming to the party?" },
+      { text: "*Festen* begynner klokka åtte.", translation: "The party starts at eight o'clock." },
+      { text: "Vi hadde en stor *fest*.", translation: "We had a big party." }
     ],
     461: [
       { text: "Han spiller *fotball* hver helg.", translation: "He plays football every weekend." },
       { text: "*Fotball* er den mest populære sporten her.", translation: "Football is the most popular sport here." },
-      { text: "Gutten drømmer om å bli proff i *fotball*.", translation: "The boy dreams of becoming a professional in football." }
+      { text: "Gutten drømmer om å bli proff i *fotball*.", translation: "The boy dreams of becoming a professional in football." },
+      { text: "Jeg liker *fotball*.", translation: "I like football." },
+      { text: "Vi ser *fotball* på tv.", translation: "We watch football on TV." },
+      { text: "Barna spiller *fotball* i parken.", translation: "The children play football in the park." }
     ],
     462: [
       { text: "Vi spiller *tennis* hver tirsdag.", translation: "We play tennis every Tuesday." },
       { text: "Hun er veldig flink i *tennis*.", translation: "She's very good at tennis." },
-      { text: "Han lærte *tennis* som barn.", translation: "He learned tennis as a child." }
+      { text: "Han lærte *tennis* som barn.", translation: "He learned tennis as a child." },
+      { text: "Jeg spiller *tennis* med far.", translation: "I play tennis with dad." },
+      { text: "Liker du *tennis*?", translation: "Do you like tennis?" },
+      { text: "Hun ser *tennis* på tv.", translation: "She watches tennis on TV." }
     ],
     463: [
       { text: "Han liker all slags *sport*.", translation: "He likes all kinds of sport." },
       { text: "*Sport* er viktig for helsen.", translation: "Sport is important for health." },
-      { text: "Hvilken *sport* driver du med?", translation: "What sport do you do?" }
+      { text: "Hvilken *sport* driver du med?", translation: "What sport do you do?" },
+      { text: "Jeg liker ikke *sport*.", translation: "I don't like sport." },
+      { text: "Vi ser *sport* på tv.", translation: "We watch sport on TV." },
+      { text: "*Sport* er bra for helsen.", translation: "Sport is good for your health." }
     ],
     464: [
       { text: "Vårt *lag* vant kampen i går.", translation: "Our team won the match yesterday." },
       { text: "Hun spiller for et lokalt *lag*.", translation: "She plays for a local team." },
-      { text: "*Laget* trente hver dag før mesterskapet.", translation: "The team trained every day before the championship." }
+      { text: "*Laget* trente hver dag før mesterskapet.", translation: "The team trained every day before the championship." },
+      { text: "*Laget* vårt er godt.", translation: "Our team is good." },
+      { text: "Jeg spiller på et *lag*.", translation: "I play on a team." },
+      { text: "*Laget* vant i går.", translation: "The team won yesterday." }
     ],
     465: [
       { text: "Barnet kastet *ballen* over gjerdet.", translation: "The child threw the ball over the fence." },
       { text: "Vi spilte med en rød *ball*.", translation: "We played with a red ball." },
-      { text: "*Ballen* traff vinduet.", translation: "The ball hit the window." }
+      { text: "*Ballen* traff vinduet.", translation: "The ball hit the window." },
+      { text: "Kast *ballen* til meg!", translation: "Throw the ball to me!" },
+      { text: "Hunden løper etter *ballen*.", translation: "The dog runs after the ball." },
+      { text: "Jeg har en ny *ball*.", translation: "I have a new ball." }
     ],
     466: [
       { text: "Han spiller *gitar* veldig godt.", translation: "He plays guitar very well." },
       { text: "*Gitaren* min trenger nye strenger.", translation: "My guitar needs new strings." },
-      { text: "Hun lærte seg *gitar* i fjor.", translation: "She learned guitar last year." }
+      { text: "Hun lærte seg *gitar* i fjor.", translation: "She learned guitar last year." },
+      { text: "Jeg spiller *gitar*.", translation: "I play the guitar." },
+      { text: "*Gitaren* er gammel.", translation: "The guitar is old." },
+      { text: "Hun kjøpte en ny *gitar*.", translation: "She bought a new guitar." }
     ],
     467: [
       { text: "Hun spiller *piano* hver dag.", translation: "She plays piano every day." },
       { text: "*Pianoet* står i stuen.", translation: "The piano is in the living room." },
-      { text: "Han øver på *piano* etter skolen.", translation: "He practices piano after school." }
+      { text: "Han øver på *piano* etter skolen.", translation: "He practices piano after school." },
+      { text: "Vi har et *piano* hjemme.", translation: "We have a piano at home." },
+      { text: "Jeg lærer å spille *piano*.", translation: "I'm learning to play the piano." },
+      { text: "*Pianoet* er svart.", translation: "The piano is black." }
     ],
     468: [
       { text: "Kan du ta et *bilde* av oss?", translation: "Can you take a photo of us?" },
       { text: "*Bildet* var veldig fint.", translation: "The photo was very nice." },
-      { text: "Vi tok mange *bilder* på turen.", translation: "We took many photos on the trip." }
+      { text: "Vi tok mange *bilder* på turen.", translation: "We took many photos on the trip." },
+      { text: "Jeg liker dette *bildet*.", translation: "I like this photo." },
+      { text: "*Bildet* henger i stuen.", translation: "The picture hangs in the living room." },
+      { text: "Send meg *bildet*!", translation: "Send me the photo!" }
     ],
     469: [
       { text: "Min *hobby* er å male.", translation: "My hobby is painting." },
       { text: "Han har mange *hobbyer*.", translation: "He has many hobbies." },
-      { text: "Hva er *hobbyen* din?", translation: "What's your hobby?" }
+      { text: "Hva er *hobbyen* din?", translation: "What's your hobby?" },
+      { text: "Lesing er min *hobby*.", translation: "Reading is my hobby." },
+      { text: "Har du en *hobby*?", translation: "Do you have a hobby?" },
+      { text: "Hans *hobby* er fotball.", translation: "His hobby is football." }
     ],
     470: [
       { text: "Vi drar på *ferie* i sommer.", translation: "We're going on holiday this summer." },
       { text: "*Ferien* var altfor kort.", translation: "The holiday was far too short." },
-      { text: "Hvor skal du på *ferie* i år?", translation: "Where are you going on holiday this year?" }
+      { text: "Hvor skal du på *ferie* i år?", translation: "Where are you going on holiday this year?" },
+      { text: "Vi har *ferie* nå.", translation: "We are on holiday now." },
+      { text: "Ha en god *ferie*!", translation: "Have a good holiday!" },
+      { text: "Jeg trenger *ferie*.", translation: "I need a holiday." }
     ],
     471: [
       { text: "Jeg bruker *internett* hver dag.", translation: "I use the internet every day." },
       { text: "*Internettet* var nede i går.", translation: "The internet was down yesterday." },
-      { text: "Vi sjekket prisen på *internett*.", translation: "We checked the price on the internet." }
+      { text: "Vi sjekket prisen på *internett*.", translation: "We checked the price on the internet." },
+      { text: "*Internett* er tregt i dag.", translation: "The internet is slow today." },
+      { text: "Vi har ikke *internett* her.", translation: "We don't have internet here." },
+      { text: "Jeg kjøpte det på *internett*.", translation: "I bought it on the internet." }
     ],
     472: [
       { text: "Denne *nettsiden* er veldig nyttig.", translation: "This website is very useful." },
       { text: "Vi laget en ny *nettside* for firmaet.", translation: "We made a new website for the company." },
-      { text: "*Nettsiden* var lett å bruke.", translation: "The website was easy to use." }
+      { text: "*Nettsiden* var lett å bruke.", translation: "The website was easy to use." },
+      { text: "Vi har en ny *nettside*.", translation: "We have a new website." },
+      { text: "*Nettsiden* er på norsk.", translation: "The website is in Norwegian." },
+      { text: "Se på *nettsiden* vår.", translation: "Look at our website." }
     ],
     473: [
       { text: "Jeg har glemt *passordet* mitt.", translation: "I've forgotten my password." },
       { text: "*Passordet* må ha minst åtte tegn.", translation: "The password must have at least eight characters." },
-      { text: "Ikke del *passordet* ditt med andre.", translation: "Don't share your password with others." }
+      { text: "Ikke del *passordet* ditt med andre.", translation: "Don't share your password with others." },
+      { text: "Hva er *passordet*?", translation: "What is the password?" },
+      { text: "Jeg endret *passordet* mitt.", translation: "I changed my password." },
+      { text: "*Passordet* er for kort.", translation: "The password is too short." }
     ],
     474: [
       { text: "*Skjermen* min er sprukket.", translation: "My screen is cracked." },
       { text: "Vi kjøpte en ny *skjerm* til datamaskinen.", translation: "We bought a new screen for the computer." },
-      { text: "Teksten på *skjermen* var for liten.", translation: "The text on the screen was too small." }
+      { text: "Teksten på *skjermen* var for liten.", translation: "The text on the screen was too small." },
+      { text: "*Skjermen* er for liten.", translation: "The screen is too small." },
+      { text: "Jeg ser på *skjermen*.", translation: "I'm looking at the screen." },
+      { text: "Telefonen har en stor *skjerm*.", translation: "The phone has a big screen." }
     ],
     475: [
       { text: "*Tastaturet* mitt slutter å virke.", translation: "My keyboard is stopping working." },
       { text: "Han skrev raskt på *tastaturet*.", translation: "He typed quickly on the keyboard." },
-      { text: "Vi kjøpte et nytt *tastatur* i går.", translation: "We bought a new keyboard yesterday." }
+      { text: "Vi kjøpte et nytt *tastatur* i går.", translation: "We bought a new keyboard yesterday." },
+      { text: "*Tastaturet* er nytt.", translation: "The keyboard is new." },
+      { text: "Jeg trenger et nytt *tastatur*.", translation: "I need a new keyboard." },
+      { text: "Katten ligger på *tastaturet*.", translation: "The cat is lying on the keyboard." }
     ],
     476: [
       { text: "Jeg fikk en *melding* fra henne i dag.", translation: "I got a message from her today." },
       { text: "Kan du sende meg en *melding*?", translation: "Can you send me a message?" },
-      { text: "*Meldingen* var kort men hyggelig.", translation: "The message was short but nice." }
+      { text: "*Meldingen* var kort men hyggelig.", translation: "The message was short but nice." },
+      { text: "Jeg fikk en *melding*.", translation: "I got a message." },
+      { text: "Les *meldingen* min!", translation: "Read my message!" },
+      { text: "Hun sendte en lang *melding*.", translation: "She sent a long message." }
     ],
     477: [
       { text: "Jeg ser på *nyhetene* hver kveld.", translation: "I watch the news every evening." },
       { text: "*Nyhetene* i dag var triste.", translation: "The news today was sad." },
-      { text: "Har du hørt *nyhetene*?", translation: "Have you heard the news?" }
+      { text: "Har du hørt *nyhetene*?", translation: "Have you heard the news?" },
+      { text: "Jeg leser *nyhetene* på nettet.", translation: "I read the news online." },
+      { text: "Har du sett *nyhetene*?", translation: "Have you seen the news?" },
+      { text: "Det er gode *nyheter*!", translation: "That is good news!" }
     ],
     478: [
       { text: "Vi ser på *tv* om kvelden.", translation: "We watch TV in the evening." },
       { text: "*Tv-en* vår er ganske gammel.", translation: "Our TV is quite old." },
-      { text: "Kan du skru av *tv-en*?", translation: "Can you turn off the TV?" }
+      { text: "Kan du skru av *tv-en*?", translation: "Can you turn off the TV?" },
+      { text: "Vi har en ny *tv*.", translation: "We have a new TV." },
+      { text: "Barna ser på *tv*.", translation: "The children are watching TV." },
+      { text: "*Tv-en* står i stuen.", translation: "The TV is in the living room." }
     ],
     479: [
       { text: "Jeg hører på *radio* i bilen.", translation: "I listen to the radio in the car." },
       { text: "*Radioen* spilte musikk hele dagen.", translation: "The radio played music all day." },
-      { text: "Han kjøpte en gammel *radio* på loppemarkedet.", translation: "He bought an old radio at the flea market." }
+      { text: "Han kjøpte en gammel *radio* på loppemarkedet.", translation: "He bought an old radio at the flea market." },
+      { text: "Far hører på *radio*.", translation: "Dad listens to the radio." },
+      { text: "*Radioen* er gammel.", translation: "The radio is old." },
+      { text: "Slå på *radioen*.", translation: "Turn on the radio." }
     ],
     480: [
       { text: "Hun kjøpte et nytt *kamera* i fjor.", translation: "She bought a new camera last year." },
       { text: "*Kameraet* mitt tar fine bilder.", translation: "My camera takes nice pictures." },
-      { text: "Han glemte *kameraet* hjemme.", translation: "He forgot the camera at home." }
+      { text: "Han glemte *kameraet* hjemme.", translation: "He forgot the camera at home." },
+      { text: "Jeg har et nytt *kamera*.", translation: "I have a new camera." },
+      { text: "*Kameraet* er i vesken.", translation: "The camera is in the bag." },
+      { text: "Hun tok bildet med *kameraet*.", translation: "She took the photo with the camera." }
     ],
     481: [
       { text: "Jeg liker *også* kaffe.", translation: "I also like coffee." },
       { text: "Hun kommer *også* i kveld.", translation: "She's also coming tonight." },
-      { text: "Vi må *også* huske å kjøpe brød.", translation: "We also need to remember to buy bread." }
+      { text: "Vi må *også* huske å kjøpe brød.", translation: "We also need to remember to buy bread." },
+      { text: "Jeg er *også* trøtt.", translation: "I'm tired too." },
+      { text: "Han snakker *også* engelsk.", translation: "He also speaks English." },
+      { text: "Vi har *også* en katt.", translation: "We also have a cat." }
     ],
     482: [
       { text: "Jeg har *bare* fem minutter.", translation: "I only have five minutes." },
       { text: "Det kostet *bare* hundre kroner.", translation: "It only cost a hundred kroner." },
-      { text: "Hun spiste *bare* litt av maten.", translation: "She only ate a little of the food." }
+      { text: "Hun spiste *bare* litt av maten.", translation: "She only ate a little of the food." },
+      { text: "Jeg vil *bare* sove.", translation: "I just want to sleep." },
+      { text: "Hun har *bare* en bror.", translation: "She only has one brother." },
+      { text: "Det tar *bare* et minutt.", translation: "It only takes a minute." }
     ],
     483: [
       { text: "Jeg er *veldig* glad i dag.", translation: "I'm very happy today." },
       { text: "Det var *veldig* kaldt i går.", translation: "It was very cold yesterday." },
-      { text: "Hun er *veldig* flink i matte.", translation: "She's very good at math." }
+      { text: "Hun er *veldig* flink i matte.", translation: "She's very good at math." },
+      { text: "Maten var *veldig* god.", translation: "The food was very good." },
+      { text: "Han er *veldig* høy.", translation: "He is very tall." },
+      { text: "Takk, det er *veldig* snilt.", translation: "Thanks, that's very kind." }
     ],
     484: [
       { text: "*Kanskje* vi kan møtes i morgen.", translation: "Maybe we can meet tomorrow." },
       { text: "Hun kommer *kanskje* på festen.", translation: "She might come to the party." },
-      { text: "*Kanskje* det blir sol i morgen.", translation: "Maybe it'll be sunny tomorrow." }
+      { text: "*Kanskje* det blir sol i morgen.", translation: "Maybe it'll be sunny tomorrow." },
+      { text: "*Kanskje* i morgen.", translation: "Maybe tomorrow." },
+      { text: "*Kanskje* han er syk.", translation: "Maybe he is sick." },
+      { text: "Vi drar *kanskje* til Spania.", translation: "We are maybe going to Spain." }
     ],
     485: [
       { text: "Jeg har *allerede* spist.", translation: "I've already eaten." },
       { text: "Er du *allerede* ferdig?", translation: "Are you already done?" },
-      { text: "Hun har *allerede* dratt hjem.", translation: "She has already gone home." }
+      { text: "Hun har *allerede* dratt hjem.", translation: "She has already gone home." },
+      { text: "Toget har *allerede* gått.", translation: "The train has already left." },
+      { text: "Jeg har *allerede* lest boka.", translation: "I have already read the book." },
+      { text: "Det er *allerede* mørkt.", translation: "It is already dark." }
     ],
     486: [
       { text: "Vi starter det nye året i *januar*.", translation: "We start the new year in January." },
       { text: "Det er kaldt i *januar*.", translation: "It's cold in January." },
-      { text: "Bursdagen min er i *januar*.", translation: "My birthday is in January." }
+      { text: "Bursdagen min er i *januar*.", translation: "My birthday is in January." },
+      { text: "Det snør mye i *januar*.", translation: "It snows a lot in January." },
+      { text: "Jeg har ferie i *januar*.", translation: "I have a holiday in January." },
+      { text: "*Januar* er en kald måned.", translation: "January is a cold month." }
     ],
     487: [
       { text: "*Februar* er den korteste måneden.", translation: "February is the shortest month." },
       { text: "Vi drar til fjells i *februar*.", translation: "We're going to the mountains in February." },
-      { text: "Skolen har vinterferie i *februar*.", translation: "School has winter break in February." }
+      { text: "Skolen har vinterferie i *februar*.", translation: "School has winter break in February." },
+      { text: "Det er kaldt i *februar*.", translation: "It is cold in February." },
+      { text: "Hun ble født i *februar*.", translation: "She was born in February." },
+      { text: "Vi går på ski i *februar*.", translation: "We go skiing in February." }
     ],
     488: [
       { text: "Våren begynner i *mars*.", translation: "Spring begins in March." },
       { text: "Hun ble født i *mars*.", translation: "She was born in March." },
-      { text: "Vi planlegger en reise i *mars*.", translation: "We're planning a trip in March." }
+      { text: "Vi planlegger en reise i *mars*.", translation: "We're planning a trip in March." },
+      { text: "Jeg har bursdag i *mars*.", translation: "My birthday is in March." },
+      { text: "Det er fortsatt kaldt i *mars*.", translation: "It is still cold in March." },
+      { text: "Vi flytter i *mars*.", translation: "We are moving in March." }
     ],
     489: [
       { text: "Det regner mye i *april*.", translation: "It rains a lot in April." },
       { text: "Påsken er ofte i *april*.", translation: "Easter is often in April." },
-      { text: "Vi feirer bursdagen hans i *april*.", translation: "We celebrate his birthday in April." }
+      { text: "Vi feirer bursdagen hans i *april*.", translation: "We celebrate his birthday in April." },
+      { text: "Det snør noen ganger i *april*.", translation: "It sometimes snows in April." },
+      { text: "Hun kommer hjem i *april*.", translation: "She comes home in April." },
+      { text: "*April* er en fin måned.", translation: "April is a nice month." }
     ],
     490: [
       { text: "*Mai* er en av de fineste månedene.", translation: "May is one of the nicest months." },
       { text: "Nasjonaldagen er i *mai*.", translation: "National Day is in May." },
-      { text: "Blomstene blomstrer i *mai*.", translation: "The flowers bloom in May." }
+      { text: "Blomstene blomstrer i *mai*.", translation: "The flowers bloom in May." },
+      { text: "Vi har eksamen i *mai*.", translation: "We have exams in May." },
+      { text: "Hun ble født i *mai*.", translation: "She was born in May." },
+      { text: "Det er varmt i *mai*.", translation: "It is warm in May." }
     ],
     491: [
       { text: "Skolen slutter i *juni*.", translation: "School ends in June." },
       { text: "Sommeren begynner i *juni*.", translation: "Summer begins in June." },
-      { text: "Vi gifter oss i *juni*.", translation: "We're getting married in June." }
+      { text: "Vi gifter oss i *juni*.", translation: "We're getting married in June." },
+      { text: "Vi har bryllup i *juni*.", translation: "We have a wedding in June." },
+      { text: "Det er lyst om natten i *juni*.", translation: "It is light at night in June." },
+      { text: "Hun har bursdag i *juni*.", translation: "Her birthday is in June." }
     ],
     492: [
       { text: "*Juli* er den varmeste måneden.", translation: "July is the hottest month." },
       { text: "Vi drar på ferie i *juli*.", translation: "We're going on holiday in July." },
-      { text: "Hun har fri hele *juli*.", translation: "She has time off all of July." }
+      { text: "Hun har fri hele *juli*.", translation: "She has time off all of July." },
+      { text: "Vi bader i havet i *juli*.", translation: "We swim in the sea in July." },
+      { text: "Jeg har ferie i *juli*.", translation: "I have a holiday in July." },
+      { text: "Det er varmt i *juli*.", translation: "It is warm in July." }
     ],
     493: [
       { text: "Skolen begynner igjen i *august*.", translation: "School starts again in August." },
       { text: "Vi feirer festivalen i *august*.", translation: "We celebrate the festival in August." },
-      { text: "Det er fortsatt varmt i *august*.", translation: "It's still hot in August." }
+      { text: "Det er fortsatt varmt i *august*.", translation: "It's still hot in August." },
+      { text: "Vi reiser hjem i *august*.", translation: "We travel home in August." },
+      { text: "Hun ble født i *august*.", translation: "She was born in August." },
+      { text: "Jeg begynner på jobb i *august*.", translation: "I start work in August." }
     ],
     494: [
       { text: "Høsten begynner i *september*.", translation: "Autumn begins in September." },
       { text: "Vi flyttet hit i *september*.", translation: "We moved here in September." },
-      { text: "Bladene begynner å falle i *september*.", translation: "The leaves start to fall in September." }
+      { text: "Bladene begynner å falle i *september*.", translation: "The leaves start to fall in September." },
+      { text: "Skolen har begynt i *september*.", translation: "School has started in September." },
+      { text: "Jeg har bursdag i *september*.", translation: "My birthday is in September." },
+      { text: "Det regner mye i *september*.", translation: "It rains a lot in September." }
     ],
     495: [
       { text: "Det blir kaldere i *oktober*.", translation: "It gets colder in October." },
       { text: "Vi feirer halloween i slutten av *oktober*.", translation: "We celebrate Halloween at the end of October." },
-      { text: "Hun ble født i *oktober*.", translation: "She was born in October." }
+      { text: "Hun ble født i *oktober*.", translation: "She was born in October." },
+      { text: "Trærne er røde i *oktober*.", translation: "The trees are red in October." },
+      { text: "Vi reiser til Spania i *oktober*.", translation: "We travel to Spain in October." },
+      { text: "Det er kaldt i *oktober*.", translation: "It is cold in October." }
     ],
     496: [
       { text: "*November* er ofte grå og våt.", translation: "November is often grey and wet." },
       { text: "Vi tenner lys i *november*.", translation: "We light candles in November." },
-      { text: "Det snør noen ganger i *november*.", translation: "It sometimes snows in November." }
+      { text: "Det snør noen ganger i *november*.", translation: "It sometimes snows in November." },
+      { text: "Det er mørkt i *november*.", translation: "It is dark in November." },
+      { text: "Hun har bursdag i *november*.", translation: "Her birthday is in November." },
+      { text: "Vi flyttet hit i *november*.", translation: "We moved here in November." }
     ],
     497: [
       { text: "Vi feirer jul i *desember*.", translation: "We celebrate Christmas in December." },
       { text: "*Desember* er den mørkeste måneden.", translation: "December is the darkest month." },
-      { text: "Familien samles i *desember*.", translation: "The family gathers in December." }
+      { text: "Familien samles i *desember*.", translation: "The family gathers in December." },
+      { text: "Det er kaldt i *desember*.", translation: "It is cold in December." },
+      { text: "Jeg har ferie i *desember*.", translation: "I have a holiday in December." },
+      { text: "Han ble født i *desember*.", translation: "He was born in December." }
     ],
     498: [
       { text: "Hvilken *dato* er det i dag?", translation: "What's the date today?" },
       { text: "Vi satte en *dato* for møtet.", translation: "We set a date for the meeting." },
-      { text: "*Datoen* på billetten var feil.", translation: "The date on the ticket was wrong." }
+      { text: "*Datoen* på billetten var feil.", translation: "The date on the ticket was wrong." },
+      { text: "Hva er *datoen* i dag?", translation: "What is the date today?" },
+      { text: "Skriv *datoen* her.", translation: "Write the date here." },
+      { text: "Husker du *datoen*?", translation: "Do you remember the date?" }
     ],
     499: [
       { text: "Jeg skrev det i *kalenderen* min.", translation: "I wrote it in my calendar." },
       { text: "*Kalenderen* henger på veggen.", translation: "The calendar hangs on the wall." },
-      { text: "Sjekk *kalenderen* for ledige dager.", translation: "Check the calendar for free days." }
+      { text: "Sjekk *kalenderen* for ledige dager.", translation: "Check the calendar for free days." },
+      { text: "Jeg har en ny *kalender*.", translation: "I have a new calendar." },
+      { text: "Se på *kalenderen*.", translation: "Look at the calendar." },
+      { text: "*Kalenderen* er full.", translation: "The calendar is full." }
     ],
     500: [
       { text: "Gratulerer med *bursdagen*!", translation: "Happy birthday!" },
       { text: "Min *bursdag* er i mai.", translation: "My birthday is in May." },
-      { text: "Vi feiret *bursdagen* hennes med kake.", translation: "We celebrated her birthday with cake." }
+      { text: "Vi feiret *bursdagen* hennes med kake.", translation: "We celebrated her birthday with cake." },
+      { text: "Når er *bursdagen* din?", translation: "When is your birthday?" },
+      { text: "I dag er det min *bursdag*.", translation: "Today is my birthday." },
+      { text: "Vi lager kake til *bursdagen*.", translation: "We are making a cake for the birthday." }
     ]
   },
 
@@ -12532,2502 +14036,4002 @@ window.DECK_EXAMPLES = {
     1: [
       { text: "*你好*，我叫小明。", romanization: "*Nǐ hǎo*, wǒ jiào Xiǎo Míng.", translation: "Hello, my name is Xiao Ming." },
       { text: "老师*你好*！", romanization: "Lǎoshī *nǐ hǎo*!", translation: "Hello, teacher!" },
-      { text: "*你好*，很高兴认识你。", romanization: "*Nǐ hǎo*, hěn gāoxìng rènshi nǐ.", translation: "Hello, nice to meet you." }
+      { text: "*你好*，很高兴认识你。", romanization: "*Nǐ hǎo*, hěn gāoxìng rènshi nǐ.", translation: "Hello, nice to meet you." },
+      { text: "*你好*，你叫什么名字？", romanization: "*Nǐ hǎo*, nǐ jiào shénme míngzi?", translation: "Hello, what's your name?" },
+      { text: "她笑着说：“*你好*！”", romanization: "Tā xiàozhe shuō: \"*Nǐ hǎo*!\"", translation: "She said with a smile: \"Hello!\"" },
+      { text: "*你好*，请问你是老师吗？", romanization: "*Nǐ hǎo*, qǐngwèn nǐ shì lǎoshī ma?", translation: "Hello, excuse me, are you a teacher?" }
     ],
     2: [
       { text: "*谢谢*你的帮助。", romanization: "*Xièxie* nǐ de bāngzhù.", translation: "Thank you for your help." },
       { text: "太*谢谢*你了！", romanization: "Tài *xièxie* nǐ le!", translation: "Thank you so much!" },
-      { text: "*谢谢*，我不要了。", romanization: "*Xièxie*, wǒ bú yào le.", translation: "Thanks, I don't want any more." }
+      { text: "*谢谢*，我不要了。", romanization: "*Xièxie*, wǒ bú yào le.", translation: "Thanks, I don't want any more." },
+      { text: "*谢谢*你的礼物。", romanization: "*Xièxie* nǐ de lǐwù.", translation: "Thank you for your gift." },
+      { text: "*谢谢*你来看我。", romanization: "*Xièxie* nǐ lái kàn wǒ.", translation: "Thanks for coming to see me." },
+      { text: "孩子说了一声*谢谢*。", romanization: "Háizi shuōle yì shēng *xièxie*.", translation: "The child said thank you." }
     ],
     3: [
       { text: "我*是*学生。", romanization: "Wǒ *shì* xuésheng.", translation: "I am a student." },
       { text: "这*是*我的书。", romanization: "Zhè *shì* wǒ de shū.", translation: "This is my book." },
-      { text: "*是*，我明白了。", romanization: "*Shì*, wǒ míngbai le.", translation: "Yes, I understand." }
+      { text: "*是*，我明白了。", romanization: "*Shì*, wǒ míngbai le.", translation: "Yes, I understand." },
+      { text: "他*是*我的哥哥。", romanization: "Tā *shì* wǒ de gēge.", translation: "He is my older brother." },
+      { text: "今天*是*星期一。", romanization: "Jīntiān *shì* xīngqīyī.", translation: "Today is Monday." },
+      { text: "*是*，我们明天去。", romanization: "*Shì*, wǒmen míngtiān qù.", translation: "Yes, we are going tomorrow." }
     ],
     4: [
       { text: "我*不*喝咖啡。", romanization: "Wǒ *bù* hē kāfēi.", translation: "I don't drink coffee." },
       { text: "*不*，谢谢。", romanization: "*Bù*, xièxie.", translation: "No, thanks." },
-      { text: "今天*不*冷。", romanization: "Jīntiān *bù* lěng.", translation: "It isn't cold today." }
+      { text: "今天*不*冷。", romanization: "Jīntiān *bù* lěng.", translation: "It isn't cold today." },
+      { text: "我*不*喜欢下雨。", romanization: "Wǒ *bù* xǐhuan xià yǔ.", translation: "I don't like rain." },
+      { text: "他今天*不*来。", romanization: "Tā jīntiān *bù* lái.", translation: "He isn't coming today." },
+      { text: "这个*不*贵。", romanization: "Zhège *bú* guì.", translation: "This isn't expensive." }
     ],
     5: [
       { text: "*请*进。", romanization: "*Qǐng* jìn.", translation: "Please come in." },
       { text: "*请*等一下。", romanization: "*Qǐng* děng yíxià.", translation: "Please wait a moment." },
-      { text: "*请*给我一杯水。", romanization: "*Qǐng* gěi wǒ yì bēi shuǐ.", translation: "Please give me a glass of water." }
+      { text: "*请*给我一杯水。", romanization: "*Qǐng* gěi wǒ yì bēi shuǐ.", translation: "Please give me a glass of water." },
+      { text: "*请*坐在这里。", romanization: "*Qǐng* zuò zài zhèlǐ.", translation: "Please sit here." },
+      { text: "*请*说慢一点。", romanization: "*Qǐng* shuō màn yìdiǎn.", translation: "Please speak a little slower." },
+      { text: "*请*把门关上。", romanization: "*Qǐng* bǎ mén guānshàng.", translation: "Please close the door." }
     ],
     6: [
       { text: "*对不起*，我迟到了。", romanization: "*Duì bu qǐ*, wǒ chídào le.", translation: "Sorry, I'm late." },
       { text: "*对不起*，我没听到。", romanization: "*Duì bu qǐ*, wǒ méi tīngdào.", translation: "Sorry, I didn't hear." },
-      { text: "他为错误说了*对不起*。", romanization: "Tā wèi cuòwù shuōle *duì bu qǐ*.", translation: "He said sorry for the mistake." }
+      { text: "他为错误说了*对不起*。", romanization: "Tā wèi cuòwù shuōle *duì bu qǐ*.", translation: "He said sorry for the mistake." },
+      { text: "*对不起*，我忘了。", romanization: "*Duì bu qǐ*, wǒ wàng le.", translation: "Sorry, I forgot." },
+      { text: "*对不起*，这是我的错。", romanization: "*Duì bu qǐ*, zhè shì wǒ de cuò.", translation: "Sorry, it's my fault." },
+      { text: "*对不起*，我不知道。", romanization: "*Duì bu qǐ*, wǒ bù zhīdào.", translation: "Sorry, I don't know." }
     ],
     7: [
       { text: "每天*早上*我喝咖啡。", romanization: "Měitiān *zǎoshang* wǒ hē kāfēi.", translation: "Every morning I drink coffee." },
       { text: "*早上*很冷很安静。", romanization: "*Zǎoshang* hěn lěng hěn ānjìng.", translation: "The morning was cold and quiet." },
-      { text: "*早上*好！", romanization: "*Zǎoshang* hǎo!", translation: "Good morning!" }
+      { text: "*早上*好！", romanization: "*Zǎoshang* hǎo!", translation: "Good morning!" },
+      { text: "我*早上*七点起床。", romanization: "Wǒ *zǎoshang* qī diǎn qǐchuáng.", translation: "I get up at seven in the morning." },
+      { text: "*早上*我去跑步。", romanization: "*Zǎoshang* wǒ qù pǎobù.", translation: "In the morning I go running." },
+      { text: "她*早上*喝茶。", romanization: "Tā *zǎoshang* hē chá.", translation: "She drinks tea in the morning." }
     ],
     8: [
       { text: "*晚上*我看书。", romanization: "*Wǎnshang* wǒ kànshū.", translation: "In the evening I read a book." },
       { text: "我们*晚上*一起吃饭。", romanization: "Wǒmen *wǎnshang* yìqǐ chīfàn.", translation: "We eat dinner together in the evening." },
-      { text: "*晚上*好！", romanization: "*Wǎnshang* hǎo!", translation: "Good evening!" }
+      { text: "*晚上*好！", romanization: "*Wǎnshang* hǎo!", translation: "Good evening!" },
+      { text: "*晚上*我们看电视。", romanization: "*Wǎnshang* wǒmen kàn diànshì.", translation: "In the evening we watch TV." },
+      { text: "他*晚上*十点睡觉。", romanization: "Tā *wǎnshang* shí diǎn shuìjiào.", translation: "He goes to bed at ten in the evening." },
+      { text: "今天*晚上*你有空吗？", romanization: "Jīntiān *wǎnshang* nǐ yǒu kòng ma?", translation: "Are you free this evening?" }
     ],
     9: [
       { text: "那*天*天气很好。", romanization: "Nà *tiān* tiānqì hěn hǎo.", translation: "That day, the weather was good." },
       { text: "这一*天*很特别。", romanization: "Zhè yì *tiān* hěn tèbié.", translation: "This day was special." },
-      { text: "那一*天*很长很累。", romanization: "Nà yì *tiān* hěn cháng hěn lèi.", translation: "That day was long and tiring." }
+      { text: "那一*天*很长很累。", romanization: "Nà yì *tiān* hěn cháng hěn lèi.", translation: "That day was long and tiring." },
+      { text: "我每*天*都学中文。", romanization: "Wǒ měi *tiān* dōu xué Zhōngwén.", translation: "I study Chinese every day." },
+      { text: "我们在北京住了三*天*。", romanization: "Wǒmen zài Běijīng zhùle sān *tiān*.", translation: "We stayed in Beijing for three days." },
+      { text: "一*天*有二十四个小时。", romanization: "Yì *tiān* yǒu èrshísì gè xiǎoshí.", translation: "A day has twenty-four hours." }
     ],
     10: [
       { text: "*夜晚*很安静。", romanization: "*Yèwǎn* hěn ānjìng.", translation: "The night is quiet." },
       { text: "我*夜晚*睡得很好。", romanization: "Wǒ *yèwǎn* shuì de hěn hǎo.", translation: "I sleep well at night." },
-      { text: "*夜晚*满天星星。", romanization: "*Yèwǎn* mǎntiān xīngxing.", translation: "The night was full of stars." }
+      { text: "*夜晚*满天星星。", romanization: "*Yèwǎn* mǎntiān xīngxing.", translation: "The night was full of stars." },
+      { text: "*夜晚*的城市很漂亮。", romanization: "*Yèwǎn* de chéngshì hěn piàoliang.", translation: "The city is beautiful at night." },
+      { text: "*夜晚*有点冷。", romanization: "*Yèwǎn* yǒudiǎn lěng.", translation: "The night is a bit cold." },
+      { text: "我喜欢安静的*夜晚*。", romanization: "Wǒ xǐhuan ānjìng de *yèwǎn*.", translation: "I like quiet nights." }
     ],
     11: [
       { text: "我可以要一杯*水*吗？", romanization: "Wǒ kěyǐ yào yì bēi *shuǐ* ma?", translation: "Can I have a glass of water?" },
       { text: "*水*很凉很新鲜。", romanization: "*Shuǐ* hěn liáng hěn xīnxiān.", translation: "The water is cold and fresh." },
-      { text: "他每天喝很多*水*。", romanization: "Tā měitiān hē hěn duō *shuǐ*.", translation: "He drinks a lot of water every day." }
+      { text: "他每天喝很多*水*。", romanization: "Tā měitiān hē hěn duō *shuǐ*.", translation: "He drinks a lot of water every day." },
+      { text: "我想喝*水*。", romanization: "Wǒ xiǎng hē *shuǐ*.", translation: "I want to drink water." },
+      { text: "*水*太冷了。", romanization: "*Shuǐ* tài lěng le.", translation: "The water is too cold." },
+      { text: "请给狗一点*水*。", romanization: "Qǐng gěi gǒu yìdiǎn *shuǐ*.", translation: "Please give the dog some water." }
     ],
     12: [
       { text: "*食物*很好吃。", romanization: "*Shíwù* hěn hǎochī.", translation: "The food was very good." },
       { text: "*食物*对健康很重要。", romanization: "*Shíwù* duì jiànkāng hěn zhòngyào.", translation: "Food is important for health." },
-      { text: "她自己做了*食物*。", romanization: "Tā zìjǐ zuòle *shíwù*.", translation: "She cooked the food herself." }
+      { text: "她自己做了*食物*。", romanization: "Tā zìjǐ zuòle *shíwù*.", translation: "She cooked the food herself." },
+      { text: "这里的*食物*很便宜。", romanization: "Zhèlǐ de *shíwù* hěn piányi.", translation: "The food here is cheap." },
+      { text: "我们需要买*食物*。", romanization: "Wǒmen xūyào mǎi *shíwù*.", translation: "We need to buy food." },
+      { text: "中国*食物*很好吃。", romanization: "Zhōngguó *shíwù* hěn hǎochī.", translation: "Chinese food is delicious." }
     ],
     13: [
       { text: "我每天早上喝*咖啡*。", romanization: "Wǒ měitiān zǎoshang hē *kāfēi*.", translation: "I drink coffee every morning." },
       { text: "一杯*咖啡*，谢谢。", romanization: "Yì bēi *kāfēi*, xièxie.", translation: "A coffee, please." },
-      { text: "*咖啡*很热很浓。", romanization: "*Kāfēi* hěn rè hěn nóng.", translation: "The coffee is hot and strong." }
+      { text: "*咖啡*很热很浓。", romanization: "*Kāfēi* hěn rè hěn nóng.", translation: "The coffee is hot and strong." },
+      { text: "你想喝*咖啡*吗？", romanization: "Nǐ xiǎng hē *kāfēi* ma?", translation: "Do you want to drink coffee?" },
+      { text: "这杯*咖啡*太甜了。", romanization: "Zhè bēi *kāfēi* tài tián le.", translation: "This cup of coffee is too sweet." },
+      { text: "他不喝*咖啡*。", romanization: "Tā bù hē *kāfēi*.", translation: "He doesn't drink coffee." }
     ],
     14: [
       { text: "我们在面包店买*面包*。", romanization: "Wǒmen zài miànbāodiàn mǎi *miànbāo*.", translation: "We buy bread at the bakery." },
       { text: "*面包*很新鲜很软。", romanization: "*Miànbāo* hěn xīnxiān hěn ruǎn.", translation: "The bread is fresh and soft." },
-      { text: "他早饭吃*面包*。", romanization: "Tā zǎofàn chī *miànbāo*.", translation: "He eats bread for breakfast." }
+      { text: "他早饭吃*面包*。", romanization: "Tā zǎofàn chī *miànbāo*.", translation: "He eats bread for breakfast." },
+      { text: "我想买*面包*。", romanization: "Wǒ xiǎng mǎi *miànbāo*.", translation: "I want to buy bread." },
+      { text: "*面包*在桌子上。", romanization: "*Miànbāo* zài zhuōzi shàng.", translation: "The bread is on the table." },
+      { text: "这个*面包*很好吃。", romanization: "Zhège *miànbāo* hěn hǎochī.", translation: "This bread is delicious." }
     ],
     15: [
       { text: "他们住在一个大*房子*里。", romanization: "Tāmen zhù zài yí ge dà *fángzi* lǐ.", translation: "They live in a big house." },
       { text: "我们的*房子*有三层。", romanization: "Wǒmen de *fángzi* yǒu sān céng.", translation: "Our house has three floors." },
-      { text: "*房子*在海边。", romanization: "*Fángzi* zài hǎibiān.", translation: "The house is by the sea." }
+      { text: "*房子*在海边。", romanization: "*Fángzi* zài hǎibiān.", translation: "The house is by the sea." },
+      { text: "我的*房子*很小。", romanization: "Wǒ de *fángzi* hěn xiǎo.", translation: "My house is small." },
+      { text: "这个*房子*很贵。", romanization: "Zhège *fángzi* hěn guì.", translation: "This house is expensive." },
+      { text: "他们买了新*房子*。", romanization: "Tāmen mǎile xīn *fángzi*.", translation: "They bought a new house." }
     ],
     16: [
       { text: "他开一辆红色的*汽车*。", romanization: "Tā kāi yí liàng hóngsè de *qìchē*.", translation: "He drives a red car." },
       { text: "*汽车*停在外面。", romanization: "*Qìchē* tíng zài wàimiàn.", translation: "The car is parked outside." },
-      { text: "我们想买一辆新*汽车*。", romanization: "Wǒmen xiǎng mǎi yí liàng xīn *qìchē*.", translation: "We're going to buy a new car." }
+      { text: "我们想买一辆新*汽车*。", romanization: "Wǒmen xiǎng mǎi yí liàng xīn *qìchē*.", translation: "We're going to buy a new car." },
+      { text: "我的*汽车*是白色的。", romanization: "Wǒ de *qìchē* shì báisè de.", translation: "My car is white." },
+      { text: "这辆*汽车*很贵。", romanization: "Zhè liàng *qìchē* hěn guì.", translation: "This car is expensive." },
+      { text: "街上有很多*汽车*。", romanization: "Jiē shàng yǒu hěn duō *qìchē*.", translation: "There are many cars on the street." }
     ],
     17: [
       { text: "我在看一本很有意思的*书*。", romanization: "Wǒ zài kàn yì běn hěn yǒu yìsi de *shū*.", translation: "I'm reading an exciting book." },
       { text: "*书*在桌子上。", romanization: "*Shū* zài zhuōzi shàng.", translation: "The book is on the table." },
-      { text: "她喜欢关于冒险的*书*。", romanization: "Tā xǐhuan guānyú màoxiǎn de *shū*.", translation: "She likes books about adventures." }
+      { text: "她喜欢关于冒险的*书*。", romanization: "Tā xǐhuan guānyú màoxiǎn de *shū*.", translation: "She likes books about adventures." },
+      { text: "我有很多*书*。", romanization: "Wǒ yǒu hěn duō *shū*.", translation: "I have many books." },
+      { text: "这本*书*很难。", romanization: "Zhè běn *shū* hěn nán.", translation: "This book is difficult." },
+      { text: "你的*书*在哪里？", romanization: "Nǐ de *shū* zài nǎlǐ?", translation: "Where is your book?" }
     ],
     18: [
       { text: "他是我最好的*朋友*。", romanization: "Tā shì wǒ zuì hǎo de *péngyou*.", translation: "He's my best friend." },
       { text: "我们周末见*朋友*。", romanization: "Wǒmen zhōumò jiàn *péngyou*.", translation: "We meet friends on the weekend." },
-      { text: "我的*朋友*住在隔壁。", romanization: "Wǒ de *péngyou* zhù zài gébì.", translation: "My friend lives next door." }
+      { text: "我的*朋友*住在隔壁。", romanization: "Wǒ de *péngyou* zhù zài gébì.", translation: "My friend lives next door." },
+      { text: "我在学校有很多*朋友*。", romanization: "Wǒ zài xuéxiào yǒu hěn duō *péngyou*.", translation: "I have many friends at school." },
+      { text: "她是我的新*朋友*。", romanization: "Tā shì wǒ de xīn *péngyou*.", translation: "She is my new friend." },
+      { text: "我和*朋友*去看电影。", romanization: "Wǒ hé *péngyou* qù kàn diànyǐng.", translation: "I go to the cinema with a friend." }
     ],
     19: [
       { text: "我的*家庭*很大很好。", romanization: "Wǒ de *jiātíng* hěn dà hěn hǎo.", translation: "My family is big and nice." },
       { text: "我们每年圣诞节都作为*家庭*团聚。", romanization: "Wǒmen měinián shèngdànjié dōu zuòwéi *jiātíng* tuánjù.", translation: "We gather as a family every Christmas." },
-      { text: "*家庭*一起吃晚饭。", romanization: "*Jiātíng* yìqǐ chī wǎnfàn.", translation: "The family eats dinner together." }
+      { text: "*家庭*一起吃晚饭。", romanization: "*Jiātíng* yìqǐ chī wǎnfàn.", translation: "The family eats dinner together." },
+      { text: "我爱我的*家庭*。", romanization: "Wǒ ài wǒ de *jiātíng*.", translation: "I love my family." },
+      { text: "他的*家庭*很小。", romanization: "Tā de *jiātíng* hěn xiǎo.", translation: "His family is small." },
+      { text: "这是一个快乐的*家庭*。", romanization: "Zhè shì yí gè kuàilè de *jiātíng*.", translation: "This is a happy family." }
     ],
     20: [
       { text: "我每天去*学校*。", romanization: "Wǒ měitiān qù *xuéxiào*.", translation: "I go to school every day." },
       { text: "*学校*离我家很近。", romanization: "*Xuéxiào* lí wǒ jiā hěn jìn.", translation: "The school is near my house." },
-      { text: "她在*学校*工作。", romanization: "Tā zài *xuéxiào* gōngzuò.", translation: "She works at a school." }
+      { text: "她在*学校*工作。", romanization: "Tā zài *xuéxiào* gōngzuò.", translation: "She works at a school." },
+      { text: "*学校*八点开始上课。", romanization: "*Xuéxiào* bā diǎn kāishǐ shàngkè.", translation: "School starts at eight." },
+      { text: "我们的*学校*很大。", romanization: "Wǒmen de *xuéxiào* hěn dà.", translation: "Our school is big." },
+      { text: "孩子们在*学校*吃午饭。", romanization: "Háizimen zài *xuéxiào* chī wǔfàn.", translation: "The children eat lunch at school." }
     ],
     21: [
       { text: "一个*男人*从我们身边走过。", romanization: "Yí ge *nánrén* cóng wǒmen shēnbiān zǒuguò.", translation: "A man walked past us." },
       { text: "窗边的*男人*很友好。", romanization: "Chuāngbiān de *nánrén* hěn yǒuhǎo.", translation: "The man by the window is nice." },
-      { text: "一个高*男人*走进商店。", romanization: "Yí ge gāo *nánrén* zǒujìn shāngdiàn.", translation: "A tall man entered the shop." }
+      { text: "一个高*男人*走进商店。", romanization: "Yí ge gāo *nánrén* zǒujìn shāngdiàn.", translation: "A tall man entered the shop." },
+      { text: "那个*男人*是我的老师。", romanization: "Nàge *nánrén* shì wǒ de lǎoshī.", translation: "That man is my teacher." },
+      { text: "这个*男人*很高。", romanization: "Zhège *nánrén* hěn gāo.", translation: "This man is tall." },
+      { text: "门口有一个*男人*。", romanization: "Ménkǒu yǒu yí gè *nánrén*.", translation: "There is a man at the door." }
     ],
     22: [
       { text: "一个*女人*今天给我打电话了。", romanization: "Yí ge *nǚrén* jīntiān gěi wǒ dǎ diànhuà le.", translation: "A woman called me today." },
       { text: "那个*女人*很有礼貌。", romanization: "Nà ge *nǚrén* hěn yǒu lǐmào.", translation: "The woman was very polite." },
-      { text: "管理公司的*女人*很能干。", romanization: "Guǎnlǐ gōngsī de *nǚrén* hěn nénggàn.", translation: "The woman who runs the company is skilled." }
+      { text: "管理公司的*女人*很能干。", romanization: "Guǎnlǐ gōngsī de *nǚrén* hěn nénggàn.", translation: "The woman who runs the company is skilled." },
+      { text: "那个*女人*是医生。", romanization: "Nàge *nǚrén* shì yīshēng.", translation: "That woman is a doctor." },
+      { text: "一个*女人*在唱歌。", romanization: "Yí gè *nǚrén* zài chàng gē.", translation: "A woman is singing." },
+      { text: "这个*女人*很漂亮。", romanization: "Zhège *nǚrén* hěn piàoliang.", translation: "This woman is beautiful." }
     ],
     23: [
       { text: "那个*孩子*很乖。", romanization: "Nà ge *háizi* hěn guāi.", translation: "That child is very kind." },
       { text: "*孩子*在花园里玩。", romanization: "*Háizi* zài huāyuán lǐ wán.", translation: "The child is playing in the garden." },
-      { text: "我们家有三个*孩子*。", romanization: "Wǒmen jiā yǒu sān ge *háizi*.", translation: "We have three children at home." }
+      { text: "我们家有三个*孩子*。", romanization: "Wǒmen jiā yǒu sān ge *háizi*.", translation: "We have three children at home." },
+      { text: "*孩子*在睡觉。", romanization: "*Háizi* zài shuìjiào.", translation: "The child is sleeping." },
+      { text: "她有两个*孩子*。", romanization: "Tā yǒu liǎng gè *háizi*.", translation: "She has two children." },
+      { text: "*孩子*们喜欢冰淇淋。", romanization: "*Háizi*men xǐhuan bīngqílín.", translation: "The children like ice cream." }
     ],
     24: [
       { text: "*女孩*的头发是红色的。", romanization: "*Nǚhái* de tóufa shì hóngsè de.", translation: "The girl has red hair." },
       { text: "一个年轻的*女孩*坐在长椅上。", romanization: "Yí ge niánqīng de *nǚhái* zuò zài chángyǐ shàng.", translation: "A young girl sat on the bench." },
-      { text: "我的*女孩*八岁了。", romanization: "Wǒ de *nǚhái* bā suì le.", translation: "My daughter is eight years old." }
+      { text: "我的*女孩*八岁了。", romanization: "Wǒ de *nǚhái* bā suì le.", translation: "My daughter is eight years old." },
+      { text: "那个*女孩*在看书。", romanization: "Nàge *nǚhái* zài kàn shū.", translation: "That girl is reading." },
+      { text: "这个*女孩*十岁。", romanization: "Zhège *nǚhái* shí suì.", translation: "This girl is ten years old." },
+      { text: "*女孩*喜欢画画。", romanization: "*Nǚhái* xǐhuan huà huà.", translation: "The girl likes drawing." }
     ],
     25: [
       { text: "*男孩*在踢足球。", romanization: "*Nánhái* zài tī zúqiú.", translation: "The boy plays football." },
       { text: "一个小*男孩*大声喊叫。", romanization: "Yí ge xiǎo *nánhái* dàshēng hǎnjiào.", translation: "A small boy shouted loudly." },
-      { text: "我的*男孩*喜欢音乐。", romanization: "Wǒ de *nánhái* xǐhuan yīnyuè.", translation: "My boy likes music." }
+      { text: "我的*男孩*喜欢音乐。", romanization: "Wǒ de *nánhái* xǐhuan yīnyuè.", translation: "My boy likes music." },
+      { text: "那个*男孩*跑得很快。", romanization: "Nàge *nánhái* pǎo de hěn kuài.", translation: "That boy runs very fast." },
+      { text: "这个*男孩*是我的儿子。", romanization: "Zhège *nánhái* shì wǒ de érzi.", translation: "This boy is my son." },
+      { text: "*男孩*在吃苹果。", romanization: "*Nánhái* zài chī píngguǒ.", translation: "The boy is eating an apple." }
     ],
     26: [
       { text: "我的*母亲*是老师。", romanization: "Wǒ de *mǔqīn* shì lǎoshī.", translation: "My mother is a teacher." },
       { text: "*母亲*每天晚上做饭。", romanization: "*Mǔqīn* měitiān wǎnshang zuòfàn.", translation: "Mother cooks every evening." },
-      { text: "我经常给*母亲*打电话。", romanization: "Wǒ jīngcháng gěi *mǔqīn* dǎ diànhuà.", translation: "I call my mother often." }
+      { text: "我经常给*母亲*打电话。", romanization: "Wǒ jīngcháng gěi *mǔqīn* dǎ diànhuà.", translation: "I call my mother often." },
+      { text: "我的*母亲*很忙。", romanization: "Wǒ de *mǔqīn* hěn máng.", translation: "My mother is busy." },
+      { text: "*母亲*在厨房做饭。", romanization: "*Mǔqīn* zài chúfáng zuò fàn.", translation: "Mother is cooking in the kitchen." },
+      { text: "我爱我的*母亲*。", romanization: "Wǒ ài wǒ de *mǔqīn*.", translation: "I love my mother." }
     ],
     27: [
       { text: "我的*父亲*是工程师。", romanization: "Wǒ de *fùqīn* shì gōngchéngshī.", translation: "My father works as an engineer." },
       { text: "*父亲*送我们去学校。", romanization: "*Fùqīn* sòng wǒmen qù xuéxiào.", translation: "Father drives us to school." },
-      { text: "我为*父亲*感到骄傲。", romanization: "Wǒ wèi *fùqīn* gǎndào jiāo'ào.", translation: "I'm proud of my father." }
+      { text: "我为*父亲*感到骄傲。", romanization: "Wǒ wèi *fùqīn* gǎndào jiāo'ào.", translation: "I'm proud of my father." },
+      { text: "我的*父亲*在医院工作。", romanization: "Wǒ de *fùqīn* zài yīyuàn gōngzuò.", translation: "My father works at the hospital." },
+      { text: "*父亲*每天看报纸。", romanization: "*Fùqīn* měi tiān kàn bàozhǐ.", translation: "Father reads the newspaper every day." },
+      { text: "*父亲*开车很慢。", romanization: "*Fùqīn* kāichē hěn màn.", translation: "Father drives very slowly." }
     ],
     28: [
       { text: "我*姐妹*比我小三岁。", romanization: "Wǒ *jiěmèi* bǐ wǒ xiǎo sān suì.", translation: "My sister is three years younger." },
       { text: "我*姐妹*学医。", romanization: "Wǒ *jiěmèi* xué yī.", translation: "My sister studies medicine." },
-      { text: "我和*姐妹*都喜欢旅行。", romanization: "Wǒ hé *jiěmèi* dōu xǐhuan lǚxíng.", translation: "My sister and I love to travel." }
+      { text: "我和*姐妹*都喜欢旅行。", romanization: "Wǒ hé *jiěmèi* dōu xǐhuan lǚxíng.", translation: "My sister and I love to travel." },
+      { text: "她有两个*姐妹*。", romanization: "Tā yǒu liǎng gè *jiěmèi*.", translation: "She has two sisters." },
+      { text: "我的*姐妹*住在上海。", romanization: "Wǒ de *jiěmèi* zhù zài Shànghǎi.", translation: "My sister lives in Shanghai." },
+      { text: "你有*姐妹*吗？", romanization: "Nǐ yǒu *jiěmèi* ma?", translation: "Do you have sisters?" }
     ],
     29: [
       { text: "我*兄弟*比我高。", romanization: "Wǒ *xiōngdì* bǐ wǒ gāo.", translation: "My brother is taller than me." },
       { text: "我*兄弟*弹吉他。", romanization: "Wǒ *xiōngdì* tán jítā.", translation: "My brother plays guitar." },
-      { text: "我和*兄弟*是好朋友。", romanization: "Wǒ hé *xiōngdì* shì hǎo péngyou.", translation: "My brother and I are good friends." }
+      { text: "我和*兄弟*是好朋友。", romanization: "Wǒ hé *xiōngdì* shì hǎo péngyou.", translation: "My brother and I are good friends." },
+      { text: "你有*兄弟*吗？", romanization: "Nǐ yǒu *xiōngdì* ma?", translation: "Do you have brothers?" },
+      { text: "我的*兄弟*是医生。", romanization: "Wǒ de *xiōngdì* shì yīshēng.", translation: "My brother is a doctor." },
+      { text: "他有三个*兄弟*。", romanization: "Tā yǒu sān gè *xiōngdì*.", translation: "He has three brothers." }
     ],
     30: [
       { text: "我*奶奶*住在农村。", romanization: "Wǒ *nǎinai* zhù zài nóngcūn.", translation: "My grandmother lives in the countryside." },
       { text: "*奶奶*每个星期天做蛋糕。", romanization: "*Nǎinai* měige xīngqītiān zuò dàngāo.", translation: "My grandmother bakes cakes every Sunday." },
-      { text: "我经常去看*奶奶*。", romanization: "Wǒ jīngcháng qù kàn *nǎinai*.", translation: "I often visit my grandmother." }
+      { text: "我经常去看*奶奶*。", romanization: "Wǒ jīngcháng qù kàn *nǎinai*.", translation: "I often visit my grandmother." },
+      { text: "*奶奶*今年八十岁。", romanization: "*Nǎinai* jīnnián bāshí suì.", translation: "Grandma is eighty this year." },
+      { text: "*奶奶*做的饭很好吃。", romanization: "*Nǎinai* zuò de fàn hěn hǎochī.", translation: "Grandma's cooking is delicious." },
+      { text: "我给*奶奶*打电话。", romanization: "Wǒ gěi *nǎinai* dǎ diànhuà.", translation: "I call grandma." }
     ],
     31: [
       { text: "一座*大*房子在山上。", romanization: "Yí zuò *dà* fángzi zài shān shàng.", translation: "A big house sits on the hill." },
       { text: "他有一只*大*狗。", romanization: "Tā yǒu yì zhī *dà* gǒu.", translation: "He has a big dog." },
-      { text: "这座城市很*大*。", romanization: "Zhè zuò chéngshì hěn *dà*.", translation: "The city is very big." }
+      { text: "这座城市很*大*。", romanization: "Zhè zuò chéngshì hěn *dà*.", translation: "The city is very big." },
+      { text: "这个苹果很*大*。", romanization: "Zhège píngguǒ hěn *dà*.", translation: "This apple is big." },
+      { text: "我们家有一个*大*花园。", romanization: "Wǒmen jiā yǒu yí gè *dà* huāyuán.", translation: "Our home has a big garden." },
+      { text: "北京是一个*大*城市。", romanization: "Běijīng shì yí gè *dà* chéngshì.", translation: "Beijing is a big city." }
     ],
     32: [
       { text: "一个*小*孩子在公园里玩。", romanization: "Yí ge *xiǎo* háizi zài gōngyuán lǐ wán.", translation: "A small child plays in the park." },
       { text: "她有一只*小*狗。", romanization: "Tā yǒu yì zhī *xiǎo* gǒu.", translation: "She has a small dog." },
-      { text: "这个房间很*小*。", romanization: "Zhège fángjiān hěn *xiǎo*.", translation: "The room is quite small." }
+      { text: "这个房间很*小*。", romanization: "Zhège fángjiān hěn *xiǎo*.", translation: "The room is quite small." },
+      { text: "我的房间很*小*。", romanization: "Wǒ de fángjiān hěn *xiǎo*.", translation: "My room is small." },
+      { text: "这件衣服太*小*了。", romanization: "Zhè jiàn yīfu tài *xiǎo* le.", translation: "This piece of clothing is too small." },
+      { text: "她住在一个*小*城市。", romanization: "Tā zhù zài yí gè *xiǎo* chéngshì.", translation: "She lives in a small city." }
     ],
     33: [
       { text: "这是一本*好*书。", romanization: "Zhè shì yì běn *hǎo* shū.", translation: "This is a good book." },
       { text: "食物味道很*好*。", romanization: "Shíwù wèidào hěn *hǎo*.", translation: "The food tastes very good." },
-      { text: "今天天气很*好*。", romanization: "Jīntiān tiānqì hěn *hǎo*.", translation: "The weather is good today." }
+      { text: "今天天气很*好*。", romanization: "Jīntiān tiānqì hěn *hǎo*.", translation: "The weather is good today." },
+      { text: "他是一个*好*人。", romanization: "Tā shì yí gè *hǎo* rén.", translation: "He is a good person." },
+      { text: "这个主意很*好*。", romanization: "Zhège zhǔyi hěn *hǎo*.", translation: "This idea is good." },
+      { text: "你的中文很*好*。", romanization: "Nǐ de Zhōngwén hěn *hǎo*.", translation: "Your Chinese is good." }
     ],
     34: [
       { text: "牛奶*坏*了。", romanization: "Niúnǎi *huài* le.", translation: "The milk has gone bad." },
       { text: "他有一个*坏*习惯。", romanization: "Tā yǒu yí ge *huài* xíguàn.", translation: "He has a bad habit." },
-      { text: "那台电脑*坏*了。", romanization: "Nà tái diànnǎo *huài* le.", translation: "That computer is broken." }
+      { text: "那台电脑*坏*了。", romanization: "Nà tái diànnǎo *huài* le.", translation: "That computer is broken." },
+      { text: "我的手机*坏*了。", romanization: "Wǒ de shǒujī *huài* le.", translation: "My phone is broken." },
+      { text: "他不是*坏*人。", romanization: "Tā bú shì *huài* rén.", translation: "He isn't a bad person." },
+      { text: "这个苹果*坏*了。", romanization: "Zhège píngguǒ *huài* le.", translation: "This apple has gone bad." }
     ],
     35: [
       { text: "我买了一部*新*手机。", romanization: "Wǒ mǎile yí bù *xīn* shǒujī.", translation: "I bought a new phone." },
       { text: "这是图书馆的*新*书。", romanization: "Zhè shì túshūguǎn de *xīn* shū.", translation: "This is a new book from the library." },
-      { text: "我们搬到一个*新*城市。", romanization: "Wǒmen bān dào yí ge *xīn* chéngshì.", translation: "We're moving to a new city." }
+      { text: "我们搬到一个*新*城市。", romanization: "Wǒmen bān dào yí ge *xīn* chéngshì.", translation: "We're moving to a new city." },
+      { text: "我有一个*新*朋友。", romanization: "Wǒ yǒu yí gè *xīn* péngyou.", translation: "I have a new friend." },
+      { text: "这是我的*新*车。", romanization: "Zhè shì wǒ de *xīn* chē.", translation: "This is my new car." },
+      { text: "她穿了*新*衣服。", romanization: "Tā chuānle *xīn* yīfu.", translation: "She is wearing new clothes." }
     ],
     36: [
       { text: "房子很*旧*很漂亮。", romanization: "Fángzi hěn *jiù* hěn piàoliang.", translation: "The house is old and beautiful." },
       { text: "她有一辆*旧*车。", romanization: "Tā yǒu yí liàng *jiù* chē.", translation: "She has an old car." },
-      { text: "这是一本*旧*书。", romanization: "Zhè shì yì běn *jiù* shū.", translation: "This is an old book." }
+      { text: "这是一本*旧*书。", romanization: "Zhè shì yì běn *jiù* shū.", translation: "This is an old book." },
+      { text: "这件衣服很*旧*。", romanization: "Zhè jiàn yīfu hěn *jiù*.", translation: "This piece of clothing is old." },
+      { text: "我的手机太*旧*了。", romanization: "Wǒ de shǒujī tài *jiù* le.", translation: "My phone is too old." },
+      { text: "我们住在一个*旧*房子里。", romanization: "Wǒmen zhù zài yí gè *jiù* fángzi lǐ.", translation: "We live in an old house." }
     ],
     37: [
       { text: "冬天喝*暖和*的咖啡很好。", romanization: "Dōngtiān hē *nuǎnhuo* de kāfēi hěn hǎo.", translation: "Warm coffee tastes good in winter." },
       { text: "房间里很*暖和*。", romanization: "Fángjiān lǐ hěn *nuǎnhuo*.", translation: "It's warm in the room." },
-      { text: "去年夏天很*暖和*。", romanization: "Qùnián xiàtiān hěn *nuǎnhuo*.", translation: "Last summer was warm." }
+      { text: "去年夏天很*暖和*。", romanization: "Qùnián xiàtiān hěn *nuǎnhuo*.", translation: "Last summer was warm." },
+      { text: "今天很*暖和*。", romanization: "Jīntiān hěn *nuǎnhuo*.", translation: "It's warm today." },
+      { text: "这件毛衣很*暖和*。", romanization: "Zhè jiàn máoyī hěn *nuǎnhuo*.", translation: "This sweater is warm." },
+      { text: "春天天气*暖和*。", romanization: "Chūntiān tiānqì *nuǎnhuo*.", translation: "The weather is warm in spring." }
     ],
     38: [
       { text: "今天刮*冷*风。", romanization: "Jīntiān guā *lěng* fēng.", translation: "A cold wind is blowing today." },
       { text: "*冷*牛奶很爽口。", romanization: "*Lěng* niúnǎi hěn shuǎngkǒu.", translation: "Cold milk is refreshing." },
-      { text: "今晚外面很*冷*。", romanization: "Jīnwǎn wàimiàn hěn *lěng*.", translation: "It's cold outside tonight." }
+      { text: "今晚外面很*冷*。", romanization: "Jīnwǎn wàimiàn hěn *lěng*.", translation: "It's cold outside tonight." },
+      { text: "水太*冷*了。", romanization: "Shuǐ tài *lěng* le.", translation: "The water is too cold." },
+      { text: "北京的冬天很*冷*。", romanization: "Běijīng de dōngtiān hěn *lěng*.", translation: "Winter in Beijing is cold." },
+      { text: "我的手很*冷*。", romanization: "Wǒ de shǒu hěn *lěng*.", translation: "My hands are cold." }
     ],
     39: [
       { text: "他开车太*快*了。", romanization: "Tā kāichē tài *kuài* le.", translation: "He drives too fast." },
       { text: "她跑得很*快*。", romanization: "Tā pǎo de hěn *kuài*.", translation: "She's a fast runner." },
-      { text: "火车很*快*。", romanization: "Huǒchē hěn *kuài*.", translation: "The train was very fast." }
+      { text: "火车很*快*。", romanization: "Huǒchē hěn *kuài*.", translation: "The train was very fast." },
+      { text: "他吃饭吃得很*快*。", romanization: "Tā chī fàn chī de hěn *kuài*.", translation: "He eats very fast." },
+      { text: "请*快*一点！", romanization: "Qǐng *kuài* yìdiǎn!", translation: "Please hurry up!" },
+      { text: "时间过得很*快*。", romanization: "Shíjiān guò de hěn *kuài*.", translation: "Time passes quickly." }
     ],
     40: [
       { text: "*慢*而稳赢得比赛。", romanization: "*Màn* ér wěn yíngdé bǐsài.", translation: "Slow and steady wins the race." },
       { text: "他*慢慢*地走过公园。", romanization: "Tā *mànmàn* de zǒuguò gōngyuán.", translation: "He walked slowly through the park." },
-      { text: "音乐播放得很*慢*很柔和。", romanization: "Yīnyuè bōfàng de hěn *màn* hěn róuhé.", translation: "The music played slow and soft." }
+      { text: "音乐播放得很*慢*很柔和。", romanization: "Yīnyuè bōfàng de hěn *màn* hěn róuhé.", translation: "The music played slow and soft." },
+      { text: "请*慢*一点说。", romanization: "Qǐng *màn* yìdiǎn shuō.", translation: "Please speak more slowly." },
+      { text: "我的电脑很*慢*。", romanization: "Wǒ de diànnǎo hěn *màn*.", translation: "My computer is slow." },
+      { text: "奶奶走路很*慢*。", romanization: "Nǎinai zǒulù hěn *màn*.", translation: "Grandma walks slowly." }
     ],
     41: [
       { text: "*我*叫马克。", romanization: "*Wǒ* jiào Mǎkè.", translation: "My name is Mark." },
       { text: "*我*喜欢看书。", romanization: "*Wǒ* xǐhuan kànshū.", translation: "I like to read books." },
-      { text: "*我*爱音乐。", romanization: "*Wǒ* ài yīnyuè.", translation: "I love music." }
+      { text: "*我*爱音乐。", romanization: "*Wǒ* ài yīnyuè.", translation: "I love music." },
+      { text: "*我*是中国人。", romanization: "*Wǒ* shì Zhōngguó rén.", translation: "I am Chinese." },
+      { text: "*我*很饿。", romanization: "*Wǒ* hěn è.", translation: "I am very hungry." },
+      { text: "*我*住在北京。", romanization: "*Wǒ* zhù zài Běijīng.", translation: "I live in Beijing." }
     ],
     42: [
       { text: "*你*是一个好朋友。", romanization: "*Nǐ* shì yí ge hǎo péngyou.", translation: "You are a good friend." },
       { text: "*你*住在哪里？", romanization: "*Nǐ* zhù zài nǎlǐ?", translation: "Where do you live?" },
-      { text: "今晚*你*来吗？", romanization: "Jīnwǎn *nǐ* lái ma?", translation: "Are you coming tonight?" }
+      { text: "今晚*你*来吗？", romanization: "Jīnwǎn *nǐ* lái ma?", translation: "Are you coming tonight?" },
+      { text: "*你*叫什么名字？", romanization: "*Nǐ* jiào shénme míngzi?", translation: "What's your name?" },
+      { text: "*你*喜欢喝茶吗？", romanization: "*Nǐ* xǐhuan hē chá ma?", translation: "Do you like tea?" },
+      { text: "*你*今天忙吗？", romanization: "*Nǐ* jīntiān máng ma?", translation: "Are you busy today?" }
     ],
     43: [
       { text: "*他*是学校的老师。", romanization: "*Tā* shì xuéxiào de lǎoshī.", translation: "He is a teacher at the school." },
       { text: "*他*每周踢足球。", romanization: "*Tā* měizhōu tī zúqiú.", translation: "He plays football every week." },
-      { text: "*他*来自德国。", romanization: "*Tā* láizì Déguó.", translation: "He comes from Germany." }
+      { text: "*他*来自德国。", romanization: "*Tā* láizì Déguó.", translation: "He comes from Germany." },
+      { text: "*他*是我的哥哥。", romanization: "*Tā* shì wǒ de gēge.", translation: "He is my older brother." },
+      { text: "*他*喜欢打篮球。", romanization: "*Tā* xǐhuan dǎ lánqiú.", translation: "He likes playing basketball." },
+      { text: "*他*在家吗？", romanization: "*Tā* zài jiā ma?", translation: "Is he at home?" }
     ],
     44: [
       { text: "*她*是一个有才华的音乐家。", romanization: "*Tā* shì yí ge yǒu cáihuá de yīnyuèjiā.", translation: "She is a talented musician." },
       { text: "*她*是医生。", romanization: "*Tā* shì yīshēng.", translation: "She works as a doctor." },
-      { text: "*她*来自西班牙。", romanization: "*Tā* láizì Xībānyá.", translation: "She comes from Spain." }
+      { text: "*她*来自西班牙。", romanization: "*Tā* láizì Xībānyá.", translation: "She comes from Spain." },
+      { text: "*她*是我的妈妈。", romanization: "*Tā* shì wǒ de māma.", translation: "She is my mother." },
+      { text: "*她*喜欢唱歌。", romanization: "*Tā* xǐhuan chàng gē.", translation: "She likes singing." },
+      { text: "*她*今天很累。", romanization: "*Tā* jīntiān hěn lèi.", translation: "She is tired today." }
     ],
     45: [
       { text: "*我们*今晚去看电影。", romanization: "*Wǒmen* jīnwǎn qù kàn diànyǐng.", translation: "We're going to the movies tonight." },
       { text: "*我们*住在同一个城市。", romanization: "*Wǒmen* zhù zài tóng yí ge chéngshì.", translation: "We live in the same city." },
-      { text: "*我们*要去西班牙旅行。", romanization: "*Wǒmen* yào qù Xībānyá lǚxíng.", translation: "We're going to travel to Spain." }
+      { text: "*我们*要去西班牙旅行。", romanization: "*Wǒmen* yào qù Xībānyá lǚxíng.", translation: "We're going to travel to Spain." },
+      { text: "*我们*是好朋友。", romanization: "*Wǒmen* shì hǎo péngyou.", translation: "We are good friends." },
+      { text: "*我们*一起吃饭吧。", romanization: "*Wǒmen* yìqǐ chī fàn ba.", translation: "Let's eat together." },
+      { text: "*我们*明天去公园。", romanization: "*Wǒmen* míngtiān qù gōngyuán.", translation: "We are going to the park tomorrow." }
     ],
     46: [
       { text: "今晚*你们*去哪儿？", romanization: "Jīnwǎn *nǐmen* qù nǎr?", translation: "Where are you all going tonight?" },
       { text: "*你们*都欢迎来参加派对。", romanization: "*Nǐmen* dōu huānyíng lái cānjiā pàiduì.", translation: "You're all welcome to the party." },
-      { text: "*你们*一起来吗？", romanization: "*Nǐmen* yìqǐ lái ma?", translation: "Are you all coming together?" }
+      { text: "*你们*一起来吗？", romanization: "*Nǐmen* yìqǐ lái ma?", translation: "Are you all coming together?" },
+      { text: "*你们*是学生吗？", romanization: "*Nǐmen* shì xuésheng ma?", translation: "Are you all students?" },
+      { text: "*你们*在做什么？", romanization: "*Nǐmen* zài zuò shénme?", translation: "What are you all doing?" },
+      { text: "*你们*想吃什么？", romanization: "*Nǐmen* xiǎng chī shénme?", translation: "What do you all want to eat?" }
     ],
     47: [
       { text: "*他们*是很友好的人。", romanization: "*Tāmen* shì hěn yǒuhǎo de rén.", translation: "They are very kind people." },
       { text: "*他们*明天来。", romanization: "*Tāmen* míngtiān lái.", translation: "They're coming tomorrow." },
-      { text: "我很喜欢*他们*。", romanization: "Wǒ hěn xǐhuan *tāmen*.", translation: "I like them very much." }
+      { text: "我很喜欢*他们*。", romanization: "Wǒ hěn xǐhuan *tāmen*.", translation: "I like them very much." },
+      { text: "*他们*住在上海。", romanization: "*Tāmen* zhù zài Shànghǎi.", translation: "They live in Shanghai." },
+      { text: "*他们*有两个孩子。", romanization: "*Tāmen* yǒu liǎng gè háizi.", translation: "They have two children." },
+      { text: "*他们*在公园玩。", romanization: "*Tāmen* zài gōngyuán wán.", translation: "They are playing in the park." }
     ],
     48: [
       { text: "这是*我的*书。", romanization: "Zhè shì *wǒ de* shū.", translation: "This is my book." },
       { text: "*我的*朋友叫路易斯。", romanization: "*Wǒ de* péngyou jiào Lùyìsī.", translation: "My friend's name is Luis." },
-      { text: "这是*我的*房子。", romanization: "Zhè shì *wǒ de* fángzi.", translation: "This is my house." }
+      { text: "这是*我的*房子。", romanization: "Zhè shì *wǒ de* fángzi.", translation: "This is my house." },
+      { text: "*我的*猫很胖。", romanization: "*Wǒ de* māo hěn pàng.", translation: "My cat is fat." },
+      { text: "*我的*手机在哪里？", romanization: "*Wǒ de* shǒujī zài nǎlǐ?", translation: "Where is my phone?" },
+      { text: "*我的*老师很好。", romanization: "*Wǒ de* lǎoshī hěn hǎo.", translation: "My teacher is nice." }
     ],
     49: [
       { text: "这是*你的*手机吗？", romanization: "Zhè shì *nǐ de* shǒujī ma?", translation: "Is this your phone?" },
       { text: "*你的*家庭很好。", romanization: "*Nǐ de* jiātíng hěn hǎo.", translation: "Your family is nice." },
-      { text: "我喜欢*你的*新外套。", romanization: "Wǒ xǐhuan *nǐ de* xīn wàitào.", translation: "I like your new jacket." }
+      { text: "我喜欢*你的*新外套。", romanization: "Wǒ xǐhuan *nǐ de* xīn wàitào.", translation: "I like your new jacket." },
+      { text: "*你的*名字很好听。", romanization: "*Nǐ de* míngzi hěn hǎotīng.", translation: "Your name sounds nice." },
+      { text: "*你的*书在桌子上。", romanization: "*Nǐ de* shū zài zhuōzi shàng.", translation: "Your book is on the table." },
+      { text: "这是*你的*包吗？", romanization: "Zhè shì *nǐ de* bāo ma?", translation: "Is this your bag?" }
     ],
     50: [
       { text: "这是*我们的*房子。", romanization: "Zhè shì *wǒmen de* fángzi.", translation: "This is our house." },
       { text: "*我们的*学校离市中心很近。", romanization: "*Wǒmen de* xuéxiào lí shìzhōngxīn hěn jìn.", translation: "Our school is near the center." },
-      { text: "*我们的*家庭很大。", romanization: "*Wǒmen de* jiātíng hěn dà.", translation: "Our family is big." }
+      { text: "*我们的*家庭很大。", romanization: "*Wǒmen de* jiātíng hěn dà.", translation: "Our family is big." },
+      { text: "*我们的*老师很年轻。", romanization: "*Wǒmen de* lǎoshī hěn niánqīng.", translation: "Our teacher is young." },
+      { text: "*我们的*车是蓝色的。", romanization: "*Wǒmen de* chē shì lánsè de.", translation: "Our car is blue." },
+      { text: "这是*我们的*教室。", romanization: "Zhè shì *wǒmen de* jiàoshì.", translation: "This is our classroom." }
     ],
     51: [
       { text: "他*是*老师。", romanization: "Tā *shì* lǎoshī.", translation: "He is a teacher." },
       { text: "她*是*医生。", romanization: "Tā *shì* yīshēng.", translation: "She is a doctor." },
-      { text: "这*是*一本好书。", romanization: "Zhè *shì* yì běn hǎo shū.", translation: "This is a good book." }
+      { text: "这*是*一本好书。", romanization: "Zhè *shì* yì běn hǎo shū.", translation: "This is a good book." },
+      { text: "我*是*中国人。", romanization: "Wǒ *shì* Zhōngguó rén.", translation: "I am Chinese." },
+      { text: "那*是*我的车。", romanization: "Nà *shì* wǒ de chē.", translation: "That is my car." },
+      { text: "他们*是*我的父母。", romanization: "Tāmen *shì* wǒ de fùmǔ.", translation: "They are my parents." }
     ],
     52: [
       { text: "我*有*一只猫。", romanization: "Wǒ *yǒu* yì zhī māo.", translation: "I have a cat." },
       { text: "我们没*有*很多时间。", romanization: "Wǒmen méi *yǒu* hěn duō shíjiān.", translation: "We don't have much time." },
-      { text: "她想*有*一只狗。", romanization: "Tā xiǎng *yǒu* yì zhī gǒu.", translation: "She wishes to have a dog." }
+      { text: "她想*有*一只狗。", romanization: "Tā xiǎng *yǒu* yì zhī gǒu.", translation: "She wishes to have a dog." },
+      { text: "他*有*一辆车。", romanization: "Tā *yǒu* yí liàng chē.", translation: "He has a car." },
+      { text: "你*有*时间吗？", romanization: "Nǐ *yǒu* shíjiān ma?", translation: "Do you have time?" },
+      { text: "我们*有*三个孩子。", romanization: "Wǒmen *yǒu* sān gè háizi.", translation: "We have three children." }
     ],
     53: [
       { text: "我每天*去*学校。", romanization: "Wǒ měitiān *qù* xuéxiào.", translation: "I go to school every day." },
       { text: "我们*去*散步吧。", romanization: "Wǒmen *qù* sànbù ba.", translation: "Shall we go for a walk?" },
-      { text: "她马上*去*上班。", romanization: "Tā mǎshàng *qù* shàngbān.", translation: "She's going to work right away." }
+      { text: "她马上*去*上班。", romanization: "Tā mǎshàng *qù* shàngbān.", translation: "She's going to work right away." },
+      { text: "你想*去*哪里？", romanization: "Nǐ xiǎng *qù* nǎlǐ?", translation: "Where do you want to go?" },
+      { text: "我明天*去*北京。", romanization: "Wǒ míngtiān *qù* Běijīng.", translation: "I'm going to Beijing tomorrow." },
+      { text: "他们*去*商店了。", romanization: "Tāmen *qù* shāngdiàn le.", translation: "They went to the shop." }
     ],
     54: [
       { text: "我马上*来*。", romanization: "Wǒ mǎshàng *lái*.", translation: "I'll come soon." },
       { text: "你能*来*这里吗？", romanization: "Nǐ néng *lái* zhèlǐ ma?", translation: "Can you come here?" },
-      { text: "他*来*自德国。", romanization: "Tā *lái* zì Déguó.", translation: "He comes from Germany." }
+      { text: "他*来*自德国。", romanization: "Tā *lái* zì Déguó.", translation: "He comes from Germany." },
+      { text: "你什么时候*来*？", romanization: "Nǐ shénme shíhou *lái*?", translation: "When are you coming?" },
+      { text: "请*来*我家吃饭。", romanization: "Qǐng *lái* wǒ jiā chī fàn.", translation: "Please come to my home for a meal." },
+      { text: "她明天*来*看我。", romanization: "Tā míngtiān *lái* kàn wǒ.", translation: "She is coming to see me tomorrow." }
     ],
     55: [
       { text: "你现在在*做*什么？", romanization: "Nǐ xiànzài zài *zuò* shénme?", translation: "What are you doing now?" },
       { text: "我会*做*到最好。", romanization: "Wǒ huì *zuò* dào zuì hǎo.", translation: "I will do my best." },
-      { text: "我们得*做*作业。", romanization: "Wǒmen děi *zuò* zuòyè.", translation: "We have to do our homework." }
+      { text: "我们得*做*作业。", romanization: "Wǒmen děi *zuò* zuòyè.", translation: "We have to do our homework." },
+      { text: "我今天要*做*很多事。", romanization: "Wǒ jīntiān yào *zuò* hěn duō shì.", translation: "I have a lot to do today." },
+      { text: "你周末*做*什么？", romanization: "Nǐ zhōumò *zuò* shénme?", translation: "What do you do at the weekend?" },
+      { text: "他在*做*作业。", romanization: "Tā zài *zuò* zuòyè.", translation: "He is doing homework." }
     ],
     56: [
       { text: "我八点*吃*早饭。", romanization: "Wǒ bā diǎn *chī* zǎofàn.", translation: "I eat breakfast at eight." },
       { text: "我们今晚一起*吃*饭吗？", romanization: "Wǒmen jīnwǎn yìqǐ *chī* fàn ma?", translation: "Shall we eat together tonight?" },
-      { text: "她从不*吃*肉。", romanization: "Tā cóngbù *chī* ròu.", translation: "She never eats meat." }
+      { text: "她从不*吃*肉。", romanization: "Tā cóngbù *chī* ròu.", translation: "She never eats meat." },
+      { text: "你想*吃*什么？", romanization: "Nǐ xiǎng *chī* shénme?", translation: "What do you want to eat?" },
+      { text: "我喜欢*吃*面条。", romanization: "Wǒ xǐhuan *chī* miàntiáo.", translation: "I like eating noodles." },
+      { text: "我们*吃*午饭吧。", romanization: "Wǒmen *chī* wǔfàn ba.", translation: "Let's have lunch." }
     ],
     57: [
       { text: "我每天*喝*水。", romanization: "Wǒ měitiān *hē* shuǐ.", translation: "I drink water every day." },
       { text: "你想*喝*什么？", romanization: "Nǐ xiǎng *hē* shénme?", translation: "What would you like to drink?" },
-      { text: "他*喝*咖啡不加糖。", romanization: "Tā *hē* kāfēi bù jiā táng.", translation: "He drinks coffee without sugar." }
+      { text: "他*喝*咖啡不加糖。", romanization: "Tā *hē* kāfēi bù jiā táng.", translation: "He drinks coffee without sugar." },
+      { text: "我想*喝*茶。", romanization: "Wǒ xiǎng *hē* chá.", translation: "I want to drink tea." },
+      { text: "孩子们*喝*牛奶。", romanization: "Háizimen *hē* niúnǎi.", translation: "The children drink milk." },
+      { text: "你*喝*咖啡吗？", romanization: "Nǐ *hē* kāfēi ma?", translation: "Do you drink coffee?" }
     ],
     58: [
       { text: "我在*读*一本有趣的书。", romanization: "Wǒ zài *dú* yì běn yǒuqù de shū.", translation: "I'm reading an interesting book." },
       { text: "你喜欢*读*书吗？", romanization: "Nǐ xǐhuan *dú* shū ma?", translation: "Do you like to read?" },
-      { text: "她每天早上*读*报纸。", romanization: "Tā měitiān zǎoshang *dú* bàozhǐ.", translation: "She reads the newspaper every morning." }
+      { text: "她每天早上*读*报纸。", romanization: "Tā měitiān zǎoshang *dú* bàozhǐ.", translation: "She reads the newspaper every morning." },
+      { text: "请*读*这个句子。", romanization: "Qǐng *dú* zhège jùzi.", translation: "Please read this sentence." },
+      { text: "他在*读*报纸。", romanization: "Tā zài *dú* bàozhǐ.", translation: "He is reading the newspaper." },
+      { text: "我每天晚上*读*书。", romanization: "Wǒ měi tiān wǎnshang *dú* shū.", translation: "I read every evening." }
     ],
     59: [
       { text: "我在给奶奶*写*信。", romanization: "Wǒ zài gěi nǎinai *xiě* xìn.", translation: "I'm writing a letter to grandmother." },
       { text: "你能在这里*写*你的名字吗？", romanization: "Nǐ néng zài zhèlǐ *xiě* nǐ de míngzi ma?", translation: "Can you write your name here?" },
-      { text: "他*写*关于历史的书。", romanization: "Tā *xiě* guānyú lìshǐ de shū.", translation: "He writes books about history." }
+      { text: "他*写*关于历史的书。", romanization: "Tā *xiě* guānyú lìshǐ de shū.", translation: "He writes books about history." },
+      { text: "请*写*你的名字。", romanization: "Qǐng *xiě* nǐ de míngzi.", translation: "Please write your name." },
+      { text: "我在*写*作业。", romanization: "Wǒ zài *xiě* zuòyè.", translation: "I'm writing my homework." },
+      { text: "她*写*了一封信。", romanization: "Tā *xiě* le yì fēng xìn.", translation: "She wrote a letter." }
     ],
     60: [
       { text: "我会*说*一点中文。", romanization: "Wǒ huì *shuō* yìdiǎn Zhōngwén.", translation: "I speak a little Chinese." },
       { text: "你能*说*慢一点吗？", romanization: "Nǐ néng *shuō* màn yìdiǎn ma?", translation: "Can you speak more slowly?" },
-      { text: "她会*说*三种语言。", romanization: "Tā huì *shuō* sān zhǒng yǔyán.", translation: "She speaks three languages." }
+      { text: "她会*说*三种语言。", romanization: "Tā huì *shuō* sān zhǒng yǔyán.", translation: "She speaks three languages." },
+      { text: "他*说*中文说得很好。", romanization: "Tā *shuō* Zhōngwén shuō de hěn hǎo.", translation: "He speaks Chinese very well." },
+      { text: "你会*说*英文吗？", romanization: "Nǐ huì *shuō* Yīngwén ma?", translation: "Can you speak English?" },
+      { text: "请*说*大声一点。", romanization: "Qǐng *shuō* dàshēng yìdiǎn.", translation: "Please speak louder." }
     ],
     61: [
       { text: "我有*一个*朋友。", romanization: "Wǒ yǒu *yí gè* péngyou.", translation: "I have a friend." },
       { text: "我可以要*一个*咖啡吗？", romanization: "Wǒ kěyǐ yào *yí gè* kāfēi ma?", translation: "Can I have a coffee?" },
-      { text: "外面有*一个*男人。", romanization: "Wàimiàn yǒu *yí gè* nánrén.", translation: "There's a man outside." }
+      { text: "外面有*一个*男人。", romanization: "Wàimiàn yǒu *yí gè* nánrén.", translation: "There's a man outside." },
+      { text: "他是*一个*好老师。", romanization: "Tā shì *yí gè* hǎo lǎoshī.", translation: "He is a good teacher." },
+      { text: "我想买*一个*包。", romanization: "Wǒ xiǎng mǎi *yí gè* bāo.", translation: "I want to buy a bag." },
+      { text: "这里有*一个*问题。", romanization: "Zhèlǐ yǒu *yí gè* wèntí.", translation: "There is a problem here." }
     ],
     62: [
       { text: "她买了*一个*包。", romanization: "Tā mǎile *yí gè* bāo.", translation: "She bought a bag." },
       { text: "我在街上看到*一个*女孩。", romanization: "Wǒ zài jiē shàng kàndào *yí gè* nǚhái.", translation: "I saw a girl on the street." },
-      { text: "桌子上有*一个*苹果。", romanization: "Zhuōzi shàng yǒu *yí gè* píngguǒ.", translation: "There's an apple on the table." }
+      { text: "桌子上有*一个*苹果。", romanization: "Zhuōzi shàng yǒu *yí gè* píngguǒ.", translation: "There's an apple on the table." },
+      { text: "她是*一个*好学生。", romanization: "Tā shì *yí gè* hǎo xuésheng.", translation: "She is a good student." },
+      { text: "我有*一个*妹妹。", romanization: "Wǒ yǒu *yí gè* mèimei.", translation: "I have a younger sister." },
+      { text: "门口有*一个*女人。", romanization: "Ménkǒu yǒu *yí gè* nǚrén.", translation: "There is a woman at the door." }
     ],
     63: [
       { text: "我有*一个*新想法。", romanization: "Wǒ yǒu *yí gè* xīn xiǎngfǎ.", translation: "I have a new idea." },
       { text: "我可以要*一个*杯子吗？", romanization: "Wǒ kěyǐ yào *yí gè* bēizi ma?", translation: "Can I have a cup?" },
-      { text: "她买了*一个*新电脑。", romanization: "Tā mǎile *yí gè* xīn diànnǎo.", translation: "She bought a new computer." }
+      { text: "她买了*一个*新电脑。", romanization: "Tā mǎile *yí gè* xīn diànnǎo.", translation: "She bought a new computer." },
+      { text: "我吃了*一个*鸡蛋。", romanization: "Wǒ chīle *yí gè* jīdàn.", translation: "I ate an egg." },
+      { text: "这是*一个*好主意。", romanization: "Zhè shì *yí gè* hǎo zhǔyi.", translation: "This is a good idea." },
+      { text: "他住在*一个*小城市。", romanization: "Tā zhù zài *yí gè* xiǎo chéngshì.", translation: "He lives in a small city." }
     ],
     64: [
       { text: "车是红色的。*它*是新的。", romanization: "Chē shì hóngsè de. *Tā* shì xīn de.", translation: "The car is red. It's new." },
       { text: "我喜欢这本书。*它*很有意思。", romanization: "Wǒ xǐhuan zhè běn shū. *Tā* hěn yǒu yìsi.", translation: "I like this book. It's interesting." },
-      { text: "看那只猫。*它*在睡觉。", romanization: "Kàn nà zhī māo. *Tā* zài shuìjiào.", translation: "Look at the cat. It's sleeping." }
+      { text: "看那只猫。*它*在睡觉。", romanization: "Kàn nà zhī māo. *Tā* zài shuìjiào.", translation: "Look at the cat. It's sleeping." },
+      { text: "这是我的狗，*它*很聪明。", romanization: "Zhè shì wǒ de gǒu, *tā* hěn cōngming.", translation: "This is my dog; it is very clever." },
+      { text: "我的包呢？*它*不见了。", romanization: "Wǒ de bāo ne? *Tā* bú jiàn le.", translation: "Where's my bag? It's gone." },
+      { text: "这张桌子很旧，*它*是奶奶的。", romanization: "Zhè zhāng zhuōzi hěn jiù, *tā* shì nǎinai de.", translation: "This table is old; it was grandma's." }
     ],
     65: [
       { text: "电脑很旧了，但*它*还能用。", romanization: "Diànnǎo hěn jiù le, dàn *tā* hái néng yòng.", translation: "The computer is old, but it still works." },
       { text: "我有一部新手机。*它*很快。", romanization: "Wǒ yǒu yí bù xīn shǒujī. *Tā* hěn kuài.", translation: "I have a new phone. It is very fast." },
-      { text: "火车到了。*它*很准时。", romanization: "Huǒchē dào le. *Tā* hěn zhǔnshí.", translation: "The train arrived. It was on time." }
+      { text: "火车到了。*它*很准时。", romanization: "Huǒchē dào le. *Tā* hěn zhǔnshí.", translation: "The train arrived. It was on time." },
+      { text: "我喜欢这本书，*它*很有趣。", romanization: "Wǒ xǐhuan zhè běn shū, *tā* hěn yǒuqù.", translation: "I like this book; it's interesting." },
+      { text: "那只鸟很小，*它*在唱歌。", romanization: "Nà zhī niǎo hěn xiǎo, *tā* zài chàng gē.", translation: "That bird is small; it is singing." },
+      { text: "我的车坏了，*它*太旧了。", romanization: "Wǒ de chē huài le, *tā* tài jiù le.", translation: "My car broke down; it's too old." }
     ],
     66: [
       { text: "我现在住*这里*。", romanization: "Wǒ xiànzài zhù *zhèlǐ*.", translation: "I live here now." },
       { text: "*这里*是你的钥匙。", romanization: "*Zhèlǐ* shì nǐ de yàoshi.", translation: "Here are your keys." },
-      { text: "请在*这里*等一下。", romanization: "Qǐng zài *zhèlǐ* děng yíxià.", translation: "Wait here, please." }
+      { text: "请在*这里*等一下。", romanization: "Qǐng zài *zhèlǐ* děng yíxià.", translation: "Wait here, please." },
+      { text: "*这里*很安静。", romanization: "*Zhèlǐ* hěn ānjìng.", translation: "It's quiet here." },
+      { text: "*这里*有很多人。", romanization: "*Zhèlǐ* yǒu hěn duō rén.", translation: "There are many people here." },
+      { text: "我喜欢*这里*的天气。", romanization: "Wǒ xǐhuan *zhèlǐ* de tiānqì.", translation: "I like the weather here." }
     ],
     67: [
       { text: "书在*那里*。", romanization: "Shū zài *nàlǐ*.", translation: "The book is over there." },
       { text: "*那里*有谁？", romanization: "*Nàlǐ* yǒu shéi?", translation: "Who is there?" },
-      { text: "我们去年在*那里*见面了。", romanization: "Wǒmen qùnián zài *nàlǐ* jiànmiàn le.", translation: "We met there last year." }
+      { text: "我们去年在*那里*见面了。", romanization: "Wǒmen qùnián zài *nàlǐ* jiànmiàn le.", translation: "We met there last year." },
+      { text: "*那里*有一个公园。", romanization: "*Nàlǐ* yǒu yí gè gōngyuán.", translation: "There is a park there." },
+      { text: "我的车在*那里*。", romanization: "Wǒ de chē zài *nàlǐ*.", translation: "My car is over there." },
+      { text: "*那里*的冬天很冷。", romanization: "*Nàlǐ* de dōngtiān hěn lěng.", translation: "Winter there is cold." }
     ],
     68: [
       { text: "我*现在*得走了。", romanization: "Wǒ *xiànzài* děi zǒu le.", translation: "I have to go now." },
       { text: "你*现在*在做什么？", romanization: "Nǐ *xiànzài* zài zuò shénme?", translation: "What are you doing now?" },
-      { text: "*现在*是吃饭的时间了。", romanization: "*Xiànzài* shì chīfàn de shíjiān le.", translation: "Now it's time to eat." }
+      { text: "*现在*是吃饭的时间了。", romanization: "*Xiànzài* shì chīfàn de shíjiān le.", translation: "Now it's time to eat." },
+      { text: "*现在*几点了？", romanization: "*Xiànzài* jǐ diǎn le?", translation: "What time is it now?" },
+      { text: "我*现在*很忙。", romanization: "Wǒ *xiànzài* hěn máng.", translation: "I'm busy now." },
+      { text: "他*现在*在上海。", romanization: "Tā *xiànzài* zài Shànghǎi.", translation: "He is in Shanghai now." }
     ],
     69: [
       { text: "我们*以后*聊。", romanization: "Wǒmen *yǐhòu* liáo.", translation: "We'll talk later." },
       { text: "我今晚*以后*来。", romanization: "Wǒ jīnwǎn *yǐhòu* lái.", translation: "I'll come later tonight." },
-      { text: "我们可以*以后*做吗？", romanization: "Wǒmen kěyǐ *yǐhòu* zuò ma?", translation: "Can we do it later?" }
+      { text: "我们可以*以后*做吗？", romanization: "Wǒmen kěyǐ *yǐhòu* zuò ma?", translation: "Can we do it later?" },
+      { text: "*以后*我想当医生。", romanization: "*Yǐhòu* wǒ xiǎng dāng yīshēng.", translation: "In the future I want to be a doctor." },
+      { text: "我们*以后*再说吧。", romanization: "Wǒmen *yǐhòu* zài shuō ba.", translation: "Let's talk about it later." },
+      { text: "*以后*请早一点来。", romanization: "*Yǐhòu* qǐng zǎo yìdiǎn lái.", translation: "From now on please come a bit earlier." }
     ],
     70: [
       { text: "她*总是*很开心。", romanization: "Tā *zǒngshì* hěn kāixīn.", translation: "She's always happy." },
       { text: "我早上*总是*喝咖啡。", romanization: "Wǒ zǎoshang *zǒngshì* hē kāfēi.", translation: "I always drink coffee in the morning." },
-      { text: "他*总是*迟到。", romanization: "Tā *zǒngshì* chídào.", translation: "He always comes late." }
+      { text: "他*总是*迟到。", romanization: "Tā *zǒngshì* chídào.", translation: "He always comes late." },
+      { text: "他*总是*很忙。", romanization: "Tā *zǒngshì* hěn máng.", translation: "He is always busy." },
+      { text: "我*总是*忘记带钥匙。", romanization: "Wǒ *zǒngshì* wàngjì dài yàoshi.", translation: "I always forget to bring my keys." },
+      { text: "她*总是*很早起床。", romanization: "Tā *zǒngshì* hěn zǎo qǐchuáng.", translation: "She always gets up very early." }
     ],
     71: [
       { text: "我们*今天*做什么？", romanization: "Wǒmen *jīntiān* zuò shénme?", translation: "What shall we do today?" },
       { text: "*今天*天气很好。", romanization: "*Jīntiān* tiānqì hěn hǎo.", translation: "Today the weather is nice." },
-      { text: "我*今天*有很多事情要做。", romanization: "Wǒ *jīntiān* yǒu hěn duō shìqing yào zuò.", translation: "I have a lot to do today." }
+      { text: "我*今天*有很多事情要做。", romanization: "Wǒ *jīntiān* yǒu hěn duō shìqing yào zuò.", translation: "I have a lot to do today." },
+      { text: "*今天*星期几？", romanization: "*Jīntiān* xīngqī jǐ?", translation: "What day is it today?" },
+      { text: "*今天*天气很热。", romanization: "*Jīntiān* tiānqì hěn rè.", translation: "The weather is hot today." },
+      { text: "我*今天*不上班。", romanization: "Wǒ *jīntiān* bú shàngbān.", translation: "I'm not working today." }
     ],
     72: [
       { text: "我们*明天*见！", romanization: "Wǒmen *míngtiān* jiàn!", translation: "See you tomorrow!" },
       { text: "我*明天*要去马德里。", romanization: "Wǒ *míngtiān* yào qù Mǎdélǐ.", translation: "Tomorrow I'll travel to Madrid." },
-      { text: "*明天*会发生什么？", romanization: "*Míngtiān* huì fāshēng shénme?", translation: "What's happening tomorrow?" }
+      { text: "*明天*会发生什么？", romanization: "*Míngtiān* huì fāshēng shénme?", translation: "What's happening tomorrow?" },
+      { text: "*明天*我去看奶奶。", romanization: "*Míngtiān* wǒ qù kàn nǎinai.", translation: "Tomorrow I'm going to see grandma." },
+      { text: "*明天*会下雨吗？", romanization: "*Míngtiān* huì xià yǔ ma?", translation: "Will it rain tomorrow?" },
+      { text: "你*明天*有空吗？", romanization: "Nǐ *míngtiān* yǒu kòng ma?", translation: "Are you free tomorrow?" }
     ],
     73: [
       { text: "我*昨天*在上班。", romanization: "Wǒ *zuótiān* zài shàngbān.", translation: "Yesterday I was at work." },
       { text: "我们*昨天*看了一部电影。", romanization: "Wǒmen *zuótiān* kànle yí bù diànyǐng.", translation: "We watched a movie yesterday." },
-      { text: "*昨天*下了很多雨。", romanization: "*Zuótiān* xiàle hěn duō yǔ.", translation: "It rained a lot yesterday." }
+      { text: "*昨天*下了很多雨。", romanization: "*Zuótiān* xiàle hěn duō yǔ.", translation: "It rained a lot yesterday." },
+      { text: "*昨天*我们在家休息。", romanization: "*Zuótiān* wǒmen zài jiā xiūxi.", translation: "Yesterday we rested at home." },
+      { text: "我*昨天*去了商店。", romanization: "Wǒ *zuótiān* qùle shāngdiàn.", translation: "I went to the shop yesterday." },
+      { text: "你*昨天*做了什么？", romanization: "Nǐ *zuótiān* zuòle shénme?", translation: "What did you do yesterday?" }
     ],
     74: [
       { text: "我一*星期*工作五天。", romanization: "Wǒ yì *xīngqī* gōngzuò wǔ tiān.", translation: "I work five days a week." },
       { text: "下*星期*我们要旅行。", romanization: "Xià *xīngqī* wǒmen yào lǚxíng.", translation: "Next week we're going to travel." },
-      { text: "这*星期*很忙。", romanization: "Zhè *xīngqī* hěn máng.", translation: "This week has been busy." }
+      { text: "这*星期*很忙。", romanization: "Zhè *xīngqī* hěn máng.", translation: "This week has been busy." },
+      { text: "一个*星期*有七天。", romanization: "Yí gè *xīngqī* yǒu qī tiān.", translation: "A week has seven days." },
+      { text: "我下个*星期*去旅行。", romanization: "Wǒ xià gè *xīngqī* qù lǚxíng.", translation: "I'm travelling next week." },
+      { text: "上个*星期*我生病了。", romanization: "Shàng gè *xīngqī* wǒ shēngbìng le.", translation: "I was sick last week." }
     ],
     75: [
       { text: "我们下个*月*要搬家。", romanization: "Wǒmen xià ge *yuè* yào bānjiā.", translation: "We're moving next month." },
       { text: "我每个*月*付房租。", romanization: "Wǒ měige *yuè* fù fángzū.", translation: "Every month I pay rent." },
-      { text: "这个*月*过得很快。", romanization: "Zhège *yuè* guò de hěn kuài.", translation: "The month went by quickly." }
+      { text: "这个*月*过得很快。", romanization: "Zhège *yuè* guò de hěn kuài.", translation: "The month went by quickly." },
+      { text: "一年有十二个*月*。", romanization: "Yì nián yǒu shí'èr gè *yuè*.", translation: "A year has twelve months." },
+      { text: "下个*月*我们去上海。", romanization: "Xià gè *yuè* wǒmen qù Shànghǎi.", translation: "Next month we're going to Shanghai." },
+      { text: "她学了三个*月*中文。", romanization: "Tā xuéle sān gè *yuè* Zhōngwén.", translation: "She studied Chinese for three months." }
     ],
     76: [
       { text: "他开了一辆*红色*的车。", romanization: "Tā kāile yí liàng *hóngsè* de chē.", translation: "He drove a red car." },
       { text: "花是*红色*的，很漂亮。", romanization: "Huā shì *hóngsè* de, hěn piàoliang.", translation: "The flower is red and beautiful." },
-      { text: "我喜欢那件*红色*毛衣。", romanization: "Wǒ xǐhuan nà jiàn *hóngsè* máoyī.", translation: "I like the red sweater." }
+      { text: "我喜欢那件*红色*毛衣。", romanization: "Wǒ xǐhuan nà jiàn *hóngsè* máoyī.", translation: "I like the red sweater." },
+      { text: "我最喜欢的颜色是*红色*。", romanization: "Wǒ zuì xǐhuan de yánsè shì *hóngsè*.", translation: "My favourite colour is red." },
+      { text: "这个苹果是*红色*的。", romanization: "Zhège píngguǒ shì *hóngsè* de.", translation: "This apple is red." },
+      { text: "她穿了一件*红色*的衣服。", romanization: "Tā chuānle yí jiàn *hóngsè* de yīfu.", translation: "She is wearing red clothes." }
     ],
     77: [
       { text: "今天天空是*蓝色*的。", romanization: "Jīntiān tiānkōng shì *lánsè* de.", translation: "The sky is blue today." },
       { text: "她有*蓝色*的眼睛。", romanization: "Tā yǒu *lánsè* de yǎnjing.", translation: "She has blue eyes." },
-      { text: "我买了一件*蓝色*外套。", romanization: "Wǒ mǎile yí jiàn *lánsè* wàitào.", translation: "I bought a blue jacket." }
+      { text: "我买了一件*蓝色*外套。", romanization: "Wǒ mǎile yí jiàn *lánsè* wàitào.", translation: "I bought a blue jacket." },
+      { text: "大海是*蓝色*的。", romanization: "Dàhǎi shì *lánsè* de.", translation: "The sea is blue." },
+      { text: "我有一辆*蓝色*的自行车。", romanization: "Wǒ yǒu yí liàng *lánsè* de zìxíngchē.", translation: "I have a blue bicycle." },
+      { text: "他最喜欢*蓝色*。", romanization: "Tā zuì xǐhuan *lánsè*.", translation: "His favourite colour is blue." }
     ],
     78: [
       { text: "夏天草是*绿色*的。", romanization: "Xiàtiān cǎo shì *lǜsè* de.", translation: "The grass is green in summer." },
       { text: "他有一辆*绿色*的车。", romanization: "Tā yǒu yí liàng *lǜsè* de chē.", translation: "He has a green car." },
-      { text: "我喜欢那件*绿色*衬衫。", romanization: "Wǒ xǐhuan nà jiàn *lǜsè* chènshān.", translation: "I like the green shirt." }
+      { text: "我喜欢那件*绿色*衬衫。", romanization: "Wǒ xǐhuan nà jiàn *lǜsè* chènshān.", translation: "I like the green shirt." },
+      { text: "树叶是*绿色*的。", romanization: "Shùyè shì *lǜsè* de.", translation: "The leaves are green." },
+      { text: "我喜欢喝*绿色*的茶。", romanization: "Wǒ xǐhuan hē *lǜsè* de chá.", translation: "I like drinking green tea." },
+      { text: "他的门是*绿色*的。", romanization: "Tā de mén shì *lǜsè* de.", translation: "His door is green." }
     ],
     79: [
       { text: "太阳是*黄色*的。", romanization: "Tàiyáng shì *huángsè* de.", translation: "The sun is yellow." },
       { text: "她有一条*黄色*裙子。", romanization: "Tā yǒu yì tiáo *huángsè* qúnzi.", translation: "She has a yellow dress." },
-      { text: "*黄色*的房子是我们的。", romanization: "*Huángsè* de fángzi shì wǒmen de.", translation: "The yellow house is ours." }
+      { text: "*黄色*的房子是我们的。", romanization: "*Huángsè* de fángzi shì wǒmen de.", translation: "The yellow house is ours." },
+      { text: "香蕉是*黄色*的。", romanization: "Xiāngjiāo shì *huángsè* de.", translation: "Bananas are yellow." },
+      { text: "我买了一件*黄色*的衬衫。", romanization: "Wǒ mǎile yí jiàn *huángsè* de chènshān.", translation: "I bought a yellow shirt." },
+      { text: "她喜欢*黄色*的花。", romanization: "Tā xǐhuan *huángsè* de huā.", translation: "She likes yellow flowers." }
     ],
     80: [
       { text: "猫是全*黑色*的。", romanization: "Māo shì quán *hēisè* de.", translation: "The cat is completely black." },
       { text: "他有一辆*黑色*的车。", romanization: "Tā yǒu yí liàng *hēisè* de chē.", translation: "He has a black car." },
-      { text: "我买了*黑色*的鞋子。", romanization: "Wǒ mǎile *hēisè* de xiézi.", translation: "I bought black shoes." }
+      { text: "我买了*黑色*的鞋子。", romanization: "Wǒ mǎile *hēisè* de xiézi.", translation: "I bought black shoes." },
+      { text: "我的头发是*黑色*的。", romanization: "Wǒ de tóufa shì *hēisè* de.", translation: "My hair is black." },
+      { text: "他喜欢穿*黑色*的衣服。", romanization: "Tā xǐhuan chuān *hēisè* de yīfu.", translation: "He likes wearing black clothes." },
+      { text: "这只狗是*黑色*的。", romanization: "Zhè zhī gǒu shì *hēisè* de.", translation: "This dog is black." }
     ],
     81: [
       { text: "雪是*白色*的，很冷。", romanization: "Xuě shì *báisè* de, hěn lěng.", translation: "The snow is white and cold." },
       { text: "她有一座*白色*的房子。", romanization: "Tā yǒu yí zuò *báisè* de fángzi.", translation: "She has a white house." },
-      { text: "他穿着*白色*衬衫。", romanization: "Tā chuānzhe *báisè* chènshān.", translation: "He wears a white shirt." }
+      { text: "他穿着*白色*衬衫。", romanization: "Tā chuānzhe *báisè* chènshān.", translation: "He wears a white shirt." },
+      { text: "我喜欢*白色*的鞋子。", romanization: "Wǒ xǐhuan *báisè* de xiézi.", translation: "I like white shoes." },
+      { text: "这只猫是*白色*的。", romanization: "Zhè zhī māo shì *báisè* de.", translation: "This cat is white." },
+      { text: "墙是*白色*的。", romanization: "Qiáng shì *báisè* de.", translation: "The wall is white." }
     ],
     82: [
       { text: "我的狗是*棕色*的。", romanization: "Wǒ de gǒu shì *zōngsè* de.", translation: "My dog is brown." },
       { text: "她有*棕色*的眼睛。", romanization: "Tā yǒu *zōngsè* de yǎnjing.", translation: "She has brown eyes." },
-      { text: "我买了一张*棕色*的桌子。", romanization: "Wǒ mǎile yì zhāng *zōngsè* de zhuōzi.", translation: "I bought a brown table." }
+      { text: "我买了一张*棕色*的桌子。", romanization: "Wǒ mǎile yì zhāng *zōngsè* de zhuōzi.", translation: "I bought a brown table." },
+      { text: "我的包是*棕色*的。", romanization: "Wǒ de bāo shì *zōngsè* de.", translation: "My bag is brown." },
+      { text: "他有*棕色*的头发。", romanization: "Tā yǒu *zōngsè* de tóufa.", translation: "He has brown hair." },
+      { text: "那匹马是*棕色*的。", romanization: "Nà pǐ mǎ shì *zōngsè* de.", translation: "That horse is brown." }
     ],
     83: [
       { text: "女孩穿着*粉色*的裙子。", romanization: "Nǚhái chuānzhe *fěnsè* de qúnzi.", translation: "The girl has a pink dress." },
       { text: "花是*粉色*的。", romanization: "Huā shì *fěnsè* de.", translation: "The flowers are pink." },
-      { text: "她把房间漆成了*粉色*。", romanization: "Tā bǎ fángjiān qī chéngle *fěnsè*.", translation: "She painted the room pink." }
+      { text: "她把房间漆成了*粉色*。", romanization: "Tā bǎ fángjiān qī chéngle *fěnsè*.", translation: "She painted the room pink." },
+      { text: "她的房间是*粉色*的。", romanization: "Tā de fángjiān shì *fěnsè* de.", translation: "Her room is pink." },
+      { text: "这朵花是*粉色*的。", romanization: "Zhè duǒ huā shì *fěnsè* de.", translation: "This flower is pink." },
+      { text: "我买了一个*粉色*的杯子。", romanization: "Wǒ mǎile yí gè *fěnsè* de bēizi.", translation: "I bought a pink cup." }
     ],
     84: [
       { text: "日落是*橙色*的。", romanization: "Rìluò shì *chéngsè* de.", translation: "The sunset was orange." },
       { text: "他有一件*橙色*外套。", romanization: "Tā yǒu yí jiàn *chéngsè* wàitào.", translation: "He has an orange jacket." },
-      { text: "橙子是*橙色*的。", romanization: "Chéngzi shì *chéngsè* de.", translation: "The orange is orange." }
+      { text: "橙子是*橙色*的。", romanization: "Chéngzi shì *chéngsè* de.", translation: "The orange is orange." },
+      { text: "我喜欢*橙色*的衣服。", romanization: "Wǒ xǐhuan *chéngsè* de yīfu.", translation: "I like orange clothes." },
+      { text: "他的车是*橙色*的。", romanization: "Tā de chē shì *chéngsè* de.", translation: "His car is orange." },
+      { text: "这个包是*橙色*的。", romanization: "Zhège bāo shì *chéngsè* de.", translation: "This bag is orange." }
     ],
     85: [
       { text: "花是*紫色*的。", romanization: "Huā shì *zǐsè* de.", translation: "The flower is purple." },
       { text: "她有一个*紫色*的包。", romanization: "Tā yǒu yí ge *zǐsè* de bāo.", translation: "She has a purple bag." },
-      { text: "晚上天空变成了*紫色*。", romanization: "Wǎnshang tiānkōng biànchéngle *zǐsè*.", translation: "The sky turned purple in the evening." }
+      { text: "晚上天空变成了*紫色*。", romanization: "Wǎnshang tiānkōng biànchéngle *zǐsè*.", translation: "The sky turned purple in the evening." },
+      { text: "我喜欢*紫色*的花。", romanization: "Wǒ xǐhuan *zǐsè* de huā.", translation: "I like purple flowers." },
+      { text: "葡萄是*紫色*的。", romanization: "Pútao shì *zǐsè* de.", translation: "Grapes are purple." },
+      { text: "她穿了一件*紫色*的毛衣。", romanization: "Tā chuānle yí jiàn *zǐsè* de máoyī.", translation: "She is wearing a purple sweater." }
     ],
     86: [
       { text: "我只有*一*个兄弟。", romanization: "Wǒ zhǐyǒu *yī* ge xiōngdì.", translation: "I only have one brother." },
       { text: "我可以要*一*杯咖啡吗？", romanization: "Wǒ kěyǐ yào *yī* bēi kāfēi ma?", translation: "Can I have one coffee?" },
-      { text: "只有*一*个孩子来了。", romanization: "Zhǐyǒu *yī* ge háizi lái le.", translation: "Only one child came." }
+      { text: "只有*一*个孩子来了。", romanization: "Zhǐyǒu *yī* ge háizi lái le.", translation: "Only one child came." },
+      { text: "我只有*一*个问题。", romanization: "Wǒ zhǐ yǒu *yí* gè wèntí.", translation: "I only have one question." },
+      { text: "他喝了*一*杯茶。", romanization: "Tā hēle *yì* bēi chá.", translation: "He drank a cup of tea." },
+      { text: "我们住了*一*个星期。", romanization: "Wǒmen zhùle *yí* gè xīngqī.", translation: "We stayed for one week." }
     ],
     87: [
       { text: "我有*二*个兄弟姐妹。", romanization: "Wǒ yǒu *èr* ge xiōngdì jiěmèi.", translation: "I have two siblings." },
       { text: "现在是*二*点。", romanization: "Xiànzài shì *èr* diǎn.", translation: "It's two o'clock." },
-      { text: "房子有*二*层。", romanization: "Fángzi yǒu *èr* céng.", translation: "The house has two floors." }
+      { text: "房子有*二*层。", romanization: "Fángzi yǒu *èr* céng.", translation: "The house has two floors." },
+      { text: "*二*加三等于五。", romanization: "*Èr* jiā sān děngyú wǔ.", translation: "Two plus three equals five." },
+      { text: "今天是*二*号。", romanization: "Jīntiān shì *èr* hào.", translation: "Today is the second." },
+      { text: "他住在*二*楼。", romanization: "Tā zhù zài *èr* lóu.", translation: "He lives on the second floor." }
     ],
     88: [
       { text: "我有*三*个孩子。", romanization: "Wǒ yǒu *sān* ge háizi.", translation: "I have three children." },
       { text: "现在是*三*点。", romanization: "Xiànzài shì *sān* diǎn.", translation: "It's three o'clock." },
-      { text: "我们等了*三*个小时。", romanization: "Wǒmen děngle *sān* ge xiǎoshí.", translation: "We waited for three hours." }
+      { text: "我们等了*三*个小时。", romanization: "Wǒmen děngle *sān* ge xiǎoshí.", translation: "We waited for three hours." },
+      { text: "我吃了*三*个苹果。", romanization: "Wǒ chīle *sān* gè píngguǒ.", translation: "I ate three apples." },
+      { text: "她有*三*只猫。", romanization: "Tā yǒu *sān* zhī māo.", translation: "She has three cats." },
+      { text: "我们学了*三*年中文。", romanization: "Wǒmen xuéle *sān* nián Zhōngwén.", translation: "We studied Chinese for three years." }
     ],
     89: [
       { text: "桌子有*四*把椅子。", romanization: "Zhuōzi yǒu *sì* bǎ yǐzi.", translation: "The table has four chairs." },
       { text: "现在是*四*点。", romanization: "Xiànzài shì *sì* diǎn.", translation: "It's four o'clock." },
-      { text: "我们家有*四*口人。", romanization: "Wǒmen jiā yǒu *sì* kǒu rén.", translation: "There are four of us in the family." }
+      { text: "我们家有*四*口人。", romanization: "Wǒmen jiā yǒu *sì* kǒu rén.", translation: "There are four of us in the family." },
+      { text: "我家有*四*个人。", romanization: "Wǒ jiā yǒu *sì* gè rén.", translation: "There are four people in my family." },
+      { text: "我们*四*点见。", romanization: "Wǒmen *sì* diǎn jiàn.", translation: "See you at four." },
+      { text: "他住在*四*楼。", romanization: "Tā zhù zài *sì* lóu.", translation: "He lives on the fourth floor." }
     ],
     90: [
       { text: "我在这里有*五*个朋友。", romanization: "Wǒ zài zhèlǐ yǒu *wǔ* ge péngyou.", translation: "I have five friends here." },
       { text: "现在是*五*点。", romanization: "Xiànzài shì *wǔ* diǎn.", translation: "It's five o'clock." },
-      { text: "房子有*五*个房间。", romanization: "Fángzi yǒu *wǔ* ge fángjiān.", translation: "The house has five rooms." }
+      { text: "房子有*五*个房间。", romanization: "Fángzi yǒu *wǔ* ge fángjiān.", translation: "The house has five rooms." },
+      { text: "我每天工作*五*个小时。", romanization: "Wǒ měi tiān gōngzuò *wǔ* gè xiǎoshí.", translation: "I work five hours a day." },
+      { text: "她*五*岁了。", romanization: "Tā *wǔ* suì le.", translation: "She is five years old." },
+      { text: "这本书*五*块钱。", romanization: "Zhè běn shū *wǔ* kuài qián.", translation: "This book costs five yuan." }
     ],
     91: [
       { text: "现在是*六*点。", romanization: "Xiànzài shì *liù* diǎn.", translation: "It's six o'clock." },
       { text: "我们有*六*个人。", romanization: "Wǒmen yǒu *liù* ge rén.", translation: "We are six people." },
-      { text: "他每晚睡*六*个小时。", romanization: "Tā měi wǎn shuì *liù* ge xiǎoshí.", translation: "He sleeps six hours every night." }
+      { text: "他每晚睡*六*个小时。", romanization: "Tā měi wǎn shuì *liù* ge xiǎoshí.", translation: "He sleeps six hours every night." },
+      { text: "我*六*点起床。", romanization: "Wǒ *liù* diǎn qǐchuáng.", translation: "I get up at six." },
+      { text: "他买了*六*个鸡蛋。", romanization: "Tā mǎile *liù* gè jīdàn.", translation: "He bought six eggs." },
+      { text: "我儿子*六*岁了。", romanization: "Wǒ érzi *liù* suì le.", translation: "My son is six." }
     ],
     92: [
       { text: "现在是*七*点。", romanization: "Xiànzài shì *qī* diǎn.", translation: "It's seven o'clock." },
       { text: "桌子上有*七*本书。", romanization: "Zhuōzi shàng yǒu *qī* běn shū.", translation: "There are seven books on the table." },
-      { text: "他吃了*七*个草莓。", romanization: "Tā chīle *qī* ge cǎoméi.", translation: "He ate seven strawberries." }
+      { text: "他吃了*七*个草莓。", romanization: "Tā chīle *qī* ge cǎoméi.", translation: "He ate seven strawberries." },
+      { text: "一个星期有*七*天。", romanization: "Yí gè xīngqī yǒu *qī* tiān.", translation: "A week has seven days." },
+      { text: "我们*七*点吃晚饭。", romanization: "Wǒmen *qī* diǎn chī wǎnfàn.", translation: "We eat dinner at seven." },
+      { text: "她家有*七*个人。", romanization: "Tā jiā yǒu *qī* gè rén.", translation: "There are seven people in her family." }
     ],
     93: [
       { text: "现在是*八*点。", romanization: "Xiànzài shì *bā* diǎn.", translation: "It's eight o'clock." },
       { text: "我每天工作*八*个小时。", romanization: "Wǒ měitiān gōngzuò *bā* ge xiǎoshí.", translation: "I work eight hours a day." },
-      { text: "派对上有*八*个人。", romanization: "Pàiduì shàng yǒu *bā* ge rén.", translation: "There were eight of us at the party." }
+      { text: "派对上有*八*个人。", romanization: "Pàiduì shàng yǒu *bā* ge rén.", translation: "There were eight of us at the party." },
+      { text: "他*八*岁了。", romanization: "Tā *bā* suì le.", translation: "He is eight." },
+      { text: "我们*八*点上课。", romanization: "Wǒmen *bā* diǎn shàngkè.", translation: "We start class at eight." },
+      { text: "我买了*八*个苹果。", romanization: "Wǒ mǎile *bā* gè píngguǒ.", translation: "I bought eight apples." }
     ],
     94: [
       { text: "现在是*九*点。", romanization: "Xiànzài shì *jiǔ* diǎn.", translation: "It's nine o'clock." },
       { text: "她*九*岁了。", romanization: "Tā *jiǔ* suì le.", translation: "She's nine years old." },
-      { text: "我们等了*九*分钟。", romanization: "Wǒmen děngle *jiǔ* fēnzhōng.", translation: "We waited nine minutes." }
+      { text: "我们等了*九*分钟。", romanization: "Wǒmen děngle *jiǔ* fēnzhōng.", translation: "We waited nine minutes." },
+      { text: "我*九*点上班。", romanization: "Wǒ *jiǔ* diǎn shàngbān.", translation: "I start work at nine." },
+      { text: "他有*九*本书。", romanization: "Tā yǒu *jiǔ* běn shū.", translation: "He has nine books." },
+      { text: "商店*九*点开门。", romanization: "Shāngdiàn *jiǔ* diǎn kāimén.", translation: "The shop opens at nine." }
     ],
     95: [
       { text: "现在是*十*点。", romanization: "Xiànzài shì *shí* diǎn.", translation: "It's ten o'clock." },
       { text: "他有*十*根手指。", romanization: "Tā yǒu *shí* gēn shǒuzhǐ.", translation: "He has ten fingers." },
-      { text: "我们在那里住了*十*年。", romanization: "Wǒmen zài nàlǐ zhùle *shí* nián.", translation: "We lived there for ten years." }
+      { text: "我们在那里住了*十*年。", romanization: "Wǒmen zài nàlǐ zhùle *shí* nián.", translation: "We lived there for ten years." },
+      { text: "我等了*十*分钟。", romanization: "Wǒ děngle *shí* fēnzhōng.", translation: "I waited ten minutes." },
+      { text: "这个*十*块钱。", romanization: "Zhège *shí* kuài qián.", translation: "This costs ten yuan." },
+      { text: "我儿子*十*岁了。", romanization: "Wǒ érzi *shí* suì le.", translation: "My son is ten." }
     ],
     96: [
       { text: "你住*哪里*？", romanization: "Nǐ zhù *nǎlǐ*?", translation: "Where do you live?" },
       { text: "你知道书在*哪里*吗？", romanization: "Nǐ zhīdào shū zài *nǎlǐ* ma?", translation: "Do you know where the book is?" },
-      { text: "我们在*哪里*见面？", romanization: "Wǒmen zài *nǎlǐ* jiànmiàn?", translation: "Where shall we meet?" }
+      { text: "我们在*哪里*见面？", romanization: "Wǒmen zài *nǎlǐ* jiànmiàn?", translation: "Where shall we meet?" },
+      { text: "厕所在*哪里*？", romanization: "Cèsuǒ zài *nǎlǐ*?", translation: "Where is the toilet?" },
+      { text: "你的朋友住在*哪里*？", romanization: "Nǐ de péngyou zhù zài *nǎlǐ*?", translation: "Where does your friend live?" },
+      { text: "你是*哪里*人？", romanization: "Nǐ shì *nǎlǐ* rén?", translation: "Where are you from?" }
     ],
     97: [
       { text: "那是*什么*？", romanization: "Nà shì *shénme*?", translation: "What is that?" },
       { text: "你在做*什么*？", romanization: "Nǐ zài zuò *shénme*?", translation: "What are you doing?" },
-      { text: "我不知道说*什么*。", romanization: "Wǒ bù zhīdào shuō *shénme*.", translation: "I don't know what to say." }
+      { text: "我不知道说*什么*。", romanization: "Wǒ bù zhīdào shuō *shénme*.", translation: "I don't know what to say." },
+      { text: "你想吃*什么*？", romanization: "Nǐ xiǎng chī *shénme*?", translation: "What do you want to eat?" },
+      { text: "这是*什么*？", romanization: "Zhè shì *shénme*?", translation: "What is this?" },
+      { text: "你叫*什么*名字？", romanization: "Nǐ jiào *shénme* míngzi?", translation: "What's your name?" }
     ],
     98: [
       { text: "那是*谁*？", romanization: "Nà shì *shéi*?", translation: "Who is that?" },
       { text: "今晚*谁*来？", romanization: "Jīnwǎn *shéi* lái?", translation: "Who's coming tonight?" },
-      { text: "你知道她是*谁*吗？", romanization: "Nǐ zhīdào tā shì *shéi* ma?", translation: "Do you know who she is?" }
+      { text: "你知道她是*谁*吗？", romanization: "Nǐ zhīdào tā shì *shéi* ma?", translation: "Do you know who she is?" },
+      { text: "*谁*是你的老师？", romanization: "*Shéi* shì nǐ de lǎoshī?", translation: "Who is your teacher?" },
+      { text: "这是*谁*的书？", romanization: "Zhè shì *shéi* de shū?", translation: "Whose book is this?" },
+      { text: "*谁*在门口？", romanization: "*Shéi* zài ménkǒu?", translation: "Who is at the door?" }
     ],
     99: [
       { text: "你*什么时候*来？", romanization: "Nǐ *shénme shíhou* lái?", translation: "When are you coming?" },
       { text: "我不知道火车*什么时候*出发。", romanization: "Wǒ bù zhīdào huǒchē *shénme shíhou* chūfā.", translation: "I don't know when the train leaves." },
-      { text: "你的生日是*什么时候*？", romanization: "Nǐ de shēngrì shì *shénme shíhou*?", translation: "When is your birthday?" }
+      { text: "你的生日是*什么时候*？", romanization: "Nǐ de shēngrì shì *shénme shíhou*?", translation: "When is your birthday?" },
+      { text: "你*什么时候*回家？", romanization: "Nǐ *shénme shíhou* huí jiā?", translation: "When are you going home?" },
+      { text: "商店*什么时候*开门？", romanization: "Shāngdiàn *shénme shíhou* kāimén?", translation: "When does the shop open?" },
+      { text: "我们*什么时候*吃饭？", romanization: "Wǒmen *shénme shíhou* chī fàn?", translation: "When do we eat?" }
     ],
     100: [
       { text: "你*为什么*迟到？", romanization: "Nǐ *wèishénme* chídào?", translation: "Why are you late?" },
       { text: "你*为什么*不喜欢鱼？", romanization: "Nǐ *wèishénme* bù xǐhuan yú?", translation: "Why don't you like fish?" },
-      { text: "我不知道他*为什么*走了。", romanization: "Wǒ bù zhīdào tā *wèishénme* zǒu le.", translation: "I don't know why he left." }
+      { text: "我不知道他*为什么*走了。", romanization: "Wǒ bù zhīdào tā *wèishénme* zǒu le.", translation: "I don't know why he left." },
+      { text: "*为什么*你不来？", romanization: "*Wèi shénme* nǐ bù lái?", translation: "Why aren't you coming?" },
+      { text: "你*为什么*学中文？", romanization: "Nǐ *wèi shénme* xué Zhōngwén?", translation: "Why are you learning Chinese?" },
+      { text: "她*为什么*哭了？", romanization: "Tā *wèi shénme* kū le?", translation: "Why did she cry?" }
     ],
     101: [
       { text: "这个*怎么*用？", romanization: "Zhège *zěnme* yòng?", translation: "How do you use this?" },
       { text: "你*怎么*去上班？", romanization: "Nǐ *zěnme* qù shàngbān?", translation: "How do you get to work?" },
-      { text: "这个词*怎么*说？", romanization: "Zhège cí *zěnme* shuō?", translation: "How do you say this word?" }
+      { text: "这个词*怎么*说？", romanization: "Zhège cí *zěnme* shuō?", translation: "How do you say this word?" },
+      { text: "去火车站*怎么*走？", romanization: "Qù huǒchēzhàn *zěnme* zǒu?", translation: "How do I get to the train station?" },
+      { text: "你今天*怎么*了？", romanization: "Nǐ jīntiān *zěnme* le?", translation: "What's wrong with you today?" },
+      { text: "这个菜*怎么*做？", romanization: "Zhège cài *zěnme* zuò?", translation: "How do you make this dish?" }
     ],
     102: [
       { text: "你要*哪个*？", romanization: "Nǐ yào *nǎge*?", translation: "Which one do you want?" },
       { text: "*哪个*是你的包？", romanization: "*Nǎge* shì nǐ de bāo?", translation: "Which one is your bag?" },
-      { text: "你喜欢*哪个*颜色？", romanization: "Nǐ xǐhuan *nǎge* yánsè?", translation: "Which color do you like?" }
+      { text: "你喜欢*哪个*颜色？", romanization: "Nǐ xǐhuan *nǎge* yánsè?", translation: "Which color do you like?" },
+      { text: "*哪个*房间是你的？", romanization: "*Nǎge* fángjiān shì nǐ de?", translation: "Which room is yours?" },
+      { text: "你想买*哪个*？", romanization: "Nǐ xiǎng mǎi *nǎge*?", translation: "Which one do you want to buy?" },
+      { text: "*哪个*人是你的老师？", romanization: "*Nǎge* rén shì nǐ de lǎoshī?", translation: "Which person is your teacher?" }
     ],
     103: [
       { text: "这个*多少*钱？", romanization: "Zhège *duōshao* qián?", translation: "How much is this?" },
       { text: "你有*多少*本书？", romanization: "Nǐ yǒu *duōshao* běn shū?", translation: "How many books do you have?" },
-      { text: "我们还有*多少*时间？", romanization: "Wǒmen hái yǒu *duōshao* shíjiān?", translation: "How much time do we have left?" }
+      { text: "我们还有*多少*时间？", romanization: "Wǒmen hái yǒu *duōshao* shíjiān?", translation: "How much time do we have left?" },
+      { text: "你家有*多少*人？", romanization: "Nǐ jiā yǒu *duōshao* rén?", translation: "How many people are in your family?" },
+      { text: "一张票*多少*钱？", romanization: "Yì zhāng piào *duōshao* qián?", translation: "How much is one ticket?" },
+      { text: "你们班有*多少*学生？", romanization: "Nǐmen bān yǒu *duōshao* xuésheng?", translation: "How many students are in your class?" }
     ],
     104: [
       { text: "我迟到了，*因为*堵车。", romanization: "Wǒ chídào le, *yīnwèi* dǔchē.", translation: "I was late because of traffic." },
       { text: "她很累，*因为*她工作了很久。", romanization: "Tā hěn lèi, *yīnwèi* tā gōngzuò le hěn jiǔ.", translation: "She's tired because she worked a long time." },
-      { text: "我喜欢这里，*因为*人很友好。", romanization: "Wǒ xǐhuan zhèlǐ, *yīnwèi* rén hěn yǒuhǎo.", translation: "I like it here because people are friendly." }
+      { text: "我喜欢这里，*因为*人很友好。", romanization: "Wǒ xǐhuan zhèlǐ, *yīnwèi* rén hěn yǒuhǎo.", translation: "I like it here because people are friendly." },
+      { text: "我没去，*因为*我生病了。", romanization: "Wǒ méi qù, *yīnwèi* wǒ shēngbìng le.", translation: "I didn't go because I was sick." },
+      { text: "*因为*下雨，我们在家。", romanization: "*Yīnwèi* xià yǔ, wǒmen zài jiā.", translation: "Because it's raining, we are at home." },
+      { text: "他很高兴，*因为*他赢了。", romanization: "Tā hěn gāoxìng, *yīnwèi* tā yíng le.", translation: "He is happy because he won." }
     ],
     105: [
       { text: "我累了，*但是*我很开心。", romanization: "Wǒ lèi le, *dànshì* wǒ hěn kāixīn.", translation: "I'm tired, but I'm happy." },
       { text: "他很聪明，*但是*很懒。", romanization: "Tā hěn cōngmíng, *dànshì* hěn lǎn.", translation: "He's smart, but lazy." },
-      { text: "天气冷，*但是*阳光很好。", romanization: "Tiānqì lěng, *dànshì* yángguāng hěn hǎo.", translation: "The weather is cold, but sunny." }
+      { text: "天气冷，*但是*阳光很好。", romanization: "Tiānqì lěng, *dànshì* yángguāng hěn hǎo.", translation: "The weather is cold, but sunny." },
+      { text: "这个很好，*但是*太贵了。", romanization: "Zhège hěn hǎo, *dànshì* tài guì le.", translation: "This is good, but too expensive." },
+      { text: "我想去，*但是*没有时间。", romanization: "Wǒ xiǎng qù, *dànshì* méiyǒu shíjiān.", translation: "I want to go, but I don't have time." },
+      { text: "他很年轻，*但是*很聪明。", romanization: "Tā hěn niánqīng, *dànshì* hěn cōngming.", translation: "He is young, but very clever." }
     ],
     106: [
       { text: "我*和*我朋友一起吃饭。", romanization: "Wǒ *hé* wǒ péngyou yìqǐ chīfàn.", translation: "My friend and I eat together." },
       { text: "我喜欢茶*和*咖啡。", romanization: "Wǒ xǐhuan chá *hé* kāfēi.", translation: "I like tea and coffee." },
-      { text: "妈妈*和*爸爸在家。", romanization: "Māma *hé* bàba zài jiā.", translation: "Mom and dad are at home." }
+      { text: "妈妈*和*爸爸在家。", romanization: "Māma *hé* bàba zài jiā.", translation: "Mom and dad are at home." },
+      { text: "我有一只猫*和*一只狗。", romanization: "Wǒ yǒu yì zhī māo *hé* yì zhī gǒu.", translation: "I have a cat and a dog." },
+      { text: "我*和*她是同学。", romanization: "Wǒ *hé* tā shì tóngxué.", translation: "She and I are classmates." },
+      { text: "我买了面包*和*牛奶。", romanization: "Wǒ mǎile miànbāo *hé* niúnǎi.", translation: "I bought bread and milk." }
     ],
     107: [
       { text: "你要茶*或者*咖啡？", romanization: "Nǐ yào chá *huòzhě* kāfēi?", translation: "Do you want tea or coffee?" },
       { text: "我们可以走路*或者*坐公交车。", romanization: "Wǒmen kěyǐ zǒulù *huòzhě* zuò gōngjiāochē.", translation: "We can walk or take the bus." },
-      { text: "你可以今天*或者*明天来。", romanization: "Nǐ kěyǐ jīntiān *huòzhě* míngtiān lái.", translation: "You can come today or tomorrow." }
+      { text: "你可以今天*或者*明天来。", romanization: "Nǐ kěyǐ jīntiān *huòzhě* míngtiān lái.", translation: "You can come today or tomorrow." },
+      { text: "我们吃米饭*或者*面条。", romanization: "Wǒmen chī mǐfàn *huòzhě* miàntiáo.", translation: "We'll eat rice or noodles." },
+      { text: "星期六*或者*星期日都可以。", romanization: "Xīngqīliù *huòzhě* xīngqīrì dōu kěyǐ.", translation: "Saturday or Sunday are both fine." },
+      { text: "你可以打电话*或者*发消息。", romanization: "Nǐ kěyǐ dǎ diànhuà *huòzhě* fā xiāoxi.", translation: "You can call or send a message." }
     ],
     108: [
       { text: "我*跟*朋友一起去。", romanization: "Wǒ *gēn* péngyou yìqǐ qù.", translation: "I'm going with a friend." },
       { text: "她*跟*我说话。", romanization: "Tā *gēn* wǒ shuōhuà.", translation: "She talks with me." },
-      { text: "你想*跟*我们一起吃饭吗？", romanization: "Nǐ xiǎng *gēn* wǒmen yìqǐ chīfàn ma?", translation: "Do you want to eat with us?" }
+      { text: "你想*跟*我们一起吃饭吗？", romanization: "Nǐ xiǎng *gēn* wǒmen yìqǐ chīfàn ma?", translation: "Do you want to eat with us?" },
+      { text: "我*跟*妈妈去商店。", romanization: "Wǒ *gēn* māma qù shāngdiàn.", translation: "I go to the shop with mum." },
+      { text: "他*跟*朋友打篮球。", romanization: "Tā *gēn* péngyou dǎ lánqiú.", translation: "He plays basketball with friends." },
+      { text: "我想*跟*你说话。", romanization: "Wǒ xiǎng *gēn* nǐ shuōhuà.", translation: "I want to talk with you." }
     ],
     109: [
       { text: "*没有*你，我做不到。", romanization: "*Méiyǒu* nǐ, wǒ zuò bu dào.", translation: "Without you, I can't do it." },
       { text: "*没有*钱我们去不了旅行。", romanization: "*Méiyǒu* qián wǒmen qù bu liǎo lǚxíng.", translation: "Without money we can't go on the trip." },
-      { text: "*没有*地图我们会迷路。", romanization: "*Méiyǒu* dìtú wǒmen huì mílù.", translation: "Without a map we'll get lost." }
+      { text: "*没有*地图我们会迷路。", romanization: "*Méiyǒu* dìtú wǒmen huì mílù.", translation: "Without a map we'll get lost." },
+      { text: "*没有*手机很不方便。", romanization: "*Méiyǒu* shǒujī hěn bù fāngbiàn.", translation: "It's inconvenient without a phone." },
+      { text: "他*没有*带伞就出去了。", romanization: "Tā *méiyǒu* dài sǎn jiù chūqù le.", translation: "He went out without an umbrella." },
+      { text: "*没有*水，花会死。", romanization: "*Méiyǒu* shuǐ, huā huì sǐ.", translation: "Without water, flowers die." }
     ],
     110: [
       { text: "我*从*中国来。", romanization: "Wǒ *cóng* Zhōngguó lái.", translation: "I come from China." },
       { text: "火车*从*北京出发。", romanization: "Huǒchē *cóng* Běijīng chūfā.", translation: "The train departs from Beijing." },
-      { text: "商店*从*九点开门。", romanization: "Shāngdiàn *cóng* jiǔ diǎn kāimén.", translation: "The shop opens from nine o'clock." }
+      { text: "商店*从*九点开门。", romanization: "Shāngdiàn *cóng* jiǔ diǎn kāimén.", translation: "The shop opens from nine o'clock." },
+      { text: "她*从*上海来。", romanization: "Tā *cóng* Shànghǎi lái.", translation: "She comes from Shanghai." },
+      { text: "我*从*早上工作到晚上。", romanization: "Wǒ *cóng* zǎoshang gōngzuò dào wǎnshang.", translation: "I work from morning to night." },
+      { text: "这是*从*中国来的茶。", romanization: "Zhè shì *cóng* Zhōngguó lái de chá.", translation: "This is tea from China." }
     ],
     111: [
       { text: "我们走路*到*学校。", romanization: "Wǒmen zǒulù *dào* xuéxiào.", translation: "We walk to school." },
       { text: "火车什么时候*到*上海？", romanization: "Huǒchē shénme shíhou *dào* Shànghǎi?", translation: "When does the train arrive in Shanghai?" },
-      { text: "我明天*到*那里。", romanization: "Wǒ míngtiān *dào* nàlǐ.", translation: "I'll get there tomorrow." }
+      { text: "我明天*到*那里。", romanization: "Wǒ míngtiān *dào* nàlǐ.", translation: "I'll get there tomorrow." },
+      { text: "我坐火车*到*北京。", romanization: "Wǒ zuò huǒchē *dào* Běijīng.", translation: "I take the train to Beijing." },
+      { text: "商店开*到*晚上十点。", romanization: "Shāngdiàn kāi *dào* wǎnshang shí diǎn.", translation: "The shop is open until ten at night." },
+      { text: "我们几点*到*家？", romanization: "Wǒmen jǐ diǎn *dào* jiā?", translation: "What time will we get home?" }
     ],
     112: [
       { text: "钱*在*我的包里。", romanization: "Qián *zài* wǒ de bāo lǐ.", translation: "The money is in my bag." },
       { text: "他*在*家。", romanization: "Tā *zài* jiā.", translation: "He is at home." },
-      { text: "我们*在*公园散步。", romanization: "Wǒmen *zài* gōngyuán sànbù.", translation: "We walk in the park." }
+      { text: "我们*在*公园散步。", romanization: "Wǒmen *zài* gōngyuán sànbù.", translation: "We walk in the park." },
+      { text: "我*在*学校学习。", romanization: "Wǒ *zài* xuéxiào xuéxí.", translation: "I study at school." },
+      { text: "猫*在*房间里。", romanization: "Māo *zài* fángjiān lǐ.", translation: "The cat is in the room." },
+      { text: "她*在*北京工作。", romanization: "Tā *zài* Běijīng gōngzuò.", translation: "She works in Beijing." }
     ],
     113: [
       { text: "书*在上面*。", romanization: "Shū *zài shàngmiàn*.", translation: "The book is on top." },
       { text: "钥匙*在上面*。", romanization: "Yàoshi *zài shàngmiàn*.", translation: "The keys are up there." },
-      { text: "猫*在上面*，你看得到吗？", romanization: "Māo *zài shàngmiàn*, nǐ kàn de dào ma?", translation: "The cat is up there, can you see it?" }
+      { text: "猫*在上面*，你看得到吗？", romanization: "Māo *zài shàngmiàn*, nǐ kàn de dào ma?", translation: "The cat is up there, can you see it?" },
+      { text: "你的手机*在上面*。", romanization: "Nǐ de shǒujī *zài shàngmiàn*.", translation: "Your phone is up there." },
+      { text: "我的名字*在上面*。", romanization: "Wǒ de míngzi *zài shàngmiàn*.", translation: "My name is at the top." },
+      { text: "杯子*在上面*，小心。", romanization: "Bēizi *zài shàngmiàn*, xiǎoxīn.", translation: "The cup is on top, be careful." }
     ],
     114: [
       { text: "猫*在下面*。", romanization: "Māo *zài xiàmiàn*.", translation: "The cat is underneath." },
       { text: "钥匙*在下面*。", romanization: "Yàoshi *zài xiàmiàn*.", translation: "The keys are underneath." },
-      { text: "书*在下面*，你能拿给我吗？", romanization: "Shū *zài xiàmiàn*, nǐ néng ná gěi wǒ ma?", translation: "The book is underneath, can you hand it to me?" }
+      { text: "书*在下面*，你能拿给我吗？", romanization: "Shū *zài xiàmiàn*, nǐ néng ná gěi wǒ ma?", translation: "The book is underneath, can you hand it to me?" },
+      { text: "你的鞋子*在下面*。", romanization: "Nǐ de xiézi *zài xiàmiàn*.", translation: "Your shoes are down there." },
+      { text: "狗*在下面*睡觉。", romanization: "Gǒu *zài xiàmiàn* shuìjiào.", translation: "The dog is sleeping underneath." },
+      { text: "我的包*在下面*。", romanization: "Wǒ de bāo *zài xiàmiàn*.", translation: "My bag is underneath." }
     ],
     115: [
       { text: "灯在桌子*上方*。", romanization: "Dēng zài zhuōzi *shàngfāng*.", translation: "The lamp is above the table." },
       { text: "云在*上方*飘动。", romanization: "Yún zài *shàngfāng* piāodòng.", translation: "The clouds float above." },
-      { text: "飞机在我们*上方*飞过。", romanization: "Fēijī zài wǒmen *shàngfāng* fēiguò.", translation: "The airplane flies above us." }
+      { text: "飞机在我们*上方*飞过。", romanization: "Fēijī zài wǒmen *shàngfāng* fēiguò.", translation: "The airplane flies above us." },
+      { text: "门的*上方*有一个钟。", romanization: "Mén de *shàngfāng* yǒu yí gè zhōng.", translation: "There is a clock above the door." },
+      { text: "鸟在房子*上方*飞。", romanization: "Niǎo zài fángzi *shàngfāng* fēi.", translation: "Birds fly above the house." },
+      { text: "沙发*上方*有一张照片。", romanization: "Shāfā *shàngfāng* yǒu yì zhāng zhàopiàn.", translation: "There is a photo above the sofa." }
     ],
     116: [
       { text: "北京是一个大*城市*。", romanization: "Běijīng shì yí ge dà *chéngshì*.", translation: "Beijing is a big city." },
       { text: "我住在这个*城市*。", romanization: "Wǒ zhù zài zhège *chéngshì*.", translation: "I live in this city." },
-      { text: "这个*城市*很漂亮。", romanization: "Zhège *chéngshì* hěn piàoliang.", translation: "This city is beautiful." }
+      { text: "这个*城市*很漂亮。", romanization: "Zhège *chéngshì* hěn piàoliang.", translation: "This city is beautiful." },
+      { text: "上海是一个国际*城市*。", romanization: "Shànghǎi shì yí gè guójì *chéngshì*.", translation: "Shanghai is an international city." },
+      { text: "你喜欢哪个*城市*？", romanization: "Nǐ xǐhuan nǎge *chéngshì*?", translation: "Which city do you like?" },
+      { text: "这个*城市*晚上很热闹。", romanization: "Zhège *chéngshì* wǎnshang hěn rènao.", translation: "This city is lively at night." }
     ],
     117: [
       { text: "这条*街道*很安静。", romanization: "Zhè tiáo *jiēdào* hěn ānjìng.", translation: "This street is quiet." },
       { text: "他住在我们的*街道*上。", romanization: "Tā zhù zài wǒmen de *jiēdào* shàng.", translation: "He lives on our street." },
-      { text: "*街道*上有很多商店。", romanization: "*Jiēdào* shàng yǒu hěn duō shāngdiàn.", translation: "There are many shops on the street." }
+      { text: "*街道*上有很多商店。", romanization: "*Jiēdào* shàng yǒu hěn duō shāngdiàn.", translation: "There are many shops on the street." },
+      { text: "这条*街道*很长。", romanization: "Zhè tiáo *jiēdào* hěn cháng.", translation: "This street is long." },
+      { text: "*街道*上有很多人。", romanization: "*Jiēdào* shàng yǒu hěn duō rén.", translation: "There are many people on the street." },
+      { text: "这条*街道*叫什么名字？", romanization: "Zhè tiáo *jiēdào* jiào shénme míngzi?", translation: "What is this street called?" }
     ],
     118: [
       { text: "*商店*几点开门？", romanization: "*Shāngdiàn* jǐ diǎn kāimén?", translation: "What time does the shop open?" },
       { text: "这家*商店*卖水果。", romanization: "Zhè jiā *shāngdiàn* mài shuǐguǒ.", translation: "This shop sells fruit." },
-      { text: "我们去*商店*买牛奶。", romanization: "Wǒmen qù *shāngdiàn* mǎi niúnǎi.", translation: "We're going to the shop to buy milk." }
+      { text: "我们去*商店*买牛奶。", romanization: "Wǒmen qù *shāngdiàn* mǎi niúnǎi.", translation: "We're going to the shop to buy milk." },
+      { text: "这家*商店*很大。", romanization: "Zhè jiā *shāngdiàn* hěn dà.", translation: "This shop is big." },
+      { text: "*商店*已经关门了。", romanization: "*Shāngdiàn* yǐjīng guānmén le.", translation: "The shop is already closed." },
+      { text: "她在一家*商店*工作。", romanization: "Tā zài yì jiā *shāngdiàn* gōngzuò.", translation: "She works in a shop." }
     ],
     119: [
       { text: "*市场*卖新鲜的蔬菜。", romanization: "*Shìchǎng* mài xīnxiān de shūcài.", translation: "The market sells fresh vegetables." },
       { text: "我们星期六去*市场*。", romanization: "Wǒmen xīngqīliù qù *shìchǎng*.", translation: "We go to the market on Saturday." },
-      { text: "这个*市场*很大。", romanization: "Zhège *shìchǎng* hěn dà.", translation: "This market is big." }
+      { text: "这个*市场*很大。", romanization: "Zhège *shìchǎng* hěn dà.", translation: "This market is big." },
+      { text: "我在*市场*买了鱼。", romanization: "Wǒ zài *shìchǎng* mǎile yú.", translation: "I bought fish at the market." },
+      { text: "*市场*早上很热闹。", romanization: "*Shìchǎng* zǎoshang hěn rènao.", translation: "The market is lively in the morning." },
+      { text: "*市场*的水果很便宜。", romanization: "*Shìchǎng* de shuǐguǒ hěn piányi.", translation: "The fruit at the market is cheap." }
     ],
     120: [
       { text: "孩子们在*公园*玩。", romanization: "Háizimen zài *gōngyuán* wán.", translation: "The children play in the park." },
       { text: "我们去*公园*散步吧。", romanization: "Wǒmen qù *gōngyuán* sànbù ba.", translation: "Let's go for a walk in the park." },
-      { text: "这个*公园*很大很美。", romanization: "Zhège *gōngyuán* hěn dà hěn měi.", translation: "This park is big and beautiful." }
+      { text: "这个*公园*很大很美。", romanization: "Zhège *gōngyuán* hěn dà hěn měi.", translation: "This park is big and beautiful." },
+      { text: "*公园*里有很多花。", romanization: "*Gōngyuán* lǐ yǒu hěn duō huā.", translation: "There are many flowers in the park." },
+      { text: "我每天在*公园*跑步。", romanization: "Wǒ měi tiān zài *gōngyuán* pǎobù.", translation: "I run in the park every day." },
+      { text: "*公园*离这里不远。", romanization: "*Gōngyuán* lí zhèlǐ bù yuǎn.", translation: "The park isn't far from here." }
     ],
     121: [
       { text: "这个*房间*很干净。", romanization: "Zhège *fángjiān* hěn gānjìng.", translation: "This room is clean." },
       { text: "我的*房间*在楼上。", romanization: "Wǒ de *fángjiān* zài lóushàng.", translation: "My room is upstairs." },
-      { text: "*房间*里有一张床。", romanization: "*Fángjiān* lǐ yǒu yì zhāng chuáng.", translation: "There's a bed in the room." }
+      { text: "*房间*里有一张床。", romanization: "*Fángjiān* lǐ yǒu yì zhāng chuáng.", translation: "There's a bed in the room." },
+      { text: "我的*房间*很小。", romanization: "Wǒ de *fángjiān* hěn xiǎo.", translation: "My room is small." },
+      { text: "酒店的*房间*很大。", romanization: "Jiǔdiàn de *fángjiān* hěn dà.", translation: "The hotel room is big." },
+      { text: "请打扫你的*房间*。", romanization: "Qǐng dǎsǎo nǐ de *fángjiān*.", translation: "Please clean your room." }
     ],
     122: [
       { text: "妈妈在*厨房*做饭。", romanization: "Māma zài *chúfáng* zuòfàn.", translation: "Mom is cooking in the kitchen." },
       { text: "*厨房*很小但很方便。", romanization: "*Chúfáng* hěn xiǎo dàn hěn fāngbiàn.", translation: "The kitchen is small but convenient." },
-      { text: "我们在*厨房*吃早饭。", romanization: "Wǒmen zài *chúfáng* chī zǎofàn.", translation: "We eat breakfast in the kitchen." }
+      { text: "我们在*厨房*吃早饭。", romanization: "Wǒmen zài *chúfáng* chī zǎofàn.", translation: "We eat breakfast in the kitchen." },
+      { text: "*厨房*里有什么吃的？", romanization: "*Chúfáng* lǐ yǒu shénme chī de?", translation: "What is there to eat in the kitchen?" },
+      { text: "我们的*厨房*很新。", romanization: "Wǒmen de *chúfáng* hěn xīn.", translation: "Our kitchen is new." },
+      { text: "爸爸在*厨房*洗碗。", romanization: "Bàba zài *chúfáng* xǐ wǎn.", translation: "Dad is washing dishes in the kitchen." }
     ],
     123: [
       { text: "*浴室*在走廊尽头。", romanization: "*Yùshì* zài zǒuláng jìntóu.", translation: "The bathroom is at the end of the hallway." },
       { text: "我在*浴室*洗澡。", romanization: "Wǒ zài *yùshì* xǐzǎo.", translation: "I take a shower in the bathroom." },
-      { text: "这个*浴室*很干净。", romanization: "Zhège *yùshì* hěn gānjìng.", translation: "This bathroom is clean." }
+      { text: "这个*浴室*很干净。", romanization: "Zhège *yùshì* hěn gānjìng.", translation: "This bathroom is clean." },
+      { text: "*浴室*在哪里？", romanization: "*Yùshì* zài nǎlǐ?", translation: "Where is the bathroom?" },
+      { text: "我们家有两个*浴室*。", romanization: "Wǒmen jiā yǒu liǎng gè *yùshì*.", translation: "Our home has two bathrooms." },
+      { text: "他在*浴室*里洗脸。", romanization: "Tā zài *yùshì* lǐ xǐ liǎn.", translation: "He is washing his face in the bathroom." }
     ],
     124: [
       { text: "我的*卧室*在二楼。", romanization: "Wǒ de *wòshì* zài èr lóu.", translation: "My bedroom is on the second floor." },
       { text: "*卧室*里有一张大床。", romanization: "*Wòshì* lǐ yǒu yì zhāng dà chuáng.", translation: "There's a big bed in the bedroom." },
-      { text: "这套房子有三间*卧室*。", romanization: "Zhè tào fángzi yǒu sān jiān *wòshì*.", translation: "This house has three bedrooms." }
+      { text: "这套房子有三间*卧室*。", romanization: "Zhè tào fángzi yǒu sān jiān *wòshì*.", translation: "This house has three bedrooms." },
+      { text: "我在*卧室*看书。", romanization: "Wǒ zài *wòshì* kàn shū.", translation: "I read in the bedroom." },
+      { text: "*卧室*里很安静。", romanization: "*Wòshì* lǐ hěn ānjìng.", translation: "It's quiet in the bedroom." },
+      { text: "孩子在*卧室*睡觉。", romanization: "Háizi zài *wòshì* shuìjiào.", translation: "The child is sleeping in the bedroom." }
     ],
     125: [
       { text: "我们在*客厅*看电视。", romanization: "Wǒmen zài *kètīng* kàn diànshì.", translation: "We watch TV in the living room." },
       { text: "*客厅*很大很亮。", romanization: "*Kètīng* hěn dà hěn liàng.", translation: "The living room is big and bright." },
-      { text: "沙发在*客厅*里。", romanization: "Shāfā zài *kètīng* lǐ.", translation: "The sofa is in the living room." }
+      { text: "沙发在*客厅*里。", romanization: "Shāfā zài *kètīng* lǐ.", translation: "The sofa is in the living room." },
+      { text: "*客厅*里有一台电视。", romanization: "*Kètīng* lǐ yǒu yì tái diànshì.", translation: "There is a TV in the living room." },
+      { text: "猫在*客厅*睡觉。", romanization: "Māo zài *kètīng* shuìjiào.", translation: "The cat is sleeping in the living room." },
+      { text: "我们的*客厅*很小。", romanization: "Wǒmen de *kètīng* hěn xiǎo.", translation: "Our living room is small." }
     ],
     126: [
       { text: "我喜欢吃*奶酪*。", romanization: "Wǒ xǐhuan chī *nǎilào*.", translation: "I like eating cheese." },
       { text: "这个三明治里有*奶酪*。", romanization: "Zhège sānmíngzhì lǐ yǒu *nǎilào*.", translation: "There's cheese in this sandwich." },
-      { text: "*奶酪*和面包很搭。", romanization: "*Nǎilào* hé miànbāo hěn dā.", translation: "Cheese goes well with bread." }
+      { text: "*奶酪*和面包很搭。", romanization: "*Nǎilào* hé miànbāo hěn dā.", translation: "Cheese goes well with bread." },
+      { text: "*奶酪*在冰箱里。", romanization: "*Nǎilào* zài bīngxiāng lǐ.", translation: "The cheese is in the fridge." },
+      { text: "他不喜欢*奶酪*。", romanization: "Tā bù xǐhuan *nǎilào*.", translation: "He doesn't like cheese." },
+      { text: "我买了一块*奶酪*。", romanization: "Wǒ mǎile yí kuài *nǎilào*.", translation: "I bought a piece of cheese." }
     ],
     127: [
       { text: "我每天早上吃*鸡蛋*。", romanization: "Wǒ měitiān zǎoshang chī *jīdàn*.", translation: "I eat eggs every morning." },
       { text: "冰箱里有六个*鸡蛋*。", romanization: "Bīngxiāng lǐ yǒu liù ge *jīdàn*.", translation: "There are six eggs in the fridge." },
-      { text: "她在做*鸡蛋*汤。", romanization: "Tā zài zuò *jīdàn* tāng.", translation: "She's making egg soup." }
+      { text: "她在做*鸡蛋*汤。", romanization: "Tā zài zuò *jīdàn* tāng.", translation: "She's making egg soup." },
+      { text: "我想吃两个*鸡蛋*。", romanization: "Wǒ xiǎng chī liǎng gè *jīdàn*.", translation: "I want to eat two eggs." },
+      { text: "*鸡蛋*多少钱？", romanization: "*Jīdàn* duōshao qián?", translation: "How much are the eggs?" },
+      { text: "她在煮*鸡蛋*。", romanization: "Tā zài zhǔ *jīdàn*.", translation: "She is boiling eggs." }
     ],
     128: [
       { text: "我们晚饭吃*鱼*。", romanization: "Wǒmen wǎnfàn chī *yú*.", translation: "We're eating fish for dinner." },
       { text: "这条*鱼*很新鲜。", romanization: "Zhè tiáo *yú* hěn xīnxiān.", translation: "This fish is fresh." },
-      { text: "猫喜欢吃*鱼*。", romanization: "Māo xǐhuan chī *yú*.", translation: "Cats like eating fish." }
+      { text: "猫喜欢吃*鱼*。", romanization: "Māo xǐhuan chī *yú*.", translation: "Cats like eating fish." },
+      { text: "我不喜欢吃*鱼*。", romanization: "Wǒ bù xǐhuan chī *yú*.", translation: "I don't like eating fish." },
+      { text: "河里有很多*鱼*。", romanization: "Hé lǐ yǒu hěn duō *yú*.", translation: "There are many fish in the river." },
+      { text: "妈妈在做*鱼*。", romanization: "Māma zài zuò *yú*.", translation: "Mum is cooking fish." }
     ],
     129: [
       { text: "他不吃*肉*。", romanization: "Tā bù chī *ròu*.", translation: "He doesn't eat meat." },
       { text: "这个汤里有*肉*。", romanization: "Zhège tāng lǐ yǒu *ròu*.", translation: "There's meat in this soup." },
-      { text: "我们买了一些*肉*。", romanization: "Wǒmen mǎile yìxiē *ròu*.", translation: "We bought some meat." }
+      { text: "我们买了一些*肉*。", romanization: "Wǒmen mǎile yìxiē *ròu*.", translation: "We bought some meat." },
+      { text: "这个*肉*很好吃。", romanization: "Zhège *ròu* hěn hǎochī.", translation: "This meat is delicious." },
+      { text: "狗喜欢吃*肉*。", romanization: "Gǒu xǐhuan chī *ròu*.", translation: "Dogs like eating meat." },
+      { text: "我每天都吃*肉*。", romanization: "Wǒ měi tiān dōu chī *ròu*.", translation: "I eat meat every day." }
     ],
     130: [
       { text: "这个*汤*很好喝。", romanization: "Zhège *tāng* hěn hǎohē.", translation: "This soup is delicious." },
       { text: "妈妈做了鸡蛋*汤*。", romanization: "Māma zuòle jīdàn *tāng*.", translation: "Mom made egg soup." },
-      { text: "我想喝一碗*汤*。", romanization: "Wǒ xiǎng hē yì wǎn *tāng*.", translation: "I'd like a bowl of soup." }
+      { text: "我想喝一碗*汤*。", romanization: "Wǒ xiǎng hē yì wǎn *tāng*.", translation: "I'd like a bowl of soup." },
+      { text: "我想喝*汤*。", romanization: "Wǒ xiǎng hē *tāng*.", translation: "I want to have some soup." },
+      { text: "*汤*太烫了。", romanization: "*Tāng* tài tàng le.", translation: "The soup is too hot." },
+      { text: "冬天喝*汤*很舒服。", romanization: "Dōngtiān hē *tāng* hěn shūfu.", translation: "Soup is comforting in winter." }
     ],
     131: [
       { text: "我每天吃一个*苹果*。", romanization: "Wǒ měitiān chī yí ge *píngguǒ*.", translation: "I eat an apple every day." },
       { text: "桌子上有三个*苹果*。", romanization: "Zhuōzi shàng yǒu sān ge *píngguǒ*.", translation: "There are three apples on the table." },
-      { text: "这个*苹果*很甜。", romanization: "Zhège *píngguǒ* hěn tián.", translation: "This apple is sweet." }
+      { text: "这个*苹果*很甜。", romanization: "Zhège *píngguǒ* hěn tián.", translation: "This apple is sweet." },
+      { text: "你想吃*苹果*吗？", romanization: "Nǐ xiǎng chī *píngguǒ* ma?", translation: "Do you want an apple?" },
+      { text: "我买了五个*苹果*。", romanization: "Wǒ mǎile wǔ gè *píngguǒ*.", translation: "I bought five apples." },
+      { text: "*苹果*是红色的。", romanization: "*Píngguǒ* shì hóngsè de.", translation: "The apple is red." }
     ],
     132: [
       { text: "他喜欢吃*香蕉*。", romanization: "Tā xǐhuan chī *xiāngjiāo*.", translation: "He likes eating bananas." },
       { text: "这些*香蕉*还没熟。", romanization: "Zhèxiē *xiāngjiāo* hái méi shú.", translation: "These bananas aren't ripe yet." },
-      { text: "我买了一些*香蕉*。", romanization: "Wǒ mǎile yìxiē *xiāngjiāo*.", translation: "I bought some bananas." }
+      { text: "我买了一些*香蕉*。", romanization: "Wǒ mǎile yìxiē *xiāngjiāo*.", translation: "I bought some bananas." },
+      { text: "*香蕉*是黄色的。", romanization: "*Xiāngjiāo* shì huángsè de.", translation: "Bananas are yellow." },
+      { text: "猴子喜欢吃*香蕉*。", romanization: "Hóuzi xǐhuan chī *xiāngjiāo*.", translation: "Monkeys like bananas." },
+      { text: "我早餐吃了一根*香蕉*。", romanization: "Wǒ zǎocān chīle yì gēn *xiāngjiāo*.", translation: "I ate a banana for breakfast." }
     ],
     133: [
       { text: "这个*橙子*很甜。", romanization: "Zhège *chéngzi* hěn tián.", translation: "This orange is sweet." },
       { text: "我想要一个*橙子*。", romanization: "Wǒ xiǎng yào yí ge *chéngzi*.", translation: "I'd like an orange." },
-      { text: "篮子里有几个*橙子*。", romanization: "Lánzi lǐ yǒu jǐ ge *chéngzi*.", translation: "There are a few oranges in the basket." }
+      { text: "篮子里有几个*橙子*。", romanization: "Lánzi lǐ yǒu jǐ ge *chéngzi*.", translation: "There are a few oranges in the basket." },
+      { text: "我每天吃一个*橙子*。", romanization: "Wǒ měi tiān chī yí gè *chéngzi*.", translation: "I eat an orange every day." },
+      { text: "*橙子*多少钱一斤？", romanization: "*Chéngzi* duōshao qián yì jīn?", translation: "How much are oranges per jin?" },
+      { text: "她在剥*橙子*。", romanization: "Tā zài bāo *chéngzi*.", translation: "She is peeling an orange." }
     ],
     134: [
       { text: "我们晚饭吃*土豆*。", romanization: "Wǒmen wǎnfàn chī *tǔdòu*.", translation: "We're eating potatoes for dinner." },
       { text: "她在做*土豆*汤。", romanization: "Tā zài zuò *tǔdòu* tāng.", translation: "She's making potato soup." },
-      { text: "这些*土豆*很新鲜。", romanization: "Zhèxiē *tǔdòu* hěn xīnxiān.", translation: "These potatoes are fresh." }
+      { text: "这些*土豆*很新鲜。", romanization: "Zhèxiē *tǔdòu* hěn xīnxiān.", translation: "These potatoes are fresh." },
+      { text: "我喜欢吃*土豆*。", romanization: "Wǒ xǐhuan chī *tǔdòu*.", translation: "I like eating potatoes." },
+      { text: "我买了一些*土豆*。", romanization: "Wǒ mǎile yìxiē *tǔdòu*.", translation: "I bought some potatoes." },
+      { text: "*土豆*很便宜。", romanization: "*Tǔdòu* hěn piányi.", translation: "Potatoes are cheap." }
     ],
     135: [
       { text: "兔子喜欢吃*胡萝卜*。", romanization: "Tùzi xǐhuan chī *húluóbo*.", translation: "Rabbits like eating carrots." },
       { text: "我在切*胡萝卜*。", romanization: "Wǒ zài qiē *húluóbo*.", translation: "I'm cutting carrots." },
-      { text: "这个汤里有*胡萝卜*。", romanization: "Zhège tāng lǐ yǒu *húluóbo*.", translation: "There are carrots in this soup." }
+      { text: "这个汤里有*胡萝卜*。", romanization: "Zhège tāng lǐ yǒu *húluóbo*.", translation: "There are carrots in this soup." },
+      { text: "我不喜欢吃*胡萝卜*。", romanization: "Wǒ bù xǐhuan chī *húluóbo*.", translation: "I don't like eating carrots." },
+      { text: "*胡萝卜*是橙色的。", romanization: "*Húluóbo* shì chéngsè de.", translation: "Carrots are orange." },
+      { text: "妈妈买了很多*胡萝卜*。", romanization: "Māma mǎile hěn duō *húluóbo*.", translation: "Mum bought a lot of carrots." }
     ],
     136: [
       { text: "我每天早上喝*茶*。", romanization: "Wǒ měitiān zǎoshang hē *chá*.", translation: "I drink tea every morning." },
       { text: "你想喝一杯*茶*吗？", romanization: "Nǐ xiǎng hē yì bēi *chá* ma?", translation: "Would you like a cup of tea?" },
-      { text: "这个*茶*很好喝。", romanization: "Zhège *chá* hěn hǎohē.", translation: "This tea is delicious." }
+      { text: "这个*茶*很好喝。", romanization: "Zhège *chá* hěn hǎohē.", translation: "This tea is delicious." },
+      { text: "请喝*茶*吧。", romanization: "Qǐng hē *chá* ba.", translation: "Please have some tea." },
+      { text: "中国人喜欢喝*茶*。", romanization: "Zhōngguó rén xǐhuan hē *chá*.", translation: "Chinese people like drinking tea." },
+      { text: "这杯*茶*太热了。", romanization: "Zhè bēi *chá* tài rè le.", translation: "This cup of tea is too hot." }
     ],
     137: [
       { text: "我每天喝*牛奶*。", romanization: "Wǒ měitiān hē *niúnǎi*.", translation: "I drink milk every day." },
       { text: "冰箱里没有*牛奶*了。", romanization: "Bīngxiāng lǐ méiyǒu *niúnǎi* le.", translation: "There's no more milk in the fridge." },
-      { text: "孩子们喜欢喝*牛奶*。", romanization: "Háizimen xǐhuan hē *niúnǎi*.", translation: "Children like drinking milk." }
+      { text: "孩子们喜欢喝*牛奶*。", romanization: "Háizimen xǐhuan hē *niúnǎi*.", translation: "Children like drinking milk." },
+      { text: "我想喝一杯*牛奶*。", romanization: "Wǒ xiǎng hē yì bēi *niúnǎi*.", translation: "I want a glass of milk." },
+      { text: "*牛奶*在冰箱里。", romanization: "*Niúnǎi* zài bīngxiāng lǐ.", translation: "The milk is in the fridge." },
+      { text: "我的咖啡要加*牛奶*。", romanization: "Wǒ de kāfēi yào jiā *niúnǎi*.", translation: "I want milk in my coffee." }
     ],
     138: [
       { text: "我想喝一杯*果汁*。", romanization: "Wǒ xiǎng hē yì bēi *guǒzhī*.", translation: "I'd like a glass of juice." },
       { text: "这个*果汁*是新鲜的。", romanization: "Zhège *guǒzhī* shì xīnxiān de.", translation: "This juice is fresh." },
-      { text: "孩子喜欢喝*果汁*。", romanization: "Háizi xǐhuan hē *guǒzhī*.", translation: "The child likes drinking juice." }
+      { text: "孩子喜欢喝*果汁*。", romanization: "Háizi xǐhuan hē *guǒzhī*.", translation: "The child likes drinking juice." },
+      { text: "你要什么*果汁*？", romanization: "Nǐ yào shénme *guǒzhī*?", translation: "What juice do you want?" },
+      { text: "我买了一瓶*果汁*。", romanization: "Wǒ mǎile yì píng *guǒzhī*.", translation: "I bought a bottle of juice." },
+      { text: "这杯*果汁*很甜。", romanization: "Zhè bēi *guǒzhī* hěn tián.", translation: "This glass of juice is sweet." }
     ],
     139: [
       { text: "我七点吃*早餐*。", romanization: "Wǒ qī diǎn chī *zǎocān*.", translation: "I eat breakfast at seven." },
       { text: "*早餐*吃什么？", romanization: "*Zǎocān* chī shénme?", translation: "What's for breakfast?" },
-      { text: "他从不吃*早餐*。", romanization: "Tā cóngbù chī *zǎocān*.", translation: "He never eats breakfast." }
+      { text: "他从不吃*早餐*。", romanization: "Tā cóngbù chī *zǎocān*.", translation: "He never eats breakfast." },
+      { text: "*早餐*我喝咖啡。", romanization: "*Zǎocān* wǒ hē kāfēi.", translation: "For breakfast I drink coffee." },
+      { text: "酒店的*早餐*很好。", romanization: "Jiǔdiàn de *zǎocān* hěn hǎo.", translation: "The hotel breakfast is good." },
+      { text: "你吃*早餐*了吗？", romanization: "Nǐ chī *zǎocān* le ma?", translation: "Have you had breakfast?" }
     ],
     140: [
       { text: "我们一起吃*午餐*吧。", romanization: "Wǒmen yìqǐ chī *wǔcān* ba.", translation: "Let's have lunch together." },
       { text: "*午餐*后我要休息。", romanization: "*Wǔcān* hòu wǒ yào xiūxi.", translation: "After lunch I want to rest." },
-      { text: "她在公司吃*午餐*。", romanization: "Tā zài gōngsī chī *wǔcān*.", translation: "She eats lunch at the office." }
+      { text: "她在公司吃*午餐*。", romanization: "Tā zài gōngsī chī *wǔcān*.", translation: "She eats lunch at the office." },
+      { text: "你*午餐*吃了什么？", romanization: "Nǐ *wǔcān* chīle shénme?", translation: "What did you have for lunch?" },
+      { text: "*午餐*在十二点。", romanization: "*Wǔcān* zài shí'èr diǎn.", translation: "Lunch is at twelve." },
+      { text: "我带了*午餐*。", romanization: "Wǒ dàile *wǔcān*.", translation: "I brought lunch." }
     ],
     141: [
       { text: "我们八点吃*晚餐*。", romanization: "Wǒmen bā diǎn chī *wǎncān*.", translation: "We eat dinner at eight." },
       { text: "*晚餐*已经准备好了。", romanization: "*Wǎncān* yǐjīng zhǔnbèi hǎo le.", translation: "Dinner is ready." },
-      { text: "他们一起做*晚餐*。", romanization: "Tāmen yìqǐ zuò *wǎncān*.", translation: "They make dinner together." }
+      { text: "他们一起做*晚餐*。", romanization: "Tāmen yìqǐ zuò *wǎncān*.", translation: "They make dinner together." },
+      { text: "*晚餐*吃什么？", romanization: "*Wǎncān* chī shénme?", translation: "What's for dinner?" },
+      { text: "我请你吃*晚餐*。", romanization: "Wǒ qǐng nǐ chī *wǎncān*.", translation: "I'll treat you to dinner." },
+      { text: "*晚餐*很好吃。", romanization: "*Wǎncān* hěn hǎochī.", translation: "Dinner is delicious." }
     ],
     142: [
       { text: "请把*盐*递给我。", romanization: "Qǐng bǎ *yán* dì gěi wǒ.", translation: "Please pass me the salt." },
       { text: "这个汤*盐*太多了。", romanization: "Zhège tāng *yán* tài duō le.", translation: "This soup has too much salt." },
-      { text: "厨房里没有*盐*了。", romanization: "Chúfáng lǐ méiyǒu *yán* le.", translation: "There's no more salt in the kitchen." }
+      { text: "厨房里没有*盐*了。", romanization: "Chúfáng lǐ méiyǒu *yán* le.", translation: "There's no more salt in the kitchen." },
+      { text: "汤里要放一点*盐*。", romanization: "Tāng lǐ yào fàng yìdiǎn *yán*.", translation: "The soup needs a little salt." },
+      { text: "*盐*在哪里？", romanization: "*Yán* zài nǎlǐ?", translation: "Where is the salt?" },
+      { text: "我买了一包*盐*。", romanization: "Wǒ mǎile yì bāo *yán*.", translation: "I bought a packet of salt." }
     ],
     143: [
       { text: "我咖啡不加*糖*。", romanization: "Wǒ kāfēi bù jiā *táng*.", translation: "I don't take sugar in my coffee." },
       { text: "请给我一点*糖*。", romanization: "Qǐng gěi wǒ yìdiǎn *táng*.", translation: "Please give me a little sugar." },
-      { text: "这个蛋糕*糖*太多了。", romanization: "Zhège dàngāo *táng* tài duō le.", translation: "This cake has too much sugar." }
+      { text: "这个蛋糕*糖*太多了。", romanization: "Zhège dàngāo *táng* tài duō le.", translation: "This cake has too much sugar." },
+      { text: "你的茶要加*糖*吗？", romanization: "Nǐ de chá yào jiā *táng* ma?", translation: "Do you want sugar in your tea?" },
+      { text: "孩子们喜欢吃*糖*。", romanization: "Háizimen xǐhuan chī *táng*.", translation: "Children like eating sweets." },
+      { text: "*糖*在桌子上。", romanization: "*Táng* zài zhuōzi shàng.", translation: "The sugar is on the table." }
     ],
     144: [
       { text: "*盘子*在桌子上。", romanization: "*Pánzi* zài zhuōzi shàng.", translation: "The plate is on the table." },
       { text: "请给我一个*盘子*。", romanization: "Qǐng gěi wǒ yí ge *pánzi*.", translation: "Please give me a plate." },
-      { text: "她洗了所有的*盘子*。", romanization: "Tā xǐle suǒyǒu de *pánzi*.", translation: "She washed all the plates." }
+      { text: "她洗了所有的*盘子*。", romanization: "Tā xǐle suǒyǒu de *pánzi*.", translation: "She washed all the plates." },
+      { text: "这个*盘子*很漂亮。", romanization: "Zhège *pánzi* hěn piàoliang.", translation: "This plate is pretty." },
+      { text: "*盘子*是空的。", romanization: "*Pánzi* shì kōng de.", translation: "The plate is empty." },
+      { text: "我们需要四个*盘子*。", romanization: "Wǒmen xūyào sì gè *pánzi*.", translation: "We need four plates." }
     ],
     145: [
       { text: "*玻璃杯*里有水。", romanization: "*Bōlibēi* lǐ yǒu shuǐ.", translation: "There's water in the glass." },
       { text: "请给我一个*玻璃杯*。", romanization: "Qǐng gěi wǒ yí ge *bōlibēi*.", translation: "Please give me a glass." },
-      { text: "这个*玻璃杯*破了。", romanization: "Zhège *bōlibēi* pò le.", translation: "This glass is broken." }
+      { text: "这个*玻璃杯*破了。", romanization: "Zhège *bōlibēi* pò le.", translation: "This glass is broken." },
+      { text: "我想要一个*玻璃杯*。", romanization: "Wǒ xiǎng yào yí gè *bōlibēi*.", translation: "I'd like a glass." },
+      { text: "*玻璃杯*在桌子上。", romanization: "*Bōlibēi* zài zhuōzi shàng.", translation: "The glass is on the table." },
+      { text: "他打破了一个*玻璃杯*。", romanization: "Tā dǎpòle yí gè *bōlibēi*.", translation: "He broke a glass." }
     ],
     146: [
       { text: "我的*头*很疼。", romanization: "Wǒ de *tóu* hěn téng.", translation: "My head hurts." },
       { text: "他摇了摇*头*。", romanization: "Tā yáo le yáo *tóu*.", translation: "He shook his head." },
-      { text: "小心你的*头*。", romanization: "Xiǎoxīn nǐ de *tóu*.", translation: "Watch your head." }
+      { text: "小心你的*头*。", romanization: "Xiǎoxīn nǐ de *tóu*.", translation: "Watch your head." },
+      { text: "他的*头*上戴着帽子。", romanization: "Tā de *tóu* shàng dàizhe màozi.", translation: "He has a hat on his head." },
+      { text: "我*头*有点疼。", romanization: "Wǒ *tóu* yǒudiǎn téng.", translation: "My head hurts a bit." },
+      { text: "她点了点*头*。", romanization: "Tā diǎnle diǎn *tóu*.", translation: "She nodded." }
     ],
     147: [
       { text: "请洗*手*。", romanization: "Qǐng xǐ *shǒu*.", translation: "Please wash your hands." },
       { text: "她的*手*很冷。", romanization: "Tā de *shǒu* hěn lěng.", translation: "Her hands are cold." },
-      { text: "他拿着我的*手*。", romanization: "Tā názhe wǒ de *shǒu*.", translation: "He held my hand." }
+      { text: "他拿着我的*手*。", romanization: "Tā názhe wǒ de *shǒu*.", translation: "He held my hand." },
+      { text: "我的*手*很脏。", romanization: "Wǒ de *shǒu* hěn zāng.", translation: "My hands are dirty." },
+      { text: "请举*手*回答。", romanization: "Qǐng jǔ *shǒu* huídá.", translation: "Please raise your hand to answer." },
+      { text: "她用左*手*写字。", romanization: "Tā yòng zuǒ *shǒu* xiě zì.", translation: "She writes with her left hand." }
     ],
     148: [
       { text: "我的*脚*很疼。", romanization: "Wǒ de *jiǎo* hěn téng.", translation: "My feet hurt." },
       { text: "他光着*脚*走路。", romanization: "Tā guāngzhe *jiǎo* zǒulù.", translation: "He walks barefoot." },
-      { text: "小心你的*脚*。", romanization: "Xiǎoxīn nǐ de *jiǎo*.", translation: "Watch your feet." }
+      { text: "小心你的*脚*。", romanization: "Xiǎoxīn nǐ de *jiǎo*.", translation: "Watch your feet." },
+      { text: "我的*脚*很冷。", romanization: "Wǒ de *jiǎo* hěn lěng.", translation: "My feet are cold." },
+      { text: "他的*脚*很大。", romanization: "Tā de *jiǎo* hěn dà.", translation: "His feet are big." },
+      { text: "我走路走得*脚*疼。", romanization: "Wǒ zǒulù zǒu de *jiǎo* téng.", translation: "My feet hurt from walking." }
     ],
     149: [
       { text: "她的*眼睛*很漂亮。", romanization: "Tā de *yǎnjing* hěn piàoliang.", translation: "Her eyes are beautiful." },
       { text: "我的*眼睛*很累。", romanization: "Wǒ de *yǎnjing* hěn lèi.", translation: "My eyes are tired." },
-      { text: "闭上*眼睛*。", romanization: "Bìshàng *yǎnjing*.", translation: "Close your eyes." }
+      { text: "闭上*眼睛*。", romanization: "Bìshàng *yǎnjing*.", translation: "Close your eyes." },
+      { text: "他的*眼睛*是蓝色的。", romanization: "Tā de *yǎnjing* shì lánsè de.", translation: "His eyes are blue." },
+      { text: "请睁开*眼睛*。", romanization: "Qǐng zhēngkāi *yǎnjing*.", translation: "Please open your eyes." },
+      { text: "猫的*眼睛*很大。", romanization: "Māo de *yǎnjing* hěn dà.", translation: "The cat's eyes are big." }
     ],
     150: [
       { text: "他的*耳朵*很大。", romanization: "Tā de *ěrduo* hěn dà.", translation: "His ears are big." },
       { text: "我的*耳朵*疼。", romanization: "Wǒ de *ěrduo* téng.", translation: "My ear hurts." },
-      { text: "兔子有长长的*耳朵*。", romanization: "Tùzi yǒu chángcháng de *ěrduo*.", translation: "Rabbits have long ears." }
+      { text: "兔子有长长的*耳朵*。", romanization: "Tùzi yǒu chángcháng de *ěrduo*.", translation: "Rabbits have long ears." },
+      { text: "她的*耳朵*很小。", romanization: "Tā de *ěrduo* hěn xiǎo.", translation: "Her ears are small." },
+      { text: "狗的*耳朵*很长。", romanization: "Gǒu de *ěrduo* hěn cháng.", translation: "The dog's ears are long." },
+      { text: "冬天我的*耳朵*很冷。", romanization: "Dōngtiān wǒ de *ěrduo* hěn lěng.", translation: "My ears are cold in winter." }
     ],
     151: [
       { text: "他的*鼻子*很大。", romanization: "Tā de *bízi* hěn dà.", translation: "His nose is big." },
       { text: "我的*鼻子*痒。", romanization: "Wǒ de *bízi* yǎng.", translation: "My nose is itchy." },
-      { text: "小狗用*鼻子*闻东西。", romanization: "Xiǎogǒu yòng *bízi* wén dōngxi.", translation: "The puppy smells things with its nose." }
+      { text: "小狗用*鼻子*闻东西。", romanization: "Xiǎogǒu yòng *bízi* wén dōngxi.", translation: "The puppy smells things with its nose." },
+      { text: "她的*鼻子*很小。", romanization: "Tā de *bízi* hěn xiǎo.", translation: "Her nose is small." },
+      { text: "我的*鼻子*很红。", romanization: "Wǒ de *bízi* hěn hóng.", translation: "My nose is red." },
+      { text: "狗的*鼻子*很冷。", romanization: "Gǒu de *bízi* hěn lěng.", translation: "The dog's nose is cold." }
     ],
     152: [
       { text: "闭上你的*嘴*。", romanization: "Bìshàng nǐ de *zuǐ*.", translation: "Close your mouth." },
       { text: "她的*嘴*很小。", romanization: "Tā de *zuǐ* hěn xiǎo.", translation: "Her mouth is small." },
-      { text: "他张开*嘴*笑了。", romanization: "Tā zhāngkāi *zuǐ* xiào le.", translation: "He opened his mouth and laughed." }
+      { text: "他张开*嘴*笑了。", romanization: "Tā zhāngkāi *zuǐ* xiào le.", translation: "He opened his mouth and laughed." },
+      { text: "请张开*嘴*吧。", romanization: "Qǐng zhāngkāi *zuǐ* ba.", translation: "Please open your mouth." },
+      { text: "他的*嘴*很大。", romanization: "Tā de *zuǐ* hěn dà.", translation: "His mouth is big." },
+      { text: "别用*嘴*咬笔。", romanization: "Bié yòng *zuǐ* yǎo bǐ.", translation: "Don't bite the pen with your mouth." }
     ],
     153: [
       { text: "她的*头发*很长。", romanization: "Tā de *tóufa* hěn cháng.", translation: "Her hair is long." },
       { text: "我今天洗了*头发*。", romanization: "Wǒ jīntiān xǐle *tóufa*.", translation: "I washed my hair today." },
-      { text: "他的*头发*是黑色的。", romanization: "Tā de *tóufa* shì hēisè de.", translation: "His hair is black." }
+      { text: "他的*头发*是黑色的。", romanization: "Tā de *tóufa* shì hēisè de.", translation: "His hair is black." },
+      { text: "我想剪*头发*。", romanization: "Wǒ xiǎng jiǎn *tóufa*.", translation: "I want to get my hair cut." },
+      { text: "奶奶的*头发*是白色的。", romanization: "Nǎinai de *tóufa* shì báisè de.", translation: "Grandma's hair is white." },
+      { text: "你的*头发*真漂亮。", romanization: "Nǐ de *tóufa* zhēn piàoliang.", translation: "Your hair is really pretty." }
     ],
     154: [
       { text: "他穿着一件*夹克*。", romanization: "Tā chuānzhe yí jiàn *jiākè*.", translation: "He's wearing a jacket." },
       { text: "这件*夹克*很暖和。", romanization: "Zhè jiàn *jiākè* hěn nuǎnhuo.", translation: "This jacket is warm." },
-      { text: "我把*夹克*忘在家里了。", romanization: "Wǒ bǎ *jiākè* wàng zài jiā lǐ le.", translation: "I forgot my jacket at home." }
+      { text: "我把*夹克*忘在家里了。", romanization: "Wǒ bǎ *jiākè* wàng zài jiā lǐ le.", translation: "I forgot my jacket at home." },
+      { text: "我的*夹克*在哪里？", romanization: "Wǒ de *jiākè* zài nǎlǐ?", translation: "Where is my jacket?" },
+      { text: "这件*夹克*太大了。", romanization: "Zhè jiàn *jiākè* tài dà le.", translation: "This jacket is too big." },
+      { text: "我买了一件新*夹克*。", romanization: "Wǒ mǎile yí jiàn xīn *jiākè*.", translation: "I bought a new jacket." }
     ],
     155: [
       { text: "我买了一双新*鞋子*。", romanization: "Wǒ mǎile yì shuāng xīn *xiézi*.", translation: "I bought a new pair of shoes." },
       { text: "请把*鞋子*脱掉。", romanization: "Qǐng bǎ *xiézi* tuō diào.", translation: "Please take off your shoes." },
-      { text: "这双*鞋子*太小了。", romanization: "Zhè shuāng *xiézi* tài xiǎo le.", translation: "These shoes are too small." }
+      { text: "这双*鞋子*太小了。", romanization: "Zhè shuāng *xiézi* tài xiǎo le.", translation: "These shoes are too small." },
+      { text: "我的*鞋子*湿了。", romanization: "Wǒ de *xiézi* shī le.", translation: "My shoes are wet." },
+      { text: "你的*鞋子*很漂亮。", romanization: "Nǐ de *xiézi* hěn piàoliang.", translation: "Your shoes are nice." },
+      { text: "*鞋子*在门口。", romanization: "*Xiézi* zài ménkǒu.", translation: "The shoes are by the door." }
     ],
     156: [
       { text: "他穿着蓝色*裤子*。", romanization: "Tā chuānzhe lánsè *kùzi*.", translation: "He's wearing blue pants." },
       { text: "这条*裤子*太长了。", romanization: "Zhè tiáo *kùzi* tài cháng le.", translation: "These pants are too long." },
-      { text: "我需要买新*裤子*。", romanization: "Wǒ xūyào mǎi xīn *kùzi*.", translation: "I need to buy new pants." }
+      { text: "我需要买新*裤子*。", romanization: "Wǒ xūyào mǎi xīn *kùzi*.", translation: "I need to buy new pants." },
+      { text: "这条*裤子*太短了。", romanization: "Zhè tiáo *kùzi* tài duǎn le.", translation: "These trousers are too short." },
+      { text: "我的*裤子*脏了。", romanization: "Wǒ de *kùzi* zāng le.", translation: "My trousers are dirty." },
+      { text: "他买了一条黑*裤子*。", romanization: "Tā mǎile yì tiáo hēi *kùzi*.", translation: "He bought black trousers." }
     ],
     157: [
       { text: "他穿着白色*衬衫*。", romanization: "Tā chuānzhe báisè *chènshān*.", translation: "He's wearing a white shirt." },
       { text: "这件*衬衫*很好看。", romanization: "Zhè jiàn *chènshān* hěn hǎokàn.", translation: "This shirt looks nice." },
-      { text: "我要熨这件*衬衫*。", romanization: "Wǒ yào yùn zhè jiàn *chènshān*.", translation: "I need to iron this shirt." }
+      { text: "我要熨这件*衬衫*。", romanization: "Wǒ yào yùn zhè jiàn *chènshān*.", translation: "I need to iron this shirt." },
+      { text: "我买了一件新*衬衫*。", romanization: "Wǒ mǎile yí jiàn xīn *chènshān*.", translation: "I bought a new shirt." },
+      { text: "这件*衬衫*太小了。", romanization: "Zhè jiàn *chènshān* tài xiǎo le.", translation: "This shirt is too small." },
+      { text: "他的*衬衫*是蓝色的。", romanization: "Tā de *chènshān* shì lánsè de.", translation: "His shirt is blue." }
     ],
     158: [
       { text: "她穿着一条红色*连衣裙*。", romanization: "Tā chuānzhe yì tiáo hóngsè *liányīqún*.", translation: "She's wearing a red dress." },
       { text: "这条*连衣裙*很漂亮。", romanization: "Zhè tiáo *liányīqún* hěn piàoliang.", translation: "This dress is beautiful." },
-      { text: "我想买一条新*连衣裙*。", romanization: "Wǒ xiǎng mǎi yì tiáo xīn *liányīqún*.", translation: "I want to buy a new dress." }
+      { text: "我想买一条新*连衣裙*。", romanization: "Wǒ xiǎng mǎi yì tiáo xīn *liányīqún*.", translation: "I want to buy a new dress." },
+      { text: "她的*连衣裙*是白色的。", romanization: "Tā de *liányīqún* shì báisè de.", translation: "Her dress is white." },
+      { text: "这条*连衣裙*太贵了。", romanization: "Zhè tiáo *liányīqún* tài guì le.", translation: "This dress is too expensive." },
+      { text: "她穿*连衣裙*很漂亮。", romanization: "Tā chuān *liányīqún* hěn piàoliang.", translation: "She looks lovely in a dress." }
     ],
     159: [
       { text: "他戴着一顶*帽子*。", romanization: "Tā dàizhe yì dǐng *màozi*.", translation: "He's wearing a hat." },
       { text: "这顶*帽子*是我的。", romanization: "Zhè dǐng *màozi* shì wǒ de.", translation: "This hat is mine." },
-      { text: "外面很冷，戴上*帽子*吧。", romanization: "Wàimiàn hěn lěng, dài shàng *màozi* ba.", translation: "It's cold outside, put on a hat." }
+      { text: "外面很冷，戴上*帽子*吧。", romanization: "Wàimiàn hěn lěng, dài shàng *màozi* ba.", translation: "It's cold outside, put on a hat." },
+      { text: "我的*帽子*在哪里？", romanization: "Wǒ de *màozi* zài nǎlǐ?", translation: "Where is my hat?" },
+      { text: "他买了一顶新*帽子*。", romanization: "Tā mǎile yì dǐng xīn *màozi*.", translation: "He bought a new hat." },
+      { text: "这顶*帽子*太大了。", romanization: "Zhè dǐng *màozi* tài dà le.", translation: "This hat is too big." }
     ],
     160: [
       { text: "她穿着一件绿色*毛衣*。", romanization: "Tā chuānzhe yí jiàn lǜsè *máoyī*.", translation: "She's wearing a green sweater." },
       { text: "这件*毛衣*很暖和。", romanization: "Zhè jiàn *máoyī* hěn nuǎnhuo.", translation: "This sweater is warm." },
-      { text: "奶奶给我织了一件*毛衣*。", romanization: "Nǎinai gěi wǒ zhīle yí jiàn *máoyī*.", translation: "Grandma knitted me a sweater." }
+      { text: "奶奶给我织了一件*毛衣*。", romanization: "Nǎinai gěi wǒ zhīle yí jiàn *máoyī*.", translation: "Grandma knitted me a sweater." },
+      { text: "冬天我穿*毛衣*。", romanization: "Dōngtiān wǒ chuān *máoyī*.", translation: "In winter I wear a sweater." },
+      { text: "这件*毛衣*太大了。", romanization: "Zhè jiàn *máoyī* tài dà le.", translation: "This sweater is too big." },
+      { text: "我的*毛衣*是灰色的。", romanization: "Wǒ de *máoyī* shì huīsè de.", translation: "My sweater is grey." }
     ],
     161: [
       { text: "请等三十*秒*。", romanization: "Qǐng děng sānshí *miǎo*.", translation: "Please wait thirty seconds." },
       { text: "这只花了几*秒*。", romanization: "Zhè zhǐ huāle jǐ *miǎo*.", translation: "This only took a few seconds." },
-      { text: "他一*秒*都没等。", romanization: "Tā yì *miǎo* dōu méi děng.", translation: "He didn't wait a single second." }
+      { text: "他一*秒*都没等。", romanization: "Tā yì *miǎo* dōu méi děng.", translation: "He didn't wait a single second." },
+      { text: "请等十*秒*。", romanization: "Qǐng děng shí *miǎo*.", translation: "Please wait ten seconds." },
+      { text: "一分钟有六十*秒*。", romanization: "Yì fēnzhōng yǒu liùshí *miǎo*.", translation: "A minute has sixty seconds." },
+      { text: "他跑了十二*秒*。", romanization: "Tā pǎole shí'èr *miǎo*.", translation: "He ran for twelve seconds." }
     ],
     162: [
       { text: "我们等了两个*小时*。", romanization: "Wǒmen děngle liǎng ge *xiǎoshí*.", translation: "We waited two hours." },
       { text: "飞机再一个*小时*就到了。", romanization: "Fēijī zài yí ge *xiǎoshí* jiù dào le.", translation: "The plane will arrive in one more hour." },
-      { text: "会议持续了一个*小时*。", romanization: "Huìyì chíxùle yí ge *xiǎoshí*.", translation: "The meeting lasted an hour." }
+      { text: "会议持续了一个*小时*。", romanization: "Huìyì chíxùle yí ge *xiǎoshí*.", translation: "The meeting lasted an hour." },
+      { text: "我每天学习一个*小时*。", romanization: "Wǒ měi tiān xuéxí yí gè *xiǎoshí*.", translation: "I study one hour every day." },
+      { text: "电影有两个*小时*。", romanization: "Diànyǐng yǒu liǎng gè *xiǎoshí*.", translation: "The film is two hours long." },
+      { text: "我睡了八个*小时*。", romanization: "Wǒ shuìle bā gè *xiǎoshí*.", translation: "I slept for eight hours." }
     ],
     163: [
       { text: "请等五*分钟*。", romanization: "Qǐng děng wǔ *fēnzhōng*.", translation: "Please wait five minutes." },
       { text: "还有十*分钟*就开始了。", romanization: "Hái yǒu shí *fēnzhōng* jiù kāishǐ le.", translation: "It starts in ten minutes." },
-      { text: "我们迟到了几*分钟*。", romanization: "Wǒmen chídàole jǐ *fēnzhōng*.", translation: "We were a few minutes late." }
+      { text: "我们迟到了几*分钟*。", romanization: "Wǒmen chídàole jǐ *fēnzhōng*.", translation: "We were a few minutes late." },
+      { text: "我十*分钟*后到。", romanization: "Wǒ shí *fēnzhōng* hòu dào.", translation: "I'll arrive in ten minutes." },
+      { text: "一小时有六十*分钟*。", romanization: "Yì xiǎoshí yǒu liùshí *fēnzhōng*.", translation: "An hour has sixty minutes." },
+      { text: "走路要二十*分钟*。", romanization: "Zǒulù yào èrshí *fēnzhōng*.", translation: "It takes twenty minutes on foot." }
     ],
     164: [
       { text: "我们在这里住了五*年*。", romanization: "Wǒmen zài zhèlǐ zhùle wǔ *nián*.", translation: "We've lived here for five years." },
       { text: "明*年*我要去中国。", romanization: "Míng *nián* wǒ yào qù Zhōngguó.", translation: "Next year I'm going to China." },
-      { text: "去*年*冬天很冷。", romanization: "Qù *nián* dōngtiān hěn lěng.", translation: "Last winter was cold." }
+      { text: "去*年*冬天很冷。", romanization: "Qù *nián* dōngtiān hěn lěng.", translation: "Last winter was cold." },
+      { text: "祝你新*年*快乐！", romanization: "Zhù nǐ xīn *nián* kuàilè!", translation: "Happy New Year to you!" },
+      { text: "我学了两*年*中文。", romanization: "Wǒ xuéle liǎng *nián* Zhōngwén.", translation: "I studied Chinese for two years." },
+      { text: "一*年*有四个季节。", romanization: "Yì *nián* yǒu sì gè jìjié.", translation: "A year has four seasons." }
     ],
     165: [
       { text: "*周末*愉快！", romanization: "*Zhōumò* yúkuài!", translation: "Have a nice weekend!" },
       { text: "我们这个*周末*去爬山。", romanization: "Wǒmen zhège *zhōumò* qù páshān.", translation: "We're going hiking this weekend." },
-      { text: "*周末*我喜欢睡懒觉。", romanization: "*Zhōumò* wǒ xǐhuan shuì lǎnjiào.", translation: "On weekends I like to sleep in." }
+      { text: "*周末*我喜欢睡懒觉。", romanization: "*Zhōumò* wǒ xǐhuan shuì lǎnjiào.", translation: "On weekends I like to sleep in." },
+      { text: "这个*周末*你做什么？", romanization: "Zhège *zhōumò* nǐ zuò shénme?", translation: "What are you doing this weekend?" },
+      { text: "*周末*我在家休息。", romanization: "*Zhōumò* wǒ zài jiā xiūxi.", translation: "At the weekend I rest at home." },
+      { text: "*周末*公园里人很多。", romanization: "*Zhōumò* gōngyuán lǐ rén hěn duō.", translation: "The park is crowded at the weekend." }
     ],
     166: [
       { text: "*星期一*我要上班。", romanization: "*Xīngqīyī* wǒ yào shàngbān.", translation: "I have to work on Monday." },
       { text: "会议在*星期一*。", romanization: "Huìyì zài *xīngqīyī*.", translation: "The meeting is on Monday." },
-      { text: "我不喜欢*星期一*。", romanization: "Wǒ bù xǐhuan *xīngqīyī*.", translation: "I don't like Mondays." }
+      { text: "我不喜欢*星期一*。", romanization: "Wǒ bù xǐhuan *xīngqīyī*.", translation: "I don't like Mondays." },
+      { text: "今天是*星期一*。", romanization: "Jīntiān shì *xīngqīyī*.", translation: "Today is Monday." },
+      { text: "*星期一*我很累。", romanization: "*Xīngqīyī* wǒ hěn lèi.", translation: "I'm tired on Monday." },
+      { text: "我们*星期一*开会。", romanization: "Wǒmen *xīngqīyī* kāihuì.", translation: "We have a meeting on Monday." }
     ],
     167: [
       { text: "*星期二*我们有课。", romanization: "*Xīngqī'èr* wǒmen yǒu kè.", translation: "We have class on Tuesday." },
       { text: "她*星期二*回来。", romanization: "Tā *xīngqī'èr* huílái.", translation: "She's coming back on Tuesday." },
-      { text: "*星期二*天气很好。", romanization: "*Xīngqī'èr* tiānqì hěn hǎo.", translation: "The weather was nice on Tuesday." }
+      { text: "*星期二*天气很好。", romanization: "*Xīngqī'èr* tiānqì hěn hǎo.", translation: "The weather was nice on Tuesday." },
+      { text: "今天是*星期二*。", romanization: "Jīntiān shì *xīngqī'èr*.", translation: "Today is Tuesday." },
+      { text: "*星期二*我去游泳。", romanization: "*Xīngqī'èr* wǒ qù yóuyǒng.", translation: "On Tuesday I go swimming." },
+      { text: "明天是*星期二*吗？", romanization: "Míngtiān shì *xīngqī'èr* ma?", translation: "Is tomorrow Tuesday?" }
     ],
     168: [
       { text: "*星期三*我去医院。", romanization: "*Xīngqīsān* wǒ qù yīyuàn.", translation: "I'm going to the hospital on Wednesday." },
       { text: "会议改到*星期三*了。", romanization: "Huìyì gǎidào *xīngqīsān* le.", translation: "The meeting was moved to Wednesday." },
-      { text: "我们*星期三*见面吧。", romanization: "Wǒmen *xīngqīsān* jiànmiàn ba.", translation: "Let's meet on Wednesday." }
+      { text: "我们*星期三*见面吧。", romanization: "Wǒmen *xīngqīsān* jiànmiàn ba.", translation: "Let's meet on Wednesday." },
+      { text: "今天是*星期三*。", romanization: "Jīntiān shì *xīngqīsān*.", translation: "Today is Wednesday." },
+      { text: "*星期三*我有中文课。", romanization: "*Xīngqīsān* wǒ yǒu Zhōngwén kè.", translation: "I have Chinese class on Wednesday." },
+      { text: "他*星期三*回家。", romanization: "Tā *xīngqīsān* huí jiā.", translation: "He goes home on Wednesday." }
     ],
     169: [
       { text: "*星期四*我很忙。", romanization: "*Xīngqīsì* wǒ hěn máng.", translation: "I'm busy on Thursday." },
       { text: "派对是*星期四*晚上。", romanization: "Pàiduì shì *xīngqīsì* wǎnshang.", translation: "The party is Thursday night." },
-      { text: "我们*星期四*出发。", romanization: "Wǒmen *xīngqīsì* chūfā.", translation: "We leave on Thursday." }
+      { text: "我们*星期四*出发。", romanization: "Wǒmen *xīngqīsì* chūfā.", translation: "We leave on Thursday." },
+      { text: "今天是*星期四*。", romanization: "Jīntiān shì *xīngqīsì*.", translation: "Today is Thursday." },
+      { text: "*星期四*我们去看电影。", romanization: "*Xīngqīsì* wǒmen qù kàn diànyǐng.", translation: "On Thursday we go to the cinema." },
+      { text: "考试在*星期四*。", romanization: "Kǎoshì zài *xīngqīsì*.", translation: "The exam is on Thursday." }
     ],
     170: [
       { text: "*星期五*是我最喜欢的一天。", romanization: "*Xīngqīwǔ* shì wǒ zuì xǐhuan de yì tiān.", translation: "Friday is my favorite day." },
       { text: "我们*星期五*晚上出去吧。", romanization: "Wǒmen *xīngqīwǔ* wǎnshang chūqù ba.", translation: "Let's go out Friday evening." },
-      { text: "报告*星期五*要交。", romanization: "Bàogào *xīngqīwǔ* yào jiāo.", translation: "The report is due Friday." }
+      { text: "报告*星期五*要交。", romanization: "Bàogào *xīngqīwǔ* yào jiāo.", translation: "The report is due Friday." },
+      { text: "今天是*星期五*。", romanization: "Jīntiān shì *xīngqīwǔ*.", translation: "Today is Friday." },
+      { text: "*星期五*晚上我们吃饭。", romanization: "*Xīngqīwǔ* wǎnshang wǒmen chī fàn.", translation: "On Friday evening we eat out." },
+      { text: "*星期五*我不上班。", romanization: "*Xīngqīwǔ* wǒ bú shàngbān.", translation: "I don't work on Friday." }
     ],
     171: [
       { text: "*星期六*我们去市场。", romanization: "*Xīngqīliù* wǒmen qù shìchǎng.", translation: "We go to the market on Saturday." },
       { text: "婚礼在*星期六*。", romanization: "Hūnlǐ zài *xīngqīliù*.", translation: "The wedding is on Saturday." },
-      { text: "*星期六*我想睡懒觉。", romanization: "*Xīngqīliù* wǒ xiǎng shuì lǎnjiào.", translation: "On Saturday I want to sleep in." }
+      { text: "*星期六*我想睡懒觉。", romanization: "*Xīngqīliù* wǒ xiǎng shuì lǎnjiào.", translation: "On Saturday I want to sleep in." },
+      { text: "今天是*星期六*。", romanization: "Jīntiān shì *xīngqīliù*.", translation: "Today is Saturday." },
+      { text: "*星期六*我们去公园。", romanization: "*Xīngqīliù* wǒmen qù gōngyuán.", translation: "On Saturday we go to the park." },
+      { text: "*星期六*你有空吗？", romanization: "*Xīngqīliù* nǐ yǒu kòng ma?", translation: "Are you free on Saturday?" }
     ],
     172: [
       { text: "*星期日*我们去教堂。", romanization: "*Xīngqīrì* wǒmen qù jiàotáng.", translation: "We go to church on Sunday." },
       { text: "商店*星期日*不开门。", romanization: "Shāngdiàn *xīngqīrì* bù kāimén.", translation: "The shop doesn't open on Sunday." },
-      { text: "*星期日*是休息的一天。", romanization: "*Xīngqīrì* shì xiūxi de yì tiān.", translation: "Sunday is a day of rest." }
+      { text: "*星期日*是休息的一天。", romanization: "*Xīngqīrì* shì xiūxi de yì tiān.", translation: "Sunday is a day of rest." },
+      { text: "今天是*星期日*。", romanization: "Jīntiān shì *xīngqīrì*.", translation: "Today is Sunday." },
+      { text: "*星期日*我去看奶奶。", romanization: "*Xīngqīrì* wǒ qù kàn nǎinai.", translation: "On Sunday I visit grandma." },
+      { text: "*星期日*我们在家吃饭。", romanization: "*Xīngqīrì* wǒmen zài jiā chī fàn.", translation: "On Sunday we eat at home." }
     ],
     173: [
       { text: "*春天*花都开了。", romanization: "*Chūntiān* huā dōu kāi le.", translation: "In spring all the flowers bloom." },
       { text: "我喜欢*春天*的天气。", romanization: "Wǒ xǐhuan *chūntiān* de tiānqì.", translation: "I like spring weather." },
-      { text: "*春天*很快就要到了。", romanization: "*Chūntiān* hěn kuài jiù yào dào le.", translation: "Spring is coming soon." }
+      { text: "*春天*很快就要到了。", romanization: "*Chūntiān* hěn kuài jiù yào dào le.", translation: "Spring is coming soon." },
+      { text: "*春天*终于来了。", romanization: "*Chūntiān* zhōngyú lái le.", translation: "Spring has finally come." },
+      { text: "*春天*是我最喜欢的季节。", romanization: "*Chūntiān* shì wǒ zuì xǐhuan de jìjié.", translation: "Spring is my favourite season." },
+      { text: "*春天*天气很暖和。", romanization: "*Chūntiān* tiānqì hěn nuǎnhuo.", translation: "The weather is warm in spring." }
     ],
     174: [
       { text: "*夏天*非常热。", romanization: "*Xiàtiān* fēicháng rè.", translation: "Summer is very hot." },
       { text: "我们*夏天*去海边。", romanization: "Wǒmen *xiàtiān* qù hǎibiān.", translation: "We go to the beach in summer." },
-      { text: "去年*夏天*很暖和。", romanization: "Qùnián *xiàtiān* hěn nuǎnhuo.", translation: "Last summer was warm." }
+      { text: "去年*夏天*很暖和。", romanization: "Qùnián *xiàtiān* hěn nuǎnhuo.", translation: "Last summer was warm." },
+      { text: "我很喜欢*夏天*。", romanization: "Wǒ hěn xǐhuan *xiàtiān*.", translation: "I really like summer." },
+      { text: "*夏天*我们去游泳。", romanization: "*Xiàtiān* wǒmen qù yóuyǒng.", translation: "In summer we go swimming." },
+      { text: "*夏天*可以吃冰淇淋。", romanization: "*Xiàtiān* kěyǐ chī bīngqílín.", translation: "In summer you can eat ice cream." }
     ],
     175: [
       { text: "*秋天*树叶变黄了。", romanization: "*Qiūtiān* shùyè biàn huáng le.", translation: "In autumn the leaves turn yellow." },
       { text: "我喜欢*秋天*的颜色。", romanization: "Wǒ xǐhuan *qiūtiān* de yánsè.", translation: "I like the colors of autumn." },
-      { text: "*秋天*天气很凉爽。", romanization: "*Qiūtiān* tiānqì hěn liángshuǎng.", translation: "Autumn weather is cool." }
+      { text: "*秋天*天气很凉爽。", romanization: "*Qiūtiān* tiānqì hěn liángshuǎng.", translation: "Autumn weather is cool." },
+      { text: "*秋天*很凉快。", romanization: "*Qiūtiān* hěn liángkuai.", translation: "Autumn is cool." },
+      { text: "北京的*秋天*很美。", romanization: "Běijīng de *qiūtiān* hěn měi.", translation: "Autumn in Beijing is beautiful." },
+      { text: "*秋天*我们去爬山。", romanization: "*Qiūtiān* wǒmen qù pá shān.", translation: "In autumn we go hiking." }
     ],
     176: [
       { text: "*冬天*非常冷。", romanization: "*Dōngtiān* fēicháng lěng.", translation: "Winter is very cold." },
       { text: "*冬天*会下雪。", romanization: "*Dōngtiān* huì xiàxuě.", translation: "It snows in winter." },
-      { text: "我不喜欢*冬天*。", romanization: "Wǒ bù xǐhuan *dōngtiān*.", translation: "I don't like winter." }
+      { text: "我不喜欢*冬天*。", romanization: "Wǒ bù xǐhuan *dōngtiān*.", translation: "I don't like winter." },
+      { text: "*冬天*我喜欢喝热茶。", romanization: "*Dōngtiān* wǒ xǐhuan hē rè chá.", translation: "In winter I like drinking hot tea." },
+      { text: "这里的*冬天*很长。", romanization: "Zhèlǐ de *dōngtiān* hěn cháng.", translation: "Winter here is long." },
+      { text: "*冬天*天黑得很早。", romanization: "*Dōngtiān* tiān hēi de hěn zǎo.", translation: "In winter it gets dark early." }
     ],
     177: [
       { text: "今天*太阳*很大。", romanization: "Jīntiān *tàiyáng* hěn dà.", translation: "The sun is strong today." },
       { text: "*太阳*从东边升起。", romanization: "*Tàiyáng* cóng dōngbian shēngqǐ.", translation: "The sun rises in the east." },
-      { text: "孩子们在*太阳*下玩耍。", romanization: "Háizimen zài *tàiyáng* xià wánshuǎ.", translation: "The children play in the sun." }
+      { text: "孩子们在*太阳*下玩耍。", romanization: "Háizimen zài *tàiyáng* xià wánshuǎ.", translation: "The children play in the sun." },
+      { text: "*太阳*出来了。", romanization: "*Tàiyáng* chūlái le.", translation: "The sun has come out." },
+      { text: "*太阳*下山了。", romanization: "*Tàiyáng* xià shān le.", translation: "The sun has set." },
+      { text: "今天的*太阳*很热。", romanization: "Jīntiān de *tàiyáng* hěn rè.", translation: "The sun is hot today." }
     ],
     178: [
       { text: "外面在下*雨*。", romanization: "Wàimiàn zài xià *yǔ*.", translation: "It's raining outside." },
       { text: "*雨*停了。", romanization: "*Yǔ* tíng le.", translation: "The rain has stopped." },
-      { text: "带上伞，可能会下*雨*。", romanization: "Dài shàng sǎn, kěnéng huì xià *yǔ*.", translation: "Bring an umbrella, it might rain." }
+      { text: "带上伞，可能会下*雨*。", romanization: "Dài shàng sǎn, kěnéng huì xià *yǔ*.", translation: "Bring an umbrella, it might rain." },
+      { text: "*雨*下得很大。", romanization: "*Yǔ* xià de hěn dà.", translation: "It's raining heavily." },
+      { text: "我喜欢听*雨*声。", romanization: "Wǒ xǐhuan tīng *yǔ* shēng.", translation: "I like listening to the rain." },
+      { text: "今天有*雨*吗？", romanization: "Jīntiān yǒu *yǔ* ma?", translation: "Will there be rain today?" }
     ],
     179: [
       { text: "外面下*雪*了。", romanization: "Wàimiàn xià *xuě* le.", translation: "It's snowing outside." },
       { text: "*雪*是白色的。", romanization: "*Xuě* shì báisè de.", translation: "Snow is white." },
-      { text: "孩子们喜欢玩*雪*。", romanization: "Háizimen xǐhuan wán *xuě*.", translation: "Children love playing in the snow." }
+      { text: "孩子们喜欢玩*雪*。", romanization: "Háizimen xǐhuan wán *xuě*.", translation: "Children love playing in the snow." },
+      { text: "昨天下了很大的*雪*。", romanization: "Zuótiān xiàle hěn dà de *xuě*.", translation: "It snowed heavily yesterday." },
+      { text: "我第一次看到*雪*。", romanization: "Wǒ dì yī cì kàndào *xuě*.", translation: "It's the first time I've seen snow." },
+      { text: "山上有很多*雪*。", romanization: "Shān shàng yǒu hěn duō *xuě*.", translation: "There's a lot of snow on the mountain." }
     ],
     180: [
       { text: "今天*风*很大。", romanization: "Jīntiān *fēng* hěn dà.", translation: "It's very windy today." },
       { text: "*风*把树叶吹走了。", romanization: "*Fēng* bǎ shùyè chuī zǒu le.", translation: "The wind blew the leaves away." },
-      { text: "外面吹着冷*风*。", romanization: "Wàimiàn chuīzhe lěng *fēng*.", translation: "A cold wind is blowing outside." }
+      { text: "外面吹着冷*风*。", romanization: "Wàimiàn chuīzhe lěng *fēng*.", translation: "A cold wind is blowing outside." },
+      { text: "海边的*风*很大。", romanization: "Hǎibiān de *fēng* hěn dà.", translation: "The wind is strong by the sea." },
+      { text: "今天的*风*很冷。", romanization: "Jīntiān de *fēng* hěn lěng.", translation: "The wind is cold today." },
+      { text: "今天没有*风*。", romanization: "Jīntiān méiyǒu *fēng*.", translation: "There's no wind today." }
     ],
     181: [
       { text: "这个主意*不错*。", romanization: "Zhège zhǔyì *búcuò*.", translation: "This is a nice idea." },
       { text: "今天天气*不错*。", romanization: "Jīntiān tiānqì *búcuò*.", translation: "The weather is nice today." },
-      { text: "这家餐厅*不错*。", romanization: "Zhè jiā cāntīng *búcuò*.", translation: "This restaurant is nice." }
+      { text: "这家餐厅*不错*。", romanization: "Zhè jiā cāntīng *búcuò*.", translation: "This restaurant is nice." },
+      { text: "你的中文*不错*。", romanization: "Nǐ de Zhōngwén *búcuò*.", translation: "Your Chinese is not bad." },
+      { text: "这本书*不错*。", romanization: "Zhè běn shū *búcuò*.", translation: "This book is pretty good." },
+      { text: "这个菜味道*不错*。", romanization: "Zhège cài wèidao *búcuò*.", translation: "This dish tastes nice." }
     ],
     182: [
       { text: "今天*多云*。", romanization: "Jīntiān *duōyún*.", translation: "Today is cloudy." },
       { text: "天空*多云*，可能会下雨。", romanization: "Tiānkōng *duōyún*, kěnéng huì xiàyǔ.", translation: "The sky is cloudy, it might rain." },
-      { text: "明天会*多云*。", romanization: "Míngtiān huì *duōyún*.", translation: "Tomorrow will be cloudy." }
+      { text: "明天会*多云*。", romanization: "Míngtiān huì *duōyún*.", translation: "Tomorrow will be cloudy." },
+      { text: "今天*多云*，有点冷。", romanization: "Jīntiān *duōyún*, yǒudiǎn lěng.", translation: "It's cloudy today and a bit cold." },
+      { text: "下午会*多云*。", romanization: "Xiàwǔ huì *duōyún*.", translation: "It will be cloudy in the afternoon." },
+      { text: "昨天一直*多云*。", romanization: "Zuótiān yìzhí *duōyún*.", translation: "It was cloudy all day yesterday." }
     ],
     183: [
       { text: "今天天空很*晴朗*。", romanization: "Jīntiān tiānkōng hěn *qínglǎng*.", translation: "The sky is clear today." },
       { text: "*晴朗*的日子最适合散步。", romanization: "*Qínglǎng* de rìzi zuì shìhé sànbù.", translation: "Clear days are best for walking." },
-      { text: "明天会很*晴朗*。", romanization: "Míngtiān huì hěn *qínglǎng*.", translation: "Tomorrow will be clear." }
+      { text: "明天会很*晴朗*。", romanization: "Míngtiān huì hěn *qínglǎng*.", translation: "Tomorrow will be clear." },
+      { text: "天气*晴朗*，我们去公园吧。", romanization: "Tiānqì *qínglǎng*, wǒmen qù gōngyuán ba.", translation: "The weather is clear, let's go to the park." },
+      { text: "今天是一个*晴朗*的日子。", romanization: "Jīntiān shì yí gè *qínglǎng* de rìzi.", translation: "Today is a clear day." },
+      { text: "山上的天空很*晴朗*。", romanization: "Shān shàng de tiānkōng hěn *qínglǎng*.", translation: "The sky on the mountain is clear." }
     ],
     184: [
       { text: "这条毛巾是*干*的。", romanization: "Zhè tiáo máojīn shì *gān* de.", translation: "This towel is dry." },
       { text: "衣服还没*干*。", romanization: "Yīfu hái méi *gān*.", translation: "The clothes aren't dry yet." },
-      { text: "空气很*干*。", romanization: "Kōngqì hěn *gān*.", translation: "The air is very dry." }
+      { text: "空气很*干*。", romanization: "Kōngqì hěn *gān*.", translation: "The air is very dry." },
+      { text: "我的嘴很*干*。", romanization: "Wǒ de zuǐ hěn *gān*.", translation: "My mouth is dry." },
+      { text: "这里的冬天很*干*。", romanization: "Zhèlǐ de dōngtiān hěn *gān*.", translation: "Winter here is dry." },
+      { text: "衣服已经*干*了。", romanization: "Yīfu yǐjīng *gān* le.", translation: "The clothes are already dry." }
     ],
     185: [
       { text: "我的鞋子是*湿*的。", romanization: "Wǒ de xiézi shì *shī* de.", translation: "My shoes are wet." },
       { text: "地板很*湿*，小心。", romanization: "Dìbǎn hěn *shī*, xiǎoxīn.", translation: "The floor is wet, be careful." },
-      { text: "外面下雨，草很*湿*。", romanization: "Wàimiàn xiàyǔ, cǎo hěn *shī*.", translation: "It's raining outside, the grass is wet." }
+      { text: "外面下雨，草很*湿*。", romanization: "Wàimiàn xiàyǔ, cǎo hěn *shī*.", translation: "It's raining outside, the grass is wet." },
+      { text: "我的头发还是*湿*的。", romanization: "Wǒ de tóufa háishi *shī* de.", translation: "My hair is still wet." },
+      { text: "衣服都*湿*了。", romanization: "Yīfu dōu *shī* le.", translation: "The clothes are all wet." },
+      { text: "毛巾是*湿*的。", romanization: "Máojīn shì *shī* de.", translation: "The towel is wet." }
     ],
     186: [
       { text: "*火车*就要出发了。", romanization: "*Huǒchē* jiù yào chūfā le.", translation: "The train is about to depart." },
       { text: "我们坐*火车*去北京。", romanization: "Wǒmen zuò *huǒchē* qù Běijīng.", translation: "We're taking the train to Beijing." },
-      { text: "*火车*晚点了。", romanization: "*Huǒchē* wǎndiǎn le.", translation: "The train is delayed." }
+      { text: "*火车*晚点了。", romanization: "*Huǒchē* wǎndiǎn le.", translation: "The train is delayed." },
+      { text: "*火车*上有很多人。", romanization: "*Huǒchē* shàng yǒu hěn duō rén.", translation: "There are many people on the train." },
+      { text: "*火车*几点到？", romanization: "*Huǒchē* jǐ diǎn dào?", translation: "What time does the train arrive?" },
+      { text: "我喜欢坐*火车*旅行。", romanization: "Wǒ xǐhuan zuò *huǒchē* lǚxíng.", translation: "I like travelling by train." }
     ],
     187: [
       { text: "我每天坐*公交车*上班。", romanization: "Wǒ měitiān zuò *gōngjiāochē* shàngbān.", translation: "I take the bus to work every day." },
       { text: "*公交车*来了。", romanization: "*Gōngjiāochē* lái le.", translation: "The bus is here." },
-      { text: "这辆*公交车*去市中心吗？", romanization: "Zhè liàng *gōngjiāochē* qù shìzhōngxīn ma?", translation: "Does this bus go downtown?" }
+      { text: "这辆*公交车*去市中心吗？", romanization: "Zhè liàng *gōngjiāochē* qù shìzhōngxīn ma?", translation: "Does this bus go downtown?" },
+      { text: "我在等*公交车*。", romanization: "Wǒ zài děng *gōngjiāochē*.", translation: "I'm waiting for the bus." },
+      { text: "*公交车*上人很多。", romanization: "*Gōngjiāochē* shàng rén hěn duō.", translation: "The bus is crowded." },
+      { text: "我们坐*公交车*去公园。", romanization: "Wǒmen zuò *gōngjiāochē* qù gōngyuán.", translation: "We take the bus to the park." }
     ],
     188: [
       { text: "*飞机*几点起飞？", romanization: "*Fēijī* jǐ diǎn qǐfēi?", translation: "What time does the plane take off?" },
       { text: "我们坐*飞机*去日本。", romanization: "Wǒmen zuò *fēijī* qù Rìběn.", translation: "We're flying to Japan." },
-      { text: "*飞机*已经降落了。", romanization: "*Fēijī* yǐjīng jiàngluò le.", translation: "The plane has already landed." }
+      { text: "*飞机*已经降落了。", romanization: "*Fēijī* yǐjīng jiàngluò le.", translation: "The plane has already landed." },
+      { text: "*飞机*比火车快。", romanization: "*Fēijī* bǐ huǒchē kuài.", translation: "Planes are faster than trains." },
+      { text: "*飞机*晚点了。", romanization: "*Fēijī* wǎndiǎn le.", translation: "The plane is delayed." },
+      { text: "我第一次坐*飞机*。", romanization: "Wǒ dì yī cì zuò *fēijī*.", translation: "It's my first time on a plane." }
     ],
     189: [
       { text: "我骑*自行车*上班。", romanization: "Wǒ qí *zìxíngchē* shàngbān.", translation: "I ride my bike to work." },
       { text: "这辆*自行车*是新的。", romanization: "Zhè liàng *zìxíngchē* shì xīn de.", translation: "This bicycle is new." },
-      { text: "他不会骑*自行车*。", romanization: "Tā bú huì qí *zìxíngchē*.", translation: "He doesn't know how to ride a bicycle." }
+      { text: "他不会骑*自行车*。", romanization: "Tā bú huì qí *zìxíngchē*.", translation: "He doesn't know how to ride a bicycle." },
+      { text: "我的*自行车*是蓝色的。", romanization: "Wǒ de *zìxíngchē* shì lánsè de.", translation: "My bicycle is blue." },
+      { text: "他每天骑*自行车*。", romanization: "Tā měi tiān qí *zìxíngchē*.", translation: "He rides a bicycle every day." },
+      { text: "我想买一辆*自行车*。", romanization: "Wǒ xiǎng mǎi yí liàng *zìxíngchē*.", translation: "I want to buy a bicycle." }
     ],
     190: [
       { text: "我们坐*船*去岛上。", romanization: "Wǒmen zuò *chuán* qù dǎo shàng.", translation: "We took a boat to the island." },
       { text: "*船*在海上行驶。", romanization: "*Chuán* zài hǎi shàng xíngshǐ.", translation: "The boat sails on the sea." },
-      { text: "这条*船*很大。", romanization: "Zhè tiáo *chuán* hěn dà.", translation: "This boat is big." }
+      { text: "这条*船*很大。", romanization: "Zhè tiáo *chuán* hěn dà.", translation: "This boat is big." },
+      { text: "河上有一条*船*。", romanization: "Hé shàng yǒu yì tiáo *chuán*.", translation: "There is a boat on the river." },
+      { text: "我们坐*船*去上海。", romanization: "Wǒmen zuò *chuán* qù Shànghǎi.", translation: "We take the boat to Shanghai." },
+      { text: "这条*船*很小。", romanization: "Zhè tiáo *chuán* hěn xiǎo.", translation: "This boat is small." }
     ],
     191: [
       { text: "*车站*离这里很近。", romanization: "*Chēzhàn* lí zhèlǐ hěn jìn.", translation: "The station is close by." },
       { text: "我们在*车站*等你。", romanization: "Wǒmen zài *chēzhàn* děng nǐ.", translation: "We'll wait for you at the station." },
-      { text: "去*车站*怎么走？", romanization: "Qù *chēzhàn* zěnme zǒu?", translation: "How do I get to the station?" }
+      { text: "去*车站*怎么走？", romanization: "Qù *chēzhàn* zěnme zǒu?", translation: "How do I get to the station?" },
+      { text: "*车站*人很多。", romanization: "*Chēzhàn* rén hěn duō.", translation: "The station is crowded." },
+      { text: "我在*车站*等公交车。", romanization: "Wǒ zài *chēzhàn* děng gōngjiāochē.", translation: "I'm waiting for the bus at the station." },
+      { text: "*车站*在哪里？", romanization: "*Chēzhàn* zài nǎlǐ?", translation: "Where is the station?" }
     ],
     192: [
       { text: "*机场*离市中心很远。", romanization: "*Jīchǎng* lí shìzhōngxīn hěn yuǎn.", translation: "The airport is far from downtown." },
       { text: "我们去*机场*接他。", romanization: "Wǒmen qù *jīchǎng* jiē tā.", translation: "We're going to the airport to pick him up." },
-      { text: "*机场*有很多商店。", romanization: "*Jīchǎng* yǒu hěn duō shāngdiàn.", translation: "The airport has many shops." }
+      { text: "*机场*有很多商店。", romanization: "*Jīchǎng* yǒu hěn duō shāngdiàn.", translation: "The airport has many shops." },
+      { text: "我在*机场*等你。", romanization: "Wǒ zài *jīchǎng* děng nǐ.", translation: "I'll wait for you at the airport." },
+      { text: "去*机场*要一个小时。", romanization: "Qù *jīchǎng* yào yí gè xiǎoshí.", translation: "It takes an hour to get to the airport." },
+      { text: "这个*机场*很大。", romanization: "Zhège *jīchǎng* hěn dà.", translation: "This airport is big." }
     ],
     193: [
       { text: "我买了两张*票*。", romanization: "Wǒ mǎile liǎng zhāng *piào*.", translation: "I bought two tickets." },
       { text: "*票*多少钱？", romanization: "*Piào* duōshao qián?", translation: "How much is a ticket?" },
-      { text: "请把*票*给我看一下。", romanization: "Qǐng bǎ *piào* gěi wǒ kàn yíxià.", translation: "Please show me your ticket." }
+      { text: "请把*票*给我看一下。", romanization: "Qǐng bǎ *piào* gěi wǒ kàn yíxià.", translation: "Please show me your ticket." },
+      { text: "我的*票*不见了。", romanization: "Wǒ de *piào* bú jiàn le.", translation: "My ticket is gone." },
+      { text: "我在网上买了*票*。", romanization: "Wǒ zài wǎng shàng mǎile *piào*.", translation: "I bought the tickets online." },
+      { text: "电影*票*很贵。", romanization: "Diànyǐng *piào* hěn guì.", translation: "Cinema tickets are expensive." }
     ],
     194: [
       { text: "你有*地图*吗？", romanization: "Nǐ yǒu *dìtú* ma?", translation: "Do you have a map?" },
       { text: "我在看*地图*找路。", romanization: "Wǒ zài kàn *dìtú* zhǎo lù.", translation: "I'm looking at the map to find the way." },
-      { text: "这张*地图*很有用。", romanization: "Zhè zhāng *dìtú* hěn yǒuyòng.", translation: "This map is useful." }
+      { text: "这张*地图*很有用。", romanization: "Zhè zhāng *dìtú* hěn yǒuyòng.", translation: "This map is useful." },
+      { text: "我们看看*地图*吧。", romanization: "Wǒmen kànkan *dìtú* ba.", translation: "Let's look at the map." },
+      { text: "我买了一张*地图*。", romanization: "Wǒ mǎile yì zhāng *dìtú*.", translation: "I bought a map." },
+      { text: "手机上有*地图*。", romanization: "Shǒujī shàng yǒu *dìtú*.", translation: "There's a map on the phone." }
     ],
     195: [
       { text: "我们住在这家*酒店*。", romanization: "Wǒmen zhù zài zhè jiā *jiǔdiàn*.", translation: "We're staying at this hotel." },
       { text: "*酒店*离机场很近。", romanization: "*Jiǔdiàn* lí jīchǎng hěn jìn.", translation: "The hotel is close to the airport." },
-      { text: "这家*酒店*很贵。", romanization: "Zhè jiā *jiǔdiàn* hěn guì.", translation: "This hotel is expensive." }
+      { text: "这家*酒店*很贵。", romanization: "Zhè jiā *jiǔdiàn* hěn guì.", translation: "This hotel is expensive." },
+      { text: "*酒店*在哪里？", romanization: "*Jiǔdiàn* zài nǎlǐ?", translation: "Where is the hotel?" },
+      { text: "这家*酒店*很新。", romanization: "Zhè jiā *jiǔdiàn* hěn xīn.", translation: "This hotel is new." },
+      { text: "我们今晚住*酒店*。", romanization: "Wǒmen jīnwǎn zhù *jiǔdiàn*.", translation: "We're staying at a hotel tonight." }
     ],
     196: [
       { text: "往*左*转。", romanization: "Wǎng *zuǒ* zhuǎn.", translation: "Turn left." },
       { text: "银行在*左*边。", romanization: "Yínháng zài *zuǒ* biān.", translation: "The bank is on the left." },
-      { text: "他坐在我*左*边。", romanization: "Tā zuò zài wǒ *zuǒ* biān.", translation: "He sits on my left." }
+      { text: "他坐在我*左*边。", romanization: "Tā zuò zài wǒ *zuǒ* biān.", translation: "He sits on my left." },
+      { text: "在下个路口往*左*走。", romanization: "Zài xià gè lùkǒu wǎng *zuǒ* zǒu.", translation: "Go left at the next junction." },
+      { text: "她用*左*手吃饭。", romanization: "Tā yòng *zuǒ* shǒu chī fàn.", translation: "She eats with her left hand." },
+      { text: "厕所在*左*边。", romanization: "Cèsuǒ zài *zuǒ* biān.", translation: "The toilet is on the left." }
     ],
     197: [
       { text: "往*右*转。", romanization: "Wǎng *yòu* zhuǎn.", translation: "Turn right." },
       { text: "商店在*右*边。", romanization: "Shāngdiàn zài *yòu* biān.", translation: "The shop is on the right." },
-      { text: "她坐在我*右*边。", romanization: "Tā zuò zài wǒ *yòu* biān.", translation: "She sits on my right." }
+      { text: "她坐在我*右*边。", romanization: "Tā zuò zài wǒ *yòu* biān.", translation: "She sits on my right." },
+      { text: "到了路口往*右*转。", romanization: "Dàole lùkǒu wǎng *yòu* zhuǎn.", translation: "Turn right at the junction." },
+      { text: "我用*右*手写字。", romanization: "Wǒ yòng *yòu* shǒu xiě zì.", translation: "I write with my right hand." },
+      { text: "医院在*右*边。", romanization: "Yīyuàn zài *yòu* biān.", translation: "The hospital is on the right." }
     ],
     198: [
       { text: "*一直走*，然后左转。", romanization: "*Yìzhízǒu*, ránhòu zuǒ zhuǎn.", translation: "Go straight, then turn left." },
       { text: "请*一直走*到红绿灯。", romanization: "Qǐng *yìzhízǒu* dào hónglǜdēng.", translation: "Please go straight to the traffic light." },
-      { text: "*一直走*就能看到车站。", romanization: "*Yìzhízǒu* jiù néng kàndào chēzhàn.", translation: "Go straight and you'll see the station." }
+      { text: "*一直走*就能看到车站。", romanization: "*Yìzhízǒu* jiù néng kàndào chēzhàn.", translation: "Go straight and you'll see the station." },
+      { text: "*一直走*，酒店就在前面。", romanization: "*Yìzhí zǒu*, jiǔdiàn jiù zài qiánmiàn.", translation: "Go straight ahead, the hotel is just in front." },
+      { text: "你*一直走*就到了。", romanization: "Nǐ *yìzhí zǒu* jiù dào le.", translation: "Just go straight ahead and you're there." },
+      { text: "*一直走*，然后往右转。", romanization: "*Yìzhí zǒu*, ránhòu wǎng yòu zhuǎn.", translation: "Go straight ahead, then turn right." }
     ],
     199: [
       { text: "学校离我家很*近*。", romanization: "Xuéxiào lí wǒ jiā hěn *jìn*.", translation: "The school is close to my house." },
       { text: "车站*近*吗？", romanization: "Chēzhàn *jìn* ma?", translation: "Is the station nearby?" },
-      { text: "商店就在*近*处。", romanization: "Shāngdiàn jiù zài *jìn* chù.", translation: "The shop is nearby." }
+      { text: "商店就在*近*处。", romanization: "Shāngdiàn jiù zài *jìn* chù.", translation: "The shop is nearby." },
+      { text: "我家离公园很*近*。", romanization: "Wǒ jiā lí gōngyuán hěn *jìn*.", translation: "My home is near the park." },
+      { text: "医院离这里很*近*。", romanization: "Yīyuàn lí zhèlǐ hěn *jìn*.", translation: "The hospital is close to here." },
+      { text: "我们住得很*近*。", romanization: "Wǒmen zhù de hěn *jìn*.", translation: "We live close to each other." }
     ],
     200: [
       { text: "机场离这里很*远*。", romanization: "Jīchǎng lí zhèlǐ hěn *yuǎn*.", translation: "The airport is far from here." },
       { text: "学校*远*吗？", romanization: "Xuéxiào *yuǎn* ma?", translation: "Is the school far?" },
-      { text: "我们走了很*远*的路。", romanization: "Wǒmen zǒule hěn *yuǎn* de lù.", translation: "We walked a long way." }
+      { text: "我们走了很*远*的路。", romanization: "Wǒmen zǒule hěn *yuǎn* de lù.", translation: "We walked a long way." },
+      { text: "我家离学校很*远*。", romanization: "Wǒ jiā lí xuéxiào hěn *yuǎn*.", translation: "My home is far from school." },
+      { text: "上海离北京很*远*。", romanization: "Shànghǎi lí Běijīng hěn *yuǎn*.", translation: "Shanghai is far from Beijing." },
+      { text: "走路太*远*了。", romanization: "Zǒulù tài *yuǎn* le.", translation: "It's too far to walk." }
     ],
     201: [
       { text: "现在是*十一*点。", romanization: "Xiànzài shì *shíyī* diǎn.", translation: "It's eleven o'clock." },
       { text: "他*十一*岁了。", romanization: "Tā *shíyī* suì le.", translation: "He's eleven years old." },
-      { text: "教室里有*十一*个学生。", romanization: "Jiàoshì lǐ yǒu *shíyī* ge xuésheng.", translation: "There are eleven students in the classroom." }
+      { text: "教室里有*十一*个学生。", romanization: "Jiàoshì lǐ yǒu *shíyī* ge xuésheng.", translation: "There are eleven students in the classroom." },
+      { text: "我们*十一*点见面。", romanization: "Wǒmen *shíyī* diǎn jiànmiàn.", translation: "We meet at eleven." },
+      { text: "这本书*十一*块钱。", romanization: "Zhè běn shū *shíyī* kuài qián.", translation: "This book costs eleven yuan." },
+      { text: "足球队有*十一*个人。", romanization: "Zúqiú duì yǒu *shíyī* gè rén.", translation: "A football team has eleven people." }
     ],
     202: [
       { text: "现在是*十二*点。", romanization: "Xiànzài shì *shí'èr* diǎn.", translation: "It's twelve o'clock." },
       { text: "一年有*十二*个月。", romanization: "Yì nián yǒu *shí'èr* ge yuè.", translation: "A year has twelve months." },
-      { text: "她*十二*岁了。", romanization: "Tā *shí'èr* suì le.", translation: "She's twelve years old." }
+      { text: "她*十二*岁了。", romanization: "Tā *shí'èr* suì le.", translation: "She's twelve years old." },
+      { text: "我们*十二*点吃午饭。", romanization: "Wǒmen *shí'èr* diǎn chī wǔfàn.", translation: "We have lunch at twelve." },
+      { text: "我买了*十二*个鸡蛋。", romanization: "Wǒ mǎile *shí'èr* gè jīdàn.", translation: "I bought twelve eggs." },
+      { text: "他住在*十二*楼。", romanization: "Tā zhù zài *shí'èr* lóu.", translation: "He lives on the twelfth floor." }
     ],
     203: [
       { text: "他*十三*岁了。", romanization: "Tā *shísān* suì le.", translation: "He's thirteen years old." },
       { text: "桌子上有*十三*本书。", romanization: "Zhuōzi shàng yǒu *shísān* běn shū.", translation: "There are thirteen books on the table." },
-      { text: "我们等了*十三*分钟。", romanization: "Wǒmen děngle *shísān* fēnzhōng.", translation: "We waited thirteen minutes." }
+      { text: "我们等了*十三*分钟。", romanization: "Wǒmen děngle *shísān* fēnzhōng.", translation: "We waited thirteen minutes." },
+      { text: "今天是*十三*号。", romanization: "Jīntiān shì *shísān* hào.", translation: "Today is the thirteenth." },
+      { text: "我在*十三*路公交车上。", romanization: "Wǒ zài *shísān* lù gōngjiāochē shàng.", translation: "I'm on the number thirteen bus." },
+      { text: "这个*十三*块钱。", romanization: "Zhège *shísān* kuài qián.", translation: "This costs thirteen yuan." }
     ],
     204: [
       { text: "她*十四*岁了。", romanization: "Tā *shísì* suì le.", translation: "She's fourteen years old." },
       { text: "我们走了*十四*天。", romanization: "Wǒmen zǒule *shísì* tiān.", translation: "We walked for fourteen days." },
-      { text: "房间号是*十四*。", romanization: "Fángjiān hào shì *shísì*.", translation: "The room number is fourteen." }
+      { text: "房间号是*十四*。", romanization: "Fángjiān hào shì *shísì*.", translation: "The room number is fourteen." },
+      { text: "我儿子*十四*岁。", romanization: "Wǒ érzi *shísì* suì.", translation: "My son is fourteen." },
+      { text: "今天是*十四*号。", romanization: "Jīntiān shì *shísì* hào.", translation: "Today is the fourteenth." },
+      { text: "这个房间住了*十四*个人。", romanization: "Zhège fángjiān zhùle *shísì* gè rén.", translation: "Fourteen people stayed in this room." }
     ],
     205: [
       { text: "他*十五*岁了。", romanization: "Tā *shíwǔ* suì le.", translation: "He's fifteen years old." },
       { text: "还有*十五*分钟。", romanization: "Hái yǒu *shíwǔ* fēnzhōng.", translation: "There are fifteen minutes left." },
-      { text: "我们班有*十五*个学生。", romanization: "Wǒmen bān yǒu *shíwǔ* ge xuésheng.", translation: "There are fifteen students in our class." }
+      { text: "我们班有*十五*个学生。", romanization: "Wǒmen bān yǒu *shíwǔ* ge xuésheng.", translation: "There are fifteen students in our class." },
+      { text: "我*十五*分钟以后到。", romanization: "Wǒ *shíwǔ* fēnzhōng yǐhòu dào.", translation: "I'll arrive in fifteen minutes." },
+      { text: "这件衬衫*十五*块钱。", romanization: "Zhè jiàn chènshān *shíwǔ* kuài qián.", translation: "This shirt costs fifteen yuan." },
+      { text: "今天是*十五*号。", romanization: "Jīntiān shì *shíwǔ* hào.", translation: "Today is the fifteenth." }
     ],
     206: [
       { text: "她*十六*岁了。", romanization: "Tā *shíliù* suì le.", translation: "She's sixteen years old." },
       { text: "我们等了*十六*分钟。", romanization: "Wǒmen děngle *shíliù* fēnzhōng.", translation: "We waited sixteen minutes." },
-      { text: "他住在*十六*号房间。", romanization: "Tā zhù zài *shíliù* hào fángjiān.", translation: "He lives in room sixteen." }
+      { text: "他住在*十六*号房间。", romanization: "Tā zhù zài *shíliù* hào fángjiān.", translation: "He lives in room sixteen." },
+      { text: "我姐姐*十六*岁。", romanization: "Wǒ jiějie *shíliù* suì.", translation: "My older sister is sixteen." },
+      { text: "我们班有*十六*个女生。", romanization: "Wǒmen bān yǒu *shíliù* gè nǚshēng.", translation: "Our class has sixteen girls." },
+      { text: "这个*十六*块钱。", romanization: "Zhège *shíliù* kuài qián.", translation: "This costs sixteen yuan." }
     ],
     207: [
       { text: "他*十七*岁了。", romanization: "Tā *shíqī* suì le.", translation: "He's seventeen years old." },
       { text: "书架上有*十七*本书。", romanization: "Shūjià shàng yǒu *shíqī* běn shū.", translation: "There are seventeen books on the shelf." },
-      { text: "我们走了*十七*公里。", romanization: "Wǒmen zǒule *shíqī* gōnglǐ.", translation: "We walked seventeen kilometers." }
+      { text: "我们走了*十七*公里。", romanization: "Wǒmen zǒule *shíqī* gōnglǐ.", translation: "We walked seventeen kilometers." },
+      { text: "今天是*十七*号。", romanization: "Jīntiān shì *shíqī* hào.", translation: "Today is the seventeenth." },
+      { text: "我*十七*岁开始工作。", romanization: "Wǒ *shíqī* suì kāishǐ gōngzuò.", translation: "I started working at seventeen." },
+      { text: "他买了*十七*朵花。", romanization: "Tā mǎile *shíqī* duǒ huā.", translation: "He bought seventeen flowers." }
     ],
     208: [
       { text: "她*十八*岁了。", romanization: "Tā *shíbā* suì le.", translation: "She's eighteen years old." },
       { text: "这栋楼有*十八*层。", romanization: "Zhè dòng lóu yǒu *shíbā* céng.", translation: "This building has eighteen floors." },
-      { text: "我们等了*十八*分钟。", romanization: "Wǒmen děngle *shíbā* fēnzhōng.", translation: "We waited eighteen minutes." }
+      { text: "我们等了*十八*分钟。", romanization: "Wǒmen děngle *shíbā* fēnzhōng.", translation: "We waited eighteen minutes." },
+      { text: "他今年*十八*岁。", romanization: "Tā jīnnián *shíbā* suì.", translation: "He is eighteen this year." },
+      { text: "今天是*十八*号。", romanization: "Jīntiān shì *shíbā* hào.", translation: "Today is the eighteenth." },
+      { text: "我们有*十八*把椅子。", romanization: "Wǒmen yǒu *shíbā* bǎ yǐzi.", translation: "We have eighteen chairs." }
     ],
     209: [
       { text: "他*十九*岁了。", romanization: "Tā *shíjiǔ* suì le.", translation: "He's nineteen years old." },
       { text: "班里有*十九*个学生。", romanization: "Bān lǐ yǒu *shíjiǔ* ge xuésheng.", translation: "There are nineteen students in the class." },
-      { text: "还有*十九*天就放假了。", romanization: "Hái yǒu *shíjiǔ* tiān jiù fàngjià le.", translation: "There are nineteen days left until the holiday." }
+      { text: "还有*十九*天就放假了。", romanization: "Hái yǒu *shíjiǔ* tiān jiù fàngjià le.", translation: "There are nineteen days left until the holiday." },
+      { text: "今天是*十九*号。", romanization: "Jīntiān shì *shíjiǔ* hào.", translation: "Today is the nineteenth." },
+      { text: "这个*十九*块钱。", romanization: "Zhège *shíjiǔ* kuài qián.", translation: "This costs nineteen yuan." },
+      { text: "我哥哥*十九*岁。", romanization: "Wǒ gēge *shíjiǔ* suì.", translation: "My older brother is nineteen." }
     ],
     210: [
       { text: "她*二十*岁了。", romanization: "Tā *èrshí* suì le.", translation: "She's twenty years old." },
       { text: "我们等了*二十*分钟。", romanization: "Wǒmen děngle *èrshí* fēnzhōng.", translation: "We waited twenty minutes." },
-      { text: "教室里有*二十*个学生。", romanization: "Jiàoshì lǐ yǒu *èrshí* ge xuésheng.", translation: "There are twenty students in the classroom." }
+      { text: "教室里有*二十*个学生。", romanization: "Jiàoshì lǐ yǒu *èrshí* ge xuésheng.", translation: "There are twenty students in the classroom." },
+      { text: "这本书*二十*块钱。", romanization: "Zhè běn shū *èrshí* kuài qián.", translation: "This book costs twenty yuan." },
+      { text: "今天是*二十*号。", romanization: "Jīntiān shì *èrshí* hào.", translation: "Today is the twentieth." },
+      { text: "我*二十*岁去了中国。", romanization: "Wǒ *èrshí* suì qùle Zhōngguó.", translation: "I went to China at twenty." }
     ],
     211: [
       { text: "我*爷爷*住在乡下。", romanization: "Wǒ *yéye* zhù zài xiāngxià.", translation: "My grandfather lives in the countryside." },
       { text: "*爷爷*每天早上散步。", romanization: "*Yéye* měitiān zǎoshang sànbù.", translation: "Grandfather takes a walk every morning." },
-      { text: "我爱我的*爷爷*。", romanization: "Wǒ ài wǒ de *yéye*.", translation: "I love my grandfather." }
+      { text: "我爱我的*爷爷*。", romanization: "Wǒ ài wǒ de *yéye*.", translation: "I love my grandfather." },
+      { text: "*爷爷*喜欢喝茶。", romanization: "*Yéye* xǐhuan hē chá.", translation: "Grandpa likes drinking tea." },
+      { text: "*爷爷*今年七十岁。", romanization: "*Yéye* jīnnián qīshí suì.", translation: "Grandpa is seventy this year." },
+      { text: "我和*爷爷*去钓鱼。", romanization: "Wǒ hé *yéye* qù diào yú.", translation: "I go fishing with grandpa." }
     ],
     212: [
       { text: "我的*父母*住在北京。", romanization: "Wǒ de *fùmǔ* zhù zài Běijīng.", translation: "My parents live in Beijing." },
       { text: "*父母*很爱他们的孩子。", romanization: "*Fùmǔ* hěn ài tāmen de háizi.", translation: "Parents love their children very much." },
-      { text: "我周末去看*父母*。", romanization: "Wǒ zhōumò qù kàn *fùmǔ*.", translation: "I visit my parents on weekends." }
+      { text: "我周末去看*父母*。", romanization: "Wǒ zhōumò qù kàn *fùmǔ*.", translation: "I visit my parents on weekends." },
+      { text: "我的*父母*都是老师。", romanization: "Wǒ de *fùmǔ* dōu shì lǎoshī.", translation: "My parents are both teachers." },
+      { text: "我每天给*父母*打电话。", romanization: "Wǒ měi tiān gěi *fùmǔ* dǎ diànhuà.", translation: "I call my parents every day." },
+      { text: "他和*父母*住在一起。", romanization: "Tā hé *fùmǔ* zhù zài yìqǐ.", translation: "He lives with his parents." }
     ],
     213: [
       { text: "他们有一个*儿子*。", romanization: "Tāmen yǒu yí ge *érzi*.", translation: "They have a son." },
       { text: "我的*儿子*八岁了。", romanization: "Wǒ de *érzi* bā suì le.", translation: "My son is eight years old." },
-      { text: "她的*儿子*在读大学。", romanization: "Tā de *érzi* zài dú dàxué.", translation: "Her son is in university." }
+      { text: "她的*儿子*在读大学。", romanization: "Tā de *érzi* zài dú dàxué.", translation: "Her son is in university." },
+      { text: "我的*儿子*喜欢踢足球。", romanization: "Wǒ de *érzi* xǐhuan tī zúqiú.", translation: "My son likes playing football." },
+      { text: "他*儿子*在上海工作。", romanization: "Tā *érzi* zài Shànghǎi gōngzuò.", translation: "His son works in Shanghai." },
+      { text: "这是我的*儿子*。", romanization: "Zhè shì wǒ de *érzi*.", translation: "This is my son." }
     ],
     214: [
       { text: "他们有一个*女儿*。", romanization: "Tāmen yǒu yí ge *nǚ'ér*.", translation: "They have a daughter." },
       { text: "我的*女儿*很聪明。", romanization: "Wǒ de *nǚ'ér* hěn cōngmíng.", translation: "My daughter is very smart." },
-      { text: "她的*女儿*在上小学。", romanization: "Tā de *nǚ'ér* zài shàng xiǎoxué.", translation: "Her daughter is in elementary school." }
+      { text: "她的*女儿*在上小学。", romanization: "Tā de *nǚ'ér* zài shàng xiǎoxué.", translation: "Her daughter is in elementary school." },
+      { text: "我的*女儿*喜欢画画。", romanization: "Wǒ de *nǚ'ér* xǐhuan huà huà.", translation: "My daughter likes drawing." },
+      { text: "他*女儿*今年五岁。", romanization: "Tā *nǚ'ér* jīnnián wǔ suì.", translation: "His daughter is five this year." },
+      { text: "这是我的*女儿*。", romanization: "Zhè shì wǒ de *nǚ'ér*.", translation: "This is my daughter." }
     ],
     215: [
       { text: "她的*丈夫*是医生。", romanization: "Tā de *zhàngfu* shì yīshēng.", translation: "Her husband is a doctor." },
       { text: "我的*丈夫*在做饭。", romanization: "Wǒ de *zhàngfu* zài zuòfàn.", translation: "My husband is cooking." },
-      { text: "她和*丈夫*一起旅行。", romanization: "Tā hé *zhàngfu* yìqǐ lǚxíng.", translation: "She travels with her husband." }
+      { text: "她和*丈夫*一起旅行。", romanization: "Tā hé *zhàngfu* yìqǐ lǚxíng.", translation: "She travels with her husband." },
+      { text: "我的*丈夫*喜欢做饭。", romanization: "Wǒ de *zhàngfu* xǐhuan zuò fàn.", translation: "My husband likes cooking." },
+      { text: "她的*丈夫*是老师。", romanization: "Tā de *zhàngfu* shì lǎoshī.", translation: "Her husband is a teacher." },
+      { text: "她在等她的*丈夫*。", romanization: "Tā zài děng tā de *zhàngfu*.", translation: "She is waiting for her husband." }
     ],
     216: [
       { text: "*老师*很有耐心。", romanization: "*Lǎoshī* hěn yǒu nàixīn.", translation: "The teacher is very patient." },
       { text: "我们的*老师*教英语。", romanization: "Wǒmen de *lǎoshī* jiāo Yīngyǔ.", translation: "Our teacher teaches English." },
-      { text: "*老师*让我们安静。", romanization: "*Lǎoshī* ràng wǒmen ānjìng.", translation: "The teacher told us to be quiet." }
+      { text: "*老师*让我们安静。", romanization: "*Lǎoshī* ràng wǒmen ānjìng.", translation: "The teacher told us to be quiet." },
+      { text: "我的*老师*是中国人。", romanization: "Wǒ de *lǎoshī* shì Zhōngguó rén.", translation: "My teacher is Chinese." },
+      { text: "*老师*，我有一个问题。", romanization: "*Lǎoshī*, wǒ yǒu yí gè wèntí.", translation: "Teacher, I have a question." },
+      { text: "她想当*老师*。", romanization: "Tā xiǎng dāng *lǎoshī*.", translation: "She wants to be a teacher." }
     ],
     217: [
       { text: "他是一个好*学生*。", romanization: "Tā shì yí ge hǎo *xuésheng*.", translation: "He's a good student." },
       { text: "很多*学生*在图书馆学习。", romanization: "Hěn duō *xuésheng* zài túshūguǎn xuéxí.", translation: "Many students are studying in the library." },
-      { text: "这个班有二十个*学生*。", romanization: "Zhège bān yǒu èrshí ge *xuésheng*.", translation: "This class has twenty students." }
+      { text: "这个班有二十个*学生*。", romanization: "Zhège bān yǒu èrshí ge *xuésheng*.", translation: "This class has twenty students." },
+      { text: "我是一名*学生*。", romanization: "Wǒ shì yì míng *xuésheng*.", translation: "I am a student." },
+      { text: "*学生*们在教室里。", romanization: "*Xuésheng*men zài jiàoshì lǐ.", translation: "The students are in the classroom." },
+      { text: "她是一个好*学生*。", romanization: "Tā shì yí gè hǎo *xuésheng*.", translation: "She is a good student." }
     ],
     218: [
       { text: "*医生*检查了我的耳朵。", romanization: "*Yīshēng* jiǎnchále wǒ de ěrduo.", translation: "The doctor examined my ear." },
       { text: "我明天要去看*医生*。", romanization: "Wǒ míngtiān yào qù kàn *yīshēng*.", translation: "I have to see the doctor tomorrow." },
-      { text: "她是一位好*医生*。", romanization: "Tā shì yí wèi hǎo *yīshēng*.", translation: "She's a good doctor." }
+      { text: "她是一位好*医生*。", romanization: "Tā shì yí wèi hǎo *yīshēng*.", translation: "She's a good doctor." },
+      { text: "我想当*医生*。", romanization: "Wǒ xiǎng dāng *yīshēng*.", translation: "I want to be a doctor." },
+      { text: "*医生*说我要多休息。", romanization: "*Yīshēng* shuō wǒ yào duō xiūxi.", translation: "The doctor says I need more rest." },
+      { text: "他爸爸是*医生*。", romanization: "Tā bàba shì *yīshēng*.", translation: "His dad is a doctor." }
     ],
     219: [
       { text: "*护士*很友好。", romanization: "*Hùshi* hěn yǒuhǎo.", translation: "The nurse is very friendly." },
       { text: "她想成为一名*护士*。", romanization: "Tā xiǎng chéngwéi yì míng *hùshi*.", translation: "She wants to become a nurse." },
-      { text: "*护士*给我量了体温。", romanization: "*Hùshi* gěi wǒ liángle tǐwēn.", translation: "The nurse took my temperature." }
+      { text: "*护士*给我量了体温。", romanization: "*Hùshi* gěi wǒ liángle tǐwēn.", translation: "The nurse took my temperature." },
+      { text: "我妈妈是*护士*。", romanization: "Wǒ māma shì *hùshi*.", translation: "My mum is a nurse." },
+      { text: "*护士*在医院工作。", romanization: "*Hùshi* zài yīyuàn gōngzuò.", translation: "Nurses work in hospitals." },
+      { text: "*护士*给了我一些药。", romanization: "*Hùshi* gěile wǒ yìxiē yào.", translation: "The nurse gave me some medicine." }
     ],
     220: [
       { text: "*警察*来了。", romanization: "*Jǐngchá* lái le.", translation: "The police arrived." },
       { text: "他是一名*警察*。", romanization: "Tā shì yì míng *jǐngchá*.", translation: "He's a police officer." },
-      { text: "*警察*帮我们找到了路。", romanization: "*Jǐngchá* bāng wǒmen zhǎodàole lù.", translation: "The police helped us find the way." }
+      { text: "*警察*帮我们找到了路。", romanization: "*Jǐngchá* bāng wǒmen zhǎodàole lù.", translation: "The police helped us find the way." },
+      { text: "快叫*警察*来！", romanization: "Kuài jiào *jǐngchá* lái!", translation: "Call the police, quick!" },
+      { text: "*警察*在门口。", romanization: "*Jǐngchá* zài ménkǒu.", translation: "The police are at the door." },
+      { text: "我哥哥是*警察*。", romanization: "Wǒ gēge shì *jǐngchá*.", translation: "My older brother is a police officer." }
     ],
     221: [
       { text: "他找到了一份新*工作*。", romanization: "Tā zhǎodàole yí fèn xīn *gōngzuò*.", translation: "He found a new job." },
       { text: "这份*工作*很有意思。", romanization: "Zhè fèn *gōngzuò* hěn yǒu yìsi.", translation: "This job is interesting." },
-      { text: "她的*工作*很忙。", romanization: "Tā de *gōngzuò* hěn máng.", translation: "Her job is busy." }
+      { text: "她的*工作*很忙。", romanization: "Tā de *gōngzuò* hěn máng.", translation: "Her job is busy." },
+      { text: "我在找*工作*。", romanization: "Wǒ zài zhǎo *gōngzuò*.", translation: "I'm looking for a job." },
+      { text: "你的*工作*忙吗？", romanization: "Nǐ de *gōngzuò* máng ma?", translation: "Is your job busy?" },
+      { text: "我喜欢我的*工作*。", romanization: "Wǒ xǐhuan wǒ de *gōngzuò*.", translation: "I like my job." }
     ],
     222: [
       { text: "他在*办公室*工作。", romanization: "Tā zài *bàngōngshì* gōngzuò.", translation: "He works in the office." },
       { text: "*办公室*离我家很近。", romanization: "*Bàngōngshì* lí wǒ jiā hěn jìn.", translation: "The office is close to my house." },
-      { text: "我们的*办公室*在三楼。", romanization: "Wǒmen de *bàngōngshì* zài sān lóu.", translation: "Our office is on the third floor." }
+      { text: "我们的*办公室*在三楼。", romanization: "Wǒmen de *bàngōngshì* zài sān lóu.", translation: "Our office is on the third floor." },
+      { text: "我的*办公室*很小。", romanization: "Wǒ de *bàngōngshì* hěn xiǎo.", translation: "My office is small." },
+      { text: "老板在*办公室*吗？", romanization: "Lǎobǎn zài *bàngōngshì* ma?", translation: "Is the boss in the office?" },
+      { text: "我八点到*办公室*。", romanization: "Wǒ bā diǎn dào *bàngōngshì*.", translation: "I get to the office at eight." }
     ],
     223: [
       { text: "我们*班级*有二十个学生。", romanization: "Wǒmen *bānjí* yǒu èrshí ge xuésheng.", translation: "Our class has twenty students." },
       { text: "这个*班级*很安静。", romanization: "Zhège *bānjí* hěn ānjìng.", translation: "This class is quiet." },
-      { text: "*班级*活动在周五。", romanization: "*Bānjí* huódòng zài zhōuwǔ.", translation: "The class activity is on Friday." }
+      { text: "*班级*活动在周五。", romanization: "*Bānjí* huódòng zài zhōuwǔ.", translation: "The class activity is on Friday." },
+      { text: "我们*班级*有很多好学生。", romanization: "Wǒmen *bānjí* yǒu hěn duō hǎo xuésheng.", translation: "Our class has many good students." },
+      { text: "她是*班级*里最高的。", romanization: "Tā shì *bānjí* lǐ zuì gāo de.", translation: "She is the tallest in the class." },
+      { text: "我们*班级*明天去公园。", romanization: "Wǒmen *bānjí* míngtiān qù gōngyuán.", translation: "Our class is going to the park tomorrow." }
     ],
     224: [
       { text: "我在做*作业*。", romanization: "Wǒ zài zuò *zuòyè*.", translation: "I'm doing homework." },
       { text: "*作业*很难。", romanization: "*Zuòyè* hěn nán.", translation: "The homework is difficult." },
-      { text: "他忘了带*作业*。", romanization: "Tā wàngle dài *zuòyè*.", translation: "He forgot to bring his homework." }
+      { text: "他忘了带*作业*。", romanization: "Tā wàngle dài *zuòyè*.", translation: "He forgot to bring his homework." },
+      { text: "今天的*作业*很多。", romanization: "Jīntiān de *zuòyè* hěn duō.", translation: "There is a lot of homework today." },
+      { text: "你做完*作业*了吗？", romanization: "Nǐ zuòwán *zuòyè* le ma?", translation: "Have you finished your homework?" },
+      { text: "老师给了我们*作业*。", romanization: "Lǎoshī gěile wǒmen *zuòyè*.", translation: "The teacher gave us homework." }
     ],
     225: [
       { text: "明天有*考试*。", romanization: "Míngtiān yǒu *kǎoshì*.", translation: "There's a test tomorrow." },
       { text: "这个*考试*很难。", romanization: "Zhège *kǎoshì* hěn nán.", translation: "This test is hard." },
-      { text: "她*考试*考得很好。", romanization: "Tā *kǎoshì* kǎo de hěn hǎo.", translation: "She did well on the test." }
+      { text: "她*考试*考得很好。", romanization: "Tā *kǎoshì* kǎo de hěn hǎo.", translation: "She did well on the test." },
+      { text: "*考试*在星期五。", romanization: "*Kǎoshì* zài xīngqīwǔ.", translation: "The exam is on Friday." },
+      { text: "我在准备*考试*。", romanization: "Wǒ zài zhǔnbèi *kǎoshì*.", translation: "I'm preparing for the exam." },
+      { text: "*考试*很容易。", romanization: "*Kǎoshì* hěn róngyì.", translation: "The exam is easy." }
     ],
     226: [
       { text: "孩子们已经*睡觉*了。", romanization: "Háizimen yǐjīng *shuìjiào* le.", translation: "The children are already asleep." },
       { text: "我十点*睡觉*。", romanization: "Wǒ shí diǎn *shuìjiào*.", translation: "I go to sleep at ten." },
-      { text: "他*睡觉*的时候很安静。", romanization: "Tā *shuìjiào* de shíhou hěn ānjìng.", translation: "He's quiet when he sleeps." }
+      { text: "他*睡觉*的时候很安静。", romanization: "Tā *shuìjiào* de shíhou hěn ānjìng.", translation: "He's quiet when he sleeps." },
+      { text: "我想*睡觉*了。", romanization: "Wǒ xiǎng *shuìjiào* le.", translation: "I want to go to sleep." },
+      { text: "猫在沙发上*睡觉*。", romanization: "Māo zài shāfā shàng *shuìjiào*.", translation: "The cat is sleeping on the sofa." },
+      { text: "你几点*睡觉*？", romanization: "Nǐ jǐ diǎn *shuìjiào*?", translation: "What time do you go to sleep?" }
     ],
     227: [
       { text: "我七点*醒来*。", romanization: "Wǒ qī diǎn *xǐnglái*.", translation: "I wake up at seven." },
       { text: "她今天很早就*醒来*了。", romanization: "Tā jīntiān hěn zǎo jiù *xǐnglái* le.", translation: "She woke up very early today." },
-      { text: "闹钟响了，他*醒来*了。", romanization: "Nàozhōng xiǎng le, tā *xǐnglái* le.", translation: "The alarm rang, and he woke up." }
+      { text: "闹钟响了，他*醒来*了。", romanization: "Nàozhōng xiǎng le, tā *xǐnglái* le.", translation: "The alarm rang, and he woke up." },
+      { text: "孩子半夜*醒来*了。", romanization: "Háizi bànyè *xǐnglái* le.", translation: "The child woke up in the middle of the night." },
+      { text: "我*醒来*的时候已经十点了。", romanization: "Wǒ *xǐnglái* de shíhou yǐjīng shí diǎn le.", translation: "When I woke up it was already ten." },
+      { text: "他*醒来*就喝水。", romanization: "Tā *xǐnglái* jiù hē shuǐ.", translation: "He drinks water as soon as he wakes up." }
     ],
     228: [
       { text: "他在银行*工作*。", romanization: "Tā zài yínháng *gōngzuò*.", translation: "He works at a bank." },
       { text: "我每天*工作*八个小时。", romanization: "Wǒ měitiān *gōngzuò* bā ge xiǎoshí.", translation: "I work eight hours a day." },
-      { text: "她在家*工作*。", romanization: "Tā zài jiā *gōngzuò*.", translation: "She works from home." }
+      { text: "她在家*工作*。", romanization: "Tā zài jiā *gōngzuò*.", translation: "She works from home." },
+      { text: "我妈妈在医院*工作*。", romanization: "Wǒ māma zài yīyuàn *gōngzuò*.", translation: "My mum works at the hospital." },
+      { text: "他*工作*很努力。", romanization: "Tā *gōngzuò* hěn nǔlì.", translation: "He works very hard." },
+      { text: "周末我不*工作*。", romanization: "Zhōumò wǒ bù *gōngzuò*.", translation: "I don't work at the weekend." }
     ],
     229: [
       { text: "我在*学习*中文。", romanization: "Wǒ zài *xuéxí* Zhōngwén.", translation: "I'm studying Chinese." },
       { text: "他每天晚上*学习*。", romanization: "Tā měitiān wǎnshang *xuéxí*.", translation: "He studies every evening." },
-      { text: "*学习*新语言很有意思。", romanization: "*Xuéxí* xīn yǔyán hěn yǒu yìsi.", translation: "Studying a new language is interesting." }
+      { text: "*学习*新语言很有意思。", romanization: "*Xuéxí* xīn yǔyán hěn yǒu yìsi.", translation: "Studying a new language is interesting." },
+      { text: "我每天*学习*两个小时。", romanization: "Wǒ měi tiān *xuéxí* liǎng gè xiǎoshí.", translation: "I study two hours every day." },
+      { text: "她在图书馆*学习*。", romanization: "Tā zài túshūguǎn *xuéxí*.", translation: "She studies in the library." },
+      { text: "我们一起*学习*吧。", romanization: "Wǒmen yìqǐ *xuéxí* ba.", translation: "Let's study together." }
     ],
     230: [
       { text: "我*学会*了游泳。", romanization: "Wǒ *xuéhuì* le yóuyǒng.", translation: "I learned to swim." },
       { text: "她想*学会*做饭。", romanization: "Tā xiǎng *xuéhuì* zuòfàn.", translation: "She wants to learn to cook." },
-      { text: "他很快就*学会*了这首歌。", romanization: "Tā hěn kuài jiù *xuéhuì* le zhè shǒu gē.", translation: "He quickly learned this song." }
+      { text: "他很快就*学会*了这首歌。", romanization: "Tā hěn kuài jiù *xuéhuì* le zhè shǒu gē.", translation: "He quickly learned this song." },
+      { text: "我想*学会*开车。", romanization: "Wǒ xiǎng *xuéhuì* kāichē.", translation: "I want to learn to drive." },
+      { text: "他*学会*了说中文。", romanization: "Tā *xuéhuì* le shuō Zhōngwén.", translation: "He has learned to speak Chinese." },
+      { text: "孩子*学会*了走路。", romanization: "Háizi *xuéhuì* le zǒulù.", translation: "The child has learned to walk." }
     ],
     231: [
       { text: "他会*开车*。", romanization: "Tā huì *kāichē*.", translation: "He knows how to drive." },
       { text: "请不要*开车*太快。", romanization: "Qǐng bú yào *kāichē* tài kuài.", translation: "Please don't drive too fast." },
-      { text: "我*开车*去上班。", romanization: "Wǒ *kāichē* qù shàngbān.", translation: "I drive to work." }
+      { text: "我*开车*去上班。", romanization: "Wǒ *kāichē* qù shàngbān.", translation: "I drive to work." },
+      { text: "我不会*开车*。", romanization: "Wǒ bú huì *kāichē*.", translation: "I can't drive." },
+      { text: "他*开车*很小心。", romanization: "Tā *kāichē* hěn xiǎoxīn.", translation: "He drives carefully." },
+      { text: "我们*开车*去海边。", romanization: "Wǒmen *kāichē* qù hǎibiān.", translation: "We drive to the seaside." }
     ],
     232: [
       { text: "我们喜欢*旅行*。", romanization: "Wǒmen xǐhuan *lǚxíng*.", translation: "We like to travel." },
       { text: "她一个人*旅行*。", romanization: "Tā yí ge rén *lǚxíng*.", translation: "She travels alone." },
-      { text: "暑假我们要去*旅行*。", romanization: "Shǔjià wǒmen yào qù *lǚxíng*.", translation: "We're going to travel during summer vacation." }
+      { text: "暑假我们要去*旅行*。", romanization: "Shǔjià wǒmen yào qù *lǚxíng*.", translation: "We're going to travel during summer vacation." },
+      { text: "我想去中国*旅行*。", romanization: "Wǒ xiǎng qù Zhōngguó *lǚxíng*.", translation: "I want to travel to China." },
+      { text: "他们*旅行*了一个月。", romanization: "Tāmen *lǚxíng* le yí gè yuè.", translation: "They travelled for a month." },
+      { text: "我喜欢和朋友*旅行*。", romanization: "Wǒ xǐhuan hé péngyou *lǚxíng*.", translation: "I like travelling with friends." }
     ],
     233: [
       { text: "请*等*我一下。", romanization: "Qǐng *děng* wǒ yíxià.", translation: "Please wait for me a moment." },
       { text: "我们*等*了很久。", romanization: "Wǒmen *děng* le hěn jiǔ.", translation: "We waited a long time." },
-      { text: "她在车站*等*朋友。", romanization: "Tā zài chēzhàn *děng* péngyou.", translation: "She's waiting for a friend at the station." }
+      { text: "她在车站*等*朋友。", romanization: "Tā zài chēzhàn *děng* péngyou.", translation: "She's waiting for a friend at the station." },
+      { text: "我在*等*公交车。", romanization: "Wǒ zài *děng* gōngjiāochē.", translation: "I'm waiting for the bus." },
+      { text: "请*等*五分钟。", romanization: "Qǐng *děng* wǔ fēnzhōng.", translation: "Please wait five minutes." },
+      { text: "你在*等*谁？", romanization: "Nǐ zài *děng* shéi?", translation: "Who are you waiting for?" }
     ],
     234: [
       { text: "我*找到*了我的钥匙。", romanization: "Wǒ *zhǎodào* le wǒ de yàoshi.", translation: "I found my keys." },
       { text: "他终于*找到*了工作。", romanization: "Tā zhōngyú *zhǎodào* le gōngzuò.", translation: "He finally found a job." },
-      { text: "你*找到*车站了吗？", romanization: "Nǐ *zhǎodào* chēzhàn le ma?", translation: "Did you find the station?" }
+      { text: "你*找到*车站了吗？", romanization: "Nǐ *zhǎodào* chēzhàn le ma?", translation: "Did you find the station?" },
+      { text: "我没*找到*我的手机。", romanization: "Wǒ méi *zhǎodào* wǒ de shǒujī.", translation: "I didn't find my phone." },
+      { text: "你*找到*工作了吗？", romanization: "Nǐ *zhǎodào* gōngzuò le ma?", translation: "Have you found a job?" },
+      { text: "他*找到*了一只小猫。", romanization: "Tā *zhǎodào* le yì zhī xiǎo māo.", translation: "He found a kitten." }
     ],
     235: [
       { text: "我们明天*见面*吧。", romanization: "Wǒmen míngtiān *jiànmiàn* ba.", translation: "Let's meet tomorrow." },
       { text: "我们多久没*见面*了？", romanization: "Wǒmen duōjiǔ méi *jiànmiàn* le?", translation: "How long has it been since we met?" },
-      { text: "很高兴和你*见面*。", romanization: "Hěn gāoxìng hé nǐ *jiànmiàn*.", translation: "Nice to meet you." }
+      { text: "很高兴和你*见面*。", romanization: "Hěn gāoxìng hé nǐ *jiànmiàn*.", translation: "Nice to meet you." },
+      { text: "我们在哪里*见面*？", romanization: "Wǒmen zài nǎlǐ *jiànmiàn*?", translation: "Where shall we meet?" },
+      { text: "我们下午三点*见面*。", romanization: "Wǒmen xiàwǔ sān diǎn *jiànmiàn*.", translation: "We meet at three in the afternoon." },
+      { text: "我和朋友在公园*见面*。", romanization: "Wǒ hé péngyou zài gōngyuán *jiànmiàn*.", translation: "I meet my friend in the park." }
     ],
     236: [
       { text: "我*喜欢*这本书。", romanization: "Wǒ *xǐhuan* zhè běn shū.", translation: "I like this book." },
       { text: "她*喜欢*音乐。", romanization: "Tā *xǐhuan* yīnyuè.", translation: "She likes music." },
-      { text: "你*喜欢*什么颜色？", romanization: "Nǐ *xǐhuan* shénme yánsè?", translation: "What color do you like?" }
+      { text: "你*喜欢*什么颜色？", romanization: "Nǐ *xǐhuan* shénme yánsè?", translation: "What color do you like?" },
+      { text: "我*喜欢*吃中国菜。", romanization: "Wǒ *xǐhuan* chī Zhōngguó cài.", translation: "I like eating Chinese food." },
+      { text: "你*喜欢*狗吗？", romanization: "Nǐ *xǐhuan* gǒu ma?", translation: "Do you like dogs?" },
+      { text: "他不*喜欢*下雨。", romanization: "Tā bù *xǐhuan* xià yǔ.", translation: "He doesn't like rain." }
     ],
     237: [
       { text: "我*爱*我的家人。", romanization: "Wǒ *ài* wǒ de jiārén.", translation: "I love my family." },
       { text: "他*爱*她。", romanization: "Tā *ài* tā.", translation: "He loves her." },
-      { text: "我们都*爱*这个城市。", romanization: "Wǒmen dōu *ài* zhège chéngshì.", translation: "We all love this city." }
+      { text: "我们都*爱*这个城市。", romanization: "Wǒmen dōu *ài* zhège chéngshì.", translation: "We all love this city." },
+      { text: "我*爱*我的家。", romanization: "Wǒ *ài* wǒ de jiā.", translation: "I love my home." },
+      { text: "妈妈*爱*她的孩子。", romanization: "Māma *ài* tā de háizi.", translation: "Mum loves her children." },
+      { text: "我*爱*吃冰淇淋。", romanization: "Wǒ *ài* chī bīngqílín.", translation: "I love eating ice cream." }
     ],
     238: [
       { text: "我*想要*一杯咖啡。", romanization: "Wǒ *xiǎngyào* yì bēi kāfēi.", translation: "I want a cup of coffee." },
       { text: "她*想要*一只小狗。", romanization: "Tā *xiǎngyào* yì zhī xiǎogǒu.", translation: "She wants a puppy." },
-      { text: "你*想要*什么？", romanization: "Nǐ *xiǎngyào* shénme?", translation: "What do you want?" }
+      { text: "你*想要*什么？", romanization: "Nǐ *xiǎngyào* shénme?", translation: "What do you want?" },
+      { text: "我*想要*一个新手机。", romanization: "Wǒ *xiǎngyào* yí gè xīn shǒujī.", translation: "I want a new phone." },
+      { text: "孩子*想要*一个蛋糕。", romanization: "Háizi *xiǎngyào* yí gè dàngāo.", translation: "The child wants a cake." },
+      { text: "他*想要*学中文。", romanization: "Tā *xiǎngyào* xué Zhōngwén.", translation: "He wants to learn Chinese." }
     ],
     239: [
       { text: "我*需要*帮助。", romanization: "Wǒ *xūyào* bāngzhù.", translation: "I need help." },
       { text: "你*需要*休息。", romanization: "Nǐ *xūyào* xiūxi.", translation: "You need to rest." },
-      { text: "我们*需要*更多时间。", romanization: "Wǒmen *xūyào* gèng duō shíjiān.", translation: "We need more time." }
+      { text: "我们*需要*更多时间。", romanization: "Wǒmen *xūyào* gèng duō shíjiān.", translation: "We need more time." },
+      { text: "我*需要*一个新包。", romanization: "Wǒ *xūyào* yí gè xīn bāo.", translation: "I need a new bag." },
+      { text: "你*需要*帮助吗？", romanization: "Nǐ *xūyào* bāngzhù ma?", translation: "Do you need help?" },
+      { text: "孩子*需要*多睡觉。", romanization: "Háizi *xūyào* duō shuìjiào.", translation: "Children need more sleep." }
     ],
     240: [
       { text: "我要去*买*菜。", romanization: "Wǒ yào qù *mǎi* cài.", translation: "I'm going to buy groceries." },
       { text: "她*买*了一件新外套。", romanization: "Tā *mǎi* le yí jiàn xīn wàitào.", translation: "She bought a new coat." },
-      { text: "你想*买*什么？", romanization: "Nǐ xiǎng *mǎi* shénme?", translation: "What do you want to buy?" }
+      { text: "你想*买*什么？", romanization: "Nǐ xiǎng *mǎi* shénme?", translation: "What do you want to buy?" },
+      { text: "我想*买*一件毛衣。", romanization: "Wǒ xiǎng *mǎi* yí jiàn máoyī.", translation: "I want to buy a sweater." },
+      { text: "他*买*了一辆新车。", romanization: "Tā *mǎi* le yí liàng xīn chē.", translation: "He bought a new car." },
+      { text: "我们去超市*买*水果。", romanization: "Wǒmen qù chāoshì *mǎi* shuǐguǒ.", translation: "We go to the supermarket to buy fruit." }
     ],
     241: [
       { text: "这家商店*卖*水果。", romanization: "Zhè jiā shāngdiàn *mài* shuǐguǒ.", translation: "This shop sells fruit." },
       { text: "他想*卖*他的车。", romanization: "Tā xiǎng *mài* tā de chē.", translation: "He wants to sell his car." },
-      { text: "市场*卖*新鲜的鱼。", romanization: "Shìchǎng *mài* xīnxiān de yú.", translation: "The market sells fresh fish." }
+      { text: "市场*卖*新鲜的鱼。", romanization: "Shìchǎng *mài* xīnxiān de yú.", translation: "The market sells fresh fish." },
+      { text: "他在市场*卖*菜。", romanization: "Tā zài shìchǎng *mài* cài.", translation: "He sells vegetables at the market." },
+      { text: "这家店*卖*鞋子。", romanization: "Zhè jiā diàn *mài* xiézi.", translation: "This shop sells shoes." },
+      { text: "我们把旧车*卖*了。", romanization: "Wǒmen bǎ jiù chē *mài* le.", translation: "We sold the old car." }
     ],
     242: [
       { text: "谁*付钱*？", romanization: "Shéi *fùqián*?", translation: "Who's paying?" },
       { text: "我用现金*付钱*。", romanization: "Wǒ yòng xiànjīn *fùqián*.", translation: "I'll pay in cash." },
-      { text: "请在这里*付钱*。", romanization: "Qǐng zài zhèlǐ *fùqián*.", translation: "Please pay here." }
+      { text: "请在这里*付钱*。", romanization: "Qǐng zài zhèlǐ *fùqián*.", translation: "Please pay here." },
+      { text: "我来*付钱*吧。", romanization: "Wǒ lái *fùqián* ba.", translation: "Let me pay." },
+      { text: "你用手机*付钱*吗？", romanization: "Nǐ yòng shǒujī *fùqián* ma?", translation: "Do you pay with your phone?" },
+      { text: "吃完饭我们*付钱*。", romanization: "Chīwán fàn wǒmen *fùqián*.", translation: "We pay after eating." }
     ],
     243: [
       { text: "请*打开*窗户。", romanization: "Qǐng *dǎkāi* chuānghu.", translation: "Please open the window." },
       { text: "她*打开*了门。", romanization: "Tā *dǎkāi* le mén.", translation: "She opened the door." },
-      { text: "我不能*打开*这个盒子。", romanization: "Wǒ bù néng *dǎkāi* zhège hézi.", translation: "I can't open this box." }
+      { text: "我不能*打开*这个盒子。", romanization: "Wǒ bù néng *dǎkāi* zhège hézi.", translation: "I can't open this box." },
+      { text: "请*打开*你的书。", romanization: "Qǐng *dǎkāi* nǐ de shū.", translation: "Please open your book." },
+      { text: "他*打开*了冰箱。", romanization: "Tā *dǎkāi* le bīngxiāng.", translation: "He opened the fridge." },
+      { text: "我可以*打开*窗户吗？", romanization: "Wǒ kěyǐ *dǎkāi* chuānghu ma?", translation: "May I open the window?" }
     ],
     244: [
       { text: "请*关上*门。", romanization: "Qǐng *guānshàng* mén.", translation: "Please close the door." },
       { text: "她*关上*了窗户。", romanization: "Tā *guānshàng* le chuānghu.", translation: "She closed the window." },
-      { text: "记得*关上*灯。", romanization: "Jìde *guānshàng* dēng.", translation: "Remember to turn off the light." }
+      { text: "记得*关上*灯。", romanization: "Jìde *guānshàng* dēng.", translation: "Remember to turn off the light." },
+      { text: "他*关上*了电脑。", romanization: "Tā *guānshàng* le diànnǎo.", translation: "He shut the computer." },
+      { text: "请*关上*窗户，很冷。", romanization: "Qǐng *guānshàng* chuānghu, hěn lěng.", translation: "Please close the window, it's cold." },
+      { text: "她*关上*了书。", romanization: "Tā *guānshàng* le shū.", translation: "She closed the book." }
     ],
     245: [
       { text: "我在*洗*盘子。", romanization: "Wǒ zài *xǐ* pánzi.", translation: "I'm washing the dishes." },
       { text: "请*洗*手。", romanization: "Qǐng *xǐ* shǒu.", translation: "Please wash your hands." },
-      { text: "她每天*洗*澡。", romanization: "Tā měitiān *xǐ* zǎo.", translation: "She showers every day." }
+      { text: "她每天*洗*澡。", romanization: "Tā měitiān *xǐ* zǎo.", translation: "She showers every day." },
+      { text: "我要*洗*衣服。", romanization: "Wǒ yào *xǐ* yīfu.", translation: "I need to wash clothes." },
+      { text: "吃饭前要*洗*手。", romanization: "Chī fàn qián yào *xǐ* shǒu.", translation: "Wash your hands before eating." },
+      { text: "他在*洗*车。", romanization: "Tā zài *xǐ* chē.", translation: "He is washing the car." }
     ],
     246: [
       { text: "我*看见*了一只猫。", romanization: "Wǒ *kànjiàn* le yì zhī māo.", translation: "I saw a cat." },
       { text: "你*看见*我的钥匙了吗？", romanization: "Nǐ *kànjiàn* wǒ de yàoshi le ma?", translation: "Did you see my keys?" },
-      { text: "她没*看见*我。", romanization: "Tā méi *kànjiàn* wǒ.", translation: "She didn't see me." }
+      { text: "她没*看见*我。", romanization: "Tā méi *kànjiàn* wǒ.", translation: "She didn't see me." },
+      { text: "我*看见*他在公园。", romanization: "Wǒ *kànjiàn* tā zài gōngyuán.", translation: "I saw him in the park." },
+      { text: "你*看见*那只鸟了吗？", romanization: "Nǐ *kànjiàn* nà zhī niǎo le ma?", translation: "Did you see that bird?" },
+      { text: "我没*看见*你的包。", romanization: "Wǒ méi *kànjiàn* nǐ de bāo.", translation: "I didn't see your bag." }
     ],
     247: [
       { text: "我*听见*了奇怪的声音。", romanization: "Wǒ *tīngjiàn* le qíguài de shēngyīn.", translation: "I heard a strange sound." },
       { text: "你*听见*了吗？", romanization: "Nǐ *tīngjiàn* le ma?", translation: "Did you hear that?" },
-      { text: "她没*听见*电话响。", romanization: "Tā méi *tīngjiàn* diànhuà xiǎng.", translation: "She didn't hear the phone ring." }
+      { text: "她没*听见*电话响。", romanization: "Tā méi *tīngjiàn* diànhuà xiǎng.", translation: "She didn't hear the phone ring." },
+      { text: "我*听见*有人在唱歌。", romanization: "Wǒ *tīngjiàn* yǒu rén zài chàng gē.", translation: "I hear someone singing." },
+      { text: "你*听见*我说话吗？", romanization: "Nǐ *tīngjiàn* wǒ shuōhuà ma?", translation: "Can you hear me talking?" },
+      { text: "我*听见*了下雨的声音。", romanization: "Wǒ *tīngjiàn* le xià yǔ de shēngyīn.", translation: "I heard the sound of rain." }
     ],
     248: [
       { text: "他*说*他很累。", romanization: "Tā *shuō* tā hěn lèi.", translation: "He said he was tired." },
       { text: "她*说*她会来。", romanization: "Tā *shuō* tā huì lái.", translation: "She said she would come." },
-      { text: "老师*说*要安静。", romanization: "Lǎoshī *shuō* yào ānjìng.", translation: "The teacher said to be quiet." }
+      { text: "老师*说*要安静。", romanization: "Lǎoshī *shuō* yào ānjìng.", translation: "The teacher said to be quiet." },
+      { text: "你刚才*说*什么？", romanization: "Nǐ gāngcái *shuō* shénme?", translation: "What did you just say?" },
+      { text: "妈妈*说*晚饭好了。", romanization: "Māma *shuō* wǎnfàn hǎo le.", translation: "Mum says dinner is ready." },
+      { text: "他*说*明天会下雨。", romanization: "Tā *shuō* míngtiān huì xià yǔ.", translation: "He says it will rain tomorrow." }
     ],
     249: [
       { text: "我可以*问*你一个问题吗？", romanization: "Wǒ kěyǐ *wèn* nǐ yí ge wèntí ma?", translation: "Can I ask you a question?" },
       { text: "她*问*了我的名字。", romanization: "Tā *wèn* le wǒ de míngzi.", translation: "She asked my name." },
-      { text: "他*问*老师问题。", romanization: "Tā *wèn* lǎoshī wèntí.", translation: "He asks the teacher questions." }
+      { text: "他*问*老师问题。", romanization: "Tā *wèn* lǎoshī wèntí.", translation: "He asks the teacher questions." },
+      { text: "我*问*他几点了。", romanization: "Wǒ *wèn* tā jǐ diǎn le.", translation: "I asked him what time it was." },
+      { text: "你可以*问*老师。", romanization: "Nǐ kěyǐ *wèn* lǎoshī.", translation: "You can ask the teacher." },
+      { text: "她*问*我去哪里。", romanization: "Tā *wèn* wǒ qù nǎlǐ.", translation: "She asked me where I was going." }
     ],
     250: [
       { text: "请*回答*这个问题。", romanization: "Qǐng *huídá* zhège wèntí.", translation: "Please answer this question." },
       { text: "他没有*回答*我。", romanization: "Tā méiyǒu *huídá* wǒ.", translation: "He didn't answer me." },
-      { text: "她*回答*得很快。", romanization: "Tā *huídá* de hěn kuài.", translation: "She answered quickly." }
+      { text: "她*回答*得很快。", romanization: "Tā *huídá* de hěn kuài.", translation: "She answered quickly." },
+      { text: "他没有*回答*。", romanization: "Tā méiyǒu *huídá*.", translation: "He didn't answer." },
+      { text: "我不知道怎么*回答*。", romanization: "Wǒ bù zhīdào zěnme *huídá*.", translation: "I don't know how to answer." },
+      { text: "请用中文*回答*。", romanization: "Qǐng yòng Zhōngwén *huídá*.", translation: "Please answer in Chinese." }
     ],
     251: [
       { text: "她很*高兴*。", romanization: "Tā hěn *gāoxìng*.", translation: "She's very happy." },
       { text: "见到你我很*高兴*。", romanization: "Jiàndào nǐ wǒ hěn *gāoxìng*.", translation: "I'm happy to see you." },
-      { text: "他今天特别*高兴*。", romanization: "Tā jīntiān tèbié *gāoxìng*.", translation: "He's especially happy today." }
+      { text: "他今天特别*高兴*。", romanization: "Tā jīntiān tèbié *gāoxìng*.", translation: "He's especially happy today." },
+      { text: "今天我很*高兴*。", romanization: "Jīntiān wǒ hěn *gāoxìng*.", translation: "I'm happy today." },
+      { text: "孩子们都很*高兴*。", romanization: "Háizimen dōu hěn *gāoxìng*.", translation: "The children are all happy." },
+      { text: "认识你很*高兴*。", romanization: "Rènshi nǐ hěn *gāoxìng*.", translation: "Nice to meet you." }
     ],
     252: [
       { text: "她看起来很*难过*。", romanization: "Tā kàn qǐlai hěn *nánguò*.", translation: "She looks sad." },
       { text: "这个消息让我很*难过*。", romanization: "Zhège xiāoxi ràng wǒ hěn *nánguò*.", translation: "This news made me sad." },
-      { text: "别*难过*了。", romanization: "Bié *nánguò* le.", translation: "Don't be sad." }
+      { text: "别*难过*了。", romanization: "Bié *nánguò* le.", translation: "Don't be sad." },
+      { text: "他今天很*难过*。", romanization: "Tā jīntiān hěn *nánguò*.", translation: "He is sad today." },
+      { text: "别*难过*，明天会更好。", romanization: "Bié *nánguò*, míngtiān huì gèng hǎo.", translation: "Don't be sad, tomorrow will be better." },
+      { text: "她的狗死了，她很*难过*。", romanization: "Tā de gǒu sǐ le, tā hěn *nánguò*.", translation: "Her dog died; she is very sad." }
     ],
     253: [
       { text: "他很*生气*。", romanization: "Tā hěn *shēngqì*.", translation: "He's very angry." },
       { text: "妈妈对我*生气*了。", romanization: "Māma duì wǒ *shēngqì* le.", translation: "Mom got angry with me." },
-      { text: "别*生气*，这只是个误会。", romanization: "Bié *shēngqì*, zhè zhǐshì ge wùhuì.", translation: "Don't be angry, it's just a misunderstanding." }
+      { text: "别*生气*，这只是个误会。", romanization: "Bié *shēngqì*, zhè zhǐshì ge wùhuì.", translation: "Don't be angry, it's just a misunderstanding." },
+      { text: "爸爸今天很*生气*。", romanization: "Bàba jīntiān hěn *shēngqì*.", translation: "Dad is angry today." },
+      { text: "你为什么*生气*？", romanization: "Nǐ wèi shénme *shēngqì*?", translation: "Why are you angry?" },
+      { text: "她*生气*了，不说话。", romanization: "Tā *shēngqì* le, bù shuōhuà.", translation: "She got angry and isn't talking." }
     ],
     254: [
       { text: "我今天很*累*。", romanization: "Wǒ jīntiān hěn *lèi*.", translation: "I'm very tired today." },
       { text: "他工作了一整天，很*累*。", romanization: "Tā gōngzuòle yì zhěng tiān, hěn *lèi*.", translation: "He worked all day and is tired." },
-      { text: "你看起来很*累*。", romanization: "Nǐ kàn qǐlai hěn *lèi*.", translation: "You look tired." }
+      { text: "你看起来很*累*。", romanization: "Nǐ kàn qǐlai hěn *lèi*.", translation: "You look tired." },
+      { text: "我走路走得很*累*。", romanization: "Wǒ zǒulù zǒu de hěn *lèi*.", translation: "I'm tired from walking." },
+      { text: "孩子们玩*累*了。", romanization: "Háizimen wán *lèi* le.", translation: "The children are tired from playing." },
+      { text: "你*累*了吗？", romanization: "Nǐ *lèi* le ma?", translation: "Are you tired?" }
     ],
     255: [
       { text: "他*生病*了。", romanization: "Tā *shēngbìng* le.", translation: "He's sick." },
       { text: "我上周*生病*了。", romanization: "Wǒ shàng zhōu *shēngbìng* le.", translation: "I was sick last week." },
-      { text: "*生病*的时候要多休息。", romanization: "*Shēngbìng* de shíhou yào duō xiūxi.", translation: "When you're sick you should rest more." }
+      { text: "*生病*的时候要多休息。", romanization: "*Shēngbìng* de shíhou yào duō xiūxi.", translation: "When you're sick you should rest more." },
+      { text: "她*生病*了，没来上课。", romanization: "Tā *shēngbìng* le, méi lái shàngkè.", translation: "She is sick and didn't come to class." },
+      { text: "我的狗*生病*了。", romanization: "Wǒ de gǒu *shēngbìng* le.", translation: "My dog is sick." },
+      { text: "冬天很容易*生病*。", romanization: "Dōngtiān hěn róngyì *shēngbìng*.", translation: "It's easy to get sick in winter." }
     ],
     256: [
       { text: "这个考试很*容易*。", romanization: "Zhège kǎoshì hěn *róngyì*.", translation: "This test is easy." },
       { text: "学中文不*容易*。", romanization: "Xué Zhōngwén bù *róngyì*.", translation: "Learning Chinese isn't easy." },
-      { text: "这个问题很*容易*回答。", romanization: "Zhège wèntí hěn *róngyì* huídá.", translation: "This question is easy to answer." }
+      { text: "这个问题很*容易*回答。", romanization: "Zhège wèntí hěn *róngyì* huídá.", translation: "This question is easy to answer." },
+      { text: "这个菜很*容易*做。", romanization: "Zhège cài hěn *róngyì* zuò.", translation: "This dish is easy to make." },
+      { text: "今天的作业很*容易*。", romanization: "Jīntiān de zuòyè hěn *róngyì*.", translation: "Today's homework is easy." },
+      { text: "开车不*容易*。", romanization: "Kāichē bù *róngyì*.", translation: "Driving isn't easy." }
     ],
     257: [
       { text: "这个问题很*难*。", romanization: "Zhège wèntí hěn *nán*.", translation: "This problem is difficult." },
       { text: "中文语法有点*难*。", romanization: "Zhōngwén yǔfǎ yǒudiǎn *nán*.", translation: "Chinese grammar is a bit difficult." },
-      { text: "这本书太*难*了。", romanization: "Zhè běn shū tài *nán* le.", translation: "This book is too difficult." }
+      { text: "这本书太*难*了。", romanization: "Zhè běn shū tài *nán* le.", translation: "This book is too difficult." },
+      { text: "汉字很*难*写。", romanization: "Hànzì hěn *nán* xiě.", translation: "Chinese characters are hard to write." },
+      { text: "今天的考试很*难*。", romanization: "Jīntiān de kǎoshì hěn *nán*.", translation: "Today's exam was hard." },
+      { text: "这个问题不*难*。", romanization: "Zhège wèntí bù *nán*.", translation: "This question isn't hard." }
     ],
     258: [
       { text: "这件外套太*贵*了。", romanization: "Zhè jiàn wàitào tài *guì* le.", translation: "This coat is too expensive." },
       { text: "这家酒店很*贵*。", romanization: "Zhè jiā jiǔdiàn hěn *guì*.", translation: "This hotel is expensive." },
-      { text: "机票很*贵*。", romanization: "Jīpiào hěn *guì*.", translation: "Plane tickets are expensive." }
+      { text: "机票很*贵*。", romanization: "Jīpiào hěn *guì*.", translation: "Plane tickets are expensive." },
+      { text: "这个手机很*贵*。", romanization: "Zhège shǒujī hěn *guì*.", translation: "This phone is expensive." },
+      { text: "北京的房子很*贵*。", romanization: "Běijīng de fángzi hěn *guì*.", translation: "Houses in Beijing are expensive." },
+      { text: "太*贵*了，便宜一点吧。", romanization: "Tài *guì* le, piányi yìdiǎn ba.", translation: "Too expensive, make it a bit cheaper." }
     ],
     259: [
       { text: "这个市场的东西很*便宜*。", romanization: "Zhège shìchǎng de dōngxi hěn *piányi*.", translation: "Things at this market are cheap." },
       { text: "这双鞋子很*便宜*。", romanization: "Zhè shuāng xiézi hěn *piányi*.", translation: "These shoes are cheap." },
-      { text: "公交车比出租车*便宜*。", romanization: "Gōngjiāochē bǐ chūzūchē *piányi*.", translation: "The bus is cheaper than a taxi." }
+      { text: "公交车比出租车*便宜*。", romanization: "Gōngjiāochē bǐ chūzūchē *piányi*.", translation: "The bus is cheaper than a taxi." },
+      { text: "这件衣服很*便宜*。", romanization: "Zhè jiàn yīfu hěn *piányi*.", translation: "This piece of clothing is cheap." },
+      { text: "坐公交车很*便宜*。", romanization: "Zuò gōngjiāochē hěn *piányi*.", translation: "Taking the bus is cheap." },
+      { text: "有没有*便宜*一点的？", romanization: "Yǒu méiyǒu *piányi* yìdiǎn de?", translation: "Is there anything a bit cheaper?" }
     ],
     260: [
       { text: "这个博物馆是*免费*的。", romanization: "Zhège bówùguǎn shì *miǎnfèi* de.", translation: "This museum is free." },
       { text: "早餐是*免费*的。", romanization: "Zǎocān shì *miǎnfèi* de.", translation: "Breakfast is free." },
-      { text: "*免费*的东西不一定好。", romanization: "*Miǎnfèi* de dōngxi bù yídìng hǎo.", translation: "Free things aren't necessarily good." }
+      { text: "*免费*的东西不一定好。", romanization: "*Miǎnfèi* de dōngxi bù yídìng hǎo.", translation: "Free things aren't necessarily good." },
+      { text: "这里的水是*免费*的。", romanization: "Zhèlǐ de shuǐ shì *miǎnfèi* de.", translation: "The water here is free." },
+      { text: "孩子坐车*免费*。", romanization: "Háizi zuò chē *miǎnfèi*.", translation: "Children ride for free." },
+      { text: "这个公园*免费*开放。", romanization: "Zhège gōngyuán *miǎnfèi* kāifàng.", translation: "This park is open for free." }
     ],
     261: [
       { text: "这里有*很多*人。", romanization: "Zhèlǐ yǒu *hěnduō* rén.", translation: "There are many people here." },
       { text: "她有*很多*书。", romanization: "Tā yǒu *hěnduō* shū.", translation: "She has many books." },
-      { text: "我们有*很多*时间。", romanization: "Wǒmen yǒu *hěnduō* shíjiān.", translation: "We have plenty of time." }
+      { text: "我们有*很多*时间。", romanization: "Wǒmen yǒu *hěnduō* shíjiān.", translation: "We have plenty of time." },
+      { text: "公园里有*很多*花。", romanization: "Gōngyuán lǐ yǒu *hěn duō* huā.", translation: "There are many flowers in the park." },
+      { text: "他有*很多*朋友。", romanization: "Tā yǒu *hěn duō* péngyou.", translation: "He has many friends." },
+      { text: "我今天有*很多*作业。", romanization: "Wǒ jīntiān yǒu *hěn duō* zuòyè.", translation: "I have a lot of homework today." }
     ],
     262: [
       { text: "这里的人很*少*。", romanization: "Zhèlǐ de rén hěn *shǎo*.", translation: "There are few people here." },
       { text: "我们的时间*少*了。", romanization: "Wǒmen de shíjiān *shǎo* le.", translation: "We have little time left." },
-      { text: "他吃得很*少*。", romanization: "Tā chī de hěn *shǎo*.", translation: "He eats very little." }
+      { text: "他吃得很*少*。", romanization: "Tā chī de hěn *shǎo*.", translation: "He eats very little." },
+      { text: "今天来的人很*少*。", romanization: "Jīntiān lái de rén hěn *shǎo*.", translation: "Few people came today." },
+      { text: "他说话很*少*。", romanization: "Tā shuōhuà hěn *shǎo*.", translation: "He speaks very little." },
+      { text: "冬天这里雨很*少*。", romanization: "Dōngtiān zhèlǐ yǔ hěn *shǎo*.", translation: "There's little rain here in winter." }
     ],
     263: [
       { text: "我需要*更多*时间。", romanization: "Wǒ xūyào *gèngduō* shíjiān.", translation: "I need more time." },
       { text: "她想要*更多*信息。", romanization: "Tā xiǎng yào *gèngduō* xìnxī.", translation: "She wants more information." },
-      { text: "请给我*更多*水。", romanization: "Qǐng gěi wǒ *gèngduō* shuǐ.", translation: "Please give me more water." }
+      { text: "请给我*更多*水。", romanization: "Qǐng gěi wǒ *gèngduō* shuǐ.", translation: "Please give me more water." },
+      { text: "我想吃*更多*水果。", romanization: "Wǒ xiǎng chī *gèng duō* shuǐguǒ.", translation: "I want to eat more fruit." },
+      { text: "我们需要*更多*椅子。", romanization: "Wǒmen xūyào *gèng duō* yǐzi.", translation: "We need more chairs." },
+      { text: "他想学*更多*汉字。", romanization: "Tā xiǎng xué *gèng duō* Hànzì.", translation: "He wants to learn more characters." }
     ],
     264: [
       { text: "我想吃*更少*的糖。", romanization: "Wǒ xiǎng chī *gèngshǎo* de táng.", translation: "I want to eat less sugar." },
       { text: "他现在工作*更少*了。", romanization: "Tā xiànzài gōngzuò *gèngshǎo* le.", translation: "He works less now." },
-      { text: "请放*更少*的盐。", romanization: "Qǐng fàng *gèngshǎo* de yán.", translation: "Please add less salt." }
+      { text: "请放*更少*的盐。", romanization: "Qǐng fàng *gèngshǎo* de yán.", translation: "Please add less salt." },
+      { text: "我想花*更少*的钱。", romanization: "Wǒ xiǎng huā *gèng shǎo* de qián.", translation: "I want to spend less money." },
+      { text: "今年的雨*更少*。", romanization: "Jīnnián de yǔ *gèng shǎo*.", translation: "There's less rain this year." },
+      { text: "现在我喝*更少*的咖啡。", romanization: "Xiànzài wǒ hē *gèng shǎo* de kāfēi.", translation: "Now I drink less coffee." }
     ],
     265: [
       { text: "我们有*足够*的钱。", romanization: "Wǒmen yǒu *zúgòu* de qián.", translation: "We have enough money." },
       { text: "这*足够*了。", romanization: "Zhè *zúgòu* le.", translation: "This is enough." },
-      { text: "你睡得*足够*吗？", romanization: "Nǐ shuì de *zúgòu* ma?", translation: "Do you sleep enough?" }
+      { text: "你睡得*足够*吗？", romanization: "Nǐ shuì de *zúgòu* ma?", translation: "Do you sleep enough?" },
+      { text: "我们有*足够*的时间。", romanization: "Wǒmen yǒu *zúgòu* de shíjiān.", translation: "We have enough time." },
+      { text: "这些菜*足够*了。", romanization: "Zhèxiē cài *zúgòu* le.", translation: "These dishes are enough." },
+      { text: "我没有*足够*的钱。", romanization: "Wǒ méiyǒu *zúgòu* de qián.", translation: "I don't have enough money." }
     ],
     266: [
       { text: "我*经常*去公园。", romanization: "Wǒ *jīngcháng* qù gōngyuán.", translation: "I often go to the park." },
       { text: "她*经常*迟到。", romanization: "Tā *jīngcháng* chídào.", translation: "She's often late." },
-      { text: "我们*经常*一起吃饭。", romanization: "Wǒmen *jīngcháng* yìqǐ chīfàn.", translation: "We often eat together." }
+      { text: "我们*经常*一起吃饭。", romanization: "Wǒmen *jīngcháng* yìqǐ chīfàn.", translation: "We often eat together." },
+      { text: "他*经常*去图书馆。", romanization: "Tā *jīngcháng* qù túshūguǎn.", translation: "He often goes to the library." },
+      { text: "这里*经常*下雨。", romanization: "Zhèlǐ *jīngcháng* xià yǔ.", translation: "It often rains here." },
+      { text: "我*经常*给奶奶打电话。", romanization: "Wǒ *jīngcháng* gěi nǎinai dǎ diànhuà.", translation: "I often call grandma." }
     ],
     267: [
       { text: "他*从不*迟到。", romanization: "Tā *cóngbù* chídào.", translation: "He's never late." },
       { text: "我*从不*喝咖啡。", romanization: "Wǒ *cóngbù* hē kāfēi.", translation: "I never drink coffee." },
-      { text: "她*从不*抱怨。", romanization: "Tā *cóngbù* bàoyuàn.", translation: "She never complains." }
+      { text: "她*从不*抱怨。", romanization: "Tā *cóngbù* bàoyuàn.", translation: "She never complains." },
+      { text: "我*从不*吃肉。", romanization: "Wǒ *cóngbù* chī ròu.", translation: "I never eat meat." },
+      { text: "他*从不*喝酒。", romanization: "Tā *cóngbù* hē jiǔ.", translation: "He never drinks alcohol." },
+      { text: "她*从不*说谎。", romanization: "Tā *cóngbù* shuōhuǎng.", translation: "She never lies." }
     ],
     268: [
       { text: "我*有时候*骑自行车上班。", romanization: "Wǒ *yǒushíhou* qí zìxíngchē shàngbān.", translation: "Sometimes I bike to work." },
       { text: "*有时候*他会晚回家。", romanization: "*Yǒushíhou* tā huì wǎn huí jiā.", translation: "Sometimes he comes home late." },
-      { text: "她*有时候*喝茶。", romanization: "Tā *yǒushíhou* hē chá.", translation: "She sometimes drinks tea." }
+      { text: "她*有时候*喝茶。", romanization: "Tā *yǒushíhou* hē chá.", translation: "She sometimes drinks tea." },
+      { text: "我*有时候*在家工作。", romanization: "Wǒ *yǒu shíhou* zài jiā gōngzuò.", translation: "Sometimes I work from home." },
+      { text: "*有时候*我很想家。", romanization: "*Yǒu shíhou* wǒ hěn xiǎng jiā.", translation: "Sometimes I miss home a lot." },
+      { text: "他*有时候*不吃早饭。", romanization: "Tā *yǒu shíhou* bù chī zǎofàn.", translation: "Sometimes he skips breakfast." }
     ],
     269: [
       { text: "他今天来得很*早*。", romanization: "Tā jīntiān lái de hěn *zǎo*.", translation: "He came very early today." },
       { text: "我们*早*点出发吧。", romanization: "Wǒmen *zǎo* diǎn chūfā ba.", translation: "Let's leave early." },
-      { text: "现在还*早*。", romanization: "Xiànzài hái *zǎo*.", translation: "It's still early." }
+      { text: "现在还*早*。", romanization: "Xiànzài hái *zǎo*.", translation: "It's still early." },
+      { text: "他每天都起得很*早*。", romanization: "Tā měi tiān dōu qǐ de hěn *zǎo*.", translation: "He gets up early every day." },
+      { text: "她来得太*早*了。", romanization: "Tā lái de tài *zǎo* le.", translation: "She came too early." },
+      { text: "明天我们要*早*点起床。", romanization: "Míngtiān wǒmen yào *zǎo* diǎn qǐchuáng.", translation: "Tomorrow we need to get up a bit early." }
     ],
     270: [
       { text: "他来得很*晚*。", romanization: "Tā lái de hěn *wǎn*.", translation: "He came very late." },
       { text: "现在已经很*晚*了。", romanization: "Xiànzài yǐjīng hěn *wǎn* le.", translation: "It's already very late now." },
-      { text: "别睡得太*晚*。", romanization: "Bié shuì de tài *wǎn*.", translation: "Don't go to bed too late." }
+      { text: "别睡得太*晚*。", romanization: "Bié shuì de tài *wǎn*.", translation: "Don't go to bed too late." },
+      { text: "对不起，我来*晚*了。", romanization: "Duì bu qǐ, wǒ lái *wǎn* le.", translation: "Sorry, I'm late." },
+      { text: "他每天睡得很*晚*。", romanization: "Tā měi tiān shuì de hěn *wǎn*.", translation: "He goes to bed late every day." },
+      { text: "太*晚*了，我们回家吧。", romanization: "Tài *wǎn* le, wǒmen huí jiā ba.", translation: "It's too late, let's go home." }
     ],
     271: [
       { text: "*这个*苹果很甜。", romanization: "*Zhège* píngguǒ hěn tián.", translation: "This apple is sweet." },
       { text: "*这个*包是我的。", romanization: "*Zhège* bāo shì wǒ de.", translation: "This bag is mine." },
-      { text: "你喜欢*这个*吗？", romanization: "Nǐ xǐhuan *zhège* ma?", translation: "Do you like this one?" }
+      { text: "你喜欢*这个*吗？", romanization: "Nǐ xǐhuan *zhège* ma?", translation: "Do you like this one?" },
+      { text: "*这个*菜很好吃。", romanization: "*Zhège* cài hěn hǎochī.", translation: "This dish is delicious." },
+      { text: "我要买*这个*包。", romanization: "Wǒ yào mǎi *zhège* bāo.", translation: "I want to buy this bag." },
+      { text: "*这个*人是谁？", romanization: "*Zhège* rén shì shéi?", translation: "Who is this person?" }
     ],
     272: [
       { text: "*这个*问题很难。", romanization: "*Zhège* wèntí hěn nán.", translation: "This problem is difficult." },
       { text: "我不明白*这个*。", romanization: "Wǒ bù míngbai *zhège*.", translation: "I don't understand this." },
-      { text: "*这个*不是我要的。", romanization: "*Zhège* bú shì wǒ yào de.", translation: "This isn't what I wanted." }
+      { text: "*这个*不是我要的。", romanization: "*Zhège* bú shì wǒ yào de.", translation: "This isn't what I wanted." },
+      { text: "*这个*房间很大。", romanization: "*Zhège* fángjiān hěn dà.", translation: "This room is big." },
+      { text: "*这个*手机是新的。", romanization: "*Zhège* shǒujī shì xīn de.", translation: "This phone is new." },
+      { text: "*这个*多少钱？", romanization: "*Zhège* duōshao qián?", translation: "How much is this?" }
     ],
     273: [
       { text: "*这些*照片很漂亮。", romanization: "*Zhèxiē* zhàopiàn hěn piàoliang.", translation: "These photos are beautiful." },
       { text: "*这些*书是我的。", romanization: "*Zhèxiē* shū shì wǒ de.", translation: "These books are mine." },
-      { text: "*这些*苹果很新鲜。", romanization: "*Zhèxiē* píngguǒ hěn xīnxiān.", translation: "These apples are fresh." }
+      { text: "*这些*苹果很新鲜。", romanization: "*Zhèxiē* píngguǒ hěn xīnxiān.", translation: "These apples are fresh." },
+      { text: "*这些*花很香。", romanization: "*Zhèxiē* huā hěn xiāng.", translation: "These flowers smell nice." },
+      { text: "*这些*衣服太小了。", romanization: "*Zhèxiē* yīfu tài xiǎo le.", translation: "These clothes are too small." },
+      { text: "*这些*是我的朋友。", romanization: "*Zhèxiē* shì wǒ de péngyou.", translation: "These are my friends." }
     ],
     274: [
       { text: "我们有*相同*的想法。", romanization: "Wǒmen yǒu *xiāngtóng* de xiǎngfǎ.", translation: "We have the same idea." },
       { text: "这两个包是*相同*的颜色。", romanization: "Zhè liǎng ge bāo shì *xiāngtóng* de yánsè.", translation: "These two bags are the same color." },
-      { text: "我们住在*相同*的城市。", romanization: "Wǒmen zhù zài *xiāngtóng* de chéngshì.", translation: "We live in the same city." }
+      { text: "我们住在*相同*的城市。", romanization: "Wǒmen zhù zài *xiāngtóng* de chéngshì.", translation: "We live in the same city." },
+      { text: "我们在*相同*的公司工作。", romanization: "Wǒmen zài *xiāngtóng* de gōngsī gōngzuò.", translation: "We work at the same company." },
+      { text: "这两本书*相同*。", romanization: "Zhè liǎng běn shū *xiāngtóng*.", translation: "These two books are the same." },
+      { text: "我们有*相同*的爱好。", romanization: "Wǒmen yǒu *xiāngtóng* de àihào.", translation: "We have the same hobby." }
     ],
     275: [
       { text: "还有*其他*问题吗？", romanization: "Hái yǒu *qítā* wèntí ma?", translation: "Are there any other questions?" },
       { text: "*其他*人已经走了。", romanization: "*Qítā* rén yǐjīng zǒu le.", translation: "The other people have already left." },
-      { text: "我想看看*其他*选择。", romanization: "Wǒ xiǎng kànkan *qítā* xuǎnzé.", translation: "I'd like to see other options." }
+      { text: "我想看看*其他*选择。", romanization: "Wǒ xiǎng kànkan *qítā* xuǎnzé.", translation: "I'd like to see other options." },
+      { text: "*其他*同学都来了。", romanization: "*Qítā* tóngxué dōu lái le.", translation: "The other classmates have all come." },
+      { text: "你还有*其他*颜色吗？", romanization: "Nǐ hái yǒu *qítā* yánsè ma?", translation: "Do you have other colours?" },
+      { text: "我不认识*其他*人。", romanization: "Wǒ bú rènshi *qítā* rén.", translation: "I don't know the other people." }
     ],
     276: [
       { text: "*再见*，明天见！", romanization: "*Zàijiàn*, míngtiān jiàn!", translation: "Bye, see you tomorrow!" },
       { text: "她说了*再见*就走了。", romanization: "Tā shuōle *zàijiàn* jiù zǒu le.", translation: "She said bye and left." },
-      { text: "*再见*，路上小心。", romanization: "*Zàijiàn*, lùshang xiǎoxīn.", translation: "Bye, be careful on the way." }
+      { text: "*再见*，路上小心。", romanization: "*Zàijiàn*, lùshang xiǎoxīn.", translation: "Bye, be careful on the way." },
+      { text: "*再见*，我们明天见！", romanization: "*Zàijiàn*, wǒmen míngtiān jiàn!", translation: "Goodbye, see you tomorrow!" },
+      { text: "我们说了*再见*。", romanization: "Wǒmen shuōle *zàijiàn*.", translation: "We said goodbye." },
+      { text: "*再见*，下次见。", romanization: "*Zàijiàn*, xià cì jiàn.", translation: "Goodbye, see you next time." }
     ],
     277: [
       { text: "*早上好*！你睡得好吗？", romanization: "*Zǎoshang hǎo*! Nǐ shuì de hǎo ma?", translation: "Good morning! Did you sleep well?" },
       { text: "他每天说*早上好*。", romanization: "Tā měitiān shuō *zǎoshang hǎo*.", translation: "He says good morning every day." },
-      { text: "*早上好*，今天天气不错。", romanization: "*Zǎoshang hǎo*, jīntiān tiānqì búcuò.", translation: "Good morning, the weather is nice today." }
+      { text: "*早上好*，今天天气不错。", romanization: "*Zǎoshang hǎo*, jīntiān tiānqì búcuò.", translation: "Good morning, the weather is nice today." },
+      { text: "*早上好*，老师！", romanization: "*Zǎoshang hǎo*, lǎoshī!", translation: "Good morning, teacher!" },
+      { text: "*早上好*，你吃早饭了吗？", romanization: "*Zǎoshang hǎo*, nǐ chī zǎofàn le ma?", translation: "Good morning, have you had breakfast?" },
+      { text: "她对我说*早上好*。", romanization: "Tā duì wǒ shuō *zǎoshang hǎo*.", translation: "She said good morning to me." }
     ],
     278: [
       { text: "*晚上好*！欢迎光临。", romanization: "*Wǎnshang hǎo*! Huānyíng guānglín.", translation: "Good evening! Welcome." },
       { text: "他对我们说*晚上好*。", romanization: "Tā duì wǒmen shuō *wǎnshang hǎo*.", translation: "He said good evening to us." },
-      { text: "*晚上好*，请进。", romanization: "*Wǎnshang hǎo*, qǐng jìn.", translation: "Good evening, please come in." }
+      { text: "*晚上好*，请进。", romanization: "*Wǎnshang hǎo*, qǐng jìn.", translation: "Good evening, please come in." },
+      { text: "*晚上好*，各位！", romanization: "*Wǎnshang hǎo*, gèwèi!", translation: "Good evening, everyone!" },
+      { text: "*晚上好*，你吃饭了吗？", romanization: "*Wǎnshang hǎo*, nǐ chī fàn le ma?", translation: "Good evening, have you eaten?" },
+      { text: "老师说：“*晚上好*。”", romanization: "Lǎoshī shuō: \"*Wǎnshang hǎo*.\"", translation: "The teacher said: \"Good evening.\"" }
     ],
     279: [
       { text: "*晚安*，做个好梦。", romanization: "*Wǎn'ān*, zuò ge hǎo mèng.", translation: "Good night, sweet dreams." },
       { text: "她跟孩子说*晚安*。", romanization: "Tā gēn háizi shuō *wǎn'ān*.", translation: "She says good night to the child." },
-      { text: "*晚安*，明天见。", romanization: "*Wǎn'ān*, míngtiān jiàn.", translation: "Good night, see you tomorrow." }
+      { text: "*晚安*，明天见。", romanization: "*Wǎn'ān*, míngtiān jiàn.", translation: "Good night, see you tomorrow." },
+      { text: "*晚安*，妈妈，我爱你！", romanization: "*Wǎn'ān*, māma, wǒ ài nǐ!", translation: "Good night, mum, I love you!" },
+      { text: "我们说了*晚安*就睡觉了。", romanization: "Wǒmen shuōle *wǎn'ān* jiù shuìjiào le.", translation: "We said good night and went to sleep." },
+      { text: "*晚安*，好好休息。", romanization: "*Wǎn'ān*, hǎohǎo xiūxi.", translation: "Good night, rest well." }
     ],
     280: [
       { text: "*欢迎*来到我们家。", romanization: "*Huānyíng* láidào wǒmen jiā.", translation: "Welcome to our home." },
       { text: "老师*欢迎*新学生。", romanization: "Lǎoshī *huānyíng* xīn xuésheng.", translation: "The teacher welcomes new students." },
-      { text: "*欢迎*光临！", romanization: "*Huānyíng* guānglín!", translation: "Welcome!" }
+      { text: "*欢迎*光临！", romanization: "*Huānyíng* guānglín!", translation: "Welcome!" },
+      { text: "*欢迎*你来中国！", romanization: "*Huānyíng* nǐ lái Zhōngguó!", translation: "Welcome to China!" },
+      { text: "*欢迎*来我们学校。", romanization: "*Huānyíng* lái wǒmen xuéxiào.", translation: "Welcome to our school." },
+      { text: "*欢迎*你们再来！", romanization: "*Huānyíng* nǐmen zài lái!", translation: "You're welcome to come again!" }
     ],
     281: [
       { text: "*给你*，这是你的书。", romanization: "*Gěi nǐ*, zhè shì nǐ de shū.", translation: "Here you are, this is your book." },
       { text: "*给你*一杯茶。", romanization: "*Gěi nǐ* yì bēi chá.", translation: "Here's a cup of tea for you." },
-      { text: "*给你*钥匙。", romanization: "*Gěi nǐ* yàoshi.", translation: "Here are your keys." }
+      { text: "*给你*钥匙。", romanization: "*Gěi nǐ* yàoshi.", translation: "Here are your keys." },
+      { text: "*给你*，这是你的咖啡。", romanization: "*Gěi nǐ*, zhè shì nǐ de kāfēi.", translation: "Here you are, this is your coffee." },
+      { text: "*给你*，生日快乐！", romanization: "*Gěi nǐ*, shēngrì kuàilè!", translation: "Here you are, happy birthday!" },
+      { text: "这是你的票，*给你*。", romanization: "Zhè shì nǐ de piào, *gěi nǐ*.", translation: "This is your ticket, here you are." }
     ],
     282: [
       { text: "*非常感谢*你的帮助。", romanization: "*Fēicháng gǎnxiè* nǐ de bāngzhù.", translation: "Many thanks for your help." },
       { text: "*非常感谢*，你太好了。", romanization: "*Fēicháng gǎnxiè*, nǐ tài hǎo le.", translation: "Many thanks, you're so kind." },
-      { text: "我*非常感谢*大家的支持。", romanization: "Wǒ *fēicháng gǎnxiè* dàjiā de zhīchí.", translation: "I'm very grateful for everyone's support." }
+      { text: "我*非常感谢*大家的支持。", romanization: "Wǒ *fēicháng gǎnxiè* dàjiā de zhīchí.", translation: "I'm very grateful for everyone's support." },
+      { text: "*非常感谢*你的礼物。", romanization: "*Fēicháng gǎnxiè* nǐ de lǐwù.", translation: "Many thanks for your gift." },
+      { text: "*非常感谢*你来看我。", romanization: "*Fēicháng gǎnxiè* nǐ lái kàn wǒ.", translation: "Many thanks for coming to see me." },
+      { text: "*非常感谢*，老师！", romanization: "*Fēicháng gǎnxiè*, lǎoshī!", translation: "Many thanks, teacher!" }
     ],
     283: [
       { text: "*没关系*，别担心。", romanization: "*Méi guānxi*, bié dānxīn.", translation: "It's fine, don't worry." },
       { text: "对不起。—— *没关系*。", romanization: "Duìbuqǐ. —— *Méi guānxi*.", translation: "Sorry. — It's fine." },
-      { text: "*没关系*，我们还有时间。", romanization: "*Méi guānxi*, wǒmen hái yǒu shíjiān.", translation: "It's fine, we still have time." }
+      { text: "*没关系*，我们还有时间。", romanization: "*Méi guānxi*, wǒmen hái yǒu shíjiān.", translation: "It's fine, we still have time." },
+      { text: "*没关系*，我不累。", romanization: "*Méi guānxi*, wǒ bú lèi.", translation: "It's fine, I'm not tired." },
+      { text: "迟到一点*没关系*。", romanization: "Chídào yìdiǎn *méi guānxi*.", translation: "Being a little late is fine." },
+      { text: "*没关系*，下次再来。", romanization: "*Méi guānxi*, xià cì zài lái.", translation: "It's fine, come again next time." }
     ],
     284: [
       { text: "你是新来的，*对吧*？", romanization: "Nǐ shì xīn lái de, *duì ba*?", translation: "You're new here, right?" },
       { text: "明天见面，*对吧*？", romanization: "Míngtiān jiànmiàn, *duì ba*?", translation: "We're meeting tomorrow, right?" },
-      { text: "这是你的包，*对吧*？", romanization: "Zhè shì nǐ de bāo, *duì ba*?", translation: "This is your bag, right?" }
+      { text: "这是你的包，*对吧*？", romanization: "Zhè shì nǐ de bāo, *duì ba*?", translation: "This is your bag, right?" },
+      { text: "你是学生，*对吧*？", romanization: "Nǐ shì xuésheng, *duì ba*?", translation: "You're a student, right?" },
+      { text: "今天是星期五，*对吧*？", romanization: "Jīntiān shì xīngqīwǔ, *duì ba*?", translation: "Today is Friday, right?" },
+      { text: "你喜欢吃辣，*对吧*？", romanization: "Nǐ xǐhuan chī là, *duì ba*?", translation: "You like spicy food, right?" }
     ],
     285: [
       { text: "*当然*可以！", romanization: "*Dāngrán* kěyǐ!", translation: "Of course you can!" },
       { text: "*当然*，我会帮你。", romanization: "*Dāngrán*, wǒ huì bāng nǐ.", translation: "Of course, I'll help you." },
-      { text: "你喜欢这个吗？—— *当然*！", romanization: "Nǐ xǐhuan zhège ma? —— *Dāngrán*!", translation: "Do you like this? — Of course!" }
+      { text: "你喜欢这个吗？—— *当然*！", romanization: "Nǐ xǐhuan zhège ma? —— *Dāngrán*!", translation: "Do you like this? — Of course!" },
+      { text: "我*当然*记得你。", romanization: "Wǒ *dāngrán* jìde nǐ.", translation: "Of course I remember you." },
+      { text: "*当然*，没问题。", romanization: "*Dāngrán*, méi wèntí.", translation: "Of course, no problem." },
+      { text: "他*当然*会来。", romanization: "Tā *dāngrán* huì lái.", translation: "Of course he'll come." }
     ],
     286: [
       { text: "*药店*在哪里？", romanization: "*Yàodiàn* zài nǎlǐ?", translation: "Where's the pharmacy?" },
       { text: "我去*药店*买药。", romanization: "Wǒ qù *yàodiàn* mǎi yào.", translation: "I'm going to the pharmacy to buy medicine." },
-      { text: "*药店*八点开门。", romanization: "*Yàodiàn* bā diǎn kāimén.", translation: "The pharmacy opens at eight." }
+      { text: "*药店*八点开门。", romanization: "*Yàodiàn* bā diǎn kāimén.", translation: "The pharmacy opens at eight." },
+      { text: "*药店*关门了。", romanization: "*Yàodiàn* guānmén le.", translation: "The pharmacy is closed." },
+      { text: "附近有*药店*吗？", romanization: "Fùjìn yǒu *yàodiàn* ma?", translation: "Is there a pharmacy nearby?" },
+      { text: "她在*药店*工作。", romanization: "Tā zài *yàodiàn* gōngzuò.", translation: "She works at a pharmacy." }
     ],
     287: [
       { text: "*医院*离这里很近。", romanization: "*Yīyuàn* lí zhèlǐ hěn jìn.", translation: "The hospital is close by." },
       { text: "他在*医院*工作。", romanization: "Tā zài *yīyuàn* gōngzuò.", translation: "He works at the hospital." },
-      { text: "我们去*医院*看他。", romanization: "Wǒmen qù *yīyuàn* kàn tā.", translation: "We're going to the hospital to see him." }
+      { text: "我们去*医院*看他。", romanization: "Wǒmen qù *yīyuàn* kàn tā.", translation: "We're going to the hospital to see him." },
+      { text: "他在*医院*住了三天。", romanization: "Tā zài *yīyuàn* zhùle sān tiān.", translation: "He stayed in hospital for three days." },
+      { text: "*医院*在哪里？", romanization: "*Yīyuàn* zài nǎlǐ?", translation: "Where is the hospital?" },
+      { text: "这家*医院*很大。", romanization: "Zhè jiā *yīyuàn* hěn dà.", translation: "This hospital is big." }
     ],
     288: [
       { text: "我明天要去看*牙医*。", romanization: "Wǒ míngtiān yào qù kàn *yáyī*.", translation: "I have to see the dentist tomorrow." },
       { text: "*牙医*检查了我的牙齿。", romanization: "*Yáyī* jiǎnchále wǒ de yáchǐ.", translation: "The dentist checked my teeth." },
-      { text: "她是一位*牙医*。", romanization: "Tā shì yí wèi *yáyī*.", translation: "She's a dentist." }
+      { text: "她是一位*牙医*。", romanization: "Tā shì yí wèi *yáyī*.", translation: "She's a dentist." },
+      { text: "我害怕看*牙医*。", romanization: "Wǒ hàipà kàn *yáyī*.", translation: "I'm afraid of going to the dentist." },
+      { text: "我爸爸是*牙医*。", romanization: "Wǒ bàba shì *yáyī*.", translation: "My dad is a dentist." },
+      { text: "*牙医*说我的牙很好。", romanization: "*Yáyī* shuō wǒ de yá hěn hǎo.", translation: "The dentist says my teeth are fine." }
     ],
     289: [
       { text: "谢谢你的*帮助*。", romanization: "Xièxie nǐ de *bāngzhù*.", translation: "Thanks for your help." },
       { text: "我需要一些*帮助*。", romanization: "Wǒ xūyào yìxiē *bāngzhù*.", translation: "I need some help." },
-      { text: "她给了我很大的*帮助*。", romanization: "Tā gěile wǒ hěn dà de *bāngzhù*.", translation: "She gave me a lot of help." }
+      { text: "她给了我很大的*帮助*。", romanization: "Tā gěile wǒ hěn dà de *bāngzhù*.", translation: "She gave me a lot of help." },
+      { text: "我需要你的*帮助*。", romanization: "Wǒ xūyào nǐ de *bāngzhù*.", translation: "I need your help." },
+      { text: "老师*帮助*了我很多。", romanization: "Lǎoshī *bāngzhù* le wǒ hěn duō.", translation: "The teacher helped me a lot." },
+      { text: "谢谢大家的*帮助*。", romanization: "Xièxie dàjiā de *bāngzhù*.", translation: "Thanks for everyone's help." }
     ],
     290: [
       { text: "我们有一个*问题*。", romanization: "Wǒmen yǒu yí ge *wèntí*.", translation: "We have a problem." },
       { text: "这不是*问题*。", romanization: "Zhè bú shì *wèntí*.", translation: "This isn't a problem." },
-      { text: "他解决了这个*问题*。", romanization: "Tā jiějuéle zhège *wèntí*.", translation: "He solved this problem." }
+      { text: "他解决了这个*问题*。", romanization: "Tā jiějuéle zhège *wèntí*.", translation: "He solved this problem." },
+      { text: "我有一个*问题*。", romanization: "Wǒ yǒu yí gè *wèntí*.", translation: "I have a question." },
+      { text: "我的电脑有*问题*。", romanization: "Wǒ de diànnǎo yǒu *wèntí*.", translation: "My computer has a problem." },
+      { text: "这个*问题*很简单。", romanization: "Zhège *wèntí* hěn jiǎndān.", translation: "This question is simple." }
     ],
     291: [
       { text: "这个*价格*很合理。", romanization: "Zhège *jiàgé* hěn hélǐ.", translation: "This price is reasonable." },
       { text: "*价格*包括早餐吗？", romanization: "*Jiàgé* bāokuò zǎocān ma?", translation: "Does the price include breakfast?" },
-      { text: "*价格*太高了。", romanization: "*Jiàgé* tài gāo le.", translation: "The price is too high." }
+      { text: "*价格*太高了。", romanization: "*Jiàgé* tài gāo le.", translation: "The price is too high." },
+      { text: "这个*价格*很便宜。", romanization: "Zhège *jiàgé* hěn piányi.", translation: "This price is cheap." },
+      { text: "*价格*是多少？", romanization: "*Jiàgé* shì duōshao?", translation: "What is the price?" },
+      { text: "这里的*价格*很高。", romanization: "Zhèlǐ de *jiàgé* hěn gāo.", translation: "Prices here are high." }
     ],
     292: [
       { text: "我没有*钱*了。", romanization: "Wǒ méiyǒu *qián* le.", translation: "I don't have any money left." },
       { text: "他借给我一些*钱*。", romanization: "Tā jiè gěi wǒ yìxiē *qián*.", translation: "He lent me some money." },
-      { text: "这个要多少*钱*？", romanization: "Zhège yào duōshao *qián*?", translation: "How much money does this cost?" }
+      { text: "这个要多少*钱*？", romanization: "Zhège yào duōshao *qián*?", translation: "How much money does this cost?" },
+      { text: "我想存*钱*。", romanization: "Wǒ xiǎng cún *qián*.", translation: "I want to save money." },
+      { text: "你有*钱*吗？", romanization: "Nǐ yǒu *qián* ma?", translation: "Do you have money?" },
+      { text: "我花了很多*钱*。", romanization: "Wǒ huāle hěn duō *qián*.", translation: "I spent a lot of money." }
     ],
     293: [
       { text: "请给我*收据*。", romanization: "Qǐng gěi wǒ *shōujù*.", translation: "Please give me the receipt." },
       { text: "我把*收据*弄丢了。", romanization: "Wǒ bǎ *shōujù* nòng diū le.", translation: "I lost the receipt." },
-      { text: "*收据*在这里。", romanization: "*Shōujù* zài zhèlǐ.", translation: "Here's the receipt." }
+      { text: "*收据*在这里。", romanization: "*Shōujù* zài zhèlǐ.", translation: "Here's the receipt." },
+      { text: "请把*收据*给我。", romanization: "Qǐng bǎ *shōujù* gěi wǒ.", translation: "Please give me the receipt." },
+      { text: "你需要*收据*吗？", romanization: "Nǐ xūyào *shōujù* ma?", translation: "Do you need a receipt?" },
+      { text: "*收据*在包里。", romanization: "*Shōujù* zài bāo lǐ.", translation: "The receipt is in the bag." }
     ],
     294: [
       { text: "我需要一个*袋子*。", romanization: "Wǒ xūyào yí ge *dàizi*.", translation: "I need a bag." },
       { text: "*袋子*里有什么？", romanization: "*Dàizi* lǐ yǒu shénme?", translation: "What's in the bag?" },
-      { text: "这个*袋子*破了。", romanization: "Zhège *dàizi* pò le.", translation: "This bag is torn." }
+      { text: "这个*袋子*破了。", romanization: "Zhège *dàizi* pò le.", translation: "This bag is torn." },
+      { text: "请给我一个*袋子*。", romanization: "Qǐng gěi wǒ yí gè *dàizi*.", translation: "Please give me a bag." },
+      { text: "这个*袋子*很重。", romanization: "Zhège *dàizi* hěn zhòng.", translation: "This bag is heavy." },
+      { text: "我带了自己的*袋子*。", romanization: "Wǒ dàile zìjǐ de *dàizi*.", translation: "I brought my own bag." }
     ],
     295: [
       { text: "你穿什么*尺码*？", romanization: "Nǐ chuān shénme *chǐmǎ*?", translation: "What size do you wear?" },
       { text: "这件衣服的*尺码*太小了。", romanization: "Zhè jiàn yīfu de *chǐmǎ* tài xiǎo le.", translation: "This piece of clothing's size is too small." },
-      { text: "你有大一点的*尺码*吗？", romanization: "Nǐ yǒu dà yìdiǎn de *chǐmǎ* ma?", translation: "Do you have a bigger size?" }
+      { text: "你有大一点的*尺码*吗？", romanization: "Nǐ yǒu dà yìdiǎn de *chǐmǎ* ma?", translation: "Do you have a bigger size?" },
+      { text: "这个*尺码*刚好。", romanization: "Zhège *chǐmǎ* gānghǎo.", translation: "This size fits just right." },
+      { text: "我要大一点的*尺码*。", romanization: "Wǒ yào dà yìdiǎn de *chǐmǎ*.", translation: "I want a bigger size." },
+      { text: "这双鞋有我的*尺码*吗？", romanization: "Zhè shuāng xié yǒu wǒ de *chǐmǎ* ma?", translation: "Do these shoes come in my size?" }
     ],
     296: [
       { text: "我的*电话*没电了。", romanization: "Wǒ de *diànhuà* méi diàn le.", translation: "My phone is out of battery." },
       { text: "*电话*在响。", romanization: "*Diànhuà* zài xiǎng.", translation: "The phone is ringing." },
-      { text: "请给我打*电话*。", romanization: "Qǐng gěi wǒ dǎ *diànhuà*.", translation: "Please call me." }
+      { text: "请给我打*电话*。", romanization: "Qǐng gěi wǒ dǎ *diànhuà*.", translation: "Please call me." },
+      { text: "*电话*响了。", romanization: "*Diànhuà* xiǎng le.", translation: "The phone is ringing." },
+      { text: "你的*电话*号码是多少？", romanization: "Nǐ de *diànhuà* hàomǎ shì duōshao?", translation: "What is your phone number?" },
+      { text: "她在打*电话*。", romanization: "Tā zài dǎ *diànhuà*.", translation: "She is on the phone." }
     ],
     297: [
       { text: "我的*电脑*坏了。", romanization: "Wǒ de *diànnǎo* huài le.", translation: "My computer is broken." },
       { text: "他在用*电脑*工作。", romanization: "Tā zài yòng *diànnǎo* gōngzuò.", translation: "He's working on the computer." },
-      { text: "这台*电脑*很快。", romanization: "Zhè tái *diànnǎo* hěn kuài.", translation: "This computer is fast." }
+      { text: "这台*电脑*很快。", romanization: "Zhè tái *diànnǎo* hěn kuài.", translation: "This computer is fast." },
+      { text: "我用*电脑*工作。", romanization: "Wǒ yòng *diànnǎo* gōngzuò.", translation: "I work on a computer." },
+      { text: "我想买一台新*电脑*。", romanization: "Wǒ xiǎng mǎi yì tái xīn *diànnǎo*.", translation: "I want to buy a new computer." },
+      { text: "孩子在*电脑*上玩游戏。", romanization: "Háizi zài *diànnǎo* shàng wán yóuxì.", translation: "The child is playing games on the computer." }
     ],
     298: [
       { text: "我找不到我的*钥匙*了。", romanization: "Wǒ zhǎo bú dào wǒ de *yàoshi* le.", translation: "I can't find my key." },
       { text: "*钥匙*在桌子上。", romanization: "*Yàoshi* zài zhuōzi shàng.", translation: "The key is on the table." },
-      { text: "请把*钥匙*给我。", romanization: "Qǐng bǎ *yàoshi* gěi wǒ.", translation: "Please give me the key." }
+      { text: "请把*钥匙*给我。", romanization: "Qǐng bǎ *yàoshi* gěi wǒ.", translation: "Please give me the key." },
+      { text: "*钥匙*在门上。", romanization: "*Yàoshi* zài mén shàng.", translation: "The key is in the door." },
+      { text: "我丢了*钥匙*。", romanization: "Wǒ diūle *yàoshi*.", translation: "I lost my key." },
+      { text: "这是车的*钥匙*。", romanization: "Zhè shì chē de *yàoshi*.", translation: "This is the car key." }
     ],
     299: [
       { text: "墙上有一个*钟*。", romanization: "Qiáng shàng yǒu yí ge *zhōng*.", translation: "There's a clock on the wall." },
       { text: "*钟*停了。", romanization: "*Zhōng* tíng le.", translation: "The clock has stopped." },
-      { text: "这个*钟*很旧了。", romanization: "Zhège *zhōng* hěn jiù le.", translation: "This clock is old." }
+      { text: "这个*钟*很旧了。", romanization: "Zhège *zhōng* hěn jiù le.", translation: "This clock is old." },
+      { text: "这个*钟*很漂亮。", romanization: "Zhège *zhōng* hěn piàoliang.", translation: "This clock is beautiful." },
+      { text: "厨房里有一个*钟*。", romanization: "Chúfáng lǐ yǒu yí gè *zhōng*.", translation: "There is a clock in the kitchen." },
+      { text: "*钟*慢了五分钟。", romanization: "*Zhōng* mànle wǔ fēnzhōng.", translation: "The clock is five minutes slow." }
     ],
     300: [
       { text: "这是我的*包*。", romanization: "Zhè shì wǒ de *bāo*.", translation: "This is my bag." },
       { text: "她买了一个新*包*。", romanization: "Tā mǎile yí ge xīn *bāo*.", translation: "She bought a new bag." },
-      { text: "*包*里有什么？", romanization: "*Bāo* lǐ yǒu shénme?", translation: "What's in the bag?" }
+      { text: "*包*里有什么？", romanization: "*Bāo* lǐ yǒu shénme?", translation: "What's in the bag?" },
+      { text: "我的*包*很重。", romanization: "Wǒ de *bāo* hěn zhòng.", translation: "My bag is heavy." },
+      { text: "你的*包*在椅子上。", romanization: "Nǐ de *bāo* zài yǐzi shàng.", translation: "Your bag is on the chair." },
+      { text: "这个*包*多少钱？", romanization: "Zhège *bāo* duōshao qián?", translation: "How much is this bag?" }
     ],
     301: [
       { text: "我*给*了他一本书。", romanization: "Wǒ *gěi* le tā yì běn shū.", translation: "I gave him a book." },
       { text: "请*给*我一杯水。", romanization: "Qǐng *gěi* wǒ yì bēi shuǐ.", translation: "Please give me a glass of water." },
-      { text: "她*给*了我一个惊喜。", romanization: "Tā *gěi* le wǒ yí ge jīngxǐ.", translation: "She gave me a surprise." }
+      { text: "她*给*了我一个惊喜。", romanization: "Tā *gěi* le wǒ yí ge jīngxǐ.", translation: "She gave me a surprise." },
+      { text: "妈妈*给*我买了新鞋。", romanization: "Māma *gěi* wǒ mǎile xīn xié.", translation: "Mum bought me new shoes." },
+      { text: "请*给*我看一下。", romanization: "Qǐng *gěi* wǒ kàn yíxià.", translation: "Please let me have a look." },
+      { text: "他*给*我打了电话。", romanization: "Tā *gěi* wǒ dǎle diànhuà.", translation: "He gave me a call." }
     ],
     302: [
       { text: "请*拿*着这个。", romanization: "Qǐng *ná* zhe zhège.", translation: "Please hold this." },
       { text: "他*拿*了我的书。", romanization: "Tā *ná* le wǒ de shū.", translation: "He took my book." },
-      { text: "你能*拿*给我那个杯子吗？", romanization: "Nǐ néng *ná* gěi wǒ nàge bēizi ma?", translation: "Can you hand me that cup?" }
+      { text: "你能*拿*给我那个杯子吗？", romanization: "Nǐ néng *ná* gěi wǒ nàge bēizi ma?", translation: "Can you hand me that cup?" },
+      { text: "我可以*拿*这本书吗？", romanization: "Wǒ kěyǐ *ná* zhè běn shū ma?", translation: "May I take this book?" },
+      { text: "请*拿*一个盘子。", romanization: "Qǐng *ná* yí gè pánzi.", translation: "Please take a plate." },
+      { text: "她*拿*着一把伞。", romanization: "Tā *ná* zhe yì bǎ sǎn.", translation: "She is holding an umbrella." }
     ],
     303: [
       { text: "请把书*放*在桌子上。", romanization: "Qǐng bǎ shū *fàng* zài zhuōzi shàng.", translation: "Please put the book on the table." },
       { text: "她把钥匙*放*进了包里。", romanization: "Tā bǎ yàoshi *fàng* jìnle bāo lǐ.", translation: "She put the keys in her bag." },
-      { text: "把盘子*放*好。", romanization: "Bǎ pánzi *fàng* hǎo.", translation: "Put the plate down properly." }
+      { text: "把盘子*放*好。", romanization: "Bǎ pánzi *fàng* hǎo.", translation: "Put the plate down properly." },
+      { text: "你把手机*放*在哪里了？", romanization: "Nǐ bǎ shǒujī *fàng* zài nǎlǐ le?", translation: "Where did you put your phone?" },
+      { text: "请把鞋子*放*在门口。", romanization: "Qǐng bǎ xiézi *fàng* zài ménkǒu.", translation: "Please put your shoes by the door." },
+      { text: "汤里不要*放*盐。", romanization: "Tāng lǐ bú yào *fàng* yán.", translation: "Don't put salt in the soup." }
     ],
     304: [
       { text: "电影*开始*了。", romanization: "Diànyǐng *kāishǐ* le.", translation: "The movie has started." },
       { text: "我们*开始*上课吧。", romanization: "Wǒmen *kāishǐ* shàngkè ba.", translation: "Let's start class." },
-      { text: "她*开始*学习中文。", romanization: "Tā *kāishǐ* xuéxí Zhōngwén.", translation: "She started learning Chinese." }
+      { text: "她*开始*学习中文。", romanization: "Tā *kāishǐ* xuéxí Zhōngwén.", translation: "She started learning Chinese." },
+      { text: "学校九月*开始*上课。", romanization: "Xuéxiào jiǔyuè *kāishǐ* shàngkè.", translation: "School starts in September." },
+      { text: "我们现在*开始*吧。", romanization: "Wǒmen xiànzài *kāishǐ* ba.", translation: "Let's start now." },
+      { text: "天*开始*下雨了。", romanization: "Tiān *kāishǐ* xià yǔ le.", translation: "It started to rain." }
     ],
     305: [
       { text: "会议*结束*了。", romanization: "Huìyì *jiéshù* le.", translation: "The meeting has ended." },
       { text: "电影几点*结束*？", romanization: "Diànyǐng jǐ diǎn *jiéshù*?", translation: "What time does the movie end?" },
-      { text: "考试*结束*了。", romanization: "Kǎoshì *jiéshù* le.", translation: "The exam is over." }
+      { text: "考试*结束*了。", romanization: "Kǎoshì *jiéshù* le.", translation: "The exam is over." },
+      { text: "假期快*结束*了。", romanization: "Jiàqī kuài *jiéshù* le.", translation: "The holiday is almost over." },
+      { text: "比赛几点*结束*？", romanization: "Bǐsài jǐ diǎn *jiéshù*?", translation: "What time does the match end?" },
+      { text: "工作*结束*以后我回家。", romanization: "Gōngzuò *jiéshù* yǐhòu wǒ huí jiā.", translation: "After work finishes I go home." }
     ],
     306: [
       { text: "我不*知道*。", romanization: "Wǒ bù *zhīdào*.", translation: "I don't know." },
       { text: "你*知道*他住在哪里吗？", romanization: "Nǐ *zhīdào* tā zhù zài nǎlǐ ma?", translation: "Do you know where he lives?" },
-      { text: "她*知道*这个答案。", romanization: "Tā *zhīdào* zhège dá'àn.", translation: "She knows the answer." }
+      { text: "她*知道*这个答案。", romanization: "Tā *zhīdào* zhège dá'àn.", translation: "She knows the answer." },
+      { text: "我*知道*他的名字。", romanization: "Wǒ *zhīdào* tā de míngzi.", translation: "I know his name." },
+      { text: "你*知道*现在几点吗？", romanization: "Nǐ *zhīdào* xiànzài jǐ diǎn ma?", translation: "Do you know what time it is?" },
+      { text: "谁*知道*答案？", romanization: "Shéi *zhīdào* dá'àn?", translation: "Who knows the answer?" }
     ],
     307: [
       { text: "我*想*你说得对。", romanization: "Wǒ *xiǎng* nǐ shuō de duì.", translation: "I think you're right." },
       { text: "他在*想*一个问题。", romanization: "Tā zài *xiǎng* yí ge wèntí.", translation: "He's thinking about a problem." },
-      { text: "我*想*去公园。", romanization: "Wǒ *xiǎng* qù gōngyuán.", translation: "I want to go to the park." }
+      { text: "我*想*去公园。", romanization: "Wǒ *xiǎng* qù gōngyuán.", translation: "I want to go to the park." },
+      { text: "我*想*回家。", romanization: "Wǒ *xiǎng* huí jiā.", translation: "I want to go home." },
+      { text: "你在*想*什么？", romanization: "Nǐ zài *xiǎng* shénme?", translation: "What are you thinking about?" },
+      { text: "我*想*明天会下雨。", romanization: "Wǒ *xiǎng* míngtiān huì xià yǔ.", translation: "I think it will rain tomorrow." }
     ],
     308: [
       { text: "我不*懂*。", romanization: "Wǒ bù *dǒng*.", translation: "I don't understand." },
       { text: "你*懂*我的意思吗？", romanization: "Nǐ *dǒng* wǒ de yìsi ma?", translation: "Do you understand what I mean?" },
-      { text: "她*懂*三种语言。", romanization: "Tā *dǒng* sān zhǒng yǔyán.", translation: "She knows three languages." }
+      { text: "她*懂*三种语言。", romanization: "Tā *dǒng* sān zhǒng yǔyán.", translation: "She knows three languages." },
+      { text: "我*懂*一点中文。", romanization: "Wǒ *dǒng* yìdiǎn Zhōngwén.", translation: "I understand a little Chinese." },
+      { text: "你*懂*了吗？", romanization: "Nǐ *dǒng* le ma?", translation: "Do you understand?" },
+      { text: "他不*懂*这个问题。", romanization: "Tā bù *dǒng* zhège wèntí.", translation: "He doesn't understand this question." }
     ],
     309: [
       { text: "我*记得*你的名字。", romanization: "Wǒ *jìde* nǐ de míngzi.", translation: "I remember your name." },
       { text: "你*记得*我们第一次见面吗？", romanization: "Nǐ *jìde* wǒmen dì yī cì jiànmiàn ma?", translation: "Do you remember when we first met?" },
-      { text: "我不*记得*了。", romanization: "Wǒ bú *jìde* le.", translation: "I don't remember." }
+      { text: "我不*记得*了。", romanization: "Wǒ bú *jìde* le.", translation: "I don't remember." },
+      { text: "你还*记得*我吗？", romanization: "Nǐ hái *jìde* wǒ ma?", translation: "Do you still remember me?" },
+      { text: "我*记得*那天很冷。", romanization: "Wǒ *jìde* nà tiān hěn lěng.", translation: "I remember that day was cold." },
+      { text: "请*记得*关灯。", romanization: "Qǐng *jìde* guān dēng.", translation: "Please remember to turn off the light." }
     ],
     310: [
       { text: "我*忘记*了他的名字。", romanization: "Wǒ *wàngjì* le tā de míngzi.", translation: "I forgot his name." },
       { text: "别*忘记*带钥匙。", romanization: "Bié *wàngjì* dài yàoshi.", translation: "Don't forget to bring your keys." },
-      { text: "她*忘记*了我们的约会。", romanization: "Tā *wàngjì* le wǒmen de yuēhuì.", translation: "She forgot our appointment." }
+      { text: "她*忘记*了我们的约会。", romanization: "Tā *wàngjì* le wǒmen de yuēhuì.", translation: "She forgot our appointment." },
+      { text: "我*忘记*带手机了。", romanization: "Wǒ *wàngjì* dài shǒujī le.", translation: "I forgot to bring my phone." },
+      { text: "不要*忘记*吃药。", romanization: "Bú yào *wàngjì* chī yào.", translation: "Don't forget to take your medicine." },
+      { text: "他*忘记*了我的生日。", romanization: "Tā *wàngjì* le wǒ de shēngrì.", translation: "He forgot my birthday." }
     ],
     311: [
       { text: "你能*帮*我一下吗？", romanization: "Nǐ néng *bāng* wǒ yíxià ma?", translation: "Can you help me?" },
       { text: "他*帮*我搬了行李。", romanization: "Tā *bāng* wǒ bānle xíngli.", translation: "He helped me carry the luggage." },
-      { text: "我*帮*她做作业。", romanization: "Wǒ *bāng* tā zuò zuòyè.", translation: "I help her with homework." }
+      { text: "我*帮*她做作业。", romanization: "Wǒ *bāng* tā zuò zuòyè.", translation: "I help her with homework." },
+      { text: "我*帮*妈妈做饭。", romanization: "Wǒ *bāng* māma zuò fàn.", translation: "I help mum cook." },
+      { text: "请*帮*我拿一下。", romanization: "Qǐng *bāng* wǒ ná yíxià.", translation: "Please help me hold this." },
+      { text: "谁能*帮*我？", romanization: "Shéi néng *bāng* wǒ?", translation: "Who can help me?" }
     ],
     312: [
       { text: "我要*打电话*给妈妈。", romanization: "Wǒ yào *dǎ diànhuà* gěi māma.", translation: "I need to call my mom." },
       { text: "请给我*打电话*。", romanization: "Qǐng gěi wǒ *dǎ diànhuà*.", translation: "Please call me." },
-      { text: "她在*打电话*。", romanization: "Tā zài *dǎ diànhuà*.", translation: "She's on the phone." }
+      { text: "她在*打电话*。", romanization: "Tā zài *dǎ diànhuà*.", translation: "She's on the phone." },
+      { text: "我晚上*打电话*给你。", romanization: "Wǒ wǎnshang *dǎ diànhuà* gěi nǐ.", translation: "I'll call you tonight." },
+      { text: "他每天给女朋友*打电话*。", romanization: "Tā měi tiān gěi nǚpéngyou *dǎ diànhuà*.", translation: "He calls his girlfriend every day." },
+      { text: "我给医生*打电话*了。", romanization: "Wǒ gěi yīshēng *dǎ diànhuà* le.", translation: "I called the doctor." }
     ],
     313: [
       { text: "我要*寄*一封信。", romanization: "Wǒ yào *jì* yì fēng xìn.", translation: "I need to send a letter." },
       { text: "她*寄*了一个包裹。", romanization: "Tā *jì* le yí ge bāoguǒ.", translation: "She sent a package." },
-      { text: "你能帮我*寄*这个吗？", romanization: "Nǐ néng bāng wǒ *jì* zhège ma?", translation: "Can you help me send this?" }
+      { text: "你能帮我*寄*这个吗？", romanization: "Nǐ néng bāng wǒ *jì* zhège ma?", translation: "Can you help me send this?" },
+      { text: "我想*寄*一张明信片。", romanization: "Wǒ xiǎng *jì* yì zhāng míngxìnpiàn.", translation: "I want to send a postcard." },
+      { text: "妈妈给我*寄*了一件毛衣。", romanization: "Māma gěi wǒ *jì* le yí jiàn máoyī.", translation: "Mum sent me a sweater." },
+      { text: "我在邮局*寄*信。", romanization: "Wǒ zài yóujú *jì* xìn.", translation: "I'm sending a letter at the post office." }
     ],
     314: [
       { text: "我*丢*了我的钥匙。", romanization: "Wǒ *diū* le wǒ de yàoshi.", translation: "I lost my keys." },
       { text: "他*丢*了工作。", romanization: "Tā *diū* le gōngzuò.", translation: "He lost his job." },
-      { text: "别*丢*了你的票。", romanization: "Bié *diū* le nǐ de piào.", translation: "Don't lose your ticket." }
+      { text: "别*丢*了你的票。", romanization: "Bié *diū* le nǐ de piào.", translation: "Don't lose your ticket." },
+      { text: "我的钱包*丢*了。", romanization: "Wǒ de qiánbāo *diū* le.", translation: "My wallet is lost." },
+      { text: "孩子*丢*了一只鞋。", romanization: "Háizi *diū* le yì zhī xié.", translation: "The child lost a shoe." },
+      { text: "我在火车上*丢*了手机。", romanization: "Wǒ zài huǒchē shàng *diū* le shǒujī.", translation: "I lost my phone on the train." }
     ],
     315: [
       { text: "我们的队*赢*了。", romanization: "Wǒmen de duì *yíng* le.", translation: "Our team won." },
       { text: "他总是*赢*。", romanization: "Tā zǒngshì *yíng*.", translation: "He always wins." },
-      { text: "谁*赢*了比赛？", romanization: "Shéi *yíng* le bǐsài?", translation: "Who won the match?" }
+      { text: "谁*赢*了比赛？", romanization: "Shéi *yíng* le bǐsài?", translation: "Who won the match?" },
+      { text: "我想*赢*这场比赛。", romanization: "Wǒ xiǎng *yíng* zhè chǎng bǐsài.", translation: "I want to win this match." },
+      { text: "她*赢*了一百块钱。", romanization: "Tā *yíng* le yìbǎi kuài qián.", translation: "She won a hundred yuan." },
+      { text: "我们一定会*赢*。", romanization: "Wǒmen yídìng huì *yíng*.", translation: "We will definitely win." }
     ],
     316: [
       { text: "我们晚上*到达*了。", romanization: "Wǒmen wǎnshang *dàodá* le.", translation: "We arrived in the evening." },
       { text: "火车什么时候*到达*？", romanization: "Huǒchē shénme shíhou *dàodá*?", translation: "When does the train arrive?" },
-      { text: "他们*到达*了机场。", romanization: "Tāmen *dàodá* le jīchǎng.", translation: "They arrived at the airport." }
+      { text: "他们*到达*了机场。", romanization: "Tāmen *dàodá* le jīchǎng.", translation: "They arrived at the airport." },
+      { text: "飞机下午三点*到达*。", romanization: "Fēijī xiàwǔ sān diǎn *dàodá*.", translation: "The plane arrives at three in the afternoon." },
+      { text: "我们*到达*了上海。", romanization: "Wǒmen *dàodá* le Shànghǎi.", translation: "We arrived in Shanghai." },
+      { text: "你什么时候*到达*北京？", romanization: "Nǐ shénme shíhou *dàodá* Běijīng?", translation: "When do you arrive in Beijing?" }
     ],
     317: [
       { text: "请*进*。", romanization: "Qǐng *jìn*.", translation: "Please come in." },
       { text: "她*进*了房间。", romanization: "Tā *jìn* le fángjiān.", translation: "She entered the room." },
-      { text: "他悄悄地*进*了房间。", romanization: "Tā qiāoqiāo de *jìn* le fángjiān.", translation: "He quietly entered the room." }
+      { text: "他悄悄地*进*了房间。", romanization: "Tā qiāoqiāo de *jìn* le fángjiān.", translation: "He quietly entered the room." },
+      { text: "他*进*了教室。", romanization: "Tā *jìn* le jiàoshì.", translation: "He went into the classroom." },
+      { text: "请*进*来坐。", romanization: "Qǐng *jìn* lái zuò.", translation: "Please come in and sit." },
+      { text: "猫从窗户*进*来了。", romanization: "Māo cóng chuānghu *jìn* lái le.", translation: "The cat came in through the window." }
     ],
     318: [
       { text: "他*离开*了公司。", romanization: "Tā *líkāi* le gōngsī.", translation: "He left the company." },
       { text: "火车九点*离开*。", romanization: "Huǒchē jiǔ diǎn *líkāi*.", translation: "The train departs at nine." },
-      { text: "请不要*离开*。", romanization: "Qǐng bú yào *líkāi*.", translation: "Please don't leave." }
+      { text: "请不要*离开*。", romanization: "Qǐng bú yào *líkāi*.", translation: "Please don't leave." },
+      { text: "我明天*离开*北京。", romanization: "Wǒ míngtiān *líkāi* Běijīng.", translation: "I leave Beijing tomorrow." },
+      { text: "她*离开*了家。", romanization: "Tā *líkāi* le jiā.", translation: "She left home." },
+      { text: "飞机几点*离开*？", romanization: "Fēijī jǐ diǎn *líkāi*?", translation: "What time does the plane leave?" }
     ],
     319: [
       { text: "我*住*在这个城市。", romanization: "Wǒ *zhù* zài zhège chéngshì.", translation: "I live in this city." },
       { text: "你*住*在哪里？", romanization: "Nǐ *zhù* zài nǎlǐ?", translation: "Where do you live?" },
-      { text: "他们*住*在乡下。", romanization: "Tāmen *zhù* zài xiāngxià.", translation: "They live in the countryside." }
+      { text: "他们*住*在乡下。", romanization: "Tāmen *zhù* zài xiāngxià.", translation: "They live in the countryside." },
+      { text: "我*住*在上海。", romanization: "Wǒ *zhù* zài Shànghǎi.", translation: "I live in Shanghai." },
+      { text: "我们*住*在一个小房子里。", romanization: "Wǒmen *zhù* zài yí gè xiǎo fángzi lǐ.", translation: "We live in a small house." },
+      { text: "她一个人*住*。", romanization: "Tā yí gè rén *zhù*.", translation: "She lives alone." }
     ],
     320: [
       { text: "我们*走*路去学校。", romanization: "Wǒmen *zǒu* lù qù xuéxiào.", translation: "We walk to school." },
       { text: "她*走*得很快。", romanization: "Tā *zǒu* de hěn kuài.", translation: "She walks fast." },
-      { text: "请往前*走*。", romanization: "Qǐng wǎng qián *zǒu*.", translation: "Please walk forward." }
+      { text: "请往前*走*。", romanization: "Qǐng wǎng qián *zǒu*.", translation: "Please walk forward." },
+      { text: "我们*走*吧。", romanization: "Wǒmen *zǒu* ba.", translation: "Let's go." },
+      { text: "他*走*得很慢。", romanization: "Tā *zǒu* de hěn màn.", translation: "He walks slowly." },
+      { text: "我每天*走*路上班。", romanization: "Wǒ měi tiān *zǒu* lù shàngbān.", translation: "I walk to work every day." }
     ],
     321: [
       { text: "他每天早上*跑*步。", romanization: "Tā měitiān zǎoshang *pǎo* bù.", translation: "He runs every morning." },
       { text: "孩子们在公园里*跑*。", romanization: "Háizimen zài gōngyuán lǐ *pǎo*.", translation: "The children are running in the park." },
-      { text: "她*跑*得很快。", romanization: "Tā *pǎo* de hěn kuài.", translation: "She runs fast." }
+      { text: "她*跑*得很快。", romanization: "Tā *pǎo* de hěn kuài.", translation: "She runs fast." },
+      { text: "狗*跑*得很快。", romanization: "Gǒu *pǎo* de hěn kuài.", translation: "The dog runs fast." },
+      { text: "别在家里*跑*。", romanization: "Bié zài jiā lǐ *pǎo*.", translation: "Don't run in the house." },
+      { text: "他*跑*到了车站。", romanization: "Tā *pǎo* dào le chēzhàn.", translation: "He ran to the station." }
     ],
     322: [
       { text: "我喜欢*游泳*。", romanization: "Wǒ xǐhuan *yóuyǒng*.", translation: "I like to swim." },
       { text: "他每天*游泳*一个小时。", romanization: "Tā měitiān *yóuyǒng* yí ge xiǎoshí.", translation: "He swims for an hour every day." },
-      { text: "她不会*游泳*。", romanization: "Tā bú huì *yóuyǒng*.", translation: "She can't swim." }
+      { text: "她不会*游泳*。", romanization: "Tā bú huì *yóuyǒng*.", translation: "She can't swim." },
+      { text: "夏天我们去*游泳*。", romanization: "Xiàtiān wǒmen qù *yóuyǒng*.", translation: "In summer we go swimming." },
+      { text: "你会*游泳*吗？", romanization: "Nǐ huì *yóuyǒng* ma?", translation: "Can you swim?" },
+      { text: "孩子在学*游泳*。", romanization: "Háizi zài xué *yóuyǒng*.", translation: "The child is learning to swim." }
     ],
     323: [
       { text: "小狗*跳*了起来。", romanization: "Xiǎogǒu *tiào* le qǐlai.", translation: "The puppy jumped up." },
       { text: "他*跳*过了那条河。", romanization: "Tā *tiào* guòle nà tiáo hé.", translation: "He jumped over the river." },
-      { text: "孩子们喜欢*跳*。", romanization: "Háizimen xǐhuan *tiào*.", translation: "Children like to jump." }
+      { text: "孩子们喜欢*跳*。", romanization: "Háizimen xǐhuan *tiào*.", translation: "Children like to jump." },
+      { text: "猫*跳*到了桌子上。", romanization: "Māo *tiào* dào le zhuōzi shàng.", translation: "The cat jumped onto the table." },
+      { text: "他*跳*得很高。", romanization: "Tā *tiào* de hěn gāo.", translation: "He jumps very high." },
+      { text: "孩子们在床上*跳*。", romanization: "Háizimen zài chuáng shàng *tiào*.", translation: "The children are jumping on the bed." }
     ],
     324: [
       { text: "我们喜欢*跳舞*。", romanization: "Wǒmen xǐhuan *tiàowǔ*.", translation: "We like to dance." },
       { text: "她*跳舞*跳得很好。", romanization: "Tā *tiàowǔ* tiào de hěn hǎo.", translation: "She dances very well." },
-      { text: "他们在派对上*跳舞*。", romanization: "Tāmen zài pàiduì shàng *tiàowǔ*.", translation: "They're dancing at the party." }
+      { text: "他们在派对上*跳舞*。", romanization: "Tāmen zài pàiduì shàng *tiàowǔ*.", translation: "They're dancing at the party." },
+      { text: "你会*跳舞*吗？", romanization: "Nǐ huì *tiàowǔ* ma?", translation: "Can you dance?" },
+      { text: "我想学*跳舞*。", romanization: "Wǒ xiǎng xué *tiàowǔ*.", translation: "I want to learn to dance." },
+      { text: "我们一起*跳舞*吧。", romanization: "Wǒmen yìqǐ *tiàowǔ* ba.", translation: "Let's dance together." }
     ],
     325: [
       { text: "她喜欢*唱歌*。", romanization: "Tā xǐhuan *chànggē*.", translation: "She likes to sing." },
       { text: "他*唱歌*唱得很好。", romanization: "Tā *chànggē* chàng de hěn hǎo.", translation: "He sings very well." },
-      { text: "孩子们在*唱歌*。", romanization: "Háizimen zài *chànggē*.", translation: "The children are singing." }
+      { text: "孩子们在*唱歌*。", romanization: "Háizimen zài *chànggē*.", translation: "The children are singing." },
+      { text: "我不会*唱歌*。", romanization: "Wǒ bú huì *chàng gē*.", translation: "I can't sing." },
+      { text: "我们一起*唱歌*吧。", romanization: "Wǒmen yìqǐ *chàng gē* ba.", translation: "Let's sing together." },
+      { text: "她每天早上*唱歌*。", romanization: "Tā měi tiān zǎoshang *chàng gē*.", translation: "She sings every morning." }
     ],
     326: [
       { text: "孩子们在*玩*。", romanization: "Háizimen zài *wán*.", translation: "The children are playing." },
       { text: "我们去公园*玩*吧。", romanization: "Wǒmen qù gōngyuán *wán* ba.", translation: "Let's go play in the park." },
-      { text: "他喜欢和朋友*玩*。", romanization: "Tā xǐhuan hé péngyou *wán*.", translation: "He likes to play with friends." }
+      { text: "他喜欢和朋友*玩*。", romanization: "Tā xǐhuan hé péngyou *wán*.", translation: "He likes to play with friends." },
+      { text: "我们周末去海边*玩*。", romanization: "Wǒmen zhōumò qù hǎibiān *wán*.", translation: "We go to the seaside for fun at the weekend." },
+      { text: "狗在*玩*球。", romanization: "Gǒu zài *wán* qiú.", translation: "The dog is playing with a ball." },
+      { text: "你想*玩*游戏吗？", romanization: "Nǐ xiǎng *wán* yóuxì ma?", translation: "Do you want to play a game?" }
     ],
     327: [
       { text: "妈妈在*做饭*。", romanization: "Māma zài *zuòfàn*.", translation: "Mom is cooking." },
       { text: "我不太会*做饭*。", romanization: "Wǒ bú tài huì *zuòfàn*.", translation: "I'm not very good at cooking." },
-      { text: "我们一起*做饭*吧。", romanization: "Wǒmen yìqǐ *zuòfàn* ba.", translation: "Let's cook together." }
+      { text: "我们一起*做饭*吧。", romanization: "Wǒmen yìqǐ *zuòfàn* ba.", translation: "Let's cook together." },
+      { text: "你会*做饭*吗？", romanization: "Nǐ huì *zuò fàn* ma?", translation: "Can you cook?" },
+      { text: "爸爸今天*做饭*。", romanization: "Bàba jīntiān *zuò fàn*.", translation: "Dad is cooking today." },
+      { text: "我喜欢给朋友*做饭*。", romanization: "Wǒ xǐhuan gěi péngyou *zuò fàn*.", translation: "I like cooking for friends." }
     ],
     328: [
       { text: "我在*打扫*房间。", romanization: "Wǒ zài *dǎsǎo* fángjiān.", translation: "I'm cleaning the room." },
       { text: "她每周*打扫*厨房。", romanization: "Tā měi zhōu *dǎsǎo* chúfáng.", translation: "She cleans the kitchen every week." },
-      { text: "我们一起*打扫*吧。", romanization: "Wǒmen yìqǐ *dǎsǎo* ba.", translation: "Let's clean together." }
+      { text: "我们一起*打扫*吧。", romanization: "Wǒmen yìqǐ *dǎsǎo* ba.", translation: "Let's clean together." },
+      { text: "周末我们*打扫*房子。", romanization: "Zhōumò wǒmen *dǎsǎo* fángzi.", translation: "At the weekend we clean the house." },
+      { text: "请*打扫*一下厨房。", romanization: "Qǐng *dǎsǎo* yíxià chúfáng.", translation: "Please clean the kitchen." },
+      { text: "他*打扫*了教室。", romanization: "Tā *dǎsǎo* le jiàoshì.", translation: "He cleaned the classroom." }
     ],
     329: [
       { text: "他们要*建*一座新桥。", romanization: "Tāmen yào *jiàn* yí zuò xīn qiáo.", translation: "They're going to build a new bridge." },
       { text: "这座房子是去年*建*的。", romanization: "Zhè zuò fángzi shì qùnián *jiàn* de.", translation: "This house was built last year." },
-      { text: "公司要*建*一栋新楼。", romanization: "Gōngsī yào *jiàn* yí dòng xīn lóu.", translation: "The company is going to build a new building." }
+      { text: "公司要*建*一栋新楼。", romanization: "Gōngsī yào *jiàn* yí dòng xīn lóu.", translation: "The company is going to build a new building." },
+      { text: "我们想*建*一个花园。", romanization: "Wǒmen xiǎng *jiàn* yí gè huāyuán.", translation: "We want to build a garden." },
+      { text: "这座桥是一百年前*建*的。", romanization: "Zhè zuò qiáo shì yìbǎi nián qián *jiàn* de.", translation: "This bridge was built a hundred years ago." },
+      { text: "城市在*建*新的学校。", romanization: "Chéngshì zài *jiàn* xīn de xuéxiào.", translation: "The city is building new schools." }
     ],
     330: [
       { text: "他*改变*了他的想法。", romanization: "Tā *gǎibiàn* le tā de xiǎngfǎ.", translation: "He changed his mind." },
       { text: "生活*改变*了很多。", romanization: "Shēnghuó *gǎibiàn* le hěn duō.", translation: "Life has changed a lot." },
-      { text: "我们不能*改变*过去。", romanization: "Wǒmen bù néng *gǎibiàn* guòqù.", translation: "We can't change the past." }
+      { text: "我们不能*改变*过去。", romanization: "Wǒmen bù néng *gǎibiàn* guòqù.", translation: "We can't change the past." },
+      { text: "我想*改变*我的生活。", romanization: "Wǒ xiǎng *gǎibiàn* wǒ de shēnghuó.", translation: "I want to change my life." },
+      { text: "天气*改变*了我们的计划。", romanization: "Tiānqì *gǎibiàn* le wǒmen de jìhuà.", translation: "The weather changed our plans." },
+      { text: "这个城市*改变*了很多。", romanization: "Zhège chéngshì *gǎibiàn* le hěn duō.", translation: "This city has changed a lot." }
     ],
     331: [
       { text: "我们晚饭吃*米饭*。", romanization: "Wǒmen wǎnfàn chī *mǐfàn*.", translation: "We're eating rice for dinner." },
       { text: "她做了*米饭*和鱼。", romanization: "Tā zuòle *mǐfàn* hé yú.", translation: "She made rice and fish." },
-      { text: "我喜欢吃*米饭*。", romanization: "Wǒ xǐhuan chī *mǐfàn*.", translation: "I like eating rice." }
+      { text: "我喜欢吃*米饭*。", romanization: "Wǒ xǐhuan chī *mǐfàn*.", translation: "I like eating rice." },
+      { text: "请再给我一碗*米饭*。", romanization: "Qǐng zài gěi wǒ yì wǎn *mǐfàn*.", translation: "Please give me another bowl of rice." },
+      { text: "*米饭*在锅里。", romanization: "*Mǐfàn* zài guō lǐ.", translation: "The rice is in the pot." },
+      { text: "中国人每天吃*米饭*。", romanization: "Zhōngguó rén měi tiān chī *mǐfàn*.", translation: "Chinese people eat rice every day." }
     ],
     332: [
       { text: "他喜欢吃*面条*。", romanization: "Tā xǐhuan chī *miàntiáo*.", translation: "He likes eating noodles." },
       { text: "妈妈做了*面条*。", romanization: "Māma zuòle *miàntiáo*.", translation: "Mom made noodles." },
-      { text: "这碗*面条*很好吃。", romanization: "Zhè wǎn *miàntiáo* hěn hǎochī.", translation: "This bowl of noodles is delicious." }
+      { text: "这碗*面条*很好吃。", romanization: "Zhè wǎn *miàntiáo* hěn hǎochī.", translation: "This bowl of noodles is delicious." },
+      { text: "我要一碗*面条*。", romanization: "Wǒ yào yì wǎn *miàntiáo*.", translation: "I'd like a bowl of noodles." },
+      { text: "*面条*太烫了。", romanization: "*Miàntiáo* tài tàng le.", translation: "The noodles are too hot." },
+      { text: "生日要吃*面条*。", romanization: "Shēngrì yào chī *miàntiáo*.", translation: "You eat noodles on your birthday." }
     ],
     333: [
       { text: "我们晚饭吃*鸡肉*。", romanization: "Wǒmen wǎnfàn chī *jīròu*.", translation: "We're eating chicken for dinner." },
       { text: "这个汤里有*鸡肉*。", romanization: "Zhège tāng lǐ yǒu *jīròu*.", translation: "There's chicken in this soup." },
-      { text: "她不吃*鸡肉*。", romanization: "Tā bù chī *jīròu*.", translation: "She doesn't eat chicken." }
+      { text: "她不吃*鸡肉*。", romanization: "Tā bù chī *jīròu*.", translation: "She doesn't eat chicken." },
+      { text: "我想吃*鸡肉*。", romanization: "Wǒ xiǎng chī *jīròu*.", translation: "I want to eat chicken." },
+      { text: "*鸡肉*比牛肉便宜。", romanization: "*Jīròu* bǐ niúròu piányi.", translation: "Chicken is cheaper than beef." },
+      { text: "妈妈做了*鸡肉*面条。", romanization: "Māma zuòle *jīròu* miàntiáo.", translation: "Mum made chicken noodles." }
     ],
     334: [
       { text: "他喜欢吃*牛肉*。", romanization: "Tā xǐhuan chī *niúròu*.", translation: "He likes eating beef." },
       { text: "这道菜是*牛肉*做的。", romanization: "Zhè dào cài shì *niúròu* zuò de.", translation: "This dish is made with beef." },
-      { text: "我们买了一些*牛肉*。", romanization: "Wǒmen mǎile yìxiē *niúròu*.", translation: "We bought some beef." }
+      { text: "我们买了一些*牛肉*。", romanization: "Wǒmen mǎile yìxiē *niúròu*.", translation: "We bought some beef." },
+      { text: "我不吃*牛肉*。", romanization: "Wǒ bù chī *niúròu*.", translation: "I don't eat beef." },
+      { text: "*牛肉*面很好吃。", romanization: "*Niúròu* miàn hěn hǎochī.", translation: "Beef noodles are delicious." },
+      { text: "*牛肉*多少钱一斤？", romanization: "*Niúròu* duōshao qián yì jīn?", translation: "How much is beef per jin?" }
     ],
     335: [
       { text: "她不吃*猪肉*。", romanization: "Tā bù chī *zhūròu*.", translation: "She doesn't eat pork." },
       { text: "这个菜市场卖*猪肉*。", romanization: "Zhège càishìchǎng mài *zhūròu*.", translation: "This market sells pork." },
-      { text: "我们买了一点*猪肉*。", romanization: "Wǒmen mǎile yìdiǎn *zhūròu*.", translation: "We bought a bit of pork." }
+      { text: "我们买了一点*猪肉*。", romanization: "Wǒmen mǎile yìdiǎn *zhūròu*.", translation: "We bought a bit of pork." },
+      { text: "我买了一斤*猪肉*。", romanization: "Wǒ mǎile yì jīn *zhūròu*.", translation: "I bought a jin of pork." },
+      { text: "*猪肉*在冰箱里。", romanization: "*Zhūròu* zài bīngxiāng lǐ.", translation: "The pork is in the fridge." },
+      { text: "他喜欢吃*猪肉*饺子。", romanization: "Tā xǐhuan chī *zhūròu* jiǎozi.", translation: "He likes pork dumplings." }
     ],
     336: [
       { text: "请把*黄油*递给我。", romanization: "Qǐng bǎ *huángyóu* dì gěi wǒ.", translation: "Please pass me the butter." },
       { text: "面包上有*黄油*。", romanization: "Miànbāo shàng yǒu *huángyóu*.", translation: "There's butter on the bread." },
-      { text: "她用*黄油*做蛋糕。", romanization: "Tā yòng *huángyóu* zuò dàngāo.", translation: "She uses butter to make cakes." }
+      { text: "她用*黄油*做蛋糕。", romanization: "Tā yòng *huángyóu* zuò dàngāo.", translation: "She uses butter to make cakes." },
+      { text: "面包上要放*黄油*吗？", romanization: "Miànbāo shàng yào fàng *huángyóu* ma?", translation: "Do you want butter on the bread?" },
+      { text: "*黄油*在冰箱里。", romanization: "*Huángyóu* zài bīngxiāng lǐ.", translation: "The butter is in the fridge." },
+      { text: "我买了一块*黄油*。", romanization: "Wǒ mǎile yí kuài *huángyóu*.", translation: "I bought a block of butter." }
     ],
     337: [
       { text: "请加一点*油*。", romanization: "Qǐng jiā yìdiǎn *yóu*.", translation: "Please add a little oil." },
       { text: "这个菜*油*太多了。", romanization: "Zhège cài *yóu* tài duō le.", translation: "This dish has too much oil." },
-      { text: "厨房里没有*油*了。", romanization: "Chúfáng lǐ méiyǒu *yóu* le.", translation: "There's no more oil in the kitchen." }
+      { text: "厨房里没有*油*了。", romanization: "Chúfáng lǐ méiyǒu *yóu* le.", translation: "There's no more oil in the kitchen." },
+      { text: "我们没有*油*了。", romanization: "Wǒmen méiyǒu *yóu* le.", translation: "We are out of oil." },
+      { text: "这个菜要少放*油*。", romanization: "Zhège cài yào shǎo fàng *yóu*.", translation: "This dish needs less oil." },
+      { text: "我买了一瓶*油*。", romanization: "Wǒ mǎile yì píng *yóu*.", translation: "I bought a bottle of oil." }
     ],
     338: [
       { text: "请给我*胡椒*。", romanization: "Qǐng gěi wǒ *hújiāo*.", translation: "Please give me the pepper." },
       { text: "这个汤*胡椒*味很重。", romanization: "Zhège tāng *hújiāo* wèi hěn zhòng.", translation: "This soup has a strong pepper taste." },
-      { text: "我喜欢加一点*胡椒*。", romanization: "Wǒ xǐhuan jiā yìdiǎn *hújiāo*.", translation: "I like to add a little pepper." }
+      { text: "我喜欢加一点*胡椒*。", romanization: "Wǒ xǐhuan jiā yìdiǎn *hújiāo*.", translation: "I like to add a little pepper." },
+      { text: "*胡椒*在哪里？", romanization: "*Hújiāo* zài nǎlǐ?", translation: "Where is the pepper?" },
+      { text: "汤里放了一点*胡椒*。", romanization: "Tāng lǐ fàngle yìdiǎn *hújiāo*.", translation: "There's a little pepper in the soup." },
+      { text: "盐和*胡椒*在桌子上。", romanization: "Yán hé *hújiāo* zài zhuōzi shàng.", translation: "The salt and pepper are on the table." }
     ],
     339: [
       { text: "我在切*洋葱*。", romanization: "Wǒ zài qiē *yángcōng*.", translation: "I'm cutting an onion." },
       { text: "这个汤里有*洋葱*。", romanization: "Zhège tāng lǐ yǒu *yángcōng*.", translation: "There's onion in this soup." },
-      { text: "她不喜欢*洋葱*。", romanization: "Tā bù xǐhuan *yángcōng*.", translation: "She doesn't like onions." }
+      { text: "她不喜欢*洋葱*。", romanization: "Tā bù xǐhuan *yángcōng*.", translation: "She doesn't like onions." },
+      { text: "切*洋葱*的时候我会哭。", romanization: "Qiē *yángcōng* de shíhou wǒ huì kū.", translation: "I cry when I cut onions." },
+      { text: "我买了两个*洋葱*。", romanization: "Wǒ mǎile liǎng gè *yángcōng*.", translation: "I bought two onions." },
+      { text: "他不吃*洋葱*。", romanization: "Tā bù chī *yángcōng*.", translation: "He doesn't eat onions." }
     ],
     340: [
       { text: "沙拉里有*西红柿*。", romanization: "Shālā lǐ yǒu *xīhóngshì*.", translation: "There are tomatoes in the salad." },
       { text: "我买了一些*西红柿*。", romanization: "Wǒ mǎile yìxiē *xīhóngshì*.", translation: "I bought some tomatoes." },
-      { text: "这个*西红柿*很新鲜。", romanization: "Zhège *xīhóngshì* hěn xīnxiān.", translation: "This tomato is fresh." }
+      { text: "这个*西红柿*很新鲜。", romanization: "Zhège *xīhóngshì* hěn xīnxiān.", translation: "This tomato is fresh." },
+      { text: "*西红柿*是红色的。", romanization: "*Xīhóngshì* shì hóngsè de.", translation: "Tomatoes are red." },
+      { text: "我想吃*西红柿*鸡蛋。", romanization: "Wǒ xiǎng chī *xīhóngshì* jīdàn.", translation: "I want to eat tomato and egg." },
+      { text: "*西红柿*很便宜。", romanization: "*Xīhóngshì* hěn piányi.", translation: "Tomatoes are cheap." }
     ],
     341: [
       { text: "这道菜有很多*大蒜*。", romanization: "Zhè dào cài yǒu hěn duō *dàsuàn*.", translation: "This dish has a lot of garlic." },
       { text: "我在切*大蒜*。", romanization: "Wǒ zài qiē *dàsuàn*.", translation: "I'm chopping garlic." },
-      { text: "汤里加一点*大蒜*。", romanization: "Tāng lǐ jiā yìdiǎn *dàsuàn*.", translation: "Add a little garlic to the soup." }
+      { text: "汤里加一点*大蒜*。", romanization: "Tāng lǐ jiā yìdiǎn *dàsuàn*.", translation: "Add a little garlic to the soup." },
+      { text: "我不喜欢*大蒜*的味道。", romanization: "Wǒ bù xǐhuan *dàsuàn* de wèidao.", translation: "I don't like the taste of garlic." },
+      { text: "请多放一点*大蒜*。", romanization: "Qǐng duō fàng yìdiǎn *dàsuàn*.", translation: "Please add a bit more garlic." },
+      { text: "我买了一些*大蒜*。", romanization: "Wǒ mǎile yìxiē *dàsuàn*.", translation: "I bought some garlic." }
     ],
     342: [
       { text: "我想要一杯*柠檬*水。", romanization: "Wǒ xiǎng yào yì bēi *níngméng* shuǐ.", translation: "I'd like a glass of lemon water." },
       { text: "这个蛋糕有*柠檬*味。", romanization: "Zhège dàngāo yǒu *níngméng* wèi.", translation: "This cake has a lemon flavor." },
-      { text: "她买了两个*柠檬*。", romanization: "Tā mǎile liǎng ge *níngméng*.", translation: "She bought two lemons." }
+      { text: "她买了两个*柠檬*。", romanization: "Tā mǎile liǎng ge *níngméng*.", translation: "She bought two lemons." },
+      { text: "*柠檬*是黄色的。", romanization: "*Níngméng* shì huángsè de.", translation: "Lemons are yellow." },
+      { text: "*柠檬*很酸。", romanization: "*Níngméng* hěn suān.", translation: "Lemons are sour." },
+      { text: "茶里放一片*柠檬*。", romanization: "Chá lǐ fàng yí piàn *níngméng*.", translation: "Put a slice of lemon in the tea." }
     ],
     343: [
       { text: "我喜欢吃*草莓*。", romanization: "Wǒ xǐhuan chī *cǎoméi*.", translation: "I like eating strawberries." },
       { text: "这些*草莓*很甜。", romanization: "Zhèxiē *cǎoméi* hěn tián.", translation: "These strawberries are sweet." },
-      { text: "她买了一盒*草莓*。", romanization: "Tā mǎile yì hé *cǎoméi*.", translation: "She bought a box of strawberries." }
+      { text: "她买了一盒*草莓*。", romanization: "Tā mǎile yì hé *cǎoméi*.", translation: "She bought a box of strawberries." },
+      { text: "*草莓*是红色的。", romanization: "*Cǎoméi* shì hóngsè de.", translation: "Strawberries are red." },
+      { text: "我想吃*草莓*蛋糕。", romanization: "Wǒ xiǎng chī *cǎoméi* dàngāo.", translation: "I want to eat strawberry cake." },
+      { text: "春天有很多*草莓*。", romanization: "Chūntiān yǒu hěn duō *cǎoméi*.", translation: "There are lots of strawberries in spring." }
     ],
     344: [
       { text: "他喜欢吃*葡萄*。", romanization: "Tā xǐhuan chī *pútao*.", translation: "He likes eating grapes." },
       { text: "这些*葡萄*很新鲜。", romanization: "Zhèxiē *pútao* hěn xīnxiān.", translation: "These grapes are fresh." },
-      { text: "她买了一串*葡萄*。", romanization: "Tā mǎile yí chuàn *pútao*.", translation: "She bought a bunch of grapes." }
+      { text: "她买了一串*葡萄*。", romanization: "Tā mǎile yí chuàn *pútao*.", translation: "She bought a bunch of grapes." },
+      { text: "*葡萄*很甜。", romanization: "*Pútao* hěn tián.", translation: "The grapes are sweet." },
+      { text: "我想吃*葡萄*。", romanization: "Wǒ xiǎng chī *pútao*.", translation: "I want to eat grapes." },
+      { text: "*葡萄*多少钱一斤？", romanization: "*Pútao* duōshao qián yì jīn?", translation: "How much are grapes per jin?" }
     ],
     345: [
       { text: "今天是她的生日，我们做了*蛋糕*。", romanization: "Jīntiān shì tā de shēngrì, wǒmen zuòle *dàngāo*.", translation: "Today is her birthday, we made a cake." },
       { text: "这个*蛋糕*很好吃。", romanization: "Zhège *dàngāo* hěn hǎochī.", translation: "This cake is delicious." },
-      { text: "我想吃一块*蛋糕*。", romanization: "Wǒ xiǎng chī yí kuài *dàngāo*.", translation: "I'd like a piece of cake." }
+      { text: "我想吃一块*蛋糕*。", romanization: "Wǒ xiǎng chī yí kuài *dàngāo*.", translation: "I'd like a piece of cake." },
+      { text: "我买了一个生日*蛋糕*。", romanization: "Wǒ mǎile yí gè shēngrì *dàngāo*.", translation: "I bought a birthday cake." },
+      { text: "*蛋糕*太甜了。", romanization: "*Dàngāo* tài tián le.", translation: "The cake is too sweet." },
+      { text: "妈妈在做*蛋糕*。", romanization: "Māma zài zuò *dàngāo*.", translation: "Mum is making a cake." }
     ],
     346: [
       { text: "我喜欢吃*巧克力*。", romanization: "Wǒ xǐhuan chī *qiǎokèlì*.", translation: "I like eating chocolate." },
       { text: "她给了我一块*巧克力*。", romanization: "Tā gěile wǒ yí kuài *qiǎokèlì*.", translation: "She gave me a piece of chocolate." },
-      { text: "这个蛋糕是*巧克力*味的。", romanization: "Zhège dàngāo shì *qiǎokèlì* wèi de.", translation: "This cake is chocolate flavored." }
+      { text: "这个蛋糕是*巧克力*味的。", romanization: "Zhège dàngāo shì *qiǎokèlì* wèi de.", translation: "This cake is chocolate flavored." },
+      { text: "*巧克力*太甜了。", romanization: "*Qiǎokèlì* tài tián le.", translation: "The chocolate is too sweet." },
+      { text: "我买了一盒*巧克力*。", romanization: "Wǒ mǎile yì hé *qiǎokèlì*.", translation: "I bought a box of chocolates." },
+      { text: "孩子们都喜欢*巧克力*。", romanization: "Háizimen dōu xǐhuan *qiǎokèlì*.", translation: "Children all like chocolate." }
     ],
     347: [
       { text: "孩子们喜欢吃*冰淇淋*。", romanization: "Háizimen xǐhuan chī *bīngqílín*.", translation: "Children love eating ice cream." },
       { text: "我想要一个*冰淇淋*。", romanization: "Wǒ xiǎng yào yí ge *bīngqílín*.", translation: "I'd like an ice cream." },
-      { text: "这个*冰淇淋*是香草味的。", romanization: "Zhège *bīngqílín* shì xiāngcǎo wèi de.", translation: "This ice cream is vanilla flavored." }
+      { text: "这个*冰淇淋*是香草味的。", romanization: "Zhège *bīngqílín* shì xiāngcǎo wèi de.", translation: "This ice cream is vanilla flavored." },
+      { text: "夏天我每天吃*冰淇淋*。", romanization: "Xiàtiān wǒ měi tiān chī *bīngqílín*.", translation: "In summer I eat ice cream every day." },
+      { text: "*冰淇淋*在冰箱里。", romanization: "*Bīngqílín* zài bīngxiāng lǐ.", translation: "The ice cream is in the fridge." },
+      { text: "我请你吃*冰淇淋*。", romanization: "Wǒ qǐng nǐ chī *bīngqílín*.", translation: "I'll treat you to ice cream." }
     ],
     348: [
       { text: "他喜欢喝*葡萄酒*。", romanization: "Tā xǐhuan hē *pútaojiǔ*.", translation: "He likes drinking wine." },
       { text: "我们点了一瓶*葡萄酒*。", romanization: "Wǒmen diǎnle yì píng *pútaojiǔ*.", translation: "We ordered a bottle of wine." },
-      { text: "这个*葡萄酒*很好喝。", romanization: "Zhège *pútaojiǔ* hěn hǎohē.", translation: "This wine is delicious." }
+      { text: "这个*葡萄酒*很好喝。", romanization: "Zhège *pútaojiǔ* hěn hǎohē.", translation: "This wine is delicious." },
+      { text: "我不喝*葡萄酒*。", romanization: "Wǒ bù hē *pútaojiǔ*.", translation: "I don't drink wine." },
+      { text: "这瓶*葡萄酒*很贵。", romanization: "Zhè píng *pútaojiǔ* hěn guì.", translation: "This bottle of wine is expensive." },
+      { text: "我们喝一杯*葡萄酒*吧。", romanization: "Wǒmen hē yì bēi *pútaojiǔ* ba.", translation: "Let's have a glass of wine." }
     ],
     349: [
       { text: "他喜欢喝*啤酒*。", romanization: "Tā xǐhuan hē *píjiǔ*.", translation: "He likes drinking beer." },
       { text: "我们点了两杯*啤酒*。", romanization: "Wǒmen diǎnle liǎng bēi *píjiǔ*.", translation: "We ordered two beers." },
-      { text: "这个*啤酒*很冷。", romanization: "Zhège *píjiǔ* hěn lěng.", translation: "This beer is cold." }
+      { text: "这个*啤酒*很冷。", romanization: "Zhège *píjiǔ* hěn lěng.", translation: "This beer is cold." },
+      { text: "夏天喝*啤酒*很舒服。", romanization: "Xiàtiān hē *píjiǔ* hěn shūfu.", translation: "Drinking beer in summer is nice." },
+      { text: "冰箱里有*啤酒*。", romanization: "Bīngxiāng lǐ yǒu *píjiǔ*.", translation: "There is beer in the fridge." },
+      { text: "他不喝*啤酒*。", romanization: "Tā bù hē *píjiǔ*.", translation: "He doesn't drink beer." }
     ],
     350: [
       { text: "*瓶子*里有水。", romanization: "*Píngzi* lǐ yǒu shuǐ.", translation: "There's water in the bottle." },
       { text: "请给我一个*瓶子*。", romanization: "Qǐng gěi wǒ yí ge *píngzi*.", translation: "Please give me a bottle." },
-      { text: "这个*瓶子*是空的。", romanization: "Zhège *píngzi* shì kōng de.", translation: "This bottle is empty." }
+      { text: "这个*瓶子*是空的。", romanization: "Zhège *píngzi* shì kōng de.", translation: "This bottle is empty." },
+      { text: "*瓶子*里还有一点水。", romanization: "*Píngzi* lǐ hái yǒu yìdiǎn shuǐ.", translation: "There's still a little water in the bottle." },
+      { text: "*瓶子*在桌子上。", romanization: "*Píngzi* zài zhuōzi shàng.", translation: "The bottle is on the table." },
+      { text: "请把*瓶子*打开。", romanization: "Qǐng bǎ *píngzi* dǎkāi.", translation: "Please open the bottle." }
     ],
     351: [
       { text: "*桌子*上有一本书。", romanization: "*Zhuōzi* shàng yǒu yì běn shū.", translation: "There's a book on the table." },
       { text: "请把*桌子*擦干净。", romanization: "Qǐng bǎ *zhuōzi* cā gānjìng.", translation: "Please wipe the table clean." },
-      { text: "这张*桌子*很大。", romanization: "Zhè zhāng *zhuōzi* hěn dà.", translation: "This table is big." }
+      { text: "这张*桌子*很大。", romanization: "Zhè zhāng *zhuōzi* hěn dà.", translation: "This table is big." },
+      { text: "我们买了一张新*桌子*。", romanization: "Wǒmen mǎile yì zhāng xīn *zhuōzi*.", translation: "We bought a new table." },
+      { text: "*桌子*上有一杯茶。", romanization: "*Zhuōzi* shàng yǒu yì bēi chá.", translation: "There is a cup of tea on the table." },
+      { text: "猫在*桌子*下面。", romanization: "Māo zài *zhuōzi* xiàmiàn.", translation: "The cat is under the table." }
     ],
     352: [
       { text: "这把*椅子*很舒服。", romanization: "Zhè bǎ *yǐzi* hěn shūfu.", translation: "This chair is comfortable." },
       { text: "请坐在这把*椅子*上。", romanization: "Qǐng zuò zài zhè bǎ *yǐzi* shàng.", translation: "Please sit on this chair." },
-      { text: "*椅子*坏了。", romanization: "*Yǐzi* huài le.", translation: "The chair is broken." }
+      { text: "*椅子*坏了。", romanization: "*Yǐzi* huài le.", translation: "The chair is broken." },
+      { text: "请坐这把*椅子*。", romanization: "Qǐng zuò zhè bǎ *yǐzi*.", translation: "Please sit on this chair." },
+      { text: "我们需要更多*椅子*。", romanization: "Wǒmen xūyào gèng duō *yǐzi*.", translation: "We need more chairs." },
+      { text: "*椅子*上有一件衣服。", romanization: "*Yǐzi* shàng yǒu yí jiàn yīfu.", translation: "There is a piece of clothing on the chair." }
     ],
     353: [
       { text: "我的*床*很舒服。", romanization: "Wǒ de *chuáng* hěn shūfu.", translation: "My bed is comfortable." },
       { text: "*床*上有一只猫。", romanization: "*Chuáng* shàng yǒu yì zhī māo.", translation: "There's a cat on the bed." },
-      { text: "他还在*床*上睡觉。", romanization: "Tā hái zài *chuáng* shàng shuìjiào.", translation: "He's still sleeping in bed." }
+      { text: "他还在*床*上睡觉。", romanization: "Tā hái zài *chuáng* shàng shuìjiào.", translation: "He's still sleeping in bed." },
+      { text: "我想买一张新*床*。", romanization: "Wǒ xiǎng mǎi yì zhāng xīn *chuáng*.", translation: "I want to buy a new bed." },
+      { text: "孩子在*床*上看书。", romanization: "Háizi zài *chuáng* shàng kàn shū.", translation: "The child is reading in bed." },
+      { text: "这张*床*太小了。", romanization: "Zhè zhāng *chuáng* tài xiǎo le.", translation: "This bed is too small." }
     ],
     354: [
       { text: "请关上*门*。", romanization: "Qǐng guānshàng *mén*.", translation: "Please close the door." },
       { text: "*门*开着。", romanization: "*Mén* kāizhe.", translation: "The door is open." },
-      { text: "有人在敲*门*。", romanization: "Yǒurén zài qiāo *mén*.", translation: "Someone is knocking on the door." }
+      { text: "有人在敲*门*。", romanization: "Yǒurén zài qiāo *mén*.", translation: "Someone is knocking on the door." },
+      { text: "*门*是红色的。", romanization: "*Mén* shì hóngsè de.", translation: "The door is red." },
+      { text: "请开*门*吧。", romanization: "Qǐng kāi *mén* ba.", translation: "Please open the door." },
+      { text: "我在*门*口等你。", romanization: "Wǒ zài *mén*kǒu děng nǐ.", translation: "I'll wait for you at the door." }
     ],
     355: [
       { text: "请打开*窗户*。", romanization: "Qǐng dǎkāi *chuānghu*.", translation: "Please open the window." },
       { text: "*窗户*很脏。", romanization: "*Chuānghu* hěn zāng.", translation: "The window is dirty." },
-      { text: "猫坐在*窗户*旁边。", romanization: "Māo zuò zài *chuānghu* pángbiān.", translation: "The cat is sitting by the window." }
+      { text: "猫坐在*窗户*旁边。", romanization: "Māo zuò zài *chuānghu* pángbiān.", translation: "The cat is sitting by the window." },
+      { text: "*窗户*开着呢。", romanization: "*Chuānghu* kāizhe ne.", translation: "The window is open." },
+      { text: "我的房间有两个*窗户*。", romanization: "Wǒ de fángjiān yǒu liǎng gè *chuānghu*.", translation: "My room has two windows." },
+      { text: "请关上*窗户*。", romanization: "Qǐng guānshàng *chuānghu*.", translation: "Please close the window." }
     ],
     356: [
       { text: "*墙*上有一幅画。", romanization: "*Qiáng* shàng yǒu yì fú huà.", translation: "There's a painting on the wall." },
       { text: "这面*墙*是白色的。", romanization: "Zhè miàn *qiáng* shì báisè de.", translation: "This wall is white." },
-      { text: "钟挂在*墙*上。", romanization: "Zhōng guà zài *qiáng* shàng.", translation: "The clock hangs on the wall." }
+      { text: "钟挂在*墙*上。", romanization: "Zhōng guà zài *qiáng* shàng.", translation: "The clock hangs on the wall." },
+      { text: "*墙*上有很多照片。", romanization: "*Qiáng* shàng yǒu hěn duō zhàopiàn.", translation: "There are many photos on the wall." },
+      { text: "这面*墙*很高。", romanization: "Zhè miàn *qiáng* hěn gāo.", translation: "This wall is high." },
+      { text: "我们把*墙*刷成了蓝色。", romanization: "Wǒmen bǎ *qiáng* shuāchéng le lánsè.", translation: "We painted the wall blue." }
     ],
     357: [
       { text: "*地板*很干净。", romanization: "*Dìbǎn* hěn gānjìng.", translation: "The floor is clean." },
       { text: "请不要坐在*地板*上。", romanization: "Qǐng bú yào zuò zài *dìbǎn* shàng.", translation: "Please don't sit on the floor." },
-      { text: "*地板*是木头做的。", romanization: "*Dìbǎn* shì mùtou zuò de.", translation: "The floor is made of wood." }
+      { text: "*地板*是木头做的。", romanization: "*Dìbǎn* shì mùtou zuò de.", translation: "The floor is made of wood." },
+      { text: "*地板*很冷。", romanization: "*Dìbǎn* hěn lěng.", translation: "The floor is cold." },
+      { text: "孩子坐在*地板*上。", romanization: "Háizi zuò zài *dìbǎn* shàng.", translation: "The child is sitting on the floor." },
+      { text: "我在擦*地板*。", romanization: "Wǒ zài cā *dìbǎn*.", translation: "I'm mopping the floor." }
     ],
     358: [
       { text: "*屋顶*漏水了。", romanization: "*Wūdǐng* lòushuǐ le.", translation: "The roof is leaking." },
       { text: "鸟停在*屋顶*上。", romanization: "Niǎo tíng zài *wūdǐng* shàng.", translation: "The bird landed on the roof." },
-      { text: "他们在修*屋顶*。", romanization: "Tāmen zài xiū *wūdǐng*.", translation: "They're repairing the roof." }
+      { text: "他们在修*屋顶*。", romanization: "Tāmen zài xiū *wūdǐng*.", translation: "They're repairing the roof." },
+      { text: "猫在*屋顶*上。", romanization: "Māo zài *wūdǐng* shàng.", translation: "The cat is on the roof." },
+      { text: "这个房子的*屋顶*是红色的。", romanization: "Zhège fángzi de *wūdǐng* shì hóngsè de.", translation: "This house's roof is red." },
+      { text: "*屋顶*上有雪。", romanization: "*Wūdǐng* shàng yǒu xuě.", translation: "There is snow on the roof." }
     ],
     359: [
       { text: "我们的*花园*很漂亮。", romanization: "Wǒmen de *huāyuán* hěn piàoliang.", translation: "Our garden is beautiful." },
       { text: "孩子们在*花园*里玩。", romanization: "Háizimen zài *huāyuán* lǐ wán.", translation: "The children are playing in the garden." },
-      { text: "她在*花园*里种花。", romanization: "Tā zài *huāyuán* lǐ zhòng huā.", translation: "She's planting flowers in the garden." }
+      { text: "她在*花园*里种花。", romanization: "Tā zài *huāyuán* lǐ zhòng huā.", translation: "She's planting flowers in the garden." },
+      { text: "*花园*里有很多花。", romanization: "*Huāyuán* lǐ yǒu hěn duō huā.", translation: "There are many flowers in the garden." },
+      { text: "奶奶的*花园*很大。", romanization: "Nǎinai de *huāyuán* hěn dà.", translation: "Grandma's garden is big." },
+      { text: "狗在*花园*里睡觉。", romanization: "Gǒu zài *huāyuán* lǐ shuìjiào.", translation: "The dog is sleeping in the garden." }
     ],
     360: [
       { text: "车在*车库*里。", romanization: "Chē zài *chēkù* lǐ.", translation: "The car is in the garage." },
       { text: "*车库*很大。", romanization: "*Chēkù* hěn dà.", translation: "The garage is big." },
-      { text: "他在*车库*修车。", romanization: "Tā zài *chēkù* xiūchē.", translation: "He's fixing the car in the garage." }
+      { text: "他在*车库*修车。", romanization: "Tā zài *chēkù* xiūchē.", translation: "He's fixing the car in the garage." },
+      { text: "自行车在*车库*里。", romanization: "Zìxíngchē zài *chēkù* lǐ.", translation: "The bicycle is in the garage." },
+      { text: "我们家没有*车库*。", romanization: "Wǒmen jiā méiyǒu *chēkù*.", translation: "Our home doesn't have a garage." },
+      { text: "*车库*门开着。", romanization: "*Chēkù* mén kāizhe.", translation: "The garage door is open." }
     ],
     361: [
       { text: "请打开*灯*。", romanization: "Qǐng dǎkāi *dēng*.", translation: "Please turn on the lamp." },
       { text: "*灯*坏了。", romanization: "*Dēng* huài le.", translation: "The lamp is broken." },
-      { text: "桌子上有一盏*灯*。", romanization: "Zhuōzi shàng yǒu yì zhǎn *dēng*.", translation: "There's a lamp on the table." }
+      { text: "桌子上有一盏*灯*。", romanization: "Zhuōzi shàng yǒu yì zhǎn *dēng*.", translation: "There's a lamp on the table." },
+      { text: "请关*灯*吧。", romanization: "Qǐng guān *dēng* ba.", translation: "Please turn off the light." },
+      { text: "房间里的*灯*很亮。", romanization: "Fángjiān lǐ de *dēng* hěn liàng.", translation: "The light in the room is bright." },
+      { text: "我买了一个新*灯*。", romanization: "Wǒ mǎile yí gè xīn *dēng*.", translation: "I bought a new lamp." }
     ],
     362: [
       { text: "她在*镜子*前梳头。", romanization: "Tā zài *jìngzi* qián shūtóu.", translation: "She's combing her hair in front of the mirror." },
       { text: "*镜子*破了。", romanization: "*Jìngzi* pò le.", translation: "The mirror is broken." },
-      { text: "墙上挂着一面*镜子*。", romanization: "Qiáng shàng guàzhe yí miàn *jìngzi*.", translation: "There's a mirror hanging on the wall." }
+      { text: "墙上挂着一面*镜子*。", romanization: "Qiáng shàng guàzhe yí miàn *jìngzi*.", translation: "There's a mirror hanging on the wall." },
+      { text: "她在照*镜子*。", romanization: "Tā zài zhào *jìngzi*.", translation: "She is looking in the mirror." },
+      { text: "浴室里有一面大*镜子*。", romanization: "Yùshì lǐ yǒu yí miàn dà *jìngzi*.", translation: "There is a big mirror in the bathroom." },
+      { text: "*镜子*很干净。", romanization: "*Jìngzi* hěn gānjìng.", translation: "The mirror is clean." }
     ],
     363: [
       { text: "请给我一条*毛巾*。", romanization: "Qǐng gěi wǒ yì tiáo *máojīn*.", translation: "Please give me a towel." },
       { text: "这条*毛巾*是湿的。", romanization: "Zhè tiáo *máojīn* shì shī de.", translation: "This towel is wet." },
-      { text: "*毛巾*在浴室里。", romanization: "*Máojīn* zài yùshì lǐ.", translation: "The towel is in the bathroom." }
+      { text: "*毛巾*在浴室里。", romanization: "*Máojīn* zài yùshì lǐ.", translation: "The towel is in the bathroom." },
+      { text: "我的*毛巾*是蓝色的。", romanization: "Wǒ de *máojīn* shì lánsè de.", translation: "My towel is blue." },
+      { text: "我需要一条干*毛巾*。", romanization: "Wǒ xūyào yì tiáo gān *máojīn*.", translation: "I need a dry towel." },
+      { text: "请把*毛巾*挂起来。", romanization: "Qǐng bǎ *máojīn* guà qǐlái.", translation: "Please hang up the towel." }
     ],
     364: [
       { text: "请用*肥皂*洗手。", romanization: "Qǐng yòng *féizào* xǐ shǒu.", translation: "Please wash your hands with soap." },
       { text: "*肥皂*没有了。", romanization: "*Féizào* méiyǒu le.", translation: "There's no more soap." },
-      { text: "这个*肥皂*闻起来很香。", romanization: "Zhège *féizào* wén qǐlai hěn xiāng.", translation: "This soap smells nice." }
+      { text: "这个*肥皂*闻起来很香。", romanization: "Zhège *féizào* wén qǐlai hěn xiāng.", translation: "This soap smells nice." },
+      { text: "我买了一块*肥皂*。", romanization: "Wǒ mǎile yí kuài *féizào*.", translation: "I bought a bar of soap." },
+      { text: "*肥皂*在浴室里。", romanization: "*Féizào* zài yùshì lǐ.", translation: "The soap is in the bathroom." },
+      { text: "用*肥皂*洗衣服。", romanization: "Yòng *féizào* xǐ yīfu.", translation: "Wash the clothes with soap." }
     ],
     365: [
       { text: "牛奶在*冰箱*里。", romanization: "Niúnǎi zài *bīngxiāng* lǐ.", translation: "The milk is in the fridge." },
       { text: "*冰箱*是空的。", romanization: "*Bīngxiāng* shì kōng de.", translation: "The fridge is empty." },
-      { text: "请把肉放进*冰箱*。", romanization: "Qǐng bǎ ròu fàng jìn *bīngxiāng*.", translation: "Please put the meat in the fridge." }
+      { text: "请把肉放进*冰箱*。", romanization: "Qǐng bǎ ròu fàng jìn *bīngxiāng*.", translation: "Please put the meat in the fridge." },
+      { text: "*冰箱*里有什么？", romanization: "*Bīngxiāng* lǐ yǒu shénme?", translation: "What's in the fridge?" },
+      { text: "我们的*冰箱*坏了。", romanization: "Wǒmen de *bīngxiāng* huài le.", translation: "Our fridge is broken." },
+      { text: "请把水果放进*冰箱*。", romanization: "Qǐng bǎ shuǐguǒ fàngjìn *bīngxiāng*.", translation: "Please put the fruit in the fridge." }
     ],
     366: [
       { text: "*烤箱*很热。", romanization: "*Kǎoxiāng* hěn rè.", translation: "The oven is hot." },
       { text: "蛋糕在*烤箱*里。", romanization: "Dàngāo zài *kǎoxiāng* lǐ.", translation: "The cake is in the oven." },
-      { text: "请打开*烤箱*。", romanization: "Qǐng dǎkāi *kǎoxiāng*.", translation: "Please turn on the oven." }
+      { text: "请打开*烤箱*。", romanization: "Qǐng dǎkāi *kǎoxiāng*.", translation: "Please turn on the oven." },
+      { text: "面包在*烤箱*里。", romanization: "Miànbāo zài *kǎoxiāng* lǐ.", translation: "The bread is in the oven." },
+      { text: "我们家没有*烤箱*。", romanization: "Wǒmen jiā méiyǒu *kǎoxiāng*.", translation: "Our home doesn't have an oven." },
+      { text: "请关上*烤箱*。", romanization: "Qǐng guānshàng *kǎoxiāng*.", translation: "Please turn off the oven." }
     ],
     367: [
       { text: "他坐在*沙发*上看电视。", romanization: "Tā zuò zài *shāfā* shàng kàn diànshì.", translation: "He's sitting on the sofa watching TV." },
       { text: "这个*沙发*很舒服。", romanization: "Zhège *shāfā* hěn shūfu.", translation: "This sofa is comfortable." },
-      { text: "猫在*沙发*上睡觉。", romanization: "Māo zài *shāfā* shàng shuìjiào.", translation: "The cat is sleeping on the sofa." }
+      { text: "猫在*沙发*上睡觉。", romanization: "Māo zài *shāfā* shàng shuìjiào.", translation: "The cat is sleeping on the sofa." },
+      { text: "我们买了一个新*沙发*。", romanization: "Wǒmen mǎile yí gè xīn *shāfā*.", translation: "We bought a new sofa." },
+      { text: "狗在*沙发*上睡觉。", romanization: "Gǒu zài *shāfā* shàng shuìjiào.", translation: "The dog is sleeping on the sofa." },
+      { text: "这个*沙发*是灰色的。", romanization: "Zhège *shāfā* shì huīsè de.", translation: "This sofa is grey." }
     ],
     368: [
       { text: "书在*架子*上。", romanization: "Shū zài *jiàzi* shàng.", translation: "The books are on the shelf." },
       { text: "*架子*上有很多书。", romanization: "*Jiàzi* shàng yǒu hěn duō shū.", translation: "There are many books on the shelf." },
-      { text: "这个*架子*太高了。", romanization: "Zhège *jiàzi* tài gāo le.", translation: "This shelf is too high." }
+      { text: "这个*架子*太高了。", romanization: "Zhège *jiàzi* tài gāo le.", translation: "This shelf is too high." },
+      { text: "请把杯子放在*架子*上。", romanization: "Qǐng bǎ bēizi fàng zài *jiàzi* shàng.", translation: "Please put the cup on the shelf." },
+      { text: "*架子*上有一个钟。", romanization: "*Jiàzi* shàng yǒu yí gè zhōng.", translation: "There is a clock on the shelf." },
+      { text: "这个*架子*是空的。", romanization: "Zhège *jiàzi* shì kōng de.", translation: "This shelf is empty." }
     ],
     369: [
       { text: "*楼梯*在哪里？", romanization: "*Lóutī* zài nǎlǐ?", translation: "Where are the stairs?" },
       { text: "他走上*楼梯*。", romanization: "Tā zǒu shàng *lóutī*.", translation: "He walks up the stairs." },
-      { text: "小心*楼梯*。", romanization: "Xiǎoxīn *lóutī*.", translation: "Be careful on the stairs." }
+      { text: "小心*楼梯*。", romanization: "Xiǎoxīn *lóutī*.", translation: "Be careful on the stairs." },
+      { text: "*楼梯*很长。", romanization: "*Lóutī* hěn cháng.", translation: "The stairs are long." },
+      { text: "孩子在*楼梯*上玩。", romanization: "Háizi zài *lóutī* shàng wán.", translation: "The child is playing on the stairs." },
+      { text: "我们走*楼梯*上去吧。", romanization: "Wǒmen zǒu *lóutī* shàngqù ba.", translation: "Let's take the stairs up." }
     ],
     370: [
       { text: "*电梯*坏了。", romanization: "*Diàntī* huài le.", translation: "The elevator is broken." },
       { text: "我们坐*电梯*上楼。", romanization: "Wǒmen zuò *diàntī* shàng lóu.", translation: "We take the elevator upstairs." },
-      { text: "*电梯*在左边。", romanization: "*Diàntī* zài zuǒbian.", translation: "The elevator is on the left." }
+      { text: "*电梯*在左边。", romanization: "*Diàntī* zài zuǒbian.", translation: "The elevator is on the left." },
+      { text: "*电梯*里有很多人。", romanization: "*Diàntī* lǐ yǒu hěn duō rén.", translation: "The lift is crowded." },
+      { text: "这栋楼没有*电梯*。", romanization: "Zhè dòng lóu méiyǒu *diàntī*.", translation: "This building has no lift." },
+      { text: "我在*电梯*里等你。", romanization: "Wǒ zài *diàntī* lǐ děng nǐ.", translation: "I'll wait for you in the lift." }
     ],
     371: [
       { text: "我有一只*狗*。", romanization: "Wǒ yǒu yì zhī *gǒu*.", translation: "I have a dog." },
       { text: "*狗*在花园里跑。", romanization: "*Gǒu* zài huāyuán lǐ pǎo.", translation: "The dog is running in the garden." },
-      { text: "这只*狗*很友好。", romanization: "Zhè zhī *gǒu* hěn yǒuhǎo.", translation: "This dog is friendly." }
+      { text: "这只*狗*很友好。", romanization: "Zhè zhī *gǒu* hěn yǒuhǎo.", translation: "This dog is friendly." },
+      { text: "*狗*在门口叫。", romanization: "*Gǒu* zài ménkǒu jiào.", translation: "The dog is barking at the door." },
+      { text: "我每天带*狗*去散步。", romanization: "Wǒ měi tiān dài *gǒu* qù sànbù.", translation: "I walk the dog every day." },
+      { text: "这只*狗*很大。", romanization: "Zhè zhī *gǒu* hěn dà.", translation: "This dog is big." }
     ],
     372: [
       { text: "我的*猫*喜欢睡觉。", romanization: "Wǒ de *māo* xǐhuan shuìjiào.", translation: "My cat likes to sleep." },
       { text: "*猫*在窗户旁边。", romanization: "*Māo* zài chuānghu pángbiān.", translation: "The cat is by the window." },
-      { text: "这只*猫*是黑色的。", romanization: "Zhè zhī *māo* shì hēisè de.", translation: "This cat is black." }
+      { text: "这只*猫*是黑色的。", romanization: "Zhè zhī *māo* shì hēisè de.", translation: "This cat is black." },
+      { text: "*猫*在吃鱼。", romanization: "*Māo* zài chī yú.", translation: "The cat is eating fish." },
+      { text: "我家有两只*猫*。", romanization: "Wǒ jiā yǒu liǎng zhī *māo*.", translation: "We have two cats at home." },
+      { text: "这只*猫*很可爱。", romanization: "Zhè zhī *māo* hěn kě'ài.", translation: "This cat is cute." }
     ],
     373: [
       { text: "*鸟*在树上唱歌。", romanization: "*Niǎo* zài shù shàng chànggē.", translation: "The bird is singing in the tree." },
       { text: "我看到一只*鸟*。", romanization: "Wǒ kàndào yì zhī *niǎo*.", translation: "I saw a bird." },
-      { text: "这只*鸟*会飞。", romanization: "Zhè zhī *niǎo* huì fēi.", translation: "This bird can fly." }
+      { text: "这只*鸟*会飞。", romanization: "Zhè zhī *niǎo* huì fēi.", translation: "This bird can fly." },
+      { text: "*鸟*在天上飞。", romanization: "*Niǎo* zài tiān shàng fēi.", translation: "The bird is flying in the sky." },
+      { text: "我早上听到*鸟*叫。", romanization: "Wǒ zǎoshang tīngdào *niǎo* jiào.", translation: "I hear birds singing in the morning." },
+      { text: "树上有很多*鸟*。", romanization: "Shù shàng yǒu hěn duō *niǎo*.", translation: "There are many birds in the tree." }
     ],
     374: [
       { text: "*马*跑得很快。", romanization: "*Mǎ* pǎo de hěn kuài.", translation: "The horse runs fast." },
       { text: "他喜欢骑*马*。", romanization: "Tā xǐhuan qí *mǎ*.", translation: "He likes riding horses." },
-      { text: "农场里有三匹*马*。", romanization: "Nóngchǎng lǐ yǒu sān pǐ *mǎ*.", translation: "There are three horses on the farm." }
+      { text: "农场里有三匹*马*。", romanization: "Nóngchǎng lǐ yǒu sān pǐ *mǎ*.", translation: "There are three horses on the farm." },
+      { text: "这匹*马*是黑色的。", romanization: "Zhè pǐ *mǎ* shì hēisè de.", translation: "This horse is black." },
+      { text: "*马*在吃草。", romanization: "*Mǎ* zài chī cǎo.", translation: "The horse is eating grass." },
+      { text: "我想学骑*马*。", romanization: "Wǒ xiǎng xué qí *mǎ*.", translation: "I want to learn to ride a horse." }
     ],
     375: [
       { text: "农场里有很多*牛*。", romanization: "Nóngchǎng lǐ yǒu hěn duō *niú*.", translation: "There are many cows on the farm." },
       { text: "*牛*在吃草。", romanization: "*Niú* zài chī cǎo.", translation: "The cow is eating grass." },
-      { text: "这头*牛*很大。", romanization: "Zhè tóu *niú* hěn dà.", translation: "This cow is big." }
+      { text: "这头*牛*很大。", romanization: "Zhè tóu *niú* hěn dà.", translation: "This cow is big." },
+      { text: "*牛*给我们牛奶。", romanization: "*Niú* gěi wǒmen niúnǎi.", translation: "Cows give us milk." },
+      { text: "这头*牛*是黑白色的。", romanization: "Zhè tóu *niú* shì hēibáisè de.", translation: "This cow is black and white." },
+      { text: "山上有很多*牛*。", romanization: "Shān shàng yǒu hěn duō *niú*.", translation: "There are many cows on the mountain." }
     ],
     376: [
       { text: "*羊*在山上吃草。", romanization: "*Yáng* zài shān shàng chī cǎo.", translation: "The sheep are eating grass on the mountain." },
       { text: "农场里有很多*羊*。", romanization: "Nóngchǎng lǐ yǒu hěn duō *yáng*.", translation: "There are many sheep on the farm." },
-      { text: "这只*羊*是白色的。", romanization: "Zhè zhī *yáng* shì báisè de.", translation: "This sheep is white." }
+      { text: "这只*羊*是白色的。", romanization: "Zhè zhī *yáng* shì báisè de.", translation: "This sheep is white." },
+      { text: "*羊*是白色的。", romanization: "*Yáng* shì báisè de.", translation: "The sheep are white." },
+      { text: "这只*羊*很小。", romanization: "Zhè zhī *yáng* hěn xiǎo.", translation: "This sheep is small." },
+      { text: "农民有一百只*羊*。", romanization: "Nóngmín yǒu yìbǎi zhī *yáng*.", translation: "The farmer has a hundred sheep." }
     ],
     377: [
       { text: "*猪*在农场里。", romanization: "*Zhū* zài nóngchǎng lǐ.", translation: "The pig is on the farm." },
       { text: "这只*猪*很胖。", romanization: "Zhè zhī *zhū* hěn pàng.", translation: "This pig is fat." },
-      { text: "孩子们喜欢看*猪*。", romanization: "Háizimen xǐhuan kàn *zhū*.", translation: "Children like watching pigs." }
+      { text: "孩子们喜欢看*猪*。", romanization: "Háizimen xǐhuan kàn *zhū*.", translation: "Children like watching pigs." },
+      { text: "*猪*在睡觉。", romanization: "*Zhū* zài shuìjiào.", translation: "The pig is sleeping." },
+      { text: "*猪*喜欢吃东西。", romanization: "*Zhū* xǐhuan chī dōngxi.", translation: "Pigs like eating." },
+      { text: "这只*猪*是粉色的。", romanization: "Zhè zhī *zhū* shì fěnsè de.", translation: "This pig is pink." }
     ],
     378: [
       { text: "*母鸡*生了一个蛋。", romanization: "*Mǔjī* shēngle yí ge dàn.", translation: "The hen laid an egg." },
       { text: "农场里有几只*母鸡*。", romanization: "Nóngchǎng lǐ yǒu jǐ zhī *mǔjī*.", translation: "There are a few hens on the farm." },
-      { text: "这只*母鸡*是棕色的。", romanization: "Zhè zhī *mǔjī* shì zōngsè de.", translation: "This hen is brown." }
+      { text: "这只*母鸡*是棕色的。", romanization: "Zhè zhī *mǔjī* shì zōngsè de.", translation: "This hen is brown." },
+      { text: "*母鸡*在院子里。", romanization: "*Mǔjī* zài yuànzi lǐ.", translation: "The hen is in the yard." },
+      { text: "奶奶有五只*母鸡*。", romanization: "Nǎinai yǒu wǔ zhī *mǔjī*.", translation: "Grandma has five hens." },
+      { text: "*母鸡*每天生蛋。", romanization: "*Mǔjī* měi tiān shēng dàn.", translation: "The hen lays eggs every day." }
     ],
     379: [
       { text: "有一只*老鼠*在厨房里。", romanization: "Yǒu yì zhī *lǎoshǔ* zài chúfáng lǐ.", translation: "There's a mouse in the kitchen." },
       { text: "猫在追*老鼠*。", romanization: "Māo zài zhuī *lǎoshǔ*.", translation: "The cat is chasing the mouse." },
-      { text: "这只*老鼠*很小。", romanization: "Zhè zhī *lǎoshǔ* hěn xiǎo.", translation: "This mouse is small." }
+      { text: "这只*老鼠*很小。", romanization: "Zhè zhī *lǎoshǔ* hěn xiǎo.", translation: "This mouse is small." },
+      { text: "我很怕*老鼠*。", romanization: "Wǒ hěn pà *lǎoshǔ*.", translation: "I'm really afraid of mice." },
+      { text: "*老鼠*跑得很快。", romanization: "*Lǎoshǔ* pǎo de hěn kuài.", translation: "Mice run fast." },
+      { text: "猫抓到了一只*老鼠*。", romanization: "Māo zhuādào le yì zhī *lǎoshǔ*.", translation: "The cat caught a mouse." }
     ],
     380: [
       { text: "*兔子*喜欢吃胡萝卜。", romanization: "*Tùzi* xǐhuan chī húluóbo.", translation: "Rabbits like eating carrots." },
       { text: "花园里有一只*兔子*。", romanization: "Huāyuán lǐ yǒu yì zhī *tùzi*.", translation: "There's a rabbit in the garden." },
-      { text: "这只*兔子*是白色的。", romanization: "Zhè zhī *tùzi* shì báisè de.", translation: "This rabbit is white." }
+      { text: "这只*兔子*是白色的。", romanization: "Zhè zhī *tùzi* shì báisè de.", translation: "This rabbit is white." },
+      { text: "我有一只*兔子*。", romanization: "Wǒ yǒu yì zhī *tùzi*.", translation: "I have a rabbit." },
+      { text: "*兔子*跳得很高。", romanization: "*Tùzi* tiào de hěn gāo.", translation: "The rabbit jumps high." },
+      { text: "*兔子*的耳朵很长。", romanization: "*Tùzi* de ěrduo hěn cháng.", translation: "The rabbit's ears are long." }
     ],
     381: [
       { text: "花园里有一棵*树*。", romanization: "Huāyuán lǐ yǒu yì kē *shù*.", translation: "There's a tree in the garden." },
       { text: "*树*上有很多鸟。", romanization: "*Shù* shàng yǒu hěn duō niǎo.", translation: "There are many birds in the tree." },
-      { text: "这棵*树*很高。", romanization: "Zhè kē *shù* hěn gāo.", translation: "This tree is tall." }
+      { text: "这棵*树*很高。", romanization: "Zhè kē *shù* hěn gāo.", translation: "This tree is tall." },
+      { text: "这棵*树*很老。", romanization: "Zhè kē *shù* hěn lǎo.", translation: "This tree is old." },
+      { text: "猫在*树*上。", romanization: "Māo zài *shù* shàng.", translation: "The cat is in the tree." },
+      { text: "我们在*树*下休息。", romanization: "Wǒmen zài *shù* xià xiūxi.", translation: "We rest under the tree." }
     ],
     382: [
       { text: "她买了一些*花*。", romanization: "Tā mǎile yìxiē *huā*.", translation: "She bought some flowers." },
       { text: "*花*很漂亮。", romanization: "*Huā* hěn piàoliang.", translation: "The flowers are beautiful." },
-      { text: "花园里种满了*花*。", romanization: "Huāyuán lǐ zhòng mǎnle *huā*.", translation: "The garden is full of flowers." }
+      { text: "花园里种满了*花*。", romanization: "Huāyuán lǐ zhòng mǎnle *huā*.", translation: "The garden is full of flowers." },
+      { text: "这朵*花*很香。", romanization: "Zhè duǒ *huā* hěn xiāng.", translation: "This flower smells nice." },
+      { text: "春天*花*都开了。", romanization: "Chūntiān *huā* dōu kāi le.", translation: "In spring the flowers all bloom." },
+      { text: "我送给妈妈一束*花*。", romanization: "Wǒ sòng gěi māma yí shù *huā*.", translation: "I gave mum a bunch of flowers." }
     ],
     383: [
       { text: "*草*是绿色的。", romanization: "*Cǎo* shì lǜsè de.", translation: "The grass is green." },
       { text: "孩子们在*草*地上玩。", romanization: "Háizimen zài *cǎo* dì shàng wán.", translation: "The children are playing on the grass." },
-      { text: "*草*很湿。", romanization: "*Cǎo* hěn shī.", translation: "The grass is wet." }
+      { text: "*草*很湿。", romanization: "*Cǎo* hěn shī.", translation: "The grass is wet." },
+      { text: "马在吃*草*。", romanization: "Mǎ zài chī *cǎo*.", translation: "The horse is eating grass." },
+      { text: "请不要在*草*上走。", romanization: "Qǐng bú yào zài *cǎo* shàng zǒu.", translation: "Please don't walk on the grass." },
+      { text: "*草*长得很高。", romanization: "*Cǎo* zhǎng de hěn gāo.", translation: "The grass has grown tall." }
     ],
     384: [
       { text: "我们周末去爬*山*。", romanization: "Wǒmen zhōumò qù pá *shān*.", translation: "We're going hiking in the mountains this weekend." },
       { text: "*山*很高。", romanization: "*Shān* hěn gāo.", translation: "The mountain is tall." },
-      { text: "*山*上有雪。", romanization: "*Shān* shàng yǒu xuě.", translation: "There's snow on the mountain." }
+      { text: "*山*上有雪。", romanization: "*Shān* shàng yǒu xuě.", translation: "There's snow on the mountain." },
+      { text: "这座*山*很高。", romanization: "Zhè zuò *shān* hěn gāo.", translation: "This mountain is high." },
+      { text: "我们在*山*上看日出。", romanization: "Wǒmen zài *shān* shàng kàn rìchū.", translation: "We watch the sunrise on the mountain." },
+      { text: "*山*上很冷。", romanization: "*Shān* shàng hěn lěng.", translation: "It's cold on the mountain." }
     ],
     385: [
       { text: "*河*水很清澈。", romanization: "*Hé* shuǐ hěn qīngchè.", translation: "The river water is clear." },
       { text: "他们在*河*边散步。", romanization: "Tāmen zài *hé* biān sànbù.", translation: "They're walking by the river." },
-      { text: "这条*河*很长。", romanization: "Zhè tiáo *hé* hěn cháng.", translation: "This river is long." }
+      { text: "这条*河*很长。", romanization: "Zhè tiáo *hé* hěn cháng.", translation: "This river is long." },
+      { text: "*河*里有很多鱼。", romanization: "*Hé* lǐ yǒu hěn duō yú.", translation: "There are many fish in the river." },
+      { text: "孩子们在*河*里游泳。", romanization: "Háizimen zài *hé* lǐ yóuyǒng.", translation: "The children are swimming in the river." },
+      { text: "我家在*河*边。", romanization: "Wǒ jiā zài *hé* biān.", translation: "My home is by the river." }
     ],
     386: [
       { text: "*海*是蓝色的。", romanization: "*Hǎi* shì lánsè de.", translation: "The sea is blue." },
       { text: "我们去*海*边度假。", romanization: "Wǒmen qù *hǎi* biān dùjià.", translation: "We're going on vacation by the sea." },
-      { text: "*海*很大。", romanization: "*Hǎi* hěn dà.", translation: "The sea is big." }
+      { text: "*海*很大。", romanization: "*Hǎi* hěn dà.", translation: "The sea is big." },
+      { text: "我喜欢在*海*里游泳。", romanization: "Wǒ xǐhuan zài *hǎi* lǐ yóuyǒng.", translation: "I like swimming in the sea." },
+      { text: "*海*水很冷。", romanization: "*Hǎi* shuǐ hěn lěng.", translation: "The sea water is cold." },
+      { text: "我第一次看到*海*。", romanization: "Wǒ dì yī cì kàndào *hǎi*.", translation: "It's the first time I've seen the sea." }
     ],
     387: [
       { text: "*湖*很平静。", romanization: "*Hú* hěn píngjìng.", translation: "The lake is calm." },
       { text: "我们在*湖*边野餐。", romanization: "Wǒmen zài *hú* biān yěcān.", translation: "We're having a picnic by the lake." },
-      { text: "这个*湖*很深。", romanization: "Zhège *hú* hěn shēn.", translation: "This lake is deep." }
+      { text: "这个*湖*很深。", romanization: "Zhège *hú* hěn shēn.", translation: "This lake is deep." },
+      { text: "*湖*里有很多鱼。", romanization: "*Hú* lǐ yǒu hěn duō yú.", translation: "There are many fish in the lake." },
+      { text: "我们在*湖*边散步。", romanization: "Wǒmen zài *hú* biān sànbù.", translation: "We walk by the lake." },
+      { text: "冬天*湖*水很冷。", romanization: "Dōngtiān *hú* shuǐ hěn lěng.", translation: "The lake water is cold in winter." }
     ],
     388: [
       { text: "*森林*里有很多树。", romanization: "*Sēnlín* lǐ yǒu hěn duō shù.", translation: "There are many trees in the forest." },
       { text: "我们在*森林*里散步。", romanization: "Wǒmen zài *sēnlín* lǐ sànbù.", translation: "We're walking in the forest." },
-      { text: "*森林*很安静。", romanization: "*Sēnlín* hěn ānjìng.", translation: "The forest is quiet." }
+      { text: "*森林*很安静。", romanization: "*Sēnlín* hěn ānjìng.", translation: "The forest is quiet." },
+      { text: "*森林*里有很多动物。", romanization: "*Sēnlín* lǐ yǒu hěn duō dòngwù.", translation: "There are many animals in the forest." },
+      { text: "我们在*森林*里迷路了。", romanization: "Wǒmen zài *sēnlín* lǐ mílù le.", translation: "We got lost in the forest." },
+      { text: "这片*森林*很大。", romanization: "Zhè piàn *sēnlín* hěn dà.", translation: "This forest is big." }
     ],
     389: [
       { text: "我们在*海滩*上玩。", romanization: "Wǒmen zài *hǎitān* shàng wán.", translation: "We're playing on the beach." },
       { text: "*海滩*上有很多人。", romanization: "*Hǎitān* shàng yǒu hěn duō rén.", translation: "There are many people on the beach." },
-      { text: "这个*海滩*很漂亮。", romanization: "Zhège *hǎitān* hěn piàoliang.", translation: "This beach is beautiful." }
+      { text: "这个*海滩*很漂亮。", romanization: "Zhège *hǎitān* hěn piàoliang.", translation: "This beach is beautiful." },
+      { text: "我们去*海滩*吧。", romanization: "Wǒmen qù *hǎitān* ba.", translation: "Let's go to the beach." },
+      { text: "*海滩*上很热。", romanization: "*Hǎitān* shàng hěn rè.", translation: "It's hot on the beach." },
+      { text: "孩子们在*海滩*上跑。", romanization: "Háizimen zài *hǎitān* shàng pǎo.", translation: "The children run on the beach." }
     ],
     390: [
       { text: "*天空*是蓝色的。", romanization: "*Tiānkōng* shì lánsè de.", translation: "The sky is blue." },
       { text: "*天空*中有很多云。", romanization: "*Tiānkōng* zhōng yǒu hěn duō yún.", translation: "There are many clouds in the sky." },
-      { text: "鸟在*天空*中飞。", romanization: "Niǎo zài *tiānkōng* zhōng fēi.", translation: "Birds fly in the sky." }
+      { text: "鸟在*天空*中飞。", romanization: "Niǎo zài *tiānkōng* zhōng fēi.", translation: "Birds fly in the sky." },
+      { text: "今天*天空*很蓝。", romanization: "Jīntiān *tiānkōng* hěn lán.", translation: "The sky is very blue today." },
+      { text: "晚上的*天空*很美。", romanization: "Wǎnshang de *tiānkōng* hěn měi.", translation: "The night sky is beautiful." },
+      { text: "*天空*变黑了。", romanization: "*Tiānkōng* biàn hēi le.", translation: "The sky has turned dark." }
     ],
     391: [
       { text: "他*三十*岁了。", romanization: "Tā *sānshí* suì le.", translation: "He's thirty years old." },
       { text: "教室里有*三十*个学生。", romanization: "Jiàoshì lǐ yǒu *sānshí* ge xuésheng.", translation: "There are thirty students in the classroom." },
-      { text: "我们等了*三十*分钟。", romanization: "Wǒmen děngle *sānshí* fēnzhōng.", translation: "We waited thirty minutes." }
+      { text: "我们等了*三十*分钟。", romanization: "Wǒmen děngle *sānshí* fēnzhōng.", translation: "We waited thirty minutes." },
+      { text: "我爸爸*三十*岁。", romanization: "Wǒ bàba *sānshí* suì.", translation: "My dad is thirty." },
+      { text: "这件毛衣*三十*块钱。", romanization: "Zhè jiàn máoyī *sānshí* kuài qián.", translation: "This sweater costs thirty yuan." },
+      { text: "一个月有*三十*天。", romanization: "Yí gè yuè yǒu *sānshí* tiān.", translation: "A month has thirty days." }
     ],
     392: [
       { text: "她*四十*岁了。", romanization: "Tā *sìshí* suì le.", translation: "She's forty years old." },
       { text: "我们走了*四十*分钟。", romanization: "Wǒmen zǒule *sìshí* fēnzhōng.", translation: "We walked for forty minutes." },
-      { text: "这本书有*四十*页。", romanization: "Zhè běn shū yǒu *sìshí* yè.", translation: "This book has forty pages." }
+      { text: "这本书有*四十*页。", romanization: "Zhè běn shū yǒu *sìshí* yè.", translation: "This book has forty pages." },
+      { text: "这本书*四十*块钱。", romanization: "Zhè běn shū *sìshí* kuài qián.", translation: "This book costs forty yuan." },
+      { text: "我们班有*四十*个学生。", romanization: "Wǒmen bān yǒu *sìshí* gè xuésheng.", translation: "Our class has forty students." },
+      { text: "我妈妈*四十*岁了。", romanization: "Wǒ māma *sìshí* suì le.", translation: "My mum is forty." }
     ],
     393: [
       { text: "他*五十*岁了。", romanization: "Tā *wǔshí* suì le.", translation: "He's fifty years old." },
       { text: "这个盒子里有*五十*个苹果。", romanization: "Zhège hézi lǐ yǒu *wǔshí* ge píngguǒ.", translation: "There are fifty apples in this box." },
-      { text: "我们走了*五十*公里。", romanization: "Wǒmen zǒule *wǔshí* gōnglǐ.", translation: "We walked fifty kilometers." }
+      { text: "我们走了*五十*公里。", romanization: "Wǒmen zǒule *wǔshí* gōnglǐ.", translation: "We walked fifty kilometers." },
+      { text: "这个*五十*块钱。", romanization: "Zhège *wǔshí* kuài qián.", translation: "This costs fifty yuan." },
+      { text: "我奶奶*五十*岁就退休了。", romanization: "Wǒ nǎinai *wǔshí* suì jiù tuìxiū le.", translation: "My grandma retired at fifty." },
+      { text: "公司有*五十*个人。", romanization: "Gōngsī yǒu *wǔshí* gè rén.", translation: "The company has fifty people." }
     ],
     394: [
       { text: "这本书有*一百*页。", romanization: "Zhè běn shū yǒu *yìbǎi* yè.", translation: "This book has a hundred pages." },
       { text: "*一百*块钱够吗？", romanization: "*Yìbǎi* kuài qián gòu ma?", translation: "Is a hundred yuan enough?" },
-      { text: "他活了*一百*岁。", romanization: "Tā huóle *yìbǎi* suì.", translation: "He lived to be a hundred years old." }
+      { text: "他活了*一百*岁。", romanization: "Tā huóle *yìbǎi* suì.", translation: "He lived to be a hundred years old." },
+      { text: "这双鞋*一百*块钱。", romanization: "Zhè shuāng xié *yìbǎi* kuài qián.", translation: "These shoes cost a hundred yuan." },
+      { text: "学校有*一百*年了。", romanization: "Xuéxiào yǒu *yìbǎi* nián le.", translation: "The school is a hundred years old." },
+      { text: "我跑了*一百*米。", romanization: "Wǒ pǎole *yìbǎi* mǐ.", translation: "I ran a hundred metres." }
     ],
     395: [
       { text: "这辆车要*一千*美元。", romanization: "Zhè liàng chē yào *yìqiān* měiyuán.", translation: "This car costs a thousand dollars." },
       { text: "这本书有*一千*个单词。", romanization: "Zhè běn shū yǒu *yìqiān* ge dāncí.", translation: "This book has a thousand words." },
-      { text: "*一千*个人来了。", romanization: "*Yìqiān* ge rén lái le.", translation: "A thousand people came." }
+      { text: "*一千*个人来了。", romanization: "*Yìqiān* ge rén lái le.", translation: "A thousand people came." },
+      { text: "这个手机*一千*块钱。", romanization: "Zhège shǒujī *yìqiān* kuài qián.", translation: "This phone costs a thousand yuan." },
+      { text: "这个城市有*一千*年了。", romanization: "Zhège chéngshì yǒu *yìqiān* nián le.", translation: "This city is a thousand years old." },
+      { text: "我每个月存*一千*块。", romanization: "Wǒ měi gè yuè cún *yìqiān* kuài.", translation: "I save a thousand yuan every month." }
     ],
     396: [
       { text: "他的车是*灰色*的。", romanization: "Tā de chē shì *huīsè* de.", translation: "His car is grey." },
       { text: "天空是*灰色*的。", romanization: "Tiānkōng shì *huīsè* de.", translation: "The sky is grey." },
-      { text: "她穿着*灰色*的外套。", romanization: "Tā chuānzhe *huīsè* de wàitào.", translation: "She's wearing a grey coat." }
+      { text: "她穿着*灰色*的外套。", romanization: "Tā chuānzhe *huīsè* de wàitào.", translation: "She's wearing a grey coat." },
+      { text: "今天的天是*灰色*的。", romanization: "Jīntiān de tiān shì *huīsè* de.", translation: "The sky is grey today." },
+      { text: "我买了一件*灰色*的毛衣。", romanization: "Wǒ mǎile yí jiàn *huīsè* de máoyī.", translation: "I bought a grey sweater." },
+      { text: "这只猫是*灰色*的。", romanization: "Zhè zhī māo shì *huīsè* de.", translation: "This cat is grey." }
     ],
     397: [
       { text: "这是我*第一*次来这里。", romanization: "Zhè shì wǒ *dìyī* cì lái zhèlǐ.", translation: "This is my first time here." },
       { text: "他是*第一*名。", romanization: "Tā shì *dìyī* míng.", translation: "He's in first place." },
-      { text: "*第一*个问题很简单。", romanization: "*Dìyī* ge wèntí hěn jiǎndān.", translation: "The first question is simple." }
+      { text: "*第一*个问题很简单。", romanization: "*Dìyī* ge wèntí hěn jiǎndān.", translation: "The first question is simple." },
+      { text: "这是我的*第一*辆车。", romanization: "Zhè shì wǒ de *dì yī* liàng chē.", translation: "This is my first car." },
+      { text: "她考了*第一*名。", romanization: "Tā kǎole *dì yī* míng.", translation: "She came first in the exam." },
+      { text: "*第一*天上班我很紧张。", romanization: "*Dì yī* tiān shàngbān wǒ hěn jǐnzhāng.", translation: "I was nervous on my first day at work." }
     ],
     398: [
       { text: "这是*最后*一个问题。", romanization: "Zhè shì *zuìhòu* yí ge wèntí.", translation: "This is the last question." },
       { text: "他*最后*一个到。", romanization: "Tā *zuìhòu* yí ge dào.", translation: "He arrived last." },
-      { text: "*最后*，谢谢大家。", romanization: "*Zuìhòu*, xièxie dàjiā.", translation: "Finally, thank you everyone." }
+      { text: "*最后*，谢谢大家。", romanization: "*Zuìhòu*, xièxie dàjiā.", translation: "Finally, thank you everyone." },
+      { text: "这是*最后*一块蛋糕。", romanization: "Zhè shì *zuìhòu* yí kuài dàngāo.", translation: "This is the last piece of cake." },
+      { text: "我们坐*最后*一班车。", romanization: "Wǒmen zuò *zuìhòu* yì bān chē.", translation: "We take the last bus." },
+      { text: "他*最后*来了。", romanization: "Tā *zuìhòu* lái le.", translation: "He came in the end." }
     ],
     399: [
       { text: "我只吃了*一半*。", romanization: "Wǒ zhǐ chīle *yíbàn*.", translation: "I only ate half." },
       { text: "*一半*的学生都来了。", romanization: "*Yíbàn* de xuésheng dōu lái le.", translation: "Half of the students came." },
-      { text: "给我*一半*就够了。", romanization: "Gěi wǒ *yíbàn* jiù gòu le.", translation: "Half is enough for me." }
+      { text: "给我*一半*就够了。", romanization: "Gěi wǒ *yíbàn* jiù gòu le.", translation: "Half is enough for me." },
+      { text: "我们一人*一半*。", romanization: "Wǒmen yì rén *yíbàn*.", translation: "We'll take half each." },
+      { text: "蛋糕吃了*一半*。", romanization: "Dàngāo chīle *yíbàn*.", translation: "Half the cake has been eaten." },
+      { text: "我把苹果切成了*一半*。", romanization: "Wǒ bǎ píngguǒ qiēchéng le *yíbàn*.", translation: "I cut the apple in half." }
     ],
     400: [
       { text: "你的电话*号码*是多少？", romanization: "Nǐ de diànhuà *hàomǎ* shì duōshao?", translation: "What's your phone number?" },
       { text: "请告诉我房间*号码*。", romanization: "Qǐng gàosu wǒ fángjiān *hàomǎ*.", translation: "Please tell me the room number." },
-      { text: "这个*号码*不对。", romanization: "Zhège *hàomǎ* bú duì.", translation: "This number is wrong." }
+      { text: "这个*号码*不对。", romanization: "Zhège *hàomǎ* bú duì.", translation: "This number is wrong." },
+      { text: "我忘了他的*号码*。", romanization: "Wǒ wàngle tā de *hàomǎ*.", translation: "I forgot his number." },
+      { text: "你的房间*号码*是多少？", romanization: "Nǐ de fángjiān *hàomǎ* shì duōshao?", translation: "What is your room number?" },
+      { text: "请写下你的手机*号码*。", romanization: "Qǐng xiěxià nǐ de shǒujī *hàomǎ*.", translation: "Please write down your mobile number." }
     ],
     401: [
       { text: "她很*害怕*。", romanization: "Tā hěn *hàipà*.", translation: "She's very afraid." },
       { text: "我*害怕*黑暗。", romanization: "Wǒ *hàipà* hēi'àn.", translation: "I'm afraid of the dark." },
-      { text: "别*害怕*，没事的。", romanization: "Bié *hàipà*, méishì de.", translation: "Don't be afraid, it's okay." }
+      { text: "别*害怕*，没事的。", romanization: "Bié *hàipà*, méishì de.", translation: "Don't be afraid, it's okay." },
+      { text: "孩子*害怕*打雷。", romanization: "Háizi *hàipà* dǎléi.", translation: "The child is afraid of thunder." },
+      { text: "你*害怕*狗吗？", romanization: "Nǐ *hàipà* gǒu ma?", translation: "Are you afraid of dogs?" },
+      { text: "我不*害怕*考试。", romanization: "Wǒ bú *hàipà* kǎoshì.", translation: "I'm not afraid of exams." }
     ],
     402: [
       { text: "他很*惊讶*。", romanization: "Tā hěn *jīngyà*.", translation: "He's very surprised." },
       { text: "这个消息让我很*惊讶*。", romanization: "Zhège xiāoxi ràng wǒ hěn *jīngyà*.", translation: "This news surprised me a lot." },
-      { text: "她看起来很*惊讶*。", romanization: "Tā kàn qǐlai hěn *jīngyà*.", translation: "She looks surprised." }
+      { text: "她看起来很*惊讶*。", romanization: "Tā kàn qǐlai hěn *jīngyà*.", translation: "She looks surprised." },
+      { text: "我很*惊讶*你会说中文。", romanization: "Wǒ hěn *jīngyà* nǐ huì shuō Zhōngwén.", translation: "I'm surprised you speak Chinese." },
+      { text: "大家都很*惊讶*。", romanization: "Dàjiā dōu hěn *jīngyà*.", translation: "Everyone was surprised." },
+      { text: "他*惊讶*地看着我。", romanization: "Tā *jīngyà* de kànzhe wǒ.", translation: "He looked at me in surprise." }
     ],
     403: [
       { text: "这部电影很*无聊*。", romanization: "Zhè bù diànyǐng hěn *wúliáo*.", translation: "This movie is boring." },
       { text: "我今天很*无聊*。", romanization: "Wǒ jīntiān hěn *wúliáo*.", translation: "I'm bored today." },
-      { text: "他觉得这个课很*无聊*。", romanization: "Tā juéde zhège kè hěn *wúliáo*.", translation: "He thinks this class is boring." }
+      { text: "他觉得这个课很*无聊*。", romanization: "Tā juéde zhège kè hěn *wúliáo*.", translation: "He thinks this class is boring." },
+      { text: "下雨天很*无聊*。", romanization: "Xià yǔ tiān hěn *wúliáo*.", translation: "Rainy days are boring." },
+      { text: "这本书有点*无聊*。", romanization: "Zhè běn shū yǒudiǎn *wúliáo*.", translation: "This book is a bit boring." },
+      { text: "孩子们觉得很*无聊*。", romanization: "Háizimen juéde hěn *wúliáo*.", translation: "The children feel bored." }
     ],
     404: [
       { text: "请*安静*一点。", romanization: "Qǐng *ānjìng* yìdiǎn.", translation: "Please be a bit quieter." },
       { text: "这个图书馆很*安静*。", romanization: "Zhège túshūguǎn hěn *ānjìng*.", translation: "This library is quiet." },
-      { text: "孩子们*安静*地坐着。", romanization: "Háizimen *ānjìng* de zuòzhe.", translation: "The children sat quietly." }
+      { text: "孩子们*安静*地坐着。", romanization: "Háizimen *ānjìng* de zuòzhe.", translation: "The children sat quietly." },
+      { text: "晚上这里很*安静*。", romanization: "Wǎnshang zhèlǐ hěn *ānjìng*.", translation: "It's quiet here at night." },
+      { text: "请大家*安静*。", romanization: "Qǐng dàjiā *ānjìng*.", translation: "Quiet, everyone, please." },
+      { text: "我喜欢*安静*的地方。", romanization: "Wǒ xǐhuan *ānjìng* de dìfang.", translation: "I like quiet places." }
     ],
     405: [
       { text: "我为你感到*骄傲*。", romanization: "Wǒ wèi nǐ gǎndào *jiāo'ào*.", translation: "I'm proud of you." },
       { text: "他对自己的工作很*骄傲*。", romanization: "Tā duì zìjǐ de gōngzuò hěn *jiāo'ào*.", translation: "He's proud of his work." },
-      { text: "父母为孩子感到*骄傲*。", romanization: "Fùmǔ wèi háizi gǎndào *jiāo'ào*.", translation: "Parents are proud of their children." }
+      { text: "父母为孩子感到*骄傲*。", romanization: "Fùmǔ wèi háizi gǎndào *jiāo'ào*.", translation: "Parents are proud of their children." },
+      { text: "妈妈为我感到*骄傲*。", romanization: "Māma wèi wǒ gǎndào *jiāo'ào*.", translation: "Mum is proud of me." },
+      { text: "我们为你*骄傲*。", romanization: "Wǒmen wèi nǐ *jiāo'ào*.", translation: "We are proud of you." },
+      { text: "他是一个*骄傲*的父亲。", romanization: "Tā shì yí gè *jiāo'ào* de fùqīn.", translation: "He is a proud father." }
     ],
     406: [
       { text: "他很*强*。", romanization: "Tā hěn *qiáng*.", translation: "He's very strong." },
       { text: "这个团队很*强*。", romanization: "Zhège tuánduì hěn *qiáng*.", translation: "This team is strong." },
-      { text: "风很*强*。", romanization: "Fēng hěn *qiáng*.", translation: "The wind is strong." }
+      { text: "风很*强*。", romanization: "Fēng hěn *qiáng*.", translation: "The wind is strong." },
+      { text: "今天风很*强*。", romanization: "Jīntiān fēng hěn *qiáng*.", translation: "The wind is strong today." },
+      { text: "他的中文比我*强*。", romanization: "Tā de Zhōngwén bǐ wǒ *qiáng*.", translation: "His Chinese is better than mine." },
+      { text: "这个队比我们*强*。", romanization: "Zhège duì bǐ wǒmen *qiáng*.", translation: "This team is stronger than us." }
     ],
     407: [
       { text: "他身体很*弱*。", romanization: "Tā shēntǐ hěn *ruò*.", translation: "He's physically weak." },
       { text: "信号很*弱*。", romanization: "Xìnhào hěn *ruò*.", translation: "The signal is weak." },
-      { text: "这支队伍太*弱*了。", romanization: "Zhè zhī duìwu tài *ruò* le.", translation: "This team is too weak." }
+      { text: "这支队伍太*弱*了。", romanization: "Zhè zhī duìwu tài *ruò* le.", translation: "This team is too weak." },
+      { text: "手机信号太*弱*了。", romanization: "Shǒujī xìnhào tài *ruò* le.", translation: "The phone signal is too weak." },
+      { text: "病人身体还很*弱*。", romanization: "Bìngrén shēntǐ hái hěn *ruò*.", translation: "The patient is still weak." },
+      { text: "灯光很*弱*。", romanization: "Dēngguāng hěn *ruò*.", translation: "The light is dim." }
     ],
     408: [
       { text: "这个花园很*美丽*。", romanization: "Zhège huāyuán hěn *měilì*.", translation: "This garden is beautiful." },
       { text: "她很*美丽*。", romanization: "Tā hěn *měilì*.", translation: "She's beautiful." },
-      { text: "这个城市非常*美丽*。", romanization: "Zhège chéngshì fēicháng *měilì*.", translation: "This city is very beautiful." }
+      { text: "这个城市非常*美丽*。", romanization: "Zhège chéngshì fēicháng *měilì*.", translation: "This city is very beautiful." },
+      { text: "她有一双*美丽*的眼睛。", romanization: "Tā yǒu yì shuāng *měilì* de yǎnjing.", translation: "She has beautiful eyes." },
+      { text: "春天的公园很*美丽*。", romanization: "Chūntiān de gōngyuán hěn *měilì*.", translation: "The park is beautiful in spring." },
+      { text: "这是一个*美丽*的地方。", romanization: "Zhè shì yí gè *měilì* de dìfang.", translation: "This is a beautiful place." }
     ],
     409: [
       { text: "这栋楼很*丑*。", romanization: "Zhè dòng lóu hěn *chǒu*.", translation: "This building is ugly." },
       { text: "他觉得这幅画很*丑*。", romanization: "Tā juéde zhè fú huà hěn *chǒu*.", translation: "He thinks this painting is ugly." },
-      { text: "这件衣服有点*丑*。", romanization: "Zhè jiàn yīfu yǒudiǎn *chǒu*.", translation: "This piece of clothing is a bit ugly." }
+      { text: "这件衣服有点*丑*。", romanization: "Zhè jiàn yīfu yǒudiǎn *chǒu*.", translation: "This piece of clothing is a bit ugly." },
+      { text: "这只狗很*丑*，但很可爱。", romanization: "Zhè zhī gǒu hěn *chǒu*, dàn hěn kě'ài.", translation: "This dog is ugly but cute." },
+      { text: "我觉得这双鞋很*丑*。", romanization: "Wǒ juéde zhè shuāng xié hěn *chǒu*.", translation: "I think these shoes are ugly." },
+      { text: "这个房子不*丑*。", romanization: "Zhège fángzi bù *chǒu*.", translation: "This house isn't ugly." }
     ],
     410: [
       { text: "她很*年轻*。", romanization: "Tā hěn *niánqīng*.", translation: "She's young." },
       { text: "他看起来很*年轻*。", romanization: "Tā kàn qǐlai hěn *niánqīng*.", translation: "He looks young." },
-      { text: "这些*年轻*人很有活力。", romanization: "Zhèxiē *niánqīng* rén hěn yǒu huólì.", translation: "These young people are full of energy." }
+      { text: "这些*年轻*人很有活力。", romanization: "Zhèxiē *niánqīng* rén hěn yǒu huólì.", translation: "These young people are full of energy." },
+      { text: "我们的老师很*年轻*。", romanization: "Wǒmen de lǎoshī hěn *niánqīng*.", translation: "Our teacher is young." },
+      { text: "*年轻*人喜欢玩手机。", romanization: "*Niánqīng* rén xǐhuan wán shǒujī.", translation: "Young people like playing on their phones." },
+      { text: "我奶奶看起来很*年轻*。", romanization: "Wǒ nǎinai kàn qǐlái hěn *niánqīng*.", translation: "My grandma looks young." }
     ],
     411: [
       { text: "他很*富有*。", romanization: "Tā hěn *fùyǒu*.", translation: "He's rich." },
       { text: "这个国家很*富有*。", romanization: "Zhège guójiā hěn *fùyǒu*.", translation: "This country is wealthy." },
-      { text: "她的家庭很*富有*。", romanization: "Tā de jiātíng hěn *fùyǒu*.", translation: "Her family is wealthy." }
+      { text: "她的家庭很*富有*。", romanization: "Tā de jiātíng hěn *fùyǒu*.", translation: "Her family is wealthy." },
+      { text: "他想变得*富有*。", romanization: "Tā xiǎng biàn de *fùyǒu*.", translation: "He wants to become rich." },
+      { text: "这个城市很*富有*。", romanization: "Zhège chéngshì hěn *fùyǒu*.", translation: "This city is rich." },
+      { text: "*富有*的人不一定快乐。", romanization: "*Fùyǒu* de rén bù yídìng kuàilè.", translation: "Rich people aren't necessarily happy." }
     ],
     412: [
       { text: "他们很*穷*。", romanization: "Tāmen hěn *qióng*.", translation: "They're poor." },
       { text: "以前我们很*穷*。", romanization: "Yǐqián wǒmen hěn *qióng*.", translation: "We used to be poor." },
-      { text: "这个地区很*穷*。", romanization: "Zhège dìqū hěn *qióng*.", translation: "This area is poor." }
+      { text: "这个地区很*穷*。", romanization: "Zhège dìqū hěn *qióng*.", translation: "This area is poor." },
+      { text: "他小时候很*穷*。", romanization: "Tā xiǎo shíhou hěn *qióng*.", translation: "He was poor as a child." },
+      { text: "我是*穷*学生。", romanization: "Wǒ shì *qióng* xuésheng.", translation: "I'm a poor student." },
+      { text: "这个村子很*穷*。", romanization: "Zhège cūnzi hěn *qióng*.", translation: "This village is poor." }
     ],
     413: [
       { text: "这个房间很*干净*。", romanization: "Zhège fángjiān hěn *gānjìng*.", translation: "This room is clean." },
       { text: "请把手洗*干净*。", romanization: "Qǐng bǎ shǒu xǐ *gānjìng*.", translation: "Please wash your hands clean." },
-      { text: "她把厨房打扫得很*干净*。", romanization: "Tā bǎ chúfáng dǎsǎo de hěn *gānjìng*.", translation: "She cleaned the kitchen very well." }
+      { text: "她把厨房打扫得很*干净*。", romanization: "Tā bǎ chúfáng dǎsǎo de hěn *gānjìng*.", translation: "She cleaned the kitchen very well." },
+      { text: "我的衣服很*干净*。", romanization: "Wǒ de yīfu hěn *gānjìng*.", translation: "My clothes are clean." },
+      { text: "这里的街道很*干净*。", romanization: "Zhèlǐ de jiēdào hěn *gānjìng*.", translation: "The streets here are clean." },
+      { text: "请给我一个*干净*的杯子。", romanization: "Qǐng gěi wǒ yí gè *gānjìng* de bēizi.", translation: "Please give me a clean cup." }
     ],
     414: [
       { text: "我的鞋子很*脏*。", romanization: "Wǒ de xiézi hěn *zāng*.", translation: "My shoes are dirty." },
       { text: "这个盘子是*脏*的。", romanization: "Zhège pánzi shì *zāng* de.", translation: "This plate is dirty." },
-      { text: "别把地板弄*脏*。", romanization: "Bié bǎ dìbǎn nòng *zāng*.", translation: "Don't make the floor dirty." }
+      { text: "别把地板弄*脏*。", romanization: "Bié bǎ dìbǎn nòng *zāng*.", translation: "Don't make the floor dirty." },
+      { text: "你的手很*脏*。", romanization: "Nǐ de shǒu hěn *zāng*.", translation: "Your hands are dirty." },
+      { text: "这件衬衫*脏*了。", romanization: "Zhè jiàn chènshān *zāng* le.", translation: "This shirt is dirty." },
+      { text: "车太*脏*了，要洗一洗。", romanization: "Chē tài *zāng* le, yào xǐ yì xǐ.", translation: "The car is too dirty; it needs a wash." }
     ],
     415: [
       { text: "这本书很*有趣*。", romanization: "Zhè běn shū hěn *yǒuqù*.", translation: "This book is interesting." },
       { text: "他是一个很*有趣*的人。", romanization: "Tā shì yí ge hěn *yǒuqù* de rén.", translation: "He's a very interesting person." },
-      { text: "这部电影很*有趣*。", romanization: "Zhè bù diànyǐng hěn *yǒuqù*.", translation: "This movie is fun." }
+      { text: "这部电影很*有趣*。", romanization: "Zhè bù diànyǐng hěn *yǒuqù*.", translation: "This movie is fun." },
+      { text: "这个游戏很*有趣*。", romanization: "Zhège yóuxì hěn *yǒuqù*.", translation: "This game is fun." },
+      { text: "学中文很*有趣*。", romanization: "Xué Zhōngwén hěn *yǒuqù*.", translation: "Learning Chinese is fun." },
+      { text: "他讲了一个*有趣*的故事。", romanization: "Tā jiǎngle yí gè *yǒuqù* de gùshi.", translation: "He told an interesting story." }
     ],
     416: [
       { text: "这条*路*很长。", romanization: "Zhè tiáo *lù* hěn cháng.", translation: "This road is long." },
       { text: "请问去车站的*路*怎么走？", romanization: "Qǐngwèn qù chēzhàn de *lù* zěnme zǒu?", translation: "Excuse me, how do I get to the station?" },
-      { text: "*路*上有很多车。", romanization: "*Lù* shàng yǒu hěn duō chē.", translation: "There are many cars on the road." }
+      { text: "*路*上有很多车。", romanization: "*Lù* shàng yǒu hěn duō chē.", translation: "There are many cars on the road." },
+      { text: "这条*路*很窄。", romanization: "Zhè tiáo *lù* hěn zhǎi.", translation: "This road is narrow." },
+      { text: "我在*路*上看到了他。", romanization: "Wǒ zài *lù* shàng kàndào le tā.", translation: "I saw him on the road." },
+      { text: "过*路*的时候要小心。", romanization: "Guò *lù* de shíhou yào xiǎoxīn.", translation: "Be careful when crossing the road." }
     ],
     417: [
       { text: "这座*桥*很长。", romanization: "Zhè zuò *qiáo* hěn cháng.", translation: "This bridge is long." },
       { text: "我们走过了那座*桥*。", romanization: "Wǒmen zǒuguòle nà zuò *qiáo*.", translation: "We crossed that bridge." },
-      { text: "*桥*下面有一条河。", romanization: "*Qiáo* xiàmiàn yǒu yì tiáo hé.", translation: "There's a river under the bridge." }
+      { text: "*桥*下面有一条河。", romanization: "*Qiáo* xiàmiàn yǒu yì tiáo hé.", translation: "There's a river under the bridge." },
+      { text: "这座*桥*很老。", romanization: "Zhè zuò *qiáo* hěn lǎo.", translation: "This bridge is old." },
+      { text: "我们在*桥*上看风景。", romanization: "Wǒmen zài *qiáo* shàng kàn fēngjǐng.", translation: "We enjoy the view from the bridge." },
+      { text: "*桥*的那边是公园。", romanization: "*Qiáo* de nàbiān shì gōngyuán.", translation: "The park is on the other side of the bridge." }
     ],
     418: [
       { text: "我们坐*出租车*去机场。", romanization: "Wǒmen zuò *chūzūchē* qù jīchǎng.", translation: "We're taking a taxi to the airport." },
       { text: "*出租车*来了。", romanization: "*Chūzūchē* lái le.", translation: "The taxi is here." },
-      { text: "*出租车*比公交车贵。", romanization: "*Chūzūchē* bǐ gōngjiāochē guì.", translation: "Taxis are more expensive than buses." }
+      { text: "*出租车*比公交车贵。", romanization: "*Chūzūchē* bǐ gōngjiāochē guì.", translation: "Taxis are more expensive than buses." },
+      { text: "我们叫一辆*出租车*吧。", romanization: "Wǒmen jiào yí liàng *chūzūchē* ba.", translation: "Let's call a taxi." },
+      { text: "*出租车*在门口等。", romanization: "*Chūzūchē* zài ménkǒu děng.", translation: "The taxi is waiting at the door." },
+      { text: "坐*出租车*去机场很快。", romanization: "Zuò *chūzūchē* qù jīchǎng hěn kuài.", translation: "Taking a taxi to the airport is fast." }
     ],
     419: [
       { text: "我的*行李*很重。", romanization: "Wǒ de *xíngli* hěn zhòng.", translation: "My luggage is heavy." },
       { text: "请帮我拿*行李*。", romanization: "Qǐng bāng wǒ ná *xíngli*.", translation: "Please help me carry my luggage." },
-      { text: "*行李*丢了。", romanization: "*Xíngli* diū le.", translation: "The luggage was lost." }
+      { text: "*行李*丢了。", romanization: "*Xíngli* diū le.", translation: "The luggage was lost." },
+      { text: "你的*行李*在哪里？", romanization: "Nǐ de *xíngli* zài nǎlǐ?", translation: "Where is your luggage?" },
+      { text: "我只有一件*行李*。", romanization: "Wǒ zhǐ yǒu yí jiàn *xíngli*.", translation: "I only have one piece of luggage." },
+      { text: "*行李*在车里。", romanization: "*Xíngli* zài chē lǐ.", translation: "The luggage is in the car." }
     ],
     420: [
       { text: "请出示你的*护照*。", romanization: "Qǐng chūshì nǐ de *hùzhào*.", translation: "Please show your passport." },
       { text: "我忘了带*护照*。", romanization: "Wǒ wàngle dài *hùzhào*.", translation: "I forgot to bring my passport." },
-      { text: "*护照*在包里。", romanization: "*Hùzhào* zài bāo lǐ.", translation: "The passport is in the bag." }
+      { text: "*护照*在包里。", romanization: "*Hùzhào* zài bāo lǐ.", translation: "The passport is in the bag." },
+      { text: "我的*护照*不见了。", romanization: "Wǒ de *hùzhào* bú jiàn le.", translation: "My passport is missing." },
+      { text: "我需要一本新*护照*。", romanization: "Wǒ xūyào yì běn xīn *hùzhào*.", translation: "I need a new passport." },
+      { text: "别忘了带*护照*。", romanization: "Bié wàngle dài *hùzhào*.", translation: "Don't forget your passport." }
     ],
     421: [
       { text: "*航班*延误了。", romanization: "*Hángbān* yánwù le.", translation: "The flight is delayed." },
       { text: "我们的*航班*几点起飞？", romanization: "Wǒmen de *hángbān* jǐ diǎn qǐfēi?", translation: "What time does our flight take off?" },
-      { text: "这个*航班*直飞北京。", romanization: "Zhège *hángbān* zhífēi Běijīng.", translation: "This flight goes directly to Beijing." }
+      { text: "这个*航班*直飞北京。", romanization: "Zhège *hángbān* zhífēi Běijīng.", translation: "This flight goes directly to Beijing." },
+      { text: "我们的*航班*是早上八点。", romanization: "Wǒmen de *hángbān* shì zǎoshang bā diǎn.", translation: "Our flight is at eight in the morning." },
+      { text: "*航班*取消了。", romanization: "*Hángbān* qǔxiāo le.", translation: "The flight was cancelled." },
+      { text: "这个*航班*很满。", romanization: "Zhège *hángbān* hěn mǎn.", translation: "This flight is full." }
     ],
     422: [
       { text: "这是我的*座位*。", romanization: "Zhè shì wǒ de *zuòwèi*.", translation: "This is my seat." },
       { text: "请坐在你的*座位*上。", romanization: "Qǐng zuò zài nǐ de *zuòwèi* shàng.", translation: "Please sit in your seat." },
-      { text: "还有*座位*吗？", romanization: "Hái yǒu *zuòwèi* ma?", translation: "Are there any seats left?" }
+      { text: "还有*座位*吗？", romanization: "Hái yǒu *zuòwèi* ma?", translation: "Are there any seats left?" },
+      { text: "这个*座位*有人吗？", romanization: "Zhège *zuòwèi* yǒu rén ma?", translation: "Is this seat taken?" },
+      { text: "我想要靠窗的*座位*。", romanization: "Wǒ xiǎng yào kào chuāng de *zuòwèi*.", translation: "I'd like a window seat." },
+      { text: "电影院里没有*座位*了。", romanization: "Diànyǐngyuàn lǐ méiyǒu *zuòwèi* le.", translation: "There are no seats left in the cinema." }
     ],
     423: [
       { text: "*司机*开车很小心。", romanization: "*Sījī* kāichē hěn xiǎoxīn.", translation: "The driver drives very carefully." },
       { text: "他是一名公交车*司机*。", romanization: "Tā shì yì míng gōngjiāochē *sījī*.", translation: "He's a bus driver." },
-      { text: "*司机*停了车。", romanization: "*Sījī* tíngle chē.", translation: "The driver stopped the car." }
+      { text: "*司机*停了车。", romanization: "*Sījī* tíngle chē.", translation: "The driver stopped the car." },
+      { text: "*司机*，请停车。", romanization: "*Sījī*, qǐng tíng chē.", translation: "Driver, please stop." },
+      { text: "我爸爸是出租车*司机*。", romanization: "Wǒ bàba shì chūzūchē *sījī*.", translation: "My dad is a taxi driver." },
+      { text: "*司机*开得太快了。", romanization: "*Sījī* kāi de tài kuài le.", translation: "The driver is going too fast." }
     ],
     424: [
       { text: "今天*交通*很堵。", romanization: "Jīntiān *jiāotōng* hěn dǔ.", translation: "Traffic is bad today." },
       { text: "*交通*灯是红色的。", romanization: "*Jiāotōng* dēng shì hóngsè de.", translation: "The traffic light is red." },
-      { text: "*交通*事故很少见。", romanization: "*Jiāotōng* shìgù hěn shǎojiàn.", translation: "Traffic accidents are rare." }
+      { text: "*交通*事故很少见。", romanization: "*Jiāotōng* shìgù hěn shǎojiàn.", translation: "Traffic accidents are rare." },
+      { text: "北京的*交通*很拥挤。", romanization: "Běijīng de *jiāotōng* hěn yōngjǐ.", translation: "Traffic in Beijing is heavy." },
+      { text: "这里的*交通*很方便。", romanization: "Zhèlǐ de *jiāotōng* hěn fāngbiàn.", translation: "Transport here is convenient." },
+      { text: "早上*交通*很堵。", romanization: "Zǎoshang *jiāotōng* hěn dǔ.", translation: "Traffic is jammed in the morning." }
     ],
     425: [
       { text: "这是一次漫长的*旅程*。", romanization: "Zhè shì yí cì màncháng de *lǚchéng*.", translation: "This is a long journey." },
       { text: "祝你*旅程*愉快！", romanization: "Zhù nǐ *lǚchéng* yúkuài!", translation: "Have a pleasant journey!" },
-      { text: "我们的*旅程*才刚开始。", romanization: "Wǒmen de *lǚchéng* cái gāng kāishǐ.", translation: "Our journey has just begun." }
+      { text: "我们的*旅程*才刚开始。", romanization: "Wǒmen de *lǚchéng* cái gāng kāishǐ.", translation: "Our journey has just begun." },
+      { text: "这次*旅程*很愉快。", romanization: "Zhè cì *lǚchéng* hěn yúkuài.", translation: "This journey was pleasant." },
+      { text: "*旅程*要三个小时。", romanization: "*Lǚchéng* yào sān gè xiǎoshí.", translation: "The journey takes three hours." },
+      { text: "我们的*旅程*从北京开始。", romanization: "Wǒmen de *lǚchéng* cóng Běijīng kāishǐ.", translation: "Our journey starts in Beijing." }
     ],
     426: [
       { text: "请给我一支*笔*。", romanization: "Qǐng gěi wǒ yì zhī *bǐ*.", translation: "Please give me a pen." },
       { text: "这支*笔*没水了。", romanization: "Zhè zhī *bǐ* méi shuǐ le.", translation: "This pen is out of ink." },
-      { text: "*笔*在桌子上。", romanization: "*Bǐ* zài zhuōzi shàng.", translation: "The pen is on the table." }
+      { text: "*笔*在桌子上。", romanization: "*Bǐ* zài zhuōzi shàng.", translation: "The pen is on the table." },
+      { text: "你有*笔*吗？", romanization: "Nǐ yǒu *bǐ* ma?", translation: "Do you have a pen?" },
+      { text: "我的*笔*是蓝色的。", romanization: "Wǒ de *bǐ* shì lánsè de.", translation: "My pen is blue." },
+      { text: "我用*笔*写信。", romanization: "Wǒ yòng *bǐ* xiě xìn.", translation: "I write letters with a pen." }
     ],
     427: [
       { text: "我用*铅笔*写字。", romanization: "Wǒ yòng *qiānbǐ* xiězì.", translation: "I write with a pencil." },
       { text: "这支*铅笔*断了。", romanization: "Zhè zhī *qiānbǐ* duàn le.", translation: "This pencil is broken." },
-      { text: "请给我一支*铅笔*。", romanization: "Qǐng gěi wǒ yì zhī *qiānbǐ*.", translation: "Please give me a pencil." }
+      { text: "请给我一支*铅笔*。", romanization: "Qǐng gěi wǒ yì zhī *qiānbǐ*.", translation: "Please give me a pencil." },
+      { text: "孩子用*铅笔*画画。", romanization: "Háizi yòng *qiānbǐ* huà huà.", translation: "The child draws with a pencil." },
+      { text: "你有*铅笔*吗？", romanization: "Nǐ yǒu *qiānbǐ* ma?", translation: "Do you have a pencil?" },
+      { text: "我买了三支*铅笔*。", romanization: "Wǒ mǎile sān zhī *qiānbǐ*.", translation: "I bought three pencils." }
     ],
     428: [
       { text: "请给我一张*纸*。", romanization: "Qǐng gěi wǒ yì zhāng *zhǐ*.", translation: "Please give me a piece of paper." },
       { text: "*纸*上写着她的名字。", romanization: "*Zhǐ* shàng xiězhe tā de míngzi.", translation: "Her name is written on the paper." },
-      { text: "这张*纸*是空白的。", romanization: "Zhè zhāng *zhǐ* shì kòngbái de.", translation: "This paper is blank." }
+      { text: "这张*纸*是空白的。", romanization: "Zhè zhāng *zhǐ* shì kòngbái de.", translation: "This paper is blank." },
+      { text: "请在*纸*上写你的名字。", romanization: "Qǐng zài *zhǐ* shàng xiě nǐ de míngzi.", translation: "Please write your name on the paper." },
+      { text: "我们没有*纸*了。", romanization: "Wǒmen méiyǒu *zhǐ* le.", translation: "We are out of paper." },
+      { text: "这张*纸*是白色的。", romanization: "Zhè zhāng *zhǐ* shì báisè de.", translation: "This sheet of paper is white." }
     ],
     429: [
       { text: "我把想法写在*笔记本*上。", romanization: "Wǒ bǎ xiǎngfǎ xiě zài *bǐjìběn* shàng.", translation: "I wrote my ideas in the notebook." },
       { text: "这个*笔记本*是新的。", romanization: "Zhège *bǐjìběn* shì xīn de.", translation: "This notebook is new." },
-      { text: "*笔记本*在书包里。", romanization: "*Bǐjìběn* zài shūbāo lǐ.", translation: "The notebook is in the school bag." }
+      { text: "*笔记本*在书包里。", romanization: "*Bǐjìběn* zài shūbāo lǐ.", translation: "The notebook is in the school bag." },
+      { text: "我买了一个新*笔记本*。", romanization: "Wǒ mǎile yí gè xīn *bǐjìběn*.", translation: "I bought a new notebook." },
+      { text: "我的*笔记本*在哪里？", romanization: "Wǒ de *bǐjìběn* zài nǎlǐ?", translation: "Where is my notebook?" },
+      { text: "请把单词写在*笔记本*上。", romanization: "Qǐng bǎ dāncí xiě zài *bǐjìběn* shàng.", translation: "Please write the words in your notebook." }
     ],
     430: [
       { text: "*书桌*上有很多书。", romanization: "*Shūzhuō* shàng yǒu hěn duō shū.", translation: "There are many books on the desk." },
       { text: "他坐在*书桌*前学习。", romanization: "Tā zuò zài *shūzhuō* qián xuéxí.", translation: "He sits at the desk to study." },
-      { text: "这张*书桌*很大。", romanization: "Zhè zhāng *shūzhuō* hěn dà.", translation: "This desk is big." }
+      { text: "这张*书桌*很大。", romanization: "Zhè zhāng *shūzhuō* hěn dà.", translation: "This desk is big." },
+      { text: "我的*书桌*在窗户旁边。", romanization: "Wǒ de *shūzhuō* zài chuānghu pángbiān.", translation: "My desk is by the window." },
+      { text: "电脑在*书桌*上。", romanization: "Diànnǎo zài *shūzhuō* shàng.", translation: "The computer is on the desk." },
+      { text: "我想买一张新*书桌*。", romanization: "Wǒ xiǎng mǎi yì zhāng xīn *shūzhuō*.", translation: "I want to buy a new desk." }
     ],
     431: [
       { text: "*会议*在十点开始。", romanization: "*Huìyì* zài shí diǎn kāishǐ.", translation: "The meeting starts at ten." },
       { text: "这个*会议*很重要。", romanization: "Zhège *huìyì* hěn zhòngyào.", translation: "This meeting is important." },
-      { text: "我们取消了*会议*。", romanization: "Wǒmen qǔxiāole *huìyì*.", translation: "We cancelled the meeting." }
+      { text: "我们取消了*会议*。", romanization: "Wǒmen qǔxiāole *huìyì*.", translation: "We cancelled the meeting." },
+      { text: "我下午有一个*会议*。", romanization: "Wǒ xiàwǔ yǒu yí gè *huìyì*.", translation: "I have a meeting this afternoon." },
+      { text: "*会议*开了两个小时。", romanization: "*Huìyì* kāile liǎng gè xiǎoshí.", translation: "The meeting lasted two hours." },
+      { text: "老板在*会议*室。", romanization: "Lǎobǎn zài *huìyì* shì.", translation: "The boss is in the meeting room." }
     ],
     432: [
       { text: "我给你发了一封*电子邮件*。", romanization: "Wǒ gěi nǐ fāle yì fēng *diànzǐ yóujiàn*.", translation: "I sent you an email." },
       { text: "请查看你的*电子邮件*。", romanization: "Qǐng chákàn nǐ de *diànzǐ yóujiàn*.", translation: "Please check your email." },
-      { text: "*电子邮件*还没到。", romanization: "*Diànzǐ yóujiàn* hái méi dào.", translation: "The email hasn't arrived yet." }
+      { text: "*电子邮件*还没到。", romanization: "*Diànzǐ yóujiàn* hái méi dào.", translation: "The email hasn't arrived yet." },
+      { text: "我每天看*电子邮件*。", romanization: "Wǒ měi tiān kàn *diànzǐ yóujiàn*.", translation: "I check my email every day." },
+      { text: "请给我发*电子邮件*。", romanization: "Qǐng gěi wǒ fā *diànzǐ yóujiàn*.", translation: "Please send me an email." },
+      { text: "我收到了他的*电子邮件*。", romanization: "Wǒ shōudào le tā de *diànzǐ yóujiàn*.", translation: "I received his email." }
     ],
     433: [
       { text: "我的*老板*很严格。", romanization: "Wǒ de *lǎobǎn* hěn yángé.", translation: "My boss is strict." },
       { text: "*老板*今天不在。", romanization: "*Lǎobǎn* jīntiān bú zài.", translation: "The boss isn't in today." },
-      { text: "她是我们的*老板*。", romanization: "Tā shì wǒmen de *lǎobǎn*.", translation: "She's our boss." }
+      { text: "她是我们的*老板*。", romanization: "Tā shì wǒmen de *lǎobǎn*.", translation: "She's our boss." },
+      { text: "*老板*让我加班。", romanization: "*Lǎobǎn* ràng wǒ jiābān.", translation: "The boss made me work overtime." },
+      { text: "我们的*老板*很年轻。", romanization: "Wǒmen de *lǎobǎn* hěn niánqīng.", translation: "Our boss is young." },
+      { text: "他是这家店的*老板*。", romanization: "Tā shì zhè jiā diàn de *lǎobǎn*.", translation: "He is the owner of this shop." }
     ],
     434: [
       { text: "他的*工资*很高。", romanization: "Tā de *gōngzī* hěn gāo.", translation: "His salary is high." },
       { text: "*工资*每月发一次。", romanization: "*Gōngzī* měi yuè fā yí cì.", translation: "Salary is paid once a month." },
-      { text: "她想要更高的*工资*。", romanization: "Tā xiǎng yào gèng gāo de *gōngzī*.", translation: "She wants a higher salary." }
+      { text: "她想要更高的*工资*。", romanization: "Tā xiǎng yào gèng gāo de *gōngzī*.", translation: "She wants a higher salary." },
+      { text: "我的*工资*不高。", romanization: "Wǒ de *gōngzī* bù gāo.", translation: "My salary isn't high." },
+      { text: "这个工作*工资*很好。", romanization: "Zhège gōngzuò *gōngzī* hěn hǎo.", translation: "This job pays well." },
+      { text: "他用*工资*买了一辆车。", romanization: "Tā yòng *gōngzī* mǎile yí liàng chē.", translation: "He bought a car with his salary." }
     ],
     435: [
       { text: "他在一家大*公司*工作。", romanization: "Tā zài yì jiā dà *gōngsī* gōngzuò.", translation: "He works at a big company." },
       { text: "这家*公司*很有名。", romanization: "Zhè jiā *gōngsī* hěn yǒumíng.", translation: "This company is famous." },
-      { text: "*公司*明天放假。", romanization: "*Gōngsī* míngtiān fàngjià.", translation: "The company is closed tomorrow." }
+      { text: "*公司*明天放假。", romanization: "*Gōngsī* míngtiān fàngjià.", translation: "The company is closed tomorrow." },
+      { text: "我们*公司*在上海。", romanization: "Wǒmen *gōngsī* zài Shànghǎi.", translation: "Our company is in Shanghai." },
+      { text: "她每天八点到*公司*。", romanization: "Tā měi tiān bā diǎn dào *gōngsī*.", translation: "She gets to the company at eight every day." },
+      { text: "这家*公司*很小。", romanization: "Zhè jiā *gōngsī* hěn xiǎo.", translation: "This company is small." }
     ],
     436: [
       { text: "他的*手臂*很强壮。", romanization: "Tā de *shǒubì* hěn qiángzhuàng.", translation: "His arm is strong." },
       { text: "我的*手臂*疼。", romanization: "Wǒ de *shǒubì* téng.", translation: "My arm hurts." },
-      { text: "她抬起*手臂*。", romanization: "Tā tái qǐ *shǒubì*.", translation: "She raised her arm." }
+      { text: "她抬起*手臂*。", romanization: "Tā tái qǐ *shǒubì*.", translation: "She raised her arm." },
+      { text: "他摔断了*手臂*。", romanization: "Tā shuāiduàn le *shǒubì*.", translation: "He broke his arm." },
+      { text: "她的*手臂*很细。", romanization: "Tā de *shǒubì* hěn xì.", translation: "Her arms are thin." },
+      { text: "请抬起你的*手臂*。", romanization: "Qǐng táiqǐ nǐ de *shǒubì*.", translation: "Please raise your arm." }
     ],
     437: [
       { text: "我的*腿*很疼。", romanization: "Wǒ de *tuǐ* hěn téng.", translation: "My leg hurts." },
       { text: "狗的*腿*很短。", romanization: "Gǒu de *tuǐ* hěn duǎn.", translation: "The dog's legs are short." },
-      { text: "他*腿*受伤了。", romanization: "Tā *tuǐ* shòushāng le.", translation: "He hurt his leg." }
+      { text: "他*腿*受伤了。", romanization: "Tā *tuǐ* shòushāng le.", translation: "He hurt his leg." },
+      { text: "她的*腿*很长。", romanization: "Tā de *tuǐ* hěn cháng.", translation: "Her legs are long." },
+      { text: "我走了很多路，*腿*很累。", romanization: "Wǒ zǒule hěn duō lù, *tuǐ* hěn lèi.", translation: "I walked a lot; my legs are tired." },
+      { text: "桌子有四条*腿*。", romanization: "Zhuōzi yǒu sì tiáo *tuǐ*.", translation: "The table has four legs." }
     ],
     438: [
       { text: "她的*手指*很长。", romanization: "Tā de *shǒuzhǐ* hěn cháng.", translation: "Her fingers are long." },
       { text: "我的*手指*被割伤了。", romanization: "Wǒ de *shǒuzhǐ* bèi gēshāng le.", translation: "My finger got cut." },
-      { text: "他用*手指*指着地图。", romanization: "Tā yòng *shǒuzhǐ* zhǐzhe dìtú.", translation: "He pointed at the map with his finger." }
+      { text: "他用*手指*指着地图。", romanization: "Tā yòng *shǒuzhǐ* zhǐzhe dìtú.", translation: "He pointed at the map with his finger." },
+      { text: "我有十个*手指*。", romanization: "Wǒ yǒu shí gè *shǒuzhǐ*.", translation: "I have ten fingers." },
+      { text: "我的*手指*很冷。", romanization: "Wǒ de *shǒuzhǐ* hěn lěng.", translation: "My fingers are cold." },
+      { text: "别用*手指*吃饭。", romanization: "Bié yòng *shǒuzhǐ* chī fàn.", translation: "Don't eat with your fingers." }
     ],
     439: [
       { text: "我的*背*很疼。", romanization: "Wǒ de *bèi* hěn téng.", translation: "My back hurts." },
       { text: "他*背*着一个包。", romanization: "Tā *bèi* zhe yí ge bāo.", translation: "He's carrying a bag on his back." },
-      { text: "医生检查了他的*背*。", romanization: "Yīshēng jiǎnchále tā de *bèi*.", translation: "The doctor examined his back." }
+      { text: "医生检查了他的*背*。", romanization: "Yīshēng jiǎnchále tā de *bèi*.", translation: "The doctor examined his back." },
+      { text: "他的*背*很直。", romanization: "Tā de *bèi* hěn zhí.", translation: "His back is straight." },
+      { text: "我*背*有点疼。", romanization: "Wǒ *bèi* yǒudiǎn téng.", translation: "My back hurts a bit." },
+      { text: "请站直，别弯*背*。", romanization: "Qǐng zhàn zhí, bié wān *bèi*.", translation: "Stand up straight, don't hunch your back." }
     ],
     440: [
       { text: "她的*心*跳得很快。", romanization: "Tā de *xīn* tiào de hěn kuài.", translation: "Her heart is beating fast." },
       { text: "他有一颗善良的*心*。", romanization: "Tā yǒu yì kē shànliáng de *xīn*.", translation: "He has a kind heart." },
-      { text: "*心*在胸口跳动。", romanization: "*Xīn* zài xiōngkǒu tiàodòng.", translation: "The heart beats in the chest." }
+      { text: "*心*在胸口跳动。", romanization: "*Xīn* zài xiōngkǒu tiàodòng.", translation: "The heart beats in the chest." },
+      { text: "她有一颗好*心*。", romanization: "Tā yǒu yì kē hǎo *xīn*.", translation: "She has a good heart." },
+      { text: "我的*心*跳得很快。", romanization: "Wǒ de *xīn* tiào de hěn kuài.", translation: "My heart is beating fast." },
+      { text: "医生在听我的*心*跳。", romanization: "Yīshēng zài tīng wǒ de *xīn* tiào.", translation: "The doctor is listening to my heartbeat." }
     ],
     441: [
       { text: "他穿着一件*大衣*。", romanization: "Tā chuānzhe yí jiàn *dàyī*.", translation: "He's wearing a coat." },
       { text: "这件*大衣*很暖和。", romanization: "Zhè jiàn *dàyī* hěn nuǎnhuo.", translation: "This coat is warm." },
-      { text: "请把*大衣*挂起来。", romanization: "Qǐng bǎ *dàyī* guà qǐlai.", translation: "Please hang up the coat." }
+      { text: "请把*大衣*挂起来。", romanization: "Qǐng bǎ *dàyī* guà qǐlai.", translation: "Please hang up the coat." },
+      { text: "冬天要穿*大衣*。", romanization: "Dōngtiān yào chuān *dàyī*.", translation: "You need a coat in winter." },
+      { text: "我的*大衣*是黑色的。", romanization: "Wǒ de *dàyī* shì hēisè de.", translation: "My coat is black." },
+      { text: "这件*大衣*太长了。", romanization: "Zhè jiàn *dàyī* tài cháng le.", translation: "This coat is too long." }
     ],
     442: [
       { text: "她穿着一条蓝色*裙子*。", romanization: "Tā chuānzhe yì tiáo lánsè *qúnzi*.", translation: "She's wearing a blue skirt." },
       { text: "这条*裙子*很漂亮。", romanization: "Zhè tiáo *qúnzi* hěn piàoliang.", translation: "This skirt is pretty." },
-      { text: "我想买一条新*裙子*。", romanization: "Wǒ xiǎng mǎi yì tiáo xīn *qúnzi*.", translation: "I want to buy a new skirt." }
+      { text: "我想买一条新*裙子*。", romanization: "Wǒ xiǎng mǎi yì tiáo xīn *qúnzi*.", translation: "I want to buy a new skirt." },
+      { text: "她喜欢穿*裙子*。", romanization: "Tā xǐhuan chuān *qúnzi*.", translation: "She likes wearing skirts." },
+      { text: "这条*裙子*太短了。", romanization: "Zhè tiáo *qúnzi* tài duǎn le.", translation: "This skirt is too short." },
+      { text: "我的*裙子*是白色的。", romanization: "Wǒ de *qúnzi* shì báisè de.", translation: "My skirt is white." }
     ],
     443: [
       { text: "我的*袜子*破了。", romanization: "Wǒ de *wàzi* pò le.", translation: "My sock has a hole." },
       { text: "请把*袜子*放进抽屉。", romanization: "Qǐng bǎ *wàzi* fàng jìn chōuti.", translation: "Please put the socks in the drawer." },
-      { text: "这双*袜子*是红色的。", romanization: "Zhè shuāng *wàzi* shì hóngsè de.", translation: "These socks are red." }
+      { text: "这双*袜子*是红色的。", romanization: "Zhè shuāng *wàzi* shì hóngsè de.", translation: "These socks are red." },
+      { text: "我的*袜子*湿了。", romanization: "Wǒ de *wàzi* shī le.", translation: "My socks are wet." },
+      { text: "我买了三双*袜子*。", romanization: "Wǒ mǎile sān shuāng *wàzi*.", translation: "I bought three pairs of socks." },
+      { text: "你的*袜子*在床下面。", romanization: "Nǐ de *wàzi* zài chuáng xiàmiàn.", translation: "Your socks are under the bed." }
     ],
     444: [
       { text: "外面很冷，戴上*手套*吧。", romanization: "Wàimiàn hěn lěng, dài shàng *shǒutào* ba.", translation: "It's cold outside, put on gloves." },
       { text: "我的*手套*丢了。", romanization: "Wǒ de *shǒutào* diū le.", translation: "I lost my gloves." },
-      { text: "这双*手套*很暖和。", romanization: "Zhè shuāng *shǒutào* hěn nuǎnhuo.", translation: "These gloves are warm." }
+      { text: "这双*手套*很暖和。", romanization: "Zhè shuāng *shǒutào* hěn nuǎnhuo.", translation: "These gloves are warm." },
+      { text: "我买了一双新*手套*。", romanization: "Wǒ mǎile yì shuāng xīn *shǒutào*.", translation: "I bought a new pair of gloves." },
+      { text: "你的*手套*在哪里？", romanization: "Nǐ de *shǒutào* zài nǎlǐ?", translation: "Where are your gloves?" },
+      { text: "冬天我戴*手套*。", romanization: "Dōngtiān wǒ dài *shǒutào*.", translation: "I wear gloves in winter." }
     ],
     445: [
       { text: "她戴着一条红色*围巾*。", romanization: "Tā dàizhe yì tiáo hóngsè *wéijīn*.", translation: "She's wearing a red scarf." },
       { text: "这条*围巾*很软。", romanization: "Zhè tiáo *wéijīn* hěn ruǎn.", translation: "This scarf is soft." },
-      { text: "冬天我喜欢戴*围巾*。", romanization: "Dōngtiān wǒ xǐhuan dài *wéijīn*.", translation: "I like wearing a scarf in winter." }
+      { text: "冬天我喜欢戴*围巾*。", romanization: "Dōngtiān wǒ xǐhuan dài *wéijīn*.", translation: "I like wearing a scarf in winter." },
+      { text: "这条*围巾*是妈妈织的。", romanization: "Zhè tiáo *wéijīn* shì māma zhī de.", translation: "Mum knitted this scarf." },
+      { text: "我的*围巾*是灰色的。", romanization: "Wǒ de *wéijīn* shì huīsè de.", translation: "My scarf is grey." },
+      { text: "外面很冷，戴上*围巾*。", romanization: "Wàimiàn hěn lěng, dàishàng *wéijīn*.", translation: "It's cold outside, put on a scarf." }
     ],
     446: [
       { text: "请按时吃*药*。", romanization: "Qǐng ànshí chī *yào*.", translation: "Please take your medicine on time." },
       { text: "这个*药*很苦。", romanization: "Zhège *yào* hěn kǔ.", translation: "This medicine is bitter." },
-      { text: "医生给了我一些*药*。", romanization: "Yīshēng gěile wǒ yìxiē *yào*.", translation: "The doctor gave me some medicine." }
+      { text: "医生给了我一些*药*。", romanization: "Yīshēng gěile wǒ yìxiē *yào*.", translation: "The doctor gave me some medicine." },
+      { text: "我在药店买了*药*。", romanization: "Wǒ zài yàodiàn mǎile *yào*.", translation: "I bought medicine at the pharmacy." },
+      { text: "这个*药*一天吃三次。", romanization: "Zhège *yào* yì tiān chī sān cì.", translation: "Take this medicine three times a day." },
+      { text: "吃了*药*就好了。", romanization: "Chīle *yào* jiù hǎo le.", translation: "You'll be fine after taking the medicine." }
     ],
     447: [
       { text: "他*发烧*了。", romanization: "Tā *fāshāo* le.", translation: "He has a fever." },
       { text: "*发烧*的时候要多喝水。", romanization: "*Fāshāo* de shíhou yào duō hē shuǐ.", translation: "You should drink more water when you have a fever." },
-      { text: "孩子晚上*发烧*了。", romanization: "Háizi wǎnshang *fāshāo* le.", translation: "The child had a fever last night." }
+      { text: "孩子晚上*发烧*了。", romanization: "Háizi wǎnshang *fāshāo* le.", translation: "The child had a fever last night." },
+      { text: "我有点*发烧*。", romanization: "Wǒ yǒudiǎn *fāshāo*.", translation: "I have a slight fever." },
+      { text: "他*发烧*了，没去上学。", romanization: "Tā *fāshāo* le, méi qù shàngxué.", translation: "He has a fever and didn't go to school." },
+      { text: "你*发烧*了吗？", romanization: "Nǐ *fāshāo* le ma?", translation: "Do you have a fever?" }
     ],
     448: [
       { text: "我的头很*疼*。", romanization: "Wǒ de tóu hěn *téng*.", translation: "My head really hurts." },
       { text: "哪里*疼*？", romanization: "Nǎlǐ *téng*?", translation: "Where does it hurt?" },
-      { text: "我的胃有点*疼*。", romanization: "Wǒ de wèi yǒudiǎn *téng*.", translation: "My stomach hurts a bit." }
+      { text: "我的胃有点*疼*。", romanization: "Wǒ de wèi yǒudiǎn *téng*.", translation: "My stomach hurts a bit." },
+      { text: "我的脚很*疼*。", romanization: "Wǒ de jiǎo hěn *téng*.", translation: "My foot hurts a lot." },
+      { text: "打针*疼*吗？", romanization: "Dǎzhēn *téng* ma?", translation: "Does the injection hurt?" },
+      { text: "我的牙很*疼*。", romanization: "Wǒ de yá hěn *téng*.", translation: "My tooth hurts a lot." }
     ],
     449: [
       { text: "他一直在*咳嗽*。", romanization: "Tā yìzhí zài *késou*.", translation: "He keeps coughing." },
       { text: "*咳嗽*的时候要捂住嘴。", romanization: "*Késou* de shíhou yào wǔ zhù zuǐ.", translation: "Cover your mouth when you cough." },
-      { text: "她感冒了，一直*咳嗽*。", romanization: "Tā gǎnmào le, yìzhí *késou*.", translation: "She has a cold and keeps coughing." }
+      { text: "她感冒了，一直*咳嗽*。", romanization: "Tā gǎnmào le, yìzhí *késou*.", translation: "She has a cold and keeps coughing." },
+      { text: "我*咳嗽*了一个星期。", romanization: "Wǒ *késou* le yí gè xīngqī.", translation: "I've been coughing for a week." },
+      { text: "他晚上*咳嗽*得很厉害。", romanization: "Tā wǎnshang *késou* de hěn lìhai.", translation: "He coughs badly at night." },
+      { text: "*咳嗽*的时候请用手捂嘴。", romanization: "*Késou* de shíhou qǐng yòng shǒu wǔ zuǐ.", translation: "Please cover your mouth when you cough." }
     ],
     450: [
       { text: "他手上有*血*。", romanization: "Tā shǒu shàng yǒu *xuè*.", translation: "There's blood on his hand." },
       { text: "医生检查了他的*血*。", romanization: "Yīshēng jiǎnchále tā de *xuè*.", translation: "The doctor checked his blood." },
-      { text: "伤口在流*血*。", romanization: "Shāngkǒu zài liú *xuè*.", translation: "The wound is bleeding." }
+      { text: "伤口在流*血*。", romanization: "Shāngkǒu zài liú *xuè*.", translation: "The wound is bleeding." },
+      { text: "我怕看到*血*。", romanization: "Wǒ pà kàndào *xuè*.", translation: "I'm afraid of seeing blood." },
+      { text: "他流了很多*血*。", romanization: "Tā liúle hěn duō *xuè*.", translation: "He lost a lot of blood." },
+      { text: "医生要检查我的*血*。", romanization: "Yīshēng yào jiǎnchá wǒ de *xuè*.", translation: "The doctor wants to test my blood." }
     ],
     451: [
       { text: "我想用*现金*付款。", romanization: "Wǒ xiǎng yòng *xiànjīn* fùkuǎn.", translation: "I'd like to pay in cash." },
       { text: "他没有*现金*。", romanization: "Tā méiyǒu *xiànjīn*.", translation: "He doesn't have cash." },
-      { text: "请给我一些*现金*。", romanization: "Qǐng gěi wǒ yìxiē *xiànjīn*.", translation: "Please give me some cash." }
+      { text: "请给我一些*现金*。", romanization: "Qǐng gěi wǒ yìxiē *xiànjīn*.", translation: "Please give me some cash." },
+      { text: "这里只收*现金*。", romanization: "Zhèlǐ zhǐ shōu *xiànjīn*.", translation: "Only cash is accepted here." },
+      { text: "我身上没有*现金*。", romanization: "Wǒ shēn shàng méiyǒu *xiànjīn*.", translation: "I don't have any cash on me." },
+      { text: "你付*现金*还是刷卡？", romanization: "Nǐ fù *xiànjīn* háishi shuākǎ?", translation: "Are you paying cash or by card?" }
     ],
     452: [
       { text: "我可以用*信用卡*吗？", romanization: "Wǒ kěyǐ yòng *xìnyòngkǎ* ma?", translation: "Can I use a credit card?" },
       { text: "她刷了*信用卡*。", romanization: "Tā shuāle *xìnyòngkǎ*.", translation: "She swiped her credit card." },
-      { text: "这里不接受*信用卡*。", romanization: "Zhèlǐ bù jiēshòu *xìnyòngkǎ*.", translation: "Credit cards aren't accepted here." }
+      { text: "这里不接受*信用卡*。", romanization: "Zhèlǐ bù jiēshòu *xìnyòngkǎ*.", translation: "Credit cards aren't accepted here." },
+      { text: "我的*信用卡*丢了。", romanization: "Wǒ de *xìnyòngkǎ* diū le.", translation: "I lost my credit card." },
+      { text: "你有*信用卡*吗？", romanization: "Nǐ yǒu *xìnyòngkǎ* ma?", translation: "Do you have a credit card?" },
+      { text: "我用*信用卡*买了机票。", romanization: "Wǒ yòng *xìnyòngkǎ* mǎile jīpiào.", translation: "I bought the plane ticket with my credit card." }
     ],
     453: [
       { text: "这件外套有*折扣*。", romanization: "Zhè jiàn wàitào yǒu *zhékòu*.", translation: "This coat has a discount." },
       { text: "*折扣*是多少？", romanization: "*Zhékòu* shì duōshao?", translation: "What's the discount?" },
-      { text: "今天所有商品都有*折扣*。", romanization: "Jīntiān suǒyǒu shāngpǐn dōu yǒu *zhékòu*.", translation: "All items have a discount today." }
+      { text: "今天所有商品都有*折扣*。", romanization: "Jīntiān suǒyǒu shāngpǐn dōu yǒu *zhékòu*.", translation: "All items have a discount today." },
+      { text: "学生有*折扣*吗？", romanization: "Xuésheng yǒu *zhékòu* ma?", translation: "Is there a student discount?" },
+      { text: "这件衣服打了*折扣*。", romanization: "Zhè jiàn yīfu dǎle *zhékòu*.", translation: "This piece of clothing is discounted." },
+      { text: "能给我一点*折扣*吗？", romanization: "Néng gěi wǒ yìdiǎn *zhékòu* ma?", translation: "Can you give me a small discount?" }
     ],
     454: [
       { text: "这家商店有很多*顾客*。", romanization: "Zhè jiā shāngdiàn yǒu hěn duō *gùkè*.", translation: "This shop has many customers." },
       { text: "*顾客*总是对的。", romanization: "*Gùkè* zǒngshì duì de.", translation: "The customer is always right." },
-      { text: "服务员对*顾客*很友好。", romanization: "Fúwùyuán duì *gùkè* hěn yǒuhǎo.", translation: "The waiter is friendly to customers." }
+      { text: "服务员对*顾客*很友好。", romanization: "Fúwùyuán duì *gùkè* hěn yǒuhǎo.", translation: "The waiter is friendly to customers." },
+      { text: "今天*顾客*很少。", romanization: "Jīntiān *gùkè* hěn shǎo.", translation: "There are few customers today." },
+      { text: "*顾客*在等你。", romanization: "*Gùkè* zài děng nǐ.", translation: "The customer is waiting for you." },
+      { text: "她是我们的老*顾客*。", romanization: "Tā shì wǒmen de lǎo *gùkè*.", translation: "She is a regular customer of ours." }
     ],
     455: [
       { text: "这是给你的*礼物*。", romanization: "Zhè shì gěi nǐ de *lǐwù*.", translation: "This is a gift for you." },
       { text: "她收到了一份*礼物*。", romanization: "Tā shōudàole yí fèn *lǐwù*.", translation: "She received a gift." },
-      { text: "谢谢你的*礼物*。", romanization: "Xièxie nǐ de *lǐwù*.", translation: "Thanks for the gift." }
+      { text: "谢谢你的*礼物*。", romanization: "Xièxie nǐ de *lǐwù*.", translation: "Thanks for the gift." },
+      { text: "我给妈妈买了*礼物*。", romanization: "Wǒ gěi māma mǎile *lǐwù*.", translation: "I bought mum a gift." },
+      { text: "这个*礼物*是谁送的？", romanization: "Zhège *lǐwù* shì shéi sòng de?", translation: "Who gave this gift?" },
+      { text: "孩子们打开了*礼物*。", romanization: "Háizimen dǎkāi le *lǐwù*.", translation: "The children opened the gifts." }
     ],
     456: [
       { text: "我喜欢*音乐*。", romanization: "Wǒ xǐhuan *yīnyuè*.", translation: "I like music." },
       { text: "她在听*音乐*。", romanization: "Tā zài tīng *yīnyuè*.", translation: "She's listening to music." },
-      { text: "这个*音乐*很好听。", romanization: "Zhège *yīnyuè* hěn hǎotīng.", translation: "This music sounds great." }
+      { text: "这个*音乐*很好听。", romanization: "Zhège *yīnyuè* hěn hǎotīng.", translation: "This music sounds great." },
+      { text: "你喜欢什么*音乐*？", romanization: "Nǐ xǐhuan shénme *yīnyuè*?", translation: "What music do you like?" },
+      { text: "*音乐*太大声了。", romanization: "*Yīnyuè* tài dàshēng le.", translation: "The music is too loud." },
+      { text: "我一边工作一边听*音乐*。", romanization: "Wǒ yìbiān gōngzuò yìbiān tīng *yīnyuè*.", translation: "I listen to music while working." }
     ],
     457: [
       { text: "她唱了一首*歌*。", romanization: "Tā chàngle yì shǒu *gē*.", translation: "She sang a song." },
       { text: "这首*歌*很好听。", romanization: "Zhè shǒu *gē* hěn hǎotīng.", translation: "This song sounds great." },
-      { text: "我不知道这首*歌*的名字。", romanization: "Wǒ bù zhīdào zhè shǒu *gē* de míngzi.", translation: "I don't know the name of this song." }
+      { text: "我不知道这首*歌*的名字。", romanization: "Wǒ bù zhīdào zhè shǒu *gē* de míngzi.", translation: "I don't know the name of this song." },
+      { text: "我喜欢这首*歌*。", romanization: "Wǒ xǐhuan zhè shǒu *gē*.", translation: "I like this song." },
+      { text: "她会唱中文*歌*。", romanization: "Tā huì chàng Zhōngwén *gē*.", translation: "She can sing Chinese songs." },
+      { text: "这首*歌*很老了。", romanization: "Zhè shǒu *gē* hěn lǎo le.", translation: "This song is very old." }
     ],
     458: [
       { text: "我们去看*电影*吧。", romanization: "Wǒmen qù kàn *diànyǐng* ba.", translation: "Let's go watch a movie." },
       { text: "这部*电影*很有意思。", romanization: "Zhè bù *diànyǐng* hěn yǒu yìsi.", translation: "This movie is interesting." },
-      { text: "*电影*几点开始？", romanization: "*Diànyǐng* jǐ diǎn kāishǐ?", translation: "What time does the movie start?" }
+      { text: "*电影*几点开始？", romanization: "*Diànyǐng* jǐ diǎn kāishǐ?", translation: "What time does the movie start?" },
+      { text: "这部*电影*太长了。", romanization: "Zhè bù *diànyǐng* tài cháng le.", translation: "This film is too long." },
+      { text: "你喜欢看*电影*吗？", romanization: "Nǐ xǐhuan kàn *diànyǐng* ma?", translation: "Do you like watching films?" },
+      { text: "我们周末看了一部*电影*。", romanization: "Wǒmen zhōumò kànle yí bù *diànyǐng*.", translation: "We watched a film at the weekend." }
     ],
     459: [
       { text: "孩子们喜欢玩*游戏*。", romanization: "Háizimen xǐhuan wán *yóuxì*.", translation: "Children like playing games." },
       { text: "这个*游戏*很有意思。", romanization: "Zhège *yóuxì* hěn yǒu yìsi.", translation: "This game is fun." },
-      { text: "我们一起玩*游戏*吧。", romanization: "Wǒmen yìqǐ wán *yóuxì* ba.", translation: "Let's play a game together." }
+      { text: "我们一起玩*游戏*吧。", romanization: "Wǒmen yìqǐ wán *yóuxì* ba.", translation: "Let's play a game together." },
+      { text: "我赢了这个*游戏*。", romanization: "Wǒ yíngle zhège *yóuxì*.", translation: "I won this game." },
+      { text: "孩子们在玩*游戏*。", romanization: "Háizimen zài wán *yóuxì*.", translation: "The children are playing a game." },
+      { text: "这个*游戏*太难了。", romanization: "Zhège *yóuxì* tài nán le.", translation: "This game is too hard." }
     ],
     460: [
       { text: "我们要开一个*派对*。", romanization: "Wǒmen yào kāi yí ge *pàiduì*.", translation: "We're going to have a party." },
       { text: "*派对*几点开始？", romanization: "*Pàiduì* jǐ diǎn kāishǐ?", translation: "What time does the party start?" },
-      { text: "她邀请我参加*派对*。", romanization: "Tā yāoqǐng wǒ cānjiā *pàiduì*.", translation: "She invited me to the party." }
+      { text: "她邀请我参加*派对*。", romanization: "Tā yāoqǐng wǒ cānjiā *pàiduì*.", translation: "She invited me to the party." },
+      { text: "你来参加*派对*吗？", romanization: "Nǐ lái cānjiā *pàiduì* ma?", translation: "Are you coming to the party?" },
+      { text: "*派对*上有很多人。", romanization: "*Pàiduì* shàng yǒu hěn duō rén.", translation: "There were many people at the party." },
+      { text: "我们为他开了生日*派对*。", romanization: "Wǒmen wèi tā kāile shēngrì *pàiduì*.", translation: "We threw him a birthday party." }
     ],
     461: [
       { text: "他喜欢踢*足球*。", romanization: "Tā xǐhuan tī *zúqiú*.", translation: "He likes playing football." },
       { text: "我们在公园踢*足球*。", romanization: "Wǒmen zài gōngyuán tī *zúqiú*.", translation: "We're playing football in the park." },
-      { text: "*足球*比赛几点开始？", romanization: "*Zúqiú* bǐsài jǐ diǎn kāishǐ?", translation: "What time does the football match start?" }
+      { text: "*足球*比赛几点开始？", romanization: "*Zúqiú* bǐsài jǐ diǎn kāishǐ?", translation: "What time does the football match start?" },
+      { text: "我每个周末踢*足球*。", romanization: "Wǒ měi gè zhōumò tī *zúqiú*.", translation: "I play football every weekend." },
+      { text: "你喜欢看*足球*吗？", romanization: "Nǐ xǐhuan kàn *zúqiú* ma?", translation: "Do you like watching football?" },
+      { text: "孩子们在踢*足球*。", romanization: "Háizimen zài tī *zúqiú*.", translation: "The children are playing football." }
     ],
     462: [
       { text: "她喜欢打*网球*。", romanization: "Tā xǐhuan dǎ *wǎngqiú*.", translation: "She likes playing tennis." },
       { text: "我们周末打*网球*。", romanization: "Wǒmen zhōumò dǎ *wǎngqiú*.", translation: "We play tennis on weekends." },
-      { text: "他*网球*打得很好。", romanization: "Tā *wǎngqiú* dǎ de hěn hǎo.", translation: "He plays tennis very well." }
+      { text: "他*网球*打得很好。", romanization: "Tā *wǎngqiú* dǎ de hěn hǎo.", translation: "He plays tennis very well." },
+      { text: "你会打*网球*吗？", romanization: "Nǐ huì dǎ *wǎngqiú* ma?", translation: "Can you play tennis?" },
+      { text: "我在学打*网球*。", romanization: "Wǒ zài xué dǎ *wǎngqiú*.", translation: "I'm learning to play tennis." },
+      { text: "他每天打*网球*。", romanization: "Tā měi tiān dǎ *wǎngqiú*.", translation: "He plays tennis every day." }
     ],
     463: [
       { text: "*运动*对身体有好处。", romanization: "*Yùndòng* duì shēntǐ yǒu hǎochù.", translation: "Exercise is good for your body." },
       { text: "他喜欢做*运动*。", romanization: "Tā xǐhuan zuò *yùndòng*.", translation: "He likes doing exercise." },
-      { text: "你喜欢什么*运动*？", romanization: "Nǐ xǐhuan shénme *yùndòng*?", translation: "What sport do you like?" }
+      { text: "你喜欢什么*运动*？", romanization: "Nǐ xǐhuan shénme *yùndòng*?", translation: "What sport do you like?" },
+      { text: "我每天早上*运动*。", romanization: "Wǒ měi tiān zǎoshang *yùndòng*.", translation: "I exercise every morning." },
+      { text: "游泳是很好的*运动*。", romanization: "Yóuyǒng shì hěn hǎo de *yùndòng*.", translation: "Swimming is good exercise." },
+      { text: "他不喜欢*运动*。", romanization: "Tā bù xǐhuan *yùndòng*.", translation: "He doesn't like sport." }
     ],
     464: [
       { text: "我们的*队*赢了。", romanization: "Wǒmen de *duì* yíng le.", translation: "Our team won." },
       { text: "他加入了篮球*队*。", romanization: "Tā jiārùle lánqiú *duì*.", translation: "He joined the basketball team." },
-      { text: "这支*队*很强。", romanization: "Zhè zhī *duì* hěn qiáng.", translation: "This team is strong." }
+      { text: "这支*队*很强。", romanization: "Zhè zhī *duì* hěn qiáng.", translation: "This team is strong." },
+      { text: "我们*队*有十个人。", romanization: "Wǒmen *duì* yǒu shí gè rén.", translation: "Our team has ten people." },
+      { text: "你喜欢哪个*队*？", romanization: "Nǐ xǐhuan nǎge *duì*?", translation: "Which team do you like?" },
+      { text: "他们*队*输了。", romanization: "Tāmen *duì* shū le.", translation: "Their team lost." }
     ],
     465: [
       { text: "孩子在踢*球*。", romanization: "Háizi zài tī *qiú*.", translation: "The child is kicking a ball." },
       { text: "*球*滚到了街上。", romanization: "*Qiú* gǔn dàole jiē shàng.", translation: "The ball rolled onto the street." },
-      { text: "请把*球*给我。", romanization: "Qǐng bǎ *qiú* gěi wǒ.", translation: "Please give me the ball." }
+      { text: "请把*球*给我。", romanization: "Qǐng bǎ *qiú* gěi wǒ.", translation: "Please give me the ball." },
+      { text: "狗在追*球*。", romanization: "Gǒu zài zhuī *qiú*.", translation: "The dog is chasing the ball." },
+      { text: "我买了一个新*球*。", romanization: "Wǒ mǎile yí gè xīn *qiú*.", translation: "I bought a new ball." },
+      { text: "这个*球*是谁的？", romanization: "Zhège *qiú* shì shéi de?", translation: "Whose ball is this?" }
     ],
     466: [
       { text: "他会弹*吉他*。", romanization: "Tā huì tán *jítā*.", translation: "He knows how to play guitar." },
       { text: "她买了一把新*吉他*。", romanization: "Tā mǎile yì bǎ xīn *jítā*.", translation: "She bought a new guitar." },
-      { text: "*吉他*的声音很好听。", romanization: "*Jítā* de shēngyīn hěn hǎotīng.", translation: "The guitar sounds great." }
+      { text: "*吉他*的声音很好听。", romanization: "*Jítā* de shēngyīn hěn hǎotīng.", translation: "The guitar sounds great." },
+      { text: "我在学弹*吉他*。", romanization: "Wǒ zài xué tán *jítā*.", translation: "I'm learning to play the guitar." },
+      { text: "这把*吉他*很贵。", romanization: "Zhè bǎ *jítā* hěn guì.", translation: "This guitar is expensive." },
+      { text: "他每天晚上弹*吉他*。", romanization: "Tā měi tiān wǎnshang tán *jítā*.", translation: "He plays the guitar every evening." }
     ],
     467: [
       { text: "她在弹*钢琴*。", romanization: "Tā zài tán *gāngqín*.", translation: "She's playing the piano." },
       { text: "我想学*钢琴*。", romanization: "Wǒ xiǎng xué *gāngqín*.", translation: "I want to learn piano." },
-      { text: "这架*钢琴*很旧了。", romanization: "Zhè jià *gāngqín* hěn jiù le.", translation: "This piano is old." }
+      { text: "这架*钢琴*很旧了。", romanization: "Zhè jià *gāngqín* hěn jiù le.", translation: "This piano is old." },
+      { text: "我家有一架*钢琴*。", romanization: "Wǒ jiā yǒu yí jià *gāngqín*.", translation: "We have a piano at home." },
+      { text: "她*钢琴*弹得很好。", romanization: "Tā *gāngqín* tán de hěn hǎo.", translation: "She plays the piano very well." },
+      { text: "孩子每天练习*钢琴*。", romanization: "Háizi měi tiān liànxí *gāngqín*.", translation: "The child practises the piano every day." }
     ],
     468: [
       { text: "这张*照片*很漂亮。", romanization: "Zhè zhāng *zhàopiàn* hěn piàoliang.", translation: "This photo is beautiful." },
       { text: "她给我看了一些*照片*。", romanization: "Tā gěi wǒ kànle yìxiē *zhàopiàn*.", translation: "She showed me some photos." },
-      { text: "我们拍一张*照片*吧。", romanization: "Wǒmen pāi yì zhāng *zhàopiàn* ba.", translation: "Let's take a photo." }
+      { text: "我们拍一张*照片*吧。", romanization: "Wǒmen pāi yì zhāng *zhàopiàn* ba.", translation: "Let's take a photo." },
+      { text: "我给你看一张*照片*。", romanization: "Wǒ gěi nǐ kàn yì zhāng *zhàopiàn*.", translation: "Let me show you a photo." },
+      { text: "这是我小时候的*照片*。", romanization: "Zhè shì wǒ xiǎo shíhou de *zhàopiàn*.", translation: "This is a photo of me as a child." },
+      { text: "墙上有很多*照片*。", romanization: "Qiáng shàng yǒu hěn duō *zhàopiàn*.", translation: "There are many photos on the wall." }
     ],
     469: [
       { text: "我的*爱好*是画画。", romanization: "Wǒ de *àihào* shì huàhuà.", translation: "My hobby is painting." },
       { text: "你有什么*爱好*？", romanization: "Nǐ yǒu shénme *àihào*?", translation: "What hobbies do you have?" },
-      { text: "阅读是她的*爱好*。", romanization: "Yuèdú shì tā de *àihào*.", translation: "Reading is her hobby." }
+      { text: "阅读是她的*爱好*。", romanization: "Yuèdú shì tā de *àihào*.", translation: "Reading is her hobby." },
+      { text: "我的*爱好*是游泳。", romanization: "Wǒ de *àihào* shì yóuyǒng.", translation: "My hobby is swimming." },
+      { text: "他有很多*爱好*。", romanization: "Tā yǒu hěn duō *àihào*.", translation: "He has many hobbies." },
+      { text: "唱歌是她的*爱好*。", romanization: "Chàng gē shì tā de *àihào*.", translation: "Singing is her hobby." }
     ],
     470: [
       { text: "*假期*快到了。", romanization: "*Jiàqī* kuài dào le.", translation: "The holidays are coming soon." },
       { text: "*假期*我们要去旅行。", romanization: "*Jiàqī* wǒmen yào qù lǚxíng.", translation: "We're going to travel during the holidays." },
-      { text: "*假期*过得很快。", romanization: "*Jiàqī* guò de hěn kuài.", translation: "The holiday went by quickly." }
+      { text: "*假期*过得很快。", romanization: "*Jiàqī* guò de hěn kuài.", translation: "The holiday went by quickly." },
+      { text: "*假期*你去哪里？", romanization: "*Jiàqī* nǐ qù nǎlǐ?", translation: "Where are you going for the holidays?" },
+      { text: "我的*假期*很短。", romanization: "Wǒ de *jiàqī* hěn duǎn.", translation: "My holiday is short." },
+      { text: "祝你*假期*愉快！", romanization: "Zhù nǐ *jiàqī* yúkuài!", translation: "Have a nice holiday!" }
     ],
     471: [
       { text: "这里的*网络*很快。", romanization: "Zhèlǐ de *wǎngluò* hěn kuài.", translation: "The internet here is fast." },
       { text: "*网络*断了。", romanization: "*Wǎngluò* duàn le.", translation: "The internet is down." },
-      { text: "我在用*网络*查资料。", romanization: "Wǒ zài yòng *wǎngluò* chá zīliào.", translation: "I'm using the internet to look up information." }
+      { text: "我在用*网络*查资料。", romanization: "Wǒ zài yòng *wǎngluò* chá zīliào.", translation: "I'm using the internet to look up information." },
+      { text: "这里没有*网络*。", romanization: "Zhèlǐ méiyǒu *wǎngluò*.", translation: "There's no internet here." },
+      { text: "今天*网络*很慢。", romanization: "Jīntiān *wǎngluò* hěn màn.", translation: "The internet is slow today." },
+      { text: "酒店有免费*网络*吗？", romanization: "Jiǔdiàn yǒu miǎnfèi *wǎngluò* ma?", translation: "Does the hotel have free internet?" }
     ],
     472: [
       { text: "这个*网站*很有用。", romanization: "Zhège *wǎngzhàn* hěn yǒuyòng.", translation: "This website is useful." },
       { text: "请打开这个*网站*。", romanization: "Qǐng dǎkāi zhège *wǎngzhàn*.", translation: "Please open this website." },
-      { text: "他建了一个新*网站*。", romanization: "Tā jiànle yí ge xīn *wǎngzhàn*.", translation: "He built a new website." }
+      { text: "他建了一个新*网站*。", romanization: "Tā jiànle yí ge xīn *wǎngzhàn*.", translation: "He built a new website." },
+      { text: "我们公司有一个*网站*。", romanization: "Wǒmen gōngsī yǒu yí gè *wǎngzhàn*.", translation: "Our company has a website." },
+      { text: "我在*网站*上买了票。", romanization: "Wǒ zài *wǎngzhàn* shàng mǎile piào.", translation: "I bought the ticket on the website." },
+      { text: "这个*网站*是中文的。", romanization: "Zhège *wǎngzhàn* shì Zhōngwén de.", translation: "This website is in Chinese." }
     ],
     473: [
       { text: "我忘记了*密码*。", romanization: "Wǒ wàngjìle *mìmǎ*.", translation: "I forgot my password." },
       { text: "请输入你的*密码*。", romanization: "Qǐng shūrù nǐ de *mìmǎ*.", translation: "Please enter your password." },
-      { text: "*密码*太简单了。", romanization: "*Mìmǎ* tài jiǎndān le.", translation: "The password is too simple." }
+      { text: "*密码*太简单了。", romanization: "*Mìmǎ* tài jiǎndān le.", translation: "The password is too simple." },
+      { text: "*密码*是多少？", romanization: "*Mìmǎ* shì duōshao?", translation: "What is the password?" },
+      { text: "我改了*密码*。", romanization: "Wǒ gǎile *mìmǎ*.", translation: "I changed the password." },
+      { text: "别告诉别人你的*密码*。", romanization: "Bié gàosu biérén nǐ de *mìmǎ*.", translation: "Don't tell others your password." }
     ],
     474: [
       { text: "*屏幕*太小了。", romanization: "*Píngmù* tài xiǎo le.", translation: "The screen is too small." },
       { text: "他的*屏幕*坏了。", romanization: "Tā de *píngmù* huài le.", translation: "His screen is broken." },
-      { text: "这个*屏幕*很清楚。", romanization: "Zhège *píngmù* hěn qīngchu.", translation: "This screen is clear." }
+      { text: "这个*屏幕*很清楚。", romanization: "Zhège *píngmù* hěn qīngchu.", translation: "This screen is clear." },
+      { text: "我的手机*屏幕*坏了。", romanization: "Wǒ de shǒujī *píngmù* huài le.", translation: "My phone screen is broken." },
+      { text: "这个*屏幕*太亮了。", romanization: "Zhège *píngmù* tài liàng le.", translation: "This screen is too bright." },
+      { text: "别一直看*屏幕*。", romanization: "Bié yìzhí kàn *píngmù*.", translation: "Don't keep staring at the screen." }
     ],
     475: [
       { text: "*键盘*坏了。", romanization: "*Jiànpán* huài le.", translation: "The keyboard is broken." },
       { text: "这个*键盘*很好用。", romanization: "Zhège *jiànpán* hěn hǎoyòng.", translation: "This keyboard is easy to use." },
-      { text: "请清洁一下*键盘*。", romanization: "Qǐng qīngjié yíxià *jiànpán*.", translation: "Please clean the keyboard." }
+      { text: "请清洁一下*键盘*。", romanization: "Qǐng qīngjié yíxià *jiànpán*.", translation: "Please clean the keyboard." },
+      { text: "我买了一个新*键盘*。", romanization: "Wǒ mǎile yí gè xīn *jiànpán*.", translation: "I bought a new keyboard." },
+      { text: "猫在*键盘*上睡觉。", romanization: "Māo zài *jiànpán* shàng shuìjiào.", translation: "The cat is sleeping on the keyboard." },
+      { text: "这个*键盘*很小。", romanization: "Zhège *jiànpán* hěn xiǎo.", translation: "This keyboard is small." }
     ],
     476: [
       { text: "我收到了她的*消息*。", romanization: "Wǒ shōudàole tā de *xiāoxi*.", translation: "I received her message." },
       { text: "这是个好*消息*。", romanization: "Zhè shì ge hǎo *xiāoxi*.", translation: "This is good news." },
-      { text: "请给我发*消息*。", romanization: "Qǐng gěi wǒ fā *xiāoxi*.", translation: "Please send me a message." }
+      { text: "请给我发*消息*。", romanization: "Qǐng gěi wǒ fā *xiāoxi*.", translation: "Please send me a message." },
+      { text: "你看到我的*消息*了吗？", romanization: "Nǐ kàndào wǒ de *xiāoxi* le ma?", translation: "Did you see my message?" },
+      { text: "我给他发了一条*消息*。", romanization: "Wǒ gěi tā fāle yì tiáo *xiāoxi*.", translation: "I sent him a message." },
+      { text: "有什么新*消息*吗？", romanization: "Yǒu shénme xīn *xiāoxi* ma?", translation: "Is there any news?" }
     ],
     477: [
       { text: "他每天看*新闻*。", romanization: "Tā měitiān kàn *xīnwén*.", translation: "He watches the news every day." },
       { text: "这是今天的*新闻*。", romanization: "Zhè shì jīntiān de *xīnwén*.", translation: "This is today's news." },
-      { text: "*新闻*说明天会下雨。", romanization: "*Xīnwén* shuō míngtiān huì xiàyǔ.", translation: "The news says it will rain tomorrow." }
+      { text: "*新闻*说明天会下雨。", romanization: "*Xīnwén* shuō míngtiān huì xiàyǔ.", translation: "The news says it will rain tomorrow." },
+      { text: "你看今天的*新闻*了吗？", romanization: "Nǐ kàn jīntiān de *xīnwén* le ma?", translation: "Did you watch today's news?" },
+      { text: "我在手机上看*新闻*。", romanization: "Wǒ zài shǒujī shàng kàn *xīnwén*.", translation: "I read the news on my phone." },
+      { text: "爸爸每天晚上看*新闻*。", romanization: "Bàba měi tiān wǎnshang kàn *xīnwén*.", translation: "Dad watches the news every evening." }
     ],
     478: [
       { text: "我们在看*电视*。", romanization: "Wǒmen zài kàn *diànshì*.", translation: "We're watching TV." },
       { text: "*电视*坏了。", romanization: "*Diànshì* huài le.", translation: "The TV is broken." },
-      { text: "孩子们喜欢看*电视*。", romanization: "Háizimen xǐhuan kàn *diànshì*.", translation: "Children like watching TV." }
+      { text: "孩子们喜欢看*电视*。", romanization: "Háizimen xǐhuan kàn *diànshì*.", translation: "Children like watching TV." },
+      { text: "我们买了一台新*电视*。", romanization: "Wǒmen mǎile yì tái xīn *diànshì*.", translation: "We bought a new TV." },
+      { text: "*电视*在客厅里。", romanization: "*Diànshì* zài kètīng lǐ.", translation: "The TV is in the living room." },
+      { text: "请关上*电视*。", romanization: "Qǐng guānshàng *diànshì*.", translation: "Please turn off the TV." }
     ],
     479: [
       { text: "他在听*收音机*。", romanization: "Tā zài tīng *shōuyīnjī*.", translation: "He's listening to the radio." },
       { text: "*收音机*坏了。", romanization: "*Shōuyīnjī* huài le.", translation: "The radio is broken." },
-      { text: "车里有一台*收音机*。", romanization: "Chē lǐ yǒu yì tái *shōuyīnjī*.", translation: "There's a radio in the car." }
+      { text: "车里有一台*收音机*。", romanization: "Chē lǐ yǒu yì tái *shōuyīnjī*.", translation: "There's a radio in the car." },
+      { text: "爷爷每天听*收音机*。", romanization: "Yéye měi tiān tīng *shōuyīnjī*.", translation: "Grandpa listens to the radio every day." },
+      { text: "这台*收音机*很旧了。", romanization: "Zhè tái *shōuyīnjī* hěn jiù le.", translation: "This radio is very old." },
+      { text: "请打开*收音机*。", romanization: "Qǐng dǎkāi *shōuyīnjī*.", translation: "Please turn on the radio." }
     ],
     480: [
       { text: "她带着*相机*。", romanization: "Tā dàizhe *xiàngjī*.", translation: "She's carrying a camera." },
       { text: "这台*相机*很贵。", romanization: "Zhè tái *xiàngjī* hěn guì.", translation: "This camera is expensive." },
-      { text: "我用*相机*拍照。", romanization: "Wǒ yòng *xiàngjī* pāizhào.", translation: "I take photos with a camera." }
+      { text: "我用*相机*拍照。", romanization: "Wǒ yòng *xiàngjī* pāizhào.", translation: "I take photos with a camera." },
+      { text: "我的*相机*在包里。", romanization: "Wǒ de *xiàngjī* zài bāo lǐ.", translation: "My camera is in the bag." },
+      { text: "他买了一台新*相机*。", romanization: "Tā mǎile yì tái xīn *xiàngjī*.", translation: "He bought a new camera." },
+      { text: "这张照片是用*相机*拍的。", romanization: "Zhè zhāng zhàopiàn shì yòng *xiàngjī* pāi de.", translation: "This photo was taken with a camera." }
     ],
     481: [
       { text: "我*也*喜欢音乐。", romanization: "Wǒ *yě* xǐhuan yīnyuè.", translation: "I also like music." },
       { text: "她*也*会说中文。", romanization: "Tā *yě* huì shuō Zhōngwén.", translation: "She can also speak Chinese." },
-      { text: "我*也*想去。", romanization: "Wǒ *yě* xiǎng qù.", translation: "I also want to go." }
+      { text: "我*也*想去。", romanization: "Wǒ *yě* xiǎng qù.", translation: "I also want to go." },
+      { text: "他*也*是学生。", romanization: "Tā *yě* shì xuésheng.", translation: "He is a student too." },
+      { text: "我*也*不知道。", romanization: "Wǒ *yě* bù zhīdào.", translation: "I don't know either." },
+      { text: "明天我们*也*去。", romanization: "Míngtiān wǒmen *yě* qù.", translation: "We're going tomorrow too." }
     ],
     482: [
       { text: "我*只*有一个包。", romanization: "Wǒ *zhǐ* yǒu yí ge bāo.", translation: "I only have one bag." },
       { text: "她*只*吃水果。", romanization: "Tā *zhǐ* chī shuǐguǒ.", translation: "She only eats fruit." },
-      { text: "这*只*要五分钟。", romanization: "Zhè *zhǐ* yào wǔ fēnzhōng.", translation: "This only takes five minutes." }
+      { text: "这*只*要五分钟。", romanization: "Zhè *zhǐ* yào wǔ fēnzhōng.", translation: "This only takes five minutes." },
+      { text: "我*只*会说一点中文。", romanization: "Wǒ *zhǐ* huì shuō yìdiǎn Zhōngwén.", translation: "I can only speak a little Chinese." },
+      { text: "他*只*喝水。", romanization: "Tā *zhǐ* hē shuǐ.", translation: "He only drinks water." },
+      { text: "我们*只*有十分钟。", romanization: "Wǒmen *zhǐ* yǒu shí fēnzhōng.", translation: "We only have ten minutes." }
     ],
     483: [
       { text: "她*很*高兴。", romanization: "Tā *hěn* gāoxìng.", translation: "She's very happy." },
       { text: "这本书*很*有趣。", romanization: "Zhè běn shū *hěn* yǒuqù.", translation: "This book is very interesting." },
-      { text: "天气*很*冷。", romanization: "Tiānqì *hěn* lěng.", translation: "The weather is very cold." }
+      { text: "天气*很*冷。", romanization: "Tiānqì *hěn* lěng.", translation: "The weather is very cold." },
+      { text: "今天*很*热。", romanization: "Jīntiān *hěn* rè.", translation: "It's very hot today." },
+      { text: "他跑得*很*快。", romanization: "Tā pǎo de *hěn* kuài.", translation: "He runs very fast." },
+      { text: "我*很*喜欢这个城市。", romanization: "Wǒ *hěn* xǐhuan zhège chéngshì.", translation: "I really like this city." }
     ],
     484: [
       { text: "*也许*他会来。", romanization: "*Yěxǔ* tā huì lái.", translation: "Maybe he'll come." },
       { text: "*也许*明天会下雨。", romanization: "*Yěxǔ* míngtiān huì xiàyǔ.", translation: "Maybe it will rain tomorrow." },
-      { text: "*也许*你是对的。", romanization: "*Yěxǔ* nǐ shì duì de.", translation: "Maybe you're right." }
+      { text: "*也许*你是对的。", romanization: "*Yěxǔ* nǐ shì duì de.", translation: "Maybe you're right." },
+      { text: "*也许*她不在家。", romanization: "*Yěxǔ* tā bú zài jiā.", translation: "Maybe she isn't at home." },
+      { text: "我们*也许*明天去。", romanization: "Wǒmen *yěxǔ* míngtiān qù.", translation: "Maybe we'll go tomorrow." },
+      { text: "*也许*他忘了。", romanization: "*Yěxǔ* tā wàng le.", translation: "Maybe he forgot." }
     ],
     485: [
       { text: "他*已经*走了。", romanization: "Tā *yǐjīng* zǒu le.", translation: "He has already left." },
       { text: "我*已经*吃过了。", romanization: "Wǒ *yǐjīng* chīguò le.", translation: "I've already eaten." },
-      { text: "电影*已经*开始了。", romanization: "Diànyǐng *yǐjīng* kāishǐ le.", translation: "The movie has already started." }
+      { text: "电影*已经*开始了。", romanization: "Diànyǐng *yǐjīng* kāishǐ le.", translation: "The movie has already started." },
+      { text: "我*已经*到家了。", romanization: "Wǒ *yǐjīng* dào jiā le.", translation: "I'm already home." },
+      { text: "天*已经*黑了。", romanization: "Tiān *yǐjīng* hēi le.", translation: "It's already dark." },
+      { text: "她*已经*知道了。", romanization: "Tā *yǐjīng* zhīdào le.", translation: "She already knows." }
     ],
     486: [
       { text: "*一月*很冷。", romanization: "*Yīyuè* hěn lěng.", translation: "January is cold." },
       { text: "她*一月*出生。", romanization: "Tā *yīyuè* chūshēng.", translation: "She was born in January." },
-      { text: "我们*一月*去滑雪。", romanization: "Wǒmen *yīyuè* qù huáxuě.", translation: "We go skiing in January." }
+      { text: "我们*一月*去滑雪。", romanization: "Wǒmen *yīyuè* qù huáxuě.", translation: "We go skiing in January." },
+      { text: "*一月*是一年的第一个月。", romanization: "*Yīyuè* shì yì nián de dì yī gè yuè.", translation: "January is the first month of the year." },
+      { text: "我*一月*去北京。", romanization: "Wǒ *yīyuè* qù Běijīng.", translation: "I'm going to Beijing in January." },
+      { text: "*一月*有三十一天。", romanization: "*Yīyuè* yǒu sānshíyī tiān.", translation: "January has thirty-one days." }
     ],
     487: [
       { text: "*二月*很短。", romanization: "*Èryuè* hěn duǎn.", translation: "February is short." },
       { text: "他的生日在*二月*。", romanization: "Tā de shēngrì zài *èryuè*.", translation: "His birthday is in February." },
-      { text: "*二月*有时候会下雪。", romanization: "*Èryuè* yǒushíhou huì xiàxuě.", translation: "It sometimes snows in February." }
+      { text: "*二月*有时候会下雪。", romanization: "*Èryuè* yǒushíhou huì xiàxuě.", translation: "It sometimes snows in February." },
+      { text: "春节常常在*二月*。", romanization: "Chūnjié chángcháng zài *èryuè*.", translation: "Spring Festival is often in February." },
+      { text: "*二月*有二十八天。", romanization: "*Èryuè* yǒu èrshíbā tiān.", translation: "February has twenty-eight days." },
+      { text: "我*二月*开始工作。", romanization: "Wǒ *èryuè* kāishǐ gōngzuò.", translation: "I start work in February." }
     ],
     488: [
       { text: "春天从*三月*开始。", romanization: "Chūntiān cóng *sānyuè* kāishǐ.", translation: "Spring starts in March." },
       { text: "*三月*天气还很冷。", romanization: "*Sānyuè* tiānqì hái hěn lěng.", translation: "It's still cold in March." },
-      { text: "我们*三月*去旅行。", romanization: "Wǒmen *sānyuè* qù lǚxíng.", translation: "We're traveling in March." }
+      { text: "我们*三月*去旅行。", romanization: "Wǒmen *sānyuè* qù lǚxíng.", translation: "We're traveling in March." },
+      { text: "她*三月*出生。", romanization: "Tā *sānyuè* chūshēng.", translation: "She was born in March." },
+      { text: "*三月*开始变暖和了。", romanization: "*Sānyuè* kāishǐ biàn nuǎnhuo le.", translation: "It starts getting warm in March." },
+      { text: "学校*三月*有考试。", romanization: "Xuéxiào *sānyuè* yǒu kǎoshì.", translation: "The school has exams in March." }
     ],
     489: [
       { text: "*四月*花都开了。", romanization: "*Sìyuè* huā dōu kāi le.", translation: "In April all the flowers bloom." },
       { text: "她的生日在*四月*。", romanization: "Tā de shēngrì zài *sìyuè*.", translation: "Her birthday is in April." },
-      { text: "*四月*天气很好。", romanization: "*Sìyuè* tiānqì hěn hǎo.", translation: "April weather is nice." }
+      { text: "*四月*天气很好。", romanization: "*Sìyuè* tiānqì hěn hǎo.", translation: "April weather is nice." },
+      { text: "*四月*常常下雨。", romanization: "*Sìyuè* chángcháng xià yǔ.", translation: "It often rains in April." },
+      { text: "我们*四月*去日本。", romanization: "Wǒmen *sìyuè* qù Rìběn.", translation: "We're going to Japan in April." },
+      { text: "*四月*有三十天。", romanization: "*Sìyuè* yǒu sānshí tiān.", translation: "April has thirty days." }
     ],
     490: [
       { text: "*五月*很温暖。", romanization: "*Wǔyuè* hěn wēnnuǎn.", translation: "May is warm." },
       { text: "我们*五月*结婚。", romanization: "Wǒmen *wǔyuè* jiéhūn.", translation: "We're getting married in May." },
-      { text: "*五月*有很多花。", romanization: "*Wǔyuè* yǒu hěn duō huā.", translation: "There are many flowers in May." }
+      { text: "*五月*有很多花。", romanization: "*Wǔyuè* yǒu hěn duō huā.", translation: "There are many flowers in May." },
+      { text: "我的生日在*五月*。", romanization: "Wǒ de shēngrì zài *wǔyuè*.", translation: "My birthday is in May." },
+      { text: "*五月*天气很好。", romanization: "*Wǔyuè* tiānqì hěn hǎo.", translation: "The weather is nice in May." },
+      { text: "他们*五月*搬家。", romanization: "Tāmen *wǔyuè* bānjiā.", translation: "They are moving in May." }
     ],
     491: [
       { text: "*六月*学校放假。", romanization: "*Liùyuè* xuéxiào fàngjià.", translation: "School lets out in June." },
       { text: "夏天从*六月*开始。", romanization: "Xiàtiān cóng *liùyuè* kāishǐ.", translation: "Summer starts in June." },
-      { text: "她*六月*毕业。", romanization: "Tā *liùyuè* bìyè.", translation: "She graduates in June." }
+      { text: "她*六月*毕业。", romanization: "Tā *liùyuè* bìyè.", translation: "She graduates in June." },
+      { text: "*六月*天气很热。", romanization: "*Liùyuè* tiānqì hěn rè.", translation: "The weather is hot in June." },
+      { text: "我哥哥*六月*结婚。", romanization: "Wǒ gēge *liùyuè* jiéhūn.", translation: "My older brother is getting married in June." },
+      { text: "*六月*有很多考试。", romanization: "*Liùyuè* yǒu hěn duō kǎoshì.", translation: "There are many exams in June." }
     ],
     492: [
       { text: "*七月*非常热。", romanization: "*Qīyuè* fēicháng rè.", translation: "July is very hot." },
       { text: "我们*七月*去海边。", romanization: "Wǒmen *qīyuè* qù hǎibiān.", translation: "We're going to the beach in July." },
-      { text: "*七月*是一年中最热的月份。", romanization: "*Qīyuè* shì yì nián zhōng zuì rè de yuèfèn.", translation: "July is the hottest month of the year." }
+      { text: "*七月*是一年中最热的月份。", romanization: "*Qīyuè* shì yì nián zhōng zuì rè de yuèfèn.", translation: "July is the hottest month of the year." },
+      { text: "她的生日在*七月*。", romanization: "Tā de shēngrì zài *qīyuè*.", translation: "Her birthday is in July." },
+      { text: "*七月*常常下大雨。", romanization: "*Qīyuè* chángcháng xià dà yǔ.", translation: "It often rains heavily in July." },
+      { text: "学校*七月*放暑假。", romanization: "Xuéxiào *qīyuè* fàng shǔjià.", translation: "School breaks for summer in July." }
     ],
     493: [
       { text: "*八月*我们去度假。", romanization: "*Bāyuè* wǒmen qù dùjià.", translation: "We go on vacation in August." },
       { text: "*八月*非常热。", romanization: "*Bāyuè* fēicháng rè.", translation: "August is very hot." },
-      { text: "他的生日在*八月*。", romanization: "Tā de shēngrì zài *bāyuè*.", translation: "His birthday is in August." }
+      { text: "他的生日在*八月*。", romanization: "Tā de shēngrì zài *bāyuè*.", translation: "His birthday is in August." },
+      { text: "*八月*我们在海边。", romanization: "*Bāyuè* wǒmen zài hǎibiān.", translation: "In August we are at the seaside." },
+      { text: "我*八月*回国。", romanization: "Wǒ *bāyuè* huíguó.", translation: "I go back to my country in August." },
+      { text: "*八月*有三十一天。", romanization: "*Bāyuè* yǒu sānshíyī tiān.", translation: "August has thirty-one days." }
     ],
     494: [
       { text: "学校*九月*开学。", romanization: "Xuéxiào *jiǔyuè* kāixué.", translation: "School starts in September." },
       { text: "*九月*天气开始变凉。", romanization: "*Jiǔyuè* tiānqì kāishǐ biàn liáng.", translation: "The weather starts getting cool in September." },
-      { text: "我们*九月*搬家。", romanization: "Wǒmen *jiǔyuè* bānjiā.", translation: "We're moving in September." }
+      { text: "我们*九月*搬家。", romanization: "Wǒmen *jiǔyuè* bānjiā.", translation: "We're moving in September." },
+      { text: "我的生日在*九月*。", romanization: "Wǒ de shēngrì zài *jiǔyuè*.", translation: "My birthday is in September." },
+      { text: "*九月*的天气很好。", romanization: "*Jiǔyuè* de tiānqì hěn hǎo.", translation: "The weather in September is nice." },
+      { text: "她*九月*开始上大学。", romanization: "Tā *jiǔyuè* kāishǐ shàng dàxué.", translation: "She starts university in September." }
     ],
     495: [
       { text: "*十月*树叶变黄了。", romanization: "*Shíyuè* shùyè biàn huáng le.", translation: "In October the leaves turn yellow." },
       { text: "她的生日在*十月*。", romanization: "Tā de shēngrì zài *shíyuè*.", translation: "Her birthday is in October." },
-      { text: "*十月*天气很凉爽。", romanization: "*Shíyuè* tiānqì hěn liángshuǎng.", translation: "October weather is cool." }
+      { text: "*十月*天气很凉爽。", romanization: "*Shíyuè* tiānqì hěn liángshuǎng.", translation: "October weather is cool." },
+      { text: "*十月*一号是国庆节。", romanization: "*Shíyuè* yī hào shì Guóqìngjié.", translation: "October first is National Day." },
+      { text: "我们*十月*去旅行。", romanization: "Wǒmen *shíyuè* qù lǚxíng.", translation: "We're travelling in October." },
+      { text: "*十月*的北京很美。", romanization: "*Shíyuè* de Běijīng hěn měi.", translation: "Beijing is beautiful in October." }
     ],
     496: [
       { text: "*十一月*开始变冷。", romanization: "*Shíyīyuè* kāishǐ biàn lěng.", translation: "It starts getting cold in November." },
       { text: "我们*十一月*去中国。", romanization: "Wǒmen *shíyīyuè* qù Zhōngguó.", translation: "We're going to China in November." },
-      { text: "*十一月*天气不太好。", romanization: "*Shíyīyuè* tiānqì bú tài hǎo.", translation: "November weather isn't very good." }
+      { text: "*十一月*天气不太好。", romanization: "*Shíyīyuè* tiānqì bú tài hǎo.", translation: "November weather isn't very good." },
+      { text: "我的生日在*十一月*。", romanization: "Wǒ de shēngrì zài *shíyīyuè*.", translation: "My birthday is in November." },
+      { text: "*十一月*天黑得很早。", romanization: "*Shíyīyuè* tiān hēi de hěn zǎo.", translation: "It gets dark early in November." },
+      { text: "他*十一月*回来。", romanization: "Tā *shíyīyuè* huílái.", translation: "He's coming back in November." }
     ],
     497: [
       { text: "*十二月*非常冷。", romanization: "*Shí'èryuè* fēicháng lěng.", translation: "December is very cold." },
       { text: "我们*十二月*回家。", romanization: "Wǒmen *shí'èryuè* huí jiā.", translation: "We go home in December." },
-      { text: "*十二月*会下雪。", romanization: "*Shí'èryuè* huì xiàxuě.", translation: "It snows in December." }
+      { text: "*十二月*会下雪。", romanization: "*Shí'èryuè* huì xiàxuě.", translation: "It snows in December." },
+      { text: "*十二月*是一年的最后一个月。", romanization: "*Shí'èryuè* shì yì nián de zuìhòu yí gè yuè.", translation: "December is the last month of the year." },
+      { text: "她的生日在*十二月*。", romanization: "Tā de shēngrì zài *shí'èryuè*.", translation: "Her birthday is in December." },
+      { text: "*十二月*我们去滑雪。", romanization: "*Shí'èryuè* wǒmen qù huáxuě.", translation: "In December we go skiing." }
     ],
     498: [
       { text: "今天的*日期*是几号？", romanization: "Jīntiān de *rìqī* shì jǐ hào?", translation: "What's today's date?" },
       { text: "请写下*日期*。", romanization: "Qǐng xiěxià *rìqī*.", translation: "Please write down the date." },
-      { text: "会议的*日期*改变了。", romanization: "Huìyì de *rìqī* gǎibiàn le.", translation: "The meeting date has changed." }
+      { text: "会议的*日期*改变了。", romanization: "Huìyì de *rìqī* gǎibiàn le.", translation: "The meeting date has changed." },
+      { text: "你记得那个*日期*吗？", romanization: "Nǐ jìde nàge *rìqī* ma?", translation: "Do you remember that date?" },
+      { text: "考试的*日期*是几号？", romanization: "Kǎoshì de *rìqī* shì jǐ hào?", translation: "What's the date of the exam?" },
+      { text: "请在这里写*日期*。", romanization: "Qǐng zài zhèlǐ xiě *rìqī*.", translation: "Please write the date here." }
     ],
     499: [
       { text: "*日历*挂在墙上。", romanization: "*Rìlì* guà zài qiáng shàng.", translation: "The calendar hangs on the wall." },
       { text: "请看一下*日历*。", romanization: "Qǐng kàn yíxià *rìlì*.", translation: "Please check the calendar." },
-      { text: "这本*日历*是新的。", romanization: "Zhè běn *rìlì* shì xīn de.", translation: "This calendar is new." }
+      { text: "这本*日历*是新的。", romanization: "Zhè běn *rìlì* shì xīn de.", translation: "This calendar is new." },
+      { text: "我买了一本新*日历*。", romanization: "Wǒ mǎile yì běn xīn *rìlì*.", translation: "I bought a new calendar." },
+      { text: "*日历*上有很多照片。", romanization: "*Rìlì* shàng yǒu hěn duō zhàopiàn.", translation: "There are many photos on the calendar." },
+      { text: "我在手机*日历*上写了会议。", romanization: "Wǒ zài shǒujī *rìlì* shàng xiěle huìyì.", translation: "I put the meeting in my phone calendar." }
     ],
     500: [
       { text: "*生日*快乐！", romanization: "*Shēngrì* kuàilè!", translation: "Happy birthday!" },
       { text: "你的*生日*是什么时候？", romanization: "Nǐ de *shēngrì* shì shénme shíhou?", translation: "When is your birthday?" },
-      { text: "今天是我的*生日*。", romanization: "Jīntiān shì wǒ de *shēngrì*.", translation: "Today is my birthday." }
+      { text: "今天是我的*生日*。", romanization: "Jīntiān shì wǒ de *shēngrì*.", translation: "Today is my birthday." },
+      { text: "我的*生日*在夏天。", romanization: "Wǒ de *shēngrì* zài xiàtiān.", translation: "My birthday is in summer." },
+      { text: "祝你*生日*快乐！", romanization: "Zhù nǐ *shēngrì* kuàilè!", translation: "Happy birthday to you!" },
+      { text: "我们去参加他的*生日*派对。", romanization: "Wǒmen qù cānjiā tā de *shēngrì* pàiduì.", translation: "We're going to his birthday party." }
     ]
   },
 
